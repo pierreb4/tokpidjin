@@ -1,0 +1,24 @@
+name: Upload Dataset
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload datasets
+        uses: jaimevalero/push-kaggle-dataset@v3.2
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        with:
+          id: "pierreb4/tokpidjin"
+          title: "Tokpidjin github repo"
+          subtitle: "TPD pronouced tepid for short"
+          description: "This is the non-kaggle bits, see pierrreb4/tokpidjin_kaggle for the Kaggle notebook"
+          files: "*.py"  # Specify files or directories to upload
+          is_public: true  # Set visibility (true for public, false for private)
