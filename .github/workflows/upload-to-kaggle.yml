@@ -67,9 +67,9 @@ jobs:
             ],
             "keywords": [
               "Tokpidjin",
-              "Dataset"
+              "Dataset",
               "ARC-AGI-2",
-              "ARC prize 2025",
+              "ARC prize 2025"
             ]
           }' > dataset-metadata.json
 
