@@ -37,7 +37,7 @@ jobs:
       - name: Upload dataset to Kaggle
         run: |
           # Create the dataset directory and zip it if necessary
-          zip -r dataset.zip .  # You can adjust this based on how you want to upload
+          # zip -r dataset.zip .  # You can adjust this based on how you want to upload
           
           # Make the dataset upload to Kaggle
           kaggle datasets create -p . -m "Dataset uploaded via GitHub Actions"
