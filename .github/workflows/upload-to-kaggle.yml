@@ -37,7 +37,26 @@ jobs:
           mkdir -p ~/.kaggle
           echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
-          cat ~/.kaggle/kaggle.json
+        env:
+          KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
+        shell: bash
+        
+      # Check if Kaggle API key is set up correctly
+      - name: Check Kaggle API key
+        run: |
+          if [ -f ~/.kaggle/kaggle.json ]; then
+            echo "Kaggle API key is set up correctly."
+          else
+            echo "Kaggle API key is not set up correctly."
+            exit 1
+          fi
+        shell: bash
+
+      # Check if Kaggle API is working
+      - name: Check Kaggle API
+        run: |
+          kaggle datasets list
+        shell: bash
 
       # Show Kaggle config
       - name: Show Kaggle config
@@ -75,7 +94,7 @@ jobs:
 
           # Check the contents of the zip file
           unzip -l dataset.zip
-          
+
           # Check the contents of the metadata file
           cat dataset-metadata.json
 
