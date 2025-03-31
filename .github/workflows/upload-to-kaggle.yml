@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
       # Install Kaggle API
       - name: Install Kaggle API
@@ -50,8 +50,33 @@ jobs:
       - name: Upload dataset to Kaggle
         run: |
           # Create the dataset directory and zip it if necessary
-          # zip -r dataset.zip .  # You can adjust this based on how you want to upload
+          zip -r dataset.zip .  # You can adjust this based on how you want to upload
           
+          # Create the dataset metadata file
+          echo '{
+            "title": "Tokpidjin Dataset",
+            "id": "pierreb4/tokpidjin",
+            "licenses": [
+              {
+                "name": "CC0-1.0"
+              }
+            ],
+            "description": "This is a dataset for Tokpidjin.",
+            "keywords": ["dataset", "tokpidjin"]
+          }' > dataset-metadata.json
+
+          # Create the dataset directory
+          mkdir -p pierreb4/tokpidjin
+          mv dataset.zip dataset-metadata.json pierreb4/tokpidjin/
+          # Change to the dataset directory
+          cd pierreb4/tokpidjin
+          # Check the contents of the directory
+          ls -la
+          # Check the contents of the zip file
+          unzip -l dataset.zip
+          # Check the contents of the metadata file
+          cat dataset-metadata.json
+
           # Make the dataset upload to Kaggle
           kaggle datasets create -p pierreb4/tokpidjin
 
