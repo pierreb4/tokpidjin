@@ -51,7 +51,7 @@ jobs:
       # Upload dataset to Kaggle
       - name: Upload dataset to Kaggle
         env:
-          # KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
+          KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
