@@ -30,41 +30,35 @@ jobs:
       - name: Set up Kaggle API credentials
         run: |
           mkdir -p ~/.kaggle
+          # Make sure that double-quotes are escaped in the secret
           echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
           # cat ~/.kaggle/kaggle.json  # Check if the file is created correctly
         shell: bash
 
       # Check if Kaggle API is working
-      - name: Check Kaggle API
-        env:
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
-        run: |
-          kaggle datasets list
-        shell: bash
+      # - name: Check Kaggle API
+      #   env:
+      #     KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      #     KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+      #   run: |
+      #     kaggle datasets list
+      #   shell: bash
 
       # Upload dataset to Kaggle
       - name: Upload dataset to Kaggle
-        # env:
-        #   KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-        #   KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
-          # Create the dataset directory and zip it if necessary
+          # Create dataset.zip and prepare to create or update kaggle dataset
           zip -r dataset.zip * -x .gitignore .git/ .github/ .vscode/ .DS_Store
           
           # Check the contents of the zip file
-          unzip -l dataset.zip
+          # unzip -l dataset.zip
 
           # Create the dataset metadata file
           echo '{
             "title": "Tokpidjin Dataset",
             "id": "pierreb4/tokpidjin",
-            "licenses": [
-              {
-                "name": "Apache-2.0"
-              }
-            ],
+            "licenses": [{ "name": "Apache-2.0" }],
             "keywords": [
               "Tokpidjin",
               "Dataset",
@@ -73,15 +67,8 @@ jobs:
             ]
           }' > dataset-metadata.json
 
-          # "subtitle": "Tokpidjin Dataset for ARC-AGI-2 + ARC prize 2025",
-          # "description": "This dataset contains Tokpidjin for ARC-AGI-2 + ARC prize 2025.",
-          # "submissions": {
-          #   "version": "v0.0.0",
-          #   "description": "This dataset contains Tokpidjin for ARC-AGI-2 + ARC prize 2025."
-          # },
-
           # Check the contents of the metadata file
-          cat dataset-metadata.json
+          # cat dataset-metadata.json
 
           # Create the dataset directory
           mkdir -p pierreb4/tokpidjin
@@ -91,10 +78,13 @@ jobs:
           cd pierreb4/tokpidjin
 
           # Check the contents of the directory
-          ls -la
+          # ls -la
 
-          # Make the dataset upload to Kaggle
-          kaggle datasets create -p . --dir-mode zip --public
+          # Create the dataset in Kaggle
+          # kaggle datasets create -p . --public
+
+          # Upload updates to Kaggle
+          kaggle datasets version -m "${{ github.event.head_commit.message }}" -p . -d
 
       # Optionally, clean up the dataset
       - name: Clean up
