@@ -44,13 +44,13 @@ jobs:
 
       # Check if Kaggle API is working
       - name: Check Kaggle API
+        env:
+          KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
+          KAGGLE_USERNAME: pierreb4
         run: |
           whoami
           pwd
           kaggle datasets list
-        env:
-          KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
-          KAGGLE_USERNAME: pierreb4
         shell: bash
 
       # Upload dataset to Kaggle
