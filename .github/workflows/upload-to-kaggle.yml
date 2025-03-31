@@ -39,13 +39,14 @@ jobs:
           chmod 600 ~/.kaggle/kaggle.json
         env:
           KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
+          KAGGLE_USERNAME: pierreb4
         shell: bash
 
       # Check if Kaggle API is working
       - name: Check Kaggle API
         run: |
           whoami
-          cd ~
+          pwd
           kaggle datasets list
         shell: bash
 
