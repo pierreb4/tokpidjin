@@ -50,36 +50,38 @@ jobs:
 
       # Upload dataset to Kaggle
       - name: Upload dataset to Kaggle
+        env:
+          KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
         run: |
           # Create the dataset directory and zip it if necessary
           zip -r dataset.zip .  # You can adjust this based on how you want to upload
           
-          # Create the dataset metadata file
-          echo '{
-            "title": "Tokpidjin Dataset",
-            "id": "pierreb4/tokpidjin",
-            "licenses": [
-              {
-                "name": "Apache-2.0"
-              }
-            ],
-          }' > dataset-metadata.json
+          # # Create the dataset metadata file
+          # echo '{
+          #   "title": "Tokpidjin Dataset",
+          #   "id": "pierreb4/tokpidjin",
+          #   "licenses": [
+          #     {
+          #       "name": "Apache-2.0"
+          #     }
+          #   ],
+          # }' > dataset-metadata.json
 
-          # Create the dataset directory
-          mkdir -p pierreb4/tokpidjin
-          mv dataset.zip dataset-metadata.json pierreb4/tokpidjin/
+          # # Create the dataset directory
+          # mkdir -p pierreb4/tokpidjin
+          # mv dataset.zip dataset-metadata.json pierreb4/tokpidjin/
 
           # Change to the dataset directory
           cd pierreb4/tokpidjin
 
-          # Check the contents of the directory
-          ls -la
+          # # Check the contents of the directory
+          # ls -la
 
-          # Check the contents of the zip file
-          unzip -l dataset.zip
+          # # Check the contents of the zip file
+          # unzip -l dataset.zip
 
-          # Check the contents of the metadata file
-          cat dataset-metadata.json
+          # # Check the contents of the metadata file
+          # cat dataset-metadata.json
 
           # Make the dataset upload to Kaggle
           kaggle datasets create -p . --dir-mode zip --public
