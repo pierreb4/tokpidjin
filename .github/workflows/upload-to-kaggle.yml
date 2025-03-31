@@ -37,14 +37,13 @@ jobs:
           mkdir -p ~/.kaggle
           echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
+          cat ~/.kaggle/kaggle.json
 
       # Show Kaggle config
       - name: Show Kaggle config
         run: |
-          cat ~/.kaggle/kaggle.json
           kaggle config view
           kaggle datasets list
-          kaggle competitions list
 
       # Upload dataset to Kaggle
       - name: Upload dataset to Kaggle
@@ -53,8 +52,7 @@ jobs:
           # zip -r dataset.zip .  # You can adjust this based on how you want to upload
           
           # Make the dataset upload to Kaggle
-          kaggle datasets create -p .
-          # -m "Dataset uploaded via GitHub Actions"
+          kaggle datasets create -p pierreb4/tokpidjin
 
       # Optionally, clean up the dataset
       - name: Clean up
