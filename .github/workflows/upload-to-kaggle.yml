@@ -41,8 +41,11 @@ jobs:
       # Show Kaggle config
       - name: Show Kaggle config
         run: |
+          cat ~/.kaggle/kaggle.json
           kaggle config view
-          
+          kaggle datasets list
+          kaggle competitions list
+
       # Upload dataset to Kaggle
       - name: Upload dataset to Kaggle
         run: |
