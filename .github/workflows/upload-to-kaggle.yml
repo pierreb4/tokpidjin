@@ -37,6 +37,9 @@ jobs:
           mkdir -p ~/.kaggle
           echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
+          cat ~/.kaggle/kaggle.json  # Check if the file is created correctly
+        env:
+          KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
         shell: bash
 
       # Check if Kaggle API is working
@@ -51,7 +54,6 @@ jobs:
       # Upload dataset to Kaggle
       - name: Upload dataset to Kaggle
         env:
-          KAGGLE_JSON: ${{ secrets.KAGGLE_JSON }}
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
