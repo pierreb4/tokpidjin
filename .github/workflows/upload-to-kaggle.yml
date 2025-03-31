@@ -26,15 +26,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install kaggle
 
-      # Set up Kaggle API key for authentication
+      # Set up Kaggle API credentials
       - name: Set up Kaggle API credentials
         run: |
           mkdir -p ~/.kaggle
-          # echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
-          echo '{
-            "username": "${{ secrets.KAGGLE_USERNAME }}",
-            "key": "${{ secrets.KAGGLE_KEY }}"
-          }' > ~/.kaggle/kaggle.json
+          echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
+          # echo '{
+          #   "username": "${{ secrets.KAGGLE_USERNAME }}",
+          #   "key": "${{ secrets.KAGGLE_KEY }}"
+          # }' > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
           cat ~/.kaggle/kaggle.json  # Check if the file is created correctly
         shell: bash
