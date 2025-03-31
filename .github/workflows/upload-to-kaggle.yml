@@ -1,0 +1,47 @@
+name: Upload Dataset to Kaggle
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  upload_to_kaggle:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      # Install Kaggle API
+      - name: Install Kaggle API
+        run: |
+          python -m pip install --upgrade pip
+          pip install kaggle
+
+      # Set up Kaggle API key for authentication
+      - name: Set up Kaggle API credentials
+        run: |
+          mkdir -p ~/.kaggle
+          echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+
+      # Upload dataset to Kaggle
+      - name: Upload dataset to Kaggle
+        run: |
+          # Create the dataset directory and zip it if necessary
+          zip -r dataset.zip .  # You can adjust this based on how you want to upload
+          
+          # Make the dataset upload to Kaggle
+          kaggle datasets create -p . -m "Dataset uploaded via GitHub Actions"
+
+      # Optionally, clean up the dataset
+      - name: Clean up
+        run: rm -rf ~/.kaggle/kaggle.json
