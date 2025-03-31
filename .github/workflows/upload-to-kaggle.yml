@@ -34,7 +34,7 @@ jobs:
           echo '{
             "username": "${{ secrets.KAGGLE_USERNAME }}",
             "key": "${{ secrets.KAGGLE_KEY }}"
-          }' > 
+          }' > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
           cat ~/.kaggle/kaggle.json  # Check if the file is created correctly
         shell: bash
