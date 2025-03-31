@@ -18,7 +18,7 @@ jobs:
         with:
           id: "pierreb4/tokpidjin"
           title: "Tokpidjin github repo"
-          subtitle: "TPD pronouced tepid for short"
+          subtitle: "TPD for short, pronounced tepid"
           description: "This is the non-kaggle bits, see pierrreb4/tokpidjin_kaggle for the Kaggle notebook"
           files: "*.py"  # Specify files or directories to upload
           is_public: true  # Set visibility (true for public, false for private)
