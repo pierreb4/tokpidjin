@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Upload datasets
+      - name: Upload dataset
         uses: jaimevalero/push-kaggle-dataset@v3.2
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
@@ -18,7 +18,7 @@ jobs:
         with:
           id: "pierreb4/tokpidjin"
           title: "Tokpidjin github repo"
-          subtitle: "TPD for short, pronounced tepid"
+          subtitle: "TPD for short (pronounce as tepid)"
           description: "This is the non-kaggle bits, see pierrreb4/tokpidjin_kaggle for the Kaggle notebook"
           files: "*.py"  # Specify files or directories to upload
           is_public: true  # Set visibility (true for public, false for private)
