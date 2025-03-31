@@ -38,6 +38,11 @@ jobs:
           echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
           chmod 600 ~/.kaggle/kaggle.json
 
+      # Show Kaggle config
+      - name: Show Kaggle config
+        run: |
+          kaggle config view
+          
       # Upload dataset to Kaggle
       - name: Upload dataset to Kaggle
         run: |
@@ -45,7 +50,8 @@ jobs:
           # zip -r dataset.zip .  # You can adjust this based on how you want to upload
           
           # Make the dataset upload to Kaggle
-          kaggle datasets create -p . -m "Dataset uploaded via GitHub Actions"
+          kaggle datasets create -p .
+          # -m "Dataset uploaded via GitHub Actions"
 
       # Optionally, clean up the dataset
       - name: Clean up
