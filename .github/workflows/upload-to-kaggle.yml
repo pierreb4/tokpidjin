@@ -62,8 +62,8 @@ jobs:
 
           # Create the dataset metadata file
           echo '{
-            "id": "pierreb4/tokpidjin",
             "title": "Tokpidjin Dataset",
+            "id": "pierreb4/tokpidjin",
             "subtitle": "Tokpidjin Dataset for ARC-AGI-2 + ARC prize 2025",
             "description": "This dataset contains Tokpidjin for ARC-AGI-2 + ARC prize 2025.",
             "licenses": [
@@ -71,6 +71,10 @@ jobs:
                 "name": "Apache-2.0"
               }
             ],
+            "submissions": {
+              "version": "v0.0.0",
+              "description": "This dataset contains Tokpidjin for ARC-AGI-2 + ARC prize 2025.",
+            },
             "keywords": [
               "Tokpidjin",
               "ARC-AGI-2",
