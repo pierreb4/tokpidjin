@@ -73,14 +73,14 @@ jobs:
             ],
             "submissions": {
               "version": "v0.0.0",
-              "description": "This dataset contains Tokpidjin for ARC-AGI-2 + ARC prize 2025.",
+              "description": "This dataset contains Tokpidjin for ARC-AGI-2 + ARC prize 2025."
             },
             "keywords": [
               "Tokpidjin",
               "ARC-AGI-2",
               "ARC prize 2025",
               "Dataset"
-            ],
+            ]
           }' > dataset-metadata.json
 
           # Check the contents of the metadata file
