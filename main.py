@@ -7,7 +7,7 @@ import arc_types
 import constants_manus
 import dsl
 import tests
-import solvers
+import solvers_manus as solvers
 
 
 
