@@ -1,10 +1,5 @@
 from dsl import *
 
-# Explicitly import functions causing NameErrors if wildcard fails
-from dsl import mostcolor, leastcolor, sizefilter # Add other needed functions here if necessary
-
-A = ((1, 0), (0, 1), (1, 0))
-
 
 A = ((1, 0), (0, 1), (1, 0))
 B = ((2, 1), (0, 1), (2, 1))
@@ -78,18 +73,16 @@ def test_contained():
  
 
 def test_combine():
-    # Convert result and expected to sets for order-insensitive comparison
-    assert set(combine((1, 2), (3, 4))) == {1, 2, 3, 4}
+    assert combine(frozenset({1, 2}), frozenset({3, 4})) == frozenset({1, 2, 3, 4})
+    assert combine((1, 2), (3, 4)) == (1, 2, 3, 4)
  
 
 def test_intersection():
-    # Use tuples as input, convert result and expected to sets for order-insensitive comparison
-    assert set(intersection((1, 2), (2, 3))) == {2}
+    assert intersection(frozenset({1, 2}), frozenset({2, 3})) == frozenset({2})
  
 
 def test_difference():
-    # Use tuples as input, convert result and expected to sets for order-insensitive comparison
-    assert set(difference((1, 2, 3), (1, 2))) == {3}
+    assert difference(frozenset({1, 2, 3}), frozenset({1, 2})) == frozenset({3})
  
 
 def test_dedupe():
@@ -112,23 +105,22 @@ def test_greater():
 
 def test_size():
     assert size((1, 2, 3)) == 3
-    assert size((2, 5)) == 2
+    assert size(frozenset({2, 5})) == 2
  
 
 def test_merge():
-    # Input is tuple of tuples, convert result and expected to sets for order-insensitive comparison
-    assert set(merge((((1, (0, 0)),), ((1, (1, 1)), (1, (0, 1)))))) == {(1, (0, 0)), (1, (1, 1)), (1, (0, 1))}
+    assert merge(frozenset({frozenset({(1, (0, 0))}), frozenset({(1, (1, 1)), (1, (0, 1))})})) == frozenset({(1, (0, 0)), (1, (1, 1)), (1, (0, 1))})
     assert merge(((1, 2), (3, 4, 5))) == (1, 2, 3, 4, 5)
     assert merge(((4, 5), (7,))) == (4, 5, 7)
  
 
 def test_maximum():
-    assert maximum((1, 2, 5, 3)) == 5
+    assert maximum({1, 2, 5, 3}) == 5
     assert maximum((4, 2, 6)) == 6
  
 
 def test_minimum():
-    assert minimum((1, 2, 5, 3)) == 1
+    assert minimum({1, 2, 5, 3}) == 1
     assert minimum((4, 2, 6)) == 2
  
 
@@ -157,7 +149,7 @@ def test_leastcommon():
  
 
 def test_initset():
-    assert initset(2) == (2,)
+    assert initset(2) == frozenset({2})
  
 
 def test_both():
@@ -206,19 +198,16 @@ def test_tojvec():
 
 def test_sfilter():
     assert sfilter((1, 2, 3), lambda x: x > 1) == (2, 3)
-    # Use tuple input, convert result and expected to sets for order-insensitive comparison
-    assert set(sfilter((2, 3, 4), lambda x: x % 2 == 0)) == {2, 4}
+    assert sfilter(frozenset({2, 3, 4}), lambda x: x % 2 == 0) == frozenset({2, 4})
  
 
 def test_mfilter():
-    # Input is tuple of tuples, convert result and expected to sets for order-insensitive comparison
-    assert set(mfilter((((2, (3, 3)),), ((1, (0, 0)),), ((1, (1, 1)), (1, (0, 1)))), lambda x: len(x) == 1)) == {(1, (0, 0)), (2, (3, 3))}
+    assert mfilter(frozenset({frozenset({(2, (3, 3))}), frozenset({(1, (0, 0))}), frozenset({(1, (1, 1)), (1, (0, 1))})}), lambda x: len(x) == 1) == frozenset({(1, (0, 0)), (2, (3, 3))})
  
 
 def test_extract():
     assert extract((1, 2, 3), lambda x: x > 2) == 3
-    # Use tuple input
-    assert extract((2, 3, 4), lambda x: x % 4 == 0) == 4
+    assert extract(frozenset({2, 3, 4}), lambda x: x % 4 == 0) == 4
  
 
 def test_totuple():
@@ -234,16 +223,15 @@ def test_last():
  
 
 def test_insert():
-    assert insert(1, (2,)) == (1, 2)
+    assert insert(1, frozenset({2})) == frozenset({1, 2})
  
 
 def test_remove():
-    # Use tuple input, convert result and expected to sets for order-insensitive comparison
-    assert set(remove(1, (1, 2))) == {2}
+    assert remove(1, frozenset({1, 2})) == frozenset({2})
  
 
 def test_other():
-    assert other((1, 2), 1) == 2
+    assert other({1, 2}, 1) == 2
  
 
 def test_interval():
@@ -256,8 +244,7 @@ def test_astuple():
  
 
 def test_product():
-    # Use tuple inputs, convert result and expected to sets for order-insensitive comparison
-    assert set(product((1, 2), (2, 3))) == {(1, 2), (1, 3), (2, 2), (2, 3)}
+    assert product({1, 2}, {2, 3}) == frozenset({(1, 2), (1, 3), (2, 2), (2, 3)})
  
 
 def test_pair():
@@ -303,18 +290,15 @@ def test_fork():
 
 def test_apply():
     assert apply(lambda x: x ** 2, (1, 2, 3)) == (1, 4, 9)
-    # Use tuple input, convert result and expected to sets for order-insensitive comparison
-    assert set(apply(lambda x: x % 2, (1, 2))) == {0, 1}
+    assert apply(lambda x: x % 2, frozenset({1, 2})) == frozenset({0, 1})
  
 
 def test_rapply():
-    # Use tuple of functions as input, convert result to set for order-insensitivity
-    assert set(rapply((lambda x: x + 1, lambda x: x - 1), 1)) == {0, 2}
+    assert rapply(frozenset({lambda x: x + 1, lambda x: x - 1}), 1) == {0, 2}
  
 
 def test_mapply():
-    # Input is tuple of tuples, apply function, convert result and expected to sets for order-insensitive comparison
-    assert set(mapply(lambda x: tuple((v + 1, idx) for v, idx in x), ( ((1, (0, 0)),), ((1, (1, 1)), (1, (0, 1))) ))) == {(2, (0, 0)), (2, (1, 1)), (2, (0, 1))}
+    assert mapply(lambda x: frozenset({(v + 1, (i, j)) for v, (i, j) in x}), frozenset({frozenset({(1, (0, 0))}), frozenset({(1, (1, 1)), (1, (0, 1))})})) == frozenset({(2, (0, 0)), (2, (1, 1)), (2, (0, 1))})
  
 
 def test_papply():
@@ -322,13 +306,16 @@ def test_papply():
  
 
 def test_mpapply():
-    # Input is tuple of tuples, apply function, compare result with expected tuple
-    assert mpapply(lambda x, y: tuple((x, idx) for _, idx in y), (3, 4), ( ((1, (0, 0)),), ((1, (1, 1)), (1, (0, 1))) )) == ((3, (0, 0)), (4, (1, 1)), (4, (0, 1)))
+    # XXX Test fails sometimes because elements in frozenset 
+    # aren't ordered, so results can vary
+    # Maybe provide a list of acceptable results :)
+    # print(f"mpapplyy: {mpapply(lambda x, y: frozenset({(x, (i, j)) for _, (i, j) in y}), (3, 4), frozenset({frozenset({(1, (0, 0))}), frozenset({(1, (1, 1)), (1, (0, 1))})}))}")
+    # print(f"result: {((3, (0, 1)), (3, (1, 1)), (4, (0, 0)))}")
+    assert mpapply(lambda x, y: frozenset({(x, (i, j)) for _, (i, j) in y}), (3, 4), sorted(frozenset({frozenset({(1, (0, 0))}), frozenset({(1, (1, 1)), (1, (0, 1))})}))) == ((3, (0, 1)), (3, (1, 1)), (4, (0, 0)))
  
 
 def test_prapply():
-    # Use tuple inputs, convert result and expected to sets for order-insensitive comparison
-    assert set(prapply(lambda x, y: x + y, (1, 2), (2, 3))) == {3, 4, 5}
+    assert prapply(lambda x, y: x + y, {1, 2}, {2, 3}) == frozenset({3, 4, 5})
  
 
 def test_mostcolor():
@@ -343,28 +330,22 @@ def test_leastcolor():
 def test_height():
     assert height(A) == 3
     assert height(C) == 2
-    # Use tuple input for object
-    assert height(((0, 4),)) == 1
-    # Use tuple input for object
-    assert height(((1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2)))) == 3
+    assert height(frozenset({(0, 4)})) == 1
+    assert height(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 3
  
 
 def test_width():
     assert width(A) == 2
     assert width(C) == 2
-    # Use tuple input for object
-    # assert width(((0, 4),)) == 1 # Known issue: _get_piece_type misidentifies as grid
-    # Use tuple input for object
-    assert width(((1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2)))) == 3
+    assert width(frozenset({(0, 4)})) == 1
+    assert width(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 3
  
 
 def test_shape():
     assert shape(A) == (3, 2)
     assert shape(C) == (2, 2)
-    # Use tuple input for object
-    # assert shape(((0, 4),)) == (1, 1) # Known issue: _get_piece_type misidentifies as grid
-    # Use tuple input for object
-    assert shape(((1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2)))) == (3, 3)
+    assert shape(frozenset({(0, 4)})) == (1, 1)
+    assert shape(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == (3, 3)
  
 
 def test_portrait():
@@ -375,65 +356,47 @@ def test_portrait():
 def test_colorcount():
     assert colorcount(A, 1) == 3
     assert colorcount(C, 5) == 2
-    # Use tuple input for object
-    assert colorcount(((1, (0, 0)), (2, (1, 0)), (2, (0, 1))), 2) == 2
-    # Use tuple input for object
-    assert colorcount(((1, (0, 0)), (2, (1, 0)), (2, (0, 1))), 1) == 1
+    assert colorcount(frozenset({(1, (0, 0)), (2, (1, 0)), (2, (0, 1))}), 2) == 2
+    assert colorcount(frozenset({(1, (0, 0)), (2, (1, 0)), (2, (0, 1))}), 1) == 1
  
 
 def test_colorfilter():
-     # Input is tuple of tuples (Objects), convert result and expected to sets of tuples for order-insensitive comparison
-     input_objects = ( ((3, (0, 4)),), ((1, (0, 0)),), ((2, (4, 1)),), ((1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))), ((2, (3, 2)), (2, (2, 3)), (2, (3, 3))) )
-     expected_result = { ((2, (4, 1)),), ((2, (3, 2)), (2, (2, 3)), (2, (3, 3))) }
-     assert set(colorfilter(input_objects, 2)) == expected_result
+     assert colorfilter(frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (3, 2)), (2, (2, 3)), (2, (3, 3))})}), 2) == frozenset({frozenset({(2, (4, 1))}), frozenset({(2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
  
 
 def test_sizefilter():
-    # Input is tuple of tuples (Objects), convert result and expected to sets of tuples for order-insensitive comparison
-    input_objects = ( ((3, (0, 4)),), ((1, (0, 0)),), ((2, (4, 1)),), ((1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))), ((2, (3, 2)), (2, (2, 3)), (2, (3, 3))) )
-    expected_result = { ((3, (0, 4)),), ((1, (0, 0)),), ((2, (4, 1)),) }
-    assert set(sizefilter(input_objects, 1)) == expected_result
+    assert sizefilter(frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (3, 2)), (2, (2, 3)), (2, (3, 3))})}), 1) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))})})
  
 
 def test_asindices():
-    # Convert result and expected to sets for order-insensitive comparison
-    assert set(asindices(A)) == {(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)}
-    assert set(asindices(C)) == {(0, 0), (0, 1), (1, 0), (1, 1)}
+    assert asindices(A) == frozenset({(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)})
+    assert asindices(C) == frozenset({(0, 0), (0, 1), (1, 0), (1, 1)})
  
 
 def test_ofcolor():
-    # Convert result and expected to sets for order-insensitive comparison
-    assert set(ofcolor(A, 0)) == {(0, 1), (1, 0), (2, 1)}
-    assert set(ofcolor(B, 2)) == {(0, 0), (2, 0)}
-    assert set(ofcolor(C, 1)) == set()
+    assert ofcolor(A, 0) == frozenset({(0, 1), (1, 0), (2, 1)})
+    assert ofcolor(B, 2) == frozenset({(0, 0), (2, 0)})
+    assert ofcolor(C, 1) == frozenset()
  
 
 def test_ulcorner():
-    # Use tuple input for indices
-    # assert ulcorner(((1, 2), (0, 3), (4, 0))) == (0, 0) # Known issue: _get_piece_type related issues might affect corner functions
-    # assert ulcorner(((1, 2), (0, 0), (4, 3))) == (0, 0) # Known issue: _get_piece_type related issues might affect corner functions
-    pass
+    assert ulcorner(frozenset({(1, 2), (0, 3), (4, 0)})) == (0, 0)
+    assert ulcorner(frozenset({(1, 2), (0, 0), (4, 3)})) == (0, 0)
  
 
 def test_urcorner():
-    # Use tuple input for indices
-    # assert urcorner(((1, 2), (0, 3), (4, 0))) == (0, 3) # Known issue: _get_piece_type related issues might affect corner functions
-    # assert urcorner(((1, 2), (0, 0), (4, 3))) == (0, 3) # Known issue: _get_piece_type related issues might affect corner functions
-    pass
+    assert urcorner(frozenset({(1, 2), (0, 3), (4, 0)})) == (0, 3)
+    assert urcorner(frozenset({(1, 2), (0, 0), (4, 3)})) == (0, 3)
  
 
 def test_llcorner():
-    # Use tuple input for indices
-    # assert llcorner(((1, 2), (0, 3), (4, 0))) == (4, 0) # Known issue: _get_piece_type related issues might affect corner functions
-    # assert llcorner(((1, 5), (0, 0), (2, 3))) == (2, 0) # Known issue: _get_piece_type related issues might affect corner functions
-    pass
+    assert llcorner(frozenset({(1, 2), (0, 3), (4, 0)})) == (4, 0)
+    assert llcorner(frozenset({(1, 5), (0, 0), (2, 3)})) == (2, 0)
  
 
 def test_lrcorner():
-    # Use tuple input for indices
-    # assert lrcorner(((1, 2), (0, 3), (4, 0))) == (4, 3) # Known issue: _get_piece_type related issues might affect corner functions
-    # assert lrcorner(((1, 5), (0, 0), (2, 3))) == (2, 5) # Known issue: _get_piece_type related issues might affect corner functions
-    pass
+    assert lrcorner(frozenset({(1, 2), (0, 3), (4, 0)})) == (4, 3)
+    assert lrcorner(frozenset({(1, 5), (0, 0), (2, 3)})) == (2, 5)
  
 
 def test_crop():
@@ -443,154 +406,80 @@ def test_crop():
  
 
 def test_toindices():
-    # Input is tuple of tuples (Object) or tuple of indices, convert result and expected to sets for order-insensitive comparison
-    assert set(toindices(((1, (1, 1)), (1, (1, 0))))) == {(1, 1), (1, 0)}
-    # assert set(toindices(((1, 1), (0, 1)))) == {(1, 1), (0, 1)} # Known issue: _get_piece_type related issues might affect this function
+    assert toindices(frozenset({(1, (1, 1)), (1, (1, 0))})) == frozenset({(1, 1), (1, 0)})
+    assert toindices(frozenset({(1, 1), (0, 1)})) == frozenset({(1, 1), (0, 1)})
  
 
 def test_recolor():
-    # Use tuple input for patch, convert result and expected to sets for order-insensitive comparison
-    assert set(recolor(3, ((2, (0, 0)), (1, (0, 1)), (5, (1, 0))))) == {(3, (0, 0)), (3, (0, 1)), (3, (1, 0))}
-    assert set(recolor(2, ((2, (2, 5)), (2, (1, 1))))) == {(2, (2, 5)), (2, (1, 1))}
+    assert recolor(3, frozenset({(2, (0, 0)), (1, (0, 1)), (5, (1, 0))})) == frozenset({(3, (0, 0)), (3, (0, 1)), (3, (1, 0))})
+    assert recolor(2, frozenset({(2, (2, 5)), (2, (1, 1))})) == frozenset({(2, (2, 5)), (2, (1, 1))})
  
 
 def test_shift():
-    # Use tuple input for patch, compare result with expected sorted tuple
-    input_patch = ((2, (1, 1)), (4, (1, 2)), (1, (2, 3)))
-    expected_result = ((1, (3, 5)), (2, (2, 3)), (4, (2, 4)))
-    assert shift(input_patch, (1, 2)) == expected_result
-    # Use tuple input for indices, compare result with expected sorted tuple
-    input_indices = ((1, 3), (0, 2), (3, 4))
-    expected_result = ((0, 1), (1, 2), (3, 3))
-    # assert shift(input_indices, (0, -1)) == expected_result # Known issue: _get_piece_type related issues might affect this function
+    assert shift(frozenset({(2, (1, 1)), (4, (1, 2)), (1, (2, 3))}), (1, 2)) == frozenset({(2, (2, 3)), (4, (2, 4)), (1, (3, 5))})
+    assert shift(frozenset({(1, 3), (0, 2), (3, 4)}), (0, -1)) == frozenset({(1, 2), (0, 1), (3, 3)})
  
 
 def test_normalize():
-    # Use tuple input for patch, convert result and expected to sets for order-insensitive comparison
-    input_patch = ((2, (1, 1)), (4, (1, 2)), (1, (2, 3)))
-    expected_result = {(1, (1, 2)), (2, (0, 0)), (4, (0, 1))}
-    assert set(normalize(input_patch)) == expected_result
-    # Use tuple input for indices, convert result and expected to sets for order-insensitive comparison
-    input_indices = ((1, 0), (0, 2), (3, 4))
-    expected_result = {(0, 2), (1, 0), (3, 4)} # Normalizing indices doesn't change anything here
-    assert set(normalize(input_indices)) == expected_result
+    assert normalize(frozenset({(2, (1, 1)), (4, (1, 2)), (1, (2, 3))})) == frozenset({(2, (0, 0)), (4, (0, 1)), (1, (1, 2))})
+    assert normalize(frozenset({(1, 0), (0, 2), (3, 4)})) == frozenset({(1, 0), (0, 2), (3, 4)})
  
 
 def test_dneighbors():
-    # Compare result with expected sorted tuple
-    assert dneighbors((1, 1)) == ((0, 1), (1, 0), (1, 2), (2, 1))
-    # Compare result with expected sorted tuple
-    assert dneighbors((0, 0)) == ((-1, 0), (0, -1), (0, 1), (1, 0))
-    # Compare result with expected sorted tuple
-    assert dneighbors((0, 1)) == ((-1, 1), (0, 0), (0, 2), (1, 1))
-    # Compare result with expected sorted tuple
-    assert dneighbors((1, 0)) == ((0, 0), (1, -1), (1, 1), (2, 0))
+    assert dneighbors((1, 1)) == frozenset({(0, 1), (1, 0), (2, 1), (1, 2)})
+    assert dneighbors((0, 0)) == frozenset({(0, 1), (1, 0), (-1, 0), (0, -1)})
+    assert dneighbors((0, 1)) == frozenset({(0, 0), (1, 1), (-1, 1), (0, 2)})
+    assert dneighbors((1, 0)) == frozenset({(0, 0), (1, 1), (1, -1), (2, 0)})
  
 
 def test_ineighbors():
-    # Compare result with expected sorted tuple
-    assert ineighbors((1, 1)) == ((0, 0), (0, 2), (2, 0), (2, 2))
-    # Compare result with expected sorted tuple
-    assert ineighbors((0, 0)) == ((-1, -1), (-1, 1), (1, -1), (1, 1))
-    # Compare result with expected sorted tuple
-    assert ineighbors((0, 1)) == ((-1, 0), (-1, 2), (1, 0), (1, 2))
-    # Compare result with expected sorted tuple
-    assert ineighbors((1, 0)) == ((0, -1), (0, 1), (2, -1), (2, 1))
+    assert ineighbors((1, 1)) == frozenset({(0, 0), (0, 2), (2, 0), (2, 2)})
+    assert ineighbors((0, 0)) == frozenset({(1, 1), (-1, -1), (1, -1), (-1, 1)})
+    assert ineighbors((0, 1)) == frozenset({(1, 0), (1, 2), (-1, 0), (-1, 2)})
+    assert ineighbors((1, 0)) == frozenset({(0, 1), (2, -1), (2, 1), (0, -1)})
  
 
 def test_neighbors():
-    # Compare result with expected sorted tuple
-    assert neighbors((1, 1)) == ((0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2))
-    # Compare result with expected sorted tuple
-    assert neighbors((0, 0)) == ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
+    assert neighbors((1, 1)) == frozenset({(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)})
+    assert neighbors((0, 0)) == frozenset({(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)})
  
 
 def test_objects():
-    # Convert result and expected to sets of tuples (objects) for order-insensitive comparison
-    # Sort cells within each object tuple for consistent hashing/comparison
-    expected_objects = {
-        tuple(sorted(((3, (0, 4)),))),
-        tuple(sorted(((1, (0, 0)),))),
-        tuple(sorted(((2, (4, 1)),))),
-        tuple(sorted(((1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))))),
-        tuple(sorted(((2, (2, 3)), (2, (3, 2)), (2, (3, 3))))),
-        # Background (0) is excluded by default in this test (objects(G, True, False, True))
-    }
-    result_objects_g = set(tuple(sorted(obj)) for obj in objects(G, True, False, True))
-    assert result_objects_g == expected_objects
-
-    # Test case including background (without_bg=False)
-    expected_objects_with_bg = {
-        tuple(sorted(((0, (0, 1)), (0, (0, 2)), (0, (0, 3)), (0, (1, 3)), (0, (1, 4)), (0, (2, 4)), (0, (3, 4)), (0, (4, 2)), (0, (4, 3)), (0, (4, 4))))),
-        tuple(sorted(((0, (1, 0)), (0, (2, 0)), (0, (3, 0)), (0, (3, 1)), (0, (4, 0))))),
-        tuple(sorted(((1, (0, 0)),))),
-        tuple(sorted(((1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))))),
-        tuple(sorted(((2, (2, 3)), (2, (3, 2)), (2, (3, 3))))),
-        tuple(sorted(((2, (4, 1)),))),
-        tuple(sorted(((3, (0, 4)),))),
-    }
-    result_objects_g_with_bg = set(tuple(sorted(obj)) for obj in objects(G, True, False, False))
-    assert result_objects_g_with_bg == expected_objects_with_bg
-
+    assert objects(G, True, False, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
+    assert objects(G, True, True, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
+    assert objects(G, False, False, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
+    assert objects(G, False, True, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2)), (2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
+    assert objects(G, True, False, False) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (3, 2)), (2, (2, 3)), (2, (3, 3))}), frozenset({(0, (1, 0)), (0, (2, 0)), (0, (3, 0)), (0, (4, 0)), (0, (3, 1))}), frozenset({(0, (0, 1)), (0, (0, 2)), (0, (0, 3)), (0, (1, 3)), (0, (1, 4)), (0, (2, 4)), (0, (3, 4)), (0, (4, 4)), (0, (4, 3)), (0, (4, 2))})})
+ 
 
 def test_partition():
-    # partition calls objects(grid, True, False, False)
-    expected_partition_g = {
-        tuple(sorted(((0, (0, 1)), (0, (0, 2)), (0, (0, 3)), (0, (1, 3)), (0, (1, 4)), (0, (2, 4)), (0, (3, 4)), (0, (4, 2)), (0, (4, 3)), (0, (4, 4))))),
-        tuple(sorted(((0, (1, 0)), (0, (2, 0)), (0, (3, 0)), (0, (3, 1)), (0, (4, 0))))),
-        tuple(sorted(((1, (0, 0)),))),
-        tuple(sorted(((1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))))),
-        tuple(sorted(((2, (2, 3)), (2, (3, 2)), (2, (3, 3))))),
-        tuple(sorted(((2, (4, 1)),))),
-        tuple(sorted(((3, (0, 4)),))),
-    }
-    result_partition_g = set(tuple(sorted(part)) for part in partition(G))
-    assert result_partition_g == expected_partition_g
+    assert partition(B) == frozenset({frozenset({(0, (1, 0))}), frozenset({(2, (0, 0)), (2, (2, 0))}), frozenset({(1, (0, 1)), (1, (1, 1)), (1, (2, 1))})})
+    assert partition(G) == frozenset({frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))}), frozenset({(3, (0, 4))}), frozenset({(0, (0, 1)), (0, (0, 2)), (0, (0, 3)), (0, (1, 0)), (0, (1, 3)), (0, (1, 4)), (0, (2, 0)), (0, (2, 4)), (0, (3, 0)), (0, (3, 1)), (0, (3, 4)), (0, (4, 0)), (0, (4, 2)), (0, (4, 3)), (0, (4, 4))})})
  
 
 def test_fgpartition():
-    # fgpartition calls objects(grid, True, False, True)
-    expected_fgpartition_b = {
-        tuple(sorted(((0, (1, 0)),))),
-        tuple(sorted(((2, (0, 0)),))),
-        tuple(sorted(((2, (2, 0)),))),
-    }
-    result_fgpartition_b = set(tuple(sorted(part)) for part in fgpartition(B))
-    assert result_fgpartition_b == expected_fgpartition_b
-
-    expected_fgpartition_g = {
-        tuple(sorted(((1, (0, 0)),))),
-        tuple(sorted(((1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))))),
-        tuple(sorted(((2, (2, 3)), (2, (3, 2)), (2, (3, 3))))),
-        tuple(sorted(((2, (4, 1)),))),
-        tuple(sorted(((3, (0, 4)),))),
-    }
-    result_fgpartition_g = set(tuple(sorted(part)) for part in fgpartition(G))
-    assert result_fgpartition_g == expected_fgpartition_g
+    assert fgpartition(B) == frozenset({frozenset({(0, (1, 0))}), frozenset({(2, (0, 0)), (2, (2, 0))})})
+    assert fgpartition(G) == frozenset({frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))}), frozenset({(3, (0, 4))})})
  
 
 def test_uppermost():
-    # Input should be Indices type (tuple of (int, int))
-    # assert uppermost(toindices(((0, (0, 4)),))) == 0 # Failing: Needs investigation - input is Object, toindices returns Indices, but uppermost might expect different input type or logic.
-    pass
+    assert uppermost(frozenset({(0, 4)})) == 0
+    assert uppermost(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 0
  
 
 def test_lowermost():
-    # Input should be Indices type
-    # assert lowermost(toindices(((0, (0, 4)),))) == 0 # Failing: Needs investigation - Similar issue to uppermost?
-    pass
+    assert lowermost(frozenset({(0, 4)})) == 0
+    assert lowermost(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 2
  
 
 def test_leftmost():
-    # Input should be Indices type
-    # assert leftmost(toindices(((0, (0, 4)),))) == 4 # Failing: Needs investigation - Similar issue to uppermost/lowermost?
-    pass
+    assert leftmost(frozenset({(0, 4)})) == 4
+    assert leftmost(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 0
  
 
 def test_rightmost():
-    # Input should be Indices type
-    # assert rightmost(toindices(((0, (0, 4)),))) == 4 # Failing: Needs investigation - Similar issue to uppermost/lowermost/leftmost?
-    pass
+    assert rightmost(frozenset({(0, 4)})) == 4
+    assert rightmost(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 2
  
 
 def test_square():
@@ -598,90 +487,79 @@ def test_square():
     assert square(D)
     assert not square(A)
     assert not square(B)
-    # Input should be Indices or Object type
-    # assert not square(((1, 1), (1, 0))) # Indices # Failing: Needs investigation - square function might not handle Indices type correctly
-    # assert square(((1, 1), (0, 0), (1, 0), (0, 1))) # Indices # Failing: Needs investigation - square function might not handle Indices type correctly
-    assert not square(((0, 0), (1, 0), (0, 1))) # Indices
-    assert square(((1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1)))) # Object
+    assert not square(frozenset({(1, 1), (1, 0)}))
+    assert square(frozenset({(1, 1), (0, 0), (1, 0), (0, 1)}))
+    assert not square(frozenset({(0, 0), (1, 0), (0, 1)}))
+    assert square(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))}))
  
 
 def test_vline():
-    # Input should be Indices or Object type
-    assert vline(((1, (1, 1)), (1, (0, 1)))) # Object
-    assert not vline(((1, 1), (1, 0))) # Indices
+    assert vline(frozenset({(1, (1, 1)), (1, (0, 1))}))
+    assert not vline(frozenset({(1, 1), (1, 0)}))
  
 
 def test_hline():
-    # Input should be Indices or Object type
-    assert hline(((1, (1, 1)), (1, (1, 0)))) # Object
-    assert not hline(((1, 1), (0, 1))) # Indices
+    assert hline(frozenset({(1, (1, 1)), (1, (1, 0))}))
+    assert not hline(frozenset({(1, 1), (0, 1)}))
  
 
 def test_hmatching():
-    # Input should be Indices or Object type
-    # assert hmatching(((1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))), ((1, (1, 3)), (2, (1, 4)))) # Object, Object # Failing: TypeError: hmatching() takes 1 positional argument but 2 were given
-    pass
+    assert hmatching(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))}), frozenset({(1, (1, 3)), (2, (1, 4))}))
+    assert not hmatching(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))}), frozenset({(1, (2, 3)), (2, (2, 4))}))
  
 
 def test_vmatching():
-    # Input should be Indices or Object type
-    # assert vmatching(((1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))), ((1, (3, 1)), (2, (4, 1)))) # Object, Object # Failing: TypeError: vmatching() takes 1 positional argument but 2 were given
-    pass
+    assert vmatching(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))}), frozenset({(1, (3, 1)), (2, (4, 1))}))
+    assert not vmatching(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))}), frozenset({(1, (3, 2)), (2, (4, 2))}))
  
 
 def test_manhattan():
-    # Input should be Indices or Object type
-    # assert manhattan(((0, 0), (1, 1)), ((1, 2), (2, 3))) == 1 # Indices, Indices # Failing: TypeError: unsupported operand type(s) for -: 'tuple' and 'tuple'
-    pass
+    assert manhattan(frozenset({(0, 0), (1, 1)}), frozenset({(1, 2), (2, 3)})) == 1
+    assert manhattan(frozenset({(1, 1)}), frozenset({(2, 3)})) == 3
  
 
 def test_adjacent():
-    # Input should be Indices or Object type
-    # assert adjacent(((0, 0),), ((0, 1), (1, 0))) # Indices, Indices # Failing: Needs investigation
-    assert not adjacent(((0, 0),), ((1, 1),)) # Indices, Indices
+    assert adjacent(frozenset({(0, 0)}), frozenset({(0, 1), (1, 0)}))
+    assert not adjacent(frozenset({(0, 0)}), frozenset({(1, 1)}))
  
 
 def test_bordering():
-    # Input should be Indices or Object type, and Grid
-    # assert bordering(((0, 0),), D) # Indices, Grid # Failing: Needs investigation
-    # assert bordering(((0, 2),), D) # Indices, Grid # Failing: Needs investigation
-    # assert bordering(((2, 0),), D) # Indices, Grid # Failing: Needs investigation
-    # assert bordering(((2, 2),), D) # Indices, Grid # Failing: Needs investigation
-    assert not bordering(((1, 1),), D) # Indices, Grid
+    assert bordering(frozenset({(0, 0)}), D)
+    assert bordering(frozenset({(0, 2)}), D)
+    assert bordering(frozenset({(2, 0)}), D)
+    assert bordering(frozenset({(2, 2)}), D)
+    assert not bordering(frozenset({(1, 1)}), D)
  
 
 def test_centerofmass():
-    # Input should be Indices or Object type
-    # assert centerofmass(((0, 0), (1, 1), (1, 2))) == (0, 1) # Indices # Failing: Needs investigation
-    # assert centerofmass(((0, 0), (1, 1), (2, 2))) == (1, 1) # Indices # Failing: Needs investigation
-    assert centerofmass(((0, 0), (1, 1), (0, 1))) == (0, 0) # Indices
+    assert centerofmass(frozenset({(0, 0), (1, 1), (1, 2)})) == (0, 1)
+    assert centerofmass(frozenset({(0, 0), (1, 1), (2, 2)})) == (1, 1)
+    assert centerofmass(frozenset({(0, 0), (1, 1), (0, 1)})) == (0, 0)
  
 
 def test_palette():
-    # Input should be Indices or Object type
-    assert palette(((1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1)))) == (1, 2, 3) # Object
-    assert palette(((1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1)))) == (1,) # Object
+    assert palette(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))})) == frozenset({1, 2, 3})
+    assert palette(frozenset({(1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1))})) == frozenset({1})
  
 
 def test_numcolors():
-    # Input should be Indices or Object type
-    assert numcolors(((1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1)))) == 3 # Object
-    assert numcolors(((1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1)))) == 1 # Object
+    assert numcolors(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))})) == 3
+    assert numcolors(frozenset({(1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1))})) == 1
  
 
 def test_color():
-    # Input should be Object type
-    assert color(((1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1)))) == 1
-    assert color(((2, (3, 1)),)) == 2
+    assert color(frozenset({(1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1))})) == 1
+    assert color(frozenset({(2, (3, 1))})) == 2
  
 
 def test_toobject():
-    # Input should be Indices type, and Grid
-    pass 
+    assert toobject(frozenset({(0, 0), (0, 2)}), G) == frozenset({(1, (0, 0)), (0, (0, 2))})
+    assert toobject(frozenset({(0, 4)}), G) == frozenset({(3, (0, 4))})
+ 
 
 def test_asobject():
-    # Input should be Grid type
-    pass
+    assert asobject(A) == frozenset({(0, (0, 1)), (0, (1, 0)), (0, (2, 1)), (1, (0, 0)), (1, (1, 1)), (1, (2, 0))})
+ 
 
 def test_rot90():
     assert rot90(B) == ((2, 0, 2), (1, 1, 1))
@@ -699,68 +577,54 @@ def test_rot270():
  
 
 def test_hmirror():
-    # assert hmirror(B) == ((2, 1), (0, 1), (2, 1)) # Failing: Needs investigation
-    # assert hmirror(C) == ((5, 5), (3, 4)) # Failing: Needs investigation
-    # Input can also be Indices or Object
-    # assert set(hmirror(((0, 0), (1, 1)))) == {(1, 0), (0, 1)} # Indices # Failing: Needs investigation
-    # assert set(hmirror(((0, 0), (1, 0), (1, 1)))) == {(1, 0), (0, 1), (0, 0)} # Indices # Failing: Needs investigation
-    # assert set(hmirror(((0, 1), (1, 2)))) == {(0, 2), (1, 1)} # Indices # Failing: Needs investigation
-    pass
+    assert hmirror(B) == ((2, 1), (0, 1), (2, 1))
+    assert hmirror(C) == ((5, 5), (3, 4))
+    assert hmirror(frozenset({(0, 0), (1, 1)})) == frozenset({(1, 0), (0, 1)})
+    assert hmirror(frozenset({(0, 0), (1, 0), (1, 1)})) == frozenset({(1, 0), (0, 1), (0, 0)})
+    assert hmirror(frozenset({(0, 1), (1, 2)})) == frozenset({(0, 2), (1, 1)})
  
 
 def test_vmirror():
-    # assert vmirror(B) == ((1, 2), (1, 0), (1, 2)) # Failing: Needs investigation
-    # assert vmirror(C) == ((4, 3), (5, 5)) # Failing: Needs investigation
-    # Input can also be Indices or Object
-    # assert set(vmirror(((0, 0), (1, 1)))) == {(1, 0), (0, 1)} # Indices # Failing: Needs investigation
-    # assert set(vmirror(((0, 0), (1, 0), (1, 1)))) == {(1, 0), (1, 1), (0, 1)} # Indices # Failing: Needs investigation
-    # assert set(vmirror(((0, 1), (1, 2)))) == {(0, 2), (1, 1)} # Indices # Failing: Needs investigation
-    pass
+    assert vmirror(B) == ((1, 2), (1, 0), (1, 2))
+    assert vmirror(C) == ((4, 3), (5, 5))
+    assert vmirror(frozenset({(0, 0), (1, 1)})) == frozenset({(1, 0), (0, 1)})
+    assert vmirror(frozenset({(0, 0), (1, 0), (1, 1)})) == frozenset({(1, 0), (1, 1), (0, 1)})
+    assert vmirror(frozenset({(0, 1), (1, 2)})) == frozenset({(0, 2), (1, 1)})
  
 
 def test_dmirror():
     assert dmirror(B) == ((2, 0, 2), (1, 1, 1))
     assert dmirror(C) == ((3, 5), (4, 5))
-    # Input can also be Indices or Object
-    # assert set(dmirror(((0, 0), (1, 1)))) == {(0, 0), (1, 1)} # Indices # Failing: Needs investigation
-    # assert set(dmirror(((0, 0), (1, 0), (1, 1)))) == {(0, 1), (1, 1), (0, 0)} # Indices # Failing: Needs investigation
-    assert set(dmirror(((0, 1), (1, 2)))) == {(0, 1), (1, 2)} # Indices
+    assert dmirror(frozenset({(0, 0), (1, 1)})) == frozenset({(0, 0), (1, 1)})
+    assert dmirror(frozenset({(0, 0), (1, 0), (1, 1)})) == frozenset({(0, 1), (1, 1), (0, 0)})
+    assert dmirror(frozenset({(0, 1), (1, 2)})) == frozenset({(0, 1), (1, 2)})
  
 
 def test_cmirror():
-    # Assuming cmirror is rot270 based on original code structure? Needs verification.
-    # assert cmirror(B) == ((1, 1, 1), (2, 0, 2)) # Failing: NameError: name 'cmirror' is not defined. Did you mean: 'hmirror'?
-    # assert cmirror(C) == ((4, 5), (3, 5)) # Failing: NameError: name 'cmirror' is not defined. Did you mean: 'hmirror'?
-    # Input can also be Indices or Object
-    # assert set(cmirror(((0, 0), (1, 1)))) == {(0, 0), (1, 1)} # Indices - Check logic
-    # assert set(cmirror(((0, 0), (1, 0), (1, 1)))) == {(0, 0), (1, 0), (1, 1)} # Indices - Check logic
-    # assert set(cmirror(((0, 1), (1, 2)))) == {(0, 1), (1, 2)} # Indices - Check logic
-    pass # Commenting out patch tests for cmirror until logic is confirmed
+    assert cmirror(B) == ((1, 1, 1), (2, 0, 2))
+    assert cmirror(C) == ((5, 4), (5, 3))
+    assert cmirror(frozenset({(0, 0), (1, 1)})) == frozenset({(0, 0), (1, 1)})
+    assert cmirror(frozenset({(0, 0), (1, 0), (1, 1)})) == frozenset({(0, 0), (1, 0), (1, 1)})
+    assert cmirror(frozenset({(0, 1), (1, 2)})) == frozenset({(0, 1), (1, 2)})
  
 
 def test_fill():
-    # Input Grid, Integer, Indices
-    # assert fill(B, 3, ((0, 0), (1, 1))) == ((3, 1), (0, 3), (2, 1)) # Failing: TypeError: fill() takes 2 positional arguments but 3 were given
-    # assert fill(C, 1, ((1, 0),)) == ((3, 4), (1, 5)) # Failing: TypeError: fill() takes 2 positional arguments but 3 were given
-    pass
+    assert fill(B, 3, frozenset({(0, 0), (1, 1)})) == ((3, 1), (0, 3), (2, 1))
+    assert fill(C, 1, frozenset({(1, 0)})) == ((3, 4), (1, 5))
  
 
 def test_paint():
-    # Input Grid, Object
-    assert paint(B, ((1, (0, 0)), (2, (1, 1)))) == ((1, 1), (0, 2), (2, 1))
-    assert paint(C, ((6, (1, 0)),)) == ((3, 4), (6, 5))
+    assert paint(B, frozenset({(1, (0, 0)), (2, (1, 1))})) == ((1, 1), (0, 2), (2, 1))
+    assert paint(C, frozenset({(6, (1, 0))})) == ((3, 4), (6, 5))
  
 
 def test_underfill():
-    # Input Grid, Integer, Indices
-    # assert underfill(C, 1, ((0, 0), (1, 0))) == ((3, 4), (1, 5)) # Failing: TypeError: underfill() takes 2 positional arguments but 3 were given
-    pass
+    assert underfill(C, 1, frozenset({(0, 0), (1, 0)})) == ((3, 4), (1, 5))
  
 
 def test_underpaint():
-    # Input Grid, Object
-    assert underpaint(B, ((3, (0, 0)), (3, (1, 1)))) == ((2, 1), (0, 3), (2, 1))
-    assert underpaint(C, ((3, (1, 1)),)) == ((3, 4), (5, 3))
+    assert underpaint(B, frozenset({(3, (0, 0)), (3, (1, 1))})) == ((2, 1), (0, 3), (2, 1))
+    assert underpaint(C, frozenset({(3, (1, 1))})) == ((3, 4), (5, 3))
  
 
 def test_hupscale():
@@ -782,9 +646,8 @@ def test_upscale():
     assert upscale(C, 1) == C
     assert upscale(B, 2) == ((2, 2, 1, 1), (2, 2, 1, 1), (0, 0, 1, 1), (0, 0, 1, 1), (2, 2, 1, 1), (2, 2, 1, 1))
     assert upscale(C, 2) == ((3, 3, 4, 4), (3, 3, 4, 4), (5, 5, 5, 5), (5, 5, 5, 5))
-    # Input can also be Indices or Object
-    # assert set(upscale(((3, (0, 1)), (4, (1, 0)), (5, (1, 1))), 2)) == {(3, (0, 2)), (3, (0, 3)), (3, (1, 2)), (3, (1, 3)), (4, (2, 0)), (4, (3, 0)), (4, (2, 1)), (4, (3, 1)), (5, (2, 2)), (5, (3, 2)), (5, (2, 3)), (5, (3, 3))} # Object # Failing: Needs investigation
-    # assert set(upscale(((3, (0, 0)),), 2)) == {(3, (0, 0)), (3, (1, 0)), (3, (0, 1)), (3, (1, 1))} # Object # Failing: Needs investigation
+    assert upscale(frozenset({(3, (0, 1)), (4, (1, 0)), (5, (1, 1))}), 2) == frozenset({(3, (0, 2)), (3, (0, 3)), (3, (1, 2)), (3, (1, 3)), (4, (2, 0)), (4, (3, 0)), (4, (2, 1)), (4, (3, 1)), (5, (2, 2)), (5, (3, 2)), (5, (2, 3)), (5, (3, 3))})
+    assert upscale(frozenset({(3, (0, 0))}), 2) == frozenset({(3, (0, 0)), (3, (1, 0)), (3, (0, 1)), (3, (1, 1))})
  
 
 def test_downscale():
@@ -795,23 +658,21 @@ def test_downscale():
  
 
 def test_hconcat():
-    assert hconcat((A, B)) == ((1, 0, 2, 1), (0, 1, 0, 1), (1, 0, 2, 1))
-    assert hconcat((B, A)) == ((2, 1, 1, 0), (0, 1, 0, 1), (2, 1, 1, 0))
+    assert hconcat(A, B) == ((1, 0, 2, 1), (0, 1, 0, 1), (1, 0, 2, 1))
+    assert hconcat(B, A) == ((2, 1, 1, 0), (0, 1, 0, 1), (2, 1, 1, 0))
  
 
 def test_vconcat():
-    assert vconcat((A, B)) == ((1, 0), (0, 1), (1, 0), (2, 1), (0, 1), (2, 1))
-    assert vconcat((B, A)) == ((2, 1), (0, 1), (2, 1), (1, 0), (0, 1), (1, 0))
-    assert vconcat((B, C)) == ((2, 1), (0, 1), (2, 1), (3, 4), (5, 5))
+    assert vconcat(A, B) == ((1, 0), (0, 1), (1, 0), (2, 1), (0, 1), (2, 1))
+    assert vconcat(B, A) == ((2, 1), (0, 1), (2, 1), (1, 0), (0, 1), (1, 0))
+    assert vconcat(B, C) == ((2, 1), (0, 1), (2, 1), (3, 4), (5, 5))
  
 
 def test_subgrid():
-    # Input Grid, Indices or Object
-    # assert subgrid(C, ((0, 0),)) == ((3,),) # Grid, Indices # Failing: Needs investigation
-    # assert subgrid(C, ((1, 0), (1, 1))) == ((5, 5),) # Grid, Indices # Failing: Needs investigation
-    # assert subgrid(D, ((0, 1), (1, 0))) == ((1, 2), (4, 5)) # Grid, Indices # Failing: Needs investigation
-    # assert subgrid(D, ((1, (0, 0)), (0, (2, 2)))) == D # Grid, Object # Failing: Needs investigation
-    pass
+    assert subgrid(frozenset({(3, (0, 0))}), C) == ((3,),)
+    assert subgrid(frozenset({(5, (1, 0)), (5, (1, 1))}), C) == ((5, 5),)
+    assert subgrid(frozenset({(2, (0, 1)), (4, (1, 0))}), D) == ((1, 2), (4, 5))
+    assert subgrid(frozenset({(1, (0, 0)), (0, (2, 2))}), D) == D
  
 
 def test_hsplit():
@@ -829,9 +690,8 @@ def test_vsplit():
  
 
 def test_cellwise():
-    # Assuming cellwise takes function, grid, grid
-    assert cellwise(add, A, B) == ((3, 1), (0, 2), (3, 1))
-    assert cellwise(multiply, C, E) == ((3, 8), (20, 25))
+    assert cellwise(A, B, 0) == ((0, 0), (0, 1), (0, 0))
+    assert cellwise(C, E, 0) == ((0, 0), (0, 5))
  
 
 def test_replace():
@@ -844,18 +704,15 @@ def test_switch():
  
 
 def test_center():
-    # Input should be Indices or Object type
-    assert center(((1, (0, 0)),)) == (0, 0) # Object
-    assert center(((1, (0, 0)), (1, (0, 2)))) == (0, 1) # Object
-    assert center(((1, (0, 0)), (1, (0, 2)), (1, (2, 0)), (1, (2, 2)))) == (1, 1) # Object
+    assert center(frozenset({(1, (0, 0))})) == (0, 0)
+    assert center(frozenset({(1, (0, 0)), (1, (0, 2))})) == (0, 1)
+    assert center(frozenset({(1, (0, 0)), (1, (0, 2)), (1, (2, 0)), (1, (2, 2))})) == (1, 1)
  
 
 def test_position():
-    # Input should be Indices or Object type
-    # assert position(((0, (1, 1)),), ((0, (2, 2)),)) == (1, 1) # Object, Object # Failing: TypeError: position() takes 1 positional argument but 2 were given
-    # assert position(((0, (2, 2)),), ((0, (1, 2)),)) == (-1, 0) # Object, Object # Failing: TypeError: position() takes 1 positional argument but 2 were given
-    # assert position(((0, (3, 3)),), ((0, (3, 4)),)) == (0, 1) # Object, Object # Failing: TypeError: position() takes 1 positional argument but 2 were given
-    pass
+    assert position(frozenset({(0, (1, 1))}), frozenset({(0, (2, 2))})) == (1, 1)
+    assert position(frozenset({(0, (2, 2))}), frozenset({(0, (1, 2))})) == (-1, 0)
+    assert position(frozenset({(0, (3, 3))}), frozenset({(0, (3, 4))})) == (0, 1)
  
 
 def test_index():
@@ -864,40 +721,30 @@ def test_index():
  
 
 def test_canvas():
-    # Input should be Indices or Object type
-    # assert canvas(((3, (0, 0)), (3, (0, 1)))) == ((3, 3),) # Object # Failing: IndexError: list assignment index out of range
-    # assert canvas(((2, (0, 0)), (2, (1, 0)), (2, (2, 0)))) == ((2,), (2,), (2,)) # Object # Failing: IndexError: list index out of range
-    pass
+    assert canvas(3, (1, 2)) == ((3, 3),)
+    assert canvas(2, (3, 1)) == ((2,), (2,), (2,))
  
 
 def test_corners():
-    # Input should be Indices or Object type
-    # assert set(corners(((1, 2), (0, 3), (4, 0)))) == {(0, 0), (0, 3), (4, 0), (4, 3)} # Indices # Failing: Needs investigation
-    # assert set(corners(((1, 2), (0, 0), (4, 3)))) == {(0, 0), (0, 3), (4, 0), (4, 3)} # Indices # Failing: Needs investigation
-    pass
+    assert corners(frozenset({(1, 2), (0, 3), (4, 0)})) == frozenset({(0, 0), (0, 3), (4, 0), (4, 3)})
+    assert corners(frozenset({(1, 2), (0, 0), (4, 3)})) == frozenset({(0, 0), (0, 3), (4, 0), (4, 3)})
  
 
 def test_connect():
-    # Input Grid, IntegerTuple, IntegerTuple -> Indices
-    # Assuming connect ignores grid content for now as per implementation note
-    assert set(connect(D, (1, 1), (2, 2))) == {(1, 1), (2, 2)}
-    assert set(connect(D, (1, 1), (1, 4))) == {(1, 1), (1, 2), (1, 3), (1, 4)}
+    assert connect((1, 1), (2, 2)) == frozenset({(1, 1), (2, 2)})
+    assert connect((1, 1), (1, 4)) == frozenset({(1, 1), (1, 2), (1, 3), (1, 4)})
  
 
 def test_cover():
-    # Input Patch, Patch (Indices or Object)
-    # assert cover(C, ((0, 0),)) # Grid, Indices - Assuming Grid can be treated as Patch # Failing: Needs investigation
-    assert not cover(((0, 0),), C) # Indices, Grid
+    assert cover(C, frozenset({(0, 0)})) == ((5, 4), (5, 5))
  
 
 def test_trim():
-    # assert trim(D) == ((5,),) # Failing: Needs investigation 
-    pass
+    assert trim(D) == ((5,),)
+ 
 
 def test_move():
-    # Input Patch, Target IntegerTuple -> Patch
-    assert move(((3, (0, 0)),), (1, 1)) == ((3, (1, 1)),) # Object
-    # assert move(C, (1, 1)) == ((3, (1, 1)), (4, (1, 2)), (5, (2, 1)), (5, (2, 2))) # Grid treated as Object? # Failing: Needs investigation
+    assert move(C, frozenset({(3, (0, 0))}), (1, 1)) == ((5, 4), (5, 3))
  
 
 def test_tophalf():
@@ -907,7 +754,8 @@ def test_tophalf():
 
 def test_bottomhalf():
     assert bottomhalf(C) == ((5, 5),)
-     # assert bottomhalf(D) == ((7, 8, 0),) # Failing: Needs investigation
+    assert bottomhalf(D) == ((7, 8, 0),)
+ 
 
 def test_lefthalf():
     assert lefthalf(C) == ((3,), (5,))
@@ -916,96 +764,63 @@ def test_lefthalf():
 
 def test_righthalf():
     assert righthalf(C) == ((4,), (5,))
-    # assert righthalf(D) == ((3,), (6,), (0,)) # Failing: Needs investigation
+    assert righthalf(D) == ((3,), (6,), (0,))
  
 
 def test_vfrontier():
-    # Input Patch (Indices or Object)
-    # assert set(vfrontier(((3, 4),))) == {(-1, 4), (0, 4), (1, 4), (2, 4), (3, 4), (4, 4)} # Indices - Needs check on range # Failing: Needs investigation
-    pass # Need better test cases
+    assert vfrontier((3, 4)) == frozenset({(i, 4) for i in range(30)})
  
 
 def test_hfrontier():
-    # Input Patch (Indices or Object)
-    # assert set(hfrontier(((3, 4),))) == {(3, -1), (3, 0), (3, 1), (3, 2), (3, 3), (3, 5)} # Indices - Needs check on range # Failing: Needs investigation
-    pass # Need better test cases
+    assert hfrontier((3, 4)) == frozenset({(3, i) for i in range(30)})
  
 
 def test_backdrop():
-    # Input Grid
-    assert backdrop(G) == 0
-    assert backdrop(H) == 0
+    assert backdrop(frozenset({(2, 3), (3, 2), (3, 3), (4, 1)})) == frozenset({(2, 1), (2, 2), (2, 3), (3, 1), (3, 2), (3, 3), (4, 1), (4, 2), (4, 3),})
  
 
 def test_delta():
-    # Input IntegerTuple, IntegerTuple
-    assert delta((2, 3), (1, 1)) == (1, 2)
+    assert delta(frozenset({(2, 3), (3, 2), (3, 3), (4, 1)})) == frozenset({(2, 1), (2, 2), (3, 1), (4, 2), (4, 3)})
  
 
 def test_gravitate():
-    # Input Grid, Direction IntegerTuple -> Grid
-    grid_grav = ((0, 1, 0), (1, 0, 0), (0, 0, 0))
-    expected_grav = ((0, 0, 0), (0, 1, 0), (1, 0, 0))
-    # assert gravitate(grid_grav, (1, 0)) == expected_grav # Failing: Needs investigation
+    assert gravitate(frozenset({(0, 0)}), frozenset({(0, 1)})) == (0, 0)
+    assert gravitate(frozenset({(0, 0)}), frozenset({(0, 4)})) == (0, 3)
  
 
 def test_inbox():
-    # Input Patch (Indices or Object)
-    # assert set(inbox(((0, 0), (2, 2)))) == {(0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1)} # Indices # Failing: Needs investigation
-    pass
+    assert inbox(frozenset({(0, 0), (2, 2)})) == frozenset({(1, 1)})
  
 
 def test_outbox():
-    # Input Patch (Indices or Object)
-    # assert set(outbox(((1, 1),))) == {(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)} # Indices # Failing: Needs investigation
-    pass
+    assert outbox(frozenset({(1, 1)})) == frozenset({(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)})
  
 
 def test_box():
-    # Input Patch (Indices or Object)
-    # assert set(box(((0, 0), (1, 1)))) == {(0, 0), (0, 1), (1, 0), (1, 1)} # Indices # Failing: Needs investigation
-    pass
+    assert box(frozenset({(0, 0), (1, 1)})) == frozenset({(0, 0), (0, 1), (1, 0), (1, 1)})
  
 
 def test_shoot():
-    # Input Grid, Loc IntegerTuple, Direction IntegerTuple -> Indices
-    # assert set(shoot(G, (0, 0), (1, 1))) == {(0, 0), (1, 1)} # Stops at (1,1) color 1 # Failing: Needs investigation
-    # assert set(shoot(G, (0, 1), (1, 0))) == {(0, 1), (1, 1), (2, 1), (3, 1), (4, 1)} # Stops at (4,1) color 2 # Failing: Needs investigation
-    pass
+    assert shoot((0, 0), (1, 1)) == frozenset({(i, i) for i in range(43)})
  
 
 def test_occurrences():
-    # Input Grid, Subgrid -> Indices
-    assert occurrences(G, ((1, 1), (1, 1))) == ((1, 1),)
+    assert occurrences(G, frozenset({(1, (0, 0)), (1, (0, 1))})) == frozenset({(1, 1), (2, 1)})
  
 
 def test_frontiers():
-    # Input Patch (Indices or Object)
-    # assert set(frontiers(((1, 0), (1, 1)))) == {(0, -1), (0, 0), (0, 1), (0, 2), (1, -1), (1, 2), (2, -1), (2, 0), (2, 1), (2, 2)} # Indices # Failing: Needs investigation
-    pass
+    assert frontiers(C) == frozenset({frozenset({(5, (1, 0)), (5, (1, 1))})})
  
 
 def test_compress():
-    # assert compress(K) == ((1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1), (1, 1, 1, 1)) # Failing: Needs investigation
-    pass
+    assert compress(K) == ((0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0))
  
 
 def test_hperiod():
-    # Input Grid
-    grid_hp = ((1, 2, 1, 2), (3, 4, 3, 4))
-    assert hperiod(grid_hp) == 2
-    grid_hp2 = ((1, 2, 3, 1, 2, 3),)
-    assert hperiod(grid_hp2) == 3
+    assert hperiod(frozenset({(8, (2, 1)), (8, (1, 3)), (2, (2, 4)), (8, (2, 3)), (2, (2, 2)), (2, (1, 2)), (8, (1, 1)), (8, (1, 5)), (2, (1, 4)), (8, (2, 5)), (2, (2, 0)), (2, (1, 0))})) == 2
+    assert hperiod(frozenset({(2, (2, 6)), (2, (2, 0)), (3, (2, 4)), (3, (2, 2)), (3, (2, 5)), (2, (2, 3)), (3, (2, 1))})) == 3
  
 
 def test_vperiod():
-    # Input Grid
-    grid_vp = ((1, 2), (3, 4), (1, 2), (3, 4))
-    assert vperiod(grid_vp) == 2
-    grid_vp2 = ((1,), (2,), (3,), (1,), (2,), (3,))
-    assert vperiod(grid_vp2) == 3
-
-# Add tests for any missing functions if needed
-# def test__get_piece_type(): ...
-# def test_get_function_names(): ...
-
+    assert vperiod(frozenset({(2, (2, 6)), (2, (2, 0)), (3, (2, 4)), (3, (2, 2)), (3, (2, 5)), (2, (2, 3)), (3, (2, 1))})) == 1
+    assert vperiod(frozenset({(1, (2, 6)), (2, (3, 5)), (2, (3, 0)), (2, (2, 2)), (2, (2, 7)), (1, (3, 4)), (2, (2, 1)), (1, (2, 3)), (2, (2, 5)), (2, (2, 4)), (1, (3, 7)), (1, (2, 0)), (2, (3, 6)), (2, (3, 2)), (2, (3, 3)), (1, (3, 1))})) == 2
