@@ -38,6 +38,7 @@ THREE_BY_THREE = (3, 3)
 # These are examples of how constants *could* be named for clarity.
 
 # Example Suffix: _color (for integers 0-9)
+Color = int
 ZERO_color = 0
 ONE_color = 1
 TWO_color = 2

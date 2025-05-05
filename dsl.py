@@ -131,10 +131,25 @@ def intersection(
     return a & b
 
 
+def and_tuple(
+    a: Tuple, 
+    b: Tuple 
+) -> Tuple:
+    """ returns the intersection of two tuples """
+    return tuple((Counter(a) & Counter(b)).elements())
+
 def difference(
     a: FrozenSet,
     b: FrozenSet
 ) -> FrozenSet:
+    """ set difference """
+    return type(a)(e for e in a if e not in b)
+
+
+def difference_tuple(
+    a: Tuple, 
+    b: Tuple
+) -> Tuple:
     """ set difference """
     return type(a)(e for e in a if e not in b)
 
@@ -533,6 +548,14 @@ def mapply(
     return merge(apply(function, container))
 
 
+def mapply_tuple(
+    function: Callable,
+    container: ContainerContainer
+) -> Tuple:
+    """ apply and merge """
+    return merge(apply(function, container))
+
+
 def papply(
     function: Callable,
     a: Tuple,
@@ -587,8 +610,30 @@ def height(
     return lowermost(piece) - uppermost(piece) + 1
 
 
+def tuple_height(
+    piece: PieceTuple
+) -> Integer:
+    """ height of grid or patch """
+    if len(piece) == 0:
+        return 0
+    if isinstance(piece, tuple):
+        return len(piece)
+    return lowermost(piece) - uppermost(piece) + 1
+
+
 def width(
     piece: Piece
+) -> Integer:
+    """ width of grid or patch """
+    if len(piece) == 0:
+        return 0
+    if isinstance(piece, tuple):
+        return len(piece[0])
+    return rightmost(piece) - leftmost(piece) + 1
+
+
+def tuple_width(
+    piece: PieceTuple
 ) -> Integer:
     """ width of grid or patch """
     if len(piece) == 0:
@@ -643,6 +688,13 @@ def asindices(
 ) -> Indices:
     """ indices of all grid cells """
     return frozenset((i, j) for i in range(len(grid)) for j in range(len(grid[0])))
+
+
+def asindice_tuple(
+    grid: Grid
+) -> IndiceTuple:
+    """ indices of all grid cells """
+    return tuple((i, j) for i in range(len(grid)) for j in range(len(grid[0])))
 
 
 def ofcolor(
@@ -722,6 +774,19 @@ def shift(
     return frozenset((i + di, j + dj) for i, j in patch)
 
 
+def shift_tuple(
+    patch: PatchTuple,
+    directions: IntegerTuple
+) -> PatchTuple:
+    """ shift patch """
+    if len(patch) == 0:
+        return patch
+    di, dj = directions
+    if isinstance(next(iter(patch))[1], tuple):
+        return tuple((value, (i + di, j + dj)) for value, (i, j) in patch)
+    return tuple((i + di, j + dj) for i, j in patch)
+
+
 def normalize(
     patch: Patch
 ) -> Patch:
@@ -738,6 +803,13 @@ def dneighbors(
     return frozenset({(loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]), (loc[0], loc[1] - 1), (loc[0], loc[1] + 1)})
 
 
+def dneighbor_tuple(
+    loc: IntegerTuple
+) -> IndiceTuple:
+    """ directly adjacent indices """
+    return ((loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]), (loc[0], loc[1] - 1), (loc[0], loc[1] + 1))
+
+
 def ineighbors(
     loc: IntegerTuple
 ) -> Indices:
@@ -745,11 +817,25 @@ def ineighbors(
     return frozenset({(loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1)})
 
 
+def ineighbor_tuple(
+    loc: IntegerTuple
+) -> IndiceTuple:
+    """ diagonally adjacent indices """
+    return ((loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1))
+
+
 def neighbors(
     loc: IntegerTuple
 ) -> Indices:
     """ adjacent indices """
     return dneighbors(loc) | ineighbors(loc)
+
+
+def neighbor_tuple(
+    loc: IntegerTuple
+) -> IndiceTuple:
+    """ adjacent indices """
+    return tuple(set(dneighbor_tuple(loc)) | set(ineighbor_tuple(loc)))
 
 
 def objects(
@@ -788,6 +874,42 @@ def objects(
     return frozenset(objs)
 
 
+def object_tuple(
+    grid: Grid,
+    univalued: Boolean,
+    diagonal: Boolean,
+    without_bg: Boolean
+) -> ObjectTuple:
+    """ objects occurring on the grid """
+    bg = mostcolor(grid) if without_bg else None
+    objs = set()
+    occupied = set()
+    h, w = len(grid), len(grid[0])
+    unvisited = asindices(grid)
+    diagfun = neighbors if diagonal else dneighbors
+    for loc in unvisited:
+        if loc in occupied:
+            continue
+        val = grid[loc[0]][loc[1]]
+        if val == bg:
+            continue
+        obj = {(val, loc)}
+        cands = {loc}
+        while len(cands) > 0:
+            neighborhood = set()
+            for cand in cands:
+                v = grid[cand[0]][cand[1]]
+                if (val == v) if univalued else (v != bg):
+                    obj.add((v, cand))
+                    occupied.add(cand)
+                    neighborhood |= {
+                        (i, j) for i, j in diagfun(cand) if 0 <= i < h and 0 <= j < w
+                    }
+            cands = neighborhood - occupied
+        objs.add(tuple(obj))
+    return tuple(objs)
+
+
 def partition(
     grid: Grid
 ) -> Objects:
@@ -799,12 +921,34 @@ def partition(
     )
 
 
+def partition_tuple(
+    grid: Grid
+) -> ObjectsTuple:
+    """ each cell with the same value part of the same object """
+    return tuple(
+        tuple(
+            (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
+        ) for value in palette_tuple(grid)
+    )
+
+
 def fgpartition(
     grid: Grid
 ) -> Objects:
     """ each cell with the same value part of the same object without background """
     return frozenset(
         frozenset(
+            (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
+        ) for value in palette(grid) - {mostcolor(grid)}
+    )
+
+
+def fgpartition_tuple(
+    grid: Grid
+) -> ObjectsTuple:
+    """ each cell with the same value part of the same object without background """
+    return tuple(
+        tuple(
             (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
         ) for value in palette(grid) - {mostcolor(grid)}
     )
@@ -915,9 +1059,25 @@ def palette(
     return frozenset({v for v, _ in element})
 
 
-def numcolors(
+def palette_tuple(
     element: Element
 ) -> IntegerSet:
+    """ colors occurring in object or grid """
+    if isinstance(element, tuple) and all(isinstance(row, tuple) for row in element):
+        # Handle 2D grid case
+        return tuple(set(cell for row in element for cell in row))
+    else:
+        # Fallback to original implementation for other cases
+        try:
+            return tuple({v for v, _ in element})
+        except ValueError:
+            # If element is just a flat collection of values
+            return tuple(set(element))
+
+
+def numcolors(
+    element: Element
+) -> Integer:
     """ number of colors occurring in object or grid """
     return len(palette(element))
 
@@ -944,6 +1104,12 @@ def asobject(
     """ conversion of grid to object """
     return frozenset((v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r))
 
+
+def asobject_tuple(
+    grid: Grid
+) -> ObjectTuple:
+    """ conversion of grid to object """
+    return tuple((v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r))
 
 def rot90(
     grid: Grid
@@ -978,6 +1144,18 @@ def hmirror(
     return frozenset((d - i, j) for i, j in piece)
 
 
+def hmirror_tuple(
+    piece: Piece
+) -> Piece:
+    """ mirroring along horizontal """
+    if isinstance(piece, tuple):
+        return piece[::-1]
+    d = ulcorner(piece)[0] + lrcorner(piece)[0]
+    if isinstance(next(iter(piece))[1], tuple):
+        return tuple((v, (d - i, j)) for v, (i, j) in piece)
+    return tuple((d - i, j) for i, j in piece)
+
+
 def vmirror(
     piece: Piece
 ) -> Piece:
@@ -988,6 +1166,18 @@ def vmirror(
     if isinstance(next(iter(piece))[1], tuple):
         return frozenset((v, (i, d - j)) for v, (i, j) in piece)
     return frozenset((i, d - j) for i, j in piece)
+
+
+def vmirror_tuple(
+    piece: Piece
+) -> Piece:
+    """ mirroring along vertical """
+    if isinstance(piece, tuple):
+        return tuple(row[::-1] for row in piece)
+    d = ulcorner(piece)[1] + lrcorner(piece)[1]
+    if isinstance(next(iter(piece))[1], tuple):
+        return tuple((v, (i, d - j)) for v, (i, j) in piece)
+    return tuple((i, d - j) for i, j in piece)
 
 
 def dmirror(
@@ -1485,6 +1675,18 @@ def frontiers(
     hfrontiers = frozenset({frozenset({(grid[i][j], (i, j)) for j in range(w)}) for i in row_indices})
     vfrontiers = frozenset({frozenset({(grid[i][j], (i, j)) for i in range(h)}) for j in column_indices})
     return hfrontiers | vfrontiers
+
+
+def frontiers_tuple(
+    grid: Grid
+) -> ObjectsTuple:
+    """ set of frontiers """
+    h, w = len(grid), len(grid[0])
+    row_indices = tuple(i for i, r in enumerate(grid) if len(set(r)) == 1)
+    column_indices = tuple(j for j, c in enumerate(dmirror(grid)) if len(set(c)) == 1)
+    hfrontiers = tuple(tuple((grid[i][j], (i, j)) for j in range(w)) for i in row_indices)
+    vfrontiers = tuple(tuple((grid[i][j], (i, j)) for i in range(h)) for j in column_indices)
+    return hfrontiers + vfrontiers
 
 
 def compress(

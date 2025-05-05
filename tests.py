@@ -81,8 +81,16 @@ def test_intersection():
     assert intersection(frozenset({1, 2}), frozenset({2, 3})) == frozenset({2})
  
 
+def test_and_tuple():
+    assert and_tuple((1, 2), (2, 3)) == (2,)
+ 
+
 def test_difference():
     assert difference(frozenset({1, 2, 3}), frozenset({1, 2})) == frozenset({3})
+ 
+
+def test_difference_tuple():
+    assert difference_tuple((1, 2, 3), (1, 2)) == (3,)
  
 
 def test_dedupe():
@@ -301,6 +309,10 @@ def test_mapply():
     assert mapply(lambda x: frozenset({(v + 1, (i, j)) for v, (i, j) in x}), frozenset({frozenset({(1, (0, 0))}), frozenset({(1, (1, 1)), (1, (0, 1))})})) == frozenset({(2, (0, 0)), (2, (1, 1)), (2, (0, 1))})
  
 
+def test_mapply_tuple():
+    assert mapply(lambda x: frozenset({(v + 1, (i, j)) for v, (i, j) in x}), frozenset({frozenset({(1, (0, 0))}), frozenset({(1, (1, 1)), (1, (0, 1))})})) == frozenset({(2, (0, 0)), (2, (1, 1)), (2, (0, 1))})
+ 
+
 def test_papply():
     assert papply(lambda x, y: x + y, (1, 2), (3, 4)) == (4, 6)
  
@@ -334,7 +346,21 @@ def test_height():
     assert height(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 3
  
 
+def test_tuple_height():
+    assert height(A) == 3
+    assert height(C) == 2
+    assert height(frozenset({(0, 4)})) == 1
+    assert height(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 3
+ 
+
 def test_width():
+    assert width(A) == 2
+    assert width(C) == 2
+    assert width(frozenset({(0, 4)})) == 1
+    assert width(frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))})) == 3
+ 
+
+def test_tuple_width():
     assert width(A) == 2
     assert width(C) == 2
     assert width(frozenset({(0, 4)})) == 1
@@ -369,6 +395,11 @@ def test_sizefilter():
  
 
 def test_asindices():
+    assert asindices(A) == frozenset({(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)})
+    assert asindices(C) == frozenset({(0, 0), (0, 1), (1, 0), (1, 1)})
+ 
+
+def test_asindice_tuple():
     assert asindices(A) == frozenset({(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)})
     assert asindices(C) == frozenset({(0, 0), (0, 1), (1, 0), (1, 1)})
  
@@ -420,6 +451,11 @@ def test_shift():
     assert shift(frozenset({(1, 3), (0, 2), (3, 4)}), (0, -1)) == frozenset({(1, 2), (0, 1), (3, 3)})
  
 
+def test_shift_tuple():
+    assert shift_tuple(((2, (1, 1)), (4, (1, 2)), (1, (2, 3))), (1, 2)) == ((2, (2, 3)), (4, (2, 4)), (1, (3, 5)))
+    assert shift_tuple(((1, 3), (0, 2), (3, 4)), (0, -1)) == ((1, 2), (0, 1), (3, 3))
+ 
+
 def test_normalize():
     assert normalize(frozenset({(2, (1, 1)), (4, (1, 2)), (1, (2, 3))})) == frozenset({(2, (0, 0)), (4, (0, 1)), (1, (1, 2))})
     assert normalize(frozenset({(1, 0), (0, 2), (3, 4)})) == frozenset({(1, 0), (0, 2), (3, 4)})
@@ -432,6 +468,13 @@ def test_dneighbors():
     assert dneighbors((1, 0)) == frozenset({(0, 0), (1, 1), (1, -1), (2, 0)})
  
 
+def test_dneighbor_tuple():
+    assert dneighbor_tuple((1, 1)) == ((0, 1), (2, 1), (1, 0), (1, 2))
+    assert dneighbor_tuple((0, 0)) == ((-1, 0), (1, 0), (0, -1), (0, 1))
+    assert dneighbor_tuple((0, 1)) == ((-1, 1), (1, 1), (0, 0), (0, 2))
+    assert dneighbor_tuple((1, 0)) == ((0, 0), (2, 0), (1, -1), (1, 1))
+ 
+
 def test_ineighbors():
     assert ineighbors((1, 1)) == frozenset({(0, 0), (0, 2), (2, 0), (2, 2)})
     assert ineighbors((0, 0)) == frozenset({(1, 1), (-1, -1), (1, -1), (-1, 1)})
@@ -439,12 +482,32 @@ def test_ineighbors():
     assert ineighbors((1, 0)) == frozenset({(0, 1), (2, -1), (2, 1), (0, -1)})
  
 
+def test_ineighbor_tuple():
+    assert ineighbor_tuple((1, 1)) == ((0, 0), (0, 2), (2, 0), (2, 2))
+    assert ineighbor_tuple((0, 0)) == ((-1, -1), (-1, 1), (1, -1), (1, 1))
+    assert ineighbor_tuple((0, 1)) == ((-1, 0), (-1, 2), (1, 0), (1, 2))
+    assert ineighbor_tuple((1, 0)) == ((0, -1), (0, 1), (2, -1), (2, 1))
+ 
+
 def test_neighbors():
     assert neighbors((1, 1)) == frozenset({(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)})
     assert neighbors((0, 0)) == frozenset({(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)})
  
 
+def test_neighbor_tuple():
+    assert neighbor_tuple((1, 1)) == ((0, 1), (1, 2), (2, 1), (0, 0), (2, 0), (0, 2), (2, 2), (1, 0))
+    assert neighbor_tuple((0, 0)) == ((0, 1), (-1, -1), (-1, 1), (1, 1), (1, -1), (-1, 0), (1, 0), (0, -1))
+ 
+
 def test_objects():
+    assert objects(G, True, False, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
+    assert objects(G, True, True, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
+    assert objects(G, False, False, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
+    assert objects(G, False, True, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2)), (2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
+    assert objects(G, True, False, False) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (3, 2)), (2, (2, 3)), (2, (3, 3))}), frozenset({(0, (1, 0)), (0, (2, 0)), (0, (3, 0)), (0, (4, 0)), (0, (3, 1))}), frozenset({(0, (0, 1)), (0, (0, 2)), (0, (0, 3)), (0, (1, 3)), (0, (1, 4)), (0, (2, 4)), (0, (3, 4)), (0, (4, 4)), (0, (4, 3)), (0, (4, 2))})})
+ 
+
+def test_object_tuple():
     assert objects(G, True, False, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
     assert objects(G, True, True, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
     assert objects(G, False, False, True) == frozenset({frozenset({(3, (0, 4))}), frozenset({(1, (0, 0))}), frozenset({(2, (4, 1))}), frozenset({(1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))})})
@@ -457,7 +520,17 @@ def test_partition():
     assert partition(G) == frozenset({frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))}), frozenset({(3, (0, 4))}), frozenset({(0, (0, 1)), (0, (0, 2)), (0, (0, 3)), (0, (1, 0)), (0, (1, 3)), (0, (1, 4)), (0, (2, 0)), (0, (2, 4)), (0, (3, 0)), (0, (3, 1)), (0, (3, 4)), (0, (4, 0)), (0, (4, 2)), (0, (4, 3)), (0, (4, 4))})})
  
 
+def test_partition_tuple():
+    assert partition(B) == frozenset({frozenset({(0, (1, 0))}), frozenset({(2, (0, 0)), (2, (2, 0))}), frozenset({(1, (0, 1)), (1, (1, 1)), (1, (2, 1))})})
+    assert partition(G) == frozenset({frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))}), frozenset({(3, (0, 4))}), frozenset({(0, (0, 1)), (0, (0, 2)), (0, (0, 3)), (0, (1, 0)), (0, (1, 3)), (0, (1, 4)), (0, (2, 0)), (0, (2, 4)), (0, (3, 0)), (0, (3, 1)), (0, (3, 4)), (0, (4, 0)), (0, (4, 2)), (0, (4, 3)), (0, (4, 4))})})
+ 
+
 def test_fgpartition():
+    assert fgpartition(B) == frozenset({frozenset({(0, (1, 0))}), frozenset({(2, (0, 0)), (2, (2, 0))})})
+    assert fgpartition(G) == frozenset({frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))}), frozenset({(3, (0, 4))})})
+ 
+
+def test_fgpartition_tuple():
     assert fgpartition(B) == frozenset({frozenset({(0, (1, 0))}), frozenset({(2, (0, 0)), (2, (2, 0))})})
     assert fgpartition(G) == frozenset({frozenset({(1, (0, 0)), (1, (1, 1)), (1, (1, 2)), (1, (2, 1)), (1, (2, 2))}), frozenset({(2, (4, 1)), (2, (3, 2)), (2, (2, 3)), (2, (3, 3))}), frozenset({(3, (0, 4))})})
  
@@ -542,6 +615,11 @@ def test_palette():
     assert palette(frozenset({(1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1))})) == frozenset({1})
  
 
+def test_palette_tuple():
+    assert palette(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))})) == frozenset({1, 2, 3})
+    assert palette(frozenset({(1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1))})) == frozenset({1})
+ 
+
 def test_numcolors():
     assert numcolors(frozenset({(1, (1, 1)), (2, (0, 0)), (2, (1, 0)), (3, (0, 1))})) == 3
     assert numcolors(frozenset({(1, (1, 1)), (1, (0, 0)), (1, (1, 0)), (1, (0, 1))})) == 1
@@ -558,6 +636,10 @@ def test_toobject():
  
 
 def test_asobject():
+    assert asobject(A) == frozenset({(0, (0, 1)), (0, (1, 0)), (0, (2, 1)), (1, (0, 0)), (1, (1, 1)), (1, (2, 0))})
+ 
+
+def test_asobject_tuple():
     assert asobject(A) == frozenset({(0, (0, 1)), (0, (1, 0)), (0, (2, 1)), (1, (0, 0)), (1, (1, 1)), (1, (2, 0))})
  
 
@@ -584,12 +666,28 @@ def test_hmirror():
     assert hmirror(frozenset({(0, 1), (1, 2)})) == frozenset({(0, 2), (1, 1)})
  
 
+def test_hmirror_tuple():
+    assert hmirror_tuple(B) == ((2, 1), (0, 1), (2, 1))
+    assert hmirror_tuple(C) == ((5, 5), (3, 4))
+    assert hmirror_tuple(((0, 0), (1, 1))) == ((1, 1), (0, 0))
+    assert hmirror_tuple(((0, 0), (1, 0), (1, 1))) == ((1, 1), (1, 0), (0, 0))
+    assert hmirror_tuple(((0, 1), (1, 2))) == ((1, 2), (0, 1))
+ 
+
 def test_vmirror():
     assert vmirror(B) == ((1, 2), (1, 0), (1, 2))
     assert vmirror(C) == ((4, 3), (5, 5))
     assert vmirror(frozenset({(0, 0), (1, 1)})) == frozenset({(1, 0), (0, 1)})
     assert vmirror(frozenset({(0, 0), (1, 0), (1, 1)})) == frozenset({(1, 0), (1, 1), (0, 1)})
     assert vmirror(frozenset({(0, 1), (1, 2)})) == frozenset({(0, 2), (1, 1)})
+ 
+
+def test_vmirror_tuple():
+    assert vmirror_tuple(B) == ((1, 2), (1, 0), (1, 2))
+    assert vmirror_tuple(C) == ((4, 3), (5, 5))
+    assert vmirror_tuple(((0, 0), (1, 1))) == ((0, 0), (1, 1))
+    assert vmirror_tuple(((0, 0), (1, 0), (1, 1))) == ((0, 0), (0, 1), (1, 1))
+    assert vmirror_tuple(((0, 1), (1, 2))) == ((1, 0), (2, 1))
  
 
 def test_dmirror():
@@ -809,6 +907,10 @@ def test_occurrences():
  
 
 def test_frontiers():
+    assert frontiers(C) == frozenset({frozenset({(5, (1, 0)), (5, (1, 1))})})
+ 
+
+def test_frontiers_tuple():
     assert frontiers(C) == frozenset({frozenset({(5, (1, 0)), (5, (1, 1))})})
  
 

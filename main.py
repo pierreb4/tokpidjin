@@ -1,13 +1,14 @@
 import os
 import json
 import inspect
+import traceback
 import tqdm
 
 import arc_types
-import constants_manus
+import constants
 import dsl
 import tests
-import solvers_manus as solvers
+import solvers
 
 
 
@@ -46,6 +47,13 @@ def run_dsl_tests(dsl_module, test_module):
     """ test DSL primitives """
     dsl_functions = get_functions(dsl_module.__file__)
     test_functions = get_functions(test_module.__file__)
+
+    # Find dsl functions that are not in the test module
+    miss_functions = [f'test_{f}' for f in dsl_functions if f'test_{f}' not in test_functions]
+    # Print them
+    if miss_functions:
+        print(f'Functions that we miss in test module: {miss_functions}')
+
     expected = set([f'test_{f}' for f in dsl_functions])
     assert set(test_functions) == expected
     for fun in test_functions:
@@ -54,7 +62,7 @@ def run_dsl_tests(dsl_module, test_module):
 
 def test_solvers_formatting(solvers_module, dsl_module):
     """ tests the implementd solvers for formatting """
-    with open('constants_manus.py', 'r') as f:
+    with open('constants.py', 'r') as f:
         constants = [c.split(' = ')[0] for c in f.readlines() if ' = ' in c]
     definitions = {
         function: inspect.getsource(getattr(solvers_module, function)) \
@@ -87,6 +95,13 @@ def test_solvers_formatting(solvers_module, dsl_module):
                         arg in constants, arg == 'I'
                     ])
             for v in variables:
+                if sum([
+                    definition.count(vs) for vs in [
+                        f'({v})', f'({v}, ', f', {v})',
+                        f', {v}, ', f' {v} = ', f' {v}('
+                    ]
+                ]) == 1 and v != 'O':
+                    print(f'{v = }')
                 assert sum([
                     definition.count(vs) for vs in [
                         f'({v})', f'({v}, ', f', {v})',
@@ -95,7 +110,9 @@ def test_solvers_formatting(solvers_module, dsl_module):
                 ]) > 1 or v == 'O'
             n_correct += 1
         except:
-            pass
+            print(f'- Exception! {key = }')
+            print(f'{definition}')
+            print(f'- Traceback: {traceback.format_exc()}')
     print(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
@@ -111,6 +128,11 @@ def test_solvers_correctness(data, solvers_module):
                 assert solver(ex['input']) == ex['output']
             n_correct += 1
         except:
+            # print(f'- Exception! {key = }')
+            # for ex in task:
+            #     print(f'>- {solver(ex["input"])}')
+            #     print(f'-> {ex["output"]}')
+            # print(f'- Traceback: {traceback.format_exc()}')
             pass
     print(f'{n_correct} out of {n} tasks solved correctly.')
 
