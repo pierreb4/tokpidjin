@@ -23,161 +23,83 @@ def dedupe_pair_tuple(S: SampleTuple) -> SampleTuple:
 
 def b_iz(S: SampleTuple, function: Callable) -> Any:
     # Filter out identical pairs first
+    # For now, we don't use them
     x1 = dedupe_pair_tuple(S)
-    
-    # Check if we have any samples left after deduplication
+    # Check that we have something left
     if not x1:
-        return False, None
-        
+        return False, None    
     x2 = apply(first, x1)
     x3 = apply(second, x1)
     x4 = apply(function, x2)
     x5 = apply(function, x3)
-    x6 = papply(difference_tuple, x4, x5)
-    
-    # print(f'{x6 = }')
+    x6 = papply(difference_tuple, x4, x5)    
     x7 = dedupe(x6)
     if len(x7) == 1:
         return True, x7[0] if x7[0] != () else None
-    else:
-        return False, x7 if len(x7) > 0 else None
+    return False, x7 if len(x7) > 0 else None
 
 
-def b_iz_0(S: SampleTuple, function: Callable) -> Any:
-    index = 0
+def b_iz_n(S: SampleTuple, index: int, function: Callable) -> Any:
     (ret_bool, ret_tuple) = b_iz(S, function)
     if ret_bool and ret_tuple is not None:
         return Color(ret_tuple[index]) if index < len(ret_tuple) else None
     return None
 
 
-def b_iz_1(S: SampleTuple, function: Callable) -> Any:
-    index = 1
-    (ret_bool, ret_tuple) = b_iz(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
-def b_iz_2(S: SampleTuple, function: Callable) -> Any:
-    index = 2
-    (ret_bool, ret_tuple) = b_iz(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
-def b_iz_3(S: SampleTuple, function: Callable) -> Any:
-    index = 3
-    (ret_bool, ret_tuple) = b_iz(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
-def b_iz_4(S: SampleTuple, function: Callable) -> Any:
-    index = 4
-    (ret_bool, ret_tuple) = b_iz(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
-def b_iz_5(S: SampleTuple, function: Callable) -> Any:
-    index = 5
-    (ret_bool, ret_tuple) = b_iz(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
 def b_zo( S: SampleTuple, function: Callable ) -> Any:
     # Filter out identical pairs first
+    # For now, we don't use them
     x1 = dedupe_pair_tuple(S)
-    
-    # Check if we have any samples left after deduplication
+    # Check that we have something left
     if not x1:
         return False, None
-        
     x2 = apply(first, x1)
     x3 = apply(second, x1)
     x4 = apply(function, x2)
     x5 = apply(function, x3)
     x6 = papply(difference_tuple, x5, x4)
-
-    # print(f'{x6 = }')
     x7 = dedupe(x6)
     if len(x7) == 1:
         return True, x7[0] if x7[0] != () else None
-    else:
-        return False, x7 if len(x7) > 0 else None
+    return False, x7 if len(x7) > 0 else None
 
 
-def b_zo_0(S: SampleTuple, function: Callable) -> Any:
-    index = 0
+def b_zo_n(S: SampleTuple, index: int, function: Callable) -> Any:
     (ret_bool, ret_tuple) = b_zo(S, function)
     if ret_bool and ret_tuple is not None:
         return ret_tuple[index] if index < len(ret_tuple) else None
     return None
 
 
-def b_zo_1(S: SampleTuple, function: Callable) -> Any:
-    index = 1
-    (ret_bool, ret_tuple) = b_zo(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
+def get_constant(S: SampleTuple, func_name: str, constant: str) -> Any:
+    command_tuple = (
+        f'{constant}',
+        f'b_iz_n(S, 0, {func_name})',
+        f'b_iz_n(S, 1, {func_name})',
+        f'b_iz_n(S, 2, {func_name})',
+        f'b_iz_n(S, 3, {func_name})',
+        f'b_iz_n(S, 4, {func_name})',
+        f'b_iz_n(S, 5, {func_name})',
+        f'b_zo_n(S, 0, {func_name})',
+        f'b_zo_n(S, 1, {func_name})',
+        f'b_zo_n(S, 2, {func_name})',
+        f'b_zo_n(S, 3, {func_name})',
+        f'b_zo_n(S, 4, {func_name})',
+        f'b_zo_n(S, 5, {func_name})',
+    )
+    exec_var_dict = {
+        'S': S
+    }
 
+    command_ret = ()
+    for command in command_tuple:
+        exec_var_dict = { 'S': S }
+        exec(f'O = {command}', None, exec_var_dict)
+        command_ret += (exec_var_dict['O'],)
 
-def b_zo_2(S: SampleTuple, function: Callable) -> Any:
-    index = 2
-    (ret_bool, ret_tuple) = b_zo(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
-def b_zo_3(S: SampleTuple, function: Callable) -> Any:
-    index = 3
-    (ret_bool, ret_tuple) = b_zo(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
-def b_zo_4(S: SampleTuple, function: Callable) -> Any:
-    index = 4
-    (ret_bool, ret_tuple) = b_zo(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
-def b_zo_5(S: SampleTuple, function: Callable) -> Any:
-    index = 5
-    (ret_bool, ret_tuple) = b_zo(S, function)
-    if ret_bool and ret_tuple is not None:
-        return ret_tuple[index] if index < len(ret_tuple) else None
-    return None
-
-
-# def get_data(train=True):
-#     path = f'../data/{"training" if train else "evaluation"}'
-#     data = {}
-#     for fn in os.listdir(path):
-#         with open(f'{path}/{fn}') as f:
-#             data[fn.rstrip('.json')] = json.load(f)
-#     ast = lambda g: tuple(tuple(r) for r in g)
-#     return {
-#         'train': {k: [{
-#             'input': ast(e['input']),
-#             'output': ast(e['output']),
-#         } for e in v['train']] for k, v in data.items()},
-#         'test': {k: [{
-#             'input': ast(e['input']),
-#             'output': ast(e['output']),
-#         } for e in v['test']] for k, v in data.items()}
-#     }
+    return tuple(
+        command for command, ret in zip(command_tuple, command_ret) if ret == command_ret[0]
+    )
 
 
 def get_return_type_name(func: Callable) -> str:
@@ -241,8 +163,6 @@ if __name__ == "__main__":
     with open('constants_manus.py', 'r') as f:
         constants = [c.split(' = ')[0] for c in f.readlines() if ' = ' in c]
 
-    print(f'{constants}')
-
     definition_dict = {
         function: inspect.getsource(getattr(solvers, function)) \
             for function in get_functions(solvers.__file__)
@@ -272,7 +192,6 @@ if __name__ == "__main__":
 
         # Show palette_tuple constants
         print(f'{b_iz(S, palette_tuple) = }')
-        print(f'{b_iz_0(S, palette_tuple) = }')
         print(f'{b_zo(S, palette_tuple) = }')
 
         lines = definition.split('\n')
@@ -293,7 +212,23 @@ if __name__ == "__main__":
             args = [args[:-1]] if ',' not in args else args[:-1].split(', ')
             for arg in args:
                 if arg in constants:
-                    print(f'{arg = }')
+                    for function in dsl_interface:
+                        try:
+                            constant_call = get_constant(S, function, arg)
+                            if len(constant_call) > 1:
+                                print(f'{constant_call = }')
+                                # Replace constant_call[0] with constant_call[1]
+                                # in the definition
+                                definition = definition.replace(
+                                    f'{variable}', f'{variable} = {constant_call[1]}\n    {variable}', 1 
+                                )
+                                definition = definition.replace(
+                                    constant_call[0], f'{variable}', 1
+                                )
+                                print(f'{definition}')
+
+                        except:
+                            pass
 
                 assert any([
                     arg in variables, arg in dsl_interface,
@@ -315,6 +250,29 @@ if __name__ == "__main__":
             ]) > 1 or v == 'O'
 
 
+"""
+    def FOUR(S: SampleTuple):
+        command_tuple = tuple(
+            '4',
+            'b_iz_0(S, palette_tuple)',
+            'b_iz_1(S, palette_tuple)',
+            'b_iz_2(S, palette_tuple)',
+            'b_iz_3(S, palette_tuple)',
+            'b_iz_4(S, palette_tuple)',
+            'b_iz_5(S, palette_tuple)',
+            'b_zo_0(S, palette_tuple)',
+            'b_zo_1(S, palette_tuple)',
+            'b_zo_2(S, palette_tuple)',
+            'b_zo_3(S, palette_tuple)',
+            'b_zo_4(S, palette_tuple)',
+            'b_zo_5(S, palette_tuple)',
+        )
+        command_ret = tuple(exec(command) for command in command_tuple)
+        # Return commands for which command_ret equals command_tuple[0]
+        return tuple(
+            command for command, ret in zip(command_tuple, command_ret)
+            if ret == command_tuple[0]
+        )
 
 def solve_dae9d2b5(I):
     x1 = lefthalf(I)
@@ -332,3 +290,11 @@ arg = 'FOUR'
 arg = 'THREE'
 arg = 'SIX'
 
+x_n = b_iz(S, palette_tuple)
+THREE = x_n[0]
+
+
+THREE = b_iz_0(S, palette_tuple)
+FOUR  = b_iz_1(S, palette_tuple)
+
+"""

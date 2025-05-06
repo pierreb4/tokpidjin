@@ -5,7 +5,7 @@ import traceback
 import tqdm
 
 import arc_types
-import constants
+import constants_manus
 import dsl
 import tests
 import solvers
@@ -62,7 +62,7 @@ def run_dsl_tests(dsl_module, test_module):
 
 def test_solvers_formatting(solvers_module, dsl_module):
     """ tests the implementd solvers for formatting """
-    with open('constants.py', 'r') as f:
+    with open('constants_manus.py', 'r') as f:
         constants = [c.split(' = ')[0] for c in f.readlines() if ' = ' in c]
     definitions = {
         function: inspect.getsource(getattr(solvers_module, function)) \

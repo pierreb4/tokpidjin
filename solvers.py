@@ -1,5 +1,170 @@
 from dsl import *
-from constants import *
+from constants_manus import *
+
+
+def solve_a85d4709(I):
+    patch_1 = ofcolor(I, FIVE_color)
+    call_2 = lbind(matcher, last)
+    call_3 = lbind(sfilter, patch_1)
+    call_4 = lbind(mapply, hfrontier)
+    call_5 = chain(call_4, call_3, call_2)
+    patch_6 = call_5(ZERO)
+    patch_7 = call_5(TWO)
+    patch_8 = call_5(ONE)
+    grid_9 = fill(I, TWO_color, patch_6)
+    grid_10 = fill(grid_9, THREE_color, patch_7)
+    O = fill(grid_10, FOUR_color, patch_8)
+    return O
+
+
+def solve_c8cbb738(I):
+    color_1 = mostcolor(I)
+    object_2 = fgpartition(I)
+    shape_3 = valmax(object_2, shape)
+    grid_4 = canvas(color_1, shape_3)
+    object_5 = apply(normalize, object_2)
+    call_6 = lbind(subtract, shape_3)
+    call_7 = chain(halve, call_6, shape)
+    call_8 = fork(shift, identity, call_7)
+    call_9 = mapply(call_8, object_5)
+    O = paint(grid_4, call_9)
+    return O
+
+
+def solve_8e1813be(I):
+    x1 = replace(I, FIVE, ZERO)
+    x2 = objects(x1, T, T, T)
+    x3 = first(x2)
+    x4 = vline(x3)
+    x5 = branch(x4, dmirror, identity)
+    x6 = x5(x1)
+    x7 = objects(x6, T, T, T)
+    x8 = order(x7, uppermost)
+    x9 = apply(color, x8)
+    x10 = dedupe(x9)
+    x11 = size(x10)
+    x12 = rbind(repeat, x11)
+    x13 = apply(x12, x10)
+    O = x5(x13)
+    return O
+
+
+def solve_a699fb00(I):
+    x1 = ofcolor(I, ONE)
+    x2 = shift(x1, RIGHT)
+    x3 = shift(x1, LEFT)
+    x4 = intersection(x2, x3)
+    O = fill(I, TWO, x4)
+    return O
+
+
+def solve_5c2c9af4(I):
+    x1 = leastcolor(I)
+    x2 = ofcolor(I, x1)
+    x3 = center(x2)
+    x4 = ulcorner(x2)
+    x5 = subtract(x3, x4)
+    x6 = multiply(NEG_ONE, NINE)
+    x7 = interval(ZERO, NINE, ONE)
+    x8 = interval(ZERO, x6, NEG_ONE)
+    x9 = lbind(multiply, x5)
+    x10 = apply(x9, x7)
+    x11 = apply(x9, x8)
+    x12 = pair(x10, x11)
+    x13 = mapply(box, x12)
+    x14 = shift(x13, x3)
+    O = fill(I, x1, x14)
+    return O
+
+
+def solve_44f52bb0(I):
+    x1 = vmirror(I)
+    x2 = equality(x1, I)
+    x3 = branch(x2, ONE, SEVEN)
+    O = canvas(x3, UNITY)
+    return O
+
+
+def solve_23581191(I):
+    x1 = objects(I, T, T, T)
+    x2 = fork(combine, vfrontier, hfrontier)
+    x3 = compose(x2, center)
+    x4 = fork(recolor, color, x3)
+    x5 = mapply(x4, x1)
+    x6 = paint(I, x5)
+    x7 = fork(intersection, first, last)
+    x8 = apply(x3, x1)
+    x9 = x7(x8)
+    O = fill(x6, TWO, x9)
+    return O
+
+
+def solve_94f9d214(I):
+    x1 = tophalf(I)
+    x2 = bottomhalf(I)
+    x3 = ofcolor(x1, ZERO)
+    x4 = ofcolor(x2, ZERO)
+    x5 = astuple(FOUR, FOUR)
+    x6 = canvas(ZERO, x5)
+    x7 = intersection(x3, x4)
+    O = fill(x6, TWO, x7)
+    return O
+
+
+def solve_f9012d9b(I):
+    x1 = objects(I, T, F, F)
+    x2 = ofcolor(I, ZERO)
+    x3 = lbind(contained, ZERO)
+    x4 = chain(flip, x3, palette)
+    x5 = mfilter(x1, x4)
+    x6 = vsplit(I, TWO)
+    x7 = hsplit(I, TWO)
+    x8 = extract(x6, x4)
+    x9 = extract(x7, x4)
+    x10 = asobject(x8)
+    x11 = asobject(x9)
+    x12 = vperiod(x10)
+    x13 = hperiod(x11)
+    x14 = neighbors(ORIGIN)
+    x15 = mapply(neighbors, x14)
+    x16 = astuple(x12, x13)
+    x17 = rbind(multiply, x16)
+    x18 = apply(x17, x15)
+    x19 = lbind(shift, x5)
+    x20 = mapply(x19, x18)
+    x21 = paint(I, x20)
+    O = subgrid(x2, x21)
+    return O
+
+
+def solve_4258a5f9(I):
+    x1 = ofcolor(I, FIVE)
+    x2 = mapply(neighbors, x1)
+    O = fill(I, ONE, x2)
+    return O
+
+
+def solve_253bf280(I):
+    x1 = ofcolor(I, EIGHT)
+    x2 = prapply(connect, x1, x1)
+    x3 = rbind(greater, ONE)
+    x4 = compose(x3, size)
+    x5 = sfilter(x2, x4)
+    x6 = fork(either, vline, hline)
+    x7 = mfilter(x5, x6)
+    x8 = fill(I, THREE, x7)
+    O = fill(x8, EIGHT, x1)
+    return O
+
+
+def solve_dae9d2b5(I):
+    x1 = lefthalf(I)
+    x2 = righthalf(I)
+    x3 = ofcolor(x1, FOUR)
+    x4 = ofcolor(x2, THREE)
+    x5 = combine(x3, x4)
+    O = fill(x1, SIX, x5)
+    return O
 
 
 def solve_67a3c6ac(I):
@@ -231,13 +396,6 @@ def solve_7b7f7511(I):
     return O
 
 
-def solve_4258a5f9(I):
-    x1 = ofcolor(I, FIVE)
-    x2 = mapply(neighbors, x1)
-    O = fill(I, ONE, x2)
-    return O
-
-
 def solve_2dc579da(I):
     x1 = vsplit(I, TWO)
     x2 = rbind(hsplit, TWO)
@@ -259,14 +417,6 @@ def solve_3af2c5a8(I):
     x2 = hconcat(I, x1)
     x3 = hmirror(x2)
     O = vconcat(x2, x3)
-    return O
-
-
-def solve_44f52bb0(I):
-    x1 = vmirror(I)
-    x2 = equality(x1, I)
-    x3 = branch(x2, ONE, SEVEN)
-    O = canvas(x3, UNITY)
     return O
 
 
@@ -563,15 +713,6 @@ def solve_9f236235(I):
     return O
 
 
-def solve_a699fb00(I):
-    x1 = ofcolor(I, ONE)
-    x2 = shift(x1, RIGHT)
-    x3 = shift(x1, LEFT)
-    x4 = intersection(x2, x3)
-    O = fill(I, TWO, x4)
-    return O
-
-
 def solve_46442a0e(I):
     x1 = rot90(I)
     x2 = rot180(I)
@@ -619,16 +760,6 @@ def solve_0520fde7(I):
     x4 = vmirror(x3)
     x5 = cellwise(x2, x4, ZERO)
     O = replace(x5, ONE, TWO)
-    return O
-
-
-def solve_dae9d2b5(I):
-    x1 = lefthalf(I)
-    x2 = righthalf(I)
-    x3 = ofcolor(x1, FOUR)
-    x4 = ofcolor(x2, THREE)
-    x5 = combine(x3, x4)
-    O = fill(x1, SIX, x5)
     return O
 
 
@@ -1222,18 +1353,6 @@ def solve_6430c8c4(I):
     return O
 
 
-def solve_94f9d214(I):
-    x1 = tophalf(I)
-    x2 = bottomhalf(I)
-    x3 = ofcolor(x1, ZERO)
-    x4 = ofcolor(x2, ZERO)
-    x5 = astuple(FOUR, FOUR)
-    x6 = canvas(ZERO, x5)
-    x7 = intersection(x3, x4)
-    O = fill(x6, TWO, x7)
-    return O
-
-
 def solve_a1570a43(I):
     x1 = ofcolor(I, TWO)
     x2 = ofcolor(I, THREE)
@@ -1473,19 +1592,6 @@ def solve_72ca375d(I):
     x7 = pair(x4, x6)
     x8 = extract(x7, last)
     O = first(x8)
-    return O
-
-
-def solve_253bf280(I):
-    x1 = ofcolor(I, EIGHT)
-    x2 = prapply(connect, x1, x1)
-    x3 = rbind(greater, ONE)
-    x4 = compose(x3, size)
-    x5 = sfilter(x2, x4)
-    x6 = fork(either, vline, hline)
-    x7 = mfilter(x5, x6)
-    x8 = fill(I, THREE, x7)
-    O = fill(x8, EIGHT, x1)
     return O
 
 
@@ -2408,34 +2514,6 @@ def solve_6c434453(I):
     return O
 
 
-def solve_23581191(I):
-    x1 = objects(I, T, T, T)
-    x2 = fork(combine, vfrontier, hfrontier)
-    x3 = compose(x2, center)
-    x4 = fork(recolor, color, x3)
-    x5 = mapply(x4, x1)
-    x6 = paint(I, x5)
-    x7 = fork(intersection, first, last)
-    x8 = apply(x3, x1)
-    x9 = x7(x8)
-    O = fill(x6, TWO, x9)
-    return O
-
-
-def solve_c8cbb738(I):
-    x1 = mostcolor(I)
-    x2 = fgpartition(I)
-    x3 = valmax(x2, shape)
-    x4 = canvas(x1, x3)
-    x5 = apply(normalize, x2)
-    x6 = lbind(subtract, x3)
-    x7 = chain(halve, x6, shape)
-    x8 = fork(shift, identity, x7)
-    x9 = mapply(x8, x5)
-    O = paint(x4, x9)
-    return O
-
-
 def solve_3eda0437(I):
     x1 = interval(TWO, TEN, ONE)
     x2 = prapply(astuple, x1, x1)
@@ -2588,21 +2666,6 @@ def solve_09629e4f(I):
     x5 = paint(I, x4)
     x6 = ofcolor(I, FIVE)
     O = fill(x5, FIVE, x6)
-    return O
-
-
-def solve_a85d4709(I):
-    x1 = ofcolor(I, FIVE)
-    x2 = lbind(matcher, last)
-    x3 = lbind(sfilter, x1)
-    x4 = lbind(mapply, hfrontier)
-    x5 = chain(x4, x3, x2)
-    x6 = x5(ZERO)
-    x7 = x5(TWO)
-    x8 = x5(ONE)
-    x9 = fill(I, TWO, x6)
-    x10 = fill(x9, THREE, x7)
-    O = fill(x10, FOUR, x8)
     return O
 
 
@@ -2927,24 +2990,6 @@ def solve_a61ba2ce(I):
     return O
 
 
-def solve_8e1813be(I):
-    x1 = replace(I, FIVE, ZERO)
-    x2 = objects(x1, T, T, T)
-    x3 = first(x2)
-    x4 = vline(x3)
-    x5 = branch(x4, dmirror, identity)
-    x6 = x5(x1)
-    x7 = objects(x6, T, T, T)
-    x8 = order(x7, uppermost)
-    x9 = apply(color, x8)
-    x10 = dedupe(x9)
-    x11 = size(x10)
-    x12 = rbind(repeat, x11)
-    x13 = apply(x12, x10)
-    O = x5(x13)
-    return O
-
-
 def solve_bc1d5164(I):
     x1 = leastcolor(I)
     x2 = crop(I, ORIGIN, THREE_BY_THREE)
@@ -2978,25 +3023,6 @@ def solve_ce602527(I):
     x12 = argmax(x5, x11)
     x13 = subgrid(x12, x1)
     O = vmirror(x13)
-    return O
-
-
-def solve_5c2c9af4(I):
-    x1 = leastcolor(I)
-    x2 = ofcolor(I, x1)
-    x3 = center(x2)
-    x4 = ulcorner(x2)
-    x5 = subtract(x3, x4)
-    x6 = multiply(NEG_ONE, NINE)
-    x7 = interval(ZERO, NINE, ONE)
-    x8 = interval(ZERO, x6, NEG_ONE)
-    x9 = lbind(multiply, x5)
-    x10 = apply(x9, x7)
-    x11 = apply(x9, x8)
-    x12 = pair(x10, x11)
-    x13 = mapply(box, x12)
-    x14 = shift(x13, x3)
-    O = fill(I, x1, x14)
     return O
 
 
@@ -4380,32 +4406,6 @@ def solve_06df4c85(I):
     x20 = mfilter(x18, x19)
     x21 = paint(I, x20)
     O = fill(x21, x2, x3)
-    return O
-
-
-def solve_f9012d9b(I):
-    x1 = objects(I, T, F, F)
-    x2 = ofcolor(I, ZERO)
-    x3 = lbind(contained, ZERO)
-    x4 = chain(flip, x3, palette)
-    x5 = mfilter(x1, x4)
-    x6 = vsplit(I, TWO)
-    x7 = hsplit(I, TWO)
-    x8 = extract(x6, x4)
-    x9 = extract(x7, x4)
-    x10 = asobject(x8)
-    x11 = asobject(x9)
-    x12 = vperiod(x10)
-    x13 = hperiod(x11)
-    x14 = neighbors(ORIGIN)
-    x15 = mapply(neighbors, x14)
-    x16 = astuple(x12, x13)
-    x17 = rbind(multiply, x16)
-    x18 = apply(x17, x15)
-    x19 = lbind(shift, x5)
-    x20 = mapply(x19, x18)
-    x21 = paint(I, x20)
-    O = subgrid(x2, x21)
     return O
 
 
