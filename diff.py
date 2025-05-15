@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
     count = 10
     for key in data['train'].keys():
-        key_list = ['253bf280', 'dae9d2b5']
+        key_list = ['253bf280', 'dae9d2b5', '0ca9ddb6']
 
         if key in key_list:
             pass
