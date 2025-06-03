@@ -2,35 +2,6 @@ from dsl import *
 from constants_manus import *
 
 
-def solve_a85d4709(I):
-    patch_1 = ofcolor(I, FIVE_color)
-    call_2 = lbind(matcher, last)
-    call_3 = lbind(sfilter, patch_1)
-    call_4 = lbind(mapply, hfrontier)
-    call_5 = chain(call_4, call_3, call_2)
-    patch_6 = call_5(ZERO)
-    patch_7 = call_5(TWO)
-    patch_8 = call_5(ONE)
-    grid_9 = fill(I, TWO_color, patch_6)
-    grid_10 = fill(grid_9, THREE_color, patch_7)
-    O = fill(grid_10, FOUR_color, patch_8)
-    return O
-
-
-def solve_c8cbb738(I):
-    color_1 = mostcolor(I)
-    object_2 = fgpartition(I)
-    shape_3 = valmax(object_2, shape)
-    grid_4 = canvas(color_1, shape_3)
-    object_5 = apply(normalize, object_2)
-    call_6 = lbind(subtract, shape_3)
-    call_7 = chain(halve, call_6, shape)
-    call_8 = fork(shift, identity, call_7)
-    call_9 = mapply(call_8, object_5)
-    O = paint(grid_4, call_9)
-    return O
-
-
 def solve_8e1813be(I):
     x1 = replace(I, FIVE, ZERO)
     x2 = objects(x1, T, T, T)
