@@ -1,0 +1,187 @@
+{
+  "vmirror_t": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:636": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((2, 0), (2, 2), (2, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((0, 8), (0, 0), (0, 8)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((0, 0), (0, 5), (5, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((3, 3), (3, 0), (3, 3)))"
+          }
+        ],
+        "code_context": "x1 = vmirror_t(I)"
+      }
+    },
+    "type_signatures": [
+      "vmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "vmirror_t(((0, 0), (0, 5), (5, 0)))",
+      "vmirror_t(((2, 0), (2, 2), (2, 0)))",
+      "vmirror_t(((0, 8), (0, 0), (0, 8)))",
+      "vmirror_t(((3, 3), (3, 0), (3, 3)))"
+    ]
+  },
+  "hconcat": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:637": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 2), (2, 2), (0, 2)), ((2, 0), (2, 2), (2, 0)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((8, 0), (0, 0), (8, 0)), ((0, 8), (0, 0), (0, 8)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0), (5, 0), (0, 5)), ((0, 0), (0, 5), (5, 0)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((3, 3), (0, 3), (3, 3)), ((3, 3), (3, 0), (3, 3)))"
+          }
+        ],
+        "code_context": "x2 = hconcat(x1, I)"
+      }
+    },
+    "type_signatures": [
+      "hconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "hconcat(((3, 3), (0, 3), (3, 3)), ((3, 3), (3, 0), (3, 3)))",
+      "hconcat(((0, 2), (2, 2), (0, 2)), ((2, 0), (2, 2), (2, 0)))",
+      "hconcat(((0, 0), (5, 0), (0, 5)), ((0, 0), (0, 5), (5, 0)))",
+      "hconcat(((8, 0), (0, 0), (8, 0)), ((0, 8), (0, 0), (0, 8)))"
+    ]
+  },
+  "hmirror_t": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:638": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((0, 2, 2, 0), (2, 2, 2, 2), (0, 2, 2, 0)))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((8, 0, 0, 8), (0, 0, 0, 0), (8, 0, 0, 8)))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((0, 0, 0, 0), (5, 0, 0, 5), (0, 5, 5, 0)))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((3, 3, 3, 3), (0, 3, 3, 0), (3, 3, 3, 3)))"
+          }
+        ],
+        "code_context": "x3 = hmirror_t(x2)"
+      },
+      "solvers.py:641": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(tuple(len=9))"
+          }
+        ],
+        "code_context": "O = hmirror_t(x5)"
+      }
+    },
+    "type_signatures": [
+      "hmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "hmirror_t(((8, 0, 0, 8), (0, 0, 0, 0), (8, 0, 0, 8)))",
+      "hmirror_t(((0, 0, 0, 0), (5, 0, 0, 5), (0, 5, 5, 0)))",
+      "hmirror_t(((0, 2, 2, 0), (2, 2, 2, 2), (0, 2, 2, 0)))",
+      "hmirror_t(((3, 3, 3, 3), (0, 3, 3, 0), (3, 3, 3, 3)))",
+      "hmirror_t(tuple(len=9))"
+    ]
+  },
+  "vconcat": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:639": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 2, 2, 0), (2, 2, 2, 2), (0, 2, 2, 0)), ((0, 2, 2, 0), (2, 2, 2, 2), (0, 2, 2, 0)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((8, 0, 0, 8), (0, 0, 0, 0), (8, 0, 0, 8)), ((8, 0, 0, 8), (0, 0, 0, 0), (8, 0, 0, 8)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0), (5, 0, 0, 5), (0, 5, 5, 0)), ((0, 5, 5, 0), (5, 0, 0, 5), (0, 0, 0, 0)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3), (0, 3, 3, 0), (3, 3, 3, 3)), ((3, 3, 3, 3), (0, 3, 3, 0), (3, 3, 3, 3)))"
+          }
+        ],
+        "code_context": "x4 = vconcat(x2, x3)"
+      },
+      "solvers.py:640": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(tuple(len=6), ((0, 2, 2, 0), (2, 2, 2, 2), (0, 2, 2, 0)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(tuple(len=6), ((8, 0, 0, 8), (0, 0, 0, 0), (8, 0, 0, 8)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(tuple(len=6), ((0, 0, 0, 0), (5, 0, 0, 5), (0, 5, 5, 0)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(tuple(len=6), ((3, 3, 3, 3), (0, 3, 3, 0), (3, 3, 3, 3)))"
+          }
+        ],
+        "code_context": "x5 = vconcat(x4, x2)"
+      }
+    },
+    "type_signatures": [
+      "vconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "vconcat(((0, 0, 0, 0), (5, 0, 0, 5), (0, 5, 5, 0)), ((0, 5, 5, 0), (5, 0, 0, 5), (0, 0, 0, 0)))",
+      "vconcat(tuple(len=6), ((0, 0, 0, 0), (5, 0, 0, 5), (0, 5, 5, 0)))",
+      "vconcat(((0, 2, 2, 0), (2, 2, 2, 2), (0, 2, 2, 0)), ((0, 2, 2, 0), (2, 2, 2, 2), (0, 2, 2, 0)))",
+      "vconcat(((8, 0, 0, 8), (0, 0, 0, 0), (8, 0, 0, 8)), ((8, 0, 0, 8), (0, 0, 0, 0), (8, 0, 0, 8)))",
+      "vconcat(((3, 3, 3, 3), (0, 3, 3, 0), (3, 3, 3, 3)), ((3, 3, 3, 3), (0, 3, 3, 0), (3, 3, 3, 3)))",
+      "vconcat(tuple(len=6), ((8, 0, 0, 8), (0, 0, 0, 0), (8, 0, 0, 8)))",
+      "vconcat(tuple(len=6), ((3, 3, 3, 3), (0, 3, 3, 0), (3, 3, 3, 3)))",
+      "vconcat(tuple(len=6), ((0, 2, 2, 0), (2, 2, 2, 2), (0, 2, 2, 0)))"
+    ]
+  }
+}

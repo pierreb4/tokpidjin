@@ -1,0 +1,2 @@
+def solve_a9f96cdd(S, I):
+    return fill(fill(fill(fill(replace(I, TWO, ZERO), THREE, shift(f_ofcolor(I, TWO), NEG_UNITY)), SIX, shift(f_ofcolor(I, TWO), UP_RIGHT)), EIGHT, shift(f_ofcolor(I, TWO), DOWN_LEFT)), SEVEN, shift(f_ofcolor(I, TWO), UNITY))

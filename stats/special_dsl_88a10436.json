@@ -1,0 +1,51 @@
+{
+  "summary": {
+    "total_functions": 18,
+    "dsl_functions": 18,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 0,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "normalize",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": false,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2123": {
+          "count": 2,
+          "code_context": "x7 = normalize(x6)",
+          "tuple_calls": 0,
+          "frozenset_calls": 2
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "first_f",
+    "center",
+    "uppermost",
+    "toindices",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "difference",
+    "normalize",
+    "shift",
+    "paint"
+  ]
+}

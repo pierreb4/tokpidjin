@@ -1,0 +1,33 @@
+def solve_e6721834_one(S, I):
+    return paint(get_nth_f(order(branch(portrait_t(I), vsplit, hsplit)(I, TWO), numcolors_t), F0), mfilter_f(apply(fork(shift, identity, fork(subtract, chain(rbind(get_nth_f, F0), lbind(occurrences, get_nth_f(order(branch(portrait_t(I), vsplit, hsplit)(I, TWO), numcolors_t), F0)), rbind(sfilter, compose(flip, matcher(rbind(get_nth_f, F0), get_color_rank_f(merge_f(o_g(get_nth_t(order(branch(portrait_t(I), vsplit, hsplit)(I, TWO), numcolors_t), L1), R1)), F0))))), compose(rbind(corner, R0), rbind(sfilter, compose(flip, matcher(rbind(get_nth_f, F0), get_color_rank_f(merge_f(o_g(get_nth_t(order(branch(portrait_t(I), vsplit, hsplit)(I, TWO), numcolors_t), L1), R1)), F0))))))), sfilter_f(o_g(get_nth_t(order(branch(portrait_t(I), vsplit, hsplit)(I, TWO), numcolors_t), L1), R1), chain(positive, size, compose(lbind(occurrences, get_nth_f(order(branch(portrait_t(I), vsplit, hsplit)(I, TWO), numcolors_t), F0)), rbind(sfilter, compose(flip, matcher(rbind(get_nth_f, F0), get_color_rank_f(merge_f(o_g(get_nth_t(order(branch(portrait_t(I), vsplit, hsplit)(I, TWO), numcolors_t), L1), R1)), F0)))))))), chain(positive, decrement, compose(decrement, width_f))))
+
+
+def solve_e6721834(S, I):
+    x1 = portrait_t(I)
+    x2 = branch(x1, vsplit, hsplit)
+    x3 = x2(I, TWO)
+    x4 = order(x3, numcolors_t)
+    x5 = get_nth_f(x4, F0)
+    x6 = rbind(get_nth_f, F0)
+    x7 = lbind(occurrences, x5)
+    x8 = get_nth_t(x4, L1)
+    x9 = o_g(x8, R1)
+    x10 = merge_f(x9)
+    x11 = get_color_rank_f(x10, F0)
+    x12 = matcher(x6, x11)
+    x13 = compose(flip, x12)
+    x14 = rbind(sfilter, x13)
+    x15 = chain(x6, x7, x14)
+    x16 = rbind(corner, R0)
+    x17 = compose(x16, x14)
+    x18 = fork(subtract, x15, x17)
+    x19 = fork(shift, identity, x18)
+    x20 = compose(x7, x14)
+    x21 = chain(positive, size, x20)
+    x22 = sfilter_f(x9, x21)
+    x23 = apply(x19, x22)
+    x24 = compose(decrement, width_f)
+    x25 = chain(positive, decrement, x24)
+    x26 = mfilter_f(x23, x25)
+    O = paint(x5, x26)
+    return O

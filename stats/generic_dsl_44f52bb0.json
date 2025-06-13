@@ -1,0 +1,170 @@
+{
+  "vmirror_t": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:266": {
+        "count": 8,
+        "signatures": [
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((0, 0, 0), (2, 0, 2), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((2, 2, 0), (0, 2, 2), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((2, 2, 0), (0, 2, 0), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((2, 0, 0), (2, 0, 0), (0, 2, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((2, 0, 2), (2, 0, 2), (2, 0, 2)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((2, 0, 2), (0, 2, 0), (2, 0, 2)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((0, 0, 0), (2, 0, 0), (2, 0, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((2, 0, 2), (2, 2, 2), (2, 0, 2)))"
+          }
+        ],
+        "code_context": "x1 = vmirror_t(I)"
+      }
+    },
+    "type_signatures": [
+      "vmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "vmirror_t(((0, 0, 0), (2, 0, 2), (0, 0, 0)))",
+      "vmirror_t(((0, 0, 0), (2, 0, 0), (2, 0, 0)))",
+      "vmirror_t(((2, 0, 0), (2, 0, 0), (0, 2, 0)))",
+      "vmirror_t(((2, 2, 0), (0, 2, 0), (0, 0, 0)))",
+      "vmirror_t(((2, 0, 2), (2, 2, 2), (2, 0, 2)))",
+      "vmirror_t(((2, 2, 0), (0, 2, 2), (0, 0, 0)))",
+      "vmirror_t(((2, 0, 2), (0, 2, 0), (2, 0, 2)))",
+      "vmirror_t(((2, 0, 2), (2, 0, 2), (2, 0, 2)))"
+    ]
+  },
+  "equality": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:267": {
+        "count": 8,
+        "signatures": [
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((0, 0, 0), (2, 0, 2), (0, 0, 0)), ((0, 0, 0), (2, 0, 2), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((0, 2, 2), (2, 2, 0), (0, 0, 0)), ((2, 2, 0), (0, 2, 2), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((0, 2, 2), (0, 2, 0), (0, 0, 0)), ((2, 2, 0), (0, 2, 0), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((0, 0, 2), (0, 0, 2), (0, 2, 0)), ((2, 0, 0), (2, 0, 0), (0, 2, 0)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((2, 0, 2), (2, 0, 2), (2, 0, 2)), ((2, 0, 2), (2, 0, 2), (2, 0, 2)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((2, 0, 2), (0, 2, 0), (2, 0, 2)), ((2, 0, 2), (0, 2, 0), (2, 0, 2)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((0, 0, 0), (0, 0, 2), (0, 0, 2)), ((0, 0, 0), (2, 0, 0), (2, 0, 0)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((2, 0, 2), (2, 2, 2), (2, 0, 2)), ((2, 0, 2), (2, 2, 2), (2, 0, 2)))"
+          }
+        ],
+        "code_context": "x2 = equality(x1, I)"
+      }
+    },
+    "type_signatures": [
+      "equality(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "equality(((0, 0, 0), (0, 0, 2), (0, 0, 2)), ((0, 0, 0), (2, 0, 0), (2, 0, 0)))",
+      "equality(((0, 2, 2), (2, 2, 0), (0, 0, 0)), ((2, 2, 0), (0, 2, 2), (0, 0, 0)))",
+      "equality(((2, 0, 2), (0, 2, 0), (2, 0, 2)), ((2, 0, 2), (0, 2, 0), (2, 0, 2)))",
+      "equality(((0, 0, 2), (0, 0, 2), (0, 2, 0)), ((2, 0, 0), (2, 0, 0), (0, 2, 0)))",
+      "equality(((2, 0, 2), (2, 0, 2), (2, 0, 2)), ((2, 0, 2), (2, 0, 2), (2, 0, 2)))",
+      "equality(((2, 0, 2), (2, 2, 2), (2, 0, 2)), ((2, 0, 2), (2, 2, 2), (2, 0, 2)))",
+      "equality(((0, 2, 2), (0, 2, 0), (0, 0, 0)), ((2, 2, 0), (0, 2, 0), (0, 0, 0)))",
+      "equality(((0, 0, 0), (2, 0, 2), (0, 0, 0)), ((0, 0, 0), (2, 0, 2), (0, 0, 0)))"
+    ]
+  },
+  "branch": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:268": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "branch(bool, int, int)",
+            "value_signature": "branch(True, 1, 7)"
+          },
+          {
+            "type_signature": "branch(bool, int, int)",
+            "value_signature": "branch(False, 1, 7)"
+          }
+        ],
+        "code_context": "x3 = branch(x2, ONE, SEVEN)"
+      }
+    },
+    "type_signatures": [
+      "branch(bool, int, int)"
+    ],
+    "value_signatures": [
+      "branch(True, 1, 7)",
+      "branch(False, 1, 7)"
+    ]
+  },
+  "canvas": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:269": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "canvas(int, tuple)",
+            "value_signature": "canvas(1, (1, 1))"
+          },
+          {
+            "type_signature": "canvas(int, tuple)",
+            "value_signature": "canvas(7, (1, 1))"
+          }
+        ],
+        "code_context": "O = canvas(x3, UNITY)"
+      }
+    },
+    "type_signatures": [
+      "canvas(int, tuple)"
+    ],
+    "value_signatures": [
+      "canvas(1, (1, 1))",
+      "canvas(7, (1, 1))"
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+def solve_cf98881b(S, I):
+    return fill(fill(get_nth_t(remove_t(get_nth_t(hsplit(I, THREE), F0), hsplit(I, THREE)), L1), NINE, f_ofcolor(get_nth_t(remove_t(get_nth_t(hsplit(I, THREE), F0), hsplit(I, THREE)), F0), NINE)), FOUR, f_ofcolor(get_nth_t(hsplit(I, THREE), F0), FOUR))

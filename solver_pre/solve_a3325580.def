@@ -1,0 +1,2 @@
+def solve_a3325580(S, I):
+    return mir_rot_t(merge_t(apply(rbind(canvas, astuple(ONE, get_val_rank_f(o_g(I, R5), size, F0))), apply(color, order(sizefilter(o_g(I, R5), get_val_rank_f(o_g(I, R5), size, F0)), rbind(col_row, R2))))), R1)

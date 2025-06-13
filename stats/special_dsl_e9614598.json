@@ -1,0 +1,85 @@
+{
+  "summary": {
+    "total_functions": 10,
+    "dsl_functions": 10,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "first",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1103": {
+          "count": 4,
+          "code_context": "x3 = x2(x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1103": {
+          "count": 4,
+          "code_context": "x3 = x2(x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "first",
+      "variant": "first_f",
+      "type": "frozenset",
+      "calls": 4,
+      "call_sites": {
+        "solvers.py:1103": {
+          "count": 4,
+          "code_context": "x3 = x2(x1)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_f",
+      "type": "frozenset",
+      "calls": 4,
+      "call_sites": {
+        "solvers.py:1103": {
+          "count": 4,
+          "code_context": "x3 = x2(x1)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "fork",
+    "first",
+    "last",
+    "add",
+    "halve",
+    "dneighbors",
+    "insert",
+    "fill",
+    "toindices"
+  ]
+}

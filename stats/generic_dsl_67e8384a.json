@@ -1,0 +1,170 @@
+{
+  "vmirror_t": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:282": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((2, 5, 2), (2, 6, 4), (2, 2, 2)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((7, 1, 5), (7, 7, 1), (5, 3, 1)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((1, 2, 1), (2, 8, 1), (8, 1, 6)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((5, 3, 4), (3, 4, 5), (3, 4, 4)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((1, 6, 6), (5, 2, 2), (2, 2, 2)))"
+          }
+        ],
+        "code_context": "x1 = vmirror_t(I)"
+      }
+    },
+    "type_signatures": [
+      "vmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "vmirror_t(((7, 1, 5), (7, 7, 1), (5, 3, 1)))",
+      "vmirror_t(((2, 5, 2), (2, 6, 4), (2, 2, 2)))",
+      "vmirror_t(((5, 3, 4), (3, 4, 5), (3, 4, 4)))",
+      "vmirror_t(((1, 2, 1), (2, 8, 1), (8, 1, 6)))",
+      "vmirror_t(((1, 6, 6), (5, 2, 2), (2, 2, 2)))"
+    ]
+  },
+  "hconcat": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:283": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((2, 5, 2), (2, 6, 4), (2, 2, 2)), ((2, 5, 2), (4, 6, 2), (2, 2, 2)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((7, 1, 5), (7, 7, 1), (5, 3, 1)), ((5, 1, 7), (1, 7, 7), (1, 3, 5)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((1, 2, 1), (2, 8, 1), (8, 1, 6)), ((1, 2, 1), (1, 8, 2), (6, 1, 8)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((5, 3, 4), (3, 4, 5), (3, 4, 4)), ((4, 3, 5), (5, 4, 3), (4, 4, 3)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((1, 6, 6), (5, 2, 2), (2, 2, 2)), ((6, 6, 1), (2, 2, 5), (2, 2, 2)))"
+          }
+        ],
+        "code_context": "x2 = hconcat(I, x1)"
+      }
+    },
+    "type_signatures": [
+      "hconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "hconcat(((2, 5, 2), (2, 6, 4), (2, 2, 2)), ((2, 5, 2), (4, 6, 2), (2, 2, 2)))",
+      "hconcat(((5, 3, 4), (3, 4, 5), (3, 4, 4)), ((4, 3, 5), (5, 4, 3), (4, 4, 3)))",
+      "hconcat(((7, 1, 5), (7, 7, 1), (5, 3, 1)), ((5, 1, 7), (1, 7, 7), (1, 3, 5)))",
+      "hconcat(((1, 6, 6), (5, 2, 2), (2, 2, 2)), ((6, 6, 1), (2, 2, 5), (2, 2, 2)))",
+      "hconcat(((1, 2, 1), (2, 8, 1), (8, 1, 6)), ((1, 2, 1), (1, 8, 2), (6, 1, 8)))"
+    ]
+  },
+  "hmirror_t": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:284": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((2, 5, 2, 2, 5, 2), (2, 6, 4, 4, 6, 2), (2, 2, 2,)"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((7, 1, 5, 5, 1, 7), (7, 7, 1, 1, 7, 7), (5, 3, 1,)"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((1, 2, 1, 1, 2, 1), (2, 8, 1, 1, 8, 2), (8, 1, 6,)"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((5, 3, 4, 4, 3, 5), (3, 4, 5, 5, 4, 3), (3, 4, 4,)"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((1, 6, 6, 6, 6, 1), (5, 2, 2, 2, 2, 5), (2, 2, 2,)"
+          }
+        ],
+        "code_context": "x3 = hmirror_t(x2)"
+      }
+    },
+    "type_signatures": [
+      "hmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "hmirror_t(((7, 1, 5, 5, 1, 7), (7, 7, 1, 1, 7, 7), (5, 3, 1,)",
+      "hmirror_t(((1, 2, 1, 1, 2, 1), (2, 8, 1, 1, 8, 2), (8, 1, 6,)",
+      "hmirror_t(((5, 3, 4, 4, 3, 5), (3, 4, 5, 5, 4, 3), (3, 4, 4,)",
+      "hmirror_t(((2, 5, 2, 2, 5, 2), (2, 6, 4, 4, 6, 2), (2, 2, 2,)",
+      "hmirror_t(((1, 6, 6, 6, 6, 1), (5, 2, 2, 2, 2, 5), (2, 2, 2,)"
+    ]
+  },
+  "vconcat": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:285": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((2, 5, 2, 2, 5, 2), (2, 6, 4, 4, 6, 2), (2, 2, 2,, ((2, 2, 2, 2, 2, 2), (2, 6, 4, 4, 6, 2), (2, 5, 2,)"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((7, 1, 5, 5, 1, 7), (7, 7, 1, 1, 7, 7), (5, 3, 1,, ((5, 3, 1, 1, 3, 5), (7, 7, 1, 1, 7, 7), (7, 1, 5,)"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((1, 2, 1, 1, 2, 1), (2, 8, 1, 1, 8, 2), (8, 1, 6,, ((8, 1, 6, 6, 1, 8), (2, 8, 1, 1, 8, 2), (1, 2, 1,)"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((5, 3, 4, 4, 3, 5), (3, 4, 5, 5, 4, 3), (3, 4, 4,, ((3, 4, 4, 4, 4, 3), (3, 4, 5, 5, 4, 3), (5, 3, 4,)"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((1, 6, 6, 6, 6, 1), (5, 2, 2, 2, 2, 5), (2, 2, 2,, ((2, 2, 2, 2, 2, 2), (5, 2, 2, 2, 2, 5), (1, 6, 6,)"
+          }
+        ],
+        "code_context": "O = vconcat(x2, x3)"
+      }
+    },
+    "type_signatures": [
+      "vconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "vconcat(((5, 3, 4, 4, 3, 5), (3, 4, 5, 5, 4, 3), (3, 4, 4,, ((3, 4, 4, 4, 4, 3), (3, 4, 5, 5, 4, 3), (5, 3, 4,)",
+      "vconcat(((2, 5, 2, 2, 5, 2), (2, 6, 4, 4, 6, 2), (2, 2, 2,, ((2, 2, 2, 2, 2, 2), (2, 6, 4, 4, 6, 2), (2, 5, 2,)",
+      "vconcat(((1, 2, 1, 1, 2, 1), (2, 8, 1, 1, 8, 2), (8, 1, 6,, ((8, 1, 6, 6, 1, 8), (2, 8, 1, 1, 8, 2), (1, 2, 1,)",
+      "vconcat(((1, 6, 6, 6, 6, 1), (5, 2, 2, 2, 2, 5), (2, 2, 2,, ((2, 2, 2, 2, 2, 2), (5, 2, 2, 2, 2, 5), (1, 6, 6,)",
+      "vconcat(((7, 1, 5, 5, 1, 7), (7, 7, 1, 1, 7, 7), (5, 3, 1,, ((5, 3, 1, 1, 3, 5), (7, 7, 1, 1, 7, 7), (7, 1, 5,)"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "hmirror_t": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:11": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((7, 3, 3, 1, 2), (1, 8, 2, 4, 1), (2, 7, 8, 7, 2))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((8, 1, 2, 1, 4), (4, 4, 2, 4, 8), (3, 7, 2, 4, 8))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(tuple(len=7))"
+          }
+        ],
+        "code_context": "O = hmirror_t(I)"
+      }
+    },
+    "type_signatures": [
+      "hmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "hmirror_t(((7, 3, 3, 1, 2), (1, 8, 2, 4, 1), (2, 7, 8, 7, 2))",
+      "hmirror_t(((8, 1, 2, 1, 4), (4, 4, 2, 4, 8), (3, 7, 2, 4, 8))",
+      "hmirror_t(tuple(len=7))"
+    ]
+  }
+}

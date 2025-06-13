@@ -1,0 +1,2 @@
+def solve_41e4d17e(S, I):
+    return underfill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(compose(fork(combine, vfrontier, hfrontier), center), o_g(I, R5)))

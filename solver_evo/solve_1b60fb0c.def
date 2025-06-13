@@ -1,0 +1,2 @@
+def solve_1b60fb0c(S, I):
+    return underfill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), get_arg_rank_f(apply(lbind(shift, f_ofcolor(mir_rot_t(I, R4), BLUE)), mapply(neighbors, neighbors(ORIGIN))), compose(size, lbind(intersection, f_ofcolor(I, BLUE))), F0))

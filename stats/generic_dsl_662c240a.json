@@ -1,0 +1,370 @@
+{
+  "vsplit": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:298": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "vsplit(tuple, int)",
+            "value_signature": "vsplit(tuple(len=9), 3)"
+          }
+        ],
+        "code_context": "x1 = vsplit(I, THREE)"
+      }
+    },
+    "type_signatures": [
+      "vsplit(tuple, int)"
+    ],
+    "value_signatures": [
+      "vsplit(tuple(len=9), 3)"
+    ]
+  },
+  "crop": {
+    "calls": 15,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:298": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(tuple(len=9), (0, 0), (3, 3))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(tuple(len=9), (3, 0), (3, 3))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(tuple(len=9), (6, 0), (3, 3))"
+          }
+        ],
+        "code_context": "x1 = vsplit(I, THREE)"
+      }
+    },
+    "type_signatures": [
+      "crop(tuple, tuple, tuple)"
+    ],
+    "value_signatures": [
+      "crop(tuple(len=9), (3, 0), (3, 3))",
+      "crop(tuple(len=9), (0, 0), (3, 3))",
+      "crop(tuple(len=9), (6, 0), (3, 3))"
+    ]
+  },
+  "fork": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:299": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function equality at 0x1049f3dc0>, <function dmirror_t at 0x1049f3af0>, <function identity at 0x1049f6e50>)"
+          }
+        ],
+        "code_context": "x2 = fork(equality, dmirror_t, identity)"
+      }
+    },
+    "type_signatures": [
+      "fork(function, function, function)"
+    ],
+    "value_signatures": [
+      "fork(<function equality at 0x1049f3dc0>, <function dmirror_t at 0x1049f3af0>, <function identity at 0x1049f6e50>)"
+    ]
+  },
+  "compose": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:300": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function flip at 0x1049f6310>, <function fork.<locals>.<lambda> at 0x104b26f70>)"
+          }
+        ],
+        "code_context": "x3 = compose(flip, x2)"
+      }
+    },
+    "type_signatures": [
+      "compose(function, function)"
+    ],
+    "value_signatures": [
+      "compose(<function flip at 0x1049f6310>, <function fork.<locals>.<lambda> at 0x104b26f70>)"
+    ]
+  },
+  "extract": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:301": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "extract(tuple, function)",
+            "value_signature": "extract((((2, 2, 2), (2, 2, 3), (2, 3, 3)), ((5, 7, 7), (7, <function compose.<locals>.<lambda> at 0x104b3a040)"
+          },
+          {
+            "type_signature": "extract(tuple, function)",
+            "value_signature": "extract((((1, 5, 5), (5, 1, 1), (5, 1, 1)), ((3, 3, 3), (3, <function compose.<locals>.<lambda> at 0x104b3a040)"
+          },
+          {
+            "type_signature": "extract(tuple, function)",
+            "value_signature": "extract((((8, 8, 4), (4, 4, 4), (4, 4, 8)), ((1, 1, 3), (1, <function compose.<locals>.<lambda> at 0x104b3a040)"
+          },
+          {
+            "type_signature": "extract(tuple, function)",
+            "value_signature": "extract((((8, 9, 8), (9, 8, 8), (8, 8, 8)), ((2, 2, 1), (2, <function compose.<locals>.<lambda> at 0x104b3a040)"
+          },
+          {
+            "type_signature": "extract(tuple, function)",
+            "value_signature": "extract((((5, 4, 4), (4, 5, 4), (4, 5, 4)), ((3, 3, 2), (3, <function compose.<locals>.<lambda> at 0x104b3a040)"
+          }
+        ],
+        "code_context": "O = extract(x1, x3)"
+      }
+    },
+    "type_signatures": [
+      "extract(tuple, function)"
+    ],
+    "value_signatures": [
+      "extract((((8, 8, 4), (4, 4, 4), (4, 4, 8)), ((1, 1, 3), (1, <function compose.<locals>.<lambda> at 0x104b3a040)",
+      "extract((((1, 5, 5), (5, 1, 1), (5, 1, 1)), ((3, 3, 3), (3, <function compose.<locals>.<lambda> at 0x104b3a040)",
+      "extract((((2, 2, 2), (2, 2, 3), (2, 3, 3)), ((5, 7, 7), (7, <function compose.<locals>.<lambda> at 0x104b3a040)",
+      "extract((((8, 9, 8), (9, 8, 8), (8, 8, 8)), ((2, 2, 1), (2, <function compose.<locals>.<lambda> at 0x104b3a040)",
+      "extract((((5, 4, 4), (4, 5, 4), (4, 5, 4)), ((3, 3, 2), (3, <function compose.<locals>.<lambda> at 0x104b3a040)"
+    ]
+  },
+  "dmirror_t": {
+    "calls": 10,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:301": {
+        "count": 10,
+        "signatures": [
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((2, 2, 2), (2, 2, 3), (2, 3, 3)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((5, 7, 7), (7, 5, 5), (7, 5, 5)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((8, 8, 1), (1, 8, 1), (1, 8, 1)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((1, 5, 5), (5, 1, 1), (5, 1, 1)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((3, 3, 3), (3, 6, 3), (3, 6, 6)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((8, 8, 4), (4, 4, 4), (4, 4, 8)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((8, 9, 8), (9, 8, 8), (8, 8, 8)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((2, 2, 1), (2, 2, 1), (1, 1, 2)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((4, 4, 4), (4, 4, 3), (3, 3, 3)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((5, 4, 4), (4, 5, 4), (4, 5, 4)))"
+          }
+        ],
+        "code_context": "O = extract(x1, x3)"
+      }
+    },
+    "type_signatures": [
+      "dmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "dmirror_t(((5, 7, 7), (7, 5, 5), (7, 5, 5)))",
+      "dmirror_t(((5, 4, 4), (4, 5, 4), (4, 5, 4)))",
+      "dmirror_t(((4, 4, 4), (4, 4, 3), (3, 3, 3)))",
+      "dmirror_t(((2, 2, 1), (2, 2, 1), (1, 1, 2)))",
+      "dmirror_t(((2, 2, 2), (2, 2, 3), (2, 3, 3)))",
+      "dmirror_t(((8, 8, 1), (1, 8, 1), (1, 8, 1)))",
+      "dmirror_t(((3, 3, 3), (3, 6, 3), (3, 6, 6)))",
+      "dmirror_t(((1, 5, 5), (5, 1, 1), (5, 1, 1)))",
+      "dmirror_t(((8, 8, 4), (4, 4, 4), (4, 4, 8)))",
+      "dmirror_t(((8, 9, 8), (9, 8, 8), (8, 8, 8)))"
+    ]
+  },
+  "identity": {
+    "calls": 10,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:301": {
+        "count": 10,
+        "signatures": [
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((2, 2, 2), (2, 2, 3), (2, 3, 3)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((5, 7, 7), (7, 5, 5), (7, 5, 5)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((8, 8, 1), (1, 8, 1), (1, 8, 1)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((1, 5, 5), (5, 1, 1), (5, 1, 1)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((3, 3, 3), (3, 6, 3), (3, 6, 6)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((8, 8, 4), (4, 4, 4), (4, 4, 8)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((8, 9, 8), (9, 8, 8), (8, 8, 8)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((2, 2, 1), (2, 2, 1), (1, 1, 2)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((4, 4, 4), (4, 4, 3), (3, 3, 3)))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity(((5, 4, 4), (4, 5, 4), (4, 5, 4)))"
+          }
+        ],
+        "code_context": "O = extract(x1, x3)"
+      }
+    },
+    "type_signatures": [
+      "identity(tuple)"
+    ],
+    "value_signatures": [
+      "identity(((8, 8, 4), (4, 4, 4), (4, 4, 8)))",
+      "identity(((4, 4, 4), (4, 4, 3), (3, 3, 3)))",
+      "identity(((5, 4, 4), (4, 5, 4), (4, 5, 4)))",
+      "identity(((8, 9, 8), (9, 8, 8), (8, 8, 8)))",
+      "identity(((2, 2, 2), (2, 2, 3), (2, 3, 3)))",
+      "identity(((8, 8, 1), (1, 8, 1), (1, 8, 1)))",
+      "identity(((2, 2, 1), (2, 2, 1), (1, 1, 2)))",
+      "identity(((1, 5, 5), (5, 1, 1), (5, 1, 1)))",
+      "identity(((3, 3, 3), (3, 6, 3), (3, 6, 6)))",
+      "identity(((5, 7, 7), (7, 5, 5), (7, 5, 5)))"
+    ]
+  },
+  "equality": {
+    "calls": 10,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:301": {
+        "count": 10,
+        "signatures": [
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((2, 2, 2), (2, 2, 3), (2, 3, 3)), ((2, 2, 2), (2, 2, 3), (2, 3, 3)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((5, 7, 7), (7, 5, 5), (7, 5, 5)), ((5, 7, 7), (7, 5, 5), (7, 5, 5)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((8, 1, 1), (8, 8, 8), (1, 1, 1)), ((8, 8, 1), (1, 8, 1), (1, 8, 1)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((1, 5, 5), (5, 1, 1), (5, 1, 1)), ((1, 5, 5), (5, 1, 1), (5, 1, 1)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((3, 3, 3), (3, 6, 6), (3, 3, 6)), ((3, 3, 3), (3, 6, 3), (3, 6, 6)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((8, 4, 4), (8, 4, 4), (4, 4, 8)), ((8, 8, 4), (4, 4, 4), (4, 4, 8)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((8, 9, 8), (9, 8, 8), (8, 8, 8)), ((8, 9, 8), (9, 8, 8), (8, 8, 8)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((2, 2, 1), (2, 2, 1), (1, 1, 2)), ((2, 2, 1), (2, 2, 1), (1, 1, 2)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((4, 4, 3), (4, 4, 3), (4, 3, 3)), ((4, 4, 4), (4, 4, 3), (3, 3, 3)))"
+          },
+          {
+            "type_signature": "equality(tuple, tuple)",
+            "value_signature": "equality(((5, 4, 4), (4, 5, 5), (4, 4, 4)), ((5, 4, 4), (4, 5, 4), (4, 5, 4)))"
+          }
+        ],
+        "code_context": "O = extract(x1, x3)"
+      }
+    },
+    "type_signatures": [
+      "equality(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "equality(((1, 5, 5), (5, 1, 1), (5, 1, 1)), ((1, 5, 5), (5, 1, 1), (5, 1, 1)))",
+      "equality(((5, 4, 4), (4, 5, 5), (4, 4, 4)), ((5, 4, 4), (4, 5, 4), (4, 5, 4)))",
+      "equality(((2, 2, 1), (2, 2, 1), (1, 1, 2)), ((2, 2, 1), (2, 2, 1), (1, 1, 2)))",
+      "equality(((8, 4, 4), (8, 4, 4), (4, 4, 8)), ((8, 8, 4), (4, 4, 4), (4, 4, 8)))",
+      "equality(((8, 1, 1), (8, 8, 8), (1, 1, 1)), ((8, 8, 1), (1, 8, 1), (1, 8, 1)))",
+      "equality(((8, 9, 8), (9, 8, 8), (8, 8, 8)), ((8, 9, 8), (9, 8, 8), (8, 8, 8)))",
+      "equality(((2, 2, 2), (2, 2, 3), (2, 3, 3)), ((2, 2, 2), (2, 2, 3), (2, 3, 3)))",
+      "equality(((4, 4, 3), (4, 4, 3), (4, 3, 3)), ((4, 4, 4), (4, 4, 3), (3, 3, 3)))",
+      "equality(((3, 3, 3), (3, 6, 6), (3, 3, 6)), ((3, 3, 3), (3, 6, 3), (3, 6, 6)))",
+      "equality(((5, 7, 7), (7, 5, 5), (7, 5, 5)), ((5, 7, 7), (7, 5, 5), (7, 5, 5)))"
+    ]
+  },
+  "flip": {
+    "calls": 10,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:301": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "flip(bool)",
+            "value_signature": "flip(True)"
+          },
+          {
+            "type_signature": "flip(bool)",
+            "value_signature": "flip(False)"
+          }
+        ],
+        "code_context": "O = extract(x1, x3)"
+      }
+    },
+    "type_signatures": [
+      "flip(bool)"
+    ],
+    "value_signatures": [
+      "flip(False)",
+      "flip(True)"
+    ]
+  }
+}

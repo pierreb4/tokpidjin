@@ -1,0 +1,2 @@
+def solve_b60334d2(S, I):
+    return fill(fill(replace(I, FIVE, ZERO), ONE, mapply(dneighbors, f_ofcolor(I, FIVE))), FIVE, mapply(ineighbors, f_ofcolor(I, FIVE)))

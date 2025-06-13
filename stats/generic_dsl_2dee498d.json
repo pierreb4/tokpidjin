@@ -1,0 +1,153 @@
+{
+  "hsplit": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:124": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "hsplit(tuple, int)",
+            "value_signature": "hsplit(((2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1), (4, 2, 1, 4, 3)"
+          },
+          {
+            "type_signature": "hsplit(tuple, int)",
+            "value_signature": "hsplit(((4, 5, 1, 1, 5, 4, 4, 5, 1), (5, 5, 5, 5, 5, 5, 5, 3)"
+          },
+          {
+            "type_signature": "hsplit(tuple, int)",
+            "value_signature": "hsplit(((2, 1, 2, 1, 2, 1), (2, 3, 2, 3, 2, 3)), 3)"
+          },
+          {
+            "type_signature": "hsplit(tuple, int)",
+            "value_signature": "hsplit(((0, 2, 0, 4, 4, 0, 2, 0, 4, 4, 0, 2, 0, 4, 4), (2, 3)"
+          }
+        ],
+        "code_context": "x1 = hsplit(I, THREE)"
+      }
+    },
+    "type_signatures": [
+      "hsplit(tuple, int)"
+    ],
+    "value_signatures": [
+      "hsplit(((2, 1, 2, 1, 2, 1), (2, 3, 2, 3, 2, 3)), 3)",
+      "hsplit(((2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1), (4, 2, 1, 4, 3)",
+      "hsplit(((4, 5, 1, 1, 5, 4, 4, 5, 1), (5, 5, 5, 5, 5, 5, 5, 3)",
+      "hsplit(((0, 2, 0, 4, 4, 0, 2, 0, 4, 4, 0, 2, 0, 4, 4), (2, 3)"
+    ]
+  },
+  "crop": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:124": {
+        "count": 12,
+        "signatures": [
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1), (4, 2, 1, 4, (0, 0), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1), (4, 2, 1, 4, (0, 4), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1), (4, 2, 1, 4, (0, 8), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((4, 5, 1, 1, 5, 4, 4, 5, 1), (5, 5, 5, 5, 5, 5, 5, (0, 0), (3, 3))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((4, 5, 1, 1, 5, 4, 4, 5, 1), (5, 5, 5, 5, 5, 5, 5, (0, 3), (3, 3))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((4, 5, 1, 1, 5, 4, 4, 5, 1), (5, 5, 5, 5, 5, 5, 5, (0, 6), (3, 3))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((2, 1, 2, 1, 2, 1), (2, 3, 2, 3, 2, 3)), (0, 0), (2, 2))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((2, 1, 2, 1, 2, 1), (2, 3, 2, 3, 2, 3)), (0, 2), (2, 2))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((2, 1, 2, 1, 2, 1), (2, 3, 2, 3, 2, 3)), (0, 4), (2, 2))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((0, 2, 0, 4, 4, 0, 2, 0, 4, 4, 0, 2, 0, 4, 4), (2, (0, 0), (5, 5))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((0, 2, 0, 4, 4, 0, 2, 0, 4, 4, 0, 2, 0, 4, 4), (2, (0, 5), (5, 5))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((0, 2, 0, 4, 4, 0, 2, 0, 4, 4, 0, 2, 0, 4, 4), (2, (0, 10), (5, 5))"
+          }
+        ],
+        "code_context": "x1 = hsplit(I, THREE)"
+      }
+    },
+    "type_signatures": [
+      "crop(tuple, tuple, tuple)"
+    ],
+    "value_signatures": [
+      "crop(((2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1), (4, 2, 1, 4, (0, 8), (4, 4))",
+      "crop(((0, 2, 0, 4, 4, 0, 2, 0, 4, 4, 0, 2, 0, 4, 4), (2, (0, 0), (5, 5))",
+      "crop(((0, 2, 0, 4, 4, 0, 2, 0, 4, 4, 0, 2, 0, 4, 4), (2, (0, 5), (5, 5))",
+      "crop(((2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1), (4, 2, 1, 4, (0, 4), (4, 4))",
+      "crop(((2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1), (4, 2, 1, 4, (0, 0), (4, 4))",
+      "crop(((0, 2, 0, 4, 4, 0, 2, 0, 4, 4, 0, 2, 0, 4, 4), (2, (0, 10), (5, 5))",
+      "crop(((4, 5, 1, 1, 5, 4, 4, 5, 1), (5, 5, 5, 5, 5, 5, 5, (0, 0), (3, 3))",
+      "crop(((2, 1, 2, 1, 2, 1), (2, 3, 2, 3, 2, 3)), (0, 0), (2, 2))",
+      "crop(((4, 5, 1, 1, 5, 4, 4, 5, 1), (5, 5, 5, 5, 5, 5, 5, (0, 6), (3, 3))",
+      "crop(((2, 1, 2, 1, 2, 1), (2, 3, 2, 3, 2, 3)), (0, 2), (2, 2))",
+      "crop(((2, 1, 2, 1, 2, 1), (2, 3, 2, 3, 2, 3)), (0, 4), (2, 2))",
+      "crop(((4, 5, 1, 1, 5, 4, 4, 5, 1), (5, 5, 5, 5, 5, 5, 5, (0, 3), (3, 3))"
+    ]
+  },
+  "first_t": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:125": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "first_t(tuple)",
+            "value_signature": "first_t((((2, 0, 0, 1), (4, 2, 1, 4), (4, 1, 2, 4), (1, 0,)"
+          },
+          {
+            "type_signature": "first_t(tuple)",
+            "value_signature": "first_t((((4, 5, 1), (5, 5, 5), (1, 5, 4)), ((1, 5, 4), (5)"
+          },
+          {
+            "type_signature": "first_t(tuple)",
+            "value_signature": "first_t((((2, 1), (2, 3)), ((2, 1), (2, 3)), ((2, 1), (2, )"
+          },
+          {
+            "type_signature": "first_t(tuple)",
+            "value_signature": "first_t((((0, 2, 0, 4, 4), (2, 2, 0, 4, 4), (0, 2, 2, 2, 0)"
+          }
+        ],
+        "code_context": "O = first_t(x1)"
+      }
+    },
+    "type_signatures": [
+      "first_t(tuple)"
+    ],
+    "value_signatures": [
+      "first_t((((2, 1), (2, 3)), ((2, 1), (2, 3)), ((2, 1), (2, )",
+      "first_t((((4, 5, 1), (5, 5, 5), (1, 5, 4)), ((1, 5, 4), (5)",
+      "first_t((((0, 2, 0, 4, 4), (2, 2, 0, 4, 4), (0, 2, 2, 2, 0)",
+      "first_t((((2, 0, 0, 1), (4, 2, 1, 4), (4, 1, 2, 4), (1, 0,)"
+    ]
+  }
+}

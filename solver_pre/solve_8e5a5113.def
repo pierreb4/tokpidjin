@@ -1,0 +1,2 @@
+def solve_8e5a5113(S, I):
+    return paint(I, mpapply(shift, apply(asobject, astuple(mir_rot_t(crop(I, ORIGIN, THREE_BY_THREE), R4), mir_rot_t(crop(I, ORIGIN, THREE_BY_THREE), R5))), apply(tojvec, astuple(FOUR, EIGHT))))

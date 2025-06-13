@@ -1,0 +1,85 @@
+{
+  "summary": {
+    "total_functions": 29,
+    "dsl_functions": 29,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "normalize",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": false,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3607": {
+          "count": 4,
+          "code_context": "x3 = normalize(x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:3608": {
+          "count": 4,
+          "code_context": "x4 = occurrences(I, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3610": {
+          "count": 4,
+          "code_context": "x6 = apply(x5, x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "recolor_i",
+    "toindices_i",
+    "normalize",
+    "uppermost",
+    "toindices",
+    "leftmost",
+    "shift",
+    "occurrences",
+    "shape_f",
+    "height_f",
+    "lowermost",
+    "width_f",
+    "rightmost",
+    "lbind",
+    "apply",
+    "astuple",
+    "initset",
+    "insert",
+    "rbind",
+    "chain",
+    "sfilter_f",
+    "ulcorner",
+    "contained",
+    "flip",
+    "merge_f",
+    "recolor_o",
+    "toindices_o",
+    "paint"
+  ]
+}

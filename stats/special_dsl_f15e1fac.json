@@ -1,0 +1,269 @@
+{
+  "summary": {
+    "total_functions": 43,
+    "dsl_functions": 43,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 6,
+    "functions_with_f_variants": 6,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "mapply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6139": {
+          "count": 4,
+          "code_context": "x17 = mapply(x16, x14)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 20,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6139": {
+          "count": 4,
+          "code_context": "x17 = mapply(x16, x14)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6141": {
+          "count": 4,
+          "code_context": "x19 = apply(first, x15)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6144": {
+          "count": 4,
+          "code_context": "x22 = apply(decrement, x21)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6150": {
+          "count": 2,
+          "code_context": "x28 = apply(tojvec, x27)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6162": {
+          "count": 4,
+          "code_context": "x40 = apply(x39, x29)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 8,
+      "tuple_percent": 50.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 50.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6139": {
+          "count": 4,
+          "code_context": "x17 = mapply(x16, x14)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:6164": {
+          "count": 4,
+          "code_context": "x42 = merge(x41)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 9685,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:6141": {
+          "count": 8,
+          "code_context": "x19 = apply(first, x15)",
+          "tuple_calls": 8,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6162": {
+          "count": 2157,
+          "code_context": "x40 = apply(x39, x29)",
+          "tuple_calls": 2157,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "total_calls": 14,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:6162": {
+          "count": 8,
+          "code_context": "x40 = apply(x39, x29)",
+          "tuple_calls": 0,
+          "frozenset_calls": 8
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 5805,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:6162": {
+          "count": 1862,
+          "code_context": "x40 = apply(x39, x29)",
+          "tuple_calls": 1862,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "percent": 100.0,
+      "calls": 9685,
+      "call_sites": {
+        "solvers.py:6141": {
+          "count": 8,
+          "code_context": "x19 = apply(first, x15)"
+        },
+        "solvers.py:6162": {
+          "count": 2157,
+          "code_context": "x40 = apply(x39, x29)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "percent": 100.0,
+      "calls": 5805,
+      "call_sites": {
+        "solvers.py:6162": {
+          "count": 1862,
+          "code_context": "x40 = apply(x39, x29)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 9685,
+      "call_sites": {
+        "solvers.py:6141": {
+          "count": 8,
+          "code_context": "x19 = apply(first, x15)"
+        },
+        "solvers.py:6162": {
+          "count": 2157,
+          "code_context": "x40 = apply(x39, x29)"
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 14,
+      "call_sites": {
+        "solvers.py:6162": {
+          "count": 8,
+          "code_context": "x40 = apply(x39, x29)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "calls": 5805,
+      "call_sites": {
+        "solvers.py:6162": {
+          "count": 1862,
+          "code_context": "x40 = apply(x39, x29)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "portrait_f",
+    "height_f",
+    "lowermost",
+    "toindices",
+    "uppermost",
+    "width_f",
+    "rightmost",
+    "leftmost",
+    "branch",
+    "identity",
+    "equality",
+    "vmirror_t",
+    "rbind",
+    "mapply",
+    "apply",
+    "shoot",
+    "connect",
+    "merge",
+    "height_t",
+    "first",
+    "insert",
+    "decrement",
+    "order",
+    "size_f",
+    "increment",
+    "interval",
+    "tojvec",
+    "pair",
+    "lbind",
+    "compose",
+    "chain",
+    "fork",
+    "sfilter",
+    "astuple",
+    "last",
+    "greater",
+    "both",
+    "papply",
+    "shift",
+    "fill",
+    "dmirror_t",
+    "hmirror_t"
+  ]
+}

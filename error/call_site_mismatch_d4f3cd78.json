@@ -1,0 +1,28 @@
+{
+  "solver_key": "d4f3cd78",
+  "timestamp": "2025-05-19T16:16:40.389567",
+  "errors": {
+    "height": {
+      "expected_sites": [
+        {
+          "line": "1810",
+          "context": "x6 = position(x4, x5)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "1810",
+          "context": "x6 = position(x4, x5)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

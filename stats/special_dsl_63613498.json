@@ -1,0 +1,89 @@
+{
+  "summary": {
+    "total_functions": 20,
+    "dsl_functions": 20,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "normalize",
+      "total_calls": 28,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": false,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4349": {
+          "count": 4,
+          "code_context": "x5 = normalize(x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:4353": {
+          "count": 21,
+          "code_context": "x9 = mfilter_f(x6, x8)",
+          "tuple_calls": 0,
+          "frozenset_calls": 21
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4353": {
+          "count": 4,
+          "code_context": "x9 = mfilter_f(x6, x8)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 4,
+      "call_sites": {
+        "solvers.py:4353": {
+          "count": 4,
+          "code_context": "x9 = mfilter_f(x6, x8)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "crop",
+    "f_ofcolor",
+    "asindices",
+    "difference",
+    "normalize",
+    "uppermost",
+    "toindices",
+    "leftmost",
+    "shift",
+    "objects",
+    "mostcolor_t",
+    "dneighbors",
+    "compose",
+    "matcher",
+    "mfilter_f",
+    "sfilter",
+    "merge_f",
+    "fill",
+    "asobject",
+    "paint"
+  ]
+}

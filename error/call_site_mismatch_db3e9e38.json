@@ -1,0 +1,17 @@
+{
+  "solver_key": "db3e9e38",
+  "timestamp": "2025-05-21T09:11:58.353219",
+  "errors": {
+    "last": {
+      "expected_sites": [
+        {
+          "line": "2779",
+          "context": "x12 = sfilter_f(x7, x10)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

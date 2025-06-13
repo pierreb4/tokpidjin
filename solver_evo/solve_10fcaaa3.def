@@ -1,0 +1,2 @@
+def solve_10fcaaa3(S, I):
+    return underfill(vconcat(hconcat(I, I), hconcat(I, I)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(ineighbors, f_ofcolor(vconcat(hconcat(I, I), hconcat(I, I)), get_color_rank_t(I, L1))))

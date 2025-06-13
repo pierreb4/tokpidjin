@@ -1,0 +1,7 @@
+def get_6aa20dc0_x10_x9(a1: Callable, a2: Callable, a3: Callable) -> Callable:
+    return fork(mapply, a1, compose(a2, a3))
+
+# {'a1': 'Callable', 'return': 'Callable', 'a2': 'Callable', 'a3': 'Callable'}
+
+func_d = {('get_6aa20dc0_x10_x9', 'Callable', 'Callable', 'Callable', 'Callable'): 'fork(mapply, a1, compose(a2, a3))'}
+

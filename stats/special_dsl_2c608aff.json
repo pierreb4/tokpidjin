@@ -1,0 +1,101 @@
+{
+  "summary": {
+    "total_functions": 26,
+    "dsl_functions": 26,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 25,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1924": {
+          "count": 25,
+          "code_context": "x3 = argmax_f(x2, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 25
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1929": {
+          "count": 5,
+          "code_context": "x8 = mfilter_f(x6, x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 25,
+      "call_sites": {
+        "solvers.py:1924": {
+          "count": 25,
+          "code_context": "x3 = argmax_f(x2, size)"
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 5,
+      "call_sites": {
+        "solvers.py:1929": {
+          "count": 5,
+          "code_context": "x8 = mfilter_f(x6, x7)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "leastcolor_t",
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "argmax_f",
+    "size",
+    "toindices",
+    "f_ofcolor",
+    "prapply",
+    "connect",
+    "fork",
+    "mfilter_f",
+    "sfilter",
+    "vline_i",
+    "height_i",
+    "lowermost_i",
+    "toindices_i",
+    "uppermost_i",
+    "width_i",
+    "rightmost_i",
+    "leftmost_i",
+    "hline_i",
+    "either",
+    "merge_f",
+    "underfill"
+  ]
+}

@@ -1,0 +1,2 @@
+def solve_3de23699(S, I):
+    return replace(trim(subgrid(get_nth_f(sizefilter(fgpartition(I), FOUR), F0), I)), color(get_nth_f(difference(fgpartition(I), sizefilter(fgpartition(I), FOUR)), F0)), color(get_nth_f(sizefilter(fgpartition(I), FOUR), F0)))

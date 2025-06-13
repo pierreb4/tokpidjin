@@ -1,0 +1,25 @@
+{
+  "solver_key": "9af7a82c",
+  "timestamp": "2025-05-21T09:11:55.404582",
+  "errors": {
+    "size": {
+      "expected_sites": [
+        {
+          "line": "3100",
+          "context": "x2 = order(x1, size)"
+        },
+        {
+          "line": "3101",
+          "context": "x3 = valmax_f(x1, size)"
+        },
+        {
+          "line": "3111",
+          "context": "x13 = apply(x12, x2)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 3,
+      "message": "Found 0 calls but expected 3"
+    }
+  }
+}

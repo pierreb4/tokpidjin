@@ -1,0 +1,2 @@
+def solve_a740d043(S, I):
+    return replace(subgrid(merge_f(o_g(I, R7)), I), ONE, ZERO)

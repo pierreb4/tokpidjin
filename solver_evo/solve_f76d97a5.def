@@ -1,0 +1,2 @@
+def solve_f76d97a5(S, I):
+    return replace(switch(I, get_nth_f(palette_t(I), F0), get_nth_f(palette_t(I), L1)), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)))

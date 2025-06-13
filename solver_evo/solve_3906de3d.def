@@ -1,0 +1,2 @@
+def solve_3906de3d(S, I):
+    return mir_rot_t(switch(apply(rbind(order, identity), switch(mir_rot_t(I, R6), ONE, TWO)), ONE, TWO), R3)

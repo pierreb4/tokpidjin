@@ -1,0 +1,2 @@
+def solve_0ca9ddb6(S, I):
+    return fill(fill(I, SEVEN, mapply(dneighbors, f_ofcolor(I, ONE))), FOUR, mapply(ineighbors, f_ofcolor(I, TWO)))

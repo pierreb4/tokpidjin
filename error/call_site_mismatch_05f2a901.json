@@ -1,0 +1,21 @@
+{
+  "solver_key": "05f2a901",
+  "timestamp": "2025-05-19T16:16:29.379648",
+  "errors": {
+    "mostcolor": {
+      "expected_sites": [
+        {
+          "line": "859",
+          "context": "x1 = objects(I, T, F, T)"
+        },
+        {
+          "line": "865",
+          "context": "O = move(I, x3, x6)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    }
+  }
+}

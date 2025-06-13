@@ -1,0 +1,133 @@
+{
+  "summary": {
+    "total_functions": 21,
+    "dsl_functions": 21,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 3,
+    "functions_with_f_variants": 3,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "sfilter",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3745": {
+          "count": 2,
+          "code_context": "x9 = sfilter(x1, x8)",
+          "tuple_calls": 0,
+          "frozenset_calls": 2
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 400,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3745": {
+          "count": 100,
+          "code_context": "x9 = sfilter(x1, x8)",
+          "tuple_calls": 100,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3751": {
+          "count": 4,
+          "code_context": "x15 = apply(tojvec, x12)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3752": {
+          "count": 4,
+          "code_context": "x16 = apply(x14, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "percent": 100.0,
+      "calls": 400,
+      "call_sites": {
+        "solvers.py:3745": {
+          "count": 100,
+          "code_context": "x9 = sfilter(x1, x8)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 4,
+      "call_sites": {
+        "solvers.py:3745": {
+          "count": 2,
+          "code_context": "x9 = sfilter(x1, x8)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "calls": 400,
+      "call_sites": {
+        "solvers.py:3745": {
+          "count": 100,
+          "code_context": "x9 = sfilter(x1, x8)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "asindices",
+    "objects",
+    "mostcolor_t",
+    "dneighbors",
+    "first_f",
+    "color",
+    "leftmost",
+    "toindices",
+    "interval",
+    "rbind",
+    "compose",
+    "sfilter",
+    "last",
+    "contained",
+    "increment",
+    "add",
+    "lbind",
+    "apply",
+    "tojvec",
+    "astuple",
+    "fill"
+  ]
+}

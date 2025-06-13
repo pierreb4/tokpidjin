@@ -1,0 +1,124 @@
+{
+  "summary": {
+    "total_functions": 19,
+    "dsl_functions": 19,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 81,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3100": {
+          "count": 16,
+          "code_context": "x2 = order(x1, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 16
+        },
+        "solvers.py:3101": {
+          "count": 16,
+          "code_context": "x3 = valmax_f(x1, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 16
+        },
+        "solvers.py:3111": {
+          "count": 16,
+          "code_context": "x13 = apply(x12, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 16
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3111": {
+          "count": 5,
+          "code_context": "x13 = apply(x12, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "percent": 100.0,
+      "calls": 81,
+      "call_sites": {
+        "solvers.py:3100": {
+          "count": 16,
+          "code_context": "x2 = order(x1, size)"
+        },
+        "solvers.py:3101": {
+          "count": 16,
+          "code_context": "x3 = valmax_f(x1, size)"
+        },
+        "solvers.py:3111": {
+          "count": 16,
+          "code_context": "x13 = apply(x12, x2)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 81,
+      "call_sites": {
+        "solvers.py:3100": {
+          "count": 16,
+          "code_context": "x2 = order(x1, size)"
+        },
+        "solvers.py:3101": {
+          "count": 16,
+          "code_context": "x3 = valmax_f(x1, size)"
+        },
+        "solvers.py:3111": {
+          "count": 16,
+          "code_context": "x13 = apply(x12, x2)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "order",
+    "size",
+    "valmax_f",
+    "rbind",
+    "lbind",
+    "compose",
+    "chain",
+    "fork",
+    "apply",
+    "color",
+    "astuple",
+    "canvas",
+    "subtract",
+    "vconcat",
+    "cmirror_t",
+    "merge_t"
+  ]
+}

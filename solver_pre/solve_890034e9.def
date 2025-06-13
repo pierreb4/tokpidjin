@@ -1,0 +1,2 @@
+def solve_890034e9(S, I):
+    return fill(I, get_color_rank_t(I, L1), mapply(lbind(shift, shift(normalize(f_ofcolor(I, get_color_rank_t(I, L1))), NEG_UNITY)), occurrences(I, recolor_i(ZERO, inbox(f_ofcolor(I, get_color_rank_t(I, L1)))))))

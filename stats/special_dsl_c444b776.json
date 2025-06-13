@@ -1,0 +1,135 @@
+{
+  "summary": {
+    "total_functions": 21,
+    "dsl_functions": 21,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 4,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 12,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 75.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2514": {
+          "count": 3,
+          "code_context": "x3 = argmin_f(x2, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    },
+    {
+      "name": "normalize",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 33.33333333333333,
+      "has_frozenset_variant": false,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2517": {
+          "count": 1,
+          "code_context": "x6 = normalize(x5)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2520": {
+          "count": 3,
+          "code_context": "x9 = mapply(x8, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2520": {
+          "count": 3,
+          "code_context": "x9 = mapply(x8, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:2520": {
+          "count": 3,
+          "code_context": "x9 = mapply(x8, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 3,
+      "call_sites": {
+        "solvers.py:2520": {
+          "count": 3,
+          "code_context": "x9 = mapply(x8, x2)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "argmin_f",
+    "size",
+    "backdrop",
+    "toindices",
+    "ulcorner",
+    "lrcorner",
+    "toobject",
+    "normalize",
+    "uppermost",
+    "leftmost",
+    "shift",
+    "lbind",
+    "compose",
+    "mapply",
+    "apply",
+    "merge",
+    "paint"
+  ]
+}

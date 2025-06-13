@@ -1,0 +1,86 @@
+{
+  "hmirror_t": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:76": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((9, 4, 9, 4), (9, 9, 4, 4), (4, 4, 4, 4)))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((4, 1, 1, 4), (1, 1, 1, 1), (4, 4, 4, 1)))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((3, 3, 5, 5), (3, 5, 5, 3), (5, 5, 3, 3)))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((9, 9, 5, 9), (5, 5, 9, 9), (9, 5, 9, 9)))"
+          },
+          {
+            "type_signature": "hmirror_t(tuple)",
+            "value_signature": "hmirror_t(((4, 4, 9, 9), (4, 4, 4, 4), (4, 4, 9, 9)))"
+          }
+        ],
+        "code_context": "x1 = hmirror_t(I)"
+      }
+    },
+    "type_signatures": [
+      "hmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "hmirror_t(((4, 1, 1, 4), (1, 1, 1, 1), (4, 4, 4, 1)))",
+      "hmirror_t(((4, 4, 9, 9), (4, 4, 4, 4), (4, 4, 9, 9)))",
+      "hmirror_t(((3, 3, 5, 5), (3, 5, 5, 3), (5, 5, 3, 3)))",
+      "hmirror_t(((9, 9, 5, 9), (5, 5, 9, 9), (9, 5, 9, 9)))",
+      "hmirror_t(((9, 4, 9, 4), (9, 9, 4, 4), (4, 4, 4, 4)))"
+    ]
+  },
+  "vconcat": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:77": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((4, 4, 4, 4), (9, 9, 4, 4), (9, 4, 9, 4)), ((9, 4, 9, 4), (9, 9, 4, 4), (4, 4, 4, 4)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((4, 4, 4, 1), (1, 1, 1, 1), (4, 1, 1, 4)), ((4, 1, 1, 4), (1, 1, 1, 1), (4, 4, 4, 1)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((5, 5, 3, 3), (3, 5, 5, 3), (3, 3, 5, 5)), ((3, 3, 5, 5), (3, 5, 5, 3), (5, 5, 3, 3)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((9, 5, 9, 9), (5, 5, 9, 9), (9, 9, 5, 9)), ((9, 9, 5, 9), (5, 5, 9, 9), (9, 5, 9, 9)))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((4, 4, 9, 9), (4, 4, 4, 4), (4, 4, 9, 9)), ((4, 4, 9, 9), (4, 4, 4, 4), (4, 4, 9, 9)))"
+          }
+        ],
+        "code_context": "O = vconcat(x1, I)"
+      }
+    },
+    "type_signatures": [
+      "vconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "vconcat(((5, 5, 3, 3), (3, 5, 5, 3), (3, 3, 5, 5)), ((3, 3, 5, 5), (3, 5, 5, 3), (5, 5, 3, 3)))",
+      "vconcat(((4, 4, 4, 4), (9, 9, 4, 4), (9, 4, 9, 4)), ((9, 4, 9, 4), (9, 9, 4, 4), (4, 4, 4, 4)))",
+      "vconcat(((4, 4, 9, 9), (4, 4, 4, 4), (4, 4, 9, 9)), ((4, 4, 9, 9), (4, 4, 4, 4), (4, 4, 9, 9)))",
+      "vconcat(((4, 4, 4, 1), (1, 1, 1, 1), (4, 1, 1, 4)), ((4, 1, 1, 4), (1, 1, 1, 1), (4, 4, 4, 1)))",
+      "vconcat(((9, 5, 9, 9), (5, 5, 9, 9), (9, 9, 5, 9)), ((9, 9, 5, 9), (5, 5, 9, 9), (9, 5, 9, 9)))"
+    ]
+  }
+}

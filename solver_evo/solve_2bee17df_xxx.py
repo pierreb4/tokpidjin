@@ -1,0 +1,33 @@
+def solve_2bee17df_one(S, I):
+    return underfill(I, c_zo_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F0))), merge_t(astuple(mapply(hfrontier, sfilter_t(pair(interval(ZERO, height_t(I), ONE), compose(lbind(apply, matcher(rbind(colorcount_t, BLACK), subtract(height_t(I), TWO))), rbind(vsplit, height_t(I)))(I)), rbind(get_nth_f, L1))), mapply(vfrontier, sfilter_t(pair(compose(lbind(apply, matcher(rbind(colorcount_t, BLACK), subtract(height_t(I), TWO))), rbind(vsplit, height_t(I)))(mir_rot_t(I, R4)), interval(ZERO, height_t(I), ONE)), rbind(get_nth_f, F0))))))
+
+
+def solve_2bee17df(S, I):
+    x1 = identity(S)
+    x2 = identity(p_g)
+    x3 = rbind(get_nth_t, F0)
+    x4 = identity(x3)
+    x5 = c_zo_n(x1, x2, x4)
+    x6 = height_t(I)
+    x7 = interval(ZERO, x6, ONE)
+    x8 = rbind(colorcount_t, BLACK)
+    x9 = subtract(x6, TWO)
+    x10 = matcher(x8, x9)
+    x11 = lbind(apply, x10)
+    x12 = rbind(vsplit, x6)
+    x13 = compose(x11, x12)
+    x14 = x13(I)
+    x15 = pair(x7, x14)
+    x16 = rbind(get_nth_f, L1)
+    x17 = sfilter_t(x15, x16)
+    x18 = mapply(hfrontier, x17)
+    x19 = mir_rot_t(I, R4)
+    x20 = x13(x19)
+    x21 = pair(x20, x7)
+    x22 = rbind(get_nth_f, F0)
+    x23 = sfilter_t(x21, x22)
+    x24 = mapply(vfrontier, x23)
+    x25 = astuple(x18, x24)
+    x26 = merge_t(x25)
+    O = underfill(I, x5, x26)
+    return O

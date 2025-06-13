@@ -1,0 +1,39 @@
+{
+  "hconcat": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:41": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((3, 0, 0), (2, 3, 0), (2, 1, 8), (0, 1, 0)), ((3, 0, 0), (2, 3, 0), (2, 1, 8), (0, 1, 0)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 5, 0), (5, 5, 2), (0, 0, 0)), ((0, 5, 0), (5, 5, 2), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((5, 2, 3, 0), (2, 5, 3, 0), (5, 2, 8, 8), (0, 0, , ((5, 2, 3, 0), (2, 5, 3, 0), (5, 2, 8, 8), (0, 0, )"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((4, 0, 0, 0), (4, 5, 0, 0), (0, 5, 6, 0), (6, 6, , ((4, 0, 0, 0), (4, 5, 0, 0), (0, 5, 6, 0), (6, 6, )"
+          }
+        ],
+        "code_context": "O = hconcat(I, I)"
+      }
+    },
+    "type_signatures": [
+      "hconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "hconcat(((0, 5, 0), (5, 5, 2), (0, 0, 0)), ((0, 5, 0), (5, 5, 2), (0, 0, 0)))",
+      "hconcat(((4, 0, 0, 0), (4, 5, 0, 0), (0, 5, 6, 0), (6, 6, , ((4, 0, 0, 0), (4, 5, 0, 0), (0, 5, 6, 0), (6, 6, )",
+      "hconcat(((5, 2, 3, 0), (2, 5, 3, 0), (5, 2, 8, 8), (0, 0, , ((5, 2, 3, 0), (2, 5, 3, 0), (5, 2, 8, 8), (0, 0, )",
+      "hconcat(((3, 0, 0), (2, 3, 0), (2, 1, 8), (0, 1, 0)), ((3, 0, 0), (2, 3, 0), (2, 1, 8), (0, 1, 0)))"
+    ]
+  }
+}

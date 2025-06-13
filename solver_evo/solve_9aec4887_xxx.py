@@ -1,0 +1,33 @@
+def solve_9aec4887_one(S, I):
+    return fill(paint(subgrid(other_f(o_g(I, R3), get_arg_rank_f(o_g(I, R3), numcolors_f, L1)), I), apply(fork(astuple, chain(rbind(get_nth_f, F0), lbind(rbind(get_arg_rank, L1), normalize_o(other_f(o_g(I, R3), get_arg_rank_f(o_g(I, R3), numcolors_f, L1)))), chain(rbind(compose, initset), lbind(rbind, manhattan), initset)), identity), toindices(shift(normalize_o(get_arg_rank_f(o_g(I, R3), numcolors_f, L1)), UNITY)))), CYAN, intersection(toindices(shift(normalize_o(get_arg_rank_f(o_g(I, R3), numcolors_f, L1)), UNITY)), fork(combine, identity, rbind(mir_rot_f, R2))(fork(connect, rbind(corner, R0), rbind(corner, R3))(toindices(shift(normalize_o(get_arg_rank_f(o_g(I, R3), numcolors_f, L1)), UNITY))))))
+
+
+def solve_9aec4887(S, I):
+    x1 = o_g(I, R3)
+    x2 = get_arg_rank_f(x1, numcolors_f, L1)
+    x3 = other_f(x1, x2)
+    x4 = subgrid(x3, I)
+    x5 = rbind(get_nth_f, F0)
+    x6 = rbind(get_arg_rank, L1)
+    x7 = normalize_o(x3)
+    x8 = lbind(x6, x7)
+    x9 = rbind(compose, initset)
+    x10 = lbind(rbind, manhattan)
+    x11 = chain(x9, x10, initset)
+    x12 = chain(x5, x8, x11)
+    x13 = fork(astuple, x12, identity)
+    x14 = normalize_o(x2)
+    x15 = shift(x14, UNITY)
+    x16 = toindices(x15)
+    x17 = apply(x13, x16)
+    x18 = paint(x4, x17)
+    x19 = rbind(mir_rot_f, R2)
+    x20 = fork(combine, identity, x19)
+    x21 = rbind(corner, R0)
+    x22 = rbind(corner, R3)
+    x23 = fork(connect, x21, x22)
+    x24 = x23(x16)
+    x25 = x20(x24)
+    x26 = intersection(x16, x25)
+    O = fill(x18, CYAN, x26)
+    return O

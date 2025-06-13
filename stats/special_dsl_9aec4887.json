@@ -1,0 +1,167 @@
+{
+  "summary": {
+    "total_functions": 46,
+    "dsl_functions": 46,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 4,
+    "functions_with_f_variants": 4,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "apply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5211": {
+          "count": 4,
+          "code_context": "x16 = apply(x15, x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "argmin",
+      "total_calls": 42,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5211": {
+          "count": 8,
+          "code_context": "x16 = apply(x15, x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 8
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 42,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5211": {
+          "count": 34,
+          "code_context": "x16 = apply(x15, x7)",
+          "tuple_calls": 34,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "combine",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5216": {
+          "count": 3,
+          "code_context": "x21 = x20(x19)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "argmin",
+      "variant": "argmin_f",
+      "type": "frozenset",
+      "calls": 42,
+      "call_sites": {
+        "solvers.py:5211": {
+          "count": 8,
+          "code_context": "x16 = apply(x15, x7)"
+        }
+      }
+    },
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 42,
+      "call_sites": {
+        "solvers.py:5211": {
+          "count": 34,
+          "code_context": "x16 = apply(x15, x7)"
+        }
+      }
+    },
+    {
+      "name": "combine",
+      "variant": "combine_f",
+      "type": "frozenset",
+      "calls": 4,
+      "call_sites": {
+        "solvers.py:5216": {
+          "count": 3,
+          "code_context": "x21 = x20(x19)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "neighbors",
+    "dneighbors",
+    "ineighbors",
+    "argmin_f",
+    "numcolors_f",
+    "palette_f",
+    "other_f",
+    "remove_f",
+    "subgrid",
+    "ulcorner",
+    "toindices",
+    "shape_f",
+    "height_f",
+    "lowermost",
+    "uppermost",
+    "width_f",
+    "rightmost",
+    "leftmost",
+    "crop",
+    "normalize_o",
+    "uppermost_o",
+    "toindices_o",
+    "leftmost_o",
+    "shift",
+    "lbind",
+    "rbind",
+    "chain",
+    "fork",
+    "apply",
+    "initset",
+    "compose",
+    "argmin",
+    "manhattan",
+    "first",
+    "identity",
+    "astuple",
+    "paint",
+    "lrcorner",
+    "connect",
+    "vmirror_f",
+    "combine",
+    "intersection",
+    "fill"
+  ]
+}

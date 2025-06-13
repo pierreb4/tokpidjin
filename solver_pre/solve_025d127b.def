@@ -1,0 +1,2 @@
+def solve_025d127b(S, I):
+    return move(I, difference(merge_f(o_g(I, R5)), mapply(compose(rbind(rbind(get_arg_rank, F0), rbind(col_row, R3)), lbind(colorfilter, o_g(I, R5))), apply(color, o_g(I, R5)))), RIGHT)

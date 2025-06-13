@@ -1,0 +1,2 @@
+def solve_a68b268e(S, I):
+    return fill(fill(fill(righthalf(bottomhalf(I)), CYAN, f_ofcolor(lefthalf(bottomhalf(I)), CYAN)), YELLOW, f_ofcolor(righthalf(tophalf(I)), YELLOW)), ORANGE, f_ofcolor(lefthalf(tophalf(I)), ORANGE))

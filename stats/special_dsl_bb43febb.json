@@ -1,0 +1,98 @@
+{
+  "summary": {
+    "total_functions": 18,
+    "dsl_functions": 18,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 3,
+    "functions_with_f_variants": 3,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "mapply",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:516": {
+          "count": 3,
+          "code_context": "x4 = mapply(x3, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:516": {
+          "count": 3,
+          "code_context": "x4 = mapply(x3, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:516": {
+          "count": 3,
+          "code_context": "x4 = mapply(x3, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 3,
+      "call_sites": {
+        "solvers.py:516": {
+          "count": 3,
+          "code_context": "x4 = mapply(x3, x2)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "compose",
+    "mapply",
+    "apply",
+    "inbox",
+    "uppermost",
+    "toindices",
+    "leftmost",
+    "lowermost",
+    "rightmost",
+    "backdrop",
+    "ulcorner",
+    "lrcorner",
+    "merge",
+    "fill"
+  ]
+}

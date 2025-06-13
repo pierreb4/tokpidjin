@@ -1,0 +1,104 @@
+{
+  "summary": {
+    "total_functions": 9,
+    "dsl_functions": 9,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "last",
+      "total_calls": 8,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4460": {
+          "count": 4,
+          "code_context": "x7 = x6(x3)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        },
+        "solvers.py:4462": {
+          "count": 4,
+          "code_context": "O = x6(x8)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "remove",
+      "total_calls": 8,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4460": {
+          "count": 4,
+          "code_context": "x7 = x6(x3)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        },
+        "solvers.py:4462": {
+          "count": 4,
+          "code_context": "O = x6(x8)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "calls": 8,
+      "call_sites": {
+        "solvers.py:4460": {
+          "count": 4,
+          "code_context": "x7 = x6(x3)"
+        },
+        "solvers.py:4462": {
+          "count": 4,
+          "code_context": "O = x6(x8)"
+        }
+      }
+    },
+    {
+      "name": "remove",
+      "variant": "remove_t",
+      "type": "tuple",
+      "calls": 8,
+      "call_sites": {
+        "solvers.py:4460": {
+          "count": 4,
+          "code_context": "x7 = x6(x3)"
+        },
+        "solvers.py:4462": {
+          "count": 4,
+          "code_context": "O = x6(x8)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "compose",
+    "dedupe",
+    "dmirror_t",
+    "fork",
+    "identity",
+    "last",
+    "remove",
+    "hmirror_t",
+    "vconcat"
+  ]
+}

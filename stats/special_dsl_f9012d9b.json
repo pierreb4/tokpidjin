@@ -1,0 +1,184 @@
+{
+  "summary": {
+    "total_functions": 40,
+    "dsl_functions": 40,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 4,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "sfilter",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4391": {
+          "count": 4,
+          "code_context": "x5 = mfilter_f(x1, x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    },
+    {
+      "name": "normalize",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": false,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4398": {
+          "count": 3,
+          "code_context": "x12 = vperiod(x10)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        },
+        "solvers.py:4399": {
+          "count": 3,
+          "code_context": "x13 = hperiod(x11)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4401": {
+          "count": 1,
+          "code_context": "x15 = mapply(neighbors, x14)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:4406": {
+          "count": 2,
+          "code_context": "x20 = mapply(x19, x18)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 12,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4401": {
+          "count": 1,
+          "code_context": "x15 = mapply(neighbors, x14)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:4404": {
+          "count": 1,
+          "code_context": "x18 = apply(x17, x15)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:4406": {
+          "count": 2,
+          "code_context": "x20 = mapply(x19, x18)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 25.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4401": {
+          "count": 1,
+          "code_context": "x15 = mapply(neighbors, x14)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        },
+        "solvers.py:4406": {
+          "count": 1,
+          "code_context": "x20 = mapply(x19, x18)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 4,
+      "call_sites": {
+        "solvers.py:4391": {
+          "count": 4,
+          "code_context": "x5 = mfilter_f(x1, x4)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "f_ofcolor",
+    "lbind",
+    "chain",
+    "mfilter_f",
+    "sfilter",
+    "palette_t",
+    "contained",
+    "flip",
+    "merge_f",
+    "vsplit",
+    "crop",
+    "hsplit",
+    "extract",
+    "asobject",
+    "vperiod",
+    "normalize",
+    "uppermost",
+    "toindices",
+    "leftmost",
+    "shift",
+    "height_f",
+    "lowermost",
+    "hperiod",
+    "width_f",
+    "rightmost",
+    "neighbors",
+    "ineighbors",
+    "mapply",
+    "apply",
+    "merge",
+    "astuple",
+    "rbind",
+    "multiply",
+    "paint",
+    "subgrid",
+    "ulcorner",
+    "shape_f"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "solver_key": "22168020",
+  "timestamp": "2025-05-21T09:11:49.623076",
+  "errors": {
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "1695",
+          "context": "x8 = mapply(x7, x2)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

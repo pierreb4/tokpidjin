@@ -1,0 +1,61 @@
+{
+  "solver_key": "3de23699",
+  "timestamp": "2025-05-19T16:16:32.038021",
+  "errors": {
+    "palette": {
+      "expected_sites": [
+        {
+          "line": "2033",
+          "context": "x1 = fgpartition(I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "mostcolor": {
+      "expected_sites": [
+        {
+          "line": "2033",
+          "context": "x1 = fgpartition(I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "shape": {
+      "expected_sites": [
+        {
+          "line": "2040",
+          "context": "x8 = subgrid(x3, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "height": {
+      "expected_sites": [
+        {
+          "line": "2040",
+          "context": "x8 = subgrid(x3, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "2040",
+          "context": "x8 = subgrid(x3, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

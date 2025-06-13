@@ -1,0 +1,2 @@
+def solve_de1cd16c(S, I):
+    return canvas(get_color_rank_t(get_arg_rank_f(apply(rbind(subgrid, I), difference(o_g(I, R4), sizefilter(o_g(I, R4), ONE))), rbind(colorcount_t, get_color_rank_t(I, L1)), F0), F0), UNITY)

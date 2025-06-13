@@ -1,0 +1,2 @@
+def solve_05f2a901(S, I):
+    return move(I, get_nth_f(colorfilter(o_g(I, R5), RED), F0), gravitate(get_nth_f(colorfilter(o_g(I, R5), RED), F0), get_nth_f(colorfilter(o_g(I, R5), CYAN), F0)))

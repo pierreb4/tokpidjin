@@ -1,0 +1,2 @@
+def solve_b2862040(S, I):
+    return fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mfilter_f(colorfilter(o_g(I, R4), BLUE), rbind(adjacent, mfilter_f(colorfilter(o_g(I, R4), BURGUNDY), compose(flip, rbind(bordering, I))))))

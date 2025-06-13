@@ -1,0 +1,2 @@
+def solve_feca6190(S, I):
+    return mir_rot_t(paint(canvas(ZERO, astuple(multiply(size_f(o_g(I, R5)), FIVE), multiply(size_f(o_g(I, R5)), FIVE))), mapply(fork(recolor_i, color, compose(rbind(shoot, UNITY), center)), o_g(I, R5))), R0)

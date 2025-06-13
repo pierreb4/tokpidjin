@@ -1,0 +1,273 @@
+{
+  "summary": {
+    "total_functions": 58,
+    "dsl_functions": 58,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 7,
+    "functions_with_f_variants": 7,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 16,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:6339": {
+          "count": 13,
+          "code_context": "x2 = argmax_f(x1, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 13
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 10,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:6344": {
+          "count": 4,
+          "code_context": "x7 = x6(I)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:6358": {
+          "count": 5,
+          "code_context": "x21 = mapply(x20, x18)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "total_calls": 15,
+      "tuple_percent": 46.666666666666664,
+      "has_tuple_variant": true,
+      "frozenset_percent": 46.666666666666664,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6355": {
+          "count": 5,
+          "code_context": "x18 = sfilter(x9, x17)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        },
+        "solvers.py:6374": {
+          "count": 5,
+          "code_context": "x37 = x36(x22)",
+          "tuple_calls": 5,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6358": {
+          "count": 5,
+          "code_context": "x21 = mapply(x20, x18)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 15,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6358": {
+          "count": 5,
+          "code_context": "x21 = mapply(x20, x18)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6374": {
+          "count": 3,
+          "code_context": "x37 = x36(x22)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 89,
+      "tuple_percent": 98.87640449438202,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6360": {
+          "count": 1,
+          "code_context": "x23 = first(x9)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        },
+        "solvers.py:6374": {
+          "count": 75,
+          "code_context": "x37 = x36(x22)",
+          "tuple_calls": 75,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 124,
+      "tuple_percent": 99.19354838709677,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6374": {
+          "count": 113,
+          "code_context": "x37 = x36(x22)",
+          "tuple_calls": 113,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "percent": 98.87640449438202,
+      "calls": 89,
+      "call_sites": {
+        "solvers.py:6374": {
+          "count": 75,
+          "code_context": "x37 = x36(x22)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "percent": 99.19354838709677,
+      "calls": 124,
+      "call_sites": {
+        "solvers.py:6374": {
+          "count": 113,
+          "code_context": "x37 = x36(x22)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 16,
+      "call_sites": {
+        "solvers.py:6339": {
+          "count": 13,
+          "code_context": "x2 = argmax_f(x1, size)"
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 10,
+      "call_sites": {
+        "solvers.py:6344": {
+          "count": 4,
+          "code_context": "x7 = x6(I)"
+        },
+        "solvers.py:6358": {
+          "count": 5,
+          "code_context": "x21 = mapply(x20, x18)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "fgpartition",
+    "palette_t",
+    "mostcolor_t",
+    "argmax_f",
+    "size",
+    "remove_f",
+    "merge_f",
+    "subgrid",
+    "ulcorner",
+    "toindices",
+    "shape_f",
+    "height_f",
+    "lowermost",
+    "uppermost",
+    "width_f",
+    "rightmost",
+    "leftmost",
+    "crop",
+    "chain",
+    "frontiers",
+    "dmirror_t",
+    "merge",
+    "color",
+    "objects",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "rbind",
+    "lbind",
+    "compose",
+    "matcher",
+    "fork",
+    "sfilter",
+    "outbox",
+    "corners",
+    "urcorner",
+    "llcorner",
+    "lrcorner",
+    "toobject",
+    "palette_f",
+    "contained",
+    "flip",
+    "numcolors_f",
+    "both",
+    "mapply",
+    "apply",
+    "identity",
+    "recolor_o",
+    "toindices_o",
+    "paint",
+    "first",
+    "height_t",
+    "increment",
+    "interval",
+    "power",
+    "pair",
+    "last",
+    "downscale"
+  ]
+}

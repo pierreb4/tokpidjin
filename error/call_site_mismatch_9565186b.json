@@ -1,0 +1,17 @@
+{
+  "solver_key": "9565186b",
+  "timestamp": "2025-05-21T09:11:55.116908",
+  "errors": {
+    "size": {
+      "expected_sites": [
+        {
+          "line": "497",
+          "context": "x3 = argmax_f(x2, size)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

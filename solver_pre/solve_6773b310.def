@@ -1,0 +1,2 @@
+def solve_6773b310(S, I):
+    return downscale(replace(fill(compress(I), ONE, mfilter(apply(rbind(toobject, compress(I)), apply(fork(insert, identity, neighbors), shift(apply(rbind(multiply, THREE), insert(ORIGIN, neighbors(ORIGIN))), astuple(FOUR, FOUR)))), matcher(rbind(colorcount_f, SIX), TWO))), SIX, ZERO), THREE)

@@ -1,0 +1,65 @@
+{
+  "solver_key": "50846271",
+  "timestamp": "2025-05-21T09:11:51.709743",
+  "errors": {
+    "sfilter": {
+      "expected_sites": [
+        {
+          "line": "5767",
+          "context": "x7 = mfilter_f(x2, x6)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "size": {
+      "expected_sites": [
+        {
+          "line": "5767",
+          "context": "x7 = mfilter_f(x2, x6)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "argmax": {
+      "expected_sites": [
+        {
+          "line": "5789",
+          "context": "x29 = apply(x28, x10)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "combine": {
+      "expected_sites": [
+        {
+          "line": "5789",
+          "context": "x29 = apply(x28, x10)"
+        },
+        {
+          "line": "5797",
+          "context": "x37 = mapply(x36, x29)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "5797",
+          "context": "x37 = mapply(x36, x29)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

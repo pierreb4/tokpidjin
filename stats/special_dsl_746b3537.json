@@ -1,0 +1,109 @@
+{
+  "summary": {
+    "total_functions": 17,
+    "dsl_functions": 17,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 3,
+    "functions_with_f_variants": 3,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "first",
+      "total_calls": 6,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4332": {
+          "count": 6,
+          "code_context": "x2 = x1(I)",
+          "tuple_calls": 6,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "size",
+      "total_calls": 6,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4332": {
+          "count": 6,
+          "code_context": "x2 = x1(I)",
+          "tuple_calls": 6,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 6,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4338": {
+          "count": 6,
+          "code_context": "x8 = apply(color, x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 6,
+      "call_sites": {
+        "solvers.py:4332": {
+          "count": 6,
+          "code_context": "x2 = x1(I)"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "variant": "size_t",
+      "type": "tuple",
+      "calls": 6,
+      "call_sites": {
+        "solvers.py:4332": {
+          "count": 6,
+          "code_context": "x2 = x1(I)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "chain",
+    "first",
+    "dedupe",
+    "size",
+    "equality",
+    "branch",
+    "dmirror_t",
+    "objects",
+    "asindices",
+    "dneighbors",
+    "order",
+    "leftmost",
+    "toindices",
+    "apply",
+    "color",
+    "repeat",
+    "identity"
+  ]
+}

@@ -1,0 +1,2 @@
+def solve_c1d99e64(S, I):
+    return fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), merge_f(frontiers(I)))

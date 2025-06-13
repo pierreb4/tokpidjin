@@ -1,0 +1,2 @@
+def solve_af902bf9(S, I):
+    return replace(fill(underfill(I, NEG_ONE, mfilter_f(prapply(connect, f_ofcolor(I, YELLOW), f_ofcolor(I, YELLOW)), fork(either, vline_i, hline_i))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(compose(backdrop, inbox), o_g(underfill(I, NEG_ONE, mfilter_f(prapply(connect, f_ofcolor(I, YELLOW), f_ofcolor(I, YELLOW)), fork(either, vline_i, hline_i))), R1))), NEG_ONE, BLACK)

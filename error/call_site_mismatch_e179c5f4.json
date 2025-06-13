@@ -1,0 +1,17 @@
+{
+  "solver_key": "e179c5f4",
+  "timestamp": "2025-05-19T16:16:41.025539",
+  "errors": {
+    "shape": {
+      "expected_sites": [
+        {
+          "line": "4477",
+          "context": "x11 = subgrid(x10, x9)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

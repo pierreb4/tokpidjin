@@ -1,0 +1,89 @@
+{
+  "summary": {
+    "total_functions": 50,
+    "dsl_functions": 50,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "combine",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 25.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6265": {
+          "count": 1,
+          "code_context": "x31 = combine(x27, x28)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        },
+        "solvers.py:6266": {
+          "count": 1,
+          "code_context": "x32 = combine(x29, x30)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "vline_i",
+    "height_i",
+    "lowermost_i",
+    "toindices_i",
+    "uppermost_i",
+    "width_i",
+    "rightmost_i",
+    "leftmost_i",
+    "center",
+    "uppermost",
+    "toindices",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "branch",
+    "greater",
+    "both",
+    "astuple",
+    "other_f",
+    "remove_f",
+    "subtract",
+    "shoot",
+    "connect",
+    "underfill",
+    "mostcolor_t",
+    "objects",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "rbind",
+    "sfilter_f",
+    "adjacent",
+    "manhattan",
+    "difference",
+    "merge_f",
+    "cover",
+    "fill",
+    "combine",
+    "initset",
+    "compose",
+    "argmax_f",
+    "gravitate",
+    "vmatching",
+    "shift",
+    "crement",
+    "add",
+    "replace"
+  ]
+}

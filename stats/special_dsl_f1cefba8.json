@@ -1,0 +1,181 @@
+{
+  "summary": {
+    "total_functions": 39,
+    "dsl_functions": 39,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 5,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "first",
+      "total_calls": 26,
+      "tuple_percent": 84.61538461538461,
+      "has_tuple_variant": true,
+      "frozenset_percent": 11.538461538461538,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5314": {
+          "count": 4,
+          "code_context": "x4 = first(x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:5333": {
+          "count": 11,
+          "code_context": "x23 = sfilter_f(x16, x22)",
+          "tuple_calls": 11,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "remove",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5323": {
+          "count": 4,
+          "code_context": "x13 = remove(ZERO, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5335": {
+          "count": 4,
+          "code_context": "x25 = mapply(vfrontier, x23)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5336": {
+          "count": 4,
+          "code_context": "x26 = mapply(hfrontier, x24)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5335": {
+          "count": 4,
+          "code_context": "x25 = mapply(vfrontier, x23)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5336": {
+          "count": 4,
+          "code_context": "x26 = mapply(hfrontier, x24)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5335": {
+          "count": 3,
+          "code_context": "x25 = mapply(vfrontier, x23)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        },
+        "solvers.py:5336": {
+          "count": 4,
+          "code_context": "x26 = mapply(hfrontier, x24)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 8,
+      "call_sites": {
+        "solvers.py:5335": {
+          "count": 3,
+          "code_context": "x25 = mapply(vfrontier, x23)"
+        },
+        "solvers.py:5336": {
+          "count": 4,
+          "code_context": "x26 = mapply(hfrontier, x24)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "palette_t",
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "f_ofcolor",
+    "first",
+    "ulcorner",
+    "toindices",
+    "subgrid",
+    "shape_f",
+    "height_f",
+    "lowermost",
+    "uppermost",
+    "width_f",
+    "rightmost",
+    "leftmost",
+    "crop",
+    "power",
+    "compose",
+    "trim",
+    "shift",
+    "fill",
+    "leastcolor_t",
+    "remove",
+    "other_f",
+    "remove_f",
+    "matcher",
+    "fork",
+    "sfilter_f",
+    "either",
+    "difference",
+    "mapply",
+    "apply",
+    "vfrontier",
+    "merge",
+    "hfrontier",
+    "combine_f",
+    "intersection"
+  ]
+}

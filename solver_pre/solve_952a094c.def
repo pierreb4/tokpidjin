@@ -1,0 +1,2 @@
+def solve_952a094c(S, I):
+    return paint(cover(I, merge_f(sizefilter(o_g(I, R5), ONE))), apply(fork(astuple, compose(color, chain(lbind(rbind(get_arg_rank, F0), sizefilter(o_g(I, R5), ONE)), lbind(rbind, manhattan), initset)), identity), corners(outbox(get_arg_rank_f(o_g(I, R5), size, F0)))))

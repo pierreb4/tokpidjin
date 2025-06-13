@@ -1,0 +1,2 @@
+def solve_0b148d64(S, I):
+    return subgrid(f_ofcolor(I, get_color_rank_t(I, L1)), I)

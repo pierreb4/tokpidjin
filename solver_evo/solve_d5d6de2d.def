@@ -1,0 +1,2 @@
+def solve_d5d6de2d(S, I):
+    return fill(replace(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)), BLACK), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(compose(backdrop, inbox), difference(o_g(I, R5), sfilter_f(o_g(I, R5), square_f))))

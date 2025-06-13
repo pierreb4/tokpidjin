@@ -1,0 +1,27 @@
+{
+  "summary": {
+    "total_functions": 12,
+    "dsl_functions": 12,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 0,
+    "functions_with_f_variants": 0,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "tophalf",
+    "bottomhalf",
+    "f_ofcolor",
+    "combine_f",
+    "intersection",
+    "difference",
+    "shape_t",
+    "height_t",
+    "width_t",
+    "canvas",
+    "fill",
+    "toindices"
+  ]
+}

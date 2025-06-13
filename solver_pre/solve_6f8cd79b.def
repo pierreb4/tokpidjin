@@ -1,0 +1,2 @@
+def solve_6f8cd79b(S, I):
+    return fill(I, EIGHT, mfilter_f(apply(initset, asindices(I)), rbind(bordering, I)))

@@ -1,0 +1,303 @@
+{
+  "f_ofcolor": {
+    "calls": 3,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1636": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 1)"
+          }
+        ],
+        "code_context": "x1 = f_ofcolor(I, ONE)"
+      }
+    },
+    "type_signatures": [
+      "f_ofcolor(tuple, int)"
+    ],
+    "value_signatures": [
+      "f_ofcolor(tuple(len=10), 1)"
+    ]
+  },
+  "shift": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1637": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=6), (1, 0))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset({(7, 7), (3, 9), (5, 3), (1, 6), (9, 1)}, (1, 0))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=7), (1, 0))"
+          }
+        ],
+        "code_context": "x2 = shift(x1, DOWN)"
+      },
+      "solvers.py:1639": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=6), (-1, 0))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset({(7, 7), (3, 9), (5, 3), (1, 6), (9, 1)}, (-1, 0))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=7), (-1, 0))"
+          }
+        ],
+        "code_context": "x4 = shift(x1, UP)"
+      },
+      "solvers.py:1641": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=6), (0, 1))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset({(7, 7), (3, 9), (5, 3), (1, 6), (9, 1)}, (0, 1))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=7), (0, 1))"
+          }
+        ],
+        "code_context": "x6 = shift(x1, RIGHT)"
+      },
+      "solvers.py:1643": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=6), (0, -1))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset({(7, 7), (3, 9), (5, 3), (1, 6), (9, 1)}, (0, -1))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=7), (0, -1))"
+          }
+        ],
+        "code_context": "x8 = shift(x1, LEFT)"
+      }
+    },
+    "type_signatures": [
+      "shift(frozenset, tuple)"
+    ],
+    "value_signatures": [
+      "shift(frozenset(len=6), (1, 0))",
+      "shift(frozenset(len=7), (1, 0))",
+      "shift(frozenset({(7, 7), (3, 9), (5, 3), (1, 6), (9, 1)}, (-1, 0))",
+      "shift(frozenset(len=6), (0, -1))",
+      "shift(frozenset(len=7), (0, -1))",
+      "shift(frozenset(len=6), (0, 1))",
+      "shift(frozenset({(7, 7), (3, 9), (5, 3), (1, 6), (9, 1)}, (1, 0))",
+      "shift(frozenset({(7, 7), (3, 9), (5, 3), (1, 6), (9, 1)}, (0, -1))",
+      "shift(frozenset(len=6), (-1, 0))",
+      "shift(frozenset(len=7), (-1, 0))",
+      "shift(frozenset({(7, 7), (3, 9), (5, 3), (1, 6), (9, 1)}, (0, 1))",
+      "shift(frozenset(len=7), (0, 1))"
+    ]
+  },
+  "fill": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1638": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 8, frozenset(len=6))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 8, frozenset({(8, 7), (4, 9), (10, 1), (2, 6), (6, 3))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 8, frozenset(len=7))"
+          }
+        ],
+        "code_context": "x3 = fill(I, EIGHT, x2)"
+      },
+      "solvers.py:1640": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 2, frozenset(len=6))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 2, frozenset({(8, 1), (4, 3), (0, 6), (6, 7), (2, 9)})"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 2, frozenset(len=7))"
+          }
+        ],
+        "code_context": "x5 = fill(x3, TWO, x4)"
+      },
+      "solvers.py:1642": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 6, frozenset(len=6))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 6, frozenset({(5, 4), (9, 2), (3, 10), (1, 7), (7, 8))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 6, frozenset(len=7))"
+          }
+        ],
+        "code_context": "x7 = fill(x5, SIX, x6)"
+      },
+      "solvers.py:1644": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 7, frozenset(len=6))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 7, frozenset({(9, 0), (3, 8), (1, 5), (7, 6), (5, 2)})"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 7, frozenset(len=7))"
+          }
+        ],
+        "code_context": "O = fill(x7, SEVEN, x8)"
+      }
+    },
+    "type_signatures": [
+      "fill(tuple, int, frozenset)"
+    ],
+    "value_signatures": [
+      "fill(tuple(len=10), 8, frozenset(len=6))",
+      "fill(tuple(len=10), 6, frozenset({(5, 4), (9, 2), (3, 10), (1, 7), (7, 8))",
+      "fill(tuple(len=10), 7, frozenset(len=6))",
+      "fill(tuple(len=10), 2, frozenset(len=6))",
+      "fill(tuple(len=10), 7, frozenset({(9, 0), (3, 8), (1, 5), (7, 6), (5, 2)})",
+      "fill(tuple(len=10), 8, frozenset({(8, 7), (4, 9), (10, 1), (2, 6), (6, 3))",
+      "fill(tuple(len=10), 6, frozenset(len=7))",
+      "fill(tuple(len=10), 8, frozenset(len=7))",
+      "fill(tuple(len=10), 7, frozenset(len=7))",
+      "fill(tuple(len=10), 2, frozenset(len=7))",
+      "fill(tuple(len=10), 2, frozenset({(8, 1), (4, 3), (0, 6), (6, 7), (2, 9)})",
+      "fill(tuple(len=10), 6, frozenset(len=6))"
+    ]
+  },
+  "toindices": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1638": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=6))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(8, 7), (4, 9), (10, 1), (2, 6), (6, 3))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=7))"
+          }
+        ],
+        "code_context": "x3 = fill(I, EIGHT, x2)"
+      },
+      "solvers.py:1640": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=6))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(8, 1), (4, 3), (0, 6), (6, 7), (2, 9)})"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=7))"
+          }
+        ],
+        "code_context": "x5 = fill(x3, TWO, x4)"
+      },
+      "solvers.py:1642": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=6))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(5, 4), (9, 2), (3, 10), (1, 7), (7, 8))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=7))"
+          }
+        ],
+        "code_context": "x7 = fill(x5, SIX, x6)"
+      },
+      "solvers.py:1644": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=6))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(9, 0), (3, 8), (1, 5), (7, 6), (5, 2)})"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=7))"
+          }
+        ],
+        "code_context": "O = fill(x7, SEVEN, x8)"
+      }
+    },
+    "type_signatures": [
+      "toindices(frozenset)"
+    ],
+    "value_signatures": [
+      "toindices(frozenset(len=7))",
+      "toindices(frozenset({(9, 0), (3, 8), (1, 5), (7, 6), (5, 2)})",
+      "toindices(frozenset(len=6))",
+      "toindices(frozenset({(8, 7), (4, 9), (10, 1), (2, 6), (6, 3))",
+      "toindices(frozenset({(5, 4), (9, 2), (3, 10), (1, 7), (7, 8))",
+      "toindices(frozenset({(8, 1), (4, 3), (0, 6), (6, 7), (2, 9)})"
+    ]
+  }
+}

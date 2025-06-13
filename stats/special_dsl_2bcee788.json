@@ -1,0 +1,130 @@
+{
+  "summary": {
+    "total_functions": 45,
+    "dsl_functions": 45,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 20,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4896": {
+          "count": 10,
+          "code_context": "x4 = argmax_f(x2, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 10
+        },
+        "solvers.py:4897": {
+          "count": 10,
+          "code_context": "x5 = argmin_f(x2, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 10
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 34,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4911": {
+          "count": 28,
+          "code_context": "x19 = sfilter_f(x16, x18)",
+          "tuple_calls": 28,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 20,
+      "call_sites": {
+        "solvers.py:4896": {
+          "count": 10,
+          "code_context": "x4 = argmax_f(x2, size)"
+        },
+        "solvers.py:4897": {
+          "count": 10,
+          "code_context": "x5 = argmin_f(x2, size)"
+        }
+      }
+    },
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 34,
+      "call_sites": {
+        "solvers.py:4911": {
+          "count": 28,
+          "code_context": "x19 = sfilter_f(x16, x18)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "mostcolor_t",
+    "objects",
+    "asindices",
+    "dneighbors",
+    "replace",
+    "argmax_f",
+    "size",
+    "argmin_f",
+    "position",
+    "toindices",
+    "center",
+    "uppermost",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "first_t",
+    "last_t",
+    "subgrid",
+    "ulcorner",
+    "shape_f",
+    "crop",
+    "hline_o",
+    "width_o",
+    "rightmost_o",
+    "toindices_o",
+    "leftmost_o",
+    "hmirror_t",
+    "vmirror_t",
+    "branch",
+    "asobject",
+    "matcher",
+    "compose",
+    "sfilter_f",
+    "first",
+    "flip",
+    "astuple",
+    "multiply",
+    "add",
+    "shift",
+    "paint",
+    "height_o",
+    "lowermost_o",
+    "uppermost_o"
+  ]
+}

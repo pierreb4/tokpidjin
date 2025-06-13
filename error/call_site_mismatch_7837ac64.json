@@ -1,0 +1,32 @@
+{
+  "solver_key": "7837ac64",
+  "timestamp": "2025-05-21T09:11:53.897999",
+  "errors": {
+    "size": {
+      "expected_sites": [
+        {
+          "line": "6339",
+          "context": "x2 = argmax_f(x1, size)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "6344",
+          "context": "x7 = x6(I)"
+        },
+        {
+          "line": "6358",
+          "context": "x21 = mapply(x20, x18)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    }
+  }
+}

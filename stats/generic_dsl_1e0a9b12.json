@@ -1,0 +1,294 @@
+{
+  "rot270": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:418": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "rot270(tuple)",
+            "value_signature": "rot270(tuple(len=6))"
+          },
+          {
+            "type_signature": "rot270(tuple)",
+            "value_signature": "rot270(((0, 4, 0, 9), (0, 0, 0, 0), (0, 4, 6, 0), (1, 0, )"
+          },
+          {
+            "type_signature": "rot270(tuple)",
+            "value_signature": "rot270(((0, 0, 0, 1, 0), (0, 3, 0, 0, 0), (0, 3, 0, 1, 2))"
+          },
+          {
+            "type_signature": "rot270(tuple)",
+            "value_signature": "rot270(((0, 2, 0, 4, 3), (5, 0, 0, 0, 0), (0, 0, 6, 0, 0))"
+          }
+        ],
+        "code_context": "x1 = rot270(I)"
+      }
+    },
+    "type_signatures": [
+      "rot270(tuple)"
+    ],
+    "value_signatures": [
+      "rot270(((0, 0, 0, 1, 0), (0, 3, 0, 0, 0), (0, 3, 0, 1, 2))",
+      "rot270(((0, 2, 0, 4, 3), (5, 0, 0, 0, 0), (0, 0, 6, 0, 0))",
+      "rot270(tuple(len=6))",
+      "rot270(((0, 4, 0, 9), (0, 0, 0, 0), (0, 4, 6, 0), (1, 0, )"
+    ]
+  },
+  "rbind": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:419": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rbind(function, function)",
+            "value_signature": "rbind(<function order at 0x1011c51f0>, <function identity at 0x1011b6e50>)"
+          }
+        ],
+        "code_context": "x2 = rbind(order, identity)"
+      }
+    },
+    "type_signatures": [
+      "rbind(function, function)"
+    ],
+    "value_signatures": [
+      "rbind(<function order at 0x1011c51f0>, <function identity at 0x1011b6e50>)"
+    ]
+  },
+  "apply": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:420": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function rbind.<locals>.<lambda> at 0x1015ebee0>, tuple(len=6))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function rbind.<locals>.<lambda> at 0x1015ebee0>, ((9, 0, 0, 0), (0, 0, 6, 0), (4, 0, 4, 0), (0, 0, )"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function rbind.<locals>.<lambda> at 0x1015ebee0>, ((0, 0, 2, 0, 0), (1, 0, 1, 0, 0), (0, 0, 0, 0, 0))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function rbind.<locals>.<lambda> at 0x1015ebee0>, ((3, 0, 0, 0, 0), (4, 0, 0, 4, 0), (0, 0, 6, 0, 0))"
+          }
+        ],
+        "code_context": "x3 = apply(x2, x1)"
+      }
+    },
+    "type_signatures": [
+      "apply(function, tuple)"
+    ],
+    "value_signatures": [
+      "apply(<function rbind.<locals>.<lambda> at 0x1015ebee0>, ((9, 0, 0, 0), (0, 0, 6, 0), (4, 0, 4, 0), (0, 0, )",
+      "apply(<function rbind.<locals>.<lambda> at 0x1015ebee0>, ((0, 0, 2, 0, 0), (1, 0, 1, 0, 0), (0, 0, 0, 0, 0))",
+      "apply(<function rbind.<locals>.<lambda> at 0x1015ebee0>, tuple(len=6))",
+      "apply(<function rbind.<locals>.<lambda> at 0x1015ebee0>, ((3, 0, 0, 0, 0), (4, 0, 0, 4, 0), (0, 0, 6, 0, 0))"
+    ]
+  },
+  "order": {
+    "calls": 20,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:420": {
+        "count": 15,
+        "signatures": [
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order(tuple(len=6), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((9, 0, 0, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((0, 0, 6, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((4, 0, 4, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((0, 0, 0, 1), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((0, 0, 2, 0, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((1, 0, 1, 0, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((0, 0, 0, 0, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((0, 3, 3, 0, 3), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((0, 0, 0, 6, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((3, 0, 0, 0, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((4, 0, 0, 4, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((0, 0, 6, 0, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((2, 0, 0, 2, 0), <function identity at 0x1011b6e50>)"
+          },
+          {
+            "type_signature": "order(tuple, function)",
+            "value_signature": "order((0, 5, 0, 5, 5), <function identity at 0x1011b6e50>)"
+          }
+        ],
+        "code_context": "x3 = apply(x2, x1)"
+      }
+    },
+    "type_signatures": [
+      "order(tuple, function)"
+    ],
+    "value_signatures": [
+      "order((2, 0, 0, 2, 0), <function identity at 0x1011b6e50>)",
+      "order((1, 0, 1, 0, 0), <function identity at 0x1011b6e50>)",
+      "order((3, 0, 0, 0, 0), <function identity at 0x1011b6e50>)",
+      "order((4, 0, 0, 4, 0), <function identity at 0x1011b6e50>)",
+      "order((0, 0, 2, 0, 0), <function identity at 0x1011b6e50>)",
+      "order(tuple(len=6), <function identity at 0x1011b6e50>)",
+      "order((0, 0, 0, 6, 0), <function identity at 0x1011b6e50>)",
+      "order((0, 3, 3, 0, 3), <function identity at 0x1011b6e50>)",
+      "order((0, 0, 0, 0, 0), <function identity at 0x1011b6e50>)",
+      "order((9, 0, 0, 0), <function identity at 0x1011b6e50>)",
+      "order((0, 5, 0, 5, 5), <function identity at 0x1011b6e50>)",
+      "order((0, 0, 6, 0), <function identity at 0x1011b6e50>)",
+      "order((4, 0, 4, 0), <function identity at 0x1011b6e50>)",
+      "order((0, 0, 0, 1), <function identity at 0x1011b6e50>)",
+      "order((0, 0, 6, 0, 0), <function identity at 0x1011b6e50>)"
+    ]
+  },
+  "identity": {
+    "calls": 102,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:420": {
+        "count": 10,
+        "signatures": [
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(9)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(0)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(8)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(7)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(4)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(6)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(1)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(2)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(3)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(5)"
+          }
+        ],
+        "code_context": "x3 = apply(x2, x1)"
+      }
+    },
+    "type_signatures": [
+      "identity(int)"
+    ],
+    "value_signatures": [
+      "identity(4)",
+      "identity(6)",
+      "identity(3)",
+      "identity(5)",
+      "identity(7)",
+      "identity(1)",
+      "identity(9)",
+      "identity(2)",
+      "identity(8)",
+      "identity(0)"
+    ]
+  },
+  "rot90": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:421": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=6))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(((0, 0, 0, 9), (0, 0, 0, 6), (0, 0, 4, 4), (0, 0, )"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(((0, 0, 0, 0, 2), (0, 0, 0, 1, 1), (0, 0, 0, 0, 0))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(((0, 0, 0, 0, 3), (0, 0, 0, 4, 4), (0, 0, 0, 0, 6))"
+          }
+        ],
+        "code_context": "O = rot90(x3)"
+      }
+    },
+    "type_signatures": [
+      "rot90(tuple)"
+    ],
+    "value_signatures": [
+      "rot90(((0, 0, 0, 9), (0, 0, 0, 6), (0, 0, 4, 4), (0, 0, )",
+      "rot90(tuple(len=6))",
+      "rot90(((0, 0, 0, 0, 3), (0, 0, 0, 4, 4), (0, 0, 0, 0, 6))",
+      "rot90(((0, 0, 0, 0, 2), (0, 0, 0, 1, 1), (0, 0, 0, 0, 0))"
+    ]
+  }
+}

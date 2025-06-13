@@ -1,4 +1,3 @@
-from collections import Counter
 from typing import (
     List,
     Union,
@@ -10,35 +9,36 @@ from typing import (
     Iterable
 )
 
+# Types supporting substitution
+F_ = int #  0  to  9, from first
+L_ = int # -10 to -1, from last
+FL = int # -10 to  9, from both ends
+R_ = int # Randomized symbols, such as colors
+C_ = int # Colors
+A_ = int # Angles
+
+# Regular types, no sub (yet)
+I_ = int
+J_ = int
+IJ = Tuple[I_, J_]
+F_ = Callable
+
+# Generic types
 Boolean = bool
 Integer = int
-IntegerTuple = Tuple[Integer, Integer]
-Numerical = Union[Integer, IntegerTuple]
-# IntegerSet = FrozenSet[Integer]
-IntegerSet = Tuple[Integer]
+# IntegerTuple = Tuple[Integer, Integer]
+Numerical = Union[Integer, IJ]
+IntegerSet = FrozenSet[Integer]
 Grid = Tuple[Tuple[Integer]]
-SampleTuple = Tuple[Grid, Grid]
-Cell = Tuple[Integer, IntegerTuple]
+Samples = Tuple[Grid, Grid]
+# Cell = Tuple[Integer, IntegerTuple]
+Cell = Tuple[C_, IJ]
 Object = FrozenSet[Cell]
-# Object -> ObjectTuple
-ObjectTuple = Tuple[Cell]
 Objects = FrozenSet[Object]
-# Objects -> ObjectsTuple
-ObjectsTuple = Tuple[Object]
-Indices = FrozenSet[IntegerTuple]
-# Indices -> IndiceTuple
-IndiceTuple = Tuple[IntegerTuple]
+Indices = FrozenSet[IJ]
 IndicesSet = FrozenSet[Indices]
-# IndicesSet -> IndicesSetTuple
-IndicesTuple = Tuple[IndiceTuple]
 Patch = Union[Object, Indices]
-# Patch -> PatchTuple
-PatchTuple = Union[ObjectTuple, IndiceTuple]
-Element = Union[Object, Grid]
-# Element -> ElementTuple
-ElementTuple = Union[ObjectTuple, Grid]
-Piece = Union[Grid, Patch]
-# Piece -> PieceTuple
-PieceTuple = Union[Grid, PatchTuple]
+# Element = Union[Object, Grid]
+# Piece = Union[Grid, Patch]
 TupleTuple = Tuple[Tuple]
 ContainerContainer = Container[Container]

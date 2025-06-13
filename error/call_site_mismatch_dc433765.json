@@ -1,0 +1,17 @@
+{
+  "solver_key": "dc433765",
+  "timestamp": "2025-05-19T16:16:40.898655",
+  "errors": {
+    "mostcolor": {
+      "expected_sites": [
+        {
+          "line": "1281",
+          "context": "O = move(I, x7, x6)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

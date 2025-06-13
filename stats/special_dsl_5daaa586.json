@@ -1,0 +1,130 @@
+{
+  "summary": {
+    "total_functions": 45,
+    "dsl_functions": 45,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 16,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3814": {
+          "count": 9,
+          "code_context": "x9 = argmax_f(x8, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 9
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3818": {
+          "count": 4,
+          "code_context": "x13 = mfilter_f(x12, vline_i)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:3819": {
+          "count": 4,
+          "code_context": "x14 = mfilter_f(x12, hline_i)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 16,
+      "call_sites": {
+        "solvers.py:3814": {
+          "count": 9,
+          "code_context": "x9 = argmax_f(x8, size)"
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 8,
+      "call_sites": {
+        "solvers.py:3818": {
+          "count": 4,
+          "code_context": "x13 = mfilter_f(x12, vline_i)"
+        },
+        "solvers.py:3819": {
+          "count": 4,
+          "code_context": "x14 = mfilter_f(x12, hline_i)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "rbind",
+    "compose",
+    "extract",
+    "bordering",
+    "uppermost",
+    "toindices",
+    "leftmost",
+    "flip",
+    "lowermost",
+    "rightmost",
+    "outbox",
+    "subgrid",
+    "ulcorner",
+    "shape_f",
+    "height_f",
+    "width_f",
+    "crop",
+    "fgpartition",
+    "palette_t",
+    "mostcolor_t",
+    "argmax_f",
+    "size",
+    "color",
+    "prapply",
+    "connect",
+    "mfilter_f",
+    "sfilter",
+    "vline_i",
+    "height_i",
+    "lowermost_i",
+    "toindices_i",
+    "uppermost_i",
+    "width_i",
+    "rightmost_i",
+    "leftmost_i",
+    "merge_f",
+    "hline_i",
+    "size_f",
+    "greater",
+    "branch",
+    "fill"
+  ]
+}

@@ -1,0 +1,2 @@
+def solve_22233c11(S, I):
+    return fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(fork(difference, compose(toindices, fork(shift, compose(rbind(upscale_f, RED), rbind(mir_rot_f, R2)), chain(invert, halve, shape_f))), compose(lbind(mapply, fork(combine, hfrontier, vfrontier)), toindices)), o_g(I, R7)))

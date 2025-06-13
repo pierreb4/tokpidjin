@@ -1,0 +1,204 @@
+{
+  "summary": {
+    "total_functions": 40,
+    "dsl_functions": 40,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 5,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 30,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 96.66666666666667,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6560": {
+          "count": 11,
+          "code_context": "x24 = argmax_f(x23, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 11
+        },
+        "solvers.py:6567": {
+          "count": 10,
+          "code_context": "x31 = argmax_f(x30, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 10
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "total_calls": 10,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:6564": {
+          "count": 5,
+          "code_context": "x28 = x27(x26)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        },
+        "solvers.py:6570": {
+          "count": 5,
+          "code_context": "x34 = x33(x31)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 10,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6565": {
+          "count": 5,
+          "code_context": "x29 = mapply(x28, x25)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6571": {
+          "count": 5,
+          "code_context": "x35 = mapply(x34, x32)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 10,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6565": {
+          "count": 5,
+          "code_context": "x29 = mapply(x28, x25)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6571": {
+          "count": 5,
+          "code_context": "x35 = mapply(x34, x32)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 10,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:6565": {
+          "count": 5,
+          "code_context": "x29 = mapply(x28, x25)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        },
+        "solvers.py:6571": {
+          "count": 5,
+          "code_context": "x35 = mapply(x34, x32)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 10,
+      "call_sites": {
+        "solvers.py:6564": {
+          "count": 5,
+          "code_context": "x28 = x27(x26)"
+        },
+        "solvers.py:6570": {
+          "count": 5,
+          "code_context": "x34 = x33(x31)"
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 10,
+      "call_sites": {
+        "solvers.py:6565": {
+          "count": 5,
+          "code_context": "x29 = mapply(x28, x25)"
+        },
+        "solvers.py:6571": {
+          "count": 5,
+          "code_context": "x35 = mapply(x34, x32)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "neighbors",
+    "dneighbors",
+    "ineighbors",
+    "astuple",
+    "invert",
+    "initset",
+    "insert",
+    "lbind",
+    "compose",
+    "rbind",
+    "fork",
+    "sfilter_f",
+    "palette_f",
+    "contained",
+    "argmax_f",
+    "size",
+    "remove_f",
+    "vmirror_f",
+    "ulcorner",
+    "toindices",
+    "lrcorner",
+    "chain",
+    "identity",
+    "sfilter",
+    "shift",
+    "mapply",
+    "apply",
+    "center",
+    "uppermost",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "merge",
+    "combine_f",
+    "paint"
+  ]
+}

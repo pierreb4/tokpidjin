@@ -1,0 +1,131 @@
+{
+  "summary": {
+    "total_functions": 34,
+    "dsl_functions": 34,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 4,
+    "functions_with_f_variants": 4,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 14,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4615": {
+          "count": 14,
+          "code_context": "x2 = argmax_f(x1, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 14
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 14,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4627": {
+          "count": 10,
+          "code_context": "x14 = mapply(x13, x3)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 24,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4627": {
+          "count": 18,
+          "code_context": "x14 = mapply(x13, x3)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 14,
+      "tuple_percent": 71.42857142857143,
+      "has_tuple_variant": true,
+      "frozenset_percent": 28.57142857142857,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4627": {
+          "count": 14,
+          "code_context": "x14 = mapply(x13, x3)",
+          "tuple_calls": 10,
+          "frozenset_calls": 4
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 14,
+      "call_sites": {
+        "solvers.py:4615": {
+          "count": 14,
+          "code_context": "x2 = argmax_f(x1, size)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "neighbors",
+    "dneighbors",
+    "ineighbors",
+    "argmax_f",
+    "size",
+    "remove_f",
+    "lbind",
+    "double",
+    "interval",
+    "rbind",
+    "chain",
+    "compose",
+    "fork",
+    "mapply",
+    "apply",
+    "color",
+    "position",
+    "toindices",
+    "center",
+    "uppermost",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "multiply",
+    "shift",
+    "merge",
+    "recolor_o",
+    "toindices_o",
+    "paint"
+  ]
+}

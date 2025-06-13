@@ -1,0 +1,2 @@
+def solve_f76d97a5(S, I):
+    return replace(switch(I, get_nth_f(palette_t(I), F0), get_nth_f(palette_t(I), L1)), FIVE, ZERO)

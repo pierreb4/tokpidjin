@@ -1,0 +1,17 @@
+{
+  "solver_key": "47c1f68c",
+  "timestamp": "2025-05-19T16:16:32.646969",
+  "errors": {
+    "dmirror": {
+      "expected_sites": [
+        {
+          "line": "2392",
+          "context": "x9 = compress(x8)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

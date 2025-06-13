@@ -1,0 +1,2 @@
+def solve_ea32f347(S, I):
+    return fill(fill(replace(I, FIVE, FOUR), ONE, get_arg_rank_f(o_g(I, R5), size, F0)), TWO, get_arg_rank_f(o_g(I, R5), size, L1))

@@ -1,0 +1,68 @@
+{
+  "summary": {
+    "total_functions": 22,
+    "dsl_functions": 22,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "sfilter",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3517": {
+          "count": 3,
+          "code_context": "x11 = mfilter_f(x9, x10)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 3,
+      "call_sites": {
+        "solvers.py:3517": {
+          "count": 3,
+          "code_context": "x11 = mfilter_f(x9, x10)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "leastcolor_t",
+    "objects",
+    "asindices",
+    "dneighbors",
+    "f_ofcolor",
+    "first_f",
+    "toobject",
+    "toindices",
+    "mostcolor_f",
+    "colorfilter",
+    "rbind",
+    "mfilter_f",
+    "sfilter",
+    "adjacent",
+    "manhattan",
+    "merge_f",
+    "chain",
+    "sfilter_f",
+    "initset",
+    "even",
+    "difference",
+    "fill"
+  ]
+}

@@ -1,0 +1,2 @@
+def solve_9af7a82c(S, I):
+    return mir_rot_t(merge_t(apply(compose(rbind(mir_rot_t, R3), fork(vconcat, fork(canvas, color, compose(rbind(astuple, ONE), size)), compose(lbind(canvas, ZERO), chain(rbind(astuple, ONE), lbind(subtract, get_val_rank_f(o_g(I, R4), size, F0)), size)))), order(o_g(I, R4), size))), R3)

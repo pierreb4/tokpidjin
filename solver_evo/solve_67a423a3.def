@@ -1,0 +1,2 @@
+def solve_67a423a3(S, I):
+    return fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), neighbors(get_nth_f(delta(merge_f(colorfilter(o_g(I, R5), get_color_rank_t(I, L1)))), F0)))

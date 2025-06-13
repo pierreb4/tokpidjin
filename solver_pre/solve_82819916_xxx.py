@@ -1,0 +1,32 @@
+def solve_82819916_one(S, I):
+    return paint(I, mapply(fork(combine, fork(recolor_o, compose(rbind(get_nth_f, F0), rbind(rbind(get_arg_rank, L1), compose(rbind(get_nth_f, L1), rbind(get_nth_f, L1)))), compose(lbind(shift, sfilter_f(normalize(get_arg_rank_f(o_g(I, R3), size, F0)), matcher(rbind(get_nth_f, F0), compose(rbind(get_nth_f, F0), rbind(rbind(get_arg_rank, L1), compose(rbind(get_nth_f, L1), rbind(get_nth_f, L1))))(normalize(get_arg_rank_f(o_g(I, R3), size, F0)))))), compose(toivec, rbind(col_row, R1)))), fork(recolor_o, fork(other, palette_f, compose(rbind(get_nth_f, F0), rbind(rbind(get_arg_rank, L1), compose(rbind(get_nth_f, L1), rbind(get_nth_f, L1))))), compose(lbind(shift, difference(normalize(get_arg_rank_f(o_g(I, R3), size, F0)), sfilter_f(normalize(get_arg_rank_f(o_g(I, R3), size, F0)), matcher(rbind(get_nth_f, F0), compose(rbind(get_nth_f, F0), rbind(rbind(get_arg_rank, L1), compose(rbind(get_nth_f, L1), rbind(get_nth_f, L1))))(normalize(get_arg_rank_f(o_g(I, R3), size, F0))))))), compose(toivec, rbind(col_row, R1))))), remove_f(get_arg_rank_f(o_g(I, R3), size, F0), o_g(I, R3))))
+
+
+def solve_82819916(S, I):
+    x1 = rbind(get_nth_f, F0)
+    x2 = rbind(get_arg_rank, L1)
+    x3 = rbind(get_nth_f, L1)
+    x4 = compose(x3, x3)
+    x5 = rbind(x2, x4)
+    x6 = compose(x1, x5)
+    x7 = o_g(I, R3)
+    x8 = get_arg_rank_f(x7, size, F0)
+    x9 = normalize(x8)
+    x10 = x6(x9)
+    x11 = matcher(x1, x10)
+    x12 = sfilter_f(x9, x11)
+    x13 = lbind(shift, x12)
+    x14 = rbind(col_row, R1)
+    x15 = compose(toivec, x14)
+    x16 = compose(x13, x15)
+    x17 = fork(recolor_o, x6, x16)
+    x18 = fork(other, palette_f, x6)
+    x19 = difference(x9, x12)
+    x20 = lbind(shift, x19)
+    x21 = compose(x20, x15)
+    x22 = fork(recolor_o, x18, x21)
+    x23 = fork(combine, x17, x22)
+    x24 = remove_f(x8, x7)
+    x25 = mapply(x23, x24)
+    O = paint(I, x25)
+    return O

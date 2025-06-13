@@ -1,0 +1,2 @@
+def solve_40853293(S, I):
+    return paint(paint(I, mfilter(apply(fork(recolor_i, color, backdrop), partition(I)), hline_i)), mfilter(apply(fork(recolor_i, color, backdrop), partition(I)), vline_i))

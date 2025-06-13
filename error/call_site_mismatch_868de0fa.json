@@ -1,0 +1,28 @@
+{
+  "solver_key": "868de0fa",
+  "timestamp": "2025-05-19T16:16:35.838572",
+  "errors": {
+    "square": {
+      "expected_sites": [
+        {
+          "line": "1728",
+          "context": "x2 = sfilter(x1, square)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "1728",
+          "context": "x2 = sfilter(x1, square)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

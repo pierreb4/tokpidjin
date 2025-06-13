@@ -1,0 +1,2 @@
+def solve_22168020(S, I):
+    return paint(I, mapply(fork(recolor_i, identity, compose(merge, fork(lbind(prapply, connect), lbind(f_ofcolor, I), lbind(f_ofcolor, I)))), remove(BLACK, palette_t(I))))

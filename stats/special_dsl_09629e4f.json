@@ -1,0 +1,69 @@
+{
+  "summary": {
+    "total_functions": 19,
+    "dsl_functions": 19,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "argmin",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 20.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2585": {
+          "count": 1,
+          "code_context": "x2 = argmin(x1, numcolors_f)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    },
+    {
+      "name": "normalize",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 20.0,
+      "has_frozenset_variant": false,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2586": {
+          "count": 1,
+          "code_context": "x3 = normalize(x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "neighbors",
+    "dneighbors",
+    "ineighbors",
+    "argmin",
+    "numcolors_f",
+    "palette_f",
+    "normalize",
+    "uppermost",
+    "toindices",
+    "leftmost",
+    "shift",
+    "upscale_f",
+    "ulcorner",
+    "paint",
+    "f_ofcolor",
+    "fill"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "solver_key": "2c608aff",
+  "timestamp": "2025-05-21T09:11:50.237503",
+  "errors": {
+    "size": {
+      "expected_sites": [
+        {
+          "line": "1924",
+          "context": "x3 = argmax_f(x2, size)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "sfilter": {
+      "expected_sites": [
+        {
+          "line": "1929",
+          "context": "x8 = mfilter_f(x6, x7)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

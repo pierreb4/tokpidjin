@@ -1,0 +1,2 @@
+def solve_6cdd2623(S, I):
+    return fill(cover(I, merge_f(fgpartition(I))), get_color_rank_t(I, L1), mfilter_f(prapply(connect, f_ofcolor(I, get_color_rank_t(I, L1)), f_ofcolor(I, get_color_rank_t(I, L1))), fork(both, fork(either, hline_i, vline_i), chain(positive, size, rbind(difference, box(merge_f(fgpartition(I))))))))

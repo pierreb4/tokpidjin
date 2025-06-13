@@ -1,0 +1,30 @@
+def solve_673ef223_one(S, I):
+    return underfill(underfill(replace(I, CYAN, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0))), CYAN, mapply(rbind(shoot, branch(equality(col_row(get_arg_rank_f(o_g(I, R5), rbind(col_row, R1), L1), R2), BLACK), LEFT, RIGHT)), f_ofcolor(I, CYAN))), CYAN, mapply(hfrontier, shift(f_ofcolor(I, CYAN), toivec(fork(subtract, rbind(get_rank, F0), rbind(get_rank, L1))(apply(rbind(col_row, R1), colorfilter(o_g(I, R5), RED)))))))
+
+
+def solve_673ef223(S, I):
+    x1 = identity(p_g)
+    x2 = rbind(get_nth_t, F0)
+    x3 = c_zo_n(S, x1, x2)
+    x4 = replace(I, CYAN, x3)
+    x5 = o_g(I, R5)
+    x6 = rbind(col_row, R1)
+    x7 = get_arg_rank_f(x5, x6, L1)
+    x8 = col_row(x7, R2)
+    x9 = equality(x8, BLACK)
+    x10 = branch(x9, LEFT, RIGHT)
+    x11 = rbind(shoot, x10)
+    x12 = f_ofcolor(I, CYAN)
+    x13 = mapply(x11, x12)
+    x14 = underfill(x4, CYAN, x13)
+    x15 = rbind(get_rank, F0)
+    x16 = rbind(get_rank, L1)
+    x17 = fork(subtract, x15, x16)
+    x18 = colorfilter(x5, RED)
+    x19 = apply(x6, x18)
+    x20 = x17(x19)
+    x21 = toivec(x20)
+    x22 = shift(x12, x21)
+    x23 = mapply(hfrontier, x22)
+    O = underfill(x14, CYAN, x23)
+    return O

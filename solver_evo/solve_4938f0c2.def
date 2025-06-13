@@ -1,0 +1,2 @@
+def solve_4938f0c2(S, I):
+    return branch(greater(size_f(o_g(I, R7)), FOUR), I, fill(fill(I, RED, shift(mir_rot_f(f_ofcolor(I, RED), R2), add(tojvec(width_f(f_ofcolor(I, RED))), ZERO_BY_TWO))), RED, shift(mir_rot_f(f_ofcolor(fill(I, RED, shift(mir_rot_f(f_ofcolor(I, RED), R2), add(tojvec(width_f(f_ofcolor(I, RED))), ZERO_BY_TWO))), RED), R0), add(toivec(height_f(f_ofcolor(I, RED))), TWO_BY_ZERO))))

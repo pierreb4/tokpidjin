@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "total_functions": 15,
+    "dsl_functions": 15,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 0,
+    "functions_with_f_variants": 0,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "height_f",
+    "lowermost",
+    "toindices",
+    "uppermost",
+    "equality",
+    "branch",
+    "recolor_i",
+    "toindices_i",
+    "move",
+    "cover",
+    "mostcolor_t",
+    "fill",
+    "shift",
+    "paint"
+  ]
+}

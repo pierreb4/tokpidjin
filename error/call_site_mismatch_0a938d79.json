@@ -1,0 +1,54 @@
+{
+  "solver_key": "0a938d79",
+  "timestamp": "2025-05-19T16:16:29.532371",
+  "errors": {
+    "height": {
+      "expected_sites": [
+        {
+          "line": "4593",
+          "context": "x1 = portrait(I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "dmirror": {
+      "expected_sites": [
+        {
+          "line": "4595",
+          "context": "x3 = x2(I)"
+        },
+        {
+          "line": "4609",
+          "context": "O = x2(x16)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "palette": {
+      "expected_sites": [
+        {
+          "line": "4596",
+          "context": "x4 = fgpartition(x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "mostcolor": {
+      "expected_sites": [
+        {
+          "line": "4596",
+          "context": "x4 = fgpartition(x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+def solve_928ad970(S, I):
+    return fill(I, get_color_rank_t(trim(subgrid(f_ofcolor(I, GRAY), I)), L1), inbox(f_ofcolor(I, GRAY)))

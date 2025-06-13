@@ -1,0 +1,2 @@
+def solve_5168d44c(S, I):
+    return move(I, recolor_i(TWO, f_ofcolor(I, TWO)), branch(equality(height_f(f_ofcolor(I, THREE)), ONE), ZERO_BY_TWO, TWO_BY_ZERO))

@@ -1,0 +1,2 @@
+def solve_c8cbb738(S, I):
+    return paint(canvas(get_color_rank_t(I, F0), get_val_rank_f(fgpartition(I), shape_f, F0)), mapply(fork(shift, identity, chain(halve, lbind(subtract, get_val_rank_f(fgpartition(I), shape_f, F0)), shape_f)), apply(normalize, fgpartition(I))))

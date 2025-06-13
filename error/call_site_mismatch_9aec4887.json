@@ -1,0 +1,39 @@
+{
+  "solver_key": "9aec4887",
+  "timestamp": "2025-05-21T09:11:55.375664",
+  "errors": {
+    "argmin": {
+      "expected_sites": [
+        {
+          "line": "5211",
+          "context": "x16 = apply(x15, x7)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "first": {
+      "expected_sites": [
+        {
+          "line": "5211",
+          "context": "x16 = apply(x15, x7)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "combine": {
+      "expected_sites": [
+        {
+          "line": "5216",
+          "context": "x21 = x20(x19)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

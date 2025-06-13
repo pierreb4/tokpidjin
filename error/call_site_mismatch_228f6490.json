@@ -1,0 +1,29 @@
+{
+  "solver_key": "228f6490",
+  "timestamp": "2025-05-19T16:16:30.529078",
+  "errors": {
+    "normalize": {
+      "expected_sites": [
+        {
+          "line": "4503",
+          "context": "x10 = x9(x6)"
+        },
+        {
+          "line": "4504",
+          "context": "x11 = x9(x7)"
+        },
+        {
+          "line": "4507",
+          "context": "x14 = extract(x8, x12)"
+        },
+        {
+          "line": "4508",
+          "context": "x15 = extract(x8, x13)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 4,
+      "message": "Found 0 calls but expected 4"
+    }
+  }
+}

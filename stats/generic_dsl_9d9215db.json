@@ -1,0 +1,2366 @@
+{
+  "rot90": {
+    "calls": 24,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5936": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=19))"
+          }
+        ],
+        "code_context": "x1 = rot90(I)"
+      },
+      "solvers.py:5944": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=9))"
+          }
+        ],
+        "code_context": "x9 = argmax_f(x8, x5)"
+      },
+      "solvers.py:5968": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=19))"
+          }
+        ],
+        "code_context": "x33 = rot90(x32)"
+      }
+    },
+    "type_signatures": [
+      "rot90(tuple)"
+    ],
+    "value_signatures": [
+      "rot90(tuple(len=9))",
+      "rot90(tuple(len=19))"
+    ]
+  },
+  "rot180": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5937": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rot180(tuple)",
+            "value_signature": "rot180(tuple(len=19))"
+          }
+        ],
+        "code_context": "x2 = rot180(I)"
+      },
+      "solvers.py:5969": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rot180(tuple)",
+            "value_signature": "rot180(tuple(len=19))"
+          }
+        ],
+        "code_context": "x34 = rot180(x32)"
+      }
+    },
+    "type_signatures": [
+      "rot180(tuple)"
+    ],
+    "value_signatures": [
+      "rot180(tuple(len=19))"
+    ]
+  },
+  "rot270": {
+    "calls": 24,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5938": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rot270(tuple)",
+            "value_signature": "rot270(tuple(len=19))"
+          }
+        ],
+        "code_context": "x3 = rot270(I)"
+      },
+      "solvers.py:5944": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rot270(tuple)",
+            "value_signature": "rot270(tuple(len=9))"
+          }
+        ],
+        "code_context": "x9 = argmax_f(x8, x5)"
+      },
+      "solvers.py:5970": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rot270(tuple)",
+            "value_signature": "rot270(tuple(len=19))"
+          }
+        ],
+        "code_context": "x35 = rot270(x32)"
+      }
+    },
+    "type_signatures": [
+      "rot270(tuple)"
+    ],
+    "value_signatures": [
+      "rot270(tuple(len=9))",
+      "rot270(tuple(len=19))"
+    ]
+  },
+  "initset": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5939": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "initset(tuple)",
+            "value_signature": "initset(tuple(len=19))"
+          }
+        ],
+        "code_context": "x4 = initset(I)"
+      }
+    },
+    "type_signatures": [
+      "initset(tuple)"
+    ],
+    "value_signatures": [
+      "initset(tuple(len=19))"
+    ]
+  },
+  "chain": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5940": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function numcolors_t at 0x105401040>, <function lefthalf at 0x1053fa940>, <function tophalf at 0x10547f3a0>)"
+          }
+        ],
+        "code_context": "x5 = chain(numcolors_t, lefthalf, tophalf)"
+      },
+      "solvers.py:5963": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function normalize at 0x1053fed30>, <function rbind.<locals>.<lambda> at 0x105540670>, <function fork.<locals>.<lambda> at 0x105540550>)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function normalize at 0x1053fed30>, <function rbind.<locals>.<lambda> at 0x105540940>, <function fork.<locals>.<lambda> at 0x1055405e0>)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function normalize at 0x1053fed30>, <function rbind.<locals>.<lambda> at 0x105540c10>, <function fork.<locals>.<lambda> at 0x105540040>)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function normalize at 0x1053fed30>, <function rbind.<locals>.<lambda> at 0x1055408b0>, <function fork.<locals>.<lambda> at 0x1055400d0>)"
+          }
+        ],
+        "code_context": "x28 = chain(normalize, x27, x25)"
+      }
+    },
+    "type_signatures": [
+      "chain(function, function, function)"
+    ],
+    "value_signatures": [
+      "chain(<function normalize at 0x1053fed30>, <function rbind.<locals>.<lambda> at 0x105540c10>, <function fork.<locals>.<lambda> at 0x105540040>)",
+      "chain(<function normalize at 0x1053fed30>, <function rbind.<locals>.<lambda> at 0x1055408b0>, <function fork.<locals>.<lambda> at 0x1055400d0>)",
+      "chain(<function normalize at 0x1053fed30>, <function rbind.<locals>.<lambda> at 0x105540940>, <function fork.<locals>.<lambda> at 0x1055405e0>)",
+      "chain(<function normalize at 0x1053fed30>, <function rbind.<locals>.<lambda> at 0x105540670>, <function fork.<locals>.<lambda> at 0x105540550>)",
+      "chain(<function numcolors_t at 0x105401040>, <function lefthalf at 0x1053fa940>, <function tophalf at 0x10547f3a0>)"
+    ]
+  },
+  "insert": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5941": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "insert(tuple, frozenset)",
+            "value_signature": "insert(tuple(len=19), frozenset({((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)"
+          }
+        ],
+        "code_context": "x6 = insert(x1, x4)"
+      },
+      "solvers.py:5942": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "insert(tuple, frozenset)",
+            "value_signature": "insert(tuple(len=19), frozenset({((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)"
+          }
+        ],
+        "code_context": "x7 = insert(x2, x6)"
+      },
+      "solvers.py:5943": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "insert(tuple, frozenset)",
+            "value_signature": "insert(tuple(len=19), frozenset({((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)"
+          }
+        ],
+        "code_context": "x8 = insert(x3, x7)"
+      }
+    },
+    "type_signatures": [
+      "insert(tuple, frozenset)"
+    ],
+    "value_signatures": [
+      "insert(tuple(len=19), frozenset({((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)"
+    ]
+  },
+  "argmax_f": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5944": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "argmax_f(frozenset, function)",
+            "value_signature": "argmax_f(frozenset({((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, <function chain.<locals>.<lambda> at 0x10548aee0>)"
+          }
+        ],
+        "code_context": "x9 = argmax_f(x8, x5)"
+      }
+    },
+    "type_signatures": [
+      "argmax_f(frozenset, function)"
+    ],
+    "value_signatures": [
+      "argmax_f(frozenset({((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, <function chain.<locals>.<lambda> at 0x10548aee0>)"
+    ]
+  },
+  "tophalf": {
+    "calls": 32,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5944": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "tophalf(tuple)",
+            "value_signature": "tophalf(tuple(len=19))"
+          }
+        ],
+        "code_context": "x9 = argmax_f(x8, x5)"
+      }
+    },
+    "type_signatures": [
+      "tophalf(tuple)"
+    ],
+    "value_signatures": [
+      "tophalf(tuple(len=19))"
+    ]
+  },
+  "lefthalf": {
+    "calls": 16,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5944": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "lefthalf(tuple)",
+            "value_signature": "lefthalf(tuple(len=9))"
+          }
+        ],
+        "code_context": "x9 = argmax_f(x8, x5)"
+      }
+    },
+    "type_signatures": [
+      "lefthalf(tuple)"
+    ],
+    "value_signatures": [
+      "lefthalf(tuple(len=9))"
+    ]
+  },
+  "numcolors_t": {
+    "calls": 16,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5944": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "numcolors_t(tuple)",
+            "value_signature": "numcolors_t(tuple(len=9))"
+          }
+        ],
+        "code_context": "x9 = argmax_f(x8, x5)"
+      }
+    },
+    "type_signatures": [
+      "numcolors_t(tuple)"
+    ],
+    "value_signatures": [
+      "numcolors_t(tuple(len=9))"
+    ]
+  },
+  "palette_t": {
+    "calls": 20,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5944": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "palette_t(tuple)",
+            "value_signature": "palette_t(tuple(len=9))"
+          }
+        ],
+        "code_context": "x9 = argmax_f(x8, x5)"
+      },
+      "solvers.py:5949": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "palette_t(tuple)",
+            "value_signature": "palette_t(tuple(len=19))"
+          }
+        ],
+        "code_context": "x14 = partition(x13)"
+      }
+    },
+    "type_signatures": [
+      "palette_t(tuple)"
+    ],
+    "value_signatures": [
+      "palette_t(tuple(len=19))",
+      "palette_t(tuple(len=9))"
+    ]
+  },
+  "vmirror_t": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5945": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(tuple(len=19))"
+          }
+        ],
+        "code_context": "x10 = vmirror_t(x9)"
+      }
+    },
+    "type_signatures": [
+      "vmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "vmirror_t(tuple(len=19))"
+    ]
+  },
+  "papply": {
+    "calls": 16,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5946": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "papply(function, tuple, tuple)",
+            "value_signature": "papply(<function pair at 0x105401550>, tuple(len=19), tuple(len=19))"
+          }
+        ],
+        "code_context": "x11 = papply(pair, x9, x10)"
+      },
+      "solvers.py:5971": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "papply(function, tuple, tuple)",
+            "value_signature": "papply(<function pair at 0x105401550>, tuple(len=19), tuple(len=19))"
+          }
+        ],
+        "code_context": "x36 = papply(pair, x32, x33)"
+      },
+      "solvers.py:5973": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "papply(function, tuple, tuple)",
+            "value_signature": "papply(<function pair at 0x105401550>, tuple(len=19), tuple(len=19))"
+          }
+        ],
+        "code_context": "x38 = papply(pair, x37, x34)"
+      },
+      "solvers.py:5975": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "papply(function, tuple, tuple)",
+            "value_signature": "papply(<function pair at 0x105401550>, tuple(len=19), tuple(len=19))"
+          }
+        ],
+        "code_context": "x40 = papply(pair, x39, x35)"
+      }
+    },
+    "type_signatures": [
+      "papply(function, tuple, tuple)"
+    ],
+    "value_signatures": [
+      "papply(<function pair at 0x105401550>, tuple(len=19), tuple(len=19))"
+    ]
+  },
+  "pair": {
+    "calls": 304,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5946": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "pair(tuple, tuple)",
+            "value_signature": "pair(tuple(len=19), tuple(len=19))"
+          }
+        ],
+        "code_context": "x11 = papply(pair, x9, x10)"
+      },
+      "solvers.py:5971": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "pair(tuple, tuple)",
+            "value_signature": "pair(tuple(len=19), tuple(len=19))"
+          }
+        ],
+        "code_context": "x36 = papply(pair, x32, x33)"
+      },
+      "solvers.py:5973": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "pair(tuple, tuple)",
+            "value_signature": "pair(tuple(len=19), tuple(len=19))"
+          }
+        ],
+        "code_context": "x38 = papply(pair, x37, x34)"
+      },
+      "solvers.py:5975": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "pair(tuple, tuple)",
+            "value_signature": "pair(tuple(len=19), tuple(len=19))"
+          }
+        ],
+        "code_context": "x40 = papply(pair, x39, x35)"
+      }
+    },
+    "type_signatures": [
+      "pair(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "pair(tuple(len=19), tuple(len=19))"
+    ]
+  },
+  "lbind": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5947": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "lbind(function, function)",
+            "value_signature": "lbind(<function apply at 0x1053dd040>, <function maximum at 0x1053fe3a0>)"
+          }
+        ],
+        "code_context": "x12 = lbind(apply, maximum)"
+      }
+    },
+    "type_signatures": [
+      "lbind(function, function)"
+    ],
+    "value_signatures": [
+      "lbind(<function apply at 0x1053dd040>, <function maximum at 0x1053fe3a0>)"
+    ]
+  },
+  "apply": {
+    "calls": 332,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5948": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540040>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function maximum at 0x1053fe3a0>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x1055408b0>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540b80>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540e50>, tuple(len=19))"
+          }
+        ],
+        "code_context": "x13 = apply(x12, x11)"
+      },
+      "solvers.py:5951": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function llcorner at 0x1053fab80>, frozenset({frozenset({(1, (3, 13)), (1, (5, 3)), ()"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function llcorner at 0x1053fab80>, frozenset({frozenset({(1, (1, 15)), (1, (1, 3)), ()"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function llcorner at 0x1053fab80>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()"
+          }
+        ],
+        "code_context": "x16 = apply(llcorner, x15)"
+      },
+      "solvers.py:5952": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function lrcorner at 0x1053faee0>, frozenset({frozenset({(1, (3, 13)), (1, (5, 3)), ()"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function lrcorner at 0x1053faee0>, frozenset({frozenset({(1, (1, 15)), (1, (1, 3)), ()"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function lrcorner at 0x1053faee0>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()"
+          }
+        ],
+        "code_context": "x17 = apply(lrcorner, x15)"
+      },
+      "solvers.py:5966": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x1055408b0>, frozenset({frozenset({(1, (3, 13)), (1, (5, 3)), ()"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x105540b80>, frozenset({frozenset({(1, (1, 15)), (1, (1, 3)), ()"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x105540e50>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x1055ae040>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      },
+      "solvers.py:5972": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540040>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function maximum at 0x1053fe3a0>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x1055408b0>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540b80>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540e50>, tuple(len=19))"
+          }
+        ],
+        "code_context": "x37 = apply(x12, x36)"
+      },
+      "solvers.py:5974": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540040>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function maximum at 0x1053fe3a0>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x1055408b0>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540b80>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540e50>, tuple(len=19))"
+          }
+        ],
+        "code_context": "x39 = apply(x12, x38)"
+      },
+      "solvers.py:5976": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540040>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function maximum at 0x1053fe3a0>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x1055408b0>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540b80>, tuple(len=19))"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function lbind.<locals>.<lambda> at 0x105540e50>, tuple(len=19))"
+          }
+        ],
+        "code_context": "O = apply(x12, x40)"
+      }
+    },
+    "type_signatures": [
+      "apply(function, frozenset)",
+      "apply(function, tuple)"
+    ],
+    "value_signatures": [
+      "apply(<function fork.<locals>.<lambda> at 0x1055408b0>, frozenset({frozenset({(1, (3, 13)), (1, (5, 3)), ()",
+      "apply(<function llcorner at 0x1053fab80>, frozenset({frozenset({(1, (3, 13)), (1, (5, 3)), ()",
+      "apply(<function fork.<locals>.<lambda> at 0x105540e50>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()",
+      "apply(<function lrcorner at 0x1053faee0>, frozenset({frozenset({(1, (1, 15)), (1, (1, 3)), ()",
+      "apply(<function llcorner at 0x1053fab80>, frozenset({frozenset({(1, (1, 15)), (1, (1, 3)), ()",
+      "apply(<function lbind.<locals>.<lambda> at 0x105540b80>, tuple(len=19))",
+      "apply(<function maximum at 0x1053fe3a0>, tuple(len=19))",
+      "apply(<function lbind.<locals>.<lambda> at 0x1055408b0>, tuple(len=19))",
+      "apply(<function lbind.<locals>.<lambda> at 0x105540e50>, tuple(len=19))",
+      "apply(<function lrcorner at 0x1053faee0>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()",
+      "apply(<function fork.<locals>.<lambda> at 0x105540b80>, frozenset({frozenset({(1, (1, 15)), (1, (1, 3)), ()",
+      "apply(<function llcorner at 0x1053fab80>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()",
+      "apply(<function lrcorner at 0x1053faee0>, frozenset({frozenset({(1, (3, 13)), (1, (5, 3)), ()",
+      "apply(<function fork.<locals>.<lambda> at 0x1055ae040>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()",
+      "apply(<function lbind.<locals>.<lambda> at 0x105540040>, tuple(len=19))"
+    ]
+  },
+  "maximum": {
+    "calls": 5776,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5948": {
+        "count": 11,
+        "signatures": [
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((3, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 3))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((4, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((1, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 1))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 4))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((8, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 8))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((2, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 2))"
+          }
+        ],
+        "code_context": "x13 = apply(x12, x11)"
+      },
+      "solvers.py:5972": {
+        "count": 16,
+        "signatures": [
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((3, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((3, 3))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((4, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((1, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((4, 4))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 1))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 4))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 3))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((8, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((8, 8))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((2, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((2, 2))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 2))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 8))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((1, 1))"
+          }
+        ],
+        "code_context": "x37 = apply(x12, x36)"
+      },
+      "solvers.py:5974": {
+        "count": 16,
+        "signatures": [
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((3, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((4, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((1, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 4))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 1))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((4, 4))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 3))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((3, 3))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((8, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((2, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 2))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((2, 2))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 8))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((8, 8))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((1, 1))"
+          }
+        ],
+        "code_context": "x39 = apply(x12, x38)"
+      },
+      "solvers.py:5976": {
+        "count": 14,
+        "signatures": [
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((3, 3))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((3, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((4, 4))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((1, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((4, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 1))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((8, 8))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((8, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((2, 2))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((2, 0))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 3))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((1, 1))"
+          },
+          {
+            "type_signature": "maximum(tuple)",
+            "value_signature": "maximum((0, 8))"
+          }
+        ],
+        "code_context": "O = apply(x12, x40)"
+      }
+    },
+    "type_signatures": [
+      "maximum(tuple)"
+    ],
+    "value_signatures": [
+      "maximum((0, 1))",
+      "maximum((0, 3))",
+      "maximum((0, 8))",
+      "maximum((0, 2))",
+      "maximum((1, 1))",
+      "maximum((4, 4))",
+      "maximum((0, 0))",
+      "maximum((3, 0))",
+      "maximum((2, 2))",
+      "maximum((4, 0))",
+      "maximum((3, 3))",
+      "maximum((8, 0))",
+      "maximum((2, 0))",
+      "maximum((0, 4))",
+      "maximum((1, 0))",
+      "maximum((8, 8))"
+    ]
+  },
+  "partition": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5949": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "partition(tuple)",
+            "value_signature": "partition(tuple(len=19))"
+          }
+        ],
+        "code_context": "x14 = partition(x13)"
+      }
+    },
+    "type_signatures": [
+      "partition(tuple)"
+    ],
+    "value_signatures": [
+      "partition(tuple(len=19))"
+    ]
+  },
+  "sizefilter": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5950": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "sizefilter(frozenset, int)",
+            "value_signature": "sizefilter(frozenset({frozenset({(3, (1, 1)), (3, (1, 17))}),, 4)"
+          },
+          {
+            "type_signature": "sizefilter(frozenset, int)",
+            "value_signature": "sizefilter(frozenset({frozenset({(2, (3, 15)), (2, (3, 3))}),, 4)"
+          },
+          {
+            "type_signature": "sizefilter(frozenset, int)",
+            "value_signature": "sizefilter(frozenset({frozenset({(8, (5, 5)), (8, (5, 13))}),, 4)"
+          },
+          {
+            "type_signature": "sizefilter(frozenset, int)",
+            "value_signature": "sizefilter(frozenset(len=6), 4)"
+          }
+        ],
+        "code_context": "x15 = sizefilter(x14, FOUR)"
+      }
+    },
+    "type_signatures": [
+      "sizefilter(frozenset, int)"
+    ],
+    "value_signatures": [
+      "sizefilter(frozenset({frozenset({(3, (1, 1)), (3, (1, 17))}),, 4)",
+      "sizefilter(frozenset(len=6), 4)",
+      "sizefilter(frozenset({frozenset({(2, (3, 15)), (2, (3, 3))}),, 4)",
+      "sizefilter(frozenset({frozenset({(8, (5, 5)), (8, (5, 13))}),, 4)"
+    ]
+  },
+  "llcorner": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5951": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "llcorner(frozenset)",
+            "value_signature": "llcorner(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+          },
+          {
+            "type_signature": "llcorner(frozenset)",
+            "value_signature": "llcorner(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+          },
+          {
+            "type_signature": "llcorner(frozenset)",
+            "value_signature": "llcorner(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)"
+          },
+          {
+            "type_signature": "llcorner(frozenset)",
+            "value_signature": "llcorner(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+          }
+        ],
+        "code_context": "x16 = apply(llcorner, x15)"
+      }
+    },
+    "type_signatures": [
+      "llcorner(frozenset)"
+    ],
+    "value_signatures": [
+      "llcorner(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))",
+      "llcorner(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)",
+      "llcorner(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))",
+      "llcorner(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+    ]
+  },
+  "toindices": {
+    "calls": 43,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5951": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+          }
+        ],
+        "code_context": "x16 = apply(llcorner, x15)"
+      },
+      "solvers.py:5952": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+          }
+        ],
+        "code_context": "x17 = apply(lrcorner, x15)"
+      },
+      "solvers.py:5954": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(5, 3), (5, 15)}))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(3, 1), (3, 17)}))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(3, 1), (7, 5), (7, 13), (3, 17)}))"
+          }
+        ],
+        "code_context": "x19 = cover(x13, x18)"
+      },
+      "solvers.py:5966": {
+        "count": 7,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=6))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(5, 10), (5, 8)}))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "toindices(frozenset)"
+    ],
+    "value_signatures": [
+      "toindices(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}))",
+      "toindices(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)",
+      "toindices(frozenset({(3, 1), (3, 17)}))",
+      "toindices(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))",
+      "toindices(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))",
+      "toindices(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))",
+      "toindices(frozenset({(3, 1), (7, 5), (7, 13), (3, 17)}))",
+      "toindices(frozenset({(5, 3), (5, 15)}))",
+      "toindices(frozenset({(5, 10), (5, 8)}))",
+      "toindices(frozenset(len=6))"
+    ]
+  },
+  "lrcorner": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5952": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "lrcorner(frozenset)",
+            "value_signature": "lrcorner(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+          },
+          {
+            "type_signature": "lrcorner(frozenset)",
+            "value_signature": "lrcorner(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+          },
+          {
+            "type_signature": "lrcorner(frozenset)",
+            "value_signature": "lrcorner(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)"
+          },
+          {
+            "type_signature": "lrcorner(frozenset)",
+            "value_signature": "lrcorner(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+          }
+        ],
+        "code_context": "x17 = apply(lrcorner, x15)"
+      }
+    },
+    "type_signatures": [
+      "lrcorner(frozenset)"
+    ],
+    "value_signatures": [
+      "lrcorner(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)",
+      "lrcorner(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))",
+      "lrcorner(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))",
+      "lrcorner(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+    ]
+  },
+  "combine_f": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5953": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "combine_f(frozenset, frozenset)",
+            "value_signature": "combine_f(frozenset({(5, 3)}), frozenset({(5, 15)}))"
+          },
+          {
+            "type_signature": "combine_f(frozenset, frozenset)",
+            "value_signature": "combine_f(frozenset({(3, 1)}), frozenset({(3, 17)}))"
+          },
+          {
+            "type_signature": "combine_f(frozenset, frozenset)",
+            "value_signature": "combine_f(frozenset({(3, 1), (7, 5)}), frozenset({(7, 13), (3, 17)}))"
+          }
+        ],
+        "code_context": "x18 = combine_f(x16, x17)"
+      }
+    },
+    "type_signatures": [
+      "combine_f(frozenset, frozenset)"
+    ],
+    "value_signatures": [
+      "combine_f(frozenset({(3, 1)}), frozenset({(3, 17)}))",
+      "combine_f(frozenset({(5, 3)}), frozenset({(5, 15)}))",
+      "combine_f(frozenset({(3, 1), (7, 5)}), frozenset({(7, 13), (3, 17)}))"
+    ]
+  },
+  "cover": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5954": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "cover(tuple, frozenset)",
+            "value_signature": "cover(tuple(len=19), frozenset({(5, 3), (5, 15)}))"
+          },
+          {
+            "type_signature": "cover(tuple, frozenset)",
+            "value_signature": "cover(tuple(len=19), frozenset({(3, 1), (3, 17)}))"
+          },
+          {
+            "type_signature": "cover(tuple, frozenset)",
+            "value_signature": "cover(tuple(len=19), frozenset({(3, 1), (7, 5), (7, 13), (3, 17)}))"
+          }
+        ],
+        "code_context": "x19 = cover(x13, x18)"
+      }
+    },
+    "type_signatures": [
+      "cover(tuple, frozenset)"
+    ],
+    "value_signatures": [
+      "cover(tuple(len=19), frozenset({(3, 1), (3, 17)}))",
+      "cover(tuple(len=19), frozenset({(3, 1), (7, 5), (7, 13), (3, 17)}))",
+      "cover(tuple(len=19), frozenset({(5, 3), (5, 15)}))"
+    ]
+  },
+  "mostcolor_t": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5954": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "mostcolor_t(tuple)",
+            "value_signature": "mostcolor_t(tuple(len=19))"
+          }
+        ],
+        "code_context": "x19 = cover(x13, x18)"
+      }
+    },
+    "type_signatures": [
+      "mostcolor_t(tuple)"
+    ],
+    "value_signatures": [
+      "mostcolor_t(tuple(len=19))"
+    ]
+  },
+  "fill": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5954": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=19), 0, frozenset({(5, 3), (5, 15)}))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=19), 0, frozenset({(3, 1), (3, 17)}))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=19), 0, frozenset({(3, 1), (7, 5), (7, 13), (3, 17)}))"
+          }
+        ],
+        "code_context": "x19 = cover(x13, x18)"
+      }
+    },
+    "type_signatures": [
+      "fill(tuple, int, frozenset)"
+    ],
+    "value_signatures": [
+      "fill(tuple(len=19), 0, frozenset({(5, 3), (5, 15)}))",
+      "fill(tuple(len=19), 0, frozenset({(3, 1), (7, 5), (7, 13), (3, 17)}))",
+      "fill(tuple(len=19), 0, frozenset({(3, 1), (3, 17)}))"
+    ]
+  },
+  "tojvec": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5955": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "tojvec(int)",
+            "value_signature": "tojvec(-2)"
+          }
+        ],
+        "code_context": "x20 = tojvec(NEG_TWO)"
+      }
+    },
+    "type_signatures": [
+      "tojvec(int)"
+    ],
+    "value_signatures": [
+      "tojvec(-2)"
+    ]
+  },
+  "rbind": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5956": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rbind(function, tuple)",
+            "value_signature": "rbind(<function add at 0x105327f70>, (0, 2))"
+          }
+        ],
+        "code_context": "x21 = rbind(add, ZERO_BY_TWO)"
+      },
+      "solvers.py:5957": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rbind(function, tuple)",
+            "value_signature": "rbind(<function add at 0x105327f70>, (0, -2))"
+          }
+        ],
+        "code_context": "x22 = rbind(add, x20)"
+      },
+      "solvers.py:5962": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "rbind(function, function)",
+            "value_signature": "rbind(<function sfilter at 0x105407670>, <function compose.<locals>.<lambda> at 0x1055405e0)"
+          },
+          {
+            "type_signature": "rbind(function, function)",
+            "value_signature": "rbind(<function sfilter at 0x105407670>, <function compose.<locals>.<lambda> at 0x105540040)"
+          },
+          {
+            "type_signature": "rbind(function, function)",
+            "value_signature": "rbind(<function sfilter at 0x105407670>, <function compose.<locals>.<lambda> at 0x1055408b0)"
+          },
+          {
+            "type_signature": "rbind(function, function)",
+            "value_signature": "rbind(<function sfilter at 0x105407670>, <function compose.<locals>.<lambda> at 0x105540c10)"
+          }
+        ],
+        "code_context": "x27 = rbind(sfilter, x26)"
+      }
+    },
+    "type_signatures": [
+      "rbind(function, function)",
+      "rbind(function, tuple)"
+    ],
+    "value_signatures": [
+      "rbind(<function add at 0x105327f70>, (0, 2))",
+      "rbind(<function add at 0x105327f70>, (0, -2))",
+      "rbind(<function sfilter at 0x105407670>, <function compose.<locals>.<lambda> at 0x105540040)",
+      "rbind(<function sfilter at 0x105407670>, <function compose.<locals>.<lambda> at 0x1055405e0)",
+      "rbind(<function sfilter at 0x105407670>, <function compose.<locals>.<lambda> at 0x1055408b0)",
+      "rbind(<function sfilter at 0x105407670>, <function compose.<locals>.<lambda> at 0x105540c10)"
+    ]
+  },
+  "compose": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5958": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x1055400d0>, <function ulcorner at 0x10547f550>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x105540820>, <function ulcorner at 0x10547f550>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x105540af0>, <function ulcorner at 0x10547f550>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x105540dc0>, <function ulcorner at 0x10547f550>)"
+          }
+        ],
+        "code_context": "x23 = compose(x21, ulcorner)"
+      },
+      "solvers.py:5959": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x105540280>, <function urcorner at 0x10547faf0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x105540310>, <function urcorner at 0x10547faf0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x1055400d0>, <function urcorner at 0x10547faf0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x105540d30>, <function urcorner at 0x10547faf0>)"
+          }
+        ],
+        "code_context": "x24 = compose(x22, urcorner)"
+      },
+      "solvers.py:5961": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function even at 0x1053f5e50>, <function last at 0x1053fa430>)"
+          }
+        ],
+        "code_context": "x26 = compose(even, last)"
+      }
+    },
+    "type_signatures": [
+      "compose(function, function)"
+    ],
+    "value_signatures": [
+      "compose(<function rbind.<locals>.<lambda> at 0x105540af0>, <function ulcorner at 0x10547f550>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x105540310>, <function urcorner at 0x10547faf0>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x105540d30>, <function urcorner at 0x10547faf0>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x105540dc0>, <function ulcorner at 0x10547f550>)",
+      "compose(<function even at 0x1053f5e50>, <function last at 0x1053fa430>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x105540820>, <function ulcorner at 0x10547f550>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x105540280>, <function urcorner at 0x10547faf0>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x1055400d0>, <function urcorner at 0x10547faf0>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x1055400d0>, <function ulcorner at 0x10547f550>)"
+    ]
+  },
+  "fork": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5960": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function connect at 0x1053f5430>, <function compose.<locals>.<lambda> at 0x105540310, <function compose.<locals>.<lambda> at 0x105540430)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function connect at 0x1053f5430>, <function compose.<locals>.<lambda> at 0x1055400d0, <function compose.<locals>.<lambda> at 0x105540280)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function connect at 0x1053f5430>, <function compose.<locals>.<lambda> at 0x105540820, <function compose.<locals>.<lambda> at 0x105540310)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function connect at 0x1053f5430>, <function compose.<locals>.<lambda> at 0x105540040, <function compose.<locals>.<lambda> at 0x105540af0)"
+          }
+        ],
+        "code_context": "x25 = fork(connect, x23, x24)"
+      },
+      "solvers.py:5964": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shift at 0x105407940>, <function chain.<locals>.<lambda> at 0x105540790>, <function compose.<locals>.<lambda> at 0x105540310)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shift at 0x105407940>, <function chain.<locals>.<lambda> at 0x105540a60>, <function compose.<locals>.<lambda> at 0x1055400d0)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shift at 0x105407940>, <function chain.<locals>.<lambda> at 0x105540d30>, <function compose.<locals>.<lambda> at 0x105540820)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shift at 0x105407940>, <function chain.<locals>.<lambda> at 0x105540ee0>, <function compose.<locals>.<lambda> at 0x105540040)"
+          }
+        ],
+        "code_context": "x29 = fork(shift, x28, x23)"
+      },
+      "solvers.py:5965": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function recolor_i at 0x105401e50>, <function color at 0x1053ddee0>, <function fork.<locals>.<lambda> at 0x105540820>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function recolor_i at 0x105401e50>, <function color at 0x1053ddee0>, <function fork.<locals>.<lambda> at 0x105540af0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function recolor_i at 0x105401e50>, <function color at 0x1053ddee0>, <function fork.<locals>.<lambda> at 0x105540dc0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function recolor_i at 0x105401e50>, <function color at 0x1053ddee0>, <function fork.<locals>.<lambda> at 0x105540f70>)"
+          }
+        ],
+        "code_context": "x30 = fork(recolor_i, color, x29)"
+      }
+    },
+    "type_signatures": [
+      "fork(function, function, function)"
+    ],
+    "value_signatures": [
+      "fork(<function connect at 0x1053f5430>, <function compose.<locals>.<lambda> at 0x105540310, <function compose.<locals>.<lambda> at 0x105540430)",
+      "fork(<function shift at 0x105407940>, <function chain.<locals>.<lambda> at 0x105540d30>, <function compose.<locals>.<lambda> at 0x105540820)",
+      "fork(<function connect at 0x1053f5430>, <function compose.<locals>.<lambda> at 0x105540820, <function compose.<locals>.<lambda> at 0x105540310)",
+      "fork(<function recolor_i at 0x105401e50>, <function color at 0x1053ddee0>, <function fork.<locals>.<lambda> at 0x105540f70>)",
+      "fork(<function recolor_i at 0x105401e50>, <function color at 0x1053ddee0>, <function fork.<locals>.<lambda> at 0x105540af0>)",
+      "fork(<function recolor_i at 0x105401e50>, <function color at 0x1053ddee0>, <function fork.<locals>.<lambda> at 0x105540820>)",
+      "fork(<function recolor_i at 0x105401e50>, <function color at 0x1053ddee0>, <function fork.<locals>.<lambda> at 0x105540dc0>)",
+      "fork(<function connect at 0x1053f5430>, <function compose.<locals>.<lambda> at 0x105540040, <function compose.<locals>.<lambda> at 0x105540af0)",
+      "fork(<function connect at 0x1053f5430>, <function compose.<locals>.<lambda> at 0x1055400d0, <function compose.<locals>.<lambda> at 0x105540280)",
+      "fork(<function shift at 0x105407940>, <function chain.<locals>.<lambda> at 0x105540ee0>, <function compose.<locals>.<lambda> at 0x105540040)",
+      "fork(<function shift at 0x105407940>, <function chain.<locals>.<lambda> at 0x105540a60>, <function compose.<locals>.<lambda> at 0x1055400d0)",
+      "fork(<function shift at 0x105407940>, <function chain.<locals>.<lambda> at 0x105540790>, <function compose.<locals>.<lambda> at 0x105540310)"
+    ]
+  },
+  "mapply": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x1055408b0>, frozenset({frozenset({(1, (3, 13)), (1, (5, 3)), ()"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x105540b80>, frozenset({frozenset({(1, (1, 15)), (1, (1, 3)), ()"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x105540e50>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x1055ae040>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "mapply(function, frozenset)"
+    ],
+    "value_signatures": [
+      "mapply(<function fork.<locals>.<lambda> at 0x105540e50>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()",
+      "mapply(<function fork.<locals>.<lambda> at 0x1055408b0>, frozenset({frozenset({(1, (3, 13)), (1, (5, 3)), ()",
+      "mapply(<function fork.<locals>.<lambda> at 0x105540b80>, frozenset({frozenset({(1, (1, 15)), (1, (1, 3)), ()",
+      "mapply(<function fork.<locals>.<lambda> at 0x1055ae040>, frozenset({frozenset({(3, (1, 15)), (3, (3, 1)), ()"
+    ]
+  },
+  "color": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "color(frozenset)",
+            "value_signature": "color(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+          },
+          {
+            "type_signature": "color(frozenset)",
+            "value_signature": "color(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+          },
+          {
+            "type_signature": "color(frozenset)",
+            "value_signature": "color(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)"
+          },
+          {
+            "type_signature": "color(frozenset)",
+            "value_signature": "color(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "color(frozenset)"
+    ],
+    "value_signatures": [
+      "color(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)",
+      "color(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))",
+      "color(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))",
+      "color(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+    ]
+  },
+  "ulcorner": {
+    "calls": 10,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "ulcorner(frozenset)",
+            "value_signature": "ulcorner(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+          },
+          {
+            "type_signature": "ulcorner(frozenset)",
+            "value_signature": "ulcorner(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+          },
+          {
+            "type_signature": "ulcorner(frozenset)",
+            "value_signature": "ulcorner(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)"
+          },
+          {
+            "type_signature": "ulcorner(frozenset)",
+            "value_signature": "ulcorner(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "ulcorner(frozenset)"
+    ],
+    "value_signatures": [
+      "ulcorner(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))",
+      "ulcorner(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)",
+      "ulcorner(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))",
+      "ulcorner(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+    ]
+  },
+  "add": {
+    "calls": 15,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "add(tuple, tuple)",
+            "value_signature": "add((3, 3), (0, 2))"
+          },
+          {
+            "type_signature": "add(tuple, tuple)",
+            "value_signature": "add((3, 15), (0, -2))"
+          },
+          {
+            "type_signature": "add(tuple, tuple)",
+            "value_signature": "add((1, 1), (0, 2))"
+          },
+          {
+            "type_signature": "add(tuple, tuple)",
+            "value_signature": "add((1, 17), (0, -2))"
+          },
+          {
+            "type_signature": "add(tuple, tuple)",
+            "value_signature": "add((5, 5), (0, 2))"
+          },
+          {
+            "type_signature": "add(tuple, tuple)",
+            "value_signature": "add((5, 13), (0, -2))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "add(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "add((5, 5), (0, 2))",
+      "add((3, 3), (0, 2))",
+      "add((1, 17), (0, -2))",
+      "add((1, 1), (0, 2))",
+      "add((3, 15), (0, -2))",
+      "add((5, 13), (0, -2))"
+    ]
+  },
+  "urcorner": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "urcorner(frozenset)",
+            "value_signature": "urcorner(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))"
+          },
+          {
+            "type_signature": "urcorner(frozenset)",
+            "value_signature": "urcorner(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))"
+          },
+          {
+            "type_signature": "urcorner(frozenset)",
+            "value_signature": "urcorner(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)"
+          },
+          {
+            "type_signature": "urcorner(frozenset)",
+            "value_signature": "urcorner(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "urcorner(frozenset)"
+    ],
+    "value_signatures": [
+      "urcorner(frozenset({(1, (3, 13)), (1, (5, 3)), (1, (5, 15)))",
+      "urcorner(frozenset({(1, (1, 15)), (1, (1, 3)), (1, (3, 17)))",
+      "urcorner(frozenset({(3, (1, 15)), (3, (3, 1)), (3, (1, 3)),)",
+      "urcorner(frozenset({(8, (5, 11)), (8, (7, 5)), (8, (7, 13)))"
+    ]
+  },
+  "connect": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (3, 13))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 3), (1, 15))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (5, 11))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "connect(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "connect((1, 3), (1, 15))",
+      "connect((5, 7), (5, 11))",
+      "connect((3, 5), (3, 13))"
+    ]
+  },
+  "sfilter": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "sfilter(frozenset, function)",
+            "value_signature": "sfilter(frozenset(len=9), <function compose.<locals>.<lambda> at 0x1055405e0)"
+          },
+          {
+            "type_signature": "sfilter(frozenset, function)",
+            "value_signature": "sfilter(frozenset(len=13), <function compose.<locals>.<lambda> at 0x105540040)"
+          },
+          {
+            "type_signature": "sfilter(frozenset, function)",
+            "value_signature": "sfilter(frozenset(len=13), <function compose.<locals>.<lambda> at 0x1055408b0)"
+          },
+          {
+            "type_signature": "sfilter(frozenset, function)",
+            "value_signature": "sfilter(frozenset(len=13), <function compose.<locals>.<lambda> at 0x105540c10)"
+          },
+          {
+            "type_signature": "sfilter(frozenset, function)",
+            "value_signature": "sfilter(frozenset({(5, 11), (5, 8), (5, 7), (5, 10), (5, 9, <function compose.<locals>.<lambda> at 0x105540c10)"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "sfilter(frozenset, function)"
+    ],
+    "value_signatures": [
+      "sfilter(frozenset(len=13), <function compose.<locals>.<lambda> at 0x1055408b0)",
+      "sfilter(frozenset(len=9), <function compose.<locals>.<lambda> at 0x1055405e0)",
+      "sfilter(frozenset(len=13), <function compose.<locals>.<lambda> at 0x105540040)",
+      "sfilter(frozenset(len=13), <function compose.<locals>.<lambda> at 0x105540c10)",
+      "sfilter(frozenset({(5, 11), (5, 8), (5, 7), (5, 10), (5, 9, <function compose.<locals>.<lambda> at 0x105540c10)"
+    ]
+  },
+  "last": {
+    "calls": 53,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 27,
+        "signatures": [
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 8))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 7))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 10))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 13))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 9))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 6))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 12))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 5))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((3, 11))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 12))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 15))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 5))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 11))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 8))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 14))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 4))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 7))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 13))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 10))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 6))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 3))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((1, 9))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((5, 11))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((5, 8))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((5, 7))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((5, 10))"
+          },
+          {
+            "type_signature": "last(tuple)",
+            "value_signature": "last((5, 9))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "last(tuple)"
+    ],
+    "value_signatures": [
+      "last((5, 10))",
+      "last((1, 9))",
+      "last((3, 9))",
+      "last((5, 7))",
+      "last((3, 13))",
+      "last((5, 8))",
+      "last((3, 7))",
+      "last((3, 5))",
+      "last((1, 11))",
+      "last((5, 11))",
+      "last((3, 8))",
+      "last((3, 11))",
+      "last((1, 13))",
+      "last((1, 12))",
+      "last((1, 14))",
+      "last((1, 8))",
+      "last((1, 15))",
+      "last((3, 6))",
+      "last((1, 6))",
+      "last((1, 4))",
+      "last((1, 7))",
+      "last((5, 9))",
+      "last((3, 12))",
+      "last((1, 10))",
+      "last((1, 3))",
+      "last((3, 10))",
+      "last((1, 5))"
+    ]
+  },
+  "even": {
+    "calls": 53,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 13,
+        "signatures": [
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(8)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(7)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(10)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(13)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(9)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(6)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(12)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(5)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(11)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(15)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(14)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(4)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(3)"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "even(int)"
+    ],
+    "value_signatures": [
+      "even(3)",
+      "even(12)",
+      "even(5)",
+      "even(15)",
+      "even(14)",
+      "even(10)",
+      "even(9)",
+      "even(13)",
+      "even(6)",
+      "even(8)",
+      "even(4)",
+      "even(11)",
+      "even(7)"
+    ]
+  },
+  "normalize": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "normalize(frozenset)",
+            "value_signature": "normalize(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}))"
+          },
+          {
+            "type_signature": "normalize(frozenset)",
+            "value_signature": "normalize(frozenset(len=6))"
+          },
+          {
+            "type_signature": "normalize(frozenset)",
+            "value_signature": "normalize(frozenset({(5, 10), (5, 8)}))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "normalize(frozenset)"
+    ],
+    "value_signatures": [
+      "normalize(frozenset({(5, 10), (5, 8)}))",
+      "normalize(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}))",
+      "normalize(frozenset(len=6))"
+    ]
+  },
+  "uppermost": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "uppermost(frozenset)",
+            "value_signature": "uppermost(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}))"
+          },
+          {
+            "type_signature": "uppermost(frozenset)",
+            "value_signature": "uppermost(frozenset(len=6))"
+          },
+          {
+            "type_signature": "uppermost(frozenset)",
+            "value_signature": "uppermost(frozenset({(5, 10), (5, 8)}))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "uppermost(frozenset)"
+    ],
+    "value_signatures": [
+      "uppermost(frozenset(len=6))",
+      "uppermost(frozenset({(5, 10), (5, 8)}))",
+      "uppermost(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}))"
+    ]
+  },
+  "leftmost": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "leftmost(frozenset)",
+            "value_signature": "leftmost(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}))"
+          },
+          {
+            "type_signature": "leftmost(frozenset)",
+            "value_signature": "leftmost(frozenset(len=6))"
+          },
+          {
+            "type_signature": "leftmost(frozenset)",
+            "value_signature": "leftmost(frozenset({(5, 10), (5, 8)}))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "leftmost(frozenset)"
+    ],
+    "value_signatures": [
+      "leftmost(frozenset({(5, 10), (5, 8)}))",
+      "leftmost(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}))",
+      "leftmost(frozenset(len=6))"
+    ]
+  },
+  "shift": {
+    "calls": 10,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}), (-3, -6))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset({(0, 0), (0, 2), (0, 4), (0, 6)}), (3, 5))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=6), (-1, -4))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset(len=6), (1, 3))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset({(5, 10), (5, 8)}), (-5, -8))"
+          },
+          {
+            "type_signature": "shift(frozenset, tuple)",
+            "value_signature": "shift(frozenset({(0, 2), (0, 0)}), (5, 7))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "shift(frozenset, tuple)"
+    ],
+    "value_signatures": [
+      "shift(frozenset({(0, 0), (0, 2), (0, 4), (0, 6)}), (3, 5))",
+      "shift(frozenset({(5, 10), (5, 8)}), (-5, -8))",
+      "shift(frozenset(len=6), (-1, -4))",
+      "shift(frozenset({(0, 2), (0, 0)}), (5, 7))",
+      "shift(frozenset({(3, 12), (3, 8), (3, 10), (3, 6)}), (-3, -6))",
+      "shift(frozenset(len=6), (1, 3))"
+    ]
+  },
+  "recolor_i": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(1, frozenset({(3, 7), (3, 9), (3, 5), (3, 11)}))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(1, frozenset(len=6))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(3, frozenset(len=6))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(8, frozenset({(5, 9), (5, 7)}))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "recolor_i(int, frozenset)"
+    ],
+    "value_signatures": [
+      "recolor_i(3, frozenset(len=6))",
+      "recolor_i(1, frozenset({(3, 7), (3, 9), (3, 5), (3, 11)}))",
+      "recolor_i(8, frozenset({(5, 9), (5, 7)}))",
+      "recolor_i(1, frozenset(len=6))"
+    ]
+  },
+  "toindices_i": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "toindices_i(frozenset)",
+            "value_signature": "toindices_i(frozenset({(3, 7), (3, 9), (3, 5), (3, 11)}))"
+          },
+          {
+            "type_signature": "toindices_i(frozenset)",
+            "value_signature": "toindices_i(frozenset(len=6))"
+          },
+          {
+            "type_signature": "toindices_i(frozenset)",
+            "value_signature": "toindices_i(frozenset({(5, 9), (5, 7)}))"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "toindices_i(frozenset)"
+    ],
+    "value_signatures": [
+      "toindices_i(frozenset({(5, 9), (5, 7)}))",
+      "toindices_i(frozenset(len=6))",
+      "toindices_i(frozenset({(3, 7), (3, 9), (3, 5), (3, 11)}))"
+    ]
+  },
+  "merge": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5966": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(1, (3, 7)), (1, (3, 9)), (1)"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(1, (1, 5)), (1, (1, 3)), (1)"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(3, (1, 5)), (3, (1, 3)), (3)"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(8, (5, 9)), (8, (5, 7))}), )"
+          }
+        ],
+        "code_context": "x31 = mapply(x30, x15)"
+      }
+    },
+    "type_signatures": [
+      "merge(frozenset)"
+    ],
+    "value_signatures": [
+      "merge(frozenset({frozenset({(8, (5, 9)), (8, (5, 7))}), )",
+      "merge(frozenset({frozenset({(3, (1, 5)), (3, (1, 3)), (3)",
+      "merge(frozenset({frozenset({(1, (1, 5)), (1, (1, 3)), (1)",
+      "merge(frozenset({frozenset({(1, (3, 7)), (1, (3, 9)), (1)"
+    ]
+  },
+  "paint": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5967": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "paint(tuple, frozenset)",
+            "value_signature": "paint(tuple(len=19), frozenset({(1, (3, 7)), (1, (3, 9)), (1, (3, 11)),)"
+          },
+          {
+            "type_signature": "paint(tuple, frozenset)",
+            "value_signature": "paint(tuple(len=19), frozenset(len=6))"
+          },
+          {
+            "type_signature": "paint(tuple, frozenset)",
+            "value_signature": "paint(tuple(len=19), frozenset(len=8))"
+          }
+        ],
+        "code_context": "x32 = paint(x19, x31)"
+      }
+    },
+    "type_signatures": [
+      "paint(tuple, frozenset)"
+    ],
+    "value_signatures": [
+      "paint(tuple(len=19), frozenset({(1, (3, 7)), (1, (3, 9)), (1, (3, 11)),)",
+      "paint(tuple(len=19), frozenset(len=6))",
+      "paint(tuple(len=19), frozenset(len=8))"
+    ]
+  }
+}

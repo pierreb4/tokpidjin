@@ -1,0 +1,39 @@
+{
+  "solver_key": "928ad970",
+  "timestamp": "2025-05-19T16:16:36.497242",
+  "errors": {
+    "shape": {
+      "expected_sites": [
+        {
+          "line": "647",
+          "context": "x2 = subgrid(x1, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "height": {
+      "expected_sites": [
+        {
+          "line": "647",
+          "context": "x2 = subgrid(x1, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "647",
+          "context": "x2 = subgrid(x1, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "solver_key": "bdad9b1f",
+  "timestamp": "2025-05-19T16:16:39.134213",
+  "errors": {
+    "height": {
+      "expected_sites": [
+        {
+          "line": "2217",
+          "context": "x3 = center(x1)"
+        },
+        {
+          "line": "2218",
+          "context": "x4 = center(x2)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "2217",
+          "context": "x3 = center(x1)"
+        },
+        {
+          "line": "2218",
+          "context": "x4 = center(x2)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    }
+  }
+}

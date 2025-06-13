@@ -1,0 +1,181 @@
+{
+  "summary": {
+    "total_functions": 44,
+    "dsl_functions": 44,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 4,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "apply",
+      "total_calls": 12,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6382": {
+          "count": 1,
+          "code_context": "x3 = apply(normalize, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6393": {
+          "count": 3,
+          "code_context": "x14 = mapply(x12, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6400": {
+          "count": 1,
+          "code_context": "x21 = apply(toindices, x20)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6406": {
+          "count": 3,
+          "code_context": "x27 = mapply(x26, x3)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "normalize",
+      "total_calls": 132,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": false,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6382": {
+          "count": 24,
+          "code_context": "x3 = apply(normalize, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 24
+        },
+        "solvers.py:6406": {
+          "count": 8,
+          "code_context": "x27 = mapply(x26, x3)",
+          "tuple_calls": 0,
+          "frozenset_calls": 8
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 6,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6393": {
+          "count": 3,
+          "code_context": "x14 = mapply(x12, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:6406": {
+          "count": 3,
+          "code_context": "x27 = mapply(x26, x3)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 6,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 33.33333333333333,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6393": {
+          "count": 1,
+          "code_context": "x14 = mapply(x12, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        },
+        "solvers.py:6406": {
+          "count": 1,
+          "code_context": "x27 = mapply(x26, x3)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    },
+    {
+      "name": "combine",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 33.33333333333333,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:6397": {
+          "count": 1,
+          "code_context": "x18 = combine(x15, x17)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "replace",
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "apply",
+    "normalize",
+    "uppermost",
+    "toindices",
+    "leftmost",
+    "shift",
+    "astuple",
+    "canvas",
+    "box",
+    "ulcorner",
+    "lrcorner",
+    "center",
+    "height_f",
+    "lowermost",
+    "width_f",
+    "rightmost",
+    "lbind",
+    "rbind",
+    "compose",
+    "chain",
+    "corners",
+    "urcorner",
+    "llcorner",
+    "mapply",
+    "initset",
+    "outbox",
+    "merge",
+    "difference",
+    "inbox",
+    "sfilter_f",
+    "subtract",
+    "contained",
+    "combine",
+    "fill",
+    "fork",
+    "identity",
+    "matcher",
+    "extract",
+    "paint"
+  ]
+}

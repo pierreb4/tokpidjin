@@ -1,0 +1,39 @@
+{
+  "solver_key": "4290ef0e",
+  "timestamp": "2025-05-21T09:11:51.078592",
+  "errors": {
+    "valmax": {
+      "expected_sites": [
+        {
+          "line": "5729",
+          "context": "x18 = order(x2, x17)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "argmin": {
+      "expected_sites": [
+        {
+          "line": "5736",
+          "context": "x25 = apply(x24, x18)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "size": {
+      "expected_sites": [
+        {
+          "line": "5738",
+          "context": "x27 = apply(size, x2)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

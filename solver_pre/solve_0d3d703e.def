@@ -1,0 +1,2 @@
+def solve_0d3d703e(S, I):
+    return switch(switch(switch(switch(I, THREE, FOUR), EIGHT, NINE), TWO, SIX), ONE, FIVE)

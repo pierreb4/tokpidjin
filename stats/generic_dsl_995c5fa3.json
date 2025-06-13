@@ -1,0 +1,1053 @@
+{
+  "hsplit": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4521": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "hsplit(tuple, int)",
+            "value_signature": "hsplit(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 0, 3)"
+          },
+          {
+            "type_signature": "hsplit(tuple, int)",
+            "value_signature": "hsplit(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (0, 5, 3)"
+          },
+          {
+            "type_signature": "hsplit(tuple, int)",
+            "value_signature": "hsplit(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 5, 3)"
+          }
+        ],
+        "code_context": "x1 = hsplit(I, THREE)"
+      }
+    },
+    "type_signatures": [
+      "hsplit(tuple, int)"
+    ],
+    "value_signatures": [
+      "hsplit(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 5, 3)",
+      "hsplit(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 0, 3)",
+      "hsplit(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (0, 5, 3)"
+    ]
+  },
+  "crop": {
+    "calls": 15,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4521": {
+        "count": 9,
+        "signatures": [
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 0, (0, 0), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 0, (0, 5), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 0, (0, 10), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (0, 5, (0, 0), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (0, 5, (0, 5), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (0, 5, (0, 10), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 5, (0, 0), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 5, (0, 5), (4, 4))"
+          },
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 5, (0, 10), (4, 4))"
+          }
+        ],
+        "code_context": "x1 = hsplit(I, THREE)"
+      }
+    },
+    "type_signatures": [
+      "crop(tuple, tuple, tuple)"
+    ],
+    "value_signatures": [
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (0, 5, (0, 10), (4, 4))",
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (0, 5, (0, 5), (4, 4))",
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 5, (0, 10), (4, 4))",
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 0, (0, 5), (4, 4))",
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (0, 5, (0, 0), (4, 4))",
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 0, (0, 0), (4, 4))",
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 5, (0, 0), (4, 4))",
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 5, (0, 5), (4, 4))",
+      "crop(((5, 5, 5, 5, 0, 5, 5, 5, 5, 0, 5, 5, 5, 5), (5, 0, (0, 10), (4, 4))"
+    ]
+  },
+  "astuple": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4522": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "astuple(int, int)",
+            "value_signature": "astuple(2, 1)"
+          }
+        ],
+        "code_context": "x2 = astuple(TWO, ONE)"
+      }
+    },
+    "type_signatures": [
+      "astuple(int, int)"
+    ],
+    "value_signatures": [
+      "astuple(2, 1)"
+    ]
+  },
+  "rbind": {
+    "calls": 15,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4523": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rbind(function, int)",
+            "value_signature": "rbind(<function f_ofcolor at 0x1008c2f70>, 0)"
+          }
+        ],
+        "code_context": "x3 = rbind(f_ofcolor, ZERO)"
+      },
+      "solvers.py:4530": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rbind(function, int)",
+            "value_signature": "rbind(<function multiply at 0x1008d2c10>, 3)"
+          }
+        ],
+        "code_context": "x10 = rbind(multiply, THREE)"
+      },
+      "solvers.py:4539": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rbind(function, tuple)",
+            "value_signature": "rbind(<function canvas at 0x1008b9af0>, (1, 1))"
+          }
+        ],
+        "code_context": "x19 = rbind(canvas, UNITY)"
+      }
+    },
+    "type_signatures": [
+      "rbind(function, tuple)",
+      "rbind(function, int)"
+    ],
+    "value_signatures": [
+      "rbind(<function multiply at 0x1008d2c10>, 3)",
+      "rbind(<function canvas at 0x1008b9af0>, (1, 1))",
+      "rbind(<function f_ofcolor at 0x1008c2f70>, 0)"
+    ]
+  },
+  "compose": {
+    "calls": 35,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4524": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function ulcorner at 0x1008df550>, <function rbind.<locals>.<lambda> at 0x100d7ef70>)"
+          }
+        ],
+        "code_context": "x4 = compose(ulcorner, x3)"
+      },
+      "solvers.py:4525": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function size at 0x1008daaf0>, <function rbind.<locals>.<lambda> at 0x100d7ef70>)"
+          }
+        ],
+        "code_context": "x5 = compose(size, x3)"
+      },
+      "solvers.py:4531": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function double at 0x1008c2c10>, <function double at 0x1008c2c10>)"
+          }
+        ],
+        "code_context": "x11 = power(double, TWO)"
+      },
+      "solvers.py:4532": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92280)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d928b0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d924c0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92700)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92940)"
+          }
+        ],
+        "code_context": "x12 = compose(double, x6)"
+      },
+      "solvers.py:4534": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x100d924c0>, <function matcher.<locals>.<lambda> at 0x100d923a0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x100d92700>, <function matcher.<locals>.<lambda> at 0x100d92280)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x100d92940>, <function matcher.<locals>.<lambda> at 0x100d928b0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x100d92820>, <function matcher.<locals>.<lambda> at 0x100d924c0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x100d923a0>, <function matcher.<locals>.<lambda> at 0x100d92700)"
+          }
+        ],
+        "code_context": "x14 = compose(x10, x8)"
+      },
+      "solvers.py:4535": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function compose.<locals>.<lambda> at 0x100d92550, <function matcher.<locals>.<lambda> at 0x100d92430)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function compose.<locals>.<lambda> at 0x100d92310, <function matcher.<locals>.<lambda> at 0x100d92160)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function compose.<locals>.<lambda> at 0x100d925e0, <function matcher.<locals>.<lambda> at 0x100d929d0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function compose.<locals>.<lambda> at 0x100d92040, <function matcher.<locals>.<lambda> at 0x100d92430)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function compose.<locals>.<lambda> at 0x100d92af0, <function matcher.<locals>.<lambda> at 0x100d92160)"
+          }
+        ],
+        "code_context": "x15 = compose(x11, x9)"
+      },
+      "solvers.py:4540": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x100d92a60>, <function fork.<locals>.<lambda> at 0x100d929d0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x100d92a60>, <function fork.<locals>.<lambda> at 0x100d92430>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x100d92a60>, <function fork.<locals>.<lambda> at 0x100d92160>)"
+          }
+        ],
+        "code_context": "x20 = compose(x19, x18)"
+      }
+    },
+    "type_signatures": [
+      "compose(function, function)"
+    ],
+    "value_signatures": [
+      "compose(<function compose.<locals>.<lambda> at 0x100d92310, <function matcher.<locals>.<lambda> at 0x100d92160)",
+      "compose(<function compose.<locals>.<lambda> at 0x100d92af0, <function matcher.<locals>.<lambda> at 0x100d92160)",
+      "compose(<function rbind.<locals>.<lambda> at 0x100d923a0>, <function matcher.<locals>.<lambda> at 0x100d92700)",
+      "compose(<function rbind.<locals>.<lambda> at 0x100d92a60>, <function fork.<locals>.<lambda> at 0x100d92160>)",
+      "compose(<function size at 0x1008daaf0>, <function rbind.<locals>.<lambda> at 0x100d7ef70>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x100d92a60>, <function fork.<locals>.<lambda> at 0x100d929d0>)",
+      "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d928b0)",
+      "compose(<function double at 0x1008c2c10>, <function double at 0x1008c2c10>)",
+      "compose(<function compose.<locals>.<lambda> at 0x100d925e0, <function matcher.<locals>.<lambda> at 0x100d929d0)",
+      "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d924c0)",
+      "compose(<function compose.<locals>.<lambda> at 0x100d92040, <function matcher.<locals>.<lambda> at 0x100d92430)",
+      "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92700)",
+      "compose(<function rbind.<locals>.<lambda> at 0x100d92a60>, <function fork.<locals>.<lambda> at 0x100d92430>)",
+      "compose(<function ulcorner at 0x1008df550>, <function rbind.<locals>.<lambda> at 0x100d7ef70>)",
+      "compose(<function rbind.<locals>.<lambda> at 0x100d924c0>, <function matcher.<locals>.<lambda> at 0x100d923a0)",
+      "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92280)",
+      "compose(<function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92940)",
+      "compose(<function rbind.<locals>.<lambda> at 0x100d92940>, <function matcher.<locals>.<lambda> at 0x100d928b0)",
+      "compose(<function compose.<locals>.<lambda> at 0x100d92550, <function matcher.<locals>.<lambda> at 0x100d92430)",
+      "compose(<function rbind.<locals>.<lambda> at 0x100d92700>, <function matcher.<locals>.<lambda> at 0x100d92280)",
+      "compose(<function rbind.<locals>.<lambda> at 0x100d92820>, <function matcher.<locals>.<lambda> at 0x100d924c0)"
+    ]
+  },
+  "matcher": {
+    "calls": 20,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4526": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "matcher(function, int)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92160, 0)"
+          },
+          {
+            "type_signature": "matcher(function, int)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d929d0, 0)"
+          },
+          {
+            "type_signature": "matcher(function, int)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92430, 0)"
+          }
+        ],
+        "code_context": "x6 = matcher(x5, ZERO)"
+      },
+      "solvers.py:4527": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92040, (1, 1))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92af0, (1, 1))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92b80, (1, 1))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92c10, (1, 1))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92ca0, (1, 1))"
+          }
+        ],
+        "code_context": "x7 = matcher(x4, UNITY)"
+      },
+      "solvers.py:4528": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92040, (1, 0))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92af0, (1, 0))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92b80, (1, 0))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92c10, (1, 0))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92ca0, (1, 0))"
+          }
+        ],
+        "code_context": "x8 = matcher(x4, DOWN)"
+      },
+      "solvers.py:4529": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92040, (2, 1))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92af0, (2, 1))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92b80, (2, 1))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92c10, (2, 1))"
+          },
+          {
+            "type_signature": "matcher(function, tuple)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x100d92ca0, (2, 1))"
+          }
+        ],
+        "code_context": "x9 = matcher(x4, x2)"
+      }
+    },
+    "type_signatures": [
+      "matcher(function, int)",
+      "matcher(function, tuple)"
+    ],
+    "value_signatures": [
+      "matcher(<function compose.<locals>.<lambda> at 0x100d929d0, 0)",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92af0, (1, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92430, 0)",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92b80, (1, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92ca0, (1, 0))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92040, (1, 0))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92b80, (1, 0))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92c10, (1, 0))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92040, (2, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92c10, (1, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92b80, (2, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92c10, (2, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92af0, (1, 0))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92ca0, (2, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92040, (1, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92af0, (2, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92ca0, (1, 1))",
+      "matcher(<function compose.<locals>.<lambda> at 0x100d92160, 0)"
+    ]
+  },
+  "power": {
+    "calls": 10,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4531": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function double at 0x1008c2c10>, 2)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function double at 0x1008c2c10>, 1)"
+          }
+        ],
+        "code_context": "x11 = power(double, TWO)"
+      }
+    },
+    "type_signatures": [
+      "power(function, int)"
+    ],
+    "value_signatures": [
+      "power(<function double at 0x1008c2c10>, 1)",
+      "power(<function double at 0x1008c2c10>, 2)"
+    ]
+  },
+  "chain": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4533": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function compose.<locals>.<lambda> at 0x100d92550, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92310)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function compose.<locals>.<lambda> at 0x100d92310, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d925e0)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function compose.<locals>.<lambda> at 0x100d925e0, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92040)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function compose.<locals>.<lambda> at 0x100d92040, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92af0)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function compose.<locals>.<lambda> at 0x100d92af0, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92b80)"
+          }
+        ],
+        "code_context": "x13 = chain(x11, double, x7)"
+      }
+    },
+    "type_signatures": [
+      "chain(function, function, function)"
+    ],
+    "value_signatures": [
+      "chain(<function compose.<locals>.<lambda> at 0x100d92af0, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92b80)",
+      "chain(<function compose.<locals>.<lambda> at 0x100d92040, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92af0)",
+      "chain(<function compose.<locals>.<lambda> at 0x100d92550, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92310)",
+      "chain(<function compose.<locals>.<lambda> at 0x100d925e0, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d92040)",
+      "chain(<function compose.<locals>.<lambda> at 0x100d92310, <function double at 0x1008c2c10>, <function matcher.<locals>.<lambda> at 0x100d925e0)"
+    ]
+  },
+  "fork": {
+    "calls": 15,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4536": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d925e0, <function chain.<locals>.<lambda> at 0x100d92700>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92040, <function chain.<locals>.<lambda> at 0x100d92940>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92af0, <function chain.<locals>.<lambda> at 0x100d92820>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92b80, <function chain.<locals>.<lambda> at 0x100d923a0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92c10, <function chain.<locals>.<lambda> at 0x100d92280>)"
+          }
+        ],
+        "code_context": "x16 = fork(add, x12, x13)"
+      },
+      "solvers.py:4537": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d92820)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d923a0)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d92280)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d928b0)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d924c0)"
+          }
+        ],
+        "code_context": "x17 = fork(add, x14, x15)"
+      },
+      "solvers.py:4538": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d928b0>, <function fork.<locals>.<lambda> at 0x100d92940>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d924c0>, <function fork.<locals>.<lambda> at 0x100d92820>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d92700>, <function fork.<locals>.<lambda> at 0x100d923a0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d92940>, <function fork.<locals>.<lambda> at 0x100d92280>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d92820>, <function fork.<locals>.<lambda> at 0x100d928b0>)"
+          }
+        ],
+        "code_context": "x18 = fork(add, x16, x17)"
+      }
+    },
+    "type_signatures": [
+      "fork(function, function, function)"
+    ],
+    "value_signatures": [
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92b80, <function chain.<locals>.<lambda> at 0x100d923a0>)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d92820)",
+      "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d92940>, <function fork.<locals>.<lambda> at 0x100d92280>)",
+      "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d92700>, <function fork.<locals>.<lambda> at 0x100d923a0>)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92af0, <function chain.<locals>.<lambda> at 0x100d92820>)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d923a0)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92c10, <function chain.<locals>.<lambda> at 0x100d92280>)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d928b0)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d925e0, <function chain.<locals>.<lambda> at 0x100d92700>)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d924c0)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92040, <function chain.<locals>.<lambda> at 0x100d92940>)",
+      "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d924c0>, <function fork.<locals>.<lambda> at 0x100d92820>)",
+      "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d92820>, <function fork.<locals>.<lambda> at 0x100d928b0>)",
+      "fork(<function add at 0x100803f70>, <function compose.<locals>.<lambda> at 0x100d92790, <function compose.<locals>.<lambda> at 0x100d92280)",
+      "fork(<function add at 0x100803f70>, <function fork.<locals>.<lambda> at 0x100d928b0>, <function fork.<locals>.<lambda> at 0x100d92940>)"
+    ]
+  },
+  "apply": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function compose.<locals>.<lambda> at 0x100d92af0, (((5, 5, 5, 5), (5, 0, 0, 5), (5, 0, 0, 5), (5, 5,)"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function compose.<locals>.<lambda> at 0x100d92b80, (((5, 5, 5, 5), (0, 5, 5, 0), (0, 5, 5, 0), (5, 5,)"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function compose.<locals>.<lambda> at 0x100d92c10, (((5, 5, 5, 5), (5, 5, 5, 5), (5, 5, 5, 5), (5, 5,)"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function compose.<locals>.<lambda> at 0x100d92ca0, (((5, 5, 5, 5), (5, 5, 5, 5), (5, 5, 5, 5), (5, 5,)"
+          },
+          {
+            "type_signature": "apply(function, tuple)",
+            "value_signature": "apply(<function compose.<locals>.<lambda> at 0x100d92d30, (((5, 5, 5, 5), (5, 5, 5, 5), (5, 0, 0, 5), (5, 0,)"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "apply(function, tuple)"
+    ],
+    "value_signatures": [
+      "apply(<function compose.<locals>.<lambda> at 0x100d92af0, (((5, 5, 5, 5), (5, 0, 0, 5), (5, 0, 0, 5), (5, 5,)",
+      "apply(<function compose.<locals>.<lambda> at 0x100d92c10, (((5, 5, 5, 5), (5, 5, 5, 5), (5, 5, 5, 5), (5, 5,)",
+      "apply(<function compose.<locals>.<lambda> at 0x100d92d30, (((5, 5, 5, 5), (5, 5, 5, 5), (5, 0, 0, 5), (5, 0,)",
+      "apply(<function compose.<locals>.<lambda> at 0x100d92ca0, (((5, 5, 5, 5), (5, 5, 5, 5), (5, 5, 5, 5), (5, 5,)",
+      "apply(<function compose.<locals>.<lambda> at 0x100d92b80, (((5, 5, 5, 5), (0, 5, 5, 0), (0, 5, 5, 0), (5, 5,)"
+    ]
+  },
+  "f_ofcolor": {
+    "calls": 60,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(((5, 5, 5, 5), (5, 0, 0, 5), (5, 0, 0, 5), (5, 5, , 0)"
+          },
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(((5, 5, 5, 5), (5, 5, 5, 5), (5, 5, 5, 5), (5, 5, , 0)"
+          },
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(((5, 5, 5, 5), (5, 5, 5, 5), (5, 0, 0, 5), (5, 0, , 0)"
+          },
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(((5, 5, 5, 5), (0, 5, 5, 0), (0, 5, 5, 0), (5, 5, , 0)"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "f_ofcolor(tuple, int)"
+    ],
+    "value_signatures": [
+      "f_ofcolor(((5, 5, 5, 5), (5, 0, 0, 5), (5, 0, 0, 5), (5, 5, , 0)",
+      "f_ofcolor(((5, 5, 5, 5), (0, 5, 5, 0), (0, 5, 5, 0), (5, 5, , 0)",
+      "f_ofcolor(((5, 5, 5, 5), (5, 5, 5, 5), (5, 0, 0, 5), (5, 0, , 0)",
+      "f_ofcolor(((5, 5, 5, 5), (5, 5, 5, 5), (5, 5, 5, 5), (5, 5, , 0)"
+    ]
+  },
+  "size": {
+    "calls": 15,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "size(frozenset)",
+            "value_signature": "size(frozenset({(1, 1), (1, 2), (2, 1), (2, 2)}))"
+          },
+          {
+            "type_signature": "size(frozenset)",
+            "value_signature": "size(frozenset())"
+          },
+          {
+            "type_signature": "size(frozenset)",
+            "value_signature": "size(frozenset({(3, 1), (3, 2), (2, 1), (2, 2)}))"
+          },
+          {
+            "type_signature": "size(frozenset)",
+            "value_signature": "size(frozenset({(1, 0), (2, 3), (1, 3), (2, 0)}))"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "size(frozenset)"
+    ],
+    "value_signatures": [
+      "size(frozenset({(1, 0), (2, 3), (1, 3), (2, 0)}))",
+      "size(frozenset({(3, 1), (3, 2), (2, 1), (2, 2)}))",
+      "size(frozenset())",
+      "size(frozenset({(1, 1), (1, 2), (2, 1), (2, 2)}))"
+    ]
+  },
+  "double": {
+    "calls": 90,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "double(bool)",
+            "value_signature": "double(False)"
+          },
+          {
+            "type_signature": "double(bool)",
+            "value_signature": "double(True)"
+          },
+          {
+            "type_signature": "double(int)",
+            "value_signature": "double(2)"
+          },
+          {
+            "type_signature": "double(int)",
+            "value_signature": "double(4)"
+          },
+          {
+            "type_signature": "double(int)",
+            "value_signature": "double(0)"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "double(int)",
+      "double(bool)"
+    ],
+    "value_signatures": [
+      "double(True)",
+      "double(False)",
+      "double(4)",
+      "double(2)",
+      "double(0)"
+    ]
+  },
+  "ulcorner": {
+    "calls": 45,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "ulcorner(frozenset)",
+            "value_signature": "ulcorner(frozenset({(1, 1), (1, 2), (2, 1), (2, 2)}))"
+          },
+          {
+            "type_signature": "ulcorner(frozenset)",
+            "value_signature": "ulcorner(frozenset())"
+          },
+          {
+            "type_signature": "ulcorner(frozenset)",
+            "value_signature": "ulcorner(frozenset({(3, 1), (3, 2), (2, 1), (2, 2)}))"
+          },
+          {
+            "type_signature": "ulcorner(frozenset)",
+            "value_signature": "ulcorner(frozenset({(1, 0), (2, 3), (1, 3), (2, 0)}))"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "ulcorner(frozenset)"
+    ],
+    "value_signatures": [
+      "ulcorner(frozenset({(1, 0), (2, 3), (1, 3), (2, 0)}))",
+      "ulcorner(frozenset())",
+      "ulcorner(frozenset({(3, 1), (3, 2), (2, 1), (2, 2)}))",
+      "ulcorner(frozenset({(1, 1), (1, 2), (2, 1), (2, 2)}))"
+    ]
+  },
+  "toindices": {
+    "calls": 45,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, 1), (1, 2), (2, 1), (2, 2)}))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset())"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(3, 1), (3, 2), (2, 1), (2, 2)}))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, 0), (2, 3), (1, 3), (2, 0)}))"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "toindices(frozenset)"
+    ],
+    "value_signatures": [
+      "toindices(frozenset({(3, 1), (3, 2), (2, 1), (2, 2)}))",
+      "toindices(frozenset({(1, 0), (2, 3), (1, 3), (2, 0)}))",
+      "toindices(frozenset({(1, 1), (1, 2), (2, 1), (2, 2)}))",
+      "toindices(frozenset())"
+    ]
+  },
+  "add": {
+    "calls": 45,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 7,
+        "signatures": [
+          {
+            "type_signature": "add(int, int)",
+            "value_signature": "add(0, 8)"
+          },
+          {
+            "type_signature": "add(int, int)",
+            "value_signature": "add(0, 0)"
+          },
+          {
+            "type_signature": "add(int, int)",
+            "value_signature": "add(8, 0)"
+          },
+          {
+            "type_signature": "add(int, int)",
+            "value_signature": "add(2, 0)"
+          },
+          {
+            "type_signature": "add(int, int)",
+            "value_signature": "add(0, 4)"
+          },
+          {
+            "type_signature": "add(int, int)",
+            "value_signature": "add(3, 0)"
+          },
+          {
+            "type_signature": "add(int, int)",
+            "value_signature": "add(0, 3)"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "add(int, int)"
+    ],
+    "value_signatures": [
+      "add(0, 4)",
+      "add(8, 0)",
+      "add(2, 0)",
+      "add(0, 3)",
+      "add(0, 8)",
+      "add(0, 0)",
+      "add(3, 0)"
+    ]
+  },
+  "multiply": {
+    "calls": 15,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "multiply(bool, int)",
+            "value_signature": "multiply(False, 3)"
+          },
+          {
+            "type_signature": "multiply(bool, int)",
+            "value_signature": "multiply(True, 3)"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "multiply(bool, int)"
+    ],
+    "value_signatures": [
+      "multiply(True, 3)",
+      "multiply(False, 3)"
+    ]
+  },
+  "canvas": {
+    "calls": 15,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4541": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "canvas(int, tuple)",
+            "value_signature": "canvas(8, (1, 1))"
+          },
+          {
+            "type_signature": "canvas(int, tuple)",
+            "value_signature": "canvas(2, (1, 1))"
+          },
+          {
+            "type_signature": "canvas(int, tuple)",
+            "value_signature": "canvas(4, (1, 1))"
+          },
+          {
+            "type_signature": "canvas(int, tuple)",
+            "value_signature": "canvas(3, (1, 1))"
+          }
+        ],
+        "code_context": "x21 = apply(x20, x1)"
+      }
+    },
+    "type_signatures": [
+      "canvas(int, tuple)"
+    ],
+    "value_signatures": [
+      "canvas(4, (1, 1))",
+      "canvas(3, (1, 1))",
+      "canvas(2, (1, 1))",
+      "canvas(8, (1, 1))"
+    ]
+  },
+  "merge_t": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4542": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "merge_t(tuple)",
+            "value_signature": "merge_t((((8,),), ((2,),), ((4,),)))"
+          },
+          {
+            "type_signature": "merge_t(tuple)",
+            "value_signature": "merge_t((((3,),), ((4,),), ((2,),)))"
+          },
+          {
+            "type_signature": "merge_t(tuple)",
+            "value_signature": "merge_t((((2,),), ((4,),), ((2,),)))"
+          },
+          {
+            "type_signature": "merge_t(tuple)",
+            "value_signature": "merge_t((((2,),), ((8,),), ((3,),)))"
+          },
+          {
+            "type_signature": "merge_t(tuple)",
+            "value_signature": "merge_t((((4,),), ((3,),), ((8,),)))"
+          }
+        ],
+        "code_context": "x22 = merge_t(x21)"
+      }
+    },
+    "type_signatures": [
+      "merge_t(tuple)"
+    ],
+    "value_signatures": [
+      "merge_t((((8,),), ((2,),), ((4,),)))",
+      "merge_t((((4,),), ((3,),), ((8,),)))",
+      "merge_t((((3,),), ((4,),), ((2,),)))",
+      "merge_t((((2,),), ((8,),), ((3,),)))",
+      "merge_t((((2,),), ((4,),), ((2,),)))"
+    ]
+  },
+  "hupscale": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4543": {
+        "count": 5,
+        "signatures": [
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((8,), (2,), (4,)), 3)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,), (4,), (2,)), 3)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((2,), (4,), (2,)), 3)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((2,), (8,), (3,)), 3)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((4,), (3,), (8,)), 3)"
+          }
+        ],
+        "code_context": "O = hupscale(x22, THREE)"
+      }
+    },
+    "type_signatures": [
+      "hupscale(tuple, int)"
+    ],
+    "value_signatures": [
+      "hupscale(((8,), (2,), (4,)), 3)",
+      "hupscale(((2,), (4,), (2,)), 3)",
+      "hupscale(((4,), (3,), (8,)), 3)",
+      "hupscale(((2,), (8,), (3,)), 3)",
+      "hupscale(((3,), (4,), (2,)), 3)"
+    ]
+  }
+}

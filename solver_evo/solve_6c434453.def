@@ -1,0 +1,2 @@
+def solve_6c434453(S, I):
+    return fill(cover(I, merge_f(sizefilter(o_g(I, R5), EIGHT))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(lbind(shift, insert(UNITY, dneighbors(UNITY))), apply(rbind(corner, R0), sizefilter(o_g(I, R5), EIGHT))))

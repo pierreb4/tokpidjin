@@ -1,0 +1,2 @@
+def solve_673ef223(S, I):
+    return underfill(underfill(replace(I, CYAN, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0))), CYAN, mapply(rbind(shoot, branch(equality(col_row(get_arg_rank_f(o_g(I, R5), rbind(col_row, R1), L1), R2), BLACK), LEFT, RIGHT)), f_ofcolor(I, CYAN))), CYAN, mapply(hfrontier, shift(f_ofcolor(I, CYAN), toivec(fork(subtract, rbind(get_rank, F0), rbind(get_rank, L1))(apply(rbind(col_row, R1), colorfilter(o_g(I, R5), RED)))))))

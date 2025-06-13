@@ -1,0 +1,180 @@
+{
+  "summary": {
+    "total_functions": 26,
+    "dsl_functions": 26,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 5,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "last",
+      "total_calls": 74,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:2863": {
+          "count": 15,
+          "code_context": "x4 = order(x2, x3)",
+          "tuple_calls": 15,
+          "frozenset_calls": 0
+        },
+        "solvers.py:2870": {
+          "count": 16,
+          "code_context": "x11 = sfilter_t(x10, x8)",
+          "tuple_calls": 16,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2871": {
+          "count": 1,
+          "code_context": "x12 = mapply(first, x11)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2871": {
+          "count": 1,
+          "code_context": "x12 = mapply(first, x11)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 14,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:2871": {
+          "count": 6,
+          "code_context": "x12 = mapply(first, x11)",
+          "tuple_calls": 6,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 4,
+      "tuple_percent": 25.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2871": {
+          "count": 1,
+          "code_context": "x12 = mapply(first, x11)",
+          "tuple_calls": 1,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "percent": 100.0,
+      "calls": 74,
+      "call_sites": {
+        "solvers.py:2863": {
+          "count": 15,
+          "code_context": "x4 = order(x2, x3)"
+        },
+        "solvers.py:2870": {
+          "count": 16,
+          "code_context": "x11 = sfilter_t(x10, x8)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "calls": 74,
+      "call_sites": {
+        "solvers.py:2863": {
+          "count": 15,
+          "code_context": "x4 = order(x2, x3)"
+        },
+        "solvers.py:2870": {
+          "count": 16,
+          "code_context": "x11 = sfilter_t(x10, x8)"
+        }
+      }
+    },
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 14,
+      "call_sites": {
+        "solvers.py:2871": {
+          "count": 6,
+          "code_context": "x12 = mapply(first, x11)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "compose",
+    "order",
+    "center",
+    "uppermost",
+    "toindices",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "last",
+    "size_t",
+    "interval",
+    "rbind",
+    "pair",
+    "sfilter_t",
+    "contained",
+    "mapply",
+    "apply",
+    "first",
+    "merge",
+    "fill"
+  ]
+}

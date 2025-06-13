@@ -1,0 +1,2 @@
+def solve_93b581b8(S, I):
+    return fill(underpaint(I, shift(upscale_f(chain(rbind(mir_rot_f, R3), rbind(mir_rot_f, R1), merge)(fgpartition(I)), THREE), astuple(NEG_TWO, NEG_TWO))), ZERO, difference(mapply(fork(combine, hfrontier, vfrontier), toindices(chain(rbind(mir_rot_f, R3), rbind(mir_rot_f, R1), merge)(fgpartition(I)))), toindices(chain(rbind(mir_rot_f, R3), rbind(mir_rot_f, R1), merge)(fgpartition(I)))))

@@ -1,0 +1,2 @@
+def solve_b9b7f026(S, I):
+    return canvas(color(extract(remove_f(get_arg_rank_f(o_g(I, R4), size, L1), o_g(I, R4)), rbind(adjacent, get_arg_rank_f(o_g(I, R4), size, L1)))), UNITY)

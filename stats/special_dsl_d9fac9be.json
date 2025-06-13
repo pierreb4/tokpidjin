@@ -1,0 +1,89 @@
+{
+  "summary": {
+    "total_functions": 12,
+    "dsl_functions": 12,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 84,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1114": {
+          "count": 79,
+          "code_context": "x3 = argmax_f(x2, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 79
+        }
+      }
+    },
+    {
+      "name": "remove",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:1116": {
+          "count": 5,
+          "code_context": "x5 = remove(ZERO, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "percent": 100.0,
+      "calls": 84,
+      "call_sites": {
+        "solvers.py:1114": {
+          "count": 79,
+          "code_context": "x3 = argmax_f(x2, size)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 84,
+      "call_sites": {
+        "solvers.py:1114": {
+          "count": 79,
+          "code_context": "x3 = argmax_f(x2, size)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "palette_t",
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "argmax_f",
+    "size",
+    "color",
+    "remove",
+    "other_f",
+    "remove_f",
+    "canvas"
+  ]
+}

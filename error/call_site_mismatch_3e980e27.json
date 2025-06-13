@@ -1,0 +1,36 @@
+{
+  "solver_key": "3e980e27",
+  "timestamp": "2025-05-21T09:11:50.912314",
+  "errors": {
+    "sfilter": {
+      "expected_sites": [
+        {
+          "line": "6564",
+          "context": "x28 = x27(x26)"
+        },
+        {
+          "line": "6570",
+          "context": "x34 = x33(x31)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "6565",
+          "context": "x29 = mapply(x28, x25)"
+        },
+        {
+          "line": "6571",
+          "context": "x35 = mapply(x34, x32)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    }
+  }
+}

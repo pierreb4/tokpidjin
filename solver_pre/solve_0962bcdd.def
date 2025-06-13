@@ -1,0 +1,2 @@
+def solve_0962bcdd(S, I):
+    return fill(fill(I, get_color_rank_t(replace(I, ZERO, get_color_rank_t(I, L1)), L1), mapply(dneighbors, f_ofcolor(I, get_color_rank_t(replace(I, ZERO, get_color_rank_t(I, L1)), L1)))), get_color_rank_t(I, L1), mapply(fork(combine, fork(connect, rbind(corner, R0), rbind(corner, R3)), fork(connect, rbind(corner, R2), rbind(corner, R1))), o_g(fill(I, get_color_rank_t(replace(I, ZERO, get_color_rank_t(I, L1)), L1), mapply(dneighbors, f_ofcolor(I, get_color_rank_t(replace(I, ZERO, get_color_rank_t(I, L1)), L1)))), R3)))

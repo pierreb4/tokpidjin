@@ -1,0 +1,2 @@
+def solve_0ca9ddb6(S, I):
+    return fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), mapply(dneighbors, f_ofcolor(I, BLUE))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(ineighbors, f_ofcolor(I, RED)))

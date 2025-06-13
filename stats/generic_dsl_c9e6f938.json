@@ -1,0 +1,76 @@
+{
+  "vmirror_t": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:118": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((0, 0, 0), (0, 7, 7), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((0, 7, 0), (0, 0, 7), (0, 7, 7)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((0, 0, 0), (7, 0, 0), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "vmirror_t(tuple)",
+            "value_signature": "vmirror_t(((7, 7, 0), (0, 7, 0), (0, 0, 7)))"
+          }
+        ],
+        "code_context": "x1 = vmirror_t(I)"
+      }
+    },
+    "type_signatures": [
+      "vmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "vmirror_t(((0, 7, 0), (0, 0, 7), (0, 7, 7)))",
+      "vmirror_t(((7, 7, 0), (0, 7, 0), (0, 0, 7)))",
+      "vmirror_t(((0, 0, 0), (7, 0, 0), (0, 0, 0)))",
+      "vmirror_t(((0, 0, 0), (0, 7, 7), (0, 0, 0)))"
+    ]
+  },
+  "hconcat": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:119": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0), (0, 7, 7), (0, 0, 0)), ((0, 0, 0), (7, 7, 0), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 7, 0), (0, 0, 7), (0, 7, 7)), ((0, 7, 0), (7, 0, 0), (7, 7, 0)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0), (7, 0, 0), (0, 0, 0)), ((0, 0, 0), (0, 0, 7), (0, 0, 0)))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((7, 7, 0), (0, 7, 0), (0, 0, 7)), ((0, 7, 7), (0, 7, 0), (7, 0, 0)))"
+          }
+        ],
+        "code_context": "O = hconcat(I, x1)"
+      }
+    },
+    "type_signatures": [
+      "hconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "hconcat(((7, 7, 0), (0, 7, 0), (0, 0, 7)), ((0, 7, 7), (0, 7, 0), (7, 0, 0)))",
+      "hconcat(((0, 7, 0), (0, 0, 7), (0, 7, 7)), ((0, 7, 0), (7, 0, 0), (7, 7, 0)))",
+      "hconcat(((0, 0, 0), (7, 0, 0), (0, 0, 0)), ((0, 0, 0), (0, 0, 7), (0, 0, 0)))",
+      "hconcat(((0, 0, 0), (0, 7, 7), (0, 0, 0)), ((0, 0, 0), (7, 7, 0), (0, 0, 0)))"
+    ]
+  }
+}

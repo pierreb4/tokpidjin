@@ -1,0 +1,7 @@
+def get_952a094c_O_x14(a1: Tuple[Tuple[int]], a2: Callable, a3: Container) -> Container:
+    return paint(a1, apply(a2, a3))
+
+# {'a1': 'Tuple[Tuple[int]]', 'return': 'Container', 'a2': 'Callable', 'a3': 'Container'}
+
+func_d = {('get_952a094c_O_x14', 'Container', 'Tuple[Tuple[int]]', 'Callable', 'Container'): 'paint(a1, apply(a2, a3))'}
+

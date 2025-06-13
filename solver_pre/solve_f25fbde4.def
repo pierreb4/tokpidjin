@@ -1,0 +1,2 @@
+def solve_f25fbde4(S, I):
+    return upscale_t(subgrid(get_nth_f(o_g(I, R7), F0), I), TWO)

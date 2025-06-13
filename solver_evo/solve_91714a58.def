@@ -1,0 +1,2 @@
+def solve_91714a58(S, I):
+    return fill(paint(canvas(BLACK, shape_t(I)), get_arg_rank_f(o_g(I, R5), size, F0)), BLACK, sfilter_f(asindices(I), compose(lbind(greater, c_iz_n(S, identity(p_g), rbind(get_nth_t, F1))), chain(rbind(colorcount_f, get_color_rank_f(get_arg_rank_f(o_g(I, R5), size, F0), F0)), rbind(toobject, paint(canvas(BLACK, shape_t(I)), get_arg_rank_f(o_g(I, R5), size, F0))), neighbors))))

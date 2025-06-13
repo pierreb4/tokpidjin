@@ -1,0 +1,2 @@
+def solve_d406998b(S, I):
+    return mir_rot_t(fill(mir_rot_t(I, R2), THREE, sfilter_f(f_ofcolor(mir_rot_t(I, R2), FIVE), compose(even, rbind(get_nth_f, L1)))), R2)

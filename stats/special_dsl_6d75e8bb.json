@@ -1,0 +1,35 @@
+{
+  "summary": {
+    "total_functions": 20,
+    "dsl_functions": 20,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 0,
+    "functions_with_f_variants": 0,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "first_f",
+    "ulcorner",
+    "toindices",
+    "subgrid",
+    "shape_f",
+    "height_f",
+    "lowermost",
+    "uppermost",
+    "width_f",
+    "rightmost",
+    "leftmost",
+    "crop",
+    "replace",
+    "asobject",
+    "shift",
+    "paint"
+  ]
+}

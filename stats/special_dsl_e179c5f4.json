@@ -1,0 +1,75 @@
+{
+  "summary": {
+    "total_functions": 25,
+    "dsl_functions": 25,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "first",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 25.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4469": {
+          "count": 1,
+          "code_context": "x3 = first(x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 4,
+      "tuple_percent": 25.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4485": {
+          "count": 1,
+          "code_context": "x19 = merge(x18)",
+          "tuple_calls": 1,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "height_t",
+    "f_ofcolor",
+    "first",
+    "shoot",
+    "connect",
+    "fill",
+    "toindices",
+    "urcorner",
+    "subgrid",
+    "ulcorner",
+    "shape_f",
+    "height_f",
+    "lowermost",
+    "uppermost",
+    "width_f",
+    "rightmost",
+    "leftmost",
+    "crop",
+    "width_t",
+    "decrement",
+    "astuple",
+    "repeat",
+    "merge",
+    "hmirror_t",
+    "replace"
+  ]
+}

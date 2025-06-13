@@ -1,0 +1,2 @@
+def solve_d0f5fe59(S, I):
+    return fill(canvas(ZERO, astuple(size_f(o_g(I, R5)), size_f(o_g(I, R5)))), EIGHT, shoot(ORIGIN, UNITY))

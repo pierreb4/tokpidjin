@@ -1,0 +1,7 @@
+def get_ce602527_x7_x4(a1: Callable, a2: Tuple) -> Any:
+    return a1(get_nth_t(a2, L1))
+
+# {'a1': 'Callable', 'a2': 'Tuple', 'return': 'Any'}
+
+func_d = {('get_ce602527_x7_x4', 'Any', 'Callable', 'Tuple'): 'a1(get_nth_t(a2, L1))'}
+

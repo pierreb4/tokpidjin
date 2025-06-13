@@ -1,0 +1,76 @@
+{
+  "summary": {
+    "total_functions": 20,
+    "dsl_functions": 20,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "merge",
+      "total_calls": 8,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4255": {
+          "count": 4,
+          "code_context": "x10 = x8(x4)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        },
+        "solvers.py:4256": {
+          "count": 4,
+          "code_context": "x11 = x8(x10)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "merge",
+      "variant": "merge_t",
+      "type": "tuple",
+      "calls": 8,
+      "call_sites": {
+        "solvers.py:4255": {
+          "count": 4,
+          "code_context": "x10 = x8(x4)"
+        },
+        "solvers.py:4256": {
+          "count": 4,
+          "code_context": "x11 = x8(x10)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "portrait_t",
+    "height_t",
+    "width_t",
+    "branch",
+    "hsplit",
+    "crop",
+    "argmin_t",
+    "numcolors_t",
+    "palette_t",
+    "argmax_t",
+    "rbind",
+    "chain",
+    "upscale_t",
+    "repeat",
+    "merge",
+    "dmirror_t",
+    "f_ofcolor",
+    "fill",
+    "toindices",
+    "vsplit"
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "summary": {
+    "total_functions": 32,
+    "dsl_functions": 32,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 5,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "first",
+      "total_calls": 40,
+      "tuple_percent": 82.5,
+      "has_tuple_variant": true,
+      "frozenset_percent": 15.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5361": {
+          "count": 4,
+          "code_context": "x17 = first(x16)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:5365": {
+          "count": 9,
+          "code_context": "x21 = apply(first, x20)",
+          "tuple_calls": 9,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 20,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5365": {
+          "count": 1,
+          "code_context": "x21 = apply(first, x20)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5366": {
+          "count": 1,
+          "code_context": "x22 = apply(last, x20)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5368": {
+          "count": 1,
+          "code_context": "x24 = apply(x23, x21)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5369": {
+          "count": 1,
+          "code_context": "x25 = apply(x23, x22)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5374": {
+          "count": 2,
+          "code_context": "x30 = mapply(x29, x28)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 36,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5366": {
+          "count": 9,
+          "code_context": "x22 = apply(last, x20)",
+          "tuple_calls": 9,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5374": {
+          "count": 2,
+          "code_context": "x30 = mapply(x29, x28)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 4,
+      "tuple_percent": 25.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5374": {
+          "count": 1,
+          "code_context": "x30 = mapply(x29, x28)",
+          "tuple_calls": 1,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "calls": 36,
+      "call_sites": {
+        "solvers.py:5366": {
+          "count": 9,
+          "code_context": "x22 = apply(last, x20)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "height_t",
+    "mostcolor_t",
+    "asobject",
+    "subtract",
+    "divide",
+    "astuple",
+    "crop",
+    "partition",
+    "palette_t",
+    "matcher",
+    "compose",
+    "extract",
+    "color",
+    "flip",
+    "initset",
+    "palette_f",
+    "difference",
+    "first",
+    "interval",
+    "product",
+    "totuple",
+    "apply",
+    "last",
+    "lbind",
+    "multiply",
+    "papply",
+    "add",
+    "mapply",
+    "shift",
+    "merge",
+    "underfill",
+    "toindices"
+  ]
+}

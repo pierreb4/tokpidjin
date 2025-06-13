@@ -1,0 +1,2 @@
+def solve_8be77c9e(S, I):
+    return vconcat(I, mir_rot_t(I, R0))

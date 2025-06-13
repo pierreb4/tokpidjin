@@ -1,0 +1,2 @@
+def solve_913fb3ed(S, I):
+    return fill(fill(fill(I, SIX, mapply(neighbors, f_ofcolor(I, THREE))), FOUR, mapply(neighbors, f_ofcolor(I, EIGHT))), ONE, mapply(neighbors, f_ofcolor(I, TWO)))

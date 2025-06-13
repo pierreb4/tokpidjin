@@ -1,0 +1,28 @@
+{
+  "solver_key": "d687bc17",
+  "timestamp": "2025-05-21T09:11:58.128850",
+  "errors": {
+    "first": {
+      "expected_sites": [
+        {
+          "line": "3092",
+          "context": "x13 = mapply(x11, x7)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "3092",
+          "context": "x13 = mapply(x11, x7)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

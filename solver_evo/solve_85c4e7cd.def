@@ -1,0 +1,2 @@
+def solve_85c4e7cd(S, I):
+    return paint(I, mpapply(recolor_o, apply(color, order(o_g(I, R4), compose(invert, size))), order(o_g(I, R4), size)))

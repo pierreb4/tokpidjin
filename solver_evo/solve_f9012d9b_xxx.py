@@ -1,0 +1,31 @@
+def solve_f9012d9b_one(S, I):
+    return subgrid(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), paint(I, mapply(lbind(shift, mfilter_f(o_g(I, R4), chain(flip, lbind(contained, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), palette_t))), apply(rbind(multiply, astuple(vperiod(asobject(extract(vsplit(I, TWO), chain(flip, lbind(contained, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), palette_t)))), hperiod(asobject(extract(hsplit(I, TWO), chain(flip, lbind(contained, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), palette_t)))))), mapply(neighbors, neighbors(ORIGIN))))))
+
+
+def solve_f9012d9b(S, I):
+    x1 = identity(p_g)
+    x2 = rbind(get_nth_t, F0)
+    x3 = c_iz_n(S, x1, x2)
+    x4 = f_ofcolor(I, x3)
+    x5 = o_g(I, R4)
+    x6 = lbind(contained, x3)
+    x7 = chain(flip, x6, palette_t)
+    x8 = mfilter_f(x5, x7)
+    x9 = lbind(shift, x8)
+    x10 = vsplit(I, TWO)
+    x11 = extract(x10, x7)
+    x12 = asobject(x11)
+    x13 = vperiod(x12)
+    x14 = hsplit(I, TWO)
+    x15 = extract(x14, x7)
+    x16 = asobject(x15)
+    x17 = hperiod(x16)
+    x18 = astuple(x13, x17)
+    x19 = rbind(multiply, x18)
+    x20 = neighbors(ORIGIN)
+    x21 = mapply(neighbors, x20)
+    x22 = apply(x19, x21)
+    x23 = mapply(x9, x22)
+    x24 = paint(I, x23)
+    O = subgrid(x4, x24)
+    return O

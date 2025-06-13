@@ -1,0 +1,126 @@
+{
+  "summary": {
+    "total_functions": 34,
+    "dsl_functions": 34,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 3,
+    "functions_with_f_variants": 3,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 20,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4768": {
+          "count": 19,
+          "code_context": "x3 = argmax_f(x1, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 19
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4776": {
+          "count": 4,
+          "code_context": "x11 = apply(x10, x5)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "argmax",
+      "total_calls": 16,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4776": {
+          "count": 4,
+          "code_context": "x11 = apply(x10, x5)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 20,
+      "call_sites": {
+        "solvers.py:4768": {
+          "count": 19,
+          "code_context": "x3 = argmax_f(x1, size)"
+        }
+      }
+    },
+    {
+      "name": "argmax",
+      "variant": "argmax_f",
+      "type": "frozenset",
+      "calls": 16,
+      "call_sites": {
+        "solvers.py:4776": {
+          "count": 4,
+          "code_context": "x11 = apply(x10, x5)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "sizefilter",
+    "argmax_f",
+    "size",
+    "outbox",
+    "uppermost",
+    "toindices",
+    "leftmost",
+    "lowermost",
+    "rightmost",
+    "corners",
+    "ulcorner",
+    "urcorner",
+    "llcorner",
+    "lrcorner",
+    "lbind",
+    "chain",
+    "compose",
+    "fork",
+    "apply",
+    "initset",
+    "rbind",
+    "argmax",
+    "manhattan",
+    "color",
+    "identity",
+    "astuple",
+    "merge_f",
+    "cover",
+    "fill",
+    "paint"
+  ]
+}

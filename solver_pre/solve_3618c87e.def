@@ -1,0 +1,2 @@
+def solve_3618c87e(S, I):
+    return move(I, merge_f(sizefilter(o_g(I, R5), ONE)), TWO_BY_ZERO)

@@ -1,0 +1,2 @@
+def solve_10fcaaa3(S, I):
+    return underfill(vconcat(hconcat(I, I), hconcat(I, I)), EIGHT, mapply(ineighbors, f_ofcolor(vconcat(hconcat(I, I), hconcat(I, I)), get_color_rank_t(I, L1))))

@@ -1,0 +1,17 @@
+{
+  "summary": {
+    "total_functions": 2,
+    "dsl_functions": 2,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 0,
+    "functions_with_f_variants": 0,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "vmirror_t",
+    "hconcat"
+  ]
+}

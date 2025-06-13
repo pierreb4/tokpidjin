@@ -1,0 +1,39 @@
+{
+  "dmirror_t": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:36": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((5, 0, 0, 0), (0, 5, 0, 0), (6, 0, 5, 0), (6, 0, )"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((5, 0, 0), (3, 5, 0), (0, 0, 5)))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(((5, 0, 0, 0, 0), (0, 5, 0, 0, 0), (8, 8, 5, 0, 0))"
+          },
+          {
+            "type_signature": "dmirror_t(tuple)",
+            "value_signature": "dmirror_t(tuple(len=6))"
+          }
+        ],
+        "code_context": "O = dmirror_t(I)"
+      }
+    },
+    "type_signatures": [
+      "dmirror_t(tuple)"
+    ],
+    "value_signatures": [
+      "dmirror_t(((5, 0, 0, 0, 0), (0, 5, 0, 0, 0), (8, 8, 5, 0, 0))",
+      "dmirror_t(((5, 0, 0, 0), (0, 5, 0, 0), (6, 0, 5, 0), (6, 0, )",
+      "dmirror_t(tuple(len=6))",
+      "dmirror_t(((5, 0, 0), (3, 5, 0), (0, 0, 5)))"
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+def solve_1190e5a7(S, I):
+    return canvas(get_color_rank_t(I, F0), increment(apply(size, astuple(difference(frontiers(I), sfilter_f(frontiers(I), vline_o)), sfilter_f(frontiers(I), vline_o)))))

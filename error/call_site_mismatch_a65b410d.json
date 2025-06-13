@@ -1,0 +1,29 @@
+{
+  "solver_key": "a65b410d",
+  "timestamp": "2025-05-19T16:16:37.712469",
+  "errors": {
+    "mostcolor": {
+      "expected_sites": [
+        {
+          "line": "2849",
+          "context": "x5 = underfill(I, THREE, x3)"
+        },
+        {
+          "line": "2850",
+          "context": "x6 = underfill(x5, ONE, x4)"
+        },
+        {
+          "line": "2854",
+          "context": "x10 = underfill(x6, ONE, x9)"
+        },
+        {
+          "line": "2855",
+          "context": "O = underfill(x10, THREE, x8)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 4,
+      "message": "Found 0 calls but expected 4"
+    }
+  }
+}

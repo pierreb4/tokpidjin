@@ -1,0 +1,2 @@
+def solve_1caeab9d(S, I):
+    return paint(cover(I, merge_f(o_g(I, R7))), mapply(fork(shift, identity, chain(toivec, lbind(subtract, col_row(f_ofcolor(I, BLUE), R0)), rbind(col_row, R0))), o_g(I, R7)))

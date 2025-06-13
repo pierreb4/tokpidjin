@@ -1,0 +1,2 @@
+def solve_2bee17df(S, I):
+    return underfill(I, c_zo_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F0))), merge_t(astuple(mapply(hfrontier, sfilter_t(pair(interval(ZERO, height_t(I), ONE), compose(lbind(apply, matcher(rbind(colorcount_t, BLACK), subtract(height_t(I), TWO))), rbind(vsplit, height_t(I)))(I)), rbind(get_nth_f, L1))), mapply(vfrontier, sfilter_t(pair(compose(lbind(apply, matcher(rbind(colorcount_t, BLACK), subtract(height_t(I), TWO))), rbind(vsplit, height_t(I)))(mir_rot_t(I, R4)), interval(ZERO, height_t(I), ONE)), rbind(get_nth_f, F0))))))

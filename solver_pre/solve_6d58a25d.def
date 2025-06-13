@@ -1,0 +1,2 @@
+def solve_6d58a25d(S, I):
+    return underfill(I, color(merge_f(remove_f(get_arg_rank_f(o_g(I, R7), size, F0), o_g(I, R7)))), mapply(chain(rbind(sfilter, compose(rbind(greater, increment(col_row(get_arg_rank_f(o_g(I, R7), size, F0), R1))), rbind(get_nth_f, F0))), vfrontier, center), sfilter_f(remove_f(get_arg_rank_f(o_g(I, R7), size, F0), o_g(I, R7)), fork(both, rbind(vmatching, get_arg_rank_f(o_g(I, R7), size, F0)), compose(rbind(greater, col_row(get_arg_rank_f(o_g(I, R7), size, F0), R1)), rbind(col_row, R1))))))

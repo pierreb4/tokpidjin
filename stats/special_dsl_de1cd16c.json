@@ -1,0 +1,56 @@
+{
+  "summary": {
+    "total_functions": 23,
+    "dsl_functions": 23,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "apply",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2248": {
+          "count": 5,
+          "code_context": "x6 = apply(x5, x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "leastcolor_t",
+    "objects",
+    "asindices",
+    "dneighbors",
+    "sizefilter",
+    "difference",
+    "rbind",
+    "apply",
+    "subgrid",
+    "ulcorner",
+    "toindices",
+    "shape_f",
+    "height_f",
+    "lowermost",
+    "uppermost",
+    "width_f",
+    "rightmost",
+    "leftmost",
+    "crop",
+    "argmax_f",
+    "colorcount_t",
+    "mostcolor_t",
+    "canvas"
+  ]
+}

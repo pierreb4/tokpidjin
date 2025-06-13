@@ -1,0 +1,2 @@
+def solve_d2abd087(S, I):
+    return fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), mfilter_f(o_g(I, R5), matcher(size, MAGENTA))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mfilter_f(o_g(I, R5), compose(flip, matcher(size, MAGENTA))))

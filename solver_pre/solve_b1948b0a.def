@@ -1,0 +1,2 @@
+def solve_b1948b0a(S, I):
+    return replace(I, SIX, TWO)

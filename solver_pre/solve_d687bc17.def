@@ -1,0 +1,2 @@
+def solve_d687bc17(S, I):
+    return paint(cover(I, merge_f(sizefilter(o_g(I, R5), ONE))), mapply(fork(shift, identity, fork(gravitate, identity, chain(rbind(get_nth_f, F0), lbind(colorfilter, difference(o_g(I, R5), sizefilter(o_g(I, R5), ONE))), color))), sfilter_f(sizefilter(o_g(I, R5), ONE), compose(rbind(contained, apply(color, difference(o_g(I, R5), sizefilter(o_g(I, R5), ONE)))), color))))

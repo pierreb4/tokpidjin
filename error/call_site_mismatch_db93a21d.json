@@ -1,0 +1,29 @@
+{
+  "solver_key": "db93a21d",
+  "timestamp": "2025-05-21T09:11:58.382555",
+  "errors": {
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "4071",
+          "context": "x5 = mapply(x4, x2)"
+        },
+        {
+          "line": "4079",
+          "context": "x13 = mapply(outbox, x3)"
+        },
+        {
+          "line": "4082",
+          "context": "x16 = mapply(x11, x14)"
+        },
+        {
+          "line": "4083",
+          "context": "x17 = mapply(x12, x15)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 4,
+      "message": "Found 0 calls but expected 4"
+    }
+  }
+}

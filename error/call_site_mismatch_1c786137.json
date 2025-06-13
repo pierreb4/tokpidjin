@@ -1,0 +1,43 @@
+{
+  "solver_key": "1c786137",
+  "timestamp": "2025-05-19T16:16:30.069866",
+  "errors": {
+    "height": {
+      "expected_sites": [
+        {
+          "line": "443",
+          "context": "x2 = argmax(x1, height)"
+        },
+        {
+          "line": "444",
+          "context": "x3 = subgrid(x2, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "shape": {
+      "expected_sites": [
+        {
+          "line": "444",
+          "context": "x3 = subgrid(x2, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "444",
+          "context": "x3 = subgrid(x2, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "summary": {
+    "total_functions": 24,
+    "dsl_functions": 24,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 56,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1484": {
+          "count": 40,
+          "code_context": "x5 = sfilter_f(x2, x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 40
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "total_calls": 9,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1486": {
+          "count": 9,
+          "code_context": "x7 = mfilter_f(x5, x6)",
+          "tuple_calls": 0,
+          "frozenset_calls": 9
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "percent": 100.0,
+      "calls": 56,
+      "call_sites": {
+        "solvers.py:1484": {
+          "count": 40,
+          "code_context": "x5 = sfilter_f(x2, x4)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 56,
+      "call_sites": {
+        "solvers.py:1484": {
+          "count": 40,
+          "code_context": "x5 = sfilter_f(x2, x4)"
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 9,
+      "call_sites": {
+        "solvers.py:1486": {
+          "count": 9,
+          "code_context": "x7 = mfilter_f(x5, x6)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "prapply",
+    "connect",
+    "rbind",
+    "compose",
+    "sfilter_f",
+    "size",
+    "greater",
+    "fork",
+    "mfilter_f",
+    "sfilter",
+    "vline_i",
+    "height_i",
+    "lowermost_i",
+    "toindices_i",
+    "uppermost_i",
+    "width_i",
+    "rightmost_i",
+    "leftmost_i",
+    "hline_i",
+    "either",
+    "merge_f",
+    "fill",
+    "toindices"
+  ]
+}

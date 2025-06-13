@@ -1,0 +1,59 @@
+{
+  "summary": {
+    "total_functions": 13,
+    "dsl_functions": 13,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "size",
+      "total_calls": 30,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:915": {
+          "count": 20,
+          "code_context": "x2 = argmin_f(x1, size)",
+          "tuple_calls": 0,
+          "frozenset_calls": 20
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 30,
+      "call_sites": {
+        "solvers.py:915": {
+          "count": 20,
+          "code_context": "x2 = argmin_f(x1, size)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "argmin_f",
+    "size",
+    "rbind",
+    "remove_f",
+    "extract",
+    "adjacent",
+    "manhattan",
+    "toindices",
+    "color",
+    "canvas"
+  ]
+}

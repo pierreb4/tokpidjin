@@ -1,0 +1,54 @@
+{
+  "solver_key": "e5062a87",
+  "timestamp": "2025-05-19T16:16:41.203448",
+  "errors": {
+    "normalize": {
+      "expected_sites": [
+        {
+          "line": "3607",
+          "context": "x3 = normalize(x2)"
+        },
+        {
+          "line": "3608",
+          "context": "x4 = occurrences(I, x2)"
+        }
+      ],
+      "actual_calls": 1,
+      "expected_calls": 2,
+      "message": "Found 1 calls but expected 2"
+    },
+    "shape": {
+      "expected_sites": [
+        {
+          "line": "3608",
+          "context": "x4 = occurrences(I, x2)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "height": {
+      "expected_sites": [
+        {
+          "line": "3608",
+          "context": "x4 = occurrences(I, x2)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "3608",
+          "context": "x4 = occurrences(I, x2)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "summary": {
+    "total_functions": 30,
+    "dsl_functions": 30,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 6,
+    "functions_with_f_variants": 6,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "mapply",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2416": {
+          "count": 3,
+          "code_context": "x5 = mapply(x4, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 6,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2416": {
+          "count": 3,
+          "code_context": "x5 = mapply(x4, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:2419": {
+          "count": 3,
+          "code_context": "x8 = apply(x3, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "combine",
+      "total_calls": 12,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 16.666666666666664,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2416": {
+          "count": 1,
+          "code_context": "x5 = mapply(x4, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        },
+        "solvers.py:2419": {
+          "count": 1,
+          "code_context": "x8 = apply(x3, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:2416": {
+          "count": 3,
+          "code_context": "x5 = mapply(x4, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:2420": {
+          "count": 3,
+          "code_context": "x9 = x7(x8)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:2420": {
+          "count": 3,
+          "code_context": "x9 = x7(x8)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 3,
+      "call_sites": {
+        "solvers.py:2416": {
+          "count": 3,
+          "code_context": "x5 = mapply(x4, x1)"
+        }
+      }
+    },
+    {
+      "name": "first",
+      "variant": "first_f",
+      "type": "frozenset",
+      "calls": 3,
+      "call_sites": {
+        "solvers.py:2420": {
+          "count": 3,
+          "code_context": "x9 = x7(x8)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_f",
+      "type": "frozenset",
+      "calls": 3,
+      "call_sites": {
+        "solvers.py:2420": {
+          "count": 3,
+          "code_context": "x9 = x7(x8)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "neighbors",
+    "dneighbors",
+    "ineighbors",
+    "fork",
+    "compose",
+    "mapply",
+    "apply",
+    "color",
+    "center",
+    "uppermost",
+    "toindices",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "vfrontier",
+    "hfrontier",
+    "combine",
+    "recolor_i",
+    "toindices_i",
+    "merge",
+    "paint",
+    "first",
+    "last",
+    "intersection",
+    "fill"
+  ]
+}

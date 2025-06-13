@@ -1,0 +1,36 @@
+{
+  "solver_key": "d2abd087",
+  "timestamp": "2025-05-21T09:11:57.857734",
+  "errors": {
+    "sfilter": {
+      "expected_sites": [
+        {
+          "line": "1060",
+          "context": "x4 = mfilter_f(x1, x2)"
+        },
+        {
+          "line": "1061",
+          "context": "x5 = mfilter_f(x1, x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "size": {
+      "expected_sites": [
+        {
+          "line": "1060",
+          "context": "x4 = mfilter_f(x1, x2)"
+        },
+        {
+          "line": "1061",
+          "context": "x5 = mfilter_f(x1, x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    }
+  }
+}

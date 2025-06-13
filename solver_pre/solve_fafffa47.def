@@ -1,0 +1,2 @@
+def solve_fafffa47(S, I):
+    return fill(canvas(ZERO, shape_t(bottomhalf(I))), TWO, intersection(f_ofcolor(tophalf(I), ZERO), f_ofcolor(bottomhalf(I), ZERO)))

@@ -1,0 +1,63 @@
+{
+  "summary": {
+    "total_functions": 17,
+    "dsl_functions": 17,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "sfilter",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:790": {
+          "count": 4,
+          "code_context": "x5 = mfilter_f(x2, x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 4,
+      "call_sites": {
+        "solvers.py:790": {
+          "count": 4,
+          "code_context": "x5 = mfilter_f(x2, x4)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "rbind",
+    "compose",
+    "mfilter_f",
+    "sfilter",
+    "bordering",
+    "uppermost",
+    "toindices",
+    "flip",
+    "leftmost",
+    "lowermost",
+    "rightmost",
+    "merge_f",
+    "fill"
+  ]
+}

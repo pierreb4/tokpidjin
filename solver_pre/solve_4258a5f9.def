@@ -1,0 +1,2 @@
+def solve_4258a5f9(S, I):
+    return fill(I, ONE, mapply(neighbors, f_ofcolor(I, FIVE)))

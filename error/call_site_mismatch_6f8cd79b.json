@@ -1,0 +1,17 @@
+{
+  "solver_key": "6f8cd79b",
+  "timestamp": "2025-05-21T09:11:53.516756",
+  "errors": {
+    "sfilter": {
+      "expected_sites": [
+        {
+          "line": "471",
+          "context": "x4 = mfilter_f(x2, x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

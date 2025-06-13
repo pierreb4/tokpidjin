@@ -1,0 +1,2 @@
+def solve_31d5ba1a(S, I):
+    return fill(canvas(BLACK, shape_t(tophalf(I))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), difference(combine_f(f_ofcolor(tophalf(I), BLACK), f_ofcolor(bottomhalf(I), BLACK)), intersection(f_ofcolor(tophalf(I), BLACK), f_ofcolor(bottomhalf(I), BLACK))))

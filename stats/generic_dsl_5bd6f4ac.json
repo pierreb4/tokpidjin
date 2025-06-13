@@ -1,0 +1,46 @@
+{
+  "tojvec": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:100": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "tojvec(int)",
+            "value_signature": "tojvec(6)"
+          }
+        ],
+        "code_context": "x1 = tojvec(SIX)"
+      }
+    },
+    "type_signatures": [
+      "tojvec(int)"
+    ],
+    "value_signatures": [
+      "tojvec(6)"
+    ]
+  },
+  "crop": {
+    "calls": 5,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:101": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "crop(tuple, tuple, tuple)",
+            "value_signature": "crop(tuple(len=9), (0, 6), (3, 3))"
+          }
+        ],
+        "code_context": "O = crop(I, x1, THREE_BY_THREE)"
+      }
+    },
+    "type_signatures": [
+      "crop(tuple, tuple, tuple)"
+    ],
+    "value_signatures": [
+      "crop(tuple(len=9), (0, 6), (3, 3))"
+    ]
+  }
+}

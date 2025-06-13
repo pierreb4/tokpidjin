@@ -1,0 +1,2 @@
+def solve_2281f1f4(S, I):
+    return underfill(I, TWO, remove_t(corner(f_ofcolor(I, FIVE), R1), apply(fork(astuple, power(rbind(get_nth_f, F0), TWO), power(rbind(get_nth_f, L1), TWO)), product(f_ofcolor(I, FIVE), f_ofcolor(I, FIVE)))))

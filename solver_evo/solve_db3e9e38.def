@@ -1,0 +1,2 @@
+def solve_db3e9e38(S, I):
+    return fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(rbind(shoot, UP), combine(shoot(corner(f_ofcolor(I, ORANGE), R3), UP_RIGHT), shoot(corner(f_ofcolor(I, ORANGE), R3), NEG_UNITY)))), ORANGE, sfilter_f(mapply(rbind(shoot, UP), combine(shoot(corner(f_ofcolor(I, ORANGE), R3), UP_RIGHT), shoot(corner(f_ofcolor(I, ORANGE), R3), NEG_UNITY))), chain(even, rbind(subtract, get_nth_t(corner(f_ofcolor(I, ORANGE), R3), L1)), rbind(get_nth_f, L1))))

@@ -1,0 +1,79 @@
+{
+  "summary": {
+    "total_functions": 28,
+    "dsl_functions": 28,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 0,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "normalize",
+      "total_calls": 48,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": false,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4503": {
+          "count": 4,
+          "code_context": "x10 = x9(x6)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:4504": {
+          "count": 4,
+          "code_context": "x11 = x9(x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:4507": {
+          "count": 16,
+          "code_context": "x14 = extract(x8, x12)",
+          "tuple_calls": 0,
+          "frozenset_calls": 16
+        },
+        "solvers.py:4508": {
+          "count": 21,
+          "code_context": "x15 = extract(x8, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 21
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "objects",
+    "asindices",
+    "dneighbors",
+    "colorfilter",
+    "rbind",
+    "compose",
+    "sfilter_f",
+    "bordering",
+    "uppermost",
+    "toindices",
+    "flip",
+    "leftmost",
+    "lowermost",
+    "rightmost",
+    "first_f",
+    "last_f",
+    "difference",
+    "normalize",
+    "shift",
+    "matcher",
+    "extract",
+    "ulcorner",
+    "subtract",
+    "move",
+    "cover",
+    "mostcolor_t",
+    "fill",
+    "paint"
+  ]
+}

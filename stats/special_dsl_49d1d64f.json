@@ -1,0 +1,121 @@
+{
+  "summary": {
+    "total_functions": 29,
+    "dsl_functions": 29,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 3,
+    "functions_with_f_variants": 3,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "apply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5238": {
+          "count": 3,
+          "code_context": "x16 = apply(x15, x9)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "argmin",
+      "total_calls": 40,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5238": {
+          "count": 7,
+          "code_context": "x16 = apply(x15, x9)",
+          "tuple_calls": 0,
+          "frozenset_calls": 7
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 40,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5238": {
+          "count": 18,
+          "code_context": "x16 = apply(x15, x9)",
+          "tuple_calls": 18,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "argmin",
+      "variant": "argmin_f",
+      "type": "frozenset",
+      "calls": 40,
+      "call_sites": {
+        "solvers.py:5238": {
+          "count": 7,
+          "code_context": "x16 = apply(x15, x9)"
+        }
+      }
+    },
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 40,
+      "call_sites": {
+        "solvers.py:5238": {
+          "count": 18,
+          "code_context": "x16 = apply(x15, x9)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "shape_t",
+    "height_t",
+    "width_t",
+    "add",
+    "canvas",
+    "asobject",
+    "shift",
+    "paint",
+    "asindices",
+    "fork",
+    "box",
+    "ulcorner",
+    "toindices",
+    "lrcorner",
+    "corners",
+    "urcorner",
+    "llcorner",
+    "difference",
+    "lbind",
+    "rbind",
+    "chain",
+    "apply",
+    "initset",
+    "compose",
+    "argmin",
+    "manhattan",
+    "first",
+    "identity",
+    "astuple"
+  ]
+}

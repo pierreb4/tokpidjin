@@ -1,0 +1,108 @@
+{
+  "summary": {
+    "total_functions": 13,
+    "dsl_functions": 13,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "sfilter",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1060": {
+          "count": 4,
+          "code_context": "x4 = mfilter_f(x1, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:1061": {
+          "count": 4,
+          "code_context": "x5 = mfilter_f(x1, x3)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    },
+    {
+      "name": "size",
+      "total_calls": 42,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:1060": {
+          "count": 12,
+          "code_context": "x4 = mfilter_f(x1, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 12
+        },
+        "solvers.py:1061": {
+          "count": 12,
+          "code_context": "x5 = mfilter_f(x1, x3)",
+          "tuple_calls": 0,
+          "frozenset_calls": 12
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 8,
+      "call_sites": {
+        "solvers.py:1060": {
+          "count": 4,
+          "code_context": "x4 = mfilter_f(x1, x2)"
+        },
+        "solvers.py:1061": {
+          "count": 4,
+          "code_context": "x5 = mfilter_f(x1, x3)"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 42,
+      "call_sites": {
+        "solvers.py:1060": {
+          "count": 12,
+          "code_context": "x4 = mfilter_f(x1, x2)"
+        },
+        "solvers.py:1061": {
+          "count": 12,
+          "code_context": "x5 = mfilter_f(x1, x3)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "matcher",
+    "compose",
+    "mfilter_f",
+    "sfilter",
+    "size",
+    "merge_f",
+    "flip",
+    "fill",
+    "toindices"
+  ]
+}

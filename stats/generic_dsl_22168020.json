@@ -1,0 +1,3255 @@
+{
+  "palette_t": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1688": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "palette_t(tuple)",
+            "value_signature": "palette_t(tuple(len=10))"
+          }
+        ],
+        "code_context": "x1 = palette_t(I)"
+      }
+    },
+    "type_signatures": [
+      "palette_t(tuple)"
+    ],
+    "value_signatures": [
+      "palette_t(tuple(len=10))"
+    ]
+  },
+  "remove": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1689": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "remove(int, frozenset)",
+            "value_signature": "remove(0, frozenset({0, 1, 4}))"
+          },
+          {
+            "type_signature": "remove(int, frozenset)",
+            "value_signature": "remove(0, frozenset({0, 3}))"
+          },
+          {
+            "type_signature": "remove(int, frozenset)",
+            "value_signature": "remove(0, frozenset({0, 8, 6}))"
+          },
+          {
+            "type_signature": "remove(int, frozenset)",
+            "value_signature": "remove(0, frozenset({0, 3, 4, 7}))"
+          }
+        ],
+        "code_context": "x2 = remove(ZERO, x1)"
+      }
+    },
+    "type_signatures": [
+      "remove(int, frozenset)"
+    ],
+    "value_signatures": [
+      "remove(0, frozenset({0, 8, 6}))",
+      "remove(0, frozenset({0, 3, 4, 7}))",
+      "remove(0, frozenset({0, 3}))",
+      "remove(0, frozenset({0, 1, 4}))"
+    ]
+  },
+  "lbind": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1690": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "lbind(function, tuple)",
+            "value_signature": "lbind(<function f_ofcolor at 0x103526f70>, tuple(len=10))"
+          }
+        ],
+        "code_context": "x3 = lbind(f_ofcolor, I)"
+      },
+      "solvers.py:1691": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "lbind(function, function)",
+            "value_signature": "lbind(<function prapply at 0x10353caf0>, <function connect at 0x103526430>)"
+          }
+        ],
+        "code_context": "x4 = lbind(prapply, connect)"
+      }
+    },
+    "type_signatures": [
+      "lbind(function, function)",
+      "lbind(function, tuple)"
+    ],
+    "value_signatures": [
+      "lbind(<function f_ofcolor at 0x103526f70>, tuple(len=10))",
+      "lbind(<function prapply at 0x10353caf0>, <function connect at 0x103526430>)"
+    ]
+  },
+  "fork": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1692": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function lbind.<locals>.<lambda> at 0x10395be50>, <function lbind.<locals>.<lambda> at 0x10395bee0>, <function lbind.<locals>.<lambda> at 0x10395bee0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function lbind.<locals>.<lambda> at 0x1039e0040>, <function lbind.<locals>.<lambda> at 0x1039e0160>, <function lbind.<locals>.<lambda> at 0x1039e0160>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function lbind.<locals>.<lambda> at 0x10395bee0>, <function lbind.<locals>.<lambda> at 0x10395be50>, <function lbind.<locals>.<lambda> at 0x10395be50>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function lbind.<locals>.<lambda> at 0x1039e0160>, <function lbind.<locals>.<lambda> at 0x1039e0040>, <function lbind.<locals>.<lambda> at 0x1039e0040>)"
+          }
+        ],
+        "code_context": "x5 = fork(x4, x3, x3)"
+      },
+      "solvers.py:1694": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function recolor_i at 0x10353ce50>, <function identity at 0x10352ae50>, <function compose.<locals>.<lambda> at 0x1039e0040)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function recolor_i at 0x10353ce50>, <function identity at 0x10352ae50>, <function compose.<locals>.<lambda> at 0x10395bee0)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function recolor_i at 0x10353ce50>, <function identity at 0x10352ae50>, <function compose.<locals>.<lambda> at 0x1039e0160)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function recolor_i at 0x10353ce50>, <function identity at 0x10352ae50>, <function compose.<locals>.<lambda> at 0x10395be50)"
+          }
+        ],
+        "code_context": "x7 = fork(recolor_i, identity, x6)"
+      }
+    },
+    "type_signatures": [
+      "fork(function, function, function)"
+    ],
+    "value_signatures": [
+      "fork(<function recolor_i at 0x10353ce50>, <function identity at 0x10352ae50>, <function compose.<locals>.<lambda> at 0x10395bee0)",
+      "fork(<function recolor_i at 0x10353ce50>, <function identity at 0x10352ae50>, <function compose.<locals>.<lambda> at 0x10395be50)",
+      "fork(<function recolor_i at 0x10353ce50>, <function identity at 0x10352ae50>, <function compose.<locals>.<lambda> at 0x1039e0040)",
+      "fork(<function lbind.<locals>.<lambda> at 0x10395be50>, <function lbind.<locals>.<lambda> at 0x10395bee0>, <function lbind.<locals>.<lambda> at 0x10395bee0>)",
+      "fork(<function lbind.<locals>.<lambda> at 0x1039e0160>, <function lbind.<locals>.<lambda> at 0x1039e0040>, <function lbind.<locals>.<lambda> at 0x1039e0040>)",
+      "fork(<function recolor_i at 0x10353ce50>, <function identity at 0x10352ae50>, <function compose.<locals>.<lambda> at 0x1039e0160)",
+      "fork(<function lbind.<locals>.<lambda> at 0x10395bee0>, <function lbind.<locals>.<lambda> at 0x10395be50>, <function lbind.<locals>.<lambda> at 0x10395be50>)",
+      "fork(<function lbind.<locals>.<lambda> at 0x1039e0040>, <function lbind.<locals>.<lambda> at 0x1039e0160>, <function lbind.<locals>.<lambda> at 0x1039e0160>)"
+    ]
+  },
+  "compose": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1693": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function merge at 0x103539430>, <function fork.<locals>.<lambda> at 0x10395bf70>)"
+          }
+        ],
+        "code_context": "x6 = compose(merge, x5)"
+      }
+    },
+    "type_signatures": [
+      "compose(function, function)"
+    ],
+    "value_signatures": [
+      "compose(<function merge at 0x103539430>, <function fork.<locals>.<lambda> at 0x10395bf70>)"
+    ]
+  },
+  "mapply": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x1039e0160>, frozenset({1, 4}))"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x10395be50>, frozenset({3}))"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x1039e0040>, frozenset({8, 6}))"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x10395bee0>, frozenset({3, 4, 7}))"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "mapply(function, frozenset)"
+    ],
+    "value_signatures": [
+      "mapply(<function fork.<locals>.<lambda> at 0x1039e0160>, frozenset({1, 4}))",
+      "mapply(<function fork.<locals>.<lambda> at 0x10395bee0>, frozenset({3, 4, 7}))",
+      "mapply(<function fork.<locals>.<lambda> at 0x10395be50>, frozenset({3}))",
+      "mapply(<function fork.<locals>.<lambda> at 0x1039e0040>, frozenset({8, 6}))"
+    ]
+  },
+  "apply": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x1039e0160>, frozenset({1, 4}))"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x10395be50>, frozenset({3}))"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x1039e0040>, frozenset({8, 6}))"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x10395bee0>, frozenset({3, 4, 7}))"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "apply(function, frozenset)"
+    ],
+    "value_signatures": [
+      "apply(<function fork.<locals>.<lambda> at 0x10395bee0>, frozenset({3, 4, 7}))",
+      "apply(<function fork.<locals>.<lambda> at 0x1039e0160>, frozenset({1, 4}))",
+      "apply(<function fork.<locals>.<lambda> at 0x1039e0040>, frozenset({8, 6}))",
+      "apply(<function fork.<locals>.<lambda> at 0x10395be50>, frozenset({3}))"
+    ]
+  },
+  "identity": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(1)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(4)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(3)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(8)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(6)"
+          },
+          {
+            "type_signature": "identity(int)",
+            "value_signature": "identity(7)"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "identity(int)"
+    ],
+    "value_signatures": [
+      "identity(6)",
+      "identity(8)",
+      "identity(1)",
+      "identity(3)",
+      "identity(7)",
+      "identity(4)"
+    ]
+  },
+  "f_ofcolor": {
+    "calls": 16,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 1)"
+          },
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 4)"
+          },
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 3)"
+          },
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 8)"
+          },
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 6)"
+          },
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 7)"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "f_ofcolor(tuple, int)"
+    ],
+    "value_signatures": [
+      "f_ofcolor(tuple(len=10), 6)",
+      "f_ofcolor(tuple(len=10), 4)",
+      "f_ofcolor(tuple(len=10), 1)",
+      "f_ofcolor(tuple(len=10), 3)",
+      "f_ofcolor(tuple(len=10), 8)",
+      "f_ofcolor(tuple(len=10), 7)"
+    ]
+  },
+  "prapply": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "prapply(function, frozenset, frozenset)",
+            "value_signature": "prapply(<function connect at 0x103526430>, frozenset(len=8), frozenset(len=8))"
+          },
+          {
+            "type_signature": "prapply(function, frozenset, frozenset)",
+            "value_signature": "prapply(<function connect at 0x103526430>, frozenset(len=10), frozenset(len=10))"
+          },
+          {
+            "type_signature": "prapply(function, frozenset, frozenset)",
+            "value_signature": "prapply(<function connect at 0x103526430>, frozenset(len=6), frozenset(len=6))"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "prapply(function, frozenset, frozenset)"
+    ],
+    "value_signatures": [
+      "prapply(<function connect at 0x103526430>, frozenset(len=10), frozenset(len=10))",
+      "prapply(<function connect at 0x103526430>, frozenset(len=6), frozenset(len=6))",
+      "prapply(<function connect at 0x103526430>, frozenset(len=8), frozenset(len=8))"
+    ]
+  },
+  "connect": {
+    "calls": 556,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 537,
+        "signatures": [
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 4), (3, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 3), (3, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (3, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 0), (3, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 2), (3, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 3), (3, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 5), (3, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 2), (3, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 4), (4, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 3), (4, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (4, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 0), (4, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 2), (4, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 3), (4, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 5), (4, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 2), (4, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 4), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 3), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 0), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 2), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 3), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 5), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 2), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 4), (2, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 3), (2, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (2, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 0), (2, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 2), (2, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 3), (2, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 5), (2, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 2), (2, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 4), (4, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 3), (4, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (4, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 0), (4, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 2), (4, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 3), (4, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 5), (4, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 2), (4, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 4), (5, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 3), (5, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (5, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 0), (5, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 2), (5, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 3), (5, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 5), (5, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 2), (5, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 4), (2, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 3), (2, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (2, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 0), (2, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 2), (2, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 3), (2, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 5), (2, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 2), (2, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 4), (5, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 3), (5, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (5, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 0), (5, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 2), (5, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 3), (5, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 5), (5, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 2), (5, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 7), (9, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 7), (9, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 6), (9, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (9, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (9, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (9, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 9), (9, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 8), (9, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 7), (8, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 7), (8, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 6), (8, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (8, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (8, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (8, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 9), (8, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 8), (8, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 7), (9, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 7), (9, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 6), (9, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (9, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (9, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (9, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 9), (9, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 8), (9, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 7), (6, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 7), (6, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 6), (6, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (6, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (6, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (6, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 9), (6, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 8), (6, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 7), (8, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 7), (8, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 6), (8, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (8, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (8, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (8, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 9), (8, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 8), (8, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 7), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 7), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 6), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 9), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 8), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 7), (6, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 7), (6, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 6), (6, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (6, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (6, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (6, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 9), (6, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 8), (6, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 7), (7, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 7), (7, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 6), (7, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (7, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (7, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (7, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 9), (7, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 8), (7, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (4, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (5, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (2, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (1, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (5, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (4, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (3, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 4), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 5), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 7), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 4), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 5), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 6), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (6, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (5, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (5, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (7, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (6, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (9, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (7, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (8, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 2), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 8), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 3), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 7), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 5), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 6), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 0), (0, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (0, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 4), (0, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 3), (0, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (0, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 5), (0, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (0, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (0, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 0), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 4), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 3), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 5), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (1, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 0), (1, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (1, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 4), (1, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 3), (1, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (1, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 5), (1, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (1, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (1, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 0), (2, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (2, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 4), (2, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 3), (2, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (2, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 5), (2, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (2, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (2, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 0), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 4), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 3), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 5), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (3, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 0), (0, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (0, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 4), (0, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 3), (0, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (0, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 5), (0, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (0, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (0, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 0), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 4), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 3), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 5), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 0), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 4), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 3), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 3), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 5), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 3), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 1), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 3), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 6), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (8, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (9, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 3), (9, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 1), (9, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 3), (9, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (9, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 6), (9, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (9, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (9, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (6, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 3), (6, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 1), (6, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 3), (6, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (6, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 6), (6, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (6, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (6, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (8, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 3), (8, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 1), (8, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 3), (8, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (8, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 6), (8, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (8, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (8, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (7, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 3), (7, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 1), (7, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 3), (7, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (7, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 6), (7, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (7, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (7, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (6, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 3), (6, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 1), (6, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 3), (6, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (6, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 6), (6, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (6, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (6, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 4), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 3), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 1), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 3), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 6), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 4), (7, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 3), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 1), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 3), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 6), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (9, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 1), (2, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (2, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (2, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 0), (2, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (2, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 3), (2, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 1), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 0), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 3), (3, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 1), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 0), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 3), (2, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 1), (1, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (1, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (1, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 0), (1, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (1, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 3), (1, 0))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 1), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 0), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 3), (3, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 1), (1, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 1), (1, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 2), (1, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 0), (1, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 2), (1, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 3), (1, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 4), (2, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 8), (2, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 6), (2, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (2, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (2, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 6), (2, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 7), (2, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (2, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 4), (3, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 8), (3, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 6), (3, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (3, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (3, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 6), (3, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 7), (3, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (3, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 4), (4, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 8), (4, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 6), (4, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (4, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (4, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 6), (4, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 7), (4, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (4, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 4), (5, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 8), (5, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 6), (5, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (5, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (5, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 6), (5, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 7), (5, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (5, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 4), (2, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 8), (2, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 6), (2, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (2, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (2, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 6), (2, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 7), (2, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (2, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 4), (5, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 8), (5, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 6), (5, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (5, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (5, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 6), (5, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 7), (5, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (5, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 4), (4, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 8), (4, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 6), (4, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (4, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (4, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 6), (4, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 7), (4, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (4, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 4), (3, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 8), (3, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 6), (3, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 7), (3, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (3, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 6), (3, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((4, 7), (3, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((3, 5), (3, 5))"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "connect(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "connect((7, 8), (7, 8))",
+      "connect((2, 3), (3, 2))",
+      "connect((3, 1), (4, 3))",
+      "connect((7, 5), (6, 9))",
+      "connect((9, 4), (7, 2))",
+      "connect((3, 6), (2, 7))",
+      "connect((3, 8), (3, 5))",
+      "connect((2, 7), (5, 5))",
+      "connect((2, 4), (2, 4))",
+      "connect((6, 6), (8, 3))",
+      "connect((3, 3), (2, 2))",
+      "connect((1, 8), (2, 2))",
+      "connect((4, 5), (2, 2))",
+      "connect((3, 4), (2, 5))",
+      "connect((1, 1), (5, 4))",
+      "connect((2, 1), (2, 1))",
+      "connect((6, 2), (5, 8))",
+      "connect((2, 3), (0, 0))",
+      "connect((8, 7), (6, 9))",
+      "connect((9, 4), (8, 4))",
+      "connect((9, 3), (7, 5))",
+      "connect((9, 3), (8, 4))",
+      "connect((5, 6), (5, 7))",
+      "connect((8, 3), (7, 2))",
+      "connect((7, 5), (8, 3))",
+      "connect((7, 6), (9, 5))",
+      "connect((2, 1), (3, 1))",
+      "connect((4, 6), (3, 5))",
+      "connect((6, 2), (6, 7))",
+      "connect((6, 6), (8, 4))",
+      "connect((2, 5), (2, 5))",
+      "connect((8, 6), (6, 4))",
+      "connect((5, 3), (3, 4))",
+      "connect((0, 0), (0, 0))",
+      "connect((9, 5), (9, 4))",
+      "connect((3, 1), (1, 0))",
+      "connect((9, 4), (9, 3))",
+      "connect((5, 3), (5, 3))",
+      "connect((8, 4), (6, 2))",
+      "connect((3, 2), (1, 3))",
+      "connect((5, 7), (2, 9))",
+      "connect((7, 2), (9, 4))",
+      "connect((9, 4), (5, 1))",
+      "connect((2, 3), (1, 1))",
+      "connect((7, 8), (8, 6))",
+      "connect((8, 4), (5, 1))",
+      "connect((3, 2), (3, 2))",
+      "connect((3, 4), (4, 3))",
+      "connect((6, 4), (6, 9))",
+      "connect((5, 4), (2, 7))",
+      "connect((5, 3), (5, 2))",
+      "connect((2, 2), (3, 1))",
+      "connect((5, 6), (3, 5))",
+      "connect((6, 9), (9, 6))",
+      "connect((5, 3), (2, 0))",
+      "connect((2, 4), (3, 8))",
+      "connect((7, 3), (9, 5))",
+      "connect((8, 4), (8, 5))",
+      "connect((2, 7), (5, 4))",
+      "connect((4, 4), (2, 7))",
+      "connect((7, 6), (5, 1))",
+      "connect((2, 7), (1, 1))",
+      "connect((8, 3), (6, 6))",
+      "connect((1, 1), (2, 3))",
+      "connect((1, 4), (3, 3))",
+      "connect((8, 4), (6, 1))",
+      "connect((1, 1), (1, 4))",
+      "connect((5, 4), (1, 8))",
+      "connect((8, 7), (6, 4))",
+      "connect((6, 7), (9, 5))",
+      "connect((6, 7), (8, 5))",
+      "connect((2, 0), (4, 2))",
+      "connect((2, 1), (1, 0))",
+      "connect((3, 3), (3, 3))",
+      "connect((5, 6), (2, 4))",
+      "connect((5, 5), (4, 5))",
+      "connect((9, 5), (7, 3))",
+      "connect((4, 3), (5, 2))",
+      "connect((6, 1), (6, 1))",
+      "connect((3, 3), (3, 2))",
+      "connect((1, 1), (5, 5))",
+      "connect((1, 1), (0, 5))",
+      "connect((2, 2), (3, 6))",
+      "connect((4, 7), (2, 9))",
+      "connect((7, 2), (6, 1))",
+      "connect((3, 3), (5, 4))",
+      "connect((7, 6), (7, 3))",
+      "connect((2, 5), (3, 1))",
+      "connect((9, 7), (9, 6))",
+      "connect((3, 1), (2, 1))",
+      "connect((4, 4), (1, 8))",
+      "connect((3, 3), (0, 5))",
+      "connect((4, 2), (5, 2))",
+      "connect((3, 3), (4, 4))",
+      "connect((5, 4), (5, 4))",
+      "connect((1, 0), (3, 2))",
+      "connect((3, 8), (4, 6))",
+      "connect((7, 5), (6, 1))",
+      "connect((5, 4), (5, 5))",
+      "connect((6, 6), (7, 5))",
+      "connect((0, 5), (2, 2))",
+      "connect((8, 4), (7, 5))",
+      "connect((0, 5), (1, 4))",
+      "connect((6, 4), (7, 5))",
+      "connect((9, 4), (6, 6))",
+      "connect((9, 7), (6, 4))",
+      "connect((5, 2), (4, 2))",
+      "connect((5, 2), (5, 2))",
+      "connect((8, 3), (9, 4))",
+      "connect((1, 8), (2, 7))",
+      "connect((9, 3), (9, 3))",
+      "connect((7, 3), (6, 7))",
+      "connect((4, 7), (5, 6))",
+      "connect((3, 2), (0, 5))",
+      "connect((3, 5), (4, 7))",
+      "connect((4, 4), (4, 4))",
+      "connect((4, 7), (4, 7))",
+      "connect((6, 7), (6, 2))",
+      "connect((5, 5), (2, 7))",
+      "connect((9, 6), (8, 6))",
+      "connect((8, 7), (9, 6))",
+      "connect((1, 3), (3, 1))",
+      "connect((5, 5), (5, 4))",
+      "connect((2, 3), (1, 4))",
+      "connect((7, 3), (5, 1))",
+      "connect((6, 4), (7, 8))",
+      "connect((0, 5), (2, 3))",
+      "connect((6, 6), (6, 6))",
+      "connect((7, 5), (6, 6))",
+      "connect((1, 1), (2, 2))",
+      "connect((5, 6), (2, 9))",
+      "connect((3, 1), (3, 1))",
+      "connect((1, 8), (3, 6))",
+      "connect((2, 7), (2, 7))",
+      "connect((8, 7), (8, 7))",
+      "connect((5, 5), (2, 2))",
+      "connect((0, 5), (3, 2))",
+      "connect((5, 4), (4, 5))",
+      "connect((7, 3), (6, 2))",
+      "connect((9, 6), (6, 4))",
+      "connect((9, 4), (8, 5))",
+      "connect((1, 3), (1, 0))",
+      "connect((4, 3), (3, 4))",
+      "connect((9, 4), (7, 6))",
+      "connect((7, 6), (6, 2))",
+      "connect((3, 4), (2, 0))",
+      "connect((6, 1), (9, 4))",
+      "connect((5, 3), (4, 2))",
+      "connect((5, 5), (3, 6))",
+      "connect((5, 2), (3, 1))",
+      "connect((9, 7), (8, 6))",
+      "connect((0, 0), (3, 2))",
+      "connect((1, 3), (1, 3))",
+      "connect((9, 5), (6, 2))",
+      "connect((1, 4), (2, 3))",
+      "connect((1, 3), (2, 1))",
+      "connect((1, 4), (1, 4))",
+      "connect((1, 0), (2, 2))",
+      "connect((7, 5), (8, 7))",
+      "connect((3, 6), (4, 5))",
+      "connect((8, 6), (6, 9))",
+      "connect((7, 8), (6, 9))",
+      "connect((5, 6), (3, 8))",
+      "connect((7, 3), (8, 5))",
+      "connect((8, 6), (7, 8))",
+      "connect((1, 1), (3, 3))",
+      "connect((9, 6), (8, 7))",
+      "connect((2, 5), (4, 2))",
+      "connect((8, 5), (9, 5))",
+      "connect((5, 1), (6, 7))",
+      "connect((9, 7), (6, 9))",
+      "connect((6, 7), (7, 3))",
+      "connect((2, 4), (4, 6))",
+      "connect((2, 2), (2, 1))",
+      "connect((1, 1), (1, 8))",
+      "connect((9, 3), (6, 1))",
+      "connect((4, 6), (5, 7))",
+      "connect((6, 2), (9, 5))",
+      "connect((4, 7), (3, 8))",
+      "connect((5, 7), (2, 4))",
+      "connect((9, 5), (7, 6))",
+      "connect((2, 0), (5, 3))",
+      "connect((3, 4), (4, 2))",
+      "connect((7, 3), (9, 4))",
+      "connect((3, 6), (1, 8))",
+      "connect((1, 4), (1, 1))",
+      "connect((2, 3), (2, 2))",
+      "connect((5, 1), (9, 4))",
+      "connect((2, 7), (2, 2))",
+      "connect((5, 5), (1, 8))",
+      "connect((2, 3), (2, 3))",
+      "connect((1, 1), (2, 7))",
+      "connect((5, 8), (8, 4))",
+      "connect((5, 1), (8, 5))",
+      "connect((8, 7), (9, 7))",
+      "connect((6, 9), (7, 5))",
+      "connect((8, 7), (8, 6))",
+      "connect((6, 2), (6, 2))",
+      "connect((6, 2), (8, 4))",
+      "connect((4, 4), (4, 5))",
+      "connect((6, 6), (6, 1))",
+      "connect((1, 0), (3, 1))",
+      "connect((3, 8), (2, 9))",
+      "connect((2, 0), (3, 1))",
+      "connect((2, 0), (5, 2))",
+      "connect((3, 1), (5, 3))",
+      "connect((5, 7), (5, 7))",
+      "connect((6, 7), (5, 1))",
+      "connect((1, 8), (3, 3))",
+      "connect((3, 1), (3, 4))",
+      "connect((8, 4), (5, 8))",
+      "connect((7, 5), (9, 3))",
+      "connect((9, 6), (7, 5))",
+      "connect((7, 6), (8, 5))",
+      "connect((8, 4), (8, 4))",
+      "connect((3, 3), (4, 5))",
+      "connect((6, 6), (7, 2))",
+      "connect((0, 0), (2, 2))",
+      "connect((1, 8), (5, 5))",
+      "connect((6, 6), (9, 4))",
+      "connect((4, 5), (3, 6))",
+      "connect((5, 1), (9, 5))",
+      "connect((3, 2), (2, 3))",
+      "connect((4, 5), (3, 3))",
+      "connect((5, 8), (5, 8))",
+      "connect((8, 4), (9, 5))",
+      "connect((1, 1), (0, 0))",
+      "connect((2, 5), (4, 3))",
+      "connect((8, 6), (8, 6))",
+      "connect((7, 8), (9, 6))",
+      "connect((3, 4), (3, 1))",
+      "connect((5, 5), (4, 4))",
+      "connect((9, 4), (8, 3))",
+      "connect((2, 0), (4, 3))",
+      "connect((3, 1), (3, 2))",
+      "connect((5, 7), (5, 6))",
+      "connect((9, 3), (6, 6))",
+      "connect((7, 6), (5, 8))",
+      "connect((3, 3), (5, 5))",
+      "connect((8, 5), (9, 4))",
+      "connect((8, 3), (9, 3))",
+      "connect((2, 7), (3, 6))",
+      "connect((2, 9), (3, 5))",
+      "connect((7, 5), (8, 4))",
+      "connect((3, 4), (5, 3))",
+      "connect((5, 5), (5, 5))",
+      "connect((9, 6), (6, 9))",
+      "connect((2, 2), (1, 3))",
+      "connect((8, 4), (7, 3))",
+      "connect((3, 4), (3, 4))",
+      "connect((8, 5), (6, 2))",
+      "connect((7, 3), (7, 3))",
+      "connect((6, 4), (8, 7))",
+      "connect((5, 5), (1, 1))",
+      "connect((3, 2), (3, 1))",
+      "connect((2, 2), (5, 5))",
+      "connect((3, 6), (3, 3))",
+      "connect((7, 2), (7, 5))",
+      "connect((5, 1), (7, 3))",
+      "connect((2, 4), (5, 6))",
+      "connect((8, 5), (8, 4))",
+      "connect((4, 5), (5, 5))",
+      "connect((3, 5), (4, 6))",
+      "connect((7, 5), (9, 7))",
+      "connect((9, 7), (8, 7))",
+      "connect((5, 8), (5, 1))",
+      "connect((6, 9), (6, 4))",
+      "connect((8, 4), (9, 4))",
+      "connect((2, 2), (1, 4))",
+      "connect((3, 8), (3, 8))",
+      "connect((3, 1), (4, 2))",
+      "connect((8, 5), (5, 1))",
+      "connect((6, 2), (7, 3))",
+      "connect((2, 9), (5, 7))",
+      "connect((2, 2), (1, 0))",
+      "connect((6, 9), (7, 8))",
+      "connect((6, 1), (8, 3))",
+      "connect((9, 7), (7, 5))",
+      "connect((9, 3), (7, 2))",
+      "connect((7, 5), (7, 8))",
+      "connect((9, 3), (8, 3))",
+      "connect((1, 0), (1, 3))",
+      "connect((8, 4), (7, 6))",
+      "connect((4, 6), (3, 8))",
+      "connect((2, 7), (1, 8))",
+      "connect((6, 1), (7, 5))",
+      "connect((3, 3), (1, 8))",
+      "connect((8, 7), (7, 5))",
+      "connect((6, 9), (9, 7))",
+      "connect((0, 0), (3, 3))",
+      "connect((6, 4), (8, 6))",
+      "connect((2, 7), (4, 4))",
+      "connect((9, 4), (7, 3))",
+      "connect((1, 1), (3, 6))",
+      "connect((5, 1), (5, 1))",
+      "connect((3, 1), (5, 2))",
+      "connect((3, 6), (2, 2))",
+      "connect((9, 4), (6, 1))",
+      "connect((1, 1), (3, 2))",
+      "connect((3, 5), (2, 4))",
+      "connect((1, 1), (1, 1))",
+      "connect((8, 7), (7, 8))",
+      "connect((5, 6), (5, 6))",
+      "connect((1, 8), (1, 1))",
+      "connect((5, 4), (1, 1))",
+      "connect((7, 2), (8, 3))",
+      "connect((3, 8), (2, 4))",
+      "connect((5, 3), (3, 1))",
+      "connect((3, 3), (2, 7))",
+      "connect((5, 4), (4, 4))",
+      "connect((2, 4), (5, 7))",
+      "connect((4, 7), (3, 5))",
+      "connect((9, 5), (8, 4))",
+      "connect((4, 4), (5, 4))",
+      "connect((5, 1), (8, 4))",
+      "connect((7, 3), (7, 6))",
+      "connect((7, 5), (8, 6))",
+      "connect((7, 8), (8, 7))",
+      "connect((9, 5), (8, 5))",
+      "connect((5, 8), (9, 5))",
+      "connect((1, 4), (0, 0))",
+      "connect((2, 1), (1, 3))",
+      "connect((7, 5), (6, 4))",
+      "connect((7, 8), (6, 4))",
+      "connect((4, 3), (4, 2))",
+      "connect((2, 0), (2, 5))",
+      "connect((8, 4), (6, 7))",
+      "connect((5, 2), (2, 0))",
+      "connect((2, 9), (5, 6))",
+      "connect((4, 5), (4, 4))",
+      "connect((1, 4), (0, 5))",
+      "connect((3, 2), (1, 0))",
+      "connect((9, 7), (9, 7))",
+      "connect((2, 1), (2, 2))",
+      "connect((2, 2), (1, 8))",
+      "connect((4, 7), (4, 6))",
+      "connect((4, 5), (5, 4))",
+      "connect((8, 3), (6, 1))",
+      "connect((1, 0), (2, 1))",
+      "connect((8, 5), (6, 7))",
+      "connect((2, 2), (0, 5))",
+      "connect((6, 4), (9, 6))",
+      "connect((6, 9), (8, 7))",
+      "connect((3, 4), (5, 2))",
+      "connect((9, 4), (5, 8))",
+      "connect((5, 7), (3, 8))",
+      "connect((4, 5), (1, 8))",
+      "connect((1, 4), (2, 2))",
+      "connect((4, 5), (4, 5))",
+      "connect((5, 5), (3, 3))",
+      "connect((5, 3), (4, 3))",
+      "connect((8, 5), (5, 8))",
+      "connect((6, 7), (6, 7))",
+      "connect((2, 2), (1, 1))",
+      "connect((0, 5), (0, 5))",
+      "connect((3, 5), (2, 9))",
+      "connect((4, 3), (2, 5))",
+      "connect((3, 1), (2, 5))",
+      "connect((3, 5), (5, 7))",
+      "connect((2, 9), (3, 8))",
+      "connect((5, 8), (6, 7))",
+      "connect((2, 9), (4, 7))",
+      "connect((0, 5), (3, 3))",
+      "connect((9, 4), (7, 5))",
+      "connect((9, 5), (5, 8))",
+      "connect((3, 2), (3, 3))",
+      "connect((2, 5), (3, 4))",
+      "connect((2, 9), (2, 4))",
+      "connect((8, 5), (7, 6))",
+      "connect((0, 5), (1, 1))",
+      "connect((1, 1), (4, 4))",
+      "connect((1, 3), (3, 2))",
+      "connect((4, 4), (1, 1))",
+      "connect((3, 1), (2, 2))",
+      "connect((6, 7), (5, 8))",
+      "connect((9, 6), (7, 8))",
+      "connect((0, 0), (0, 5))",
+      "connect((7, 2), (9, 3))",
+      "connect((9, 6), (9, 7))",
+      "connect((5, 3), (2, 5))",
+      "connect((2, 3), (3, 3))",
+      "connect((7, 5), (9, 6))",
+      "connect((3, 3), (0, 0))",
+      "connect((5, 4), (3, 3))",
+      "connect((2, 2), (3, 2))",
+      "connect((8, 3), (8, 3))",
+      "connect((6, 1), (7, 2))",
+      "connect((2, 2), (5, 4))",
+      "connect((7, 5), (7, 2))",
+      "connect((3, 6), (3, 6))",
+      "connect((9, 4), (6, 2))",
+      "connect((6, 4), (9, 7))",
+      "connect((1, 8), (1, 8))",
+      "connect((2, 5), (5, 3))",
+      "connect((9, 5), (9, 5))",
+      "connect((4, 6), (2, 4))",
+      "connect((7, 2), (7, 2))",
+      "connect((3, 2), (1, 4))",
+      "connect((6, 6), (9, 3))",
+      "connect((9, 4), (6, 7))",
+      "connect((4, 6), (4, 7))",
+      "connect((2, 4), (3, 5))",
+      "connect((7, 6), (6, 7))",
+      "connect((5, 2), (3, 4))",
+      "connect((5, 7), (3, 5))",
+      "connect((5, 4), (2, 2))",
+      "connect((1, 8), (4, 5))",
+      "connect((4, 3), (3, 1))",
+      "connect((5, 2), (2, 5))",
+      "connect((3, 3), (1, 4))",
+      "connect((4, 2), (2, 5))",
+      "connect((4, 4), (5, 5))",
+      "connect((3, 2), (2, 1))",
+      "connect((3, 5), (5, 6))",
+      "connect((9, 4), (9, 5))",
+      "connect((7, 6), (9, 4))",
+      "connect((7, 6), (8, 4))",
+      "connect((4, 2), (4, 2))",
+      "connect((3, 6), (4, 4))",
+      "connect((3, 1), (1, 3))",
+      "connect((8, 4), (9, 3))",
+      "connect((2, 0), (2, 0))",
+      "connect((7, 5), (9, 4))",
+      "connect((3, 6), (5, 4))",
+      "connect((4, 2), (4, 3))",
+      "connect((7, 5), (7, 5))",
+      "connect((5, 2), (4, 3))",
+      "connect((4, 5), (2, 7))",
+      "connect((6, 2), (8, 5))",
+      "connect((9, 7), (7, 8))",
+      "connect((3, 6), (1, 1))",
+      "connect((8, 6), (9, 6))",
+      "connect((0, 5), (0, 0))",
+      "connect((8, 6), (7, 5))",
+      "connect((6, 1), (8, 4))",
+      "connect((5, 2), (5, 3))",
+      "connect((9, 5), (6, 7))",
+      "connect((5, 7), (4, 6))",
+      "connect((2, 0), (3, 4))",
+      "connect((8, 6), (9, 7))",
+      "connect((4, 7), (2, 4))",
+      "connect((2, 5), (5, 2))",
+      "connect((1, 8), (4, 4))",
+      "connect((3, 6), (5, 5))",
+      "connect((8, 3), (8, 4))",
+      "connect((5, 6), (4, 6))",
+      "connect((4, 2), (5, 3))",
+      "connect((2, 4), (2, 9))",
+      "connect((4, 6), (5, 6))",
+      "connect((4, 4), (3, 6))",
+      "connect((6, 1), (9, 3))",
+      "connect((6, 2), (9, 4))",
+      "connect((2, 2), (3, 3))",
+      "connect((3, 8), (5, 7))",
+      "connect((4, 2), (2, 0))",
+      "connect((2, 2), (4, 4))",
+      "connect((3, 3), (3, 6))",
+      "connect((2, 2), (0, 0))",
+      "connect((6, 1), (6, 6))",
+      "connect((3, 2), (2, 2))",
+      "connect((2, 2), (2, 2))",
+      "connect((6, 9), (6, 9))",
+      "connect((4, 6), (2, 9))",
+      "connect((5, 8), (7, 6))",
+      "connect((5, 7), (4, 7))",
+      "connect((6, 9), (8, 6))",
+      "connect((9, 6), (9, 6))",
+      "connect((5, 1), (7, 6))",
+      "connect((5, 6), (4, 7))",
+      "connect((1, 3), (2, 2))",
+      "connect((6, 7), (8, 4))",
+      "connect((2, 2), (2, 7))",
+      "connect((5, 4), (3, 6))",
+      "connect((5, 1), (5, 8))",
+      "connect((7, 6), (7, 6))",
+      "connect((6, 2), (7, 6))",
+      "connect((7, 3), (8, 4))",
+      "connect((4, 3), (2, 0))",
+      "connect((5, 8), (7, 3))",
+      "connect((6, 4), (6, 4))",
+      "connect((2, 7), (4, 5))",
+      "connect((8, 4), (8, 3))",
+      "connect((4, 3), (4, 3))",
+      "connect((9, 4), (9, 4))",
+      "connect((2, 4), (4, 7))",
+      "connect((5, 1), (6, 2))",
+      "connect((3, 5), (3, 8))",
+      "connect((5, 8), (9, 4))",
+      "connect((6, 7), (7, 6))",
+      "connect((5, 8), (8, 5))",
+      "connect((0, 0), (1, 4))",
+      "connect((8, 5), (8, 5))",
+      "connect((4, 3), (5, 3))",
+      "connect((4, 7), (5, 7))",
+      "connect((3, 8), (5, 6))",
+      "connect((7, 3), (5, 8))",
+      "connect((1, 0), (1, 0))",
+      "connect((8, 3), (7, 5))",
+      "connect((1, 1), (4, 5))",
+      "connect((3, 1), (2, 0))",
+      "connect((4, 2), (3, 1))",
+      "connect((1, 4), (3, 2))",
+      "connect((4, 4), (2, 2))",
+      "connect((3, 2), (1, 1))",
+      "connect((7, 2), (6, 6))",
+      "connect((3, 5), (3, 5))",
+      "connect((4, 5), (1, 1))",
+      "connect((0, 0), (2, 3))",
+      "connect((9, 3), (9, 4))",
+      "connect((0, 0), (1, 1))",
+      "connect((3, 3), (1, 1))",
+      "connect((3, 2), (0, 0))",
+      "connect((2, 5), (2, 0))",
+      "connect((2, 9), (2, 9))",
+      "connect((6, 7), (9, 4))",
+      "connect((2, 3), (0, 5))",
+      "connect((4, 6), (4, 6))",
+      "connect((7, 8), (7, 5))",
+      "connect((7, 2), (8, 4))",
+      "connect((7, 8), (9, 7))",
+      "connect((8, 5), (7, 3))",
+      "connect((8, 4), (6, 6))",
+      "connect((2, 9), (4, 6))",
+      "connect((4, 2), (3, 4))",
+      "connect((3, 8), (4, 7))",
+      "connect((8, 6), (8, 7))",
+      "connect((4, 4), (3, 3))",
+      "connect((2, 2), (2, 3))",
+      "connect((2, 7), (3, 3))",
+      "connect((2, 1), (3, 2))",
+      "connect((2, 2), (4, 5))",
+      "connect((9, 5), (5, 1))",
+      "connect((3, 3), (2, 3))",
+      "connect((8, 4), (7, 2))",
+      "connect((5, 8), (6, 2))",
+      "connect((1, 8), (5, 4))",
+      "connect((6, 2), (5, 1))"
+    ]
+  },
+  "merge": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 7,
+        "signatures": [
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset(len=27))"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(4, (6, 6)), (4, (7, 5)), (4)"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset(len=38))"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(3, (3, 4)), (3, (1, 1)), (3)"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(8, (5, 3)), (8, (6, 6)), (8)"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset(len=18))"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(4, (1, 2)), (4, (3, 1)), (4)"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "merge(frozenset)"
+    ],
+    "value_signatures": [
+      "merge(frozenset({frozenset({(4, (1, 2)), (4, (3, 1)), (4)",
+      "merge(frozenset({frozenset({(3, (3, 4)), (3, (1, 1)), (3)",
+      "merge(frozenset({frozenset({(4, (6, 6)), (4, (7, 5)), (4)",
+      "merge(frozenset({frozenset({(8, (5, 3)), (8, (6, 6)), (8)",
+      "merge(frozenset(len=38))",
+      "merge(frozenset(len=27))",
+      "merge(frozenset(len=18))"
+    ]
+  },
+  "recolor_i": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 8,
+        "signatures": [
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(1, frozenset(len=14))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(4, frozenset(len=14))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(3, frozenset(len=22))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(8, frozenset(len=22))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(6, frozenset(len=14))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(3, frozenset(len=14))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(4, frozenset(len=8))"
+          },
+          {
+            "type_signature": "recolor_i(int, frozenset)",
+            "value_signature": "recolor_i(7, frozenset(len=14))"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "recolor_i(int, frozenset)"
+    ],
+    "value_signatures": [
+      "recolor_i(1, frozenset(len=14))",
+      "recolor_i(6, frozenset(len=14))",
+      "recolor_i(4, frozenset(len=14))",
+      "recolor_i(3, frozenset(len=22))",
+      "recolor_i(3, frozenset(len=14))",
+      "recolor_i(7, frozenset(len=14))",
+      "recolor_i(4, frozenset(len=8))",
+      "recolor_i(8, frozenset(len=22))"
+    ]
+  },
+  "toindices_i": {
+    "calls": 8,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1695": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "toindices_i(frozenset)",
+            "value_signature": "toindices_i(frozenset(len=14))"
+          },
+          {
+            "type_signature": "toindices_i(frozenset)",
+            "value_signature": "toindices_i(frozenset(len=22))"
+          },
+          {
+            "type_signature": "toindices_i(frozenset)",
+            "value_signature": "toindices_i(frozenset(len=8))"
+          }
+        ],
+        "code_context": "x8 = mapply(x7, x2)"
+      }
+    },
+    "type_signatures": [
+      "toindices_i(frozenset)"
+    ],
+    "value_signatures": [
+      "toindices_i(frozenset(len=14))",
+      "toindices_i(frozenset(len=22))",
+      "toindices_i(frozenset(len=8))"
+    ]
+  },
+  "paint": {
+    "calls": 4,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:1696": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "paint(tuple, frozenset)",
+            "value_signature": "paint(tuple(len=10), frozenset(len=28))"
+          },
+          {
+            "type_signature": "paint(tuple, frozenset)",
+            "value_signature": "paint(tuple(len=10), frozenset(len=22))"
+          },
+          {
+            "type_signature": "paint(tuple, frozenset)",
+            "value_signature": "paint(tuple(len=10), frozenset(len=36))"
+          }
+        ],
+        "code_context": "O = paint(I, x8)"
+      }
+    },
+    "type_signatures": [
+      "paint(tuple, frozenset)"
+    ],
+    "value_signatures": [
+      "paint(tuple(len=10), frozenset(len=22))",
+      "paint(tuple(len=10), frozenset(len=28))",
+      "paint(tuple(len=10), frozenset(len=36))"
+    ]
+  }
+}

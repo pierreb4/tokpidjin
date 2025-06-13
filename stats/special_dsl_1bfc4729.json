@@ -1,0 +1,47 @@
+{
+  "summary": {
+    "total_functions": 14,
+    "dsl_functions": 14,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 1,
+    "functions_with_f_variants": 1,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "combine",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 33.33333333333333,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:2809": {
+          "count": 1,
+          "code_context": "x8 = combine(x6, x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 1
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "asindices",
+    "tophalf",
+    "bottomhalf",
+    "leastcolor_t",
+    "hfrontier",
+    "box",
+    "ulcorner",
+    "toindices",
+    "lrcorner",
+    "combine",
+    "fill",
+    "hmirror_t",
+    "replace",
+    "vconcat"
+  ]
+}

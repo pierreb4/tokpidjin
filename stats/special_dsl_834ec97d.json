@@ -1,0 +1,117 @@
+{
+  "summary": {
+    "total_functions": 21,
+    "dsl_functions": 21,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "first",
+      "total_calls": 263,
+      "tuple_percent": 99.61977186311786,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3673": {
+          "count": 4,
+          "code_context": "x3 = first(x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:3686": {
+          "count": 144,
+          "code_context": "x16 = sfilter_f(x1, x13)",
+          "tuple_calls": 144,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 111,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3687": {
+          "count": 57,
+          "code_context": "x17 = sfilter_f(x16, x15)",
+          "tuple_calls": 57,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "percent": 99.61977186311786,
+      "calls": 263,
+      "call_sites": {
+        "solvers.py:3686": {
+          "count": 144,
+          "code_context": "x16 = sfilter_f(x1, x13)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "percent": 100.0,
+      "calls": 111,
+      "call_sites": {
+        "solvers.py:3687": {
+          "count": 57,
+          "code_context": "x17 = sfilter_f(x16, x15)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "calls": 111,
+      "call_sites": {
+        "solvers.py:3687": {
+          "count": 57,
+          "code_context": "x17 = sfilter_f(x16, x15)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "asindices",
+    "objects",
+    "mostcolor_t",
+    "dneighbors",
+    "first",
+    "shift",
+    "fill",
+    "toindices",
+    "paint",
+    "uppermost",
+    "leftmost",
+    "subtract",
+    "add",
+    "interval",
+    "lbind",
+    "compose",
+    "rbind",
+    "sfilter_f",
+    "greater",
+    "last",
+    "contained"
+  ]
+}

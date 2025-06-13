@@ -1,0 +1,2 @@
+def solve_b27ca6d3(S, I):
+    return fill(I, THREE, mapply(outbox, sizefilter(o_g(I, R5), TWO)))

@@ -1,0 +1,39 @@
+{
+  "solver_key": "88a10436",
+  "timestamp": "2025-05-19T16:16:35.925827",
+  "errors": {
+    "mostcolor": {
+      "expected_sites": [
+        {
+          "line": "2117",
+          "context": "x1 = objects(I, F, F, T)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "height": {
+      "expected_sites": [
+        {
+          "line": "2120",
+          "context": "x4 = center(x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "2120",
+          "context": "x4 = center(x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

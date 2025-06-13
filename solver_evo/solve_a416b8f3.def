@@ -1,0 +1,2 @@
+def solve_a416b8f3(S, I):
+    return crop(mir_rot_t(merge_t(repeat(mir_rot_t(crop(I, corner(asobject(I), R0), astuple(height_f(asobject(I)), hperiod(asobject(I)))), R4), increment(divide(double(width_t(I)), hperiod(asobject(I)))))), R6), ORIGIN, astuple(height_f(asobject(I)), double(width_t(I))))

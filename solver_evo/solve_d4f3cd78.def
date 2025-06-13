@@ -1,0 +1,2 @@
+def solve_d4f3cd78(S, I):
+    return fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), delta(f_ofcolor(I, GRAY))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), shoot(get_nth_f(difference(box(f_ofcolor(I, GRAY)), f_ofcolor(I, GRAY)), F0), position(box(f_ofcolor(I, GRAY)), difference(box(f_ofcolor(I, GRAY)), f_ofcolor(I, GRAY)))))

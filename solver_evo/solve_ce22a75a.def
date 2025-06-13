@@ -1,0 +1,2 @@
+def solve_ce22a75a(S, I):
+    return fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(backdrop, apply(outbox, o_g(I, R5))))

@@ -1,0 +1,7 @@
+def get_2dd70a9a_x50_x49(a1: Grid, a2: Tuple[int, int], a3: Tuple[int, int]) -> FrozenSet[Tuple[int, int]]:
+    return underfill(a1, ONE, connect(a2, a3))
+
+# {'a1': 'Grid', 'return': 'FrozenSet[Tuple[int, int]]', 'a2': 'Tuple[int, int]', 'a3': 'Tuple[int, int]'}
+
+func_d = {('get_2dd70a9a_x50_x49', 'FrozenSet[Tuple[int, int]]', 'Grid', 'Tuple[int, int]', 'Tuple[int, int]'): 'underfill(a1, ONE, connect(a2, a3))'}
+

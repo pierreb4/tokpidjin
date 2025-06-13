@@ -1,0 +1,2 @@
+def solve_cce03e0d(S, I):
+    return fill(vconcat(vconcat(hconcat(hconcat(I, I), I), hconcat(hconcat(I, I), I)), hconcat(hconcat(I, I), I)), BLACK, combine_f(f_ofcolor(upscale_t(I, THREE), BLACK), f_ofcolor(upscale_t(I, THREE), BLUE)))

@@ -1,0 +1,17 @@
+{
+  "solver_key": "b91ae062",
+  "timestamp": "2025-05-19T16:16:38.779733",
+  "errors": {
+    "palette": {
+      "expected_sites": [
+        {
+          "line": "214",
+          "context": "x1 = numcolors(I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+def solve_760b3cac(S, I):
+    return fill(I, CYAN, shift(mir_rot_f(f_ofcolor(I, CYAN), R2), tojvec(multiply(branch(equality(index(I, corner(f_ofcolor(I, YELLOW), R0)), YELLOW), NEG_ONE, BLUE), THREE))))

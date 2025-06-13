@@ -1,0 +1,2 @@
+def solve_e98196ab(S, I):
+    return paint(bottomhalf(I), merge_f(o_g(tophalf(I), R5)))

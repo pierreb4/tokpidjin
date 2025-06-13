@@ -1,0 +1,323 @@
+{
+  "summary": {
+    "total_functions": 50,
+    "dsl_functions": 50,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 5,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "mapply",
+      "total_calls": 25,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 5,
+          "code_context": "x19 = mapply(x18, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5840": {
+          "count": 10,
+          "code_context": "x37 = mapply(x35, x23)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5841": {
+          "count": 10,
+          "code_context": "x38 = mapply(x36, x22)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 35,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 5,
+          "code_context": "x19 = mapply(x18, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5840": {
+          "count": 14,
+          "code_context": "x37 = mapply(x35, x23)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5841": {
+          "count": 14,
+          "code_context": "x38 = mapply(x36, x22)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "sfilter",
+      "total_calls": 150,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 10,
+          "code_context": "x19 = mapply(x18, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 10
+        },
+        "solvers.py:5825": {
+          "count": 10,
+          "code_context": "x22 = sfilter_f(x1, x21)",
+          "tuple_calls": 0,
+          "frozenset_calls": 10
+        },
+        "solvers.py:5840": {
+          "count": 5,
+          "code_context": "x37 = mapply(x35, x23)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        },
+        "solvers.py:5841": {
+          "count": 5,
+          "code_context": "x38 = mapply(x36, x22)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 6195,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 256,
+          "code_context": "x19 = mapply(x18, x1)",
+          "tuple_calls": 256,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5825": {
+          "count": 256,
+          "code_context": "x22 = sfilter_f(x1, x21)",
+          "tuple_calls": 256,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5840": {
+          "count": 145,
+          "code_context": "x37 = mapply(x35, x23)",
+          "tuple_calls": 145,
+          "frozenset_calls": 0
+        },
+        "solvers.py:5841": {
+          "count": 180,
+          "code_context": "x38 = mapply(x36, x22)",
+          "tuple_calls": 180,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 25,
+      "tuple_percent": 44.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 52.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 5,
+          "code_context": "x19 = mapply(x18, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        },
+        "solvers.py:5840": {
+          "count": 10,
+          "code_context": "x37 = mapply(x35, x23)",
+          "tuple_calls": 5,
+          "frozenset_calls": 5
+        },
+        "solvers.py:5841": {
+          "count": 10,
+          "code_context": "x38 = mapply(x36, x22)",
+          "tuple_calls": 5,
+          "frozenset_calls": 5
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "percent": 100.0,
+      "calls": 150,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 10,
+          "code_context": "x19 = mapply(x18, x1)"
+        },
+        "solvers.py:5825": {
+          "count": 10,
+          "code_context": "x22 = sfilter_f(x1, x21)"
+        },
+        "solvers.py:5840": {
+          "count": 5,
+          "code_context": "x37 = mapply(x35, x23)"
+        },
+        "solvers.py:5841": {
+          "count": 5,
+          "code_context": "x38 = mapply(x36, x22)"
+        }
+      }
+    },
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "percent": 100.0,
+      "calls": 6195,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 256,
+          "code_context": "x19 = mapply(x18, x1)"
+        },
+        "solvers.py:5825": {
+          "count": 256,
+          "code_context": "x22 = sfilter_f(x1, x21)"
+        },
+        "solvers.py:5840": {
+          "count": 145,
+          "code_context": "x37 = mapply(x35, x23)"
+        },
+        "solvers.py:5841": {
+          "count": 180,
+          "code_context": "x38 = mapply(x36, x22)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 150,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 10,
+          "code_context": "x19 = mapply(x18, x1)"
+        },
+        "solvers.py:5825": {
+          "count": 10,
+          "code_context": "x22 = sfilter_f(x1, x21)"
+        },
+        "solvers.py:5840": {
+          "count": 5,
+          "code_context": "x37 = mapply(x35, x23)"
+        },
+        "solvers.py:5841": {
+          "count": 5,
+          "code_context": "x38 = mapply(x36, x22)"
+        }
+      }
+    },
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 6195,
+      "call_sites": {
+        "solvers.py:5822": {
+          "count": 256,
+          "code_context": "x19 = mapply(x18, x1)"
+        },
+        "solvers.py:5825": {
+          "count": 256,
+          "code_context": "x22 = sfilter_f(x1, x21)"
+        },
+        "solvers.py:5840": {
+          "count": 145,
+          "code_context": "x37 = mapply(x35, x23)"
+        },
+        "solvers.py:5841": {
+          "count": 180,
+          "code_context": "x38 = mapply(x36, x22)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "matcher",
+    "rbind",
+    "compose",
+    "fork",
+    "mapply",
+    "apply",
+    "sfilter",
+    "first",
+    "center",
+    "uppermost",
+    "toindices",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "equality",
+    "invert",
+    "add",
+    "astuple",
+    "shoot",
+    "connect",
+    "merge",
+    "fill",
+    "sfilter_f",
+    "vline_i",
+    "height_i",
+    "lowermost_i",
+    "toindices_i",
+    "uppermost_i",
+    "width_i",
+    "rightmost_i",
+    "leftmost_i",
+    "difference",
+    "chain",
+    "lbind",
+    "shape_f",
+    "minimum",
+    "decrement",
+    "increment",
+    "interval",
+    "toivec",
+    "shift",
+    "tojvec",
+    "combine_f",
+    "underfill"
+  ]
+}

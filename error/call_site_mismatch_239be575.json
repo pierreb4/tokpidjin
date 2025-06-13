@@ -1,0 +1,28 @@
+{
+  "solver_key": "239be575",
+  "timestamp": "2025-05-19T16:16:30.788854",
+  "errors": {
+    "mostcolor": {
+      "expected_sites": [
+        {
+          "line": "1178",
+          "context": "x1 = objects(I, F, T, T)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "palette": {
+      "expected_sites": [
+        {
+          "line": "1181",
+          "context": "x4 = sfilter(x1, x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

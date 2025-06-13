@@ -1,0 +1,2 @@
+def solve_ce4f8723(S, I):
+    return fill(canvas(c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), astuple(FOUR, FOUR)), BLACK, intersection(f_ofcolor(tophalf(I), BLACK), f_ofcolor(bottomhalf(I), BLACK)))

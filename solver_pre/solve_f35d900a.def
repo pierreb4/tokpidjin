@@ -1,0 +1,2 @@
+def solve_f35d900a(S, I):
+    return fill(paint(I, mapply(fork(recolor_i, compose(lbind(other, remove(ZERO, palette_t(I))), color), outbox), o_g(I, R5))), FIVE, sfilter_f(difference(box(mapply(toindices, o_g(I, R5))), mapply(toindices, o_g(I, R5))), compose(even, fork(manhattan, initset, chain(initset, lbind(rbind(get_arg_rank, L1), mapply(toindices, o_g(I, R5))), chain(rbind(compose, initset), lbind(rbind, manhattan), initset))))))

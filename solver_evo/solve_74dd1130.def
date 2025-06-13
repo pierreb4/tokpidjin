@@ -1,0 +1,2 @@
+def solve_74dd1130(S, I):
+    return mir_rot_t(I, R1)

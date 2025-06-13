@@ -1,0 +1,103 @@
+{
+  "summary": {
+    "total_functions": 30,
+    "dsl_functions": 30,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 3,
+    "functions_with_f_variants": 3,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "merge",
+      "total_calls": 20,
+      "tuple_percent": 40.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 60.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4597": {
+          "count": 5,
+          "code_context": "x5 = merge(x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 5
+        },
+        "solvers.py:4607": {
+          "count": 10,
+          "code_context": "x15 = mapply(x14, x4)",
+          "tuple_calls": 5,
+          "frozenset_calls": 5
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 15,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4607": {
+          "count": 15,
+          "code_context": "x15 = mapply(x14, x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 15,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4607": {
+          "count": 15,
+          "code_context": "x15 = mapply(x14, x4)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "portrait_t",
+    "height_t",
+    "width_t",
+    "branch",
+    "dmirror_t",
+    "fgpartition",
+    "palette_t",
+    "mostcolor_t",
+    "merge",
+    "chain",
+    "width_f",
+    "rightmost",
+    "toindices",
+    "leftmost",
+    "decrement",
+    "double",
+    "compose",
+    "lbind",
+    "rbind",
+    "fork",
+    "mapply",
+    "apply",
+    "color",
+    "interval",
+    "tojvec",
+    "vfrontier",
+    "recolor_i",
+    "toindices_i",
+    "paint",
+    "identity"
+  ]
+}

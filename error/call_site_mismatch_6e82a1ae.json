@@ -1,0 +1,25 @@
+{
+  "solver_key": "6e82a1ae",
+  "timestamp": "2025-05-21T09:11:53.456096",
+  "errors": {
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "1704",
+          "context": "x4 = x3(TWO)"
+        },
+        {
+          "line": "1705",
+          "context": "x5 = x3(THREE)"
+        },
+        {
+          "line": "1706",
+          "context": "x6 = x3(FOUR)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 3,
+      "message": "Found 0 calls but expected 3"
+    }
+  }
+}

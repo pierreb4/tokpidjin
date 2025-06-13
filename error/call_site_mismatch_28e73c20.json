@@ -1,0 +1,17 @@
+{
+  "solver_key": "28e73c20",
+  "timestamp": "2025-05-19T16:16:31.143715",
+  "errors": {
+    "height": {
+      "expected_sites": [
+        {
+          "line": "5410",
+          "context": "O = x30(x19)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

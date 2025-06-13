@@ -1,0 +1,2 @@
+def solve_73182012(S, I):
+    return tophalf(lefthalf(subgrid(get_nth_f(o_g(I, R3), F0), I)))

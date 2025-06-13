@@ -1,0 +1,2 @@
+def solve_7e0986d6(S, I):
+    return fill(replace(I, get_color_rank_t(I, L1), BLACK), get_color_rank_t(replace(I, get_color_rank_t(I, L1), BLACK), L1), sfilter_f(f_ofcolor(I, get_color_rank_t(I, L1)), chain(chain(positive, decrement, rbind(colorcount_f, get_color_rank_t(replace(I, get_color_rank_t(I, L1), BLACK), L1))), rbind(toobject, replace(I, get_color_rank_t(I, L1), BLACK)), dneighbors)))

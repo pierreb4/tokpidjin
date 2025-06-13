@@ -1,0 +1,25 @@
+{
+  "solver_key": "05269061",
+  "timestamp": "2025-05-19T16:16:29.350016",
+  "errors": {
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "2705",
+          "context": "x3 = mapply(neighbors, x2)"
+        },
+        {
+          "line": "2708",
+          "context": "x6 = merge(x1)"
+        },
+        {
+          "line": "2710",
+          "context": "x8 = mapply(x7, x5)"
+        }
+      ],
+      "actual_calls": 1,
+      "expected_calls": 3,
+      "message": "Found 1 calls but expected 3"
+    }
+  }
+}

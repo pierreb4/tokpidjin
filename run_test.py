@@ -1,0 +1,462 @@
+"""
+ARC-DSL Test Runner
+
+This script tests the Domain Specific Language (DSL) for the Abstraction and Reasoning Corpus.
+It provides functionality to:
+- Run tests on the DSL primitives
+- Check the formatting of solvers to ensure they follow DSL conventions
+- Verify the correctness of solvers against training and test examples
+
+Usage:
+  python run_test.py                     # Run all tests
+  python run_test.py -k TASK_KEY         # Test a specific task by key
+  python run_test.py --skip-tests        # Skip DSL primitive tests
+  python run_test.py -q, --quiet         # Show only key errors and line counts
+
+Example:
+  python run_test.py -k 00d62c1b -q      # Test task 00d62c1b with minimal output
+"""
+import os
+import json
+import inspect
+import tqdm
+import argparse
+import re
+
+import arc_types
+import constants
+import dsl
+import tests
+import solvers_pre
+import solvers_evo
+
+from grid import *
+from utils import *
+
+
+def get_data(train=True):
+    path = f'../data/{"training" if train else "evaluation"}'
+    data = {}
+    for fn in os.listdir(path):
+        with open(f'{path}/{fn}') as f:
+            data[fn.rstrip('.json')] = json.load(f)
+    ast = lambda g: tuple(tuple(r) for r in g)
+    return {
+        'train': {k: [{
+            'input': ast(e['input']),
+            'output': ast(e['output']),
+        } for e in v['train']] for k, v in data.items()},
+        'test': {k: [{
+            'input': ast(e['input']),
+            'output': ast(e['output']),
+        } for e in v['test']] for k, v in data.items()}
+    }
+
+
+def get_functions(path):
+    """ returns a list of available functions """
+    with open(path, 'r') as f:
+        code = f.read()
+    functions = []
+    for row in code.split('\n'):
+        if row.startswith('def '):
+            function = row.split('def ')[1].split('(')[0]
+            functions.append(function)
+    return functions
+
+
+def run_dsl_tests(dsl_module, test_module, quiet=False):
+    """ test DSL primitives """
+    dsl_functions = get_functions(dsl_module.__file__)
+    test_functions = get_functions(test_module.__file__)
+    expected = set([f'test_{f}' for f in dsl_functions])
+    assert set(test_functions) == expected
+    for fun in test_functions:
+        getattr(test_module, fun)()
+    if not quiet:
+        print(f"All {len(test_functions)} DSL tests passed.")
+
+
+def test_solvers_formatting(solvers_module, dsl_module, specific_key=None, quiet=False):
+    """ tests the implemented solvers for formatting """
+    with open('constants.py', 'r') as f:
+        constants = [c.split(' = ')[0] for c in f.readlines() if ' = ' in c]
+    definitions = {
+        function: inspect.getsource(getattr(solvers_module, function)) \
+            for function in get_functions(solvers_module.__file__)
+    }
+    
+    # Filter for specific key if provided
+    if specific_key and f'solve_{specific_key}' in definitions:
+        definitions = {f'solve_{specific_key}': definitions[f'solve_{specific_key}']}
+    
+    dsl_interface = get_functions(dsl_module.__file__)
+    n_correct = 0
+    n = len(definitions)
+    
+    if not quiet:
+        print(f"Testing {n} solver(s) for formatting...")
+    
+    for key, definition in definitions.items():
+        try:
+            lines = definition.split('\n')
+            assert lines[0] == f'def {key}(S, I):'
+            assert lines[-1] == ''
+            variables = set()
+            calls = set()
+            for line in lines[1:-2]:
+                variable, call = line.lstrip().split(' = ')
+                function, args = call.split('(')
+                assert variable not in dsl_interface
+                assert variable not in variables
+                assert call not in calls
+                variables.add(variable)
+                calls.add(call)
+                assert function in dsl_interface or function in variables
+                assert args[-1] == ')'
+                args = [args[:-1]] if ',' not in args else args[:-1].split(', ')
+                for arg in args:
+                    assert any([
+                        arg in variables, arg in dsl_interface,
+                        arg in constants, arg == 'I'
+                    ])
+            for v in variables:
+                assert sum([
+                    definition.count(vs) for vs in [
+                        f'({v})', f'({v}, ', f', {v})',
+                        f', {v}, ', f' {v} = ', f' {v}('
+                    ]
+                ]) > 1 or v == 'O'
+            n_correct += 1
+        except:
+            if quiet:
+                print(f"Error in {key}: {len(lines)} lines")
+            else:
+                print(f'Error in {key}:\n{definition}')
+    
+    print(f'{n_correct} out of {n} solvers formatted correctly.')
+
+
+def test_solvers_correctness(data, solvers_module, specific_key=None, quiet=False, patch=False, update=False):
+    """ tests the implemented solvers for correctness """
+    definitions = {
+        function: inspect.getsource(getattr(solvers_module, function)) \
+            for function in get_functions(solvers_module.__file__)
+    }
+    
+    # Filter data and definitions for specific key if provided
+    if specific_key:
+        if specific_key in data['train']:
+            task_keys = [specific_key]
+        else:
+            print(f"Key '{specific_key}' not found in training data.")
+            return
+    else:
+        task_keys = data['train'].keys()
+    
+    n_correct = 0
+    n = len(task_keys)
+    
+    if not quiet and specific_key is None:
+        print(f"Testing {n} solver(s) for correctness...")
+        iter_keys = tqdm.tqdm(task_keys, total=n)
+    else:
+        iter_keys = task_keys
+    
+    correct_train = 0
+    correct_test = 0
+    for key in iter_keys:
+        task = data['train'][key] + data['test'][key]
+        num_train = len(data['train'][key])
+        num_test = len(data['test'][key])
+
+        S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
+        try:
+            solver = getattr(solvers_module, f'solve_{key}')
+            # print(f'{definitions.get(f"solve_{key}")}')
+            correct = 1
+            for i, ex in enumerate(task):
+                if i < num_train:
+                    k_type = 'Train'
+                else:
+                    k_type = 'Test'
+
+                ok = 'OK'
+                if quiet:
+                    assert solver(S, ex['input']) == ex['output']
+                elif solver(S, ex['input']) != ex['output']:
+                    correct = 0
+                    ok = 'KO'
+
+                if specific_key:
+                    side_by_side( 
+                        [ex['input'], ex['output'], solver(S, ex['input'])], 
+                        titles=[f'{k_type} Input', f'{k_type} Output', f'{ok} Output'])
+            
+            n_correct += correct
+
+        except NameError as e:
+            if patch and specific_key:
+                # Try to patch the undefined function with specialized variants
+                error_msg = str(e)
+                # Extract the undefined name from the error message
+                import re
+                match = re.search(r"name '([^']+)' is not defined", error_msg)
+                if match:
+                    missing_func = match.group(1)
+                    # Try to patch with specialized variants (suffix _t, _f, etc.)
+                    patched = patch_missing_function(solvers_module, missing_func, key, ex['input'], quiet, update)
+                    if patched:
+                        n_correct += 1
+                        continue
+            
+            # If we reach here, either patching wasn't requested, or it failed
+            definition = definitions.get(f"solve_{key}", "Solver not found")
+            lines = len(definition.split('\n')) if isinstance(definition, str) else 0
+            if quiet:
+                print(f"Error in {key}: {lines} lines")
+            else:
+                print(f'Error in {key}:\n{definition}')
+            if specific_key:  # Show detailed error for specific key
+                print(f"NameError: {str(e)}")
+                try:
+                    # Try to show output anyway for debugging
+                    output = solver(ex['input'])
+                    side_by_side(
+                        [ex['input'], ex['output'], output],
+                        titles=['Input', 'Expected Output', 'Solver Output'])
+                except:
+                    side_by_side(
+                        [ex['input'], ex['output']],
+                        titles=['Input', 'Expected Output'])
+        except Exception as e:
+            definition = definitions.get(f"solve_{key}", "Solver not found")
+            lines = len(definition.split('\n')) if isinstance(definition, str) else 0
+            if quiet:
+                print_l(f"Error in {key}: {lines} lines")
+            else:
+                # Include source location in exception message
+                import sys, traceback
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                frame = traceback.extract_tb(exc_tb)[-1]
+                filename = frame.filename.split('/')[-1] if frame else "unknown"
+                lineno = frame.lineno if frame else "unknown"
+                
+                print_l(f'Exception in {filename}:{lineno}: {e}')
+                print_l(f'Error in {key}:\n{definition}')
+            if specific_key:  # Show detailed error for specific key
+                print_l(f"Error: {type(e).__name__}: {str(e)}")
+                try:
+                    # Try to show output anyway for debugging
+                    side_by_side( 
+                        [ex['input'], ex['output'], solver(ex['input'])], 
+                        titles=['Input', 'Expected Output', 'Solver Output'])
+                except:
+                    side_by_side(
+                        [ex['input'], ex['output']],
+                        titles=['Input', 'Expected Output'])
+    
+    print(f'{n_correct} out of {n} tasks solved correctly.')
+
+
+def patch_missing_function(solvers_module, missing_func, key, test_input, quiet=False, update_file=False):
+    """
+    Try to patch a missing function with specialized variants.
+    
+    Args:
+        solvers_module: The solvers module
+        missing_func: The name of the function that's missing
+        key: The solver key
+        test_input: Input data to test the patched function with
+        quiet: Whether to suppress verbose output
+        update_file: Whether to update the solvers.py file with successful patches
+    
+    Returns:
+        bool: True if patching succeeded, False otherwise
+    """
+    # Check if the function exists in dsl with specialized variants
+    import types
+    import dsl
+    import re
+    
+    solver_name = f'solve_{key}'
+    solver_func = getattr(solvers_module, solver_name)
+    original_code = inspect.getsource(solver_func)
+    
+    # Find potential specialized variants (_t, _f, _i, _o, etc.)
+    variants = []
+    for name in dir(dsl):
+        # Check if this is a variant of the missing function
+        if name.startswith(f"{missing_func}_") and callable(getattr(dsl, name)):
+            variants.append(name)
+    
+    if not variants:
+        if not quiet:
+            print(f"No variants found for '{missing_func}' in dsl.py")
+        return False
+    
+    if not quiet:
+        print(f"Found {len(variants)} potential variants for '{missing_func}': {variants}")
+    
+    # Try each variant
+    for variant in variants:
+        if not quiet:
+            print(f"Trying {variant}...")
+        
+        # Create a patched version of the solver - handle both direct calls and references
+        patched_code = original_code
+        
+        # Replace direct function calls: recolor(...)
+        patched_code = patched_code.replace(f"{missing_func}(", f"{variant}(")
+        
+        # Replace function references in nested contexts like fork(recolor, ...)
+        # Make sure we only replace whole words and not parts of other words
+        pattern = r'\b' + re.escape(missing_func) + r'\b'
+        patched_code = re.sub(pattern, variant, patched_code)
+        
+        try:
+            # Create a namespace for the function
+            namespace = {}
+            
+            # Add all dsl functions to the namespace
+            for attr_name in dir(dsl):
+                if not attr_name.startswith('_'):  # Skip internal attributes
+                    namespace[attr_name] = getattr(dsl, attr_name)
+            
+            # Add constants to the namespace
+            import constants
+            for const_name in dir(constants):
+                if const_name.isupper():
+                    namespace[const_name] = getattr(constants, const_name)
+            
+            # Execute the patched code
+            exec(patched_code, namespace)
+            patched_solver = namespace[solver_name]
+            
+            # Test the patched solver on the input
+            output = patched_solver(test_input)
+            
+            # Update the solver in the solvers module with the patched version
+            setattr(solvers_module, solver_name, patched_solver)
+            
+            if not quiet:
+                print(f"Successfully patched solver using {variant}!")
+                print(f"Modified code:\n{patched_code}")
+            
+            # Update the solvers.py file if requested
+            if update_file:
+                update_solver_in_file(solver_name, patched_code)
+                if not quiet:
+                    print(f"Updated solvers.py with patched implementation")
+            
+            return True
+        except Exception as e:
+            if not quiet:
+                print(f"Failed with {variant}: {type(e).__name__}: {str(e)}")
+                print(f"Error details: {str(e)}")
+    
+    # If we get here, none of the variants worked
+    if not quiet:
+        print("All variants failed. Restoring original function.")
+    
+    return False
+
+
+def update_solver_in_file(solver_name, patched_code):
+    """
+    Update the solvers.py file with the patched code.
+    
+    Args:
+        solver_name: The name of the solver function
+        patched_code: The patched code to write
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        solvers_path = "solvers.py"
+        with open(solvers_path, 'r') as f:
+            lines = f.readlines()
+        
+        # Find the function definition
+        start_line = -1
+        end_line = -1
+        
+        for i, line in enumerate(lines):
+            # Look for function definition
+            if re.match(rf'def\s+{solver_name}\s*\(', line):
+                start_line = i
+                # Find the end of the function (next function def or end of file)
+                for j in range(i + 1, len(lines)):
+                    if re.match(r'def\s+', lines[j]):
+                        end_line = j - 1
+                        break
+                if end_line == -1:  # If we reached the end of file
+                    end_line = len(lines) - 1
+                break
+        
+        if start_line == -1:
+            print(f"Error: Function '{solver_name}' not found in '{solvers_path}'")
+            return False
+        
+        # Count empty lines after the function
+        trailing_newlines = 0
+        for i in range(end_line, min(end_line + 3, len(lines))):
+            if lines[i].strip() == '':
+                trailing_newlines += 1
+            else:
+                break
+        
+        # Ensure the patched code ends with the appropriate number of newlines (at least 3)
+        patched_code = patched_code.rstrip('\n')
+        patched_code += '\n' * max(3, trailing_newlines)
+        
+        # Replace the function lines with the patched version
+        new_lines = patched_code.splitlines(True)
+        lines[start_line:end_line+1] = new_lines
+        
+        with open(solvers_path, 'w') as f:
+            f.writelines(lines)
+        
+        return True
+    except Exception as e:
+        print(f"Error updating solvers file: {e}")
+        return False
+
+
+def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description="Test ARC solvers")
+    parser.add_argument("-k", "--key", help="Specific task key to test", type=str)
+    parser.add_argument("--skip-tests", help="Skip DSL tests", action="store_true")
+    parser.add_argument("-q", "--quiet", help="Show only key errors and line counts", action="store_true")
+    parser.add_argument("--patch", help="Attempt to patch functions with NameErrors using specialized variants", action="store_true")
+    parser.add_argument("--update", help="Update solvers.py with successful patches", action="store_true")
+    args = parser.parse_args()
+
+    # if not args.skip_tests:
+    #     run_dsl_tests(dsl, tests, args.quiet)
+
+    # data = get_data(train=True)
+    train_data = get_data(train=True)
+    eval_data = get_data(train=False)
+    total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
+    
+    task_id = args.key
+    if hasattr(solvers_evo, f'solve_{task_id}'):
+        print_l(f"Using solvers_evo solver for task {task_id}")
+        solver = getattr(solvers_evo, f'solve_{task_id}')
+        solvers_module = solvers_evo
+    elif hasattr(solvers_pre, f'solve_{task_id}'):
+        print_l(f"Using solvers_pre solver for task {task_id}")
+        solver = getattr(solvers_pre, f'solve_{task_id}')
+        solvers_module = solvers_pre
+    else:
+        print_l(f"No solver found for task {args.key}")
+        return
+
+    test_solvers_formatting(solvers_module, dsl, args.key, args.quiet)
+    test_solvers_correctness(total_data, solvers_module, args.key, args.quiet, args.patch, args.update)
+
+if __name__ == "__main__":
+    main()

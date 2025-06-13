@@ -1,0 +1,84 @@
+{
+  "solver_key": "846bdb03",
+  "timestamp": "2025-05-19T16:16:35.741124",
+  "errors": {
+    "colorcount": {
+      "expected_sites": [
+        {
+          "line": "3696",
+          "context": "x4 = extract(x1, x3)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "shape": {
+      "expected_sites": [
+        {
+          "line": "3699",
+          "context": "x7 = subgrid(x6, I)"
+        },
+        {
+          "line": "3701",
+          "context": "x9 = subgrid(x4, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "height": {
+      "expected_sites": [
+        {
+          "line": "3699",
+          "context": "x7 = subgrid(x6, I)"
+        },
+        {
+          "line": "3701",
+          "context": "x9 = subgrid(x4, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "width": {
+      "expected_sites": [
+        {
+          "line": "3699",
+          "context": "x7 = subgrid(x6, I)"
+        },
+        {
+          "line": "3701",
+          "context": "x9 = subgrid(x4, I)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "first": {
+      "expected_sites": [
+        {
+          "line": "3704",
+          "context": "x12 = other(x11, ZERO)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "vmirror": {
+      "expected_sites": [
+        {
+          "line": "3707",
+          "context": "x15 = x14(x4)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

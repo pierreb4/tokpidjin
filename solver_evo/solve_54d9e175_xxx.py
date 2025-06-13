@@ -1,0 +1,30 @@
+def solve_54d9e175_one(S, I):
+    return replace(replace(replace(replace(paint(I, mapply(fork(recolor_i, color, compose(neighbors, center)), sizefilter(o_g(I, R5), ONE))), c_iz_n(S, identity(p_g), rbind(get_nth_t, F1)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F2))), c_iz_n(S, identity(p_g), rbind(get_nth_t, F4)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F3))), c_iz_n(S, identity(p_g), rbind(get_nth_t, F2)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0))), c_iz_n(S, identity(p_g), rbind(get_nth_t, F3)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)))
+
+
+def solve_54d9e175(S, I):
+    x1 = compose(neighbors, center)
+    x2 = fork(recolor_i, color, x1)
+    x3 = o_g(I, R5)
+    x4 = sizefilter(x3, ONE)
+    x5 = mapply(x2, x4)
+    x6 = paint(I, x5)
+    x7 = identity(p_g)
+    x8 = rbind(get_nth_t, F1)
+    x9 = c_iz_n(S, x7, x8)
+    x10 = rbind(get_nth_t, F2)
+    x11 = c_zo_n(S, x7, x10)
+    x12 = replace(x6, x9, x11)
+    x13 = rbind(get_nth_t, F4)
+    x14 = c_iz_n(S, x7, x13)
+    x15 = rbind(get_nth_t, F3)
+    x16 = c_zo_n(S, x7, x15)
+    x17 = replace(x12, x14, x16)
+    x18 = c_iz_n(S, x7, x10)
+    x19 = rbind(get_nth_t, F0)
+    x20 = c_zo_n(S, x7, x19)
+    x21 = replace(x17, x18, x20)
+    x22 = c_iz_n(S, x7, x15)
+    x23 = c_zo_n(S, x7, x8)
+    O = replace(x21, x22, x23)
+    return O

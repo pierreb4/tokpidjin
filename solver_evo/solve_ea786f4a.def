@@ -1,0 +1,2 @@
+def solve_ea786f4a(S, I):
+    return fill(I, BLACK, combine(shoot(ORIGIN, UNITY), shoot(tojvec(decrement(width_t(I))), DOWN_LEFT)))

@@ -1,0 +1,37 @@
+{
+  "solver_key": "150deff5",
+  "timestamp": "2025-05-21T09:11:49.102985",
+  "errors": {
+    "merge": {
+      "expected_sites": [
+        {
+          "line": "5852",
+          "context": "x5 = mapply(x4, x3)"
+        },
+        {
+          "line": "5861",
+          "context": "x14 = mapply(x13, x12)"
+        },
+        {
+          "line": "5868",
+          "context": "x21 = mapply(x20, x19)"
+        },
+        {
+          "line": "5874",
+          "context": "x27 = mapply(x26, x25)"
+        },
+        {
+          "line": "5880",
+          "context": "x33 = mapply(x32, x31)"
+        },
+        {
+          "line": "5886",
+          "context": "x39 = mapply(x38, x37)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 6,
+      "message": "Found 0 calls but expected 6"
+    }
+  }
+}

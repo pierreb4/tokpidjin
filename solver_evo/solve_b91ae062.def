@@ -1,0 +1,2 @@
+def solve_b91ae062(S, I):
+    return upscale_t(I, decrement(numcolors_t(I)))

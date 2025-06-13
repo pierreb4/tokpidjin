@@ -1,0 +1,32 @@
+{
+  "solver_key": "e509e548",
+  "timestamp": "2025-05-21T09:11:58.785504",
+  "errors": {
+    "sfilter": {
+      "expected_sites": [
+        {
+          "line": "2742",
+          "context": "x9 = mfilter_f(x1, x5)"
+        },
+        {
+          "line": "2743",
+          "context": "x10 = mfilter_f(x1, x8)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 2,
+      "message": "Found 0 calls but expected 2"
+    },
+    "size": {
+      "expected_sites": [
+        {
+          "line": "2743",
+          "context": "x10 = mfilter_f(x1, x8)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

@@ -1,0 +1,1895 @@
+{
+  "width_t": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5380": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "width_t(tuple)",
+            "value_signature": "width_t(tuple(len=13))"
+          },
+          {
+            "type_signature": "width_t(tuple)",
+            "value_signature": "width_t(tuple(len=8))"
+          },
+          {
+            "type_signature": "width_t(tuple)",
+            "value_signature": "width_t(tuple(len=15))"
+          },
+          {
+            "type_signature": "width_t(tuple)",
+            "value_signature": "width_t(tuple(len=10))"
+          },
+          {
+            "type_signature": "width_t(tuple)",
+            "value_signature": "width_t(tuple(len=6))"
+          },
+          {
+            "type_signature": "width_t(tuple)",
+            "value_signature": "width_t(tuple(len=18))"
+          }
+        ],
+        "code_context": "x1 = width_t(I)"
+      }
+    },
+    "type_signatures": [
+      "width_t(tuple)"
+    ],
+    "value_signatures": [
+      "width_t(tuple(len=8))",
+      "width_t(tuple(len=18))",
+      "width_t(tuple(len=10))",
+      "width_t(tuple(len=15))",
+      "width_t(tuple(len=6))",
+      "width_t(tuple(len=13))"
+    ]
+  },
+  "astuple": {
+    "calls": 24,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5381": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "astuple(int, int)",
+            "value_signature": "astuple(1, 2)"
+          }
+        ],
+        "code_context": "x2 = astuple(ONE, TWO)"
+      },
+      "solvers.py:5382": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "astuple(int, int)",
+            "value_signature": "astuple(2, 2)"
+          }
+        ],
+        "code_context": "x3 = astuple(TWO, TWO)"
+      },
+      "solvers.py:5383": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "astuple(int, int)",
+            "value_signature": "astuple(2, 1)"
+          }
+        ],
+        "code_context": "x4 = astuple(TWO, ONE)"
+      },
+      "solvers.py:5384": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "astuple(int, int)",
+            "value_signature": "astuple(3, 1)"
+          }
+        ],
+        "code_context": "x5 = astuple(THREE, ONE)"
+      }
+    },
+    "type_signatures": [
+      "astuple(int, int)"
+    ],
+    "value_signatures": [
+      "astuple(2, 1)",
+      "astuple(2, 2)",
+      "astuple(3, 1)",
+      "astuple(1, 2)"
+    ]
+  },
+  "canvas": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5385": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "canvas(int, tuple)",
+            "value_signature": "canvas(3, (1, 1))"
+          }
+        ],
+        "code_context": "x6 = canvas(THREE, UNITY)"
+      },
+      "solvers.py:5399": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "canvas(int, tuple)",
+            "value_signature": "canvas(0, (1, 1))"
+          }
+        ],
+        "code_context": "x20 = canvas(ZERO, UNITY)"
+      }
+    },
+    "type_signatures": [
+      "canvas(int, tuple)"
+    ],
+    "value_signatures": [
+      "canvas(3, (1, 1))",
+      "canvas(0, (1, 1))"
+    ]
+  },
+  "upscale_t": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5386": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "upscale_t(tuple, int)",
+            "value_signature": "upscale_t(((3,),), 4)"
+          }
+        ],
+        "code_context": "x7 = upscale_t(x6, FOUR)"
+      }
+    },
+    "type_signatures": [
+      "upscale_t(tuple, int)"
+    ],
+    "value_signatures": [
+      "upscale_t(((3,),), 4)"
+    ]
+  },
+  "initset": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5387": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "initset(tuple)",
+            "value_signature": "initset((1, 0))"
+          }
+        ],
+        "code_context": "x8 = initset(DOWN)"
+      }
+    },
+    "type_signatures": [
+      "initset(tuple)"
+    ],
+    "value_signatures": [
+      "initset((1, 0))"
+    ]
+  },
+  "insert": {
+    "calls": 30,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5388": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "insert(tuple, frozenset)",
+            "value_signature": "insert((1, 1), frozenset({(1, 0)}))"
+          }
+        ],
+        "code_context": "x9 = insert(UNITY, x8)"
+      },
+      "solvers.py:5389": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "insert(tuple, frozenset)",
+            "value_signature": "insert((1, 2), frozenset({(1, 0), (1, 1)}))"
+          }
+        ],
+        "code_context": "x10 = insert(x2, x9)"
+      },
+      "solvers.py:5390": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "insert(tuple, frozenset)",
+            "value_signature": "insert((2, 2), frozenset({(1, 0), (1, 1), (1, 2)}))"
+          }
+        ],
+        "code_context": "x11 = insert(x3, x10)"
+      },
+      "solvers.py:5394": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "insert(tuple, frozenset)",
+            "value_signature": "insert((2, 1), frozenset({(1, 0), (1, 1)}))"
+          }
+        ],
+        "code_context": "x15 = insert(x4, x9)"
+      },
+      "solvers.py:5395": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "insert(tuple, frozenset)",
+            "value_signature": "insert((3, 1), frozenset({(1, 0), (1, 1), (2, 1)}))"
+          }
+        ],
+        "code_context": "x16 = insert(x5, x15)"
+      }
+    },
+    "type_signatures": [
+      "insert(tuple, frozenset)"
+    ],
+    "value_signatures": [
+      "insert((1, 2), frozenset({(1, 0), (1, 1)}))",
+      "insert((2, 2), frozenset({(1, 0), (1, 1), (1, 2)}))",
+      "insert((2, 1), frozenset({(1, 0), (1, 1)}))",
+      "insert((1, 1), frozenset({(1, 0)}))",
+      "insert((3, 1), frozenset({(1, 0), (1, 1), (2, 1)}))"
+    ]
+  },
+  "fill": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5391": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(((3, 3, 3, 3), (3, 3, 3, 3), (3, 3, 3, 3), (3, 3, , 0, frozenset({(1, 0), (1, 1), (1, 2), (2, 2)}))"
+          }
+        ],
+        "code_context": "x12 = fill(x7, ZERO, x11)"
+      },
+      "solvers.py:5396": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(((3, 3, 3), (3, 3, 3), (3, 3, 3), (3, 3, 3), (3, 3, 0, frozenset({(1, 0), (3, 1), (1, 1), (2, 1)}))"
+          }
+        ],
+        "code_context": "x17 = fill(x14, ZERO, x16)"
+      }
+    },
+    "type_signatures": [
+      "fill(tuple, int, frozenset)"
+    ],
+    "value_signatures": [
+      "fill(((3, 3, 3), (3, 3, 3), (3, 3, 3), (3, 3, 3), (3, 3, 0, frozenset({(1, 0), (3, 1), (1, 1), (2, 1)}))",
+      "fill(((3, 3, 3, 3), (3, 3, 3, 3), (3, 3, 3, 3), (3, 3, , 0, frozenset({(1, 0), (1, 1), (1, 2), (2, 2)}))"
+    ]
+  },
+  "toindices": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5391": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, 0), (1, 1), (1, 2), (2, 2)}))"
+          }
+        ],
+        "code_context": "x12 = fill(x7, ZERO, x11)"
+      },
+      "solvers.py:5396": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset({(1, 0), (3, 1), (1, 1), (2, 1)}))"
+          }
+        ],
+        "code_context": "x17 = fill(x14, ZERO, x16)"
+      }
+    },
+    "type_signatures": [
+      "toindices(frozenset)"
+    ],
+    "value_signatures": [
+      "toindices(frozenset({(1, 0), (1, 1), (1, 2), (2, 2)}))",
+      "toindices(frozenset({(1, 0), (3, 1), (1, 1), (2, 1)}))"
+    ]
+  },
+  "vupscale": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5392": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "vupscale(tuple, int)",
+            "value_signature": "vupscale(((3,),), 5)"
+          }
+        ],
+        "code_context": "x13 = vupscale(x6, FIVE)"
+      }
+    },
+    "type_signatures": [
+      "vupscale(tuple, int)"
+    ],
+    "value_signatures": [
+      "vupscale(((3,),), 5)"
+    ]
+  },
+  "hupscale": {
+    "calls": 98,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5393": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,), (3,), (3,), (3,), (3,)), 3)"
+          }
+        ],
+        "code_context": "x14 = hupscale(x13, THREE)"
+      },
+      "solvers.py:5410": {
+        "count": 28,
+        "signatures": [
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 5)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 4)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 7)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 6)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 9)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 8)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 11)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 10)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 13)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 12)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 4)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 3)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 6)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 5)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 8)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 7)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 15)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 14)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 10)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 9)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 12)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 11)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 14)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 13)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 16)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 15)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((3,),), 18)"
+          },
+          {
+            "type_signature": "hupscale(tuple, int)",
+            "value_signature": "hupscale(((0,),), 17)"
+          }
+        ],
+        "code_context": "O = x30(x19)"
+      }
+    },
+    "type_signatures": [
+      "hupscale(tuple, int)"
+    ],
+    "value_signatures": [
+      "hupscale(((3,),), 7)",
+      "hupscale(((3,),), 16)",
+      "hupscale(((0,),), 11)",
+      "hupscale(((3,),), 5)",
+      "hupscale(((0,),), 14)",
+      "hupscale(((3,),), 15)",
+      "hupscale(((0,),), 3)",
+      "hupscale(((3,),), 11)",
+      "hupscale(((3,),), 13)",
+      "hupscale(((3,),), 10)",
+      "hupscale(((3,),), 18)",
+      "hupscale(((0,),), 6)",
+      "hupscale(((0,),), 15)",
+      "hupscale(((3,),), 8)",
+      "hupscale(((0,),), 4)",
+      "hupscale(((0,),), 5)",
+      "hupscale(((3,),), 4)",
+      "hupscale(((3,),), 12)",
+      "hupscale(((0,),), 12)",
+      "hupscale(((0,),), 9)",
+      "hupscale(((3,),), 14)",
+      "hupscale(((0,),), 13)",
+      "hupscale(((3,),), 6)",
+      "hupscale(((0,),), 10)",
+      "hupscale(((3,), (3,), (3,), (3,), (3,)), 3)",
+      "hupscale(((0,),), 8)",
+      "hupscale(((3,),), 9)",
+      "hupscale(((0,),), 7)",
+      "hupscale(((0,),), 17)"
+    ]
+  },
+  "even": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5397": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(13)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(8)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(15)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(10)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(6)"
+          },
+          {
+            "type_signature": "even(int)",
+            "value_signature": "even(18)"
+          }
+        ],
+        "code_context": "x18 = even(x1)"
+      }
+    },
+    "type_signatures": [
+      "even(int)"
+    ],
+    "value_signatures": [
+      "even(6)",
+      "even(13)",
+      "even(18)",
+      "even(10)",
+      "even(8)",
+      "even(15)"
+    ]
+  },
+  "branch": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5398": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "branch(bool, tuple, tuple)",
+            "value_signature": "branch(False, ((3, 3, 3, 3), (0, 0, 0, 3), (3, 3, 0, 3), (3, 3, , ((3, 3, 3), (0, 0, 3), (3, 0, 3), (3, 0, 3), (3, 3)"
+          },
+          {
+            "type_signature": "branch(bool, tuple, tuple)",
+            "value_signature": "branch(True, ((3, 3, 3, 3), (0, 0, 0, 3), (3, 3, 0, 3), (3, 3, , ((3, 3, 3), (0, 0, 3), (3, 0, 3), (3, 0, 3), (3, 3)"
+          }
+        ],
+        "code_context": "x19 = branch(x18, x12, x17)"
+      }
+    },
+    "type_signatures": [
+      "branch(bool, tuple, tuple)"
+    ],
+    "value_signatures": [
+      "branch(False, ((3, 3, 3, 3), (0, 0, 0, 3), (3, 3, 0, 3), (3, 3, , ((3, 3, 3), (0, 0, 3), (3, 0, 3), (3, 0, 3), (3, 3)",
+      "branch(True, ((3, 3, 3, 3), (0, 0, 0, 3), (3, 3, 0, 3), (3, 3, , ((3, 3, 3), (0, 0, 3), (3, 0, 3), (3, 0, 3), (3, 3)"
+    ]
+  },
+  "lbind": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5400": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "lbind(function, tuple)",
+            "value_signature": "lbind(<function hupscale at 0x10384dd30>, ((0,),))"
+          }
+        ],
+        "code_context": "x21 = lbind(hupscale, x20)"
+      },
+      "solvers.py:5404": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "lbind(function, tuple)",
+            "value_signature": "lbind(<function hupscale at 0x10384dd30>, ((3,),))"
+          }
+        ],
+        "code_context": "x25 = lbind(hupscale, x6)"
+      }
+    },
+    "type_signatures": [
+      "lbind(function, tuple)"
+    ],
+    "value_signatures": [
+      "lbind(<function hupscale at 0x10384dd30>, ((0,),))",
+      "lbind(<function hupscale at 0x10384dd30>, ((3,),))"
+    ]
+  },
+  "chain": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5401": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function lbind.<locals>.<lambda> at 0x103972ee0>, <function decrement at 0x10384a700>, <function height_t at 0x10384d820>)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function lbind.<locals>.<lambda> at 0x103972f70>, <function decrement at 0x10384a700>, <function height_t at 0x10384d820>)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function lbind.<locals>.<lambda> at 0x103999670>, <function decrement at 0x10384a700>, <function height_t at 0x10384d820>)"
+          }
+        ],
+        "code_context": "x22 = chain(x21, decrement, height_t)"
+      }
+    },
+    "type_signatures": [
+      "chain(function, function, function)"
+    ],
+    "value_signatures": [
+      "chain(<function lbind.<locals>.<lambda> at 0x103972ee0>, <function decrement at 0x10384a700>, <function height_t at 0x10384d820>)",
+      "chain(<function lbind.<locals>.<lambda> at 0x103972f70>, <function decrement at 0x10384a700>, <function height_t at 0x10384d820>)",
+      "chain(<function lbind.<locals>.<lambda> at 0x103999670>, <function decrement at 0x10384a700>, <function height_t at 0x10384d820>)"
+    ]
+  },
+  "rbind": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5402": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "rbind(function, tuple)",
+            "value_signature": "rbind(<function hconcat at 0x10384d5e0>, ((3,),))"
+          }
+        ],
+        "code_context": "x23 = rbind(hconcat, x6)"
+      }
+    },
+    "type_signatures": [
+      "rbind(function, tuple)"
+    ],
+    "value_signatures": [
+      "rbind(<function hconcat at 0x10384d5e0>, ((3,),))"
+    ]
+  },
+  "compose": {
+    "calls": 52,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5403": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x103988040>, <function chain.<locals>.<lambda> at 0x103972f70>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x103988820>, <function chain.<locals>.<lambda> at 0x103972ee0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x1039881f0>, <function chain.<locals>.<lambda> at 0x103972f70>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x103999550>, <function chain.<locals>.<lambda> at 0x1039995e0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x103999430>, <function chain.<locals>.<lambda> at 0x1039993a0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function rbind.<locals>.<lambda> at 0x1039995e0>, <function chain.<locals>.<lambda> at 0x103999670>)"
+          }
+        ],
+        "code_context": "x24 = compose(x23, x22)"
+      },
+      "solvers.py:5405": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103988160>, <function height_t at 0x10384d820>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103988700>, <function height_t at 0x10384d820>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103988430>, <function height_t at 0x10384d820>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103999430>, <function height_t at 0x10384d820>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x1039995e0>, <function height_t at 0x10384d820>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x1039993a0>, <function height_t at 0x10384d820>)"
+          }
+        ],
+        "code_context": "x26 = compose(x25, height_t)"
+      },
+      "solvers.py:5409": {
+        "count": 36,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function fork.<locals>.<lambda> at 0x1039883a0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988430)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x1039884c0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988550)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x1039885e0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988670)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988700)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988790)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function fork.<locals>.<lambda> at 0x1039884c0>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x103988430)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039883a0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function fork.<locals>.<lambda> at 0x103988550>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103988790)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103988820)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x1039880d0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103988040)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x1039993a0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103999430)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x1039994c0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103999550)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x1039995e0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function fork.<locals>.<lambda> at 0x103988040>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function compose.<locals>.<lambda> at 0x1039880d0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function compose.<locals>.<lambda> at 0x103988820)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function compose.<locals>.<lambda> at 0x103988790)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function compose.<locals>.<lambda> at 0x103988550)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x103988820)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039880d0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x103988040)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x103988700)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039881f0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a81f0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a8280)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a8310)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a83a0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a8430)"
+          }
+        ],
+        "code_context": "x30 = power(x28, x29)"
+      }
+    },
+    "type_signatures": [
+      "compose(function, function)"
+    ],
+    "value_signatures": [
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103988790)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x1039994c0)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988700)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039880d0)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x1039993a0)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x103988430)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103988040)",
+      "compose(<function rbind.<locals>.<lambda> at 0x103999550>, <function chain.<locals>.<lambda> at 0x1039995e0>)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a8310)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function fork.<locals>.<lambda> at 0x103988040>)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x1039884c0)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a8430)",
+      "compose(<function rbind.<locals>.<lambda> at 0x103999430>, <function chain.<locals>.<lambda> at 0x1039993a0>)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x1039880d0)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a83a0)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103988820)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a81f0)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988550)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039881f0)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039883a0)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function compose.<locals>.<lambda> at 0x103988820)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function fork.<locals>.<lambda> at 0x1039884c0>)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function compose.<locals>.<lambda> at 0x1039880d0)",
+      "compose(<function rbind.<locals>.<lambda> at 0x103988040>, <function chain.<locals>.<lambda> at 0x103972f70>)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103988700>, <function height_t at 0x10384d820>)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function fork.<locals>.<lambda> at 0x103988550>)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x1039885e0)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x103988820)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x103988040)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988430)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103999430>, <function height_t at 0x10384d820>)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function compose.<locals>.<lambda> at 0x103988550)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103999430)",
+      "compose(<function rbind.<locals>.<lambda> at 0x1039881f0>, <function chain.<locals>.<lambda> at 0x103972f70>)",
+      "compose(<function lbind.<locals>.<lambda> at 0x1039993a0>, <function height_t at 0x10384d820>)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988790)",
+      "compose(<function rbind.<locals>.<lambda> at 0x1039995e0>, <function chain.<locals>.<lambda> at 0x103999670>)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x1039995e0)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988040>, <function compose.<locals>.<lambda> at 0x103988790)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103988160>, <function height_t at 0x10384d820>)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103988430>, <function height_t at 0x10384d820>)",
+      "compose(<function lbind.<locals>.<lambda> at 0x1039995e0>, <function height_t at 0x10384d820>)",
+      "compose(<function fork.<locals>.<lambda> at 0x103988550>, <function compose.<locals>.<lambda> at 0x103999550)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function fork.<locals>.<lambda> at 0x1039883a0>)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x103988700)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039884c0>, <function compose.<locals>.<lambda> at 0x1039a8280)",
+      "compose(<function fork.<locals>.<lambda> at 0x1039883a0>, <function compose.<locals>.<lambda> at 0x103988670)",
+      "compose(<function rbind.<locals>.<lambda> at 0x103988820>, <function chain.<locals>.<lambda> at 0x103972ee0>)"
+    ]
+  },
+  "fork": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5406": {
+        "count": 4,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039880d0, <function rot90 at 0x103868550>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x103988790, <function rot90 at 0x103868550>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039883a0, <function rot90 at 0x103868550>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039994c0, <function rot90 at 0x103868550>)"
+          }
+        ],
+        "code_context": "x27 = fork(vconcat, x24, rot90)"
+      },
+      "solvers.py:5407": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039881f0, <function fork.<locals>.<lambda> at 0x103988310>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x103988670, <function fork.<locals>.<lambda> at 0x103988550>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039884c0, <function fork.<locals>.<lambda> at 0x103988700>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039993a0, <function fork.<locals>.<lambda> at 0x103972ee0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x103999670, <function fork.<locals>.<lambda> at 0x1039884c0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x103999430, <function fork.<locals>.<lambda> at 0x103988550>)"
+          }
+        ],
+        "code_context": "x28 = fork(vconcat, x26, x27)"
+      }
+    },
+    "type_signatures": [
+      "fork(function, function, function)"
+    ],
+    "value_signatures": [
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039880d0, <function rot90 at 0x103868550>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x103999430, <function fork.<locals>.<lambda> at 0x103988550>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039993a0, <function fork.<locals>.<lambda> at 0x103972ee0>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039994c0, <function rot90 at 0x103868550>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039883a0, <function rot90 at 0x103868550>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x103988790, <function rot90 at 0x103868550>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039884c0, <function fork.<locals>.<lambda> at 0x103988700>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x103999670, <function fork.<locals>.<lambda> at 0x1039884c0>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x103988670, <function fork.<locals>.<lambda> at 0x103988550>)",
+      "fork(<function vconcat at 0x1038ccf70>, <function compose.<locals>.<lambda> at 0x1039881f0, <function fork.<locals>.<lambda> at 0x103988310>)"
+    ]
+  },
+  "subtract": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5408": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "subtract(int, int)",
+            "value_signature": "subtract(13, 4)"
+          },
+          {
+            "type_signature": "subtract(int, int)",
+            "value_signature": "subtract(8, 4)"
+          },
+          {
+            "type_signature": "subtract(int, int)",
+            "value_signature": "subtract(15, 4)"
+          },
+          {
+            "type_signature": "subtract(int, int)",
+            "value_signature": "subtract(10, 4)"
+          },
+          {
+            "type_signature": "subtract(int, int)",
+            "value_signature": "subtract(6, 4)"
+          },
+          {
+            "type_signature": "subtract(int, int)",
+            "value_signature": "subtract(18, 4)"
+          }
+        ],
+        "code_context": "x29 = subtract(x1, FOUR)"
+      }
+    },
+    "type_signatures": [
+      "subtract(int, int)"
+    ],
+    "value_signatures": [
+      "subtract(13, 4)",
+      "subtract(10, 4)",
+      "subtract(6, 4)",
+      "subtract(8, 4)",
+      "subtract(18, 4)",
+      "subtract(15, 4)"
+    ]
+  },
+  "power": {
+    "calls": 46,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5409": {
+        "count": 40,
+        "signatures": [
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 9)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 8)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 7)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 6)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 5)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 4)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 3)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 2)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 1)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 4)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 3)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 2)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 1)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 11)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 10)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 9)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 8)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 7)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 6)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 5)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 4)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 3)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 2)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988550>, 1)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988040>, 6)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988040>, 5)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988040>, 4)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988040>, 3)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988040>, 2)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x103988040>, 1)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 14)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 13)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 12)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 11)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 10)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 9)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 8)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 7)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 6)"
+          },
+          {
+            "type_signature": "power(function, int)",
+            "value_signature": "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 5)"
+          }
+        ],
+        "code_context": "x30 = power(x28, x29)"
+      }
+    },
+    "type_signatures": [
+      "power(function, int)"
+    ],
+    "value_signatures": [
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 9)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 5)",
+      "power(<function fork.<locals>.<lambda> at 0x103988040>, 5)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 3)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 2)",
+      "power(<function fork.<locals>.<lambda> at 0x103988040>, 3)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 10)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 1)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 2)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 8)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 10)",
+      "power(<function fork.<locals>.<lambda> at 0x103988040>, 1)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 7)",
+      "power(<function fork.<locals>.<lambda> at 0x103988040>, 6)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 3)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 4)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 2)",
+      "power(<function fork.<locals>.<lambda> at 0x103988040>, 4)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 5)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 9)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 13)",
+      "power(<function fork.<locals>.<lambda> at 0x103988040>, 2)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 1)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 4)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 8)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 7)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 4)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 14)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 11)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 11)",
+      "power(<function fork.<locals>.<lambda> at 0x103988550>, 6)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 9)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 6)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 8)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 5)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 3)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 12)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 7)",
+      "power(<function fork.<locals>.<lambda> at 0x1039883a0>, 6)",
+      "power(<function fork.<locals>.<lambda> at 0x1039884c0>, 1)"
+    ]
+  },
+  "height_t": {
+    "calls": 92,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5410": {
+        "count": 15,
+        "signatures": [
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(((3, 3, 3), (0, 0, 3), (3, 0, 3), (3, 0, 3), (3, 3)"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(((3, 3, 3, 3, 3), (0, 0, 0, 0, 3), (3, 3, 3, 0, 3))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=7))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=9))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=11))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=13))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(((3, 3, 3, 3), (0, 0, 0, 3), (3, 3, 0, 3), (3, 3, )"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=6))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=8))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=15))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=10))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=12))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=14))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=16))"
+          },
+          {
+            "type_signature": "height_t(tuple)",
+            "value_signature": "height_t(tuple(len=18))"
+          }
+        ],
+        "code_context": "O = x30(x19)"
+      }
+    },
+    "type_signatures": [
+      "height_t(tuple)"
+    ],
+    "value_signatures": [
+      "height_t(tuple(len=15))",
+      "height_t(tuple(len=12))",
+      "height_t(tuple(len=8))",
+      "height_t(tuple(len=18))",
+      "height_t(tuple(len=10))",
+      "height_t(tuple(len=16))",
+      "height_t(tuple(len=13))",
+      "height_t(tuple(len=9))",
+      "height_t(tuple(len=14))",
+      "height_t(((3, 3, 3, 3), (0, 0, 0, 3), (3, 3, 0, 3), (3, 3, )",
+      "height_t(tuple(len=7))",
+      "height_t(((3, 3, 3, 3, 3), (0, 0, 0, 0, 3), (3, 3, 3, 0, 3))",
+      "height_t(((3, 3, 3), (0, 0, 3), (3, 0, 3), (3, 0, 3), (3, 3)",
+      "height_t(tuple(len=11))",
+      "height_t(tuple(len=6))"
+    ]
+  },
+  "decrement": {
+    "calls": 46,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5410": {
+        "count": 14,
+        "signatures": [
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(5)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(7)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(9)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(11)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(13)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(4)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(6)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(8)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(15)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(10)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(12)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(14)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(16)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(18)"
+          }
+        ],
+        "code_context": "O = x30(x19)"
+      }
+    },
+    "type_signatures": [
+      "decrement(int)"
+    ],
+    "value_signatures": [
+      "decrement(11)",
+      "decrement(15)",
+      "decrement(4)",
+      "decrement(9)",
+      "decrement(5)",
+      "decrement(18)",
+      "decrement(12)",
+      "decrement(14)",
+      "decrement(7)",
+      "decrement(8)",
+      "decrement(16)",
+      "decrement(6)",
+      "decrement(10)",
+      "decrement(13)"
+    ]
+  },
+  "hconcat": {
+    "calls": 46,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5410": {
+        "count": 14,
+        "signatures": [
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+          },
+          {
+            "type_signature": "hconcat(tuple, tuple)",
+            "value_signature": "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , ((3,),))"
+          }
+        ],
+        "code_context": "O = x30(x19)"
+      }
+    },
+    "type_signatures": [
+      "hconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , ((3,),))",
+      "hconcat(((0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))",
+      "hconcat(((0, 0, 0, 0, 0, 0, 0, 0),), ((3,),))"
+    ]
+  },
+  "rot90": {
+    "calls": 46,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5410": {
+        "count": 15,
+        "signatures": [
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(((3, 3, 3), (0, 0, 3), (3, 0, 3), (3, 0, 3), (3, 3)"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(((3, 3, 3, 3, 3), (0, 0, 0, 0, 3), (3, 3, 3, 0, 3))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=7))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=9))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=11))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=13))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(((3, 3, 3, 3), (0, 0, 0, 3), (3, 3, 0, 3), (3, 3, )"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=6))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=8))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=15))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=10))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=12))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=14))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=16))"
+          },
+          {
+            "type_signature": "rot90(tuple)",
+            "value_signature": "rot90(tuple(len=18))"
+          }
+        ],
+        "code_context": "O = x30(x19)"
+      }
+    },
+    "type_signatures": [
+      "rot90(tuple)"
+    ],
+    "value_signatures": [
+      "rot90(tuple(len=6))",
+      "rot90(tuple(len=9))",
+      "rot90(tuple(len=18))",
+      "rot90(tuple(len=14))",
+      "rot90(tuple(len=8))",
+      "rot90(tuple(len=7))",
+      "rot90(tuple(len=16))",
+      "rot90(tuple(len=12))",
+      "rot90(((3, 3, 3), (0, 0, 3), (3, 0, 3), (3, 0, 3), (3, 3)",
+      "rot90(tuple(len=15))",
+      "rot90(tuple(len=10))",
+      "rot90(tuple(len=11))",
+      "rot90(tuple(len=13))",
+      "rot90(((3, 3, 3, 3, 3), (0, 0, 0, 0, 3), (3, 3, 3, 0, 3))",
+      "rot90(((3, 3, 3, 3), (0, 0, 0, 3), (3, 3, 0, 3), (3, 3, )"
+    ]
+  },
+  "vconcat": {
+    "calls": 92,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:5410": {
+        "count": 50,
+        "signatures": [
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 3),), ((3, 3, 3, 0, 3), (3, 0, 0, 0, 3), (3, 3, 3, 3, 3))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3),), ((0, 0, 0, 0, 3), (3, 3, 3, 0, 3), (3, 0, 0, 0, 3))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 3),), ((3, 3, 3, 0, 3), (3, 0, 3, 0, 3), (3, 0, 3, 0, 3))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3),), tuple(len=6))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 3),), ((3, 3, 3, 3, 3, 0, 3), (3, 0, 0, 0, 3, 0, 3), (3,)"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3),), tuple(len=6))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 3),), tuple(len=7))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3),), tuple(len=8))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=7))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=8))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=9))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=10))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=9))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=10))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=11))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=12))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=11))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=12))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 3),), ((3, 3, 0, 3), (3, 3, 0, 3), (3, 0, 0, 3), (3, 3, )"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3),), ((0, 0, 0, 3), (3, 3, 0, 3), (3, 3, 0, 3), (3, 0, )"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 3),), ((3, 3, 3, 3, 0, 3), (3, 0, 3, 3, 0, 3), (3, 0, 0,)"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3),), ((0, 0, 0, 0, 0, 3), (3, 3, 3, 3, 0, 3), (3, 0, 3,)"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 3),), tuple(len=6))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3),), tuple(len=7))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=6))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=7))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=13))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=14))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=13))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=14))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=8))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=9))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=8))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=9))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=10))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=11))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=10))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=11))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=12))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=13))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=12))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=13))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=14))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=15))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),, tuple(len=14))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),, tuple(len=15))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),, tuple(len=16))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),, tuple(len=17))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , tuple(len=16))"
+          },
+          {
+            "type_signature": "vconcat(tuple, tuple)",
+            "value_signature": "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, , tuple(len=17))"
+          }
+        ],
+        "code_context": "O = x30(x19)"
+      }
+    },
+    "type_signatures": [
+      "vconcat(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=10))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=7))",
+      "vconcat(((0, 0, 0, 0, 0, 3),), tuple(len=6))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3),), tuple(len=6))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=9))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=13))",
+      "vconcat(((0, 0, 0, 0, 3),), ((3, 3, 3, 0, 3), (3, 0, 0, 0, 3), (3, 3, 3, 3, 3))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=7))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=9))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=9))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=14))",
+      "vconcat(((3, 3, 3, 3, 3),), ((0, 0, 0, 0, 3), (3, 3, 3, 0, 3), (3, 0, 0, 0, 3))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3),), tuple(len=8))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=8))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),, tuple(len=16))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=11))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=14))",
+      "vconcat(((3, 3, 3, 3, 3, 3),), tuple(len=7))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=10))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=12))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, , tuple(len=17))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=15))",
+      "vconcat(((0, 0, 0, 3),), ((3, 3, 0, 3), (3, 3, 0, 3), (3, 0, 0, 3), (3, 3, )",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=13))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),, tuple(len=14))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=11))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=8))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),, tuple(len=15))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),, tuple(len=17))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=13))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=10))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=6))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=11))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=10))",
+      "vconcat(((3, 3, 3, 3, 3, 3),), ((0, 0, 0, 0, 0, 3), (3, 3, 3, 3, 0, 3), (3, 0, 3,)",
+      "vconcat(((0, 0, 0, 0, 0, 3),), ((3, 3, 3, 3, 0, 3), (3, 0, 3, 3, 0, 3), (3, 0, 0,)",
+      "vconcat(((0, 0, 0, 0, 0, 0, 3),), ((3, 3, 3, 3, 3, 0, 3), (3, 0, 0, 0, 3, 0, 3), (3,)",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=8))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=14))",
+      "vconcat(((3, 3, 3, 3),), ((0, 0, 0, 3), (3, 3, 0, 3), (3, 3, 0, 3), (3, 0, )",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=12))",
+      "vconcat(((0, 0, 0, 0, 3),), ((3, 3, 3, 0, 3), (3, 0, 3, 0, 3), (3, 0, 3, 0, 3))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=9))",
+      "vconcat(((3, 3, 3, 3, 3),), tuple(len=6))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 3),), tuple(len=7))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=12))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3),), tuple(len=12))",
+      "vconcat(((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , tuple(len=16))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=11))",
+      "vconcat(((3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),), tuple(len=13))"
+    ]
+  }
+}

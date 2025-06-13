@@ -1,0 +1,31 @@
+{
+  "summary": {
+    "total_functions": 16,
+    "dsl_functions": 16,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 0,
+    "functions_with_f_variants": 0,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [],
+  "high_impact_opportunities": [],
+  "perfect_matches": [],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "height_f",
+    "lowermost",
+    "toindices",
+    "uppermost",
+    "decrement",
+    "subtract",
+    "astuple",
+    "canvas",
+    "hconcat",
+    "hsplit",
+    "crop",
+    "first_t",
+    "last_t",
+    "vmirror_t",
+    "vconcat"
+  ]
+}

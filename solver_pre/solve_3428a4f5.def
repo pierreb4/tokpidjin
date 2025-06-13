@@ -1,0 +1,2 @@
+def solve_3428a4f5(S, I):
+    return fill(canvas(ZERO, astuple(SIX, FIVE)), THREE, difference(combine_f(f_ofcolor(tophalf(I), TWO), f_ofcolor(bottomhalf(I), TWO)), intersection(f_ofcolor(tophalf(I), TWO), f_ofcolor(bottomhalf(I), TWO))))

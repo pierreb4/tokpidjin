@@ -1,0 +1,2 @@
+def solve_e8593010(S, I):
+    return replace(fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F2)), merge_f(sizefilter(o_g(I, R5), ONE))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), merge_f(sizefilter(o_g(I, R5), TWO))), BLACK, BLUE)

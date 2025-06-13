@@ -1,0 +1,28 @@
+{
+  "solver_key": "d90796e8",
+  "timestamp": "2025-05-21T09:11:58.241742",
+  "errors": {
+    "sfilter": {
+      "expected_sites": [
+        {
+          "line": "1913",
+          "context": "x5 = mfilter_f(x2, x4)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    },
+    "first": {
+      "expected_sites": [
+        {
+          "line": "1916",
+          "context": "x8 = sfilter_f(x5, x7)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

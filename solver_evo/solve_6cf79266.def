@@ -1,0 +1,2 @@
+def solve_6cf79266(S, I):
+    return fill(I, BLUE, mapply(lbind(shift, toindices(upscale_f(initset(astuple(ZERO, ORIGIN)), THREE))), sfilter_f(f_ofcolor(I, BLACK), fork(both, matcher(chain(size, rbind(difference, f_ofcolor(I, BLACK)), lbind(shift, toindices(upscale_f(initset(astuple(ZERO, ORIGIN)), THREE)))), BLACK), chain(flip, matcher(chain(size, rbind(difference, f_ofcolor(I, BLACK)), lbind(shift, toindices(upscale_f(initset(astuple(ZERO, ORIGIN)), THREE)))), BLACK), lbind(add, NEG_UNITY))))))

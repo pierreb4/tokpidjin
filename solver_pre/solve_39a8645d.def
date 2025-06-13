@@ -1,0 +1,2 @@
+def solve_39a8645d(S, I):
+    return subgrid(extract(o_g(I, R7), matcher(color, get_common_rank_t(apply(color, totuple(o_g(I, R7))), F0))), I)

@@ -1,0 +1,117 @@
+{
+  "summary": {
+    "total_functions": 32,
+    "dsl_functions": 32,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 2,
+    "functions_with_f_variants": 2,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "sfilter",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:2742": {
+          "count": 4,
+          "code_context": "x9 = mfilter_f(x1, x5)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:2743": {
+          "count": 4,
+          "code_context": "x10 = mfilter_f(x1, x8)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        }
+      }
+    },
+    {
+      "name": "size",
+      "total_calls": 22,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:2743": {
+          "count": 12,
+          "code_context": "x10 = mfilter_f(x1, x8)",
+          "tuple_calls": 0,
+          "frozenset_calls": 12
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 8,
+      "call_sites": {
+        "solvers.py:2742": {
+          "count": 4,
+          "code_context": "x9 = mfilter_f(x1, x5)"
+        },
+        "solvers.py:2743": {
+          "count": 4,
+          "code_context": "x10 = mfilter_f(x1, x8)"
+        }
+      }
+    },
+    {
+      "name": "size",
+      "variant": "size_f",
+      "type": "frozenset",
+      "calls": 22,
+      "call_sites": {
+        "solvers.py:2743": {
+          "count": 12,
+          "code_context": "x10 = mfilter_f(x1, x8)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "rbind",
+    "chain",
+    "lbind",
+    "compose",
+    "fork",
+    "mfilter_f",
+    "sfilter",
+    "subgrid",
+    "ulcorner",
+    "toindices",
+    "shape_f",
+    "height_f",
+    "lowermost",
+    "uppermost",
+    "width_f",
+    "rightmost",
+    "leftmost",
+    "crop",
+    "trim",
+    "palette_t",
+    "contained",
+    "merge_f",
+    "size",
+    "add",
+    "decrement",
+    "equality",
+    "replace",
+    "fill"
+  ]
+}

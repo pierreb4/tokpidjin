@@ -1,0 +1,182 @@
+{
+  "summary": {
+    "total_functions": 38,
+    "dsl_functions": 38,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 5,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "mapply",
+      "total_calls": 10,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4664": {
+          "count": 5,
+          "code_context": "x6 = mapply(x5, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:4681": {
+          "count": 5,
+          "code_context": "x23 = mapply(x21, x22)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 10,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4664": {
+          "count": 5,
+          "code_context": "x6 = mapply(x5, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:4681": {
+          "count": 5,
+          "code_context": "x23 = mapply(x21, x22)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 10,
+      "tuple_percent": 60.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 30.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:4664": {
+          "count": 4,
+          "code_context": "x6 = mapply(x5, x2)",
+          "tuple_calls": 0,
+          "frozenset_calls": 4
+        },
+        "solvers.py:4681": {
+          "count": 5,
+          "code_context": "x23 = mapply(x21, x22)",
+          "tuple_calls": 5,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "first",
+      "total_calls": 22,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4681": {
+          "count": 11,
+          "code_context": "x23 = mapply(x21, x22)",
+          "tuple_calls": 11,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 11,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:4681": {
+          "count": 11,
+          "code_context": "x23 = mapply(x21, x22)",
+          "tuple_calls": 11,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 22,
+      "call_sites": {
+        "solvers.py:4681": {
+          "count": 11,
+          "code_context": "x23 = mapply(x21, x22)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "calls": 11,
+      "call_sites": {
+        "solvers.py:4681": {
+          "count": 11,
+          "code_context": "x23 = mapply(x21, x22)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "shape_t",
+    "height_t",
+    "width_t",
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "rbind",
+    "compose",
+    "fork",
+    "mapply",
+    "apply",
+    "color",
+    "center",
+    "uppermost",
+    "toindices",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "shoot",
+    "connect",
+    "recolor_i",
+    "toindices_i",
+    "merge",
+    "paint",
+    "add",
+    "initset",
+    "insert",
+    "order",
+    "first_t",
+    "remove_f",
+    "pair",
+    "first",
+    "lrcorner",
+    "last",
+    "underpaint"
+  ]
+}

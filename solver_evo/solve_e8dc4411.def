@@ -1,0 +1,2 @@
+def solve_e8dc4411(S, I):
+    return fill(I, get_color_rank_t(I, L1), mapply(lbind(shift, f_ofcolor(I, BLACK)), apply(lbind(multiply, apply(branch(equality(fork(connect, rbind(corner, R0), rbind(corner, R3))(f_ofcolor(I, BLACK)), intersection(f_ofcolor(I, BLACK), fork(connect, rbind(corner, R0), rbind(corner, R3))(f_ofcolor(I, BLACK)))), identity, fork(add, identity, fork(subtract, identity, crement))), multiply(shape_f(f_ofcolor(I, BLACK)), position(f_ofcolor(I, BLACK), f_ofcolor(I, get_color_rank_t(I, L1)))))), interval(ONE, FIVE, ONE))))

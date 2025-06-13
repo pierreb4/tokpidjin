@@ -1,0 +1,2 @@
+def solve_23581191(S, I):
+    return fill(paint(I, mapply(fork(recolor_i, color, compose(fork(combine, vfrontier, hfrontier), center)), o_g(I, R7))), TWO, fork(intersection, rbind(get_nth_f, F0), rbind(get_nth_f, L1))(apply(compose(fork(combine, vfrontier, hfrontier), center), o_g(I, R7))))

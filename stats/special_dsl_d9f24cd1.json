@@ -1,0 +1,194 @@
+{
+  "summary": {
+    "total_functions": 35,
+    "dsl_functions": 35,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 4,
+    "functions_with_f_variants": 4,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "sfilter",
+      "total_calls": 3,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3488": {
+          "count": 2,
+          "code_context": "x4 = mfilter_f(x3, vline_i)",
+          "tuple_calls": 0,
+          "frozenset_calls": 2
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 9,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3495": {
+          "count": 2,
+          "code_context": "x11 = mapply(toindices, x10)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3499": {
+          "count": 3,
+          "code_context": "x15 = mapply(x14, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3501": {
+          "count": 3,
+          "code_context": "x17 = mapply(vfrontier, x11)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 12,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3495": {
+          "count": 2,
+          "code_context": "x11 = mapply(toindices, x10)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3496": {
+          "count": 3,
+          "code_context": "x12 = apply(urcorner, x8)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3499": {
+          "count": 3,
+          "code_context": "x15 = mapply(x14, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3501": {
+          "count": 3,
+          "code_context": "x17 = mapply(vfrontier, x11)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 9,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3495": {
+          "count": 3,
+          "code_context": "x11 = mapply(toindices, x10)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        },
+        "solvers.py:3499": {
+          "count": 3,
+          "code_context": "x15 = mapply(x14, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        },
+        "solvers.py:3501": {
+          "count": 2,
+          "code_context": "x17 = mapply(vfrontier, x11)",
+          "tuple_calls": 0,
+          "frozenset_calls": 2
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "sfilter",
+      "variant": "sfilter_f",
+      "type": "frozenset",
+      "calls": 3,
+      "call_sites": {
+        "solvers.py:3488": {
+          "count": 2,
+          "code_context": "x4 = mfilter_f(x3, vline_i)"
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 9,
+      "call_sites": {
+        "solvers.py:3495": {
+          "count": 3,
+          "code_context": "x11 = mapply(toindices, x10)"
+        },
+        "solvers.py:3499": {
+          "count": 3,
+          "code_context": "x15 = mapply(x14, x13)"
+        },
+        "solvers.py:3501": {
+          "count": 2,
+          "code_context": "x17 = mapply(vfrontier, x11)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "prapply",
+    "connect",
+    "mfilter_f",
+    "sfilter",
+    "vline_i",
+    "height_i",
+    "width_i",
+    "lowermost_i",
+    "toindices_i",
+    "uppermost_i",
+    "rightmost_i",
+    "leftmost_i",
+    "merge_f",
+    "underfill",
+    "mostcolor_t",
+    "toindices",
+    "matcher",
+    "objects",
+    "asindices",
+    "dneighbors",
+    "sfilter_f",
+    "numcolors_f",
+    "palette_f",
+    "difference",
+    "colorfilter",
+    "mapply",
+    "apply",
+    "merge",
+    "urcorner",
+    "shift",
+    "rbind",
+    "shoot",
+    "fill",
+    "vfrontier"
+  ]
+}

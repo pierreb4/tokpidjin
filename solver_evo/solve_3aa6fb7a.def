@@ -1,0 +1,2 @@
+def solve_3aa6fb7a(S, I):
+    return fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mfilter_f(apply(delta, o_g(I, R5)), square_f))

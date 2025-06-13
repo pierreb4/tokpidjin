@@ -1,0 +1,115 @@
+{
+  "summary": {
+    "total_functions": 13,
+    "dsl_functions": 13,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 3,
+    "functions_with_f_variants": 3,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "apply",
+      "total_calls": 8,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3195": {
+          "count": 2,
+          "code_context": "x2 = apply(mostcommon, I)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3196": {
+          "count": 3,
+          "code_context": "x3 = apply(mostcommon, x1)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "mostcommon",
+      "total_calls": 116,
+      "tuple_percent": 11.206896551724139,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3195": {
+          "count": 3,
+          "code_context": "x2 = apply(mostcommon, I)",
+          "tuple_calls": 3,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3196": {
+          "count": 2,
+          "code_context": "x3 = apply(mostcommon, x1)",
+          "tuple_calls": 2,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "size",
+      "total_calls": 8,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3200": {
+          "count": 4,
+          "code_context": "x7 = x6(x2)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3201": {
+          "count": 4,
+          "code_context": "x8 = x6(x3)",
+          "tuple_calls": 4,
+          "frozenset_calls": 0
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "size",
+      "variant": "size_t",
+      "type": "tuple",
+      "calls": 8,
+      "call_sites": {
+        "solvers.py:3200": {
+          "count": 4,
+          "code_context": "x7 = x6(x2)"
+        },
+        "solvers.py:3201": {
+          "count": 4,
+          "code_context": "x8 = x6(x3)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "rot90",
+    "apply",
+    "mostcommon",
+    "repeat",
+    "compose",
+    "dedupe",
+    "size",
+    "greater",
+    "branch",
+    "height_t",
+    "vupscale",
+    "width_t",
+    "hupscale"
+  ]
+}

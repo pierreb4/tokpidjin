@@ -1,0 +1,17 @@
+{
+  "solver_key": "d4a91cb9",
+  "timestamp": "2025-05-19T16:16:40.346466",
+  "errors": {
+    "mostcolor": {
+      "expected_sites": [
+        {
+          "line": "2536",
+          "context": "O = underfill(I, FOUR, x10)"
+        }
+      ],
+      "actual_calls": 0,
+      "expected_calls": 1,
+      "message": "Found 0 calls but expected 1"
+    }
+  }
+}

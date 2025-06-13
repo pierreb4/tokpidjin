@@ -1,0 +1,2 @@
+def solve_8efcae92(S, I):
+    return subgrid(get_arg_rank_f(colorfilter(o_g(I, R4), ONE), compose(size, delta), F0), I)

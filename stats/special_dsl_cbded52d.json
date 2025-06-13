@@ -1,0 +1,225 @@
+{
+  "summary": {
+    "total_functions": 32,
+    "dsl_functions": 32,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 5,
+    "functions_with_f_variants": 5,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "first",
+      "total_calls": 232,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3162": {
+          "count": 79,
+          "code_context": "x7 = sfilter_f(x3, x6)",
+          "tuple_calls": 79,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3169": {
+          "count": 37,
+          "code_context": "x14 = mapply(x13, x7)",
+          "tuple_calls": 37,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "last",
+      "total_calls": 195,
+      "tuple_percent": 100.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3162": {
+          "count": 79,
+          "code_context": "x7 = sfilter_f(x3, x6)",
+          "tuple_calls": 79,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3169": {
+          "count": 37,
+          "code_context": "x14 = mapply(x13, x7)",
+          "tuple_calls": 37,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3169": {
+          "count": 4,
+          "code_context": "x14 = mapply(x13, x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "apply",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3169": {
+          "count": 4,
+          "code_context": "x14 = mapply(x13, x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 4,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3169": {
+          "count": 2,
+          "code_context": "x14 = mapply(x13, x7)",
+          "tuple_calls": 0,
+          "frozenset_calls": 2
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "percent": 100.0,
+      "calls": 232,
+      "call_sites": {
+        "solvers.py:3162": {
+          "count": 79,
+          "code_context": "x7 = sfilter_f(x3, x6)"
+        },
+        "solvers.py:3169": {
+          "count": 37,
+          "code_context": "x14 = mapply(x13, x7)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "percent": 100.0,
+      "calls": 195,
+      "call_sites": {
+        "solvers.py:3162": {
+          "count": 79,
+          "code_context": "x7 = sfilter_f(x3, x6)"
+        },
+        "solvers.py:3169": {
+          "count": 37,
+          "code_context": "x14 = mapply(x13, x7)"
+        }
+      }
+    }
+  ],
+  "perfect_matches": [
+    {
+      "name": "first",
+      "variant": "first_t",
+      "type": "tuple",
+      "calls": 232,
+      "call_sites": {
+        "solvers.py:3162": {
+          "count": 79,
+          "code_context": "x7 = sfilter_f(x3, x6)"
+        },
+        "solvers.py:3169": {
+          "count": 37,
+          "code_context": "x14 = mapply(x13, x7)"
+        }
+      }
+    },
+    {
+      "name": "last",
+      "variant": "last_t",
+      "type": "tuple",
+      "calls": 195,
+      "call_sites": {
+        "solvers.py:3162": {
+          "count": 79,
+          "code_context": "x7 = sfilter_f(x3, x6)"
+        },
+        "solvers.py:3169": {
+          "count": 37,
+          "code_context": "x14 = mapply(x13, x7)"
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 4,
+      "call_sites": {
+        "solvers.py:3169": {
+          "count": 2,
+          "code_context": "x14 = mapply(x13, x7)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "objects",
+    "mostcolor_t",
+    "asindices",
+    "dneighbors",
+    "sizefilter",
+    "product",
+    "fork",
+    "sfilter_f",
+    "first",
+    "last",
+    "vmatching",
+    "toindices",
+    "hmatching",
+    "either",
+    "compose",
+    "chain",
+    "mapply",
+    "apply",
+    "color",
+    "center",
+    "uppermost",
+    "height_f",
+    "lowermost",
+    "leftmost",
+    "width_f",
+    "rightmost",
+    "connect",
+    "initset",
+    "recolor_i",
+    "toindices_i",
+    "merge",
+    "paint"
+  ]
+}

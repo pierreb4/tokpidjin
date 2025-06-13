@@ -1,0 +1,2 @@
+def solve_794b24be(S, I):
+    return fill(canvas(ZERO, THREE_BY_THREE), TWO, branch(equality(size_f(f_ofcolor(I, ONE)), FOUR), insert(UNITY, connect(ORIGIN, tojvec(decrement(size_f(f_ofcolor(I, ONE)))))), connect(ORIGIN, tojvec(decrement(size_f(f_ofcolor(I, ONE)))))))

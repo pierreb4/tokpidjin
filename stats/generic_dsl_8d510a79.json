@@ -1,0 +1,4469 @@
+{
+  "f_ofcolor": {
+    "calls": 9,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4181": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 1)"
+          }
+        ],
+        "code_context": "x1 = f_ofcolor(I, ONE)"
+      },
+      "solvers.py:4182": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 2)"
+          }
+        ],
+        "code_context": "x2 = f_ofcolor(I, TWO)"
+      },
+      "solvers.py:4183": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "f_ofcolor(tuple, int)",
+            "value_signature": "f_ofcolor(tuple(len=10), 5)"
+          }
+        ],
+        "code_context": "x3 = f_ofcolor(I, FIVE)"
+      }
+    },
+    "type_signatures": [
+      "f_ofcolor(tuple, int)"
+    ],
+    "value_signatures": [
+      "f_ofcolor(tuple(len=10), 5)",
+      "f_ofcolor(tuple(len=10), 1)",
+      "f_ofcolor(tuple(len=10), 2)"
+    ]
+  },
+  "uppermost": {
+    "calls": 3,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4184": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "uppermost(frozenset)",
+            "value_signature": "uppermost(frozenset(len=10))"
+          }
+        ],
+        "code_context": "x4 = uppermost(x3)"
+      }
+    },
+    "type_signatures": [
+      "uppermost(frozenset)"
+    ],
+    "value_signatures": [
+      "uppermost(frozenset(len=10))"
+    ]
+  },
+  "toindices": {
+    "calls": 9,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4184": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=10))"
+          }
+        ],
+        "code_context": "x4 = uppermost(x3)"
+      },
+      "solvers.py:4197": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=17))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=10))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=15))"
+          }
+        ],
+        "code_context": "x17 = underfill(I, TWO, x16)"
+      },
+      "solvers.py:4198": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=215))"
+          },
+          {
+            "type_signature": "toindices(frozenset)",
+            "value_signature": "toindices(frozenset(len=172))"
+          }
+        ],
+        "code_context": "O = fill(x17, ONE, x15)"
+      }
+    },
+    "type_signatures": [
+      "toindices(frozenset)"
+    ],
+    "value_signatures": [
+      "toindices(frozenset(len=15))",
+      "toindices(frozenset(len=172))",
+      "toindices(frozenset(len=215))",
+      "toindices(frozenset(len=17))",
+      "toindices(frozenset(len=10))"
+    ]
+  },
+  "chain": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4185": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function toivec at 0x1035951f0>, <function decrement at 0x103575790>, <function double at 0x103575c10>)"
+          }
+        ],
+        "code_context": "x5 = chain(toivec, decrement, double)"
+      },
+      "solvers.py:4188": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function invert at 0x10357d3a0>, <function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a280d0)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function invert at 0x10357d3a0>, <function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a283a0)"
+          },
+          {
+            "type_signature": "chain(function, function, function)",
+            "value_signature": "chain(<function invert at 0x10357d3a0>, <function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a28430)"
+          }
+        ],
+        "code_context": "x8 = chain(invert, x5, x7)"
+      }
+    },
+    "type_signatures": [
+      "chain(function, function, function)"
+    ],
+    "value_signatures": [
+      "chain(<function invert at 0x10357d3a0>, <function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a283a0)",
+      "chain(<function toivec at 0x1035951f0>, <function decrement at 0x103575790>, <function double at 0x103575c10>)",
+      "chain(<function invert at 0x10357d3a0>, <function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a28430)",
+      "chain(<function invert at 0x10357d3a0>, <function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a280d0)"
+    ]
+  },
+  "lbind": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4186": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "lbind(function, int)",
+            "value_signature": "lbind(<function greater at 0x103579550>, 3)"
+          },
+          {
+            "type_signature": "lbind(function, int)",
+            "value_signature": "lbind(<function greater at 0x103579550>, 5)"
+          },
+          {
+            "type_signature": "lbind(function, int)",
+            "value_signature": "lbind(<function greater at 0x103579550>, 4)"
+          }
+        ],
+        "code_context": "x6 = lbind(greater, x4)"
+      },
+      "solvers.py:4192": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "lbind(function, function)",
+            "value_signature": "lbind(<function matcher at 0x103588310>, <function compose.<locals>.<lambda> at 0x103a280d0)"
+          },
+          {
+            "type_signature": "lbind(function, function)",
+            "value_signature": "lbind(<function matcher at 0x103588310>, <function compose.<locals>.<lambda> at 0x103a283a0)"
+          },
+          {
+            "type_signature": "lbind(function, function)",
+            "value_signature": "lbind(<function matcher at 0x103588310>, <function compose.<locals>.<lambda> at 0x103a28430)"
+          }
+        ],
+        "code_context": "x12 = lbind(matcher, x7)"
+      }
+    },
+    "type_signatures": [
+      "lbind(function, int)",
+      "lbind(function, function)"
+    ],
+    "value_signatures": [
+      "lbind(<function matcher at 0x103588310>, <function compose.<locals>.<lambda> at 0x103a283a0)",
+      "lbind(<function matcher at 0x103588310>, <function compose.<locals>.<lambda> at 0x103a28430)",
+      "lbind(<function greater at 0x103579550>, 3)",
+      "lbind(<function greater at 0x103579550>, 4)",
+      "lbind(<function greater at 0x103579550>, 5)",
+      "lbind(<function matcher at 0x103588310>, <function compose.<locals>.<lambda> at 0x103a280d0)"
+    ]
+  },
+  "compose": {
+    "calls": 9,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4187": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103a28040>, <function first at 0x103579160>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103a285e0>, <function first at 0x103579160>)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103a28700>, <function first at 0x103579160>)"
+          }
+        ],
+        "code_context": "x7 = compose(x6, first)"
+      },
+      "solvers.py:4190": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a280d0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a283a0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a28430)"
+          }
+        ],
+        "code_context": "x10 = compose(x5, x7)"
+      },
+      "solvers.py:4193": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103a28430>, <function compose.<locals>.<lambda> at 0x103a280d0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103a28280>, <function compose.<locals>.<lambda> at 0x103a283a0)"
+          },
+          {
+            "type_signature": "compose(function, function)",
+            "value_signature": "compose(<function lbind.<locals>.<lambda> at 0x103a28040>, <function compose.<locals>.<lambda> at 0x103a28430)"
+          }
+        ],
+        "code_context": "x13 = compose(x12, x7)"
+      }
+    },
+    "type_signatures": [
+      "compose(function, function)"
+    ],
+    "value_signatures": [
+      "compose(<function lbind.<locals>.<lambda> at 0x103a28040>, <function first at 0x103579160>)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103a28700>, <function first at 0x103579160>)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103a28280>, <function compose.<locals>.<lambda> at 0x103a283a0)",
+      "compose(<function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a280d0)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103a285e0>, <function first at 0x103579160>)",
+      "compose(<function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a28430)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103a28040>, <function compose.<locals>.<lambda> at 0x103a28430)",
+      "compose(<function chain.<locals>.<lambda> at 0x1035b2ee0>, <function compose.<locals>.<lambda> at 0x103a283a0)",
+      "compose(<function lbind.<locals>.<lambda> at 0x103a28430>, <function compose.<locals>.<lambda> at 0x103a280d0)"
+    ]
+  },
+  "fork": {
+    "calls": 9,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4189": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function chain.<locals>.<lambda> at 0x103a281f0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function chain.<locals>.<lambda> at 0x103a280d0>)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function chain.<locals>.<lambda> at 0x103a283a0>)"
+          }
+        ],
+        "code_context": "x9 = fork(shoot, identity, x8)"
+      },
+      "solvers.py:4191": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function compose.<locals>.<lambda> at 0x103a28310)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function compose.<locals>.<lambda> at 0x103a28550)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function compose.<locals>.<lambda> at 0x103a28670)"
+          }
+        ],
+        "code_context": "x11 = fork(shoot, identity, x10)"
+      },
+      "solvers.py:4194": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function sfilter at 0x10358f670>, <function fork.<locals>.<lambda> at 0x103a283a0>, <function compose.<locals>.<lambda> at 0x103a28550)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function sfilter at 0x10358f670>, <function fork.<locals>.<lambda> at 0x103a28430>, <function compose.<locals>.<lambda> at 0x103a28670)"
+          },
+          {
+            "type_signature": "fork(function, function, function)",
+            "value_signature": "fork(<function sfilter at 0x10358f670>, <function fork.<locals>.<lambda> at 0x103a28280>, <function compose.<locals>.<lambda> at 0x103a28790)"
+          }
+        ],
+        "code_context": "x14 = fork(sfilter, x11, x13)"
+      }
+    },
+    "type_signatures": [
+      "fork(function, function, function)"
+    ],
+    "value_signatures": [
+      "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function compose.<locals>.<lambda> at 0x103a28670)",
+      "fork(<function sfilter at 0x10358f670>, <function fork.<locals>.<lambda> at 0x103a28280>, <function compose.<locals>.<lambda> at 0x103a28790)",
+      "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function compose.<locals>.<lambda> at 0x103a28310)",
+      "fork(<function sfilter at 0x10358f670>, <function fork.<locals>.<lambda> at 0x103a283a0>, <function compose.<locals>.<lambda> at 0x103a28550)",
+      "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function chain.<locals>.<lambda> at 0x103a281f0>)",
+      "fork(<function sfilter at 0x10358f670>, <function fork.<locals>.<lambda> at 0x103a28430>, <function compose.<locals>.<lambda> at 0x103a28670)",
+      "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function compose.<locals>.<lambda> at 0x103a28550)",
+      "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function chain.<locals>.<lambda> at 0x103a283a0>)",
+      "fork(<function shoot at 0x10358f9d0>, <function identity at 0x103579e50>, <function chain.<locals>.<lambda> at 0x103a280d0>)"
+    ]
+  },
+  "mapply": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x103a28280>, frozenset({(8, 8), (0, 3), (6, 4), (1, 7), (8, 2)})"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x103a28040>, frozenset({(8, 8), (1, 6), (0, 2), (8, 1)}))"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x103a285e0>, frozenset({(7, 2), (1, 3), (9, 8), (2, 6)}))"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x103a285e0>, frozenset({(0, 1), (1, 5), (5, 1), (8, 6), (5, 9)})"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x103a28700>, frozenset({(2, 9), (2, 1), (8, 5)}))"
+          },
+          {
+            "type_signature": "mapply(function, frozenset)",
+            "value_signature": "mapply(<function fork.<locals>.<lambda> at 0x103a28940>, frozenset({(1, 1), (1, 8), (7, 5), (8, 0)}))"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "mapply(function, frozenset)"
+    ],
+    "value_signatures": [
+      "mapply(<function fork.<locals>.<lambda> at 0x103a28700>, frozenset({(2, 9), (2, 1), (8, 5)}))",
+      "mapply(<function fork.<locals>.<lambda> at 0x103a28940>, frozenset({(1, 1), (1, 8), (7, 5), (8, 0)}))",
+      "mapply(<function fork.<locals>.<lambda> at 0x103a28280>, frozenset({(8, 8), (0, 3), (6, 4), (1, 7), (8, 2)})",
+      "mapply(<function fork.<locals>.<lambda> at 0x103a28040>, frozenset({(8, 8), (1, 6), (0, 2), (8, 1)}))",
+      "mapply(<function fork.<locals>.<lambda> at 0x103a285e0>, frozenset({(7, 2), (1, 3), (9, 8), (2, 6)}))",
+      "mapply(<function fork.<locals>.<lambda> at 0x103a285e0>, frozenset({(0, 1), (1, 5), (5, 1), (8, 6), (5, 9)})"
+    ]
+  },
+  "apply": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x103a28280>, frozenset({(8, 8), (0, 3), (6, 4), (1, 7), (8, 2)})"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x103a28040>, frozenset({(8, 8), (1, 6), (0, 2), (8, 1)}))"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x103a285e0>, frozenset({(7, 2), (1, 3), (9, 8), (2, 6)}))"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x103a285e0>, frozenset({(0, 1), (1, 5), (5, 1), (8, 6), (5, 9)})"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x103a28700>, frozenset({(2, 9), (2, 1), (8, 5)}))"
+          },
+          {
+            "type_signature": "apply(function, frozenset)",
+            "value_signature": "apply(<function fork.<locals>.<lambda> at 0x103a28940>, frozenset({(1, 1), (1, 8), (7, 5), (8, 0)}))"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "apply(function, frozenset)"
+    ],
+    "value_signatures": [
+      "apply(<function fork.<locals>.<lambda> at 0x103a285e0>, frozenset({(7, 2), (1, 3), (9, 8), (2, 6)}))",
+      "apply(<function fork.<locals>.<lambda> at 0x103a285e0>, frozenset({(0, 1), (1, 5), (5, 1), (8, 6), (5, 9)})",
+      "apply(<function fork.<locals>.<lambda> at 0x103a28700>, frozenset({(2, 9), (2, 1), (8, 5)}))",
+      "apply(<function fork.<locals>.<lambda> at 0x103a28040>, frozenset({(8, 8), (1, 6), (0, 2), (8, 1)}))",
+      "apply(<function fork.<locals>.<lambda> at 0x103a28280>, frozenset({(8, 8), (0, 3), (6, 4), (1, 7), (8, 2)})",
+      "apply(<function fork.<locals>.<lambda> at 0x103a28940>, frozenset({(1, 1), (1, 8), (7, 5), (8, 0)}))"
+    ]
+  },
+  "identity": {
+    "calls": 25,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 12,
+        "signatures": [
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((8, 8))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((0, 3))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((6, 4))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((1, 7))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((8, 2))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((1, 6))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((0, 2))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((8, 1))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((7, 2))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((1, 3))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((9, 8))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((2, 6))"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 12,
+        "signatures": [
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((0, 1))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((1, 5))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((5, 1))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((8, 6))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((5, 9))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((2, 9))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((2, 1))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((8, 5))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((1, 1))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((1, 8))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((7, 5))"
+          },
+          {
+            "type_signature": "identity(tuple)",
+            "value_signature": "identity((8, 0))"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "identity(tuple)"
+    ],
+    "value_signatures": [
+      "identity((1, 6))",
+      "identity((1, 1))",
+      "identity((0, 3))",
+      "identity((8, 5))",
+      "identity((2, 6))",
+      "identity((7, 2))",
+      "identity((5, 9))",
+      "identity((1, 8))",
+      "identity((1, 3))",
+      "identity((0, 2))",
+      "identity((9, 8))",
+      "identity((5, 1))",
+      "identity((8, 6))",
+      "identity((0, 1))",
+      "identity((8, 0))",
+      "identity((2, 9))",
+      "identity((7, 5))",
+      "identity((6, 4))",
+      "identity((1, 5))",
+      "identity((8, 1))",
+      "identity((8, 8))",
+      "identity((2, 1))",
+      "identity((8, 2))",
+      "identity((1, 7))"
+    ]
+  },
+  "first": {
+    "calls": 553,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 12,
+        "signatures": [
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((0, 3))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((6, 4))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 7))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 2))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((0, 2))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((7, 2))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 3))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((9, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((2, 6))"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 372,
+        "signatures": [
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((0, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((12, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((23, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((34, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((27, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((3, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((14, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((36, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((5, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((25, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((16, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((38, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((7, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((18, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((29, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((40, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((22, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((20, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((31, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((9, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((42, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((11, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((33, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((26, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((2, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((13, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((24, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((35, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((6, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((39, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((15, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((4, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((37, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((17, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((28, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((32, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((19, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((30, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((41, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((10, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((21, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((20, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((31, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((22, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((7, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((9, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((42, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((40, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((11, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((33, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((2, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((13, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((24, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((35, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((15, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((26, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((6, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((39, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((4, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((37, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((17, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((28, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((19, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((30, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((41, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((10, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((32, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((43, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((21, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((12, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((23, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((34, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((14, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((3, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((36, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((5, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((27, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((25, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((16, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((38, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((18, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((29, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-21, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-10, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-30, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-19, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-28, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-6, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-8, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-17, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-37, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-26, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-15, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-4, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-35, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-24, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-13, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-2, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-1, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-11, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-22, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-33, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-31, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-20, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-9, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-18, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-7, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-16, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-29, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-27, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-5, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-36, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-25, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-14, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-3, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-23, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-32, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-34, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-12, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-29, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((4, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-27, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-5, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-25, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-14, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-3, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-32, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-23, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-34, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-12, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-21, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-10, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-7, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-6, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-30, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-19, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((3, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((5, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-28, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-8, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-17, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-26, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-15, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-4, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((7, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-11, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-24, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-13, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-2, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-1, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-33, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-22, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((0, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-31, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-20, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-9, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((2, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-16, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((6, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-18, 6))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((5, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((4, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-27, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-5, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-29, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-36, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-25, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-14, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-3, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-23, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-32, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-12, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-21, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-34, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-10, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-30, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-19, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((3, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-28, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-6, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-17, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-8, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-37, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-26, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-15, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-4, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-35, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-24, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-13, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-2, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-1, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-11, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-22, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((0, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-20, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-31, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-33, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-9, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((2, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-18, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-7, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-16, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((37, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((17, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((28, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((19, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((30, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((41, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((10, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((32, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((43, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((21, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((12, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((23, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((34, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((14, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((36, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((26, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((27, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((25, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((16, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((38, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((7, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((18, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((29, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((40, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((20, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((31, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((22, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((9, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((42, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((11, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((33, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((44, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((13, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((24, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((35, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((15, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((6, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((39, 9))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((44, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((43, 1))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-11, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-33, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-22, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((0, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-20, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-31, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-9, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-18, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-7, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-16, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-29, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-27, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-5, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-15, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-25, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-14, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-3, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-23, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-32, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-2, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-1, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-34, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-12, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-21, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-10, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-19, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-30, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-28, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-6, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-8, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-17, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-26, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-4, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-24, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-13, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((22, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((40, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((20, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((31, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((9, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((42, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((11, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((33, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((2, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((13, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((24, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((35, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((39, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((15, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((26, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((6, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((4, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((37, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((17, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((28, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((43, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((19, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((30, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((41, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((10, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((32, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((21, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((12, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((23, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((34, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((27, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((3, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((14, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((36, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((5, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((25, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((7, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((16, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((38, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((18, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((29, 8))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-35, 5))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((8, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-29, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((4, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-27, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-5, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-25, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-14, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-3, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-23, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-32, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((1, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-34, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-12, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-21, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-10, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-30, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-19, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((3, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-28, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-6, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((5, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-8, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-17, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-26, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-15, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-4, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((7, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-24, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-13, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-2, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-1, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-11, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-33, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-22, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((0, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-31, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-20, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-9, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((2, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-18, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-7, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((-16, 0))"
+          },
+          {
+            "type_signature": "first(tuple)",
+            "value_signature": "first((6, 0))"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "first(tuple)"
+    ],
+    "value_signatures": [
+      "first((0, 1))",
+      "first((20, 5))",
+      "first((-4, 0))",
+      "first((7, 2))",
+      "first((-29, 9))",
+      "first((-16, 0))",
+      "first((-30, 1))",
+      "first((-15, 1))",
+      "first((23, 5))",
+      "first((4, 9))",
+      "first((32, 5))",
+      "first((21, 5))",
+      "first((-18, 6))",
+      "first((-28, 6))",
+      "first((28, 5))",
+      "first((30, 9))",
+      "first((-16, 9))",
+      "first((40, 5))",
+      "first((30, 5))",
+      "first((-19, 6))",
+      "first((8, 8))",
+      "first((-1, 1))",
+      "first((10, 8))",
+      "first((-36, 9))",
+      "first((-23, 0))",
+      "first((-3, 5))",
+      "first((16, 5))",
+      "first((6, 0))",
+      "first((-3, 1))",
+      "first((-8, 1))",
+      "first((4, 1))",
+      "first((18, 9))",
+      "first((32, 9))",
+      "first((5, 0))",
+      "first((-12, 1))",
+      "first((2, 6))",
+      "first((-37, 1))",
+      "first((-5, 9))",
+      "first((-14, 5))",
+      "first((18, 5))",
+      "first((9, 9))",
+      "first((39, 8))",
+      "first((34, 9))",
+      "first((20, 9))",
+      "first((42, 1))",
+      "first((19, 9))",
+      "first((-33, 1))",
+      "first((8, 2))",
+      "first((-9, 9))",
+      "first((17, 1))",
+      "first((-34, 1))",
+      "first((-6, 1))",
+      "first((4, 6))",
+      "first((-22, 0))",
+      "first((8, 6))",
+      "first((-26, 0))",
+      "first((22, 5))",
+      "first((43, 5))",
+      "first((-24, 5))",
+      "first((34, 5))",
+      "first((-6, 6))",
+      "first((-4, 9))",
+      "first((31, 8))",
+      "first((4, 8))",
+      "first((-30, 9))",
+      "first((2, 1))",
+      "first((-2, 9))",
+      "first((-17, 0))",
+      "first((1, 3))",
+      "first((-10, 1))",
+      "first((31, 9))",
+      "first((20, 1))",
+      "first((-34, 9))",
+      "first((33, 5))",
+      "first((37, 1))",
+      "first((-33, 9))",
+      "first((-36, 1))",
+      "first((-20, 5))",
+      "first((1, 6))",
+      "first((35, 8))",
+      "first((-23, 6))",
+      "first((0, 2))",
+      "first((10, 5))",
+      "first((18, 1))",
+      "first((35, 1))",
+      "first((-21, 0))",
+      "first((26, 8))",
+      "first((-20, 6))",
+      "first((-11, 9))",
+      "first((-9, 5))",
+      "first((8, 1))",
+      "first((-20, 0))",
+      "first((7, 5))",
+      "first((15, 5))",
+      "first((-5, 5))",
+      "first((-27, 0))",
+      "first((-12, 6))",
+      "first((24, 8))",
+      "first((-15, 5))",
+      "first((-13, 9))",
+      "first((-4, 5))",
+      "first((-15, 0))",
+      "first((-23, 9))",
+      "first((-22, 9))",
+      "first((37, 5))",
+      "first((37, 8))",
+      "first((33, 1))",
+      "first((14, 8))",
+      "first((-10, 5))",
+      "first((-25, 0))",
+      "first((-25, 6))",
+      "first((23, 9))",
+      "first((-14, 1))",
+      "first((-11, 5))",
+      "first((9, 8))",
+      "first((-18, 9))",
+      "first((6, 8))",
+      "first((-19, 0))",
+      "first((38, 9))",
+      "first((-23, 1))",
+      "first((21, 8))",
+      "first((-25, 1))",
+      "first((-35, 9))",
+      "first((10, 9))",
+      "first((-8, 9))",
+      "first((40, 1))",
+      "first((-16, 5))",
+      "first((7, 1))",
+      "first((25, 5))",
+      "first((8, 5))",
+      "first((3, 1))",
+      "first((44, 9))",
+      "first((11, 8))",
+      "first((14, 5))",
+      "first((41, 9))",
+      "first((12, 8))",
+      "first((-37, 9))",
+      "first((31, 1))",
+      "first((-20, 1))",
+      "first((2, 5))",
+      "first((-13, 6))",
+      "first((-2, 1))",
+      "first((-17, 1))",
+      "first((-21, 9))",
+      "first((8, 0))",
+      "first((-17, 5))",
+      "first((27, 9))",
+      "first((-13, 0))",
+      "first((43, 1))",
+      "first((26, 1))",
+      "first((-19, 5))",
+      "first((23, 8))",
+      "first((-33, 6))",
+      "first((6, 4))",
+      "first((16, 9))",
+      "first((1, 0))",
+      "first((13, 9))",
+      "first((-18, 5))",
+      "first((24, 1))",
+      "first((-5, 0))",
+      "first((-15, 9))",
+      "first((-24, 6))",
+      "first((11, 1))",
+      "first((-30, 6))",
+      "first((24, 5))",
+      "first((25, 9))",
+      "first((-25, 5))",
+      "first((0, 5))",
+      "first((-30, 0))",
+      "first((19, 8))",
+      "first((36, 8))",
+      "first((-32, 5))",
+      "first((1, 5))",
+      "first((38, 5))",
+      "first((7, 6))",
+      "first((-28, 9))",
+      "first((22, 9))",
+      "first((5, 5))",
+      "first((-11, 0))",
+      "first((23, 1))",
+      "first((43, 9))",
+      "first((31, 5))",
+      "first((-34, 0))",
+      "first((22, 1))",
+      "first((25, 1))",
+      "first((44, 1))",
+      "first((-33, 5))",
+      "first((-20, 9))",
+      "first((-34, 6))",
+      "first((12, 1))",
+      "first((10, 1))",
+      "first((5, 6))",
+      "first((-7, 5))",
+      "first((40, 8))",
+      "first((29, 5))",
+      "first((32, 1))",
+      "first((0, 6))",
+      "first((-32, 9))",
+      "first((15, 1))",
+      "first((-2, 6))",
+      "first((5, 8))",
+      "first((-30, 5))",
+      "first((17, 8))",
+      "first((5, 9))",
+      "first((-1, 0))",
+      "first((9, 1))",
+      "first((-4, 1))",
+      "first((16, 8))",
+      "first((6, 5))",
+      "first((-6, 9))",
+      "first((-10, 9))",
+      "first((-27, 9))",
+      "first((26, 9))",
+      "first((-7, 0))",
+      "first((5, 1))",
+      "first((-34, 5))",
+      "first((-27, 5))",
+      "first((-31, 1))",
+      "first((8, 9))",
+      "first((-5, 6))",
+      "first((-17, 9))",
+      "first((-27, 6))",
+      "first((14, 9))",
+      "first((-32, 6))",
+      "first((-18, 0))",
+      "first((-29, 0))",
+      "first((-22, 1))",
+      "first((14, 1))",
+      "first((-11, 1))",
+      "first((39, 5))",
+      "first((3, 8))",
+      "first((35, 9))",
+      "first((28, 9))",
+      "first((-1, 6))",
+      "first((-14, 0))",
+      "first((0, 0))",
+      "first((2, 9))",
+      "first((19, 1))",
+      "first((-14, 9))",
+      "first((36, 9))",
+      "first((-32, 1))",
+      "first((17, 9))",
+      "first((-10, 6))",
+      "first((1, 9))",
+      "first((-11, 6))",
+      "first((-13, 1))",
+      "first((-12, 9))",
+      "first((-22, 6))",
+      "first((42, 8))",
+      "first((-7, 1))",
+      "first((12, 9))",
+      "first((29, 1))",
+      "first((42, 9))",
+      "first((-6, 0))",
+      "first((11, 5))",
+      "first((-29, 5))",
+      "first((-3, 0))",
+      "first((-8, 6))",
+      "first((38, 8))",
+      "first((-28, 1))",
+      "first((1, 1))",
+      "first((20, 8))",
+      "first((39, 1))",
+      "first((-17, 6))",
+      "first((-10, 0))",
+      "first((27, 1))",
+      "first((6, 6))",
+      "first((15, 8))",
+      "first((-19, 9))",
+      "first((35, 5))",
+      "first((-16, 1))",
+      "first((-25, 9))",
+      "first((-12, 0))",
+      "first((-9, 1))",
+      "first((-24, 1))",
+      "first((-26, 9))",
+      "first((-1, 9))",
+      "first((-23, 5))",
+      "first((13, 5))",
+      "first((-7, 9))",
+      "first((-2, 0))",
+      "first((-15, 6))",
+      "first((-16, 6))",
+      "first((-28, 5))",
+      "first((-4, 6))",
+      "first((-24, 9))",
+      "first((-31, 0))",
+      "first((30, 8))",
+      "first((15, 9))",
+      "first((26, 5))",
+      "first((-31, 9))",
+      "first((32, 8))",
+      "first((24, 9))",
+      "first((-12, 5))",
+      "first((2, 0))",
+      "first((17, 5))",
+      "first((-5, 1))",
+      "first((25, 8))",
+      "first((43, 8))",
+      "first((36, 1))",
+      "first((34, 8))",
+      "first((13, 1))",
+      "first((0, 9))",
+      "first((28, 8))",
+      "first((-19, 1))",
+      "first((-28, 0))",
+      "first((41, 1))",
+      "first((37, 9))",
+      "first((18, 8))",
+      "first((-21, 1))",
+      "first((39, 9))",
+      "first((28, 1))",
+      "first((-27, 1))",
+      "first((12, 5))",
+      "first((-6, 5))",
+      "first((7, 9))",
+      "first((19, 5))",
+      "first((-3, 6))",
+      "first((6, 9))",
+      "first((1, 7))",
+      "first((3, 9))",
+      "first((29, 8))",
+      "first((41, 5))",
+      "first((7, 0))",
+      "first((21, 9))",
+      "first((-13, 5))",
+      "first((-9, 6))",
+      "first((4, 0))",
+      "first((6, 1))",
+      "first((-29, 6))",
+      "first((-7, 6))",
+      "first((34, 1))",
+      "first((-26, 6))",
+      "first((-35, 1))",
+      "first((3, 6))",
+      "first((2, 8))",
+      "first((33, 9))",
+      "first((38, 1))",
+      "first((11, 9))",
+      "first((-21, 5))",
+      "first((42, 5))",
+      "first((27, 5))",
+      "first((7, 8))",
+      "first((-3, 9))",
+      "first((-8, 5))",
+      "first((-8, 0))",
+      "first((-26, 5))",
+      "first((-2, 5))",
+      "first((-1, 5))",
+      "first((3, 5))",
+      "first((0, 3))",
+      "first((29, 9))",
+      "first((22, 8))",
+      "first((16, 1))",
+      "first((3, 0))",
+      "first((21, 1))",
+      "first((-18, 1))",
+      "first((30, 1))",
+      "first((33, 8))",
+      "first((41, 8))",
+      "first((40, 9))",
+      "first((-33, 0))",
+      "first((-31, 6))",
+      "first((13, 8))",
+      "first((-24, 0))",
+      "first((9, 5))",
+      "first((-31, 5))",
+      "first((1, 8))",
+      "first((-35, 5))",
+      "first((-32, 0))",
+      "first((-21, 6))",
+      "first((-14, 6))",
+      "first((36, 5))",
+      "first((27, 8))",
+      "first((-22, 5))",
+      "first((-26, 1))",
+      "first((-29, 1))",
+      "first((4, 5))",
+      "first((-9, 0))"
+    ]
+  },
+  "greater": {
+    "calls": 553,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 11,
+        "signatures": [
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 8)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 0)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 6)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 8)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 0)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 7)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 9)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 2)"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 239,
+        "signatures": [
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 0)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 12)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 23)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 34)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 27)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 3)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 14)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 36)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 5)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 25)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 16)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 38)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 7)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 18)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 29)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 40)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 22)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 20)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 31)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 9)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 42)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 11)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 33)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 26)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 2)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 13)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 24)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 35)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 6)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 39)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 15)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 4)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 37)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 17)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 28)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 32)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 8)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 19)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 30)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 41)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 10)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 21)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, 43)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -21)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -10)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -30)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -19)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -28)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -6)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -8)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -17)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -37)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -26)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -15)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -4)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -35)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -24)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -13)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -2)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -11)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -22)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -33)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -31)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -20)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -9)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -18)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -7)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -16)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -29)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -27)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -5)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -36)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -25)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -14)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -3)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -23)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -32)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -34)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(3, -12)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 2)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 4)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 37)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 17)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 28)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 8)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 19)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 30)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 41)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 10)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 32)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 43)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 21)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 12)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 23)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 34)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 3)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 14)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 36)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 26)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 5)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 27)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 25)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 16)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 38)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 7)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 18)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 29)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 40)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 20)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 31)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 22)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 9)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 42)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 11)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 33)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 44)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 13)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 24)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 35)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 15)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 6)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 39)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -11)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -33)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -22)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 0)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -20)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -31)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -9)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -18)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -7)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -16)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -29)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -27)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -5)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -15)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -25)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -14)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -3)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -23)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -32)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, 1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -2)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -34)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -12)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -21)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -10)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -19)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -30)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -28)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -6)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -8)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -17)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -26)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -4)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -24)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(5, -13)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 12)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 23)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 34)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 27)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 3)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 14)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 36)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 5)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 25)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 16)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 38)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 7)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 18)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 29)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 40)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 22)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 20)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 31)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 9)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 42)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 11)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 33)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 26)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 2)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 13)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 24)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 35)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 6)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 39)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 15)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 4)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 37)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 17)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 28)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 32)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 8)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 19)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 30)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 41)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 10)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 43)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 21)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -11)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -33)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -22)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, 0)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -20)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -31)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -9)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -18)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -7)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -16)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -29)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -27)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -5)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -15)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -25)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -14)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -35)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -3)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -23)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -32)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -2)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -1)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -34)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -12)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -21)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -10)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -19)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -30)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -28)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -6)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -8)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -17)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -26)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -4)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -24)"
+          },
+          {
+            "type_signature": "greater(int, int)",
+            "value_signature": "greater(4, -13)"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "greater(int, int)"
+    ],
+    "value_signatures": [
+      "greater(3, -8)",
+      "greater(5, -31)",
+      "greater(4, -27)",
+      "greater(5, -22)",
+      "greater(4, 42)",
+      "greater(5, 32)",
+      "greater(4, 29)",
+      "greater(4, 10)",
+      "greater(4, 43)",
+      "greater(4, -3)",
+      "greater(5, -12)",
+      "greater(5, 35)",
+      "greater(3, 6)",
+      "greater(5, 10)",
+      "greater(3, 37)",
+      "greater(3, 12)",
+      "greater(5, 39)",
+      "greater(3, -19)",
+      "greater(5, -23)",
+      "greater(4, -31)",
+      "greater(4, 26)",
+      "greater(4, -12)",
+      "greater(4, 21)",
+      "greater(4, -24)",
+      "greater(5, 11)",
+      "greater(4, 5)",
+      "greater(4, -16)",
+      "greater(4, -11)",
+      "greater(4, -35)",
+      "greater(3, -35)",
+      "greater(4, 16)",
+      "greater(5, -10)",
+      "greater(3, 36)",
+      "greater(3, -37)",
+      "greater(5, 24)",
+      "greater(4, -26)",
+      "greater(4, -20)",
+      "greater(3, 19)",
+      "greater(5, -9)",
+      "greater(3, 14)",
+      "greater(5, 33)",
+      "greater(3, 0)",
+      "greater(3, -14)",
+      "greater(5, -13)",
+      "greater(4, 28)",
+      "greater(5, -24)",
+      "greater(4, 1)",
+      "greater(5, -14)",
+      "greater(3, 25)",
+      "greater(3, 16)",
+      "greater(4, 8)",
+      "greater(3, 11)",
+      "greater(4, -34)",
+      "greater(5, -26)",
+      "greater(5, -7)",
+      "greater(5, 9)",
+      "greater(3, -3)",
+      "greater(4, 13)",
+      "greater(4, -1)",
+      "greater(3, -23)",
+      "greater(4, 30)",
+      "greater(3, -4)",
+      "greater(3, 23)",
+      "greater(3, 42)",
+      "greater(4, 38)",
+      "greater(5, 37)",
+      "greater(5, -34)",
+      "greater(5, 21)",
+      "greater(5, -29)",
+      "greater(5, -19)",
+      "greater(5, 15)",
+      "greater(5, 19)",
+      "greater(5, -30)",
+      "greater(4, 9)",
+      "greater(5, 5)",
+      "greater(4, 34)",
+      "greater(5, -25)",
+      "greater(3, -27)",
+      "greater(4, -15)",
+      "greater(4, 36)",
+      "greater(4, 31)",
+      "greater(5, 41)",
+      "greater(3, -16)",
+      "greater(4, 35)",
+      "greater(3, -7)",
+      "greater(5, 23)",
+      "greater(4, 3)",
+      "greater(5, -21)",
+      "greater(5, 1)",
+      "greater(5, 43)",
+      "greater(5, 44)",
+      "greater(5, 8)",
+      "greater(5, 3)",
+      "greater(4, 12)",
+      "greater(5, -6)",
+      "greater(3, 21)",
+      "greater(5, 16)",
+      "greater(3, -33)",
+      "greater(3, -21)",
+      "greater(4, -30)",
+      "greater(4, -14)",
+      "greater(3, -24)",
+      "greater(5, -33)",
+      "greater(3, 24)",
+      "greater(3, 2)",
+      "greater(3, -1)",
+      "greater(4, -17)",
+      "greater(3, 10)",
+      "greater(4, -2)",
+      "greater(4, 2)",
+      "greater(4, 6)",
+      "greater(5, 17)",
+      "greater(4, -33)",
+      "greater(5, 26)",
+      "greater(5, 22)",
+      "greater(5, 30)",
+      "greater(5, 40)",
+      "greater(3, 8)",
+      "greater(4, -9)",
+      "greater(5, 14)",
+      "greater(3, -6)",
+      "greater(4, 24)",
+      "greater(5, -17)",
+      "greater(3, -25)",
+      "greater(4, 4)",
+      "greater(4, 32)",
+      "greater(3, 26)",
+      "greater(3, -10)",
+      "greater(5, 27)",
+      "greater(4, 41)",
+      "greater(3, 18)",
+      "greater(5, 36)",
+      "greater(3, -36)",
+      "greater(3, 4)",
+      "greater(5, 0)",
+      "greater(5, 20)",
+      "greater(3, 1)",
+      "greater(5, -16)",
+      "greater(3, 39)",
+      "greater(4, -25)",
+      "greater(3, 20)",
+      "greater(3, 33)",
+      "greater(3, -26)",
+      "greater(3, 5)",
+      "greater(3, -30)",
+      "greater(3, 27)",
+      "greater(3, 17)",
+      "greater(4, -22)",
+      "greater(3, -15)",
+      "greater(5, 2)",
+      "greater(3, 13)",
+      "greater(3, -18)",
+      "greater(3, 15)",
+      "greater(3, -5)",
+      "greater(5, -27)",
+      "greater(3, 31)",
+      "greater(5, 42)",
+      "greater(5, -3)",
+      "greater(5, -28)",
+      "greater(3, 43)",
+      "greater(3, -2)",
+      "greater(4, 11)",
+      "greater(4, 15)",
+      "greater(5, 25)",
+      "greater(5, -15)",
+      "greater(3, -31)",
+      "greater(4, -21)",
+      "greater(3, -11)",
+      "greater(4, -23)",
+      "greater(5, 28)",
+      "greater(3, 3)",
+      "greater(5, 38)",
+      "greater(5, 29)",
+      "greater(4, 18)",
+      "greater(4, 14)",
+      "greater(4, 17)",
+      "greater(4, -32)",
+      "greater(4, -4)",
+      "greater(3, 29)",
+      "greater(5, -8)",
+      "greater(3, 32)",
+      "greater(5, -4)",
+      "greater(4, 0)",
+      "greater(4, -29)",
+      "greater(4, -5)",
+      "greater(5, -20)",
+      "greater(3, 34)",
+      "greater(4, 27)",
+      "greater(4, 37)",
+      "greater(4, -13)",
+      "greater(5, 34)",
+      "greater(4, -19)",
+      "greater(3, 22)",
+      "greater(3, 9)",
+      "greater(3, -9)",
+      "greater(5, 4)",
+      "greater(5, -2)",
+      "greater(4, -8)",
+      "greater(3, 40)",
+      "greater(4, -7)",
+      "greater(3, 28)",
+      "greater(4, -10)",
+      "greater(4, 33)",
+      "greater(5, 12)",
+      "greater(4, 39)",
+      "greater(4, -18)",
+      "greater(3, -34)",
+      "greater(3, 38)",
+      "greater(3, -28)",
+      "greater(5, -11)",
+      "greater(3, 35)",
+      "greater(4, 7)",
+      "greater(5, 31)",
+      "greater(4, 19)",
+      "greater(3, -17)",
+      "greater(4, -6)",
+      "greater(3, -20)",
+      "greater(4, 40)",
+      "greater(4, 23)",
+      "greater(3, -22)",
+      "greater(3, -32)",
+      "greater(5, -32)",
+      "greater(5, 7)",
+      "greater(4, 25)",
+      "greater(5, 13)",
+      "greater(4, 22)",
+      "greater(5, -18)",
+      "greater(3, 41)",
+      "greater(5, 18)",
+      "greater(4, 20)",
+      "greater(3, -12)",
+      "greater(5, -5)",
+      "greater(3, 7)",
+      "greater(5, 6)",
+      "greater(3, -13)",
+      "greater(3, -29)",
+      "greater(5, -1)",
+      "greater(3, 30)",
+      "greater(4, -28)"
+    ]
+  },
+  "double": {
+    "calls": 25,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "double(bool)",
+            "value_signature": "double(False)"
+          },
+          {
+            "type_signature": "double(bool)",
+            "value_signature": "double(True)"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "double(bool)",
+            "value_signature": "double(True)"
+          },
+          {
+            "type_signature": "double(bool)",
+            "value_signature": "double(False)"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "double(bool)"
+    ],
+    "value_signatures": [
+      "double(True)",
+      "double(False)"
+    ]
+  },
+  "decrement": {
+    "calls": 25,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(0)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(2)"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(2)"
+          },
+          {
+            "type_signature": "decrement(int)",
+            "value_signature": "decrement(0)"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "decrement(int)"
+    ],
+    "value_signatures": [
+      "decrement(0)",
+      "decrement(2)"
+    ]
+  },
+  "toivec": {
+    "calls": 25,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "toivec(int)",
+            "value_signature": "toivec(-1)"
+          },
+          {
+            "type_signature": "toivec(int)",
+            "value_signature": "toivec(1)"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "toivec(int)",
+            "value_signature": "toivec(1)"
+          },
+          {
+            "type_signature": "toivec(int)",
+            "value_signature": "toivec(-1)"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "toivec(int)"
+    ],
+    "value_signatures": [
+      "toivec(-1)",
+      "toivec(1)"
+    ]
+  },
+  "invert": {
+    "calls": 13,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "invert(tuple)",
+            "value_signature": "invert((-1, 0))"
+          },
+          {
+            "type_signature": "invert(tuple)",
+            "value_signature": "invert((1, 0))"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      }
+    },
+    "type_signatures": [
+      "invert(tuple)"
+    ],
+    "value_signatures": [
+      "invert((-1, 0))",
+      "invert((1, 0))"
+    ]
+  },
+  "shoot": {
+    "calls": 25,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 12,
+        "signatures": [
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((8, 8), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((0, 3), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((6, 4), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((1, 7), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((8, 2), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((1, 6), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((0, 2), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((8, 1), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((7, 2), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((1, 3), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((9, 8), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((2, 6), (-1, 0))"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 12,
+        "signatures": [
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((0, 1), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((1, 5), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((5, 1), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((8, 6), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((5, 9), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((2, 9), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((2, 1), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((8, 5), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((1, 1), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((1, 8), (1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((7, 5), (-1, 0))"
+          },
+          {
+            "type_signature": "shoot(tuple, tuple)",
+            "value_signature": "shoot((8, 0), (-1, 0))"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "shoot(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "shoot((5, 1), (-1, 0))",
+      "shoot((1, 8), (1, 0))",
+      "shoot((1, 7), (-1, 0))",
+      "shoot((0, 3), (-1, 0))",
+      "shoot((8, 1), (1, 0))",
+      "shoot((2, 6), (-1, 0))",
+      "shoot((7, 2), (1, 0))",
+      "shoot((1, 5), (1, 0))",
+      "shoot((0, 1), (1, 0))",
+      "shoot((2, 1), (1, 0))",
+      "shoot((7, 5), (-1, 0))",
+      "shoot((5, 9), (-1, 0))",
+      "shoot((6, 4), (1, 0))",
+      "shoot((8, 2), (1, 0))",
+      "shoot((1, 3), (-1, 0))",
+      "shoot((9, 8), (1, 0))",
+      "shoot((1, 1), (1, 0))",
+      "shoot((0, 2), (-1, 0))",
+      "shoot((8, 0), (-1, 0))",
+      "shoot((8, 5), (-1, 0))",
+      "shoot((2, 9), (1, 0))",
+      "shoot((8, 8), (1, 0))",
+      "shoot((8, 6), (-1, 0))",
+      "shoot((1, 6), (-1, 0))"
+    ]
+  },
+  "connect": {
+    "calls": 25,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 12,
+        "signatures": [
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 8), (50, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 3), (-42, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((6, 4), (48, 4))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 7), (-41, 7))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 2), (50, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 6), (-41, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 2), (-42, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 1), (50, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 2), (49, 2))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 3), (-41, 3))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((9, 8), (51, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 6), (-40, 6))"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 12,
+        "signatures": [
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((0, 1), (42, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 5), (43, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 1), (-37, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 6), (-34, 6))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((5, 9), (-37, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 9), (44, 9))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((2, 1), (44, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 5), (-34, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 1), (43, 1))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((1, 8), (43, 8))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((7, 5), (-35, 5))"
+          },
+          {
+            "type_signature": "connect(tuple, tuple)",
+            "value_signature": "connect((8, 0), (-34, 0))"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "connect(tuple, tuple)"
+    ],
+    "value_signatures": [
+      "connect((6, 4), (48, 4))",
+      "connect((1, 3), (-41, 3))",
+      "connect((0, 1), (42, 1))",
+      "connect((8, 5), (-34, 5))",
+      "connect((1, 8), (43, 8))",
+      "connect((8, 6), (-34, 6))",
+      "connect((8, 8), (50, 8))",
+      "connect((1, 1), (43, 1))",
+      "connect((0, 3), (-42, 3))",
+      "connect((1, 5), (43, 5))",
+      "connect((2, 1), (44, 1))",
+      "connect((8, 0), (-34, 0))",
+      "connect((1, 6), (-41, 6))",
+      "connect((2, 6), (-40, 6))",
+      "connect((0, 2), (-42, 2))",
+      "connect((2, 9), (44, 9))",
+      "connect((5, 9), (-37, 9))",
+      "connect((5, 1), (-37, 1))",
+      "connect((7, 5), (-35, 5))",
+      "connect((8, 1), (50, 1))",
+      "connect((8, 2), (50, 2))",
+      "connect((1, 7), (-41, 7))",
+      "connect((7, 2), (49, 2))",
+      "connect((9, 8), (51, 8))"
+    ]
+  },
+  "merge": {
+    "calls": 6,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4195": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(-29, 3), (-38, 3), (-27, 3))"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(47, 1), (12, 1), (23, 1), ()"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(22, 2), (9, 2), (42, 2), (1)"
+          }
+        ],
+        "code_context": "x15 = mapply(x9, x1)"
+      },
+      "solvers.py:4196": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(0, 1), (1, 1), (2, 1)}), fr)"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(3, 1), (4, 1), (2, 1)}), fr)"
+          },
+          {
+            "type_signature": "merge(frozenset)",
+            "value_signature": "merge(frozenset({frozenset({(3, 8), (1, 8), (2, 8)}), fr)"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "merge(frozenset)"
+    ],
+    "value_signatures": [
+      "merge(frozenset({frozenset({(3, 1), (4, 1), (2, 1)}), fr)",
+      "merge(frozenset({frozenset({(0, 1), (1, 1), (2, 1)}), fr)",
+      "merge(frozenset({frozenset({(3, 8), (1, 8), (2, 8)}), fr)",
+      "merge(frozenset({frozenset({(47, 1), (12, 1), (23, 1), ()",
+      "merge(frozenset({frozenset({(22, 2), (9, 2), (42, 2), (1)",
+      "merge(frozenset({frozenset({(-29, 3), (-38, 3), (-27, 3))"
+    ]
+  },
+  "matcher": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4196": {
+        "count": 6,
+        "signatures": [
+          {
+            "type_signature": "matcher(function, bool)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x103a280d0, True)"
+          },
+          {
+            "type_signature": "matcher(function, bool)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x103a280d0, False)"
+          },
+          {
+            "type_signature": "matcher(function, bool)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x103a283a0, True)"
+          },
+          {
+            "type_signature": "matcher(function, bool)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x103a283a0, False)"
+          },
+          {
+            "type_signature": "matcher(function, bool)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x103a28430, True)"
+          },
+          {
+            "type_signature": "matcher(function, bool)",
+            "value_signature": "matcher(<function compose.<locals>.<lambda> at 0x103a28430, False)"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "matcher(function, bool)"
+    ],
+    "value_signatures": [
+      "matcher(<function compose.<locals>.<lambda> at 0x103a283a0, True)",
+      "matcher(<function compose.<locals>.<lambda> at 0x103a283a0, False)",
+      "matcher(<function compose.<locals>.<lambda> at 0x103a28430, True)",
+      "matcher(<function compose.<locals>.<lambda> at 0x103a280d0, False)",
+      "matcher(<function compose.<locals>.<lambda> at 0x103a280d0, True)",
+      "matcher(<function compose.<locals>.<lambda> at 0x103a28430, False)"
+    ]
+  },
+  "sfilter": {
+    "calls": 12,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4196": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "sfilter(frozenset, function)",
+            "value_signature": "sfilter(frozenset(len=43), <function matcher.<locals>.<lambda> at 0x103a28670)"
+          },
+          {
+            "type_signature": "sfilter(frozenset, function)",
+            "value_signature": "sfilter(frozenset(len=43), <function matcher.<locals>.<lambda> at 0x103a28790)"
+          },
+          {
+            "type_signature": "sfilter(frozenset, function)",
+            "value_signature": "sfilter(frozenset(len=43), <function matcher.<locals>.<lambda> at 0x103a289d0)"
+          }
+        ],
+        "code_context": "x16 = mapply(x14, x2)"
+      }
+    },
+    "type_signatures": [
+      "sfilter(frozenset, function)"
+    ],
+    "value_signatures": [
+      "sfilter(frozenset(len=43), <function matcher.<locals>.<lambda> at 0x103a28790)",
+      "sfilter(frozenset(len=43), <function matcher.<locals>.<lambda> at 0x103a28670)",
+      "sfilter(frozenset(len=43), <function matcher.<locals>.<lambda> at 0x103a289d0)"
+    ]
+  },
+  "underfill": {
+    "calls": 3,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4197": {
+        "count": 3,
+        "signatures": [
+          {
+            "type_signature": "underfill(tuple, int, frozenset)",
+            "value_signature": "underfill(tuple(len=10), 2, frozenset(len=17))"
+          },
+          {
+            "type_signature": "underfill(tuple, int, frozenset)",
+            "value_signature": "underfill(tuple(len=10), 2, frozenset(len=10))"
+          },
+          {
+            "type_signature": "underfill(tuple, int, frozenset)",
+            "value_signature": "underfill(tuple(len=10), 2, frozenset(len=15))"
+          }
+        ],
+        "code_context": "x17 = underfill(I, TWO, x16)"
+      }
+    },
+    "type_signatures": [
+      "underfill(tuple, int, frozenset)"
+    ],
+    "value_signatures": [
+      "underfill(tuple(len=10), 2, frozenset(len=17))",
+      "underfill(tuple(len=10), 2, frozenset(len=15))",
+      "underfill(tuple(len=10), 2, frozenset(len=10))"
+    ]
+  },
+  "mostcolor_t": {
+    "calls": 3,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4197": {
+        "count": 1,
+        "signatures": [
+          {
+            "type_signature": "mostcolor_t(tuple)",
+            "value_signature": "mostcolor_t(tuple(len=10))"
+          }
+        ],
+        "code_context": "x17 = underfill(I, TWO, x16)"
+      }
+    },
+    "type_signatures": [
+      "mostcolor_t(tuple)"
+    ],
+    "value_signatures": [
+      "mostcolor_t(tuple(len=10))"
+    ]
+  },
+  "fill": {
+    "calls": 3,
+    "execution_time": 0.0,
+    "call_sites": {
+      "solvers.py:4198": {
+        "count": 2,
+        "signatures": [
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 1, frozenset(len=215))"
+          },
+          {
+            "type_signature": "fill(tuple, int, frozenset)",
+            "value_signature": "fill(tuple(len=10), 1, frozenset(len=172))"
+          }
+        ],
+        "code_context": "O = fill(x17, ONE, x15)"
+      }
+    },
+    "type_signatures": [
+      "fill(tuple, int, frozenset)"
+    ],
+    "value_signatures": [
+      "fill(tuple(len=10), 1, frozenset(len=215))",
+      "fill(tuple(len=10), 1, frozenset(len=172))"
+    ]
+  }
+}

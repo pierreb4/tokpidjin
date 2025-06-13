@@ -1,0 +1,2 @@
+def solve_56ff96f3(S, I):
+    return paint(I, mapply(fork(recolor_i, color, backdrop), fgpartition(I)))

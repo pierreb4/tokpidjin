@@ -1,0 +1,2 @@
+def solve_3f7978a0(S, I):
+    return crop(I, subtract(corner(extract(fgpartition(I), matcher(color, GRAY)), R0), DOWN), add(shape_f(extract(fgpartition(I), matcher(color, GRAY))), TWO_BY_ZERO))

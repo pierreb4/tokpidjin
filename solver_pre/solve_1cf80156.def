@@ -1,0 +1,2 @@
+def solve_1cf80156(S, I):
+    return subgrid(get_nth_f(o_g(I, R7), F0), I)

@@ -1,0 +1,2 @@
+def solve_ba97ae07(S, I):
+    return fill(I, get_common_rank_t(apply(color, totuple(o_g(I, R5))), F0), backdrop(f_ofcolor(I, get_common_rank_t(apply(color, totuple(o_g(I, R5))), F0))))

@@ -1,0 +1,2 @@
+def solve_05269061(S, I):
+    return paint(paint(paint(I, mapply(lbind(shift, merge_f(o_g(I, R7))), apply(rbind(multiply, THREE), mapply(neighbors, neighbors(ORIGIN))))), shift(mapply(lbind(shift, merge_f(o_g(I, R7))), apply(rbind(multiply, THREE), mapply(neighbors, neighbors(ORIGIN)))), UP_RIGHT)), shift(mapply(lbind(shift, merge_f(o_g(I, R7))), apply(rbind(multiply, THREE), mapply(neighbors, neighbors(ORIGIN)))), DOWN_LEFT))

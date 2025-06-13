@@ -1,0 +1,2 @@
+def solve_5117e062(S, I):
+    return replace(subgrid(extract(o_g(I, R3), matcher(numcolors_f, TWO)), I), EIGHT, get_color_rank_f(extract(o_g(I, R3), matcher(numcolors_f, TWO)), F0))

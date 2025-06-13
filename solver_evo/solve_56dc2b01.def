@@ -1,0 +1,2 @@
+def solve_56dc2b01(S, I):
+    return move(paint(I, shift(recolor_i(c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), f_ofcolor(I, RED)), crement(multiply(sign(gravitate(f_ofcolor(I, RED), get_nth_f(colorfilter(o_g(I, R5), GREEN), F0))), branch(equality(get_nth_f(gravitate(get_nth_f(colorfilter(o_g(I, R5), GREEN), F0), f_ofcolor(I, RED)), F0), BLACK), width_f, height_f)(get_nth_f(colorfilter(o_g(I, R5), GREEN), F0)))))), get_nth_f(colorfilter(o_g(I, R5), GREEN), F0), gravitate(get_nth_f(colorfilter(o_g(I, R5), GREEN), F0), f_ofcolor(I, RED)))

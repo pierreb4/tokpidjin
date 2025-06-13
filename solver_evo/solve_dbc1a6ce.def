@@ -1,0 +1,2 @@
+def solve_dbc1a6ce(S, I):
+    return underfill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mfilter_f(apply(fork(connect, rbind(get_nth_f, F0), rbind(get_nth_f, L1)), product(f_ofcolor(I, BLUE), f_ofcolor(I, BLUE))), fork(either, vline_i, hline_i)))

@@ -1,0 +1,2 @@
+def solve_29c11459(S, I):
+    return fill(paint(paint(I, mapply(fork(recolor_i, color, compose(hfrontier, center)), o_g(righthalf(I), R5))), merge_f(o_g(paint(lefthalf(I), mapply(fork(recolor_i, color, compose(hfrontier, center)), o_g(lefthalf(I), R5))), R5))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), shift(apply(rbind(corner, R1), o_g(paint(lefthalf(I), mapply(fork(recolor_i, color, compose(hfrontier, center)), o_g(lefthalf(I), R5))), R5)), RIGHT))

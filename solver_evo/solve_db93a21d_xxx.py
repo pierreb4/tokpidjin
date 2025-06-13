@@ -1,0 +1,31 @@
+def solve_db93a21d_one(S, I):
+    return fill(fill(fill(underfill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), mapply(rbind(shoot, DOWN), f_ofcolor(I, BURGUNDY))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(outbox, colorfilter(o_g(I, R7), BURGUNDY))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(power(outbox, TWO), sfilter_f(colorfilter(o_g(I, R7), BURGUNDY), compose(rbind(greater, c_zo_n(S, identity(p_g), rbind(get_nth_t, F1))), compose(halve, width_f))))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(power(outbox, THREE), sfilter_f(colorfilter(o_g(I, R7), BURGUNDY), matcher(compose(halve, width_f), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0))))))
+
+
+def solve_db93a21d(S, I):
+    x1 = identity(p_g)
+    x2 = rbind(get_nth_t, F1)
+    x3 = c_zo_n(S, x1, x2)
+    x4 = rbind(shoot, DOWN)
+    x5 = f_ofcolor(I, BURGUNDY)
+    x6 = mapply(x4, x5)
+    x7 = underfill(I, x3, x6)
+    x8 = rbind(get_nth_t, F0)
+    x9 = c_zo_n(S, x1, x8)
+    x10 = o_g(I, R7)
+    x11 = colorfilter(x10, BURGUNDY)
+    x12 = mapply(outbox, x11)
+    x13 = fill(x7, x9, x12)
+    x14 = power(outbox, TWO)
+    x15 = rbind(greater, x3)
+    x16 = compose(halve, width_f)
+    x17 = compose(x15, x16)
+    x18 = sfilter_f(x11, x17)
+    x19 = mapply(x14, x18)
+    x20 = fill(x13, x9, x19)
+    x21 = power(outbox, THREE)
+    x22 = matcher(x16, x9)
+    x23 = sfilter_f(x11, x22)
+    x24 = mapply(x21, x23)
+    O = fill(x20, x9, x24)
+    return O

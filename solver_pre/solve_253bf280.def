@@ -1,0 +1,2 @@
+def solve_253bf280(S, I):
+    return fill(fill(I, THREE, mfilter_f(sfilter_f(prapply(connect, f_ofcolor(I, EIGHT), f_ofcolor(I, EIGHT)), compose(rbind(greater, ONE), size)), fork(either, vline_i, hline_i))), EIGHT, f_ofcolor(I, EIGHT))

@@ -1,0 +1,33 @@
+def solve_995c5fa3_one(S, I):
+    return hupscale(merge_t(apply(compose(rbind(canvas, UNITY), fork(add, fork(add, compose(double, matcher(compose(size, rbind(f_ofcolor, BLACK)), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)))), chain(power(double, TWO), double, matcher(compose(rbind(corner, R0), rbind(f_ofcolor, BLACK)), UNITY))), fork(add, compose(rbind(multiply, GREEN), matcher(compose(rbind(corner, R0), rbind(f_ofcolor, BLACK)), DOWN)), compose(power(double, TWO), matcher(compose(rbind(corner, R0), rbind(f_ofcolor, BLACK)), astuple(TWO, ONE)))))), hsplit(I, THREE))), THREE)
+
+
+def solve_995c5fa3(S, I):
+    x1 = rbind(canvas, UNITY)
+    x2 = rbind(f_ofcolor, BLACK)
+    x3 = compose(size, x2)
+    x4 = identity(p_g)
+    x5 = rbind(get_nth_t, F0)
+    x6 = c_iz_n(S, x4, x5)
+    x7 = matcher(x3, x6)
+    x8 = compose(double, x7)
+    x9 = power(double, TWO)
+    x10 = rbind(corner, R0)
+    x11 = compose(x10, x2)
+    x12 = matcher(x11, UNITY)
+    x13 = chain(x9, double, x12)
+    x14 = fork(add, x8, x13)
+    x15 = rbind(multiply, GREEN)
+    x16 = matcher(x11, DOWN)
+    x17 = compose(x15, x16)
+    x18 = astuple(TWO, ONE)
+    x19 = matcher(x11, x18)
+    x20 = compose(x9, x19)
+    x21 = fork(add, x17, x20)
+    x22 = fork(add, x14, x21)
+    x23 = compose(x1, x22)
+    x24 = hsplit(I, THREE)
+    x25 = apply(x23, x24)
+    x26 = merge_t(x25)
+    O = hupscale(x26, THREE)
+    return O

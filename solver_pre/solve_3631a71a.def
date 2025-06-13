@@ -1,0 +1,2 @@
+def solve_3631a71a(S, I):
+    return paint(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, replace(I, NINE, ZERO), mir_rot_t(replace(I, NINE, ZERO), R1))), shift(merge(o_g(mir_rot_t(crop(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, replace(I, NINE, ZERO), mir_rot_t(replace(I, NINE, ZERO), R1))), TWO_BY_TWO, subtract(shape_t(I), TWO_BY_TWO)), R2), R5)), TWO_BY_TWO))

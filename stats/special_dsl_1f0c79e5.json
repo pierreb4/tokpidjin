@@ -1,0 +1,107 @@
+{
+  "summary": {
+    "total_functions": 21,
+    "dsl_functions": 21,
+    "non_dsl_functions": 0,
+    "functions_with_t_variants": 3,
+    "functions_with_f_variants": 3,
+    "threshold_percent": 100.0
+  },
+  "specialized_functions": [
+    {
+      "name": "apply",
+      "total_calls": 10,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3368": {
+          "count": 5,
+          "code_context": "x11 = apply(x7, x10)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        },
+        "solvers.py:3372": {
+          "count": 3,
+          "code_context": "x15 = mapply(x14, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "mapply",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 0.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": false,
+      "call_sites": {
+        "solvers.py:3372": {
+          "count": 3,
+          "code_context": "x15 = mapply(x14, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 0
+        }
+      }
+    },
+    {
+      "name": "merge",
+      "total_calls": 5,
+      "tuple_percent": 0.0,
+      "has_tuple_variant": true,
+      "frozenset_percent": 100.0,
+      "has_frozenset_variant": true,
+      "meets_threshold": true,
+      "call_sites": {
+        "solvers.py:3372": {
+          "count": 3,
+          "code_context": "x15 = mapply(x14, x13)",
+          "tuple_calls": 0,
+          "frozenset_calls": 3
+        }
+      }
+    }
+  ],
+  "high_impact_opportunities": [],
+  "perfect_matches": [
+    {
+      "name": "merge",
+      "variant": "merge_f",
+      "type": "frozenset",
+      "calls": 5,
+      "call_sites": {
+        "solvers.py:3372": {
+          "count": 3,
+          "code_context": "x15 = mapply(x14, x13)"
+        }
+      }
+    }
+  ],
+  "analyzed_functions": [
+    "f_ofcolor",
+    "replace",
+    "leastcolor_t",
+    "combine_f",
+    "recolor_i",
+    "toindices_i",
+    "compose",
+    "ulcorner",
+    "toindices",
+    "invert",
+    "shift",
+    "apply",
+    "double",
+    "decrement",
+    "interval",
+    "prapply",
+    "multiply",
+    "lbind",
+    "mapply",
+    "merge",
+    "paint"
+  ]
+}
