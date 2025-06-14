@@ -48,3 +48,46 @@
 # Notes
 1. The intention is to avoid manual edits in solvers_ref.py.
     Experimental edits happen in solvers.py or solvers_xxx.py but are expected to be wiped out eventually by replace.py.
+
+# Github commands
+|----------------------------------------------------------------|
+| **Step**                                                       |
+| Command Example(s)                                             |
+| or Rollback/Undo Command(s)                                    |
+|----------------------------------------------------------------|
+| **Clone your fork**                                            |
+| `git clone https://github.com/YOU/REPO.git`                    |
+|  or  N/A                                                       |
+|----------------------------------------------------------------|
+| **Add upstream remote**                                        |
+| `git remote add upstream https://github.com/ORIGINAL/REPO.git` |
+|  or `git remote remove upstream`                               |
+|----------------------------------------------------------------|
+| **Create branch**                                              |
+| `git checkout -b my-feature`                                   |
+|  or `git branch -D my-feature` (if not pushed)                 |
+|----------------------------------------------------------------|
+| **Stage changes**                                              |
+| `git add file1 file2`                                          |
+|  or `git checkout -- file1` (uncommitted)                      |
+|----------------------------------------------------------------|
+| **Commit changes**                                             |
+| `git commit -m "Description"`                                  |
+|  or `git reset --soft HEAD~1` (local only)                     |
+|----------------------------------------------------------------|
+| **Push branch**                                                |
+| `git push origin my-feature`                                   |
+|  or `git push -f origin my-feature` (if needed)                |
+|----------------------------------------------------------------|
+| **Sync with upstream**                                         |
+| `git fetch upstream`<br>`git merge upstream/main`              |
+|  or `git reset --hard <hash>` (local only)                     |
+|----------------------------------------------------------------|
+| **Rebase branch**                                              |
+| `git checkout my-feature`<br>`git rebase main`                 |
+|  or `git rebase --abort`                                       |
+|----------------------------------------------------------------|
+| **Undo pushed commit**                                         |
+| `git revert <commit-hash>`                                     |
+|  or  N/A (safe for shared branches)                            |
+|----------------------------------------------------------------|
