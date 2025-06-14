@@ -25,6 +25,9 @@ import argparse
 import ast
 from pathlib import Path
 
+from utils import *
+
+
 def parse_solver_function(file_content):
     """
     Extract solver function details from file content
@@ -242,12 +245,13 @@ def process_file(input_file, output_file=None, verbose=False, include_condensed=
     with open(output_file, 'w') as f:
         f.write(output_content)
     
-    print(f"Split solver into {len(solver_info['vars'])} functions")
-    if not include_condensed:
-        print("Condensed solver function excluded from output")
-    if not include_expanded:
-        print("Expanded solver function excluded from output")
-    print(f"Output saved to: {output_file}")
+    if verbose:
+        print(f"Split solver into {len(solver_info['vars'])} functions")
+        if not include_condensed:
+            print("Condensed solver function excluded from output")
+        if not include_expanded:
+            print("Expanded solver function excluded from output")
+        print(f"Output saved to: {output_file}")
     return output_file
 
 def process_directory(directory, verbose=False, include_condensed=True, include_expanded=True):
@@ -273,7 +277,8 @@ def process_directory(directory, verbose=False, include_condensed=True, include_
         print(f"No solver files with _xxx suffix found in {directory}")
         return 0
     
-    print(f"Found {len(solver_files)} solver files in {directory}")
+    if verbose:
+        print(f"Found {len(solver_files)} solver files in {directory}")
     
     # Process each file
     success_count = 0
@@ -290,7 +295,8 @@ def process_directory(directory, verbose=False, include_condensed=True, include_
                 import traceback
                 traceback.print_exc()
     
-    print(f"\nSuccessfully processed {success_count} out of {len(solver_files)} files")
+    if verbose:
+        print(f"Successfully processed {success_count} out of {len(solver_files)} files")
     return success_count
 
 def main():

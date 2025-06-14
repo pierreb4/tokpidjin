@@ -56,23 +56,32 @@ def get_nth_by_key_f( container: frozenset, rank: 'F_', key = identity ) -> Any:
 (1, 'o_g(mir_rot_t(I, R2), R5)', '68b16354')
 
 
-        if hint == 'fill(I, get_common_rank_t(apply(color, totuple(o_g(I, R5))), F0), backdrop(f_ofcolor(I, get_common_rank_t(apply(color, totuple(o_g(I, R5))), F0))))':
-            print_l(f'Hello!')
 
-
-def solve_ba97ae07(S, I):
-    x1 = o_g(I, R5)
-    x2 = totuple(x1)
-    x3 = apply(color, x2)
-    x4 = get_common_rank_t(x3, F0)
-    x5 = f_ofcolor(I, x4)
-    x6 = backdrop(x5)
-    O = fill(I, x4, x6)
+def solve_f25fbde4(S, I):
+    x1 = o_g(I, R7)
+    x2 = get_nth_f(x1, F0)
+    x3 = subgrid(x2, I)
+    O = upscale_t(x3, TWO)
     return O
 
 
 
-fill(I, get_common_rank_t(
-    apply(color, totuple(o_g(I, R5))), F0), 
-        backdrop(f_ofcolor(I, get_common_rank_t(
-    apply(color, totuple(o_g(I, R5))), F0))))
+def solve_46442a0e(S, I, x=0):
+    x1 = mir_rot_t(I, R4)
+    if x == 1:
+        return x1
+    x2 = hconcat(I, x1)
+    if x == 2:
+        return x2
+    x3 = mir_rot_t(I, R6)
+    if x == 3:
+        return x3
+    x4 = mir_rot_t(I, R5)
+    if x == 4:
+        return x4
+    x5 = hconcat(x3, x4)
+    if x == 5:
+        return x5
+    O = vconcat(x2, x5)
+    return O
+

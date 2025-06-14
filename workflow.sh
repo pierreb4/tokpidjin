@@ -73,7 +73,7 @@ while true
 done
 
 # Lower left
-clear; time timeout 5s python regen.py
+clear; time timeout 15s python regen.py
 
 # Lower right
 python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py && \
@@ -93,6 +93,13 @@ do for f in `cd solver_pre && ls *.def`
   done | sort -rnk5 | tail -5
 python regen_dev.py `cat next_task_dev.txt`
 sleep 120
+done
+
+# Regenerate any solver, preferring smallest tasks
+clear
+while date
+do python regen_dev.py
+sleep 60
 done
 
 # Remove bad evo solvers and check

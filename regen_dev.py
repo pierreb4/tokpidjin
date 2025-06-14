@@ -49,7 +49,8 @@ def build_solver_dict(total_data, max_attempt=3, task_id_list=None):
 
     # Don't exclude task_id_list from learning
     todo_set = set()
-    todo_set = add_todo_set(total_data, None, todo_set, None)
+    todo_var = {}
+    todo_set = add_todo_set(total_data, None, todo_set, todo_var, None)
 
     solver_dict['todo_hint_sorted'] = [t[1] for t in sorted(todo_set)]
 
@@ -155,7 +156,7 @@ def build_solver_dict(total_data, max_attempt=3, task_id_list=None):
             break
 
         if got_closer:
-            todo_set = add_todo_set(total_data, start_from, todo_set, task_id_list)
+            todo_set = add_todo_set(total_data, start_from, todo_set, todo_var, task_id_list)
             solver_dict['todo_hint_sorted'] = [t[1] for t in sorted(todo_set)]
 
     return solver_dict
@@ -486,10 +487,11 @@ def substitute_symbol(self, arg, constant_dict):
 
 
 class VariableInliner(ast.NodeTransformer):
-    def __init__(self, task_id, S, todo_set=set(), score=0):
+    def __init__(self, task_id, S, todo_set, todo_var, score=0):
         self.task_id = task_id
         self.S = S
         self.todo_set = todo_set
+        self.todo_var = todo_var
         self.score = score
         self.assignments = {}
         self.safe_to_inline = set()  # Track which variables are safe to inline
@@ -498,6 +500,7 @@ class VariableInliner(ast.NodeTransformer):
         self.all_func_names = set()  # NEW: Track all function names seen
         self.func_name_counts = {}   # NEW: Count frequency of each function name
         self.func_name_order = []    # NEW: Track order of function names encountered
+        self.count = 0
 
     def visit_Assign(self, node):
         # Only handle simple assignments to variable names
@@ -552,11 +555,40 @@ class VariableInliner(ast.NodeTransformer):
             else:
                 self.score += 1
 
-        if var_name == 'O':
-            # XXX Temporary, to recreate old sorting
-            # self.score = len(new_value)
+        # if var_name == 'O':
+        #     # NOTE Having task_id removes grouping of identical values  
+        #     # self.todo_set.add((self.score, new_value, self.task_id))
+        #     self.todo_set.add((self.score, new_value))
 
-            self.todo_set.add((self.score, new_value, self.task_id))
+        # if self.count < 100:
+        print_l(f'-- {var_name = } - {original_value = } -----')
+        print_l(f'-- {self.count = } - {new_value = } -----')
+            # self.count += 1
+
+        # while new_value not in self.todo_var.keys() and new_value.count('(') > 1:
+        while new_value.count('(') > 1:
+            for score, value, var in self.todo_set:                
+                if value in new_value and value != new_value:
+                    new_value = new_value.replace(value, var)
+            else:
+                break
+                    # print_l(f'Replaced {value} with {var} in {new_value = }')
+
+        #     if random.random() < 0.1 and  new_value.count('(') > 1:
+        #         print_l(f'{new_value = }')
+
+        # if random.random() < 0.1:
+        #     print_l(f"{new_value.count('(') = } - {new_value.count(')') = }")
+
+        if new_value not in self.todo_var.keys():
+            self.todo_var[new_value] = f't{1 + len(self.todo_var)}'
+            self.todo_set.add((self.score, new_value, self.todo_var[new_value]))
+
+        # print_l(f'{self.todo_var = }')
+        # print_l(f'{self.todo_set = }')
+
+        # else:
+        #     assert False
 
         # Keep the assignment in the output (don't return None)
         return node
@@ -597,9 +629,9 @@ class VariableInliner(ast.NodeTransformer):
         }
 
 
-def inline_variables(task_id, source_code, S, todo_set):
+def inline_variables(task_id, source_code, S, todo_set, todo_var):
     tree = ast.parse(source_code)
-    inliner = VariableInliner(task_id, S, todo_set, 0)
+    inliner = VariableInliner(task_id, S, todo_set, todo_var, 0)
     
     # Process tree and collect assignments
     tree = inliner.visit(tree)
@@ -624,7 +656,7 @@ def inline_variables(task_id, source_code, S, todo_set):
     return ast.unparse(tree)
 
 
-def add_todo_set(total_data, start_from, todo_set, task_id_list=None):
+def add_todo_set(total_data, start_from, todo_set, todo_var, task_id_list=None):
     """ Get todo set from solver code """
 
     if task_id_list is None:
@@ -714,7 +746,7 @@ def add_todo_set(total_data, start_from, todo_set, task_id_list=None):
             solver_source = '\n'.join(lines)
 
         # Add to to_do from this solver
-        one_source = inline_variables(task_id, solver_source, S, todo_set)
+        one_source = inline_variables(task_id, solver_source, S, todo_set, todo_var)
         # print(f'{one_source = }')
 
     for tup in todo_set:
@@ -730,18 +762,24 @@ def add_todo_set(total_data, start_from, todo_set, task_id_list=None):
             for item in sorted_todo_set:
                 f.write(f"{item}\n")
 
-        for item in sorted_todo_set:
-            if os.path.exists(f'solver_evo/solve_{item[2]}.def'):
-                continue
-            # Don't pick as next the task that we are currently working on
-            if os.path.exists('next_task_dev.txt'):
-                with open('next_task_dev.txt', 'r') as f:
-                    next_task = f.read().strip()
-                if next_task == item[2]:
+        try:
+            for item in sorted_todo_set:
+                if os.path.exists(f'solver_evo/solve_{item[2]}.def'):
                     continue
-            with open('next_task_dev.txt', 'w') as f:
-                f.write(f"{item[2]}\n")
-            break
+                # Don't pick as next the task that we are currently working on
+                if os.path.exists('next_task_dev.txt'):
+                    with open('next_task_dev.txt', 'r') as f:
+                        next_task = f.read().strip()
+                    if next_task == item[2]:
+                        continue
+                with open('next_task_dev.txt', 'w') as f:
+                    f.write(f"{item[2]}\n")
+                break
+        except:
+            # Above only works with task_id in todo_set,
+            # which we don't usually want
+            # Just ignore failures
+            pass
 
     return todo_set
 
@@ -1191,6 +1229,8 @@ def check_hint(task, task_id, cand_dict, call_score_dict, dist_score_dict, \
                     # print_l(f'>- Got closer with {hint}:')
                     # print_l(f'-> {hint_k = } - {val_pass = }')
                     # dist_score_dict[task_id][hint_k] = val_pass
+                    if in_dev():
+                        print_l(f'-> {hint_k = }')
             elif type(Y_v) == tuple and issubsequence(val_pass, hint_v):
                 if hint_k not in dist_score_dict[task_id]:
                     print_l(f'>- Not in dist_score_dict[task_id]:')
@@ -1203,6 +1243,8 @@ def check_hint(task, task_id, cand_dict, call_score_dict, dist_score_dict, \
                     # print_l(f'>- Got closer with {hint}:')
                     # print_l(f'-> {hint_k = } - {val_pass = }')
                     # dist_score_dict[task_id][hint_k] = val_pass
+                    if in_dev():
+                        print_l(f'-> {hint_k = }')
 
     if can_use > 20:
         with open('solvers_gen.py', 'a') as f:
@@ -1342,29 +1384,30 @@ MONITORING_HINTS = {
 }
 # Solvers in solvers_pre.py that don't work
 BAD_SOLVERS = {
-    '27a28665',
-    '29623171',
-    '39a8645d',
-    '50846271',
-    '6455b5f5',
-    '6855a6e4',
-    '88a62173',
-    '9af7a82c',
-    '9f236235',
-    'a3325580',
-    'a64e4611',
-    'a87f7484',
-    'b230c067',
-    'ba97ae07',
-    'c8cbb738',
-    'd6ad076f',
-    'e40b9e2f',
+    '27a28665', # Broken in solvers_ref.py
+    '29623171', # Broken in solvers_ref.py
+    '39a8645d', # Broken in solvers_ref.py
+    '50846271', # Broken in solvers_ref.py
+    '6455b5f5', # Broken in solvers_ref.py
+    '6855a6e4', # Broken in solvers_ref.py
+    '88a62173', # Broken in solvers_ref.py
+    '9af7a82c', # Broken in solvers_ref.py
+    '9f236235', # Broken in solvers_ref.py
+    'a3325580', # Broken in solvers_ref.py
+    'a64e4611', # Broken in solvers_ref.py
+    'a87f7484', # Broken in solvers_ref.py
+    'b230c067', # Broken in solvers_ref.py
+    'ba97ae07', # Broken in solvers_ref.py
+    'c8cbb738', # Broken in solvers_ref.py
+    'd6ad076f', # Broken in solvers_ref.py
+    'e40b9e2f', # Broken in solvers_ref.py
     'a65b410d', # Gets closer, but no solve
     '6773b310', # Gets closer, but no solve
     'ef135b50', # Gets closer, but no solve
     '6a1e5592', # Gets closer, but no solve
     'a8d7556c', # Gets closer, but no solve
     'd06dbe63', # Gets closer, but no solve
+    '484b58aa', # Gets closer, but no solve
     'e26a3af2', # Seems to hang
 } 
 
@@ -1399,7 +1442,6 @@ def main(task_id=None):
 
         task_sizes = []
         for task_id in task_list:
-        # for task_id in ['44f52bb0']:
             size = 0
             for S in total_data['train'][task_id] + total_data['test'][task_id]:
                 for ex in S.values():
@@ -1419,7 +1461,7 @@ def main(task_id=None):
             # Skip tasks with existing solver most of the time
             if os.path.exists(f'solver_evo/solve_{task_id}.def'):
                 # Sometimes try to improve existing solver
-                if random.random() < 0.99:
+                if random.random() < 0.9:
                     continue
             
             break

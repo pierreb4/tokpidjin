@@ -17,7 +17,7 @@ def get_variables(solver_source):
     lines = solver_source.split('\n')
     
     # Split each line at '=' to get variable names and their values
-    assignments = [line.split('=', 1) for line in lines if '=' in line]
+    assignments = [line.split('=', 1) for line in lines if ' = ' in line]
     # Create a dictionary to hold variable names and their values
     variables = {}
     for var, value in assignments:

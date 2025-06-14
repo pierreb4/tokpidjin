@@ -217,7 +217,7 @@ def process_directory(directory: str, output_suffix: str = "_two", output_dir: s
     solver_files.extend(
         os.path.join(directory, file)
         for file in os.listdir(directory)
-        if file.endswith('_split.py') and file.startswith('solve_')
+        if file.startswith('solve_') and file.endswith('_split.py')
     )
     
     if not solver_files:

@@ -24,8 +24,8 @@ while date; do
   # Obsolete?
   # grep -q '^def ' solvers_gen.py && cat solvers_gen.py
 
-  # echo -n Total solvers:
-  # ls -l solver_evo/*.def | wc -l
+  echo -n Total solvers:
+  ls -l solver_evo/*.def | wc -l
   echo -n Known solvers:
   for f in `ls solver_evo/*.def`; do 
     for n in `echo $f | grep -o solve_........`; do 
