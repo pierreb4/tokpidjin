@@ -1075,6 +1075,106 @@ def solve_60c09cac(S, I, x=0):
     O = upscale_t(I, TWO)
     return O
 
+def solve_1e32b0e9(S, I, x=0):
+    x1 = asobject(I)
+    if x == 1:
+        return x1
+    x2 = palette_f(x1)
+    if x == 2:
+        return x2
+    x3 = height_t(I)
+    if x == 3:
+        return x3
+    x4 = subtract(x3, TWO)
+    if x == 4:
+        return x4
+    x5 = divide(x4, THREE)
+    if x == 5:
+        return x5
+    x6 = astuple(x5, x5)
+    if x == 6:
+        return x6
+    x7 = crop(I, ORIGIN, x6)
+    if x == 7:
+        return x7
+    x8 = partition(x7)
+    if x == 8:
+        return x8
+    x9 = matcher(color, BLACK)
+    if x == 9:
+        return x9
+    x10 = compose(flip, x9)
+    if x == 10:
+        return x10
+    x11 = extract(x8, x10)
+    if x == 11:
+        return x11
+    x12 = palette_f(x11)
+    if x == 12:
+        return x12
+    x13 = difference(x2, x12)
+    if x == 13:
+        return x13
+    x14 = get_color_rank_t(I, F0)
+    if x == 14:
+        return x14
+    x15 = initset(x14)
+    if x == 15:
+        return x15
+    x16 = difference(x13, x15)
+    if x == 16:
+        return x16
+    x17 = get_nth_f(x16, F0)
+    if x == 17:
+        return x17
+    x18 = lbind(shift, x11)
+    if x == 18:
+        return x18
+    x19 = lbind(multiply, x5)
+    if x == 19:
+        return x19
+    x20 = rbind(get_nth_f, F0)
+    if x == 20:
+        return x20
+    x21 = interval(ZERO, THREE, ONE)
+    if x == 21:
+        return x21
+    x22 = product(x21, x21)
+    if x == 22:
+        return x22
+    x23 = totuple(x22)
+    if x == 23:
+        return x23
+    x24 = apply(x20, x23)
+    if x == 24:
+        return x24
+    x25 = apply(x19, x24)
+    if x == 25:
+        return x25
+    x26 = papply(add, x25, x24)
+    if x == 26:
+        return x26
+    x27 = rbind(get_nth_f, L1)
+    if x == 27:
+        return x27
+    x28 = apply(x27, x23)
+    if x == 28:
+        return x28
+    x29 = apply(x19, x28)
+    if x == 29:
+        return x29
+    x30 = papply(add, x29, x28)
+    if x == 30:
+        return x30
+    x31 = papply(astuple, x26, x30)
+    if x == 31:
+        return x31
+    x32 = mapply(x18, x31)
+    if x == 32:
+        return x32
+    O = underfill(I, x17, x32)
+    return O
+
 def solve_941d9a10(S, I, x=0):
     x1 = identity(p_g)
     if x == 1:
@@ -2171,6 +2271,208 @@ def solve_6cf79266(S, I, x=0):
     if x == 14:
         return x14
     O = fill(I, BLUE, x14)
+    return O
+
+def solve_97a05b5b(S, I, x=0):
+    x1 = o_g(I, R3)
+    if x == 1:
+        return x1
+    x2 = get_arg_rank_f(x1, size, F0)
+    if x == 2:
+        return x2
+    x3 = subgrid(x2, I)
+    if x == 3:
+        return x3
+    x4 = lbind(lbind, shift)
+    if x == 4:
+        return x4
+    x5 = compose(x4, normalize)
+    if x == 5:
+        return x5
+    x6 = lbind(rbind, subtract)
+    if x == 6:
+        return x6
+    x7 = rbind(corner, R0)
+    if x == 7:
+        return x7
+    x8 = compose(x6, x7)
+    if x == 8:
+        return x8
+    x9 = lbind(recolor_o, BLACK)
+    if x == 9:
+        return x9
+    x10 = rbind(get_nth_f, F0)
+    if x == 10:
+        return x10
+    x11 = matcher(x10, RED)
+    if x == 11:
+        return x11
+    x12 = compose(flip, x11)
+    if x == 12:
+        return x12
+    x13 = rbind(sfilter, x12)
+    if x == 13:
+        return x13
+    x14 = compose(x9, x13)
+    if x == 14:
+        return x14
+    x15 = rbind(sfilter, x11)
+    if x == 15:
+        return x15
+    x16 = fork(combine, x14, x15)
+    if x == 16:
+        return x16
+    x17 = chain(x8, x16, normalize)
+    if x == 17:
+        return x17
+    x18 = compose(positive, size)
+    if x == 18:
+        return x18
+    x19 = switch(x3, RED, BLACK)
+    if x == 19:
+        return x19
+    x20 = o_g(x19, R7)
+    if x == 20:
+        return x20
+    x21 = apply(toindices, x20)
+    if x == 21:
+        return x21
+    x22 = lbind(sfilter, x21)
+    if x == 22:
+        return x22
+    x23 = lbind(lbind, contained)
+    if x == 23:
+        return x23
+    x24 = chain(x18, x22, x23)
+    if x == 24:
+        return x24
+    x25 = rbind(sfilter, x24)
+    if x == 25:
+        return x25
+    x26 = lbind(occurrences, x19)
+    if x == 26:
+        return x26
+    x27 = chain(x26, x16, normalize)
+    if x == 27:
+        return x27
+    x28 = compose(x25, x27)
+    if x == 28:
+        return x28
+    x29 = chain(size, x10, x22)
+    if x == 29:
+        return x29
+    x30 = compose(x29, x23)
+    if x == 30:
+        return x30
+    x31 = rbind(compose, x30)
+    if x == 31:
+        return x31
+    x32 = lbind(rbind, equality)
+    if x == 32:
+        return x32
+    x33 = rbind(colorcount_f, RED)
+    if x == 33:
+        return x33
+    x34 = chain(x31, x32, x33)
+    if x == 34:
+        return x34
+    x35 = fork(sfilter, x28, x34)
+    if x == 35:
+        return x35
+    x36 = fork(apply, x17, x35)
+    if x == 36:
+        return x36
+    x37 = fork(mapply, x5, x36)
+    if x == 37:
+        return x37
+    x38 = rbind(get_nth_f, L1)
+    if x == 38:
+        return x38
+    x39 = fork(compose, x10, x38)
+    if x == 39:
+        return x39
+    x40 = rbind(mir_rot_f, R3)
+    if x == 40:
+        return x40
+    x41 = rbind(mir_rot_f, R1)
+    if x == 41:
+        return x41
+    x42 = astuple(x40, x41)
+    if x == 42:
+        return x42
+    x43 = rbind(mir_rot_f, R0)
+    if x == 43:
+        return x43
+    x44 = rbind(mir_rot_f, R2)
+    if x == 44:
+        return x44
+    x45 = astuple(x43, x44)
+    if x == 45:
+        return x45
+    x46 = combine(x42, x45)
+    if x == 46:
+        return x46
+    x47 = product(x46, x46)
+    if x == 47:
+        return x47
+    x48 = apply(x39, x47)
+    if x == 48:
+        return x48
+    x49 = lbind(rapply, x48)
+    if x == 49:
+        return x49
+    x50 = rbind(greater, BLUE)
+    if x == 50:
+        return x50
+    x51 = compose(x50, numcolors_f)
+    if x == 51:
+        return x51
+    x52 = sfilter_f(x1, x51)
+    if x == 52:
+        return x52
+    x53 = mapply(x49, x52)
+    if x == 53:
+        return x53
+    x54 = mapply(x37, x53)
+    if x == 54:
+        return x54
+    x55 = paint(x3, x54)
+    if x == 55:
+        return x55
+    x56 = fork(apply, x17, x27)
+    if x == 56:
+        return x56
+    x57 = fork(mapply, x5, x56)
+    if x == 57:
+        return x57
+    x58 = lbind(remove, RED)
+    if x == 58:
+        return x58
+    x59 = palette_t(x54)
+    if x == 59:
+        return x59
+    x60 = x58(x59)
+    if x == 60:
+        return x60
+    x61 = rbind(contained, x60)
+    if x == 61:
+        return x61
+    x62 = chain(x10, x58, palette_f)
+    if x == 62:
+        return x62
+    x63 = chain(flip, x61, x62)
+    if x == 63:
+        return x63
+    x64 = sfilter_f(x52, x63)
+    if x == 64:
+        return x64
+    x65 = mapply(x49, x64)
+    if x == 65:
+        return x65
+    x66 = mapply(x57, x65)
+    if x == 66:
+        return x66
+    O = paint(x55, x66)
     return O
 
 def solve_5ad4f10b(S, I, x=0):
@@ -3465,6 +3767,151 @@ def solve_8731374e(S, I, x=0):
     if x == 19:
         return x19
     O = fill(x15, x16, x19)
+    return O
+
+def solve_9ddd00f0(S, I, x=0):
+    x1 = rbind(get_rank, F0)
+    if x == 1:
+        return x1
+    x2 = lbind(apply, x1)
+    if x == 2:
+        return x2
+    x3 = mir_rot_t(I, R6)
+    if x == 3:
+        return x3
+    x4 = mir_rot_t(I, R5)
+    if x == 4:
+        return x4
+    x5 = mir_rot_t(I, R4)
+    if x == 5:
+        return x5
+    x6 = initset(I)
+    if x == 6:
+        return x6
+    x7 = insert(x5, x6)
+    if x == 7:
+        return x7
+    x8 = insert(x4, x7)
+    if x == 8:
+        return x8
+    x9 = insert(x3, x8)
+    if x == 9:
+        return x9
+    x10 = chain(numcolors_t, lefthalf, tophalf)
+    if x == 10:
+        return x10
+    x11 = get_arg_rank_f(x9, x10, F1)
+    if x == 11:
+        return x11
+    x12 = mir_rot_t(x11, R2)
+    if x == 12:
+        return x12
+    x13 = papply(pair, x11, x12)
+    if x == 13:
+        return x13
+    x14 = apply(x2, x13)
+    if x == 14:
+        return x14
+    x15 = rbind(corner, R2)
+    if x == 15:
+        return x15
+    x16 = partition(x14)
+    if x == 16:
+        return x16
+    x17 = sizefilter(x16, FOUR)
+    if x == 17:
+        return x17
+    x18 = apply(x15, x17)
+    if x == 18:
+        return x18
+    x19 = rbind(corner, R3)
+    if x == 19:
+        return x19
+    x20 = apply(x19, x17)
+    if x == 20:
+        return x20
+    x21 = combine_f(x18, x20)
+    if x == 21:
+        return x21
+    x22 = cover(x14, x21)
+    if x == 22:
+        return x22
+    x23 = rbind(get_nth_f, L1)
+    if x == 23:
+        return x23
+    x24 = compose(even, x23)
+    if x == 24:
+        return x24
+    x25 = rbind(sfilter, x24)
+    if x == 25:
+        return x25
+    x26 = rbind(add, ZERO_BY_TWO)
+    if x == 26:
+        return x26
+    x27 = rbind(corner, R0)
+    if x == 27:
+        return x27
+    x28 = compose(x26, x27)
+    if x == 28:
+        return x28
+    x29 = tojvec(NEG_TWO)
+    if x == 29:
+        return x29
+    x30 = rbind(add, x29)
+    if x == 30:
+        return x30
+    x31 = rbind(corner, R1)
+    if x == 31:
+        return x31
+    x32 = fork(subtract, x31, x30)
+    if x == 32:
+        return x32
+    x33 = fork(shoot, x30, x32)
+    if x == 33:
+        return x33
+    x34 = fork(connect, x28, x33)
+    if x == 34:
+        return x34
+    x35 = chain(normalize, x25, x34)
+    if x == 35:
+        return x35
+    x36 = fork(shift, x35, x28)
+    if x == 36:
+        return x36
+    x37 = fork(recolor_i, color, x36)
+    if x == 37:
+        return x37
+    x38 = mapply(x37, x17)
+    if x == 38:
+        return x38
+    x39 = paint(x22, x38)
+    if x == 39:
+        return x39
+    x40 = mir_rot_t(x39, R4)
+    if x == 40:
+        return x40
+    x41 = papply(pair, x39, x40)
+    if x == 41:
+        return x41
+    x42 = apply(x2, x41)
+    if x == 42:
+        return x42
+    x43 = mir_rot_t(x39, R5)
+    if x == 43:
+        return x43
+    x44 = papply(pair, x42, x43)
+    if x == 44:
+        return x44
+    x45 = apply(x2, x44)
+    if x == 45:
+        return x45
+    x46 = mir_rot_t(x39, R6)
+    if x == 46:
+        return x46
+    x47 = papply(pair, x45, x46)
+    if x == 47:
+        return x47
+    O = apply(x2, x47)
     return O
 
 def solve_4522001f(S, I, x=0):
@@ -8142,6 +8589,19 @@ def solve_d56f2372(S, I, x=0):
     O = get_nth_t(x10, F0)
     return O
 
+def solve_0c786b71(S, I, x=0):
+    x1 = mir_rot_t(I, R2)
+    if x == 1:
+        return x1
+    x2 = hconcat(x1, I)
+    if x == 2:
+        return x2
+    x3 = mir_rot_t(x2, R0)
+    if x == 3:
+        return x3
+    O = vconcat(x3, x2)
+    return O
+
 def solve_e98196ab(S, I, x=0):
     x1 = bottomhalf(I)
     if x == 1:
@@ -8477,6 +8937,103 @@ def solve_41e4d17e(S, I, x=0):
     if x == 7:
         return x7
     O = underfill(I, x3, x7)
+    return O
+
+def solve_6aa20dc0(S, I, x=0):
+    x1 = lbind(lbind, shift)
+    if x == 1:
+        return x1
+    x2 = lbind(occurrences, I)
+    if x == 2:
+        return x2
+    x3 = rbind(get_nth_f, F0)
+    if x == 3:
+        return x3
+    x4 = lbind(matcher, x3)
+    if x == 4:
+        return x4
+    x5 = rbind(get_color_rank_f, F0)
+    if x == 5:
+        return x5
+    x6 = compose(x4, x5)
+    if x == 6:
+        return x6
+    x7 = fork(sfilter, identity, x6)
+    if x == 7:
+        return x7
+    x8 = fork(difference, identity, x7)
+    if x == 8:
+        return x8
+    x9 = compose(x2, x8)
+    if x == 9:
+        return x9
+    x10 = fork(mapply, x1, x9)
+    if x == 10:
+        return x10
+    x11 = rbind(get_nth_f, L1)
+    if x == 11:
+        return x11
+    x12 = fork(compose, x3, x11)
+    if x == 12:
+        return x12
+    x13 = rbind(mir_rot_f, R1)
+    if x == 13:
+        return x13
+    x14 = rbind(mir_rot_f, R3)
+    if x == 14:
+        return x14
+    x15 = rbind(mir_rot_f, R0)
+    if x == 15:
+        return x15
+    x16 = rbind(mir_rot_f, R2)
+    if x == 16:
+        return x16
+    x17 = initset(identity)
+    if x == 17:
+        return x17
+    x18 = insert(x16, x17)
+    if x == 18:
+        return x18
+    x19 = insert(x15, x18)
+    if x == 19:
+        return x19
+    x20 = insert(x14, x19)
+    if x == 20:
+        return x20
+    x21 = insert(x13, x20)
+    if x == 21:
+        return x21
+    x22 = lbind(rbind, upscale_f)
+    if x == 22:
+        return x22
+    x23 = interval(ONE, FOUR, ONE)
+    if x == 23:
+        return x23
+    x24 = apply(x22, x23)
+    if x == 24:
+        return x24
+    x25 = product(x21, x24)
+    if x == 25:
+        return x25
+    x26 = apply(x12, x25)
+    if x == 26:
+        return x26
+    x27 = o_g(I, R3)
+    if x == 27:
+        return x27
+    x28 = get_arg_rank_f(x27, numcolors_f, F0)
+    if x == 28:
+        return x28
+    x29 = normalize(x28)
+    if x == 29:
+        return x29
+    x30 = rapply_f(x26, x29)
+    if x == 30:
+        return x30
+    x31 = mapply(x10, x30)
+    if x == 31:
+        return x31
+    O = paint(I, x31)
     return O
 
 def solve_39a8645d(S, I, x=0):
