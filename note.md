@@ -80,7 +80,8 @@
 |  or `git push -f origin my-feature` (if needed)                |
 |----------------------------------------------------------------|
 | **Sync with upstream**                                         |
-| `git fetch upstream`<br>`git merge upstream/main`              |
+| `git fetch upstream`                                           |
+| `git merge upstream/main`                                      |
 |  or `git reset --hard <hash>` (local only)                     |
 |----------------------------------------------------------------|
 | **Rebase branch**                                              |

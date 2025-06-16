@@ -688,11 +688,6 @@ def add_todo_set(total_data, start_from, todo_set, todo_var, task_id_list=None):
         solver_source = safe_getsource(solver)
 
         # Replace a call or 2
-        # XXX Instead of just replacing a call with local variables,
-        # we could pick values from todo_set
-        # NOTE In a perfect world, these items would already have been
-        # checked to pass hints
-        # Maybe do first round to validate items before replacement round?
         random_budget = 0.8
         while random.random() < random_budget:
             variables = get_variables(solver_source)
