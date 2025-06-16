@@ -61,6 +61,9 @@ python expand_solver.py --source solver_pre/ --solvers-file solvers.py
 
 # Upper left term
 clear; bash run_regen.sh 12
+# Or check on simone
+while true; do d=`date +'%F %T'`; echo -n "$d - "; ssh simone 'ls /home/jupyter/dsl/tokpidjin/solver_evo/*.def | wc -l'
+; sleep 60; done
 
 # 2nd from upper left
 g='c_iz_n c_zo_n a_mr'

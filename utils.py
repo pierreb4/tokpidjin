@@ -3,6 +3,9 @@ import json
 import inspect
 import ast
 
+import solvers_pre
+import solvers_evo
+
 
 BAD_SOLVERS = {
     '27a28665', # Broken in solvers_ref.py
@@ -100,6 +103,8 @@ def get_solvers():
     total_data = {}
     for k in ['train', 'test']:
         total_data[k] = {**train_data[k], **eval_data[k]}
+
+    task_list = list(total_data['train'].keys())
 
     # Exclude known bad solvers
     bad_solvers = BAD_SOLVERS
