@@ -4,14 +4,42 @@ import inspect
 import ast
 
 
-def get_data(train=True, sort_by_size=False, key=None):
+BAD_SOLVERS = {
+    '27a28665', # Broken in solvers_ref.py
+    '29623171', # Broken in solvers_ref.py
+    '39a8645d', # Broken in solvers_ref.py
+    '50846271', # Broken in solvers_ref.py
+    '6455b5f5', # Broken in solvers_ref.py
+    '6855a6e4', # Broken in solvers_ref.py
+    '88a62173', # Broken in solvers_ref.py
+    '9af7a82c', # Broken in solvers_ref.py
+    '9f236235', # Broken in solvers_ref.py
+    'a3325580', # Broken in solvers_ref.py
+    'a64e4611', # Broken in solvers_ref.py
+    'a87f7484', # Broken in solvers_ref.py
+    'b230c067', # Broken in solvers_ref.py
+    'ba97ae07', # Broken in solvers_ref.py
+    'c8cbb738', # Broken in solvers_ref.py
+    'd6ad076f', # Broken in solvers_ref.py
+    'e40b9e2f', # Broken in solvers_ref.py
+    'a65b410d', # Gets closer, but no solve
+    '6773b310', # Gets closer, but no solve
+    'ef135b50', # Gets closer, but no solve
+    '6a1e5592', # Gets closer, but no solve
+    'a8d7556c', # Gets closer, but no solve
+    'd06dbe63', # Gets closer, but no solve
+    '484b58aa', # Gets closer, but no solve
+    'e26a3af2', # Seems to hang
+} 
+
+def get_data(train=True, sort_by_size=False, task_id=None):
     """
     Load ARC task data with options for sorting and filtering.
     
     Args:
         train: Whether to load training data (True) or evaluation data (False)
         sort_by_size: Whether to sort tasks by file size
-        key: Optional key to filter for a specific task
+        task_id: Optional task_id to filter for a specific task
         
     Returns:
         Dictionary containing task data organized by train/test sets
@@ -29,10 +57,10 @@ def get_data(train=True, sort_by_size=False, key=None):
         # Get entries in default order
         files_to_process = os.listdir(path)
     
-    # Process each file (or just the specified key)
+    # Process each file (or just the specified task_id)
     for fn in files_to_process:
         task_key = fn.rstrip('.json')
-        if key is None or task_key == key:
+        if task_id is None or task_key == task_id:
             with open(f'{path}/{fn}') as f:
                 data[task_key] = json.load(f)
     
@@ -48,6 +76,42 @@ def get_data(train=True, sort_by_size=False, key=None):
             'output': ast(e['output']),
         } for e in v['test']] for k, v in data.items()}
     }
+
+
+def get_source(task_id):
+    if hasattr(solvers_evo, f'solve_{task_id}'):
+        solver = getattr(solvers_evo, f'solve_{task_id}')
+    elif hasattr(solvers_pre, f'solve_{task_id}'):
+        if task_id in BAD_SOLVERS:
+            return None
+        solver = getattr(solvers_pre, f'solve_{task_id}')
+    else:
+        return None
+
+    return inspect.getsource(solver)
+
+
+def get_solvers():
+    # Get both train and test tasks
+    train_data = get_data(train=True)
+    eval_data = get_data(train=False)
+
+    # Group 'train' and 'eval' datasets, each task has 'train' and 'test' samples
+    total_data = {}
+    for k in ['train', 'test']:
+        total_data[k] = {**train_data[k], **eval_data[k]}
+
+    # Exclude known bad solvers
+    bad_solvers = BAD_SOLVERS
+    task_list = [task_id for task_id in task_list if task_id not in bad_solvers]
+
+    solvers = {}
+    for task_id in task_list:
+        source = get_source(task_id)
+        if source is not None:
+            solvers[task_id] = source
+
+    return solvers
 
 
 def print_l(msg, sep=' ', end='\n', flush=False):

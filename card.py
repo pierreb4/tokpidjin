@@ -1,8 +1,12 @@
+from utils import *
+
+
 # Combine all solvers in solver_evo into a single one
 
 # Outline with examples:
 
 # 1. Read all source files in the solver_evo directory
+"""
 def solve_f25fbde4(S, I):
     x1 = o_g(I, R7)
     x2 = get_nth_f(x1, F0)
@@ -64,5 +68,12 @@ def solve_a740d043(S, I):
     t[4] = x3 = subgrid(t[2], I)
     t[6] = O = replace(t[4], ONE, ZERO)
     O -> check_done(t[6])
+"""
 
 # 3. Output a single file, batt.py
+
+
+
+def main():
+    get_solvers()
+
