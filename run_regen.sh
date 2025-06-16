@@ -15,6 +15,7 @@ if [ $# -eq 0 ]; then
 fi
 
 FACTOR=${1}
+CYCLE=${2}
 SLEEP=$((FACTOR / 3))
 TIMEOUT=$((SLEEP * 2))
 
@@ -35,27 +36,30 @@ while date; do
 
   # d=`date +%F`
   
-  # From solvers_evo.py to solvers_xxx.py
-  python replace_func.py -q --input solvers_evo.py --output solvers_xxx.py
-  python list_solvers.py -q --input solvers_xxx.py >key_xxx.txt
-  # From solvers_xxx.py to solver_evo/
-  for k in `cat key_xxx.txt`
-  do python replace_arg.py -q --input solvers_xxx.py --output-dir solver_evo/ $k
-  done
-  # From solver_evo/ to solvers_evo.py
-  python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py
+  # If we got a third option, build solvers_*.py
+  if [ -n "$BUILD" ]; then
+    # From solvers_evo.py to solvers_xxx.py
+    python replace_func.py -q --input solvers_evo.py --output solvers_xxx.py
+    python list_solvers.py -q --input solvers_xxx.py >key_xxx.txt
+    # From solvers_xxx.py to solver_evo/
+    for k in `cat key_xxx.txt`
+    do python replace_arg.py -q --input solvers_xxx.py --output-dir solver_evo/ $k
+    done
+    # From solver_evo/ to solvers_evo.py
+    python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py
 
-  # python main.py -q --solvers solvers_evo.py
+    # python main.py -q --solvers solvers_evo.py
 
-  # From solvers_ref.py to solvers.py
-  python replace_func.py -q
-  python list_solvers.py -q --input solvers.py >key_pre.txt
-  # From solvers.py to solver_pre/
-  for k in `cat key_pre.txt`
-  do python replace_arg.py -q --input solvers.py --output-dir solver_pre/ $k
-  done
-  # From solver_pre/ to solvers_pre.py
-  python expand_solver.py -q --source solver_pre/ --solvers-file solvers_pre.py
+    # From solvers_ref.py to solvers.py
+    python replace_func.py -q
+    python list_solvers.py -q --input solvers.py >key_pre.txt
+    # From solvers.py to solver_pre/
+    for k in `cat key_pre.txt`
+    do python replace_arg.py -q --input solvers.py --output-dir solver_pre/ $k
+    done
+    # From solver_pre/ to solvers_pre.py
+    python expand_solver.py -q --source solver_pre/ --solvers-file solvers_pre.py
+  fi
 
   sleep $SLEEP
 done
