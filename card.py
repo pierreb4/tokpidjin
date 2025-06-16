@@ -1,3 +1,5 @@
+import re
+
 from utils import *
 
 
@@ -68,9 +70,23 @@ def solve_a740d043(S, I):
     t[4] = x3 = subgrid(t[2], I)
     t[6] = O = replace(t[4], ONE, ZERO)
     O -> check_done(t[6])
-"""
+
+
+- Start from x1
+  - Go through each solver
+    - Is it empty?
+    - Then remove it from solver list
+    - Else take the first assignment - x1 = call(...)
+      - Remove entry from equals
+      - Was the left side O?
+      - Then add check_done(O) to new solver
+      - Else is the right side new?
+        - Then add it to t_call/t_name
+      - Replace x1 with t_name[x_call] in rest of solver
 
 # 3. Output a single file, batt.py
+
+"""
 
 
 def get_equals(solver):
@@ -78,7 +94,7 @@ def get_equals(solver):
     equals = {}
     for line in solver.split('\n'):
         if ' = ' in line:
-            parts = line.split('=')
+            parts = line.split(' = ')
             var_name = parts[0].strip()
             value = parts[1].strip()
             equals[var_name] = value
@@ -87,68 +103,70 @@ def get_equals(solver):
 
 def main():
     solvers = get_solvers()
-    print_l(solvers.keys())
 
-    print(solvers['73182012'])
+    # print_l(solvers.keys())
+    # print(solvers['73182012'])
 
     equals = {}
     for task_id, source in solvers.items():
         equals[task_id] = get_equals(source)
     
-    print_l(f"{get_equals(solvers['73182012']) = }")
+    # print_l(f"{get_equals(solvers['a85d4709']) = }")
 
-    count = 2
-    t_num = 0
+    # Work on sample of 3 first solvers
+    # solvers = {k: solvers[k] for k in list(solvers.keys())[:3]}
+
+
+    count = 999
     t_call = {}
     t_name = {}
+    # Start from t1
+    t_num = 1
     while count > 0:
         count -= 1
 
-        # Print the next entry, if any, of each solver
-        sub_count = 20
-        for task_id, source in solvers.items():
-            sub_count -= 1
-            if sub_count <= 0:
-                break
+        # Go through each solver
+        solvers_copy = solvers.copy()
+        for task_id, source in solvers_copy.items():
+            # print_l(f"-- {task_id} -----")
+
+            # Is it empty?
             if not equals[task_id]:
+                # Then remove it from solver list
+                del solvers[task_id]
                 continue
-            x_name, x_call = next(iter(equals[task_id].items()))
 
+            # Else take the first assignment - x1 = call(...)
+            old_name, old_call = next(iter(equals[task_id].items()))
 
-            if x_call not in t_name.keys():
+            # print_l(f"{old_name} = {old_call}")
+
+            # Remove entry from equals
+            del equals[task_id][old_name]
+
+            # Else is the right side new?
+            if old_call not in t_name.keys():
+                # Then add it to t_call/t_name
                 t_k = f't{t_num}'
-                t_call[t_k] = x_call
-                t_name[x_call] = t_k
+                t_call[t_k] = old_call
+                t_name[old_call] = t_k
                 t_num += 1
 
-                print_l(f"{task_id}: {x_name} = {x_call}")
-                print_l(f"{task_id}: {t_k} = {t_call[t_k]}")
+                # print_l(f"{task_id}: {old_name} = {old_call}")
+                # print_l(f"{task_id}: {t_k} = {t_call[t_k]}")
 
                 # Print new source code
-                t_source = f"{t_k} = {t_call[t_k]}\n"
-                print_l(t_source)
+                t_source = f"{t_k} = {t_call[t_k]}"
+                print(f'    {t_source}')
 
-            # Replace x variable names with new t variable name
-            for replace_task_id, replace_source in solvers.items():
-                # Just check the firsst assignment
-                r_equal = equals[replace_task_id].popitem()
-                if r_equal is None:
-                    break
+            # Was the left side O?
+            if old_name == 'O':
+                print(f'    check_done({t_name[old_call]}) # For task: {task_id}')
 
-                r_x_name, r_x_code = r_equal
-                if r_x_code in t_name.keys():
-                    if r_x_name == 'O':
-                        print_l('check_done(t_name)')
-                    else:
-                        # Replace r_x_code with t_name[r_x_code]
-                        r_equal[r_x_name] = t_name[r_x_code]
-                        del equals[replace_task_id][r_x_name]
-
-                        # Replace r_x_name with t_name[r_x_code]
-                        # in the rest of the solver
-                        # NOTE Also deal with possible cascading replacements
-                        replace_source = replace_source.replace(r_x_code, t_name[r_x_code])
-
+            # Replace x1 with t_name[x_call] in rest of solver
+            for x_name, x_call in equals[task_id].items():
+                if old_name in x_call:
+                    equals[task_id][x_name] = re.sub(rf'\b{old_name}\b', t_name[old_call], x_call)
 
 
 if __name__ == "__main__":
