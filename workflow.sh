@@ -61,16 +61,22 @@ python expand_solver.py --source solver_pre/ --solvers-file solvers.py
 
 # Upper left term
 clear; bash run_regen.sh 12
+# Or check on simone
+while true
+  do date +'%F %T'
+    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh'
+    sleep 60
+  done
 
 # 2nd from upper left
 g='c_iz_n c_zo_n a_mr'
 while true
   do for izzo in $g
-  do echo -n $izzo
-    grep $izzo solvers_evo.py | wc -l
+    do echo -n $izzo
+      grep $izzo solvers_evo.py | wc -l
     done
-  sleep 60
-done
+    sleep 60
+  done
 
 # Lower left
 clear; time timeout 15s python regen.py

@@ -84,7 +84,8 @@
 |  or `git reset --hard <hash>` (local only)                     |
 |----------------------------------------------------------------|
 | **Rebase branch**                                              |
-| `git checkout my-feature`<br>`git rebase main`                 |
+| `git checkout my-feature`                                      |
+| `git rebase main`                                              |
 |  or `git rebase --abort`                                       |
 |----------------------------------------------------------------|
 | **Undo pushed commit**                                         |

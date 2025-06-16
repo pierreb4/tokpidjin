@@ -1,5 +1,4 @@
 import ast
-import astor
 import sys
 import argparse
 import os

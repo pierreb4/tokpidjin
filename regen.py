@@ -1413,7 +1413,7 @@ def main(task_id=None):
             # Skip tasks with existing solver most of the time
             if os.path.exists(f'solver_evo/solve_{task_id}.def'):
                 # Sometimes try to improve existing solver
-                if random.random() < 0.99:
+                if random.random() < 0.9:
                     continue
             
             break
