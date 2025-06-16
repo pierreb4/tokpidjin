@@ -2,7 +2,7 @@ from constants import *
 from dsl import *
 
 
-def batt(S, I):
+def batt(S, I, O):
     try:
         t1 = identity(p_g)
     except:
@@ -91,7 +91,8 @@ def batt(S, I):
         t22 = mir_rot_t(I, R6)
     except:
         t22 = None
-    check_done('ed36ccf7', 't22', t22)
+    if t22 == O:
+        return True, f'ed36ccf7 - t22'
     try:
         t23 = rbind(get_nth_f, L1)
     except:
@@ -104,7 +105,8 @@ def batt(S, I):
         t25 = mir_rot_t(I, R1)
     except:
         t25 = None
-    check_done('74dd1130', 't25', t25)
+    if t25 == O:
+        return True, f'74dd1130 - t25'
     try:
         t26 = asindices(I)
     except:
@@ -113,7 +115,8 @@ def batt(S, I):
         t27 = mir_rot_t(I, R5)
     except:
         t27 = None
-    check_done('6150a2bd', 't27', t27)
+    if t27 == O:
+        return True, f'6150a2bd - t27'
     try:
         t28 = astuple(TWO, ONE)
     except:
@@ -214,7 +217,8 @@ def batt(S, I):
         t52 = upscale_t(I, TWO)
     except:
         t52 = None
-    check_done('60c09cac', 't52', t52)
+    if t52 == O:
+        return True, f'60c09cac - t52'
     try:
         t53 = f_ofcolor(I, GREEN)
     except:
@@ -259,7 +263,8 @@ def batt(S, I):
         t63 = fork(difference, toindices, box)
     except:
         t63 = None
-    check_done('3c9b0459', 't27', t27)
+    if t27 == O:
+        return True, f'3c9b0459 - t27'
     try:
         t64 = astuple(ZERO, ORIGIN)
     except:
@@ -284,7 +289,8 @@ def batt(S, I):
         t69 = crop(I, ORIGIN, TWO_BY_TWO)
     except:
         t69 = None
-    check_done('d10ecb37', 't69', t69)
+    if t69 == O:
+        return True, f'd10ecb37 - t69'
     try:
         t70 = replace(I, RED, BLACK)
     except:
@@ -309,7 +315,8 @@ def batt(S, I):
         t75 = canvas(GREEN, UNITY)
     except:
         t75 = None
-    check_done('67a3c6ac', 't3', t3)
+    if t3 == O:
+        return True, f'67a3c6ac - t3'
     try:
         t76 = frontiers(I)
     except:
@@ -326,17 +333,20 @@ def batt(S, I):
         t79 = f_ofcolor(I, YELLOW)
     except:
         t79 = None
-    check_done('c59eb873', 't52', t52)
+    if t52 == O:
+        return True, f'c59eb873 - t52'
     try:
         t80 = shoot(ORIGIN, UNITY)
     except:
         t80 = None
-    check_done('9dfd6313', 't25', t25)
+    if t25 == O:
+        return True, f'9dfd6313 - t25'
     try:
         t81 = switch(I, FIVE, EIGHT)
     except:
         t81 = None
-    check_done('d511f180', 't81', t81)
+    if t81 == O:
+        return True, f'd511f180 - t81'
     try:
         t82 = replace(I, GREEN, BLACK)
     except:
@@ -357,7 +367,8 @@ def batt(S, I):
         t86 = upscale_t(I, THREE)
     except:
         t86 = None
-    check_done('9172f3a0', 't86', t86)
+    if t86 == O:
+        return True, f'9172f3a0 - t86'
     try:
         t87 = astuple(TEN, TEN)
     except:
@@ -550,7 +561,8 @@ def batt(S, I):
         t134 = multiply(UNITY, TEN)
     except:
         t134 = None
-    check_done('6d0aefbc', 't97', t97)
+    if t97 == O:
+        return True, f'6d0aefbc - t97'
     try:
         t135 = get_nth_f(t29, F0)
     except:
@@ -579,7 +591,8 @@ def batt(S, I):
         t141 = vconcat(I, t43)
     except:
         t141 = None
-    check_done('6fa7a44f', 't141', t141)
+    if t141 == O:
+        return True, f'6fa7a44f - t141'
     try:
         t142 = colorfilter(t7, GRAY)
     except:
@@ -700,7 +713,8 @@ def batt(S, I):
         t171 = colorfilter(t7, RED)
     except:
         t171 = None
-    check_done('2dee498d', 't127', t127)
+    if t127 == O:
+        return True, f'2dee498d - t127'
     try:
         t172 = asindices(t35)
     except:
@@ -725,7 +739,8 @@ def batt(S, I):
         t177 = rbind(gravitate, t53)
     except:
         t177 = None
-    check_done('c9e6f938', 't97', t97)
+    if t97 == O:
+        return True, f'c9e6f938 - t97'
     try:
         t178 = mapply(vfrontier, t6)
     except:
@@ -746,7 +761,8 @@ def batt(S, I):
         t182 = vconcat(t43, I)
     except:
         t182 = None
-    check_done('4c4377d9', 't182', t182)
+    if t182 == O:
+        return True, f'4c4377d9 - t182'
     try:
         t183 = multiply(t68, THREE)
     except:
@@ -775,7 +791,8 @@ def batt(S, I):
         t189 = canvas(t50, THREE_BY_THREE)
     except:
         t189 = None
-    check_done('5582e5ca', 't189', t189)
+    if t189 == O:
+        return True, f'5582e5ca - t189'
     try:
         t190 = decrement(t19)
     except:
@@ -916,7 +933,8 @@ def batt(S, I):
         t224 = crop(I, t83, THREE_BY_THREE)
     except:
         t224 = None
-    check_done('5bd6f4ac', 't224', t224)
+    if t224 == O:
+        return True, f'5bd6f4ac - t224'
     try:
         t225 = recolor_i(BLACK, t6)
     except:
@@ -1001,7 +1019,8 @@ def batt(S, I):
         t245 = branch(t51, tophalf, lefthalf)
     except:
         t245 = None
-    check_done('8be77c9e', 't141', t141)
+    if t141 == O:
+        return True, f'8be77c9e - t141'
     try:
         t246 = c_zo_n(S, t1, t89)
     except:
@@ -1046,7 +1065,8 @@ def batt(S, I):
         t256 = move(I, t99, DOWN)
     except:
         t256 = None
-    check_done('25ff71a9', 't256', t256)
+    if t256 == O:
+        return True, f'25ff71a9 - t256'
     try:
         t257 = compose(t10, delta)
     except:
@@ -1067,7 +1087,8 @@ def batt(S, I):
         t261 = upscale_t(I, t103)
     except:
         t261 = None
-    check_done('b91ae062', 't261', t261)
+    if t261 == O:
+        return True, f'b91ae062 - t261'
     try:
         t262 = fork(recolor_i, color, t104)
     except:
@@ -1172,7 +1193,8 @@ def batt(S, I):
         t287 = mir_rot_t(I, t124)
     except:
         t287 = None
-    check_done('68b16354', 't287', t287)
+    if t287 == O:
+        return True, f'68b16354 - t287'
     try:
         t288 = merge_f(t125)
     except:
@@ -1181,7 +1203,8 @@ def batt(S, I):
         t289 = subgrid(t126, I)
     except:
         t289 = None
-    check_done('be94b721', 't289', t289)
+    if t289 == O:
+        return True, f'be94b721 - t289'
     try:
         t290 = remove_t(t127, t33)
     except:
@@ -1202,7 +1225,8 @@ def batt(S, I):
         t294 = subgrid(t91, I)
     except:
         t294 = None
-    check_done('c909285e', 't294', t294)
+    if t294 == O:
+        return True, f'c909285e - t294'
     try:
         t295 = subgrid(t114, I)
     except:
@@ -1259,7 +1283,8 @@ def batt(S, I):
         t308 = vconcat(t146, t5)
     except:
         t308 = None
-    check_done('f25ffba3', 't308', t308)
+    if t308 == O:
+        return True, f'f25ffba3 - t308'
     try:
         t309 = switch(t22, ONE, TWO)
     except:
@@ -1356,7 +1381,8 @@ def batt(S, I):
         t332 = mapply(t63, t7)
     except:
         t332 = None
-    check_done('1f85a75f', 't294', t294)
+    if t294 == O:
+        return True, f'1f85a75f - t294'
     try:
         t333 = get_nth_f(t171, F0)
     except:
@@ -1449,7 +1475,8 @@ def batt(S, I):
         t355 = fork(remove, t23, identity)
     except:
         t355 = None
-    check_done('0b148d64', 't294', t294)
+    if t294 == O:
+        return True, f'0b148d64 - t294'
     try:
         t356 = o_g(t11, R5)
     except:
@@ -1522,7 +1549,8 @@ def batt(S, I):
         t373 = portrait_f(t106)
     except:
         t373 = None
-    check_done('ac0a08a4', 't261', t261)
+    if t261 == O:
+        return True, f'ac0a08a4 - t261'
     try:
         t374 = compose(size, delta)
     except:
@@ -1691,7 +1719,8 @@ def batt(S, I):
         t415 = mir_rot_t(t35, R5)
     except:
         t415 = None
-    check_done('23b5c85d', 't294', t294)
+    if t294 == O:
+        return True, f'23b5c85d - t294'
     try:
         t416 = prapply(connect, t6, t54)
     except:
@@ -1724,7 +1753,8 @@ def batt(S, I):
         t423 = t245(I)
     except:
         t423 = None
-    check_done('7b7f7511', 't423', t423)
+    if t423 == O:
+        return True, f'7b7f7511 - t423'
     try:
         t424 = fork(equality, size, t195)
     except:
@@ -1749,7 +1779,8 @@ def batt(S, I):
         t429 = vconcat(t97, t254)
     except:
         t429 = None
-    check_done('67e8384a', 't429', t429)
+    if t429 == O:
+        return True, f'67e8384a - t429'
     try:
         t430 = height_t(t255)
     except:
@@ -1794,7 +1825,8 @@ def batt(S, I):
         t440 = hconcat(t266, t266)
     except:
         t440 = None
-    check_done('28bf18c6', 't440', t440)
+    if t440 == O:
+        return True, f'28bf18c6 - t440'
     try:
         t441 = vconcat(t267, t107)
     except:
@@ -1835,7 +1867,8 @@ def batt(S, I):
         t450 = trim(t280)
     except:
         t450 = None
-    check_done('1c786137', 't450', t450)
+    if t450 == O:
+        return True, f'1c786137 - t450'
     try:
         t451 = fork(multiply, sign, identity)
     except:
@@ -1856,7 +1889,8 @@ def batt(S, I):
         t455 = get_arg_rank_t(t286, numcolors_t, F0)
     except:
         t455 = None
-    check_done('2dc579da', 't455', t455)
+    if t455 == O:
+        return True, f'2dc579da - t455'
     try:
         t456 = cover(I, t288)
     except:
@@ -1909,7 +1943,8 @@ def batt(S, I):
         t468 = mir_rot_t(t260, R2)
     except:
         t468 = None
-    check_done('7468f01a', 't468', t468)
+    if t468 == O:
+        return True, f'7468f01a - t468'
     try:
         t469 = o_g(t148, R5)
     except:
@@ -1970,12 +2005,14 @@ def batt(S, I):
         t483 = switch(I, t152, t316)
     except:
         t483 = None
-    check_done('3af2c5a8', 't429', t429)
+    if t429 == O:
+        return True, f'3af2c5a8 - t429'
     try:
         t484 = vconcat(t317, t153)
     except:
         t484 = None
-    check_done('0c786b71', 't484', t484)
+    if t484 == O:
+        return True, f'0c786b71 - t484'
     try:
         t485 = corner(t318, R0)
     except:
@@ -1988,7 +2025,8 @@ def batt(S, I):
         t487 = mir_rot_t(t319, R4)
     except:
         t487 = None
-    check_done('1e0a9b12', 't487', t487)
+    if t487 == O:
+        return True, f'1e0a9b12 - t487'
     try:
         t488 = branch(t156, identity, t18)
     except:
@@ -1997,7 +2035,8 @@ def batt(S, I):
         t489 = index(I, t320)
     except:
         t489 = None
-    check_done('62c24649', 't429', t429)
+    if t429 == O:
+        return True, f'62c24649 - t429'
     try:
         t490 = difference(t8, t209)
     except:
@@ -2034,7 +2073,8 @@ def batt(S, I):
         t498 = paint(I, t329)
     except:
         t498 = None
-    check_done('56ff96f3', 't498', t498)
+    if t498 == O:
+        return True, f'56ff96f3 - t498'
     try:
         t499 = col_row(t53, R1)
     except:
@@ -2043,7 +2083,8 @@ def batt(S, I):
         t500 = subgrid(t330, I)
     except:
         t500 = None
-    check_done('ae4f1146', 't500', t500)
+    if t500 == O:
+        return True, f'ae4f1146 - t500'
     try:
         t501 = rbind(upscale_f, RED)
     except:
@@ -2064,7 +2105,8 @@ def batt(S, I):
         t505 = fill(I, BLACK, t332)
     except:
         t505 = None
-    check_done('4347f46a', 't505', t505)
+    if t505 == O:
+        return True, f'4347f46a - t505'
     try:
         t506 = lbind(matcher, t10)
     except:
@@ -2205,7 +2247,8 @@ def batt(S, I):
         t540 = cover(I, t362)
     except:
         t540 = None
-    check_done('42a50994', 't540', t540)
+    if t540 == O:
+        return True, f'42a50994 - t540'
     try:
         t541 = fork(difference, asindices, t233)
     except:
@@ -2274,7 +2317,8 @@ def batt(S, I):
         t557 = switch(t380, ONE, FIVE)
     except:
         t557 = None
-    check_done('b1948b0a', 't557', t557)
+    if t557 == O:
+        return True, f'b1948b0a - t557'
     try:
         t558 = subgrid(t381, I)
     except:
@@ -2283,7 +2327,8 @@ def batt(S, I):
         t559 = move(I, t288, TWO_BY_ZERO)
     except:
         t559 = None
-    check_done('3618c87e', 't559', t559)
+    if t559 == O:
+        return True, f'3618c87e - t559'
     try:
         t560 = mir_rot_t(t382, R0)
     except:
@@ -2340,7 +2385,8 @@ def batt(S, I):
         t573 = fill(I, YELLOW, t393)
     except:
         t573 = None
-    check_done('0d3d703e', 't557', t557)
+    if t557 == O:
+        return True, f'0d3d703e - t557'
     try:
         t574 = rbind(adjacent, t221)
     except:
@@ -2381,7 +2427,8 @@ def batt(S, I):
         t583 = replace(t158, t322, t2)
     except:
         t583 = None
-    check_done('aabf363d', 't583', t583)
+    if t583 == O:
+        return True, f'aabf363d - t583'
     try:
         t584 = vconcat(t153, t317)
     except:
@@ -2434,7 +2481,8 @@ def batt(S, I):
         t596 = upscale_t(t266, TWO)
     except:
         t596 = None
-    check_done('f25fbde4', 't596', t596)
+    if t596 == O:
+        return True, f'f25fbde4 - t596'
     try:
         t597 = rbind(sfilter, t417)
     except:
@@ -2451,7 +2499,8 @@ def batt(S, I):
         t600 = upscale_t(t420, FOUR)
     except:
         t600 = None
-    check_done('46f33fce', 't600', t600)
+    if t600 == O:
+        return True, f'46f33fce - t600'
     try:
         t601 = compose(merge, t421)
     except:
@@ -2580,7 +2629,8 @@ def batt(S, I):
         t632 = downscale(t437, THREE)
     except:
         t632 = None
-    check_done('5614dbcf', 't632', t632)
+    if t632 == O:
+        return True, f'5614dbcf - t632'
     try:
         t633 = lbind(apply, t451)
     except:
@@ -2601,7 +2651,8 @@ def batt(S, I):
         t637 = tophalf(t454)
     except:
         t637 = None
-    check_done('2013d3e2', 't637', t637)
+    if t637 == O:
+        return True, f'2013d3e2 - t637'
     try:
         t638 = get_arg_rank_f(t9, t195, F0)
     except:
@@ -2770,7 +2821,8 @@ def batt(S, I):
         t679 = extract(t56, t491)
     except:
         t679 = None
-    check_done('662c240a', 't679', t679)
+    if t679 == O:
+        return True, f'662c240a - t679'
     try:
         t680 = rbind(colorcount_f, t322)
     except:
@@ -2851,7 +2903,8 @@ def batt(S, I):
         t699 = equality(t511, BLUE)
     except:
         t699 = None
-    check_done('73182012', 't637', t637)
+    if t637 == O:
+        return True, f'73182012 - t637'
     try:
         t700 = get_nth_f(t512, F0)
     except:
@@ -2876,7 +2929,8 @@ def batt(S, I):
         t705 = paint(I, t516)
     except:
         t705 = None
-    check_done('22eb0ac0', 't705', t705)
+    if t705 == O:
+        return True, f'22eb0ac0 - t705'
     try:
         t706 = sizefilter(t8, THREE)
     except:
@@ -2977,7 +3031,8 @@ def batt(S, I):
         t730 = paint(t5, t534)
     except:
         t730 = None
-    check_done('e98196ab', 't730', t730)
+    if t730 == O:
+        return True, f'e98196ab - t730'
     try:
         t731 = compose(vfrontier, tojvec)
     except:
@@ -3006,7 +3061,8 @@ def batt(S, I):
         t737 = canvas(t539, TWO_BY_TWO)
     except:
         t737 = None
-    check_done('445eab21', 't737', t737)
+    if t737 == O:
+        return True, f'445eab21 - t737'
     try:
         t738 = fork(toobject, t541, identity)
     except:
@@ -3063,7 +3119,8 @@ def batt(S, I):
         t751 = subgrid(t552, I)
     except:
         t751 = None
-    check_done('8efcae92', 't751', t751)
+    if t751 == O:
+        return True, f'8efcae92 - t751'
     try:
         t752 = extract(t207, t553)
     except:
@@ -3312,7 +3369,8 @@ def batt(S, I):
         t813 = fill(I, t246, t608)
     except:
         t813 = None
-    check_done('4258a5f9', 't813', t813)
+    if t813 == O:
+        return True, f'4258a5f9 - t813'
     try:
         t814 = center(t73)
     except:
@@ -3345,7 +3403,8 @@ def batt(S, I):
         t821 = paint(I, t615)
     except:
         t821 = None
-    check_done('d037b0a7', 't821', t821)
+    if t821 == O:
+        return True, f'd037b0a7 - t821'
     try:
         t822 = upscale_f(t616, THREE)
     except:
@@ -3426,7 +3485,8 @@ def batt(S, I):
         t841 = hconcat(t636, t453)
     except:
         t841 = None
-    check_done('e9afcf9a', 't841', t841)
+    if t841 == O:
+        return True, f'e9afcf9a - t841'
     try:
         t842 = color(t638)
     except:
@@ -3439,7 +3499,8 @@ def batt(S, I):
         t844 = fill(I, t246, t640)
     except:
         t844 = None
-    check_done('32597951', 't844', t844)
+    if t844 == O:
+        return True, f'32597951 - t844'
     try:
         t845 = f_ofcolor(t641, BURGUNDY)
     except:
@@ -3456,7 +3517,8 @@ def batt(S, I):
         t848 = switch(t295, t462, t646)
     except:
         t848 = None
-    check_done('b94a9452', 't848', t848)
+    if t848 == O:
+        return True, f'b94a9452 - t848'
     try:
         t849 = f_ofcolor(I, t647)
     except:
@@ -3521,7 +3583,8 @@ def batt(S, I):
         t864 = fill(I, t246, t663)
     except:
         t864 = None
-    check_done('c1d99e64', 't864', t864)
+    if t864 == O:
+        return True, f'c1d99e64 - t864'
     try:
         t865 = center(t106)
     except:
@@ -3530,22 +3593,26 @@ def batt(S, I):
         t866 = mir_rot_t(t664, R3)
     except:
         t866 = None
-    check_done('3906de3d', 't866', t866)
+    if t866 == O:
+        return True, f'3906de3d - t866'
     try:
         t867 = paint(t48, t666)
     except:
         t867 = None
-    check_done('e3497940', 't867', t867)
+    if t867 == O:
+        return True, f'e3497940 - t867'
     try:
         t868 = vconcat(t149, t667)
     except:
         t868 = None
-    check_done('46442a0e', 't868', t868)
+    if t868 == O:
+        return True, f'46442a0e - t868'
     try:
         t869 = fill(t478, CYAN, t80)
     except:
         t869 = None
-    check_done('d0f5fe59', 't869', t869)
+    if t869 == O:
+        return True, f'd0f5fe59 - t869'
     try:
         t870 = increment(t668)
     except:
@@ -3618,7 +3685,8 @@ def batt(S, I):
         t887 = fill(I, t495, t685)
     except:
         t887 = None
-    check_done('928ad970', 't887', t887)
+    if t887 == O:
+        return True, f'928ad970 - t887'
     try:
         t888 = difference(t20, t165)
     except:
@@ -3687,7 +3755,8 @@ def batt(S, I):
         t904 = f_ofcolor(t86, BLACK)
     except:
         t904 = None
-    check_done('6d75e8bb', 't844', t844)
+    if t844 == O:
+        return True, f'6d75e8bb - t844'
     try:
         t905 = fork(add, t10, t23)
     except:
@@ -3808,7 +3877,8 @@ def batt(S, I):
         t934 = canvas(BLACK, t39)
     except:
         t934 = None
-    check_done('7fe24cdd', 't868', t868)
+    if t868 == O:
+        return True, f'7fe24cdd - t868'
     try:
         t935 = compose(flip, t733)
     except:
@@ -3929,7 +3999,8 @@ def batt(S, I):
         t964 = subgrid(t766, I)
     except:
         t964 = None
-    check_done('48d8fb45', 't964', t964)
+    if t964 == O:
+        return True, f'48d8fb45 - t964'
     try:
         t965 = mfilter_f(t767, square_f)
     except:
@@ -3974,7 +4045,8 @@ def batt(S, I):
         t975 = fill(I, t246, t775)
     except:
         t975 = None
-    check_done('60b61512', 't975', t975)
+    if t975 == O:
+        return True, f'60b61512 - t975'
     try:
         t976 = combine(t80, t776)
     except:
@@ -4043,7 +4115,8 @@ def batt(S, I):
         t992 = mir_rot_t(t789, R0)
     except:
         t992 = None
-    check_done('8d5021e8', 't992', t992)
+    if t992 == O:
+        return True, f'8d5021e8 - t992'
     try:
         t993 = mir_rot_f(t790, R2)
     except:
@@ -4168,7 +4241,8 @@ def batt(S, I):
         t1023 = fill(I, t246, t819)
     except:
         t1023 = None
-    check_done('50cb2852', 't1023', t1023)
+    if t1023 == O:
+        return True, f'50cb2852 - t1023'
     try:
         t1024 = astuple(NEG_TWO, NEG_TWO)
     except:
@@ -4337,7 +4411,8 @@ def batt(S, I):
         t1065 = fill(t665, BLACK, t181)
     except:
         t1065 = None
-    check_done('c9f8e694', 't1065', t1065)
+    if t1065 == O:
+        return True, f'c9f8e694 - t1065'
     try:
         t1066 = branch(t479, t668, t870)
     except:
@@ -4354,7 +4429,8 @@ def batt(S, I):
         t1069 = increment(t872)
     except:
         t1069 = None
-    check_done('c7d4e6ad', 't1065', t1065)
+    if t1065 == O:
+        return True, f'c7d4e6ad - t1065'
     try:
         t1070 = sfilter_f(t12, t874)
     except:
@@ -4407,7 +4483,8 @@ def batt(S, I):
         t1082 = fill(I, t246, t883)
     except:
         t1082 = None
-    check_done('b27ca6d3', 't1082', t1082)
+    if t1082 == O:
+        return True, f'b27ca6d3 - t1082'
     try:
         t1083 = apply(t58, t884)
     except:
@@ -4464,12 +4541,14 @@ def batt(S, I):
         t1096 = move(I, t333, t898)
     except:
         t1096 = None
-    check_done('05f2a901', 't1096', t1096)
+    if t1096 == O:
+        return True, f'05f2a901 - t1096'
     try:
         t1097 = mir_rot_t(t899, R6)
     except:
         t1097 = None
-    check_done('90c28cc7', 't1097', t1097)
+    if t1097 == O:
+        return True, f'90c28cc7 - t1097'
     try:
         t1098 = paint(I, t900)
     except:
@@ -4478,7 +4557,8 @@ def batt(S, I):
         t1099 = move(I, t131, t901)
     except:
         t1099 = None
-    check_done('5168d44c', 't1099', t1099)
+    if t1099 == O:
+        return True, f'5168d44c - t1099'
     try:
         t1100 = t902(t295)
     except:
@@ -4507,7 +4587,8 @@ def batt(S, I):
         t1106 = paint(I, t906)
     except:
         t1106 = None
-    check_done('08ed6ac7', 't1106', t1106)
+    if t1106 == O:
+        return True, f'08ed6ac7 - t1106'
     try:
         t1107 = difference(t704, t907)
     except:
@@ -4552,7 +4633,8 @@ def batt(S, I):
         t1117 = paint(t347, t918)
     except:
         t1117 = None
-    check_done('5521c0d9', 't1117', t1117)
+    if t1117 == O:
+        return True, f'5521c0d9 - t1117'
     try:
         t1118 = lbind(power, outbox)
     except:
@@ -4605,7 +4687,8 @@ def batt(S, I):
         t1130 = fill(I, t246, t931)
     except:
         t1130 = None
-    check_done('ce22a75a', 't1130', t1130)
+    if t1130 == O:
+        return True, f'ce22a75a - t1130'
     try:
         t1131 = chain(double, decrement, width_f)
     except:
@@ -4642,7 +4725,8 @@ def batt(S, I):
         t1139 = paint(I, t938)
     except:
         t1139 = None
-    check_done('85c4e7cd', 't1139', t1139)
+    if t1139 == O:
+        return True, f'85c4e7cd - t1139'
     try:
         t1140 = bottomhalf(t148)
     except:
@@ -4695,7 +4779,8 @@ def batt(S, I):
         t1152 = fill(t748, GRAY, t54)
     except:
         t1152 = None
-    check_done('09629e4f', 't1152', t1152)
+    if t1152 == O:
+        return True, f'09629e4f - t1152'
     try:
         t1153 = o_g(t948, R5)
     except:
@@ -4732,7 +4817,8 @@ def batt(S, I):
         t1161 = mir_rot_t(t956, R0)
     except:
         t1161 = None
-    check_done('f8ff0b80', 't1161', t1161)
+    if t1161 == O:
+        return True, f'f8ff0b80 - t1161'
     try:
         t1162 = sfilter_f(t957, square_f)
     except:
@@ -4741,7 +4827,8 @@ def batt(S, I):
         t1163 = cellwise(t211, t441, ZERO)
     except:
         t1163 = None
-    check_done('007bbfb7', 't1163', t1163)
+    if t1163 == O:
+        return True, f'007bbfb7 - t1163'
     try:
         t1164 = mir_rot_t(t437, R1)
     except:
@@ -4754,7 +4841,8 @@ def batt(S, I):
         t1166 = fill(I, t246, t960)
     except:
         t1166 = None
-    check_done('dc1df850', 't1166', t1166)
+    if t1166 == O:
+        return True, f'dc1df850 - t1166'
     try:
         t1167 = apply(t764, t962)
     except:
@@ -4767,7 +4855,8 @@ def batt(S, I):
         t1169 = fill(I, t246, t965)
     except:
         t1169 = None
-    check_done('3aa6fb7a', 't1169', t1169)
+    if t1169 == O:
+        return True, f'3aa6fb7a - t1169'
     try:
         t1170 = apply(t567, t967)
     except:
@@ -4796,12 +4885,14 @@ def batt(S, I):
         t1176 = fill(I, BLACK, t976)
     except:
         t1176 = None
-    check_done('ea786f4a', 't1176', t1176)
+    if t1176 == O:
+        return True, f'ea786f4a - t1176'
     try:
         t1177 = paint(I, t977)
     except:
         t1177 = None
-    check_done('9edfc990', 't1177', t1177)
+    if t1177 == O:
+        return True, f'9edfc990 - t1177'
     try:
         t1178 = chain(t394, t10, t823)
     except:
@@ -4814,7 +4905,8 @@ def batt(S, I):
         t1180 = canvas(t979, UNITY)
     except:
         t1180 = None
-    check_done('b9b7f026', 't1180', t1180)
+    if t1180 == O:
+        return True, f'b9b7f026 - t1180'
     try:
         t1181 = mapply(t780, t7)
     except:
@@ -4867,7 +4959,8 @@ def batt(S, I):
         t1193 = vconcat(t787, t990)
     except:
         t1193 = None
-    check_done('496994bd', 't1193', t1193)
+    if t1193 == O:
+        return True, f'496994bd - t1193'
     try:
         t1194 = lbind(shift, t993)
     except:
@@ -4932,7 +5025,8 @@ def batt(S, I):
         t1209 = apply(tojvec, t1006)
     except:
         t1209 = None
-    check_done('44d8ac46', 't1169', t1169)
+    if t1169 == O:
+        return True, f'44d8ac46 - t1169'
     try:
         t1210 = rbind(corner, R1)
     except:
@@ -4973,7 +5067,8 @@ def batt(S, I):
         t1219 = fill(I, t246, t1011)
     except:
         t1219 = None
-    check_done('a699fb00', 't1219', t1219)
+    if t1219 == O:
+        return True, f'a699fb00 - t1219'
     try:
         t1220 = apply(t811, t1012)
     except:
@@ -5046,7 +5141,8 @@ def batt(S, I):
         t1237 = fill(t445, BLUE, t1031)
     except:
         t1237 = None
-    check_done('5c0a986e', 't1237', t1237)
+    if t1237 == O:
+        return True, f'5c0a986e - t1237'
     try:
         t1238 = occurrences(I, t1032)
     except:
@@ -5083,7 +5179,8 @@ def batt(S, I):
         t1246 = fill(I, t246, t1038)
     except:
         t1246 = None
-    check_done('aedd82e4', 't1246', t1246)
+    if t1246 == O:
+        return True, f'aedd82e4 - t1246'
     try:
         t1247 = sfilter_f(t634, t1039)
     except:
@@ -5128,7 +5225,8 @@ def batt(S, I):
         t1257 = move(I, t131, t1047)
     except:
         t1257 = None
-    check_done('a1570a43', 't1257', t1257)
+    if t1257 == O:
+        return True, f'a1570a43 - t1257'
     try:
         t1258 = order(t9, t302)
     except:
@@ -5165,7 +5263,8 @@ def batt(S, I):
         t1266 = paint(t137, t1054)
     except:
         t1266 = None
-    check_done('d13f3404', 't1266', t1266)
+    if t1266 == O:
+        return True, f'd13f3404 - t1266'
     try:
         t1267 = fill(I, t300, t1055)
     except:
@@ -5230,7 +5329,8 @@ def batt(S, I):
         t1282 = canvas(t50, t1069)
     except:
         t1282 = None
-    check_done('1190e5a7', 't1282', t1282)
+    if t1282 == O:
+        return True, f'1190e5a7 - t1282'
     try:
         t1283 = rbind(repeat, t671)
     except:
@@ -5247,7 +5347,8 @@ def batt(S, I):
         t1286 = move(I, t154, t1072)
     except:
         t1286 = None
-    check_done('dc433765', 't1286', t1286)
+    if t1286 == O:
+        return True, f'dc433765 - t1286'
     try:
         t1287 = mapply(ineighbors, t1073)
     except:
@@ -5336,7 +5437,8 @@ def batt(S, I):
         t1308 = fill(I, BLACK, t1093)
     except:
         t1308 = None
-    check_done('7f4411dc', 't1308', t1308)
+    if t1308 == O:
+        return True, f'7f4411dc - t1308'
     try:
         t1309 = fork(difference, identity, t1094)
     except:
@@ -5409,7 +5511,8 @@ def batt(S, I):
         t1326 = paint(t711, t98)
     except:
         t1326 = None
-    check_done('9565186b', 't1326', t1326)
+    if t1326 == O:
+        return True, f'9565186b - t1326'
     try:
         t1327 = compose(toivec, numcolors_f)
     except:
@@ -5470,7 +5573,8 @@ def batt(S, I):
         t1341 = replace(t351, t251, t246)
     except:
         t1341 = None
-    check_done('c8f0f002', 't1341', t1341)
+    if t1341 == O:
+        return True, f'c8f0f002 - t1341'
     try:
         t1342 = mapply(t530, t1124)
     except:
@@ -5519,7 +5623,8 @@ def batt(S, I):
         t1353 = fill(I, BLACK, t1136)
     except:
         t1353 = None
-    check_done('d23f8c26', 't1353', t1353)
+    if t1353 == O:
+        return True, f'd23f8c26 - t1353'
     try:
         t1354 = cover(I, t1126)
     except:
@@ -5560,7 +5665,8 @@ def batt(S, I):
         t1363 = mir_rot_t(t1148, R4)
     except:
         t1363 = None
-    check_done('a740d043', 't1341', t1341)
+    if t1341 == O:
+        return True, f'a740d043 - t1341'
     try:
         t1364 = paint(t747, t1150)
     except:
@@ -5601,7 +5707,8 @@ def batt(S, I):
         t1373 = fill(I, t246, t1165)
     except:
         t1373 = None
-    check_done('6f8cd79b', 't1373', t1373)
+    if t1373 == O:
+        return True, f'6f8cd79b - t1373'
     try:
         t1374 = mfilter_f(t961, t384)
     except:
@@ -5654,7 +5761,8 @@ def batt(S, I):
         t1386 = fill(I, t246, t1175)
     except:
         t1386 = None
-    check_done('bb43febb', 't1386', t1386)
+    if t1386 == O:
+        return True, f'bb43febb - t1386'
     try:
         t1387 = t1178(TWO)
     except:
@@ -5671,7 +5779,8 @@ def batt(S, I):
         t1390 = replace(t980, t1182, t2)
     except:
         t1390 = None
-    check_done('fcb5c309', 't1390', t1390)
+    if t1390 == O:
+        return True, f'fcb5c309 - t1390'
     try:
         t1391 = compose(invert, t1183)
     except:
@@ -5700,12 +5809,14 @@ def batt(S, I):
         t1397 = underfill(I, t246, t1188)
     except:
         t1397 = None
-    check_done('41e4d17e', 't1397', t1397)
+    if t1397 == O:
+        return True, f'41e4d17e - t1397'
     try:
         t1398 = replace(t403, t251, t246)
     except:
         t1398 = None
-    check_done('a79310a0', 't1398', t1398)
+    if t1398 == O:
+        return True, f'a79310a0 - t1398'
     try:
         t1399 = mir_rot_t(t1190, R0)
     except:
@@ -5746,7 +5857,8 @@ def batt(S, I):
         t1408 = crop(I, t796, t1202)
     except:
         t1408 = None
-    check_done('3f7978a0', 't1408', t1408)
+    if t1408 == O:
+        return True, f'3f7978a0 - t1408'
     try:
         t1409 = branch(t1002, lefthalf, tophalf)
     except:
@@ -5823,7 +5935,8 @@ def batt(S, I):
         t1427 = canvas(t1221, UNITY)
     except:
         t1427 = None
-    check_done('44f52bb0', 't1427', t1427)
+    if t1427 == O:
+        return True, f'44f52bb0 - t1427'
     try:
         t1428 = f_ofcolor(t1222, BLACK)
     except:
@@ -5908,12 +6021,14 @@ def batt(S, I):
         t1448 = paint(I, t1241)
     except:
         t1448 = None
-    check_done('1f876c06', 't1448', t1448)
+    if t1448 == O:
+        return True, f'1f876c06 - t1448'
     try:
         t1449 = fill(t1036, GRAY, t1242)
     except:
         t1449 = None
-    check_done('b60334d2', 't1449', t1449)
+    if t1449 == O:
+        return True, f'b60334d2 - t1449'
     try:
         t1450 = insert(UNITY, t1243)
     except:
@@ -5926,7 +6041,8 @@ def batt(S, I):
         t1452 = underfill(I, CYAN, t1245)
     except:
         t1452 = None
-    check_done('ded97339', 't1452', t1452)
+    if t1452 == O:
+        return True, f'ded97339 - t1452'
     try:
         t1453 = fill(t3, t246, t1247)
     except:
@@ -5935,7 +6051,8 @@ def batt(S, I):
         t1454 = fill(I, t246, t1248)
     except:
         t1454 = None
-    check_done('a5313dff', 't1454', t1454)
+    if t1454 == O:
+        return True, f'a5313dff - t1454'
     try:
         t1455 = lbind(recolor_o, BLACK)
     except:
@@ -5964,7 +6081,8 @@ def batt(S, I):
         t1461 = fill(t1046, YELLOW, t1256)
     except:
         t1461 = None
-    check_done('cf98881b', 't1461', t1461)
+    if t1461 == O:
+        return True, f'cf98881b - t1461'
     try:
         t1462 = mapply(t458, t427)
     except:
@@ -5981,7 +6099,8 @@ def batt(S, I):
         t1465 = canvas(t647, t1261)
     except:
         t1465 = None
-    check_done('d631b094', 't1465', t1465)
+    if t1465 == O:
+        return True, f'd631b094 - t1465'
     try:
         t1466 = f_ofcolor(t1263, BLUE)
     except:
@@ -6006,7 +6125,8 @@ def batt(S, I):
         t1471 = fill(I, t654, t1269)
     except:
         t1471 = None
-    check_done('7ddcd7ec', 't1471', t1471)
+    if t1471 == O:
+        return True, f'7ddcd7ec - t1471'
     try:
         t1472 = mapply(t139, t1270)
     except:
@@ -6023,7 +6143,8 @@ def batt(S, I):
         t1475 = cellwise(t471, t1273, ZERO)
     except:
         t1475 = None
-    check_done('8f2ea7aa', 't1475', t1475)
+    if t1475 == O:
+        return True, f'8f2ea7aa - t1475'
     try:
         t1476 = matcher(t10, BLACK)
     except:
@@ -6040,7 +6161,8 @@ def batt(S, I):
         t1479 = underfill(I, t2, t1277)
     except:
         t1479 = None
-    check_done('25d487eb', 't1479', t1479)
+    if t1479 == O:
+        return True, f'25d487eb - t1479'
     try:
         t1480 = fork(vmatching, t10, t23)
     except:
@@ -6069,7 +6191,8 @@ def batt(S, I):
         t1486 = replace(t483, t251, t246)
     except:
         t1486 = None
-    check_done('f76d97a5', 't1486', t1486)
+    if t1486 == O:
+        return True, f'f76d97a5 - t1486'
     try:
         t1487 = greater(t1284, ONE)
     except:
@@ -6078,12 +6201,14 @@ def batt(S, I):
         t1488 = underfill(I, t2, t1285)
     except:
         t1488 = None
-    check_done('b8cdaf2b', 't1488', t1488)
+    if t1488 == O:
+        return True, f'b8cdaf2b - t1488'
     try:
         t1489 = underfill(t155, t246, t1287)
     except:
         t1489 = None
-    check_done('10fcaaa3', 't1489', t1489)
+    if t1489 == O:
+        return True, f'10fcaaa3 - t1489'
     try:
         t1490 = gravitate(t6, t1288)
     except:
@@ -6192,7 +6317,8 @@ def batt(S, I):
         t1516 = fill(t441, BLACK, t1316)
     except:
         t1516 = None
-    check_done('cce03e0d', 't1516', t1516)
+    if t1516 == O:
+        return True, f'cce03e0d - t1516'
     try:
         t1517 = halve(t1318)
     except:
@@ -6201,7 +6327,8 @@ def batt(S, I):
         t1518 = fill(I, t246, t1319)
     except:
         t1518 = None
-    check_done('67385a82', 't1518', t1518)
+    if t1518 == O:
+        return True, f'67385a82 - t1518'
     try:
         t1519 = insert(t22, t1320)
     except:
@@ -6210,7 +6337,8 @@ def batt(S, I):
         t1520 = paint(I, t1322)
     except:
         t1520 = None
-    check_done('bda2d7a6', 't1520', t1520)
+    if t1520 == O:
+        return True, f'bda2d7a6 - t1520'
     try:
         t1521 = rbind(compose, initset)
     except:
@@ -6243,7 +6371,8 @@ def batt(S, I):
         t1528 = vconcat(t1332, t1332)
     except:
         t1528 = None
-    check_done('f5b8619d', 't1528', t1528)
+    if t1528 == O:
+        return True, f'f5b8619d - t1528'
     try:
         t1529 = fork(shift, identity, t1334)
     except:
@@ -6280,7 +6409,8 @@ def batt(S, I):
         t1537 = paint(I, t1342)
     except:
         t1537 = None
-    check_done('e76a88a6', 't1537', t1537)
+    if t1537 == O:
+        return True, f'e76a88a6 - t1537'
     try:
         t1538 = get_nth_f(t725, F0)
     except:
@@ -6321,7 +6451,8 @@ def batt(S, I):
         t1547 = vconcat(t363, t1357)
     except:
         t1547 = None
-    check_done('bd4472b8', 't1547', t1547)
+    if t1547 == O:
+        return True, f'bd4472b8 - t1547'
     try:
         t1548 = compose(t1359, initset)
     except:
@@ -6330,7 +6461,8 @@ def batt(S, I):
         t1549 = switch(t1360, EIGHT, TWO)
     except:
         t1549 = None
-    check_done('ce9e57f2', 't1549', t1549)
+    if t1549 == O:
+        return True, f'ce9e57f2 - t1549'
     try:
         t1550 = divide(t1362, THREE)
     except:
@@ -6351,7 +6483,8 @@ def batt(S, I):
         t1554 = mir_rot_t(t1364, R4)
     except:
         t1554 = None
-    check_done('681b3aeb', 't1554', t1554)
+    if t1554 == O:
+        return True, f'681b3aeb - t1554'
     try:
         t1555 = decrement(t1151)
     except:
@@ -6364,7 +6497,8 @@ def batt(S, I):
         t1557 = paint(I, t1366)
     except:
         t1557 = None
-    check_done('1f642eb9', 't1557', t1557)
+    if t1557 == O:
+        return True, f'1f642eb9 - t1557'
     try:
         t1558 = get_arg_rank_f(t1367, size, F0)
     except:
@@ -6393,7 +6527,8 @@ def batt(S, I):
         t1564 = replace(t558, t251, t246)
     except:
         t1564 = None
-    check_done('1cf80156', 't1564', t1564)
+    if t1564 == O:
+        return True, f'1cf80156 - t1564'
     try:
         t1565 = other_f(t758, t1371)
     except:
@@ -6410,7 +6545,8 @@ def batt(S, I):
         t1568 = underfill(I, t2, t1374)
     except:
         t1568 = None
-    check_done('2c608aff', 't1568', t1568)
+    if t1568 == O:
+        return True, f'2c608aff - t1568'
     try:
         t1569 = mapply(t386, t1375)
     except:
@@ -6443,7 +6579,8 @@ def batt(S, I):
         t1576 = replace(t569, t247, t1383)
     except:
         t1576 = None
-    check_done('5117e062', 't1576', t1576)
+    if t1576 == O:
+        return True, f'5117e062 - t1576'
     try:
         t1577 = get_nth_t(t1384, L1)
     except:
@@ -6508,7 +6645,8 @@ def batt(S, I):
         t1592 = fill(t409, t794, t1406)
     except:
         t1592 = None
-    check_done('bbc9ae5d', 't1592', t1592)
+    if t1592 == O:
+        return True, f'bbc9ae5d - t1592'
     try:
         t1593 = mapply(t998, t208)
     except:
@@ -6529,7 +6667,8 @@ def batt(S, I):
         t1597 = fill(t1205, RED, t1411)
     except:
         t1597 = None
-    check_done('31aa019c', 't1597', t1597)
+    if t1597 == O:
+        return True, f'31aa019c - t1597'
     try:
         t1598 = get_arg_rank_f(t1206, t1412, F0)
     except:
@@ -6538,7 +6677,8 @@ def batt(S, I):
         t1599 = upscale_t(t1413, THREE)
     except:
         t1599 = None
-    check_done('00d62c1b', 't1454', t1454)
+    if t1454 == O:
+        return True, f'00d62c1b - t1454'
     try:
         t1600 = get_nth_f(t1414, F0)
     except:
@@ -6547,7 +6687,8 @@ def batt(S, I):
         t1601 = paint(I, t1415)
     except:
         t1601 = None
-    check_done('8e5a5113', 't1601', t1601)
+    if t1601 == O:
+        return True, f'8e5a5113 - t1601'
     try:
         t1602 = shift(t1417, UNITY)
     except:
@@ -6564,7 +6705,8 @@ def batt(S, I):
         t1605 = paint(I, t1421)
     except:
         t1605 = None
-    check_done('22168020', 't1605', t1605)
+    if t1605 == O:
+        return True, f'22168020 - t1605'
     try:
         t1606 = t602(t1422)
     except:
@@ -6641,7 +6783,8 @@ def batt(S, I):
         t1624 = fill(I, t2, t1443)
     except:
         t1624 = None
-    check_done('890034e9', 't1624', t1624)
+    if t1624 == O:
+        return True, f'890034e9 - t1624'
     try:
         t1625 = chain(positive, size, t1445)
     except:
@@ -6654,7 +6797,8 @@ def batt(S, I):
         t1627 = paint(t834, t1447)
     except:
         t1627 = None
-    check_done('d8c310e9', 't1627', t1627)
+    if t1627 == O:
+        return True, f'd8c310e9 - t1627'
     try:
         t1628 = lbind(shift, t1450)
     except:
@@ -6671,7 +6815,8 @@ def batt(S, I):
         t1631 = mir_rot_t(t1453, R2)
     except:
         t1631 = None
-    check_done('d406998b', 't1631', t1631)
+    if t1631 == O:
+        return True, f'd406998b - t1631'
     try:
         t1632 = chain(toindices, t501, normalize)
     except:
@@ -6700,7 +6845,8 @@ def batt(S, I):
         t1638 = paint(I, t1462)
     except:
         t1638 = None
-    check_done('363442ee', 't1638', t1638)
+    if t1638 == O:
+        return True, f'363442ee - t1638'
     try:
         t1639 = lbind(greater, t247)
     except:
@@ -6713,7 +6859,8 @@ def batt(S, I):
         t1641 = fill(I, YELLOW, t1464)
     except:
         t1641 = None
-    check_done('a5f85a15', 't1641', t1641)
+    if t1641 == O:
+        return True, f'a5f85a15 - t1641'
     try:
         t1642 = corner(t1466, R0)
     except:
@@ -6722,7 +6869,8 @@ def batt(S, I):
         t1643 = fill(I, t253, t1467)
     except:
         t1643 = None
-    check_done('623ea044', 't1643', t1643)
+    if t1643 == O:
+        return True, f'623ea044 - t1643'
     try:
         t1644 = inbox(t650)
     except:
@@ -6807,7 +6955,8 @@ def batt(S, I):
         t1664 = canvas(t1492, UNITY)
     except:
         t1664 = None
-    check_done('de1cd16c', 't1664', t1664)
+    if t1664 == O:
+        return True, f'de1cd16c - t1664'
     try:
         t1665 = mapply(neighbors, t73)
     except:
@@ -6816,7 +6965,8 @@ def batt(S, I):
         t1666 = fill(t158, t322, t1493)
     except:
         t1666 = None
-    check_done('7e0986d6', 't1666', t1666)
+    if t1666 == O:
+        return True, f'7e0986d6 - t1666'
     try:
         t1667 = t1494(ORIGIN)
     except:
@@ -6825,7 +6975,8 @@ def batt(S, I):
         t1668 = paint(t159, t1495)
     except:
         t1668 = None
-    check_done('6b9890af', 't1668', t1668)
+    if t1668 == O:
+        return True, f'6b9890af - t1668'
     try:
         t1669 = apply(tojvec, t1496)
     except:
@@ -6834,12 +6985,14 @@ def batt(S, I):
         t1670 = downscale(t1497, THREE)
     except:
         t1670 = None
-    check_done('80af3007', 't1670', t1670)
+    if t1670 == O:
+        return True, f'80af3007 - t1670'
     try:
         t1671 = crop(t1297, DOWN, t1498)
     except:
         t1671 = None
-    check_done('f8b3ba0a', 't1671', t1671)
+    if t1671 == O:
+        return True, f'f8b3ba0a - t1671'
     try:
         t1672 = vconcat(t1298, t1499)
     except:
@@ -6860,7 +7013,8 @@ def batt(S, I):
         t1676 = replace(t686, t1300, t1502)
     except:
         t1676 = None
-    check_done('3de23699', 't1676', t1676)
+    if t1676 == O:
+        return True, f'3de23699 - t1676'
     try:
         t1677 = apply(t687, t1503)
     except:
@@ -6953,7 +7107,8 @@ def batt(S, I):
         t1699 = paint(t343, t1525)
     except:
         t1699 = None
-    check_done('178fcbfb', 't1699', t1699)
+    if t1699 == O:
+        return True, f'178fcbfb - t1699'
     try:
         t1700 = extract(t1329, t23)
     except:
@@ -6962,7 +7117,8 @@ def batt(S, I):
         t1701 = t345(t1526)
     except:
         t1701 = None
-    check_done('4be741c5', 't1701', t1701)
+    if t1701 == O:
+        return True, f'4be741c5 - t1701'
     try:
         t1702 = fork(sfilter, t10, t1527)
     except:
@@ -6971,7 +7127,8 @@ def batt(S, I):
         t1703 = replace(t717, t251, t246)
     except:
         t1703 = None
-    check_done('0520fde7', 't1703', t1703)
+    if t1703 == O:
+        return True, f'0520fde7 - t1703'
     try:
         t1704 = mapply(t1529, t9)
     except:
@@ -7080,7 +7237,8 @@ def batt(S, I):
         t1730 = downscale(t1146, t1550)
     except:
         t1730 = None
-    check_done('5ad4f10b', 't1730', t1730)
+    if t1730 == O:
+        return True, f'5ad4f10b - t1730'
     try:
         t1731 = paint(t744, t1054)
     except:
@@ -7113,7 +7271,8 @@ def batt(S, I):
         t1738 = hconcat(t951, t1559)
     except:
         t1738 = None
-    check_done('1fad071e', 't1738', t1738)
+    if t1738 == O:
+        return True, f'1fad071e - t1738'
     try:
         t1739 = mapply(delta, t755)
     except:
@@ -7134,7 +7293,8 @@ def batt(S, I):
         t1743 = canvas(t1565, UNITY)
     except:
         t1743 = None
-    check_done('d9fac9be', 't1743', t1743)
+    if t1743 == O:
+        return True, f'd9fac9be - t1743'
     try:
         t1744 = mir_rot_t(t1566, R3)
     except:
@@ -7143,7 +7303,8 @@ def batt(S, I):
         t1745 = replace(t958, t2, t1567)
     except:
         t1745 = None
-    check_done('47c1f68c', 't1745', t1745)
+    if t1745 == O:
+        return True, f'47c1f68c - t1745'
     try:
         t1746 = o_g(t762, R1)
     except:
@@ -7152,7 +7313,8 @@ def batt(S, I):
         t1747 = paint(I, t1569)
     except:
         t1747 = None
-    check_done('8eb1be9a', 't1747', t1747)
+    if t1747 == O:
+        return True, f'8eb1be9a - t1747'
     try:
         t1748 = get_arg_rank_f(t1376, t1570, F0)
     except:
@@ -7265,12 +7427,14 @@ def batt(S, I):
         t1775 = paint(t1405, t1591)
     except:
         t1775 = None
-    check_done('11852cab', 't1775', t1775)
+    if t1775 == O:
+        return True, f'11852cab - t1775'
     try:
         t1776 = underpaint(I, t1593)
     except:
         t1776 = None
-    check_done('444801d8', 't1776', t1776)
+    if t1776 == O:
+        return True, f'444801d8 - t1776'
     try:
         t1777 = branch(t999, t714, t72)
     except:
@@ -7295,7 +7459,8 @@ def batt(S, I):
         t1782 = paint(t71, t1602)
     except:
         t1782 = None
-    check_done('137eaa0f', 't1782', t1782)
+    if t1782 == O:
+        return True, f'137eaa0f - t1782'
     try:
         t1783 = compose(t65, t1603)
     except:
@@ -7368,7 +7533,8 @@ def batt(S, I):
         t1800 = fill(t437, t246, t1616)
     except:
         t1800 = None
-    check_done('d5d6de2d', 't1800', t1800)
+    if t1800 == O:
+        return True, f'd5d6de2d - t1800'
     try:
         t1801 = toindices(t616)
     except:
@@ -7377,7 +7543,8 @@ def batt(S, I):
         t1802 = move(I, t1618, RIGHT)
     except:
         t1802 = None
-    check_done('025d127b', 't1802', t1802)
+    if t1802 == O:
+        return True, f'025d127b - t1802'
     try:
         t1803 = mfilter_f(t7, t1619)
     except:
@@ -7386,7 +7553,8 @@ def batt(S, I):
         t1804 = replace(t825, t251, t246)
     except:
         t1804 = None
-    check_done('017c7c7b', 't1804', t1804)
+    if t1804 == O:
+        return True, f'017c7c7b - t1804'
     try:
         t1805 = f_ofcolor(t86, t50)
     except:
@@ -7419,7 +7587,8 @@ def batt(S, I):
         t1812 = fill(I, t246, t1629)
     except:
         t1812 = None
-    check_done('810b9b61', 't1812', t1812)
+    if t1812 == O:
+        return True, f'810b9b61 - t1812'
     try:
         t1813 = compose(t839, t1630)
     except:
@@ -7524,7 +7693,8 @@ def batt(S, I):
         t1838 = fill(I, t246, t1657)
     except:
         t1838 = None
-    check_done('67a423a3', 't1838', t1838)
+    if t1838 == O:
+        return True, f'67a423a3 - t1838'
     try:
         t1839 = t1485(t1659)
     except:
@@ -7533,7 +7703,8 @@ def batt(S, I):
         t1840 = canvas(t1660, UNITY)
     except:
         t1840 = None
-    check_done('239be575', 't1840', t1840)
+    if t1840 == O:
+        return True, f'239be575 - t1840'
     try:
         t1841 = gravitate(t1288, t6)
     except:
@@ -7566,7 +7737,8 @@ def batt(S, I):
         t1848 = fill(t325, t246, t1674)
     except:
         t1848 = None
-    check_done('1b2d62fb', 't1848', t1848)
+    if t1848 == O:
+        return True, f'1b2d62fb - t1848'
     try:
         t1849 = lbind(t193, t1675)
     except:
@@ -7611,12 +7783,14 @@ def batt(S, I):
         t1859 = fill(t696, BLACK, t1686)
     except:
         t1859 = None
-    check_done('ce4f8723', 't1859', t1859)
+    if t1859 == O:
+        return True, f'ce4f8723 - t1859'
     try:
         t1860 = vconcat(t1511, t1687)
     except:
         t1860 = None
-    check_done('3ac3eb23', 't1860', t1860)
+    if t1860 == O:
+        return True, f'3ac3eb23 - t1860'
     try:
         t1861 = get_color_rank_t(t1688, L1)
     except:
@@ -7645,7 +7819,8 @@ def batt(S, I):
         t1867 = fill(t1321, BLACK, t1694)
     except:
         t1867 = None
-    check_done('25d8a9c8', 't1867', t1867)
+    if t1867 == O:
+        return True, f'25d8a9c8 - t1867'
     try:
         t1868 = fork(difference, identity, t1323)
     except:
@@ -7674,12 +7849,14 @@ def batt(S, I):
         t1874 = get_nth_t(t1700, F0)
     except:
         t1874 = None
-    check_done('72ca375d', 't1874', t1874)
+    if t1874 == O:
+        return True, f'72ca375d - t1874'
     try:
         t1875 = paint(t348, t1704)
     except:
         t1875 = None
-    check_done('1caeab9d', 't1875', t1875)
+    if t1875 == O:
+        return True, f'1caeab9d - t1875'
     try:
         t1876 = lbind(rapply, t1705)
     except:
@@ -7708,7 +7885,8 @@ def batt(S, I):
         t1882 = vconcat(t1123, t1712)
     except:
         t1882 = None
-    check_done('eb281b96', 't1882', t1882)
+    if t1882 == O:
+        return True, f'eb281b96 - t1882'
     try:
         t1883 = astuple(t1343, t1713)
     except:
@@ -7725,12 +7903,14 @@ def batt(S, I):
         t1886 = mir_rot_t(t1716, R1)
     except:
         t1886 = None
-    check_done('d56f2372', 't1874', t1874)
+    if t1874 == O:
+        return True, f'd56f2372 - t1874'
     try:
         t1887 = fill(I, CYAN, t1717)
     except:
         t1887 = None
-    check_done('760b3cac', 't1887', t1887)
+    if t1887 == O:
+        return True, f'760b3cac - t1887'
     try:
         t1888 = rbind(interval, t1718)
     except:
@@ -7771,7 +7951,8 @@ def batt(S, I):
         t1897 = t738(t1725)
     except:
         t1897 = None
-    check_done('e345f17b', 't1848', t1848)
+    if t1848 == O:
+        return True, f'e345f17b - t1848'
     try:
         t1898 = fork(vconcat, t364, t1726)
     except:
@@ -7792,7 +7973,8 @@ def batt(S, I):
         t1902 = mir_rot_t(t1731, R0)
     except:
         t1902 = None
-    check_done('feca6190', 't1902', t1902)
+    if t1902 == O:
+        return True, f'feca6190 - t1902'
     try:
         t1903 = compose(dneighbors, t23)
     except:
@@ -7825,7 +8007,8 @@ def batt(S, I):
         t1910 = fill(t1158, t264, t1739)
     except:
         t1910 = None
-    check_done('543a7ed5', 't1910', t1910)
+    if t1910 == O:
+        return True, f'543a7ed5 - t1910'
     try:
         t1911 = mapply(t1369, t1740)
     except:
@@ -7850,12 +8033,14 @@ def batt(S, I):
         t1916 = subgrid(t1748, I)
     except:
         t1916 = None
-    check_done('e50d258f', 't1916', t1916)
+    if t1916 == O:
+        return True, f'e50d258f - t1916'
     try:
         t1917 = fill(t966, t246, t1749)
     except:
         t1917 = None
-    check_done('0ca9ddb6', 't1917', t1917)
+    if t1917 == O:
+        return True, f'0ca9ddb6 - t1917'
     try:
         t1918 = paint(t1571, t1750)
     except:
@@ -7864,7 +8049,8 @@ def batt(S, I):
         t1919 = branch(t1379, t1751, t969)
     except:
         t1919 = None
-    check_done('ff805c23', 't1919', t1919)
+    if t1919 == O:
+        return True, f'ff805c23 - t1919'
     try:
         t1920 = canvas(CYAN, t1753)
     except:
@@ -7901,7 +8087,8 @@ def batt(S, I):
         t1928 = fill(t399, BLACK, t1761)
     except:
         t1928 = None
-    check_done('6ecd11f4', 't1928', t1928)
+    if t1928 == O:
+        return True, f'6ecd11f4 - t1928'
     try:
         t1929 = extract(t880, t553)
     except:
@@ -7922,7 +8109,8 @@ def batt(S, I):
         t1933 = paint(I, t1765)
     except:
         t1933 = None
-    check_done('c444b776', 't1933', t1933)
+    if t1933 == O:
+        return True, f'c444b776 - t1933'
     try:
         t1934 = replace(t1399, t226, t1766)
     except:
@@ -7935,7 +8123,8 @@ def batt(S, I):
         t1936 = lbind(mapply, dneighbors)
     except:
         t1936 = None
-    check_done('f2829549', 't1848', t1848)
+    if t1848 == O:
+        return True, f'f2829549 - t1848'
     try:
         t1937 = f_ofcolor(t1769, CYAN)
     except:
@@ -7996,7 +8185,8 @@ def batt(S, I):
         t1951 = asobject(t1784)
     except:
         t1951 = None
-    check_done('66f2d22f', 't1848', t1848)
+    if t1848 == O:
+        return True, f'66f2d22f - t1848'
     try:
         t1952 = extract(t422, t1785)
     except:
@@ -8029,7 +8219,8 @@ def batt(S, I):
         t1959 = fill(t250, t246, t1791)
     except:
         t1959 = None
-    check_done('94f9d214', 't1959', t1959)
+    if t1959 == O:
+        return True, f'94f9d214 - t1959'
     try:
         t1960 = asobject(t1792)
     except:
@@ -8070,7 +8261,8 @@ def batt(S, I):
         t1969 = fill(t1026, t246, t1803)
     except:
         t1969 = None
-    check_done('d2abd087', 't1969', t1969)
+    if t1969 == O:
+        return True, f'd2abd087 - t1969'
     try:
         t1970 = difference(t1438, t1805)
     except:
@@ -8087,7 +8279,8 @@ def batt(S, I):
         t1973 = fill(t1442, ORANGE, t1809)
     except:
         t1973 = None
-    check_done('a68b268e', 't1973', t1973)
+    if t1973 == O:
+        return True, f'a68b268e - t1973'
     try:
         t1974 = chain(t1521, t1359, initset)
     except:
@@ -8112,7 +8305,8 @@ def batt(S, I):
         t1979 = underfill(I, t246, t1815)
     except:
         t1979 = None
-    check_done('dbc1a6ce', 't1979', t1979)
+    if t1979 == O:
+        return True, f'dbc1a6ce - t1979'
     try:
         t1980 = astuple(t185, ONE)
     except:
@@ -8125,7 +8319,8 @@ def batt(S, I):
         t1982 = fill(t1633, ORANGE, t810)
     except:
         t1982 = None
-    check_done('d364b489', 't1982', t1982)
+    if t1982 == O:
+        return True, f'd364b489 - t1982'
     try:
         t1983 = combine(t1458, t1817)
     except:
@@ -8146,7 +8341,8 @@ def batt(S, I):
         t1987 = rbind(colorcount_f, t1820)
     except:
         t1987 = None
-    check_done('6430c8c4', 't1959', t1959)
+    if t1959 == O:
+        return True, f'6430c8c4 - t1959'
     try:
         t1988 = apply(t1210, t729)
     except:
@@ -8163,7 +8359,8 @@ def batt(S, I):
         t1991 = center(t465)
     except:
         t1991 = None
-    check_done('0c9aba6e', 't1959', t1959)
+    if t1959 == O:
+        return True, f'0c9aba6e - t1959'
     try:
         t1992 = matcher(numcolors_f, BLUE)
     except:
@@ -8204,7 +8401,8 @@ def batt(S, I):
         t2001 = paint(I, t1834)
     except:
         t2001 = None
-    check_done('ddf7fa4f', 't2001', t2001)
+    if t2001 == O:
+        return True, f'ddf7fa4f - t2001'
     try:
         t2002 = pair(t1481, t1835)
     except:
@@ -8233,7 +8431,8 @@ def batt(S, I):
         t2008 = add(t1076, t1843)
     except:
         t2008 = None
-    check_done('fafffa47', 't1959', t1959)
+    if t1959 == O:
+        return True, f'fafffa47 - t1959'
     try:
         t2009 = hsplit(t1846, THREE)
     except:
@@ -8254,7 +8453,8 @@ def batt(S, I):
         t2013 = fill(I, t246, t1851)
     except:
         t2013 = None
-    check_done('ba26e723', 't2013', t2013)
+    if t2013 == O:
+        return True, f'ba26e723 - t2013'
     try:
         t2014 = shift(t6, UP_RIGHT)
     except:
@@ -8279,7 +8479,8 @@ def batt(S, I):
         t2019 = fill(t1858, CYAN, t73)
     except:
         t2019 = None
-    check_done('253bf280', 't2019', t2019)
+    if t2019 == O:
+        return True, f'253bf280 - t2019'
     try:
         t2020 = other_f(t123, t1861)
     except:
@@ -8300,12 +8501,14 @@ def batt(S, I):
         t2024 = replace(t1317, t251, t264)
     except:
         t2024 = None
-    check_done('7b6016b9', 't2024', t2024)
+    if t2024 == O:
+        return True, f'7b6016b9 - t2024'
     try:
         t2025 = fill(I, t246, t1865)
     except:
         t2025 = None
-    check_done('e9614598', 't2025', t2025)
+    if t2025 == O:
+        return True, f'e9614598 - t2025'
     try:
         t2026 = mir_rot_t(t1866, R2)
     except:
@@ -8354,7 +8557,8 @@ def batt(S, I):
         t2037 = fill(I, t246, t1879)
     except:
         t2037 = None
-    check_done('b2862040', 't2037', t2037)
+    if t2037 == O:
+        return True, f'b2862040 - t2037'
     try:
         t2038 = combine(t1710, t1880)
     except:
@@ -8379,7 +8583,8 @@ def batt(S, I):
         t2043 = t727(t1886)
     except:
         t2043 = None
-    check_done('eb5a1d5d', 't2043', t2043)
+    if t2043 == O:
+        return True, f'eb5a1d5d - t2043'
     try:
         t2044 = width_t(t523)
     except:
@@ -8428,12 +8633,14 @@ def batt(S, I):
         t2055 = fill(I, t246, t1899)
     except:
         t2055 = None
-    check_done('54d82841', 't2055', t2055)
+    if t2055 == O:
+        return True, f'54d82841 - t2055'
     try:
         t2056 = fill(t200, GRAY, t1900)
     except:
         t2056 = None
-    check_done('a48eeaf7', 't2056', t2056)
+    if t2056 == O:
+        return True, f'a48eeaf7 - t2056'
     try:
         t2057 = rbind(chain, t1903)
     except:
@@ -8494,7 +8701,8 @@ def batt(S, I):
         t2071 = paint(t1752, t129)
     except:
         t2071 = None
-    check_done('63613498', 't2071', t2071)
+    if t2071 == O:
+        return True, f'63613498 - t2071'
     try:
         t2072 = subtract(SIX, t1574)
     except:
@@ -8523,7 +8731,8 @@ def batt(S, I):
         t2078 = mir_rot_t(t1926, R5)
     except:
         t2078 = None
-    check_done('beb8660c', 't2078', t2078)
+    if t2078 == O:
+        return True, f'beb8660c - t2078'
     try:
         t2079 = fork(add, t1391, t1927)
     except:
@@ -8552,7 +8761,8 @@ def batt(S, I):
         t2085 = vconcat(t1190, t1934)
     except:
         t2085 = None
-    check_done('1bfc4729', 't2085', t2085)
+    if t2085 == O:
+        return True, f'1bfc4729 - t2085'
     try:
         t2086 = chain(palette_t, trim, t55)
     except:
@@ -8605,7 +8815,8 @@ def batt(S, I):
         t2098 = fill(t1005, t246, t1947)
     except:
         t2098 = None
-    check_done('d4f3cd78', 't2098', t2098)
+    if t2098 == O:
+        return True, f'd4f3cd78 - t2098'
     try:
         t2099 = shift(t1948, UNITY)
     except:
@@ -8626,7 +8837,8 @@ def batt(S, I):
         t2103 = fill(t48, t246, t1953)
     except:
         t2103 = None
-    check_done('dae9d2b5', 't2103', t2103)
+    if t2103 == O:
+        return True, f'dae9d2b5 - t2103'
     try:
         t2104 = rbind(vsplit, t47)
     except:
@@ -8659,7 +8871,8 @@ def batt(S, I):
         t2111 = fill(t1224, t246, t1961)
     except:
         t2111 = None
-    check_done('bdad9b1f', 't2111', t2111)
+    if t2111 == O:
+        return True, f'bdad9b1f - t2111'
     try:
         t2112 = interval(t1962, TEN, FOUR)
     except:
@@ -8684,7 +8897,8 @@ def batt(S, I):
         t2117 = fill(t259, t246, t1965)
     except:
         t2117 = None
-    check_done('99b1bc43', 't2117', t2117)
+    if t2117 == O:
+        return True, f'99b1bc43 - t2117'
     try:
         t2118 = upscale_t(t1228, t1966)
     except:
@@ -8701,7 +8915,8 @@ def batt(S, I):
         t2121 = fill(t441, t246, t1970)
     except:
         t2121 = None
-    check_done('c3e719e8', 't2121', t2121)
+    if t2121 == O:
+        return True, f'c3e719e8 - t2121'
     try:
         t2122 = index(I, t1233)
     except:
@@ -8722,7 +8937,8 @@ def batt(S, I):
         t2126 = fill(t275, t2, t1975)
     except:
         t2126 = None
-    check_done('6cdd2623', 't2126', t2126)
+    if t2126 == O:
+        return True, f'6cdd2623 - t2126'
     try:
         t2127 = chain(t170, t1626, normalize)
     except:
@@ -8791,7 +9007,8 @@ def batt(S, I):
         t2143 = fill(t1470, t1826, t1994)
     except:
         t2143 = None
-    check_done('b548a754', 't2143', t2143)
+    if t2143 == O:
+        return True, f'b548a754 - t2143'
     try:
         t2144 = paint(t855, t1995)
     except:
@@ -8856,12 +9073,14 @@ def batt(S, I):
         t2159 = subtract(t1076, t1843)
     except:
         t2159 = None
-    check_done('31d5ba1a', 't2117', t2117)
+    if t2117 == O:
+        return True, f'31d5ba1a - t2117'
     try:
         t2160 = merge_t(t2009)
     except:
         t2160 = None
-    check_done('ff28f65a', 't2160', t2160)
+    if t2160 == O:
+        return True, f'ff28f65a - t2160'
     try:
         t2161 = occurrences(t885, t1847)
     except:
@@ -8926,7 +9145,8 @@ def batt(S, I):
         t2176 = paint(I, t2028)
     except:
         t2176 = None
-    check_done('d43fd935', 't2176', t2176)
+    if t2176 == O:
+        return True, f'd43fd935 - t2176'
     try:
         t2177 = hconcat(t1325, t2029)
     except:
@@ -8971,7 +9191,8 @@ def batt(S, I):
         t2187 = paint(I, t2041)
     except:
         t2187 = None
-    check_done('88a10436', 't2187', t2187)
+    if t2187 == O:
+        return True, f'88a10436 - t2187'
     try:
         t2188 = rbind(vmatching, t187)
     except:
@@ -8996,7 +9217,8 @@ def batt(S, I):
         t2193 = hperiod(t1721)
     except:
         t2193 = None
-    check_done('27f8ce4f', 't2121', t2121)
+    if t2121 == O:
+        return True, f'27f8ce4f - t2121'
     try:
         t2194 = lbind(recolor_i, BLACK)
     except:
@@ -9017,7 +9239,8 @@ def batt(S, I):
         t2198 = replace(t2053, BLACK, BLUE)
     except:
         t2198 = None
-    check_done('e8593010', 't2198', t2198)
+    if t2198 == O:
+        return True, f'e8593010 - t2198'
     try:
         t2199 = tophalf(t148)
     except:
@@ -9058,7 +9281,8 @@ def batt(S, I):
         t2208 = fill(I, t246, t2063)
     except:
         t2208 = None
-    check_done('3eda0437', 't2208', t2208)
+    if t2208 == O:
+        return True, f'3eda0437 - t2208'
     try:
         t2209 = apply(color, t209)
     except:
@@ -9071,17 +9295,20 @@ def batt(S, I):
         t2211 = mir_rot_t(t2065, R3)
     except:
         t2211 = None
-    check_done('b8825c91', 't2211', t2211)
+    if t2211 == O:
+        return True, f'b8825c91 - t2211'
     try:
         t2212 = fill(t959, t246, t2066)
     except:
         t2212 = None
-    check_done('d90796e8', 't2212', t2212)
+    if t2212 == O:
+        return True, f'd90796e8 - t2212'
     try:
         t2213 = replace(t2067, NEG_ONE, BLACK)
     except:
         t2213 = None
-    check_done('af902bf9', 't2213', t2213)
+    if t2213 == O:
+        return True, f'af902bf9 - t2213'
     try:
         t2214 = lbind(greater, t2068)
     except:
@@ -9090,7 +9317,8 @@ def batt(S, I):
         t2215 = paint(t1918, t2069)
     except:
         t2215 = None
-    check_done('05269061', 't2215', t2215)
+    if t2215 == O:
+        return True, f'05269061 - t2215'
     try:
         t2216 = merge_f(t2070)
     except:
@@ -9111,8 +9339,10 @@ def batt(S, I):
         t2220 = t973(t2075)
     except:
         t2220 = None
-    check_done('746b3537', 't2220', t2220)
-    check_done('3428a4f5', 't2117', t2117)
+    if t2220 == O:
+        return True, f'746b3537 - t2220'
+    if t2117 == O:
+        return True, f'3428a4f5 - t2117'
     try:
         t2221 = position(t393, t1924)
     except:
@@ -9205,7 +9435,8 @@ def batt(S, I):
         t2243 = fill(t1599, BLACK, t2097)
     except:
         t2243 = None
-    check_done('7c008303', 't2243', t2243)
+    if t2243 == O:
+        return True, f'7c008303 - t2243'
     try:
         t2244 = mapply(t470, t2099)
     except:
@@ -9278,7 +9509,8 @@ def batt(S, I):
         t2261 = fill(t1436, BLACK, t2120)
     except:
         t2261 = None
-    check_done('93b581b8', 't2261', t2261)
+    if t2261 == O:
+        return True, f'93b581b8 - t2261'
     try:
         t2262 = astuple(t2122, ORIGIN)
     except:
@@ -9303,7 +9535,8 @@ def batt(S, I):
         t2267 = fill(t449, t246, t2128)
     except:
         t2267 = None
-    check_done('6c434453', 't2267', t2267)
+    if t2267 == O:
+        return True, f'6c434453 - t2267'
     try:
         t2268 = chain(t117, t1977, t1331)
     except:
@@ -9316,12 +9549,14 @@ def batt(S, I):
         t2270 = fill(t1457, t264, t2130)
     except:
         t2270 = None
-    check_done('3bd67248', 't2270', t2270)
+    if t2270 == O:
+        return True, f'3bd67248 - t2270'
     try:
         t2271 = mir_rot_t(t2131, R2)
     except:
         t2271 = None
-    check_done('cd3c21df', 't2271', t2271)
+    if t2271 == O:
+        return True, f'cd3c21df - t2271'
     try:
         t2272 = shoot(t2132, UP_RIGHT)
     except:
@@ -9330,7 +9565,8 @@ def batt(S, I):
         t2273 = underfill(I, t246, t2133)
     except:
         t2273 = None
-    check_done('2281f1f4', 't2273', t2273)
+    if t2273 == O:
+        return True, f'2281f1f4 - t2273'
     try:
         t2274 = sfilter_f(t125, t2135)
     except:
@@ -9391,7 +9627,8 @@ def batt(S, I):
         t2288 = fill(t873, BLACK, t2156)
     except:
         t2288 = None
-    check_done('b190f7f5', 't2288', t2288)
+    if t2288 == O:
+        return True, f'b190f7f5 - t2288'
     try:
         t2289 = branch(t2157, width_f, height_f)
     except:
@@ -9460,7 +9697,8 @@ def batt(S, I):
         t2305 = underfill(I, t246, t2178)
     except:
         t2305 = None
-    check_done('1b60fb0c', 't2305', t2305)
+    if t2305 == O:
+        return True, f'1b60fb0c - t2305'
     try:
         t2306 = apply(t175, t2179)
     except:
@@ -9469,12 +9707,14 @@ def batt(S, I):
         t2307 = fill(I, t246, t2180)
     except:
         t2307 = None
-    check_done('fcc82909', 't2307', t2307)
+    if t2307 == O:
+        return True, f'fcc82909 - t2307'
     try:
         t2308 = paint(t437, t2181)
     except:
         t2308 = None
-    check_done('a61f2674', 't2308', t2308)
+    if t2308 == O:
+        return True, f'a61f2674 - t2308'
     try:
         t2309 = compose(t10, t2182)
     except:
@@ -9483,7 +9723,8 @@ def batt(S, I):
         t2310 = fill(t1706, t264, t599)
     except:
         t2310 = None
-    check_done('ea32f347', 't2310', t2310)
+    if t2310 == O:
+        return True, f'ea32f347 - t2310'
     try:
         t2311 = interval(ZERO, t2184, ONE)
     except:
@@ -9500,7 +9741,8 @@ def batt(S, I):
         t2314 = fill(t71, t2, t2186)
     except:
         t2314 = None
-    check_done('bc1d5164', 't2314', t2314)
+    if t2314 == O:
+        return True, f'bc1d5164 - t2314'
     try:
         t2315 = rbind(greater, t929)
     except:
@@ -9525,7 +9767,8 @@ def batt(S, I):
         t2320 = paint(t1354, t2195)
     except:
         t2320 = None
-    check_done('321b1fc6', 't2320', t2320)
+    if t2320 == O:
+        return True, f'321b1fc6 - t2320'
     try:
         t2321 = toivec(t2196)
     except:
@@ -9558,7 +9801,8 @@ def batt(S, I):
         t2328 = fill(t71, t246, t2205)
     except:
         t2328 = None
-    check_done('794b24be', 't2328', t2328)
+    if t2328 == O:
+        return True, f'794b24be - t2328'
     try:
         t2329 = get_nth_f(t1556, F0)
     except:
@@ -9571,7 +9815,8 @@ def batt(S, I):
         t2331 = t1157(t1210)
     except:
         t2331 = None
-    check_done('ce602527', 't2271', t2271)
+    if t2271 == O:
+        return True, f'ce602527 - t2271'
     try:
         t2332 = other_f(t2209, t2064)
     except:
@@ -9596,7 +9841,8 @@ def batt(S, I):
         t2337 = underfill(I, t246, t2219)
     except:
         t2337 = None
-    check_done('d4a91cb9', 't2337', t2337)
+    if t2337 == O:
+        return True, f'd4a91cb9 - t2337'
     try:
         t2338 = lbind(multiply, t2221)
     except:
@@ -9621,7 +9867,8 @@ def batt(S, I):
         t2343 = fill(t1584, t264, t2228)
     except:
         t2343 = None
-    check_done('694f12f3', 't2343', t2343)
+    if t2343 == O:
+        return True, f'694f12f3 - t2343'
     try:
         t2344 = mfilter_f(t7, t2229)
     except:
@@ -9638,7 +9885,8 @@ def batt(S, I):
         t2347 = fill(t406, t585, t2233)
     except:
         t2347 = None
-    check_done('3345333e', 't2347', t2347)
+    if t2347 == O:
+        return True, f'3345333e - t2347'
     try:
         t2348 = corner(t1588, R0)
     except:
@@ -9719,12 +9967,14 @@ def batt(S, I):
         t2367 = fill(I, t2, t2251)
     except:
         t2367 = None
-    check_done('5c2c9af4', 't2367', t2367)
+    if t2367 == O:
+        return True, f'5c2c9af4 - t2367'
     try:
         t2368 = fill(t812, t246, t2252)
     except:
         t2368 = None
-    check_done('23581191', 't2368', t2368)
+    if t2368 == O:
+        return True, f'23581191 - t2368'
     try:
         t2369 = extract(t2253, t1014)
     except:
@@ -9753,7 +10003,8 @@ def batt(S, I):
         t2375 = fill(t2118, BLACK, t2259)
     except:
         t2375 = None
-    check_done('77fdfe62', 't2375', t2375)
+    if t2375 == O:
+        return True, f'77fdfe62 - t2375'
     try:
         t2376 = rbind(subgrid, t436)
     except:
@@ -9862,7 +10113,8 @@ def batt(S, I):
         t2402 = fill(t481, t264, t2287)
     except:
         t2402 = None
-    check_done('6e02f1e3', 't2402', t2402)
+    if t2402 == O:
+        return True, f'6e02f1e3 - t2402'
     try:
         t2403 = t2289(t1288)
     except:
@@ -9871,7 +10123,8 @@ def batt(S, I):
         t2404 = t488(t2290)
     except:
         t2404 = None
-    check_done('4093f84a', 't2404', t2404)
+    if t2404 == O:
+        return True, f'4093f84a - t2404'
     try:
         t2405 = fill(I, GREEN, t2291)
     except:
@@ -9888,7 +10141,8 @@ def batt(S, I):
         t2408 = paint(t456, t2293)
     except:
         t2408 = None
-    check_done('952a094c', 't2408', t2408)
+    if t2408 == O:
+        return True, f'952a094c - t2408'
     try:
         t2409 = mapply(t2294, t125)
     except:
@@ -9929,7 +10183,8 @@ def batt(S, I):
         t2418 = fill(I, BLUE, t2301)
     except:
         t2418 = None
-    check_done('6cf79266', 't2418', t2418)
+    if t2418 == O:
+        return True, f'6cf79266 - t2418'
     try:
         t2419 = lbind(recolor_i, ZERO)
     except:
@@ -10002,7 +10257,8 @@ def batt(S, I):
         t2436 = paint(t2054, t2322)
     except:
         t2436 = None
-    check_done('ea9794b1', 't2436', t2436)
+    if t2436 == O:
+        return True, f'ea9794b1 - t2436'
     try:
         t2437 = even(t74)
     except:
@@ -10023,7 +10279,8 @@ def batt(S, I):
         t2441 = astuple(t370, t1553)
     except:
         t2441 = None
-    check_done('75b8110e', 't2436', t2436)
+    if t2436 == O:
+        return True, f'75b8110e - t2436'
     try:
         t2442 = t2206(t2329)
     except:
@@ -10048,7 +10305,8 @@ def batt(S, I):
         t2447 = fill(t1572, t264, t2334)
     except:
         t2447 = None
-    check_done('868de0fa', 't2447', t2447)
+    if t2447 == O:
+        return True, f'868de0fa - t2447'
     try:
         t2448 = hconcat(t1920, t2335)
     except:
@@ -10101,12 +10359,14 @@ def batt(S, I):
         t2460 = fill(t2091, t246, t2349)
     except:
         t2460 = None
-    check_done('b6afb2da', 't2460', t2460)
+    if t2460 == O:
+        return True, f'b6afb2da - t2460'
     try:
         t2461 = paint(I, t2350)
     except:
         t2461 = None
-    check_done('045e512c', 't2461', t2461)
+    if t2461 == O:
+        return True, f'045e512c - t2461'
     try:
         t2462 = t1201(t2354, TWO)
     except:
@@ -10179,7 +10439,8 @@ def batt(S, I):
         t2479 = fill(t2257, BLACK, t2373)
     except:
         t2479 = None
-    check_done('6e19193c', 't2479', t2479)
+    if t2479 == O:
+        return True, f'6e19193c - t2479'
     try:
         t2480 = corner(t2374, R0)
     except:
@@ -10220,7 +10481,8 @@ def batt(S, I):
         t2489 = paint(t456, t2385)
     except:
         t2489 = None
-    check_done('1a07d186', 't2489', t2489)
+    if t2489 == O:
+        return True, f'1a07d186 - t2489'
     try:
         t2490 = sfilter_f(t26, t2386)
     except:
@@ -10249,7 +10511,8 @@ def batt(S, I):
         t2496 = fill(t1993, t246, t2392)
     except:
         t2496 = None
-    check_done('6e82a1ae', 't2496', t2496)
+    if t2496 == O:
+        return True, f'6e82a1ae - t2496'
     try:
         t2497 = t2393(t42)
     except:
@@ -10294,7 +10557,8 @@ def batt(S, I):
         t2507 = fill(t1844, t246, t2406)
     except:
         t2507 = None
-    check_done('913fb3ed', 't2507', t2507)
+    if t2507 == O:
+        return True, f'913fb3ed - t2507'
     try:
         t2508 = t1494(t190)
     except:
@@ -10303,7 +10567,8 @@ def batt(S, I):
         t2509 = paint(t456, t2409)
     except:
         t2509 = None
-    check_done('d89b689b', 't2509', t2509)
+    if t2509 == O:
+        return True, f'd89b689b - t2509'
     try:
         t2510 = lbind(hmatching, t91)
     except:
@@ -10320,7 +10585,8 @@ def batt(S, I):
         t2513 = fill(I, t246, t2412)
     except:
         t2513 = None
-    check_done('22233c11', 't2513', t2513)
+    if t2513 == O:
+        return True, f'22233c11 - t2513'
     try:
         t2514 = compose(dedupe, totuple)
     except:
@@ -10365,7 +10631,8 @@ def batt(S, I):
         t2524 = paint(I, t2426)
     except:
         t2524 = None
-    check_done('1f0c79e5', 't2524', t2524)
+    if t2524 == O:
+        return True, f'1f0c79e5 - t2524'
     try:
         t2525 = compose(t2315, t302)
     except:
@@ -10390,7 +10657,8 @@ def batt(S, I):
         t2530 = fill(t71, t246, t2431)
     except:
         t2530 = None
-    check_done('d4469b4b', 't2530', t2530)
+    if t2530 == O:
+        return True, f'd4469b4b - t2530'
     try:
         t2531 = chain(t170, t2433, t1309)
     except:
@@ -10419,7 +10687,8 @@ def batt(S, I):
         t2537 = crop(t2327, ORIGIN, t2441)
     except:
         t2537 = None
-    check_done('a416b8f3', 't2537', t2537)
+    if t2537 == O:
+        return True, f'a416b8f3 - t2537'
     try:
         t2538 = t2206(t1736)
     except:
@@ -10440,8 +10709,10 @@ def batt(S, I):
         t2542 = paint(t1742, t2445)
     except:
         t2542 = None
-    check_done('83302e8f', 't2542', t2542)
-    check_done('963e52fc', 't2537', t2537)
+    if t2542 == O:
+        return True, f'83302e8f - t2542'
+    if t2537 == O:
+        return True, f'963e52fc - t2537'
     try:
         t2543 = sfilter_f(t26, t2446)
     except:
@@ -10454,7 +10725,8 @@ def batt(S, I):
         t2545 = downscale(t2449, TWO)
     except:
         t2545 = None
-    check_done('36fdfd69', 't2545', t2545)
+    if t2545 == O:
+        return True, f'36fdfd69 - t2545'
     try:
         t2546 = apply(t2338, t1012)
     except:
@@ -10483,12 +10755,14 @@ def batt(S, I):
         t2552 = add(DOWN, t2456)
     except:
         t2552 = None
-    check_done('d687bc17', 't2489', t2489)
+    if t2489 == O:
+        return True, f'd687bc17 - t2489'
     try:
         t2553 = fill(I, t246, t2457)
     except:
         t2553 = None
-    check_done('e73095fd', 't2553', t2553)
+    if t2553 == O:
+        return True, f'e73095fd - t2553'
     try:
         t2554 = chain(t582, t1401, t2458)
     except:
@@ -10497,7 +10771,8 @@ def batt(S, I):
         t2555 = paint(t230, t2459)
     except:
         t2555 = None
-    check_done('8a004b2b', 't2555', t2555)
+    if t2555 == O:
+        return True, f'8a004b2b - t2555'
     try:
         t2556 = add(t19, DOWN_LEFT)
     except:
@@ -10514,7 +10789,8 @@ def batt(S, I):
         t2559 = fill(t1001, t2, t2463)
     except:
         t2559 = None
-    check_done('0962bcdd', 't2559', t2559)
+    if t2559 == O:
+        return True, f'0962bcdd - t2559'
     try:
         t2560 = t2464(I)
     except:
@@ -10607,7 +10883,8 @@ def batt(S, I):
         t2582 = fill(t643, BLACK, t2490)
     except:
         t2582 = None
-    check_done('91714a58', 't2582', t2582)
+    if t2582 == O:
+        return True, f'91714a58 - t2582'
     try:
         t2583 = compose(t2387, t2491)
     except:
@@ -10640,7 +10917,8 @@ def batt(S, I):
         t2590 = fill(t1828, ORANGE, t2498)
     except:
         t2590 = None
-    check_done('db3e9e38', 't2590', t2590)
+    if t2590 == O:
+        return True, f'db3e9e38 - t2590'
     try:
         t2591 = mfilter_f(t7, t2499)
     except:
@@ -10649,12 +10927,14 @@ def batt(S, I):
         t2592 = paint(I, t2500)
     except:
         t2592 = None
-    check_done('cbded52d', 't2592', t2592)
+    if t2592 == O:
+        return True, f'cbded52d - t2592'
     try:
         t2593 = fill(t861, t246, t2501)
     except:
         t2593 = None
-    check_done('97999447', 't2593', t2593)
+    if t2593 == O:
+        return True, f'97999447 - t2593'
     try:
         t2594 = normalize(t2502)
     except:
@@ -10767,7 +11047,8 @@ def batt(S, I):
         t2621 = fill(t2046, t246, t2528)
     except:
         t2621 = None
-    check_done('c0f76784', 't2621', t2621)
+    if t2621 == O:
+        return True, f'c0f76784 - t2621'
     try:
         t2622 = mir_rot_t(t2316, R5)
     except:
@@ -10820,7 +11101,8 @@ def batt(S, I):
         t2634 = paint(t2077, t2547)
     except:
         t2634 = None
-    check_done('ae3edfdc', 't2634', t2634)
+    if t2634 == O:
+        return True, f'ae3edfdc - t2634'
     try:
         t2635 = chain(initset, t2223, t1950)
     except:
@@ -10989,7 +11271,8 @@ def batt(S, I):
         t2676 = fill(I, t2147, t2591)
     except:
         t2676 = None
-    check_done('776ffc46', 't2676', t2676)
+    if t2676 == O:
+        return True, f'776ffc46 - t2676'
     try:
         t2677 = shift(t2594, UNITY)
     except:
@@ -11002,7 +11285,8 @@ def batt(S, I):
         t2679 = fill(I, t246, t2595)
     except:
         t2679 = None
-    check_done('7447852a', 't2679', t2679)
+    if t2679 == O:
+        return True, f'7447852a - t2679'
     try:
         t2680 = compose(initset, t689)
     except:
@@ -11107,7 +11391,8 @@ def batt(S, I):
         t2705 = branch(t359, I, t2624)
     except:
         t2705 = None
-    check_done('4938f0c2', 't2705', t2705)
+    if t2705 == O:
+        return True, f'4938f0c2 - t2705'
     try:
         t2706 = fork(other, palette_f, t937)
     except:
@@ -11140,7 +11425,8 @@ def batt(S, I):
         t2713 = vconcat(t2062, t2630)
     except:
         t2713 = None
-    check_done('a61ba2ce', 't2713', t2713)
+    if t2713 == O:
+        return True, f'a61ba2ce - t2713'
     try:
         t2714 = subtract(t2631, TEN)
     except:
@@ -11197,7 +11483,8 @@ def batt(S, I):
         t2727 = fill(t2561, t1410, t2647)
     except:
         t2727 = None
-    check_done('b782dc8a', 't2727', t2727)
+    if t2727 == O:
+        return True, f'b782dc8a - t2727'
     try:
         t2728 = fork(apply, t2466, t2648)
     except:
@@ -11266,7 +11553,8 @@ def batt(S, I):
         t2744 = paint(t831, t2663)
     except:
         t2744 = None
-    check_done('49d1d64f', 't2744', t2744)
+    if t2744 == O:
+        return True, f'49d1d64f - t2744'
     try:
         t2745 = chain(t905, t633, t1630)
     except:
@@ -11307,12 +11595,14 @@ def batt(S, I):
         t2754 = paint(t1062, t2677)
     except:
         t2754 = None
-    check_done('846bdb03', 't2754', t2754)
+    if t2754 == O:
+        return True, f'846bdb03 - t2754'
     try:
         t2755 = fill(t2284, BLUE, t2678)
     except:
         t2755 = None
-    check_done('8d510a79', 't2755', t2755)
+    if t2755 == O:
+        return True, f'8d510a79 - t2755'
     try:
         t2756 = fork(insert, t105, t2680)
     except:
@@ -11389,7 +11679,8 @@ def batt(S, I):
         t2774 = merge_t(t2698)
     except:
         t2774 = None
-    check_done('91413438', 't2774', t2774)
+    if t2774 == O:
+        return True, f'91413438 - t2774'
     try:
         t2775 = o_g(t2699, R5)
     except:
@@ -11402,7 +11693,8 @@ def batt(S, I):
         t2777 = t345(t2701)
     except:
         t2777 = None
-    check_done('0a938d79', 't2777', t2777)
+    if t2777 == O:
+        return True, f'0a938d79 - t2777'
     try:
         t2778 = t4(t2702)
     except:
@@ -11439,7 +11731,8 @@ def batt(S, I):
         t2786 = fill(t1155, t1737, t2712)
     except:
         t2786 = None
-    check_done('5daaa586', 't2786', t2786)
+    if t2786 == O:
+        return True, f'5daaa586 - t2786'
     try:
         t2787 = add(t2631, TEN)
     except:
@@ -11464,12 +11757,14 @@ def batt(S, I):
         t2792 = underfill(I, t246, t2720)
     except:
         t2792 = None
-    check_done('4612dd53', 't2792', t2792)
+    if t2792 == O:
+        return True, f'4612dd53 - t2792'
     try:
         t2793 = paint(I, t2721)
     except:
         t2793 = None
-    check_done('e5062a87', 't2793', t2793)
+    if t2793 == O:
+        return True, f'e5062a87 - t2793'
     try:
         t2794 = fork(either, vline_o, hline_o)
     except:
@@ -11514,7 +11809,8 @@ def batt(S, I):
         t2804 = fill(t2359, RED, t2729)
     except:
         t2804 = None
-    check_done('d9f24cd1', 't2804', t2804)
+    if t2804 == O:
+        return True, f'd9f24cd1 - t2804'
     try:
         t2805 = matcher(t10, t2730)
     except:
@@ -11531,12 +11827,14 @@ def batt(S, I):
         t2808 = fill(t1008, t1216, t2735)
     except:
         t2808 = None
-    check_done('98cf29f8', 't2808', t2808)
+    if t2808 == O:
+        return True, f'98cf29f8 - t2808'
     try:
         t2809 = fill(t2568, t264, t2736)
     except:
         t2809 = None
-    check_done('a85d4709', 't2809', t2809)
+    if t2809 == O:
+        return True, f'a85d4709 - t2809'
     try:
         t2810 = apply(t2737, t2569)
     except:
@@ -11545,12 +11843,14 @@ def batt(S, I):
         t2811 = fill(t2371, t2477, t2739)
     except:
         t2811 = None
-    check_done('8731374e', 't2811', t2811)
+    if t2811 == O:
+        return True, f'8731374e - t2811'
     try:
         t2812 = fill(t2478, CYAN, t2740)
     except:
         t2812 = None
-    check_done('ecdecbb3', 't2812', t2812)
+    if t2812 == O:
+        return True, f'ecdecbb3 - t2812'
     try:
         t2813 = multiply(t2572, THREE)
     except:
@@ -11579,7 +11879,8 @@ def batt(S, I):
         t2819 = underfill(I, t1043, t2747)
     except:
         t2819 = None
-    check_done('ec883f72', 't2819', t2819)
+    if t2819 == O:
+        return True, f'ec883f72 - t2819'
     try:
         t2820 = mapply(t1459, t2748)
     except:
@@ -11608,7 +11909,8 @@ def batt(S, I):
         t2826 = fill(t2144, t246, t2752)
     except:
         t2826 = None
-    check_done('29c11459', 't2826', t2826)
+    if t2826 == O:
+        return True, f'29c11459 - t2826'
     try:
         t2827 = shoot(t2589, t2753)
     except:
@@ -11625,7 +11927,8 @@ def batt(S, I):
         t2830 = move(t2758, t1288, t1841)
     except:
         t2830 = None
-    check_done('56dc2b01', 't2830', t2830)
+    if t2830 == O:
+        return True, f'56dc2b01 - t2830'
     try:
         t2831 = astuple(FIVE, FIVE)
     except:
@@ -11638,12 +11941,14 @@ def batt(S, I):
         t2833 = underfill(I, CYAN, t2760)
     except:
         t2833 = None
-    check_done('a2fd1cf0', 't2833', t2833)
+    if t2833 == O:
+        return True, f'a2fd1cf0 - t2833'
     try:
         t2834 = fill(t2512, t264, t2761)
     except:
         t2834 = None
-    check_done('a9f96cdd', 't2834', t2834)
+    if t2834 == O:
+        return True, f'a9f96cdd - t2834'
     try:
         t2835 = sfilter(t2762, t2602)
     except:
@@ -11696,12 +12001,14 @@ def batt(S, I):
         t2847 = underfill(I, t726, t2776)
     except:
         t2847 = None
-    check_done('6d58a25d', 't2847', t2847)
+    if t2847 == O:
+        return True, f'6d58a25d - t2847'
     try:
         t2848 = fill(t130, t1349, t2778)
     except:
         t2848 = None
-    check_done('e48d4e1a', 't2848', t2848)
+    if t2848 == O:
+        return True, f'e48d4e1a - t2848'
     try:
         t2849 = branch(t2703, t2779, t2316)
     except:
@@ -11774,7 +12081,8 @@ def batt(S, I):
         t2866 = paint(t988, t2796)
     except:
         t2866 = None
-    check_done('53b68214', 't2866', t2866)
+    if t2866 == O:
+        return True, f'53b68214 - t2866'
     try:
         t2867 = mapply(t14, t2797)
     except:
@@ -11823,7 +12131,8 @@ def batt(S, I):
         t2878 = t1789(t2810)
     except:
         t2878 = None
-    check_done('8e1813be', 't2878', t2878)
+    if t2878 == O:
+        return True, f'8e1813be - t2878'
     try:
         t2879 = lbind(astuple, BURGUNDY)
     except:
@@ -11868,7 +12177,8 @@ def batt(S, I):
         t2889 = underfill(I, ONE, t2821)
     except:
         t2889 = None
-    check_done('90f3ed37', 't2889', t2889)
+    if t2889 == O:
+        return True, f'90f3ed37 - t2889'
     try:
         t2890 = asobject(t2822)
     except:
@@ -11909,7 +12219,8 @@ def batt(S, I):
         t2899 = mir_rot_t(t2835, R6)
     except:
         t2899 = None
-    check_done('780d0b14', 't2899', t2899)
+    if t2899 == O:
+        return True, f'780d0b14 - t2899'
     try:
         t2900 = sfilter_f(t2763, t2836)
     except:
@@ -11990,7 +12301,8 @@ def batt(S, I):
         t2919 = t943(t2854)
     except:
         t2919 = None
-    check_done('855e0971', 't2919', t2919)
+    if t2919 == O:
+        return True, f'855e0971 - t2919'
     try:
         t2920 = fork(sfilter, identity, t2855)
     except:
@@ -12015,7 +12327,8 @@ def batt(S, I):
         t2925 = fill(t1389, GRAY, t2861)
     except:
         t2925 = None
-    check_done('f35d900a', 't2925', t2925)
+    if t2925 == O:
+        return True, f'f35d900a - t2925'
     try:
         t2926 = fork(astuple, t2079, t2862)
     except:
@@ -12032,7 +12345,8 @@ def batt(S, I):
         t2929 = fill(t2455, t246, t2865)
     except:
         t2929 = None
-    check_done('e509e548', 't2929', t2929)
+    if t2929 == O:
+        return True, f'e509e548 - t2929'
     try:
         t2930 = lbind(sfilter, t2867)
     except:
@@ -12053,7 +12367,8 @@ def batt(S, I):
         t2934 = t1203(t2356, t2872)
     except:
         t2934 = None
-    check_done('2204b7a8', 't2934', t2934)
+    if t2934 == O:
+        return True, f'2204b7a8 - t2934'
     try:
         t2935 = corner(t2873, R0)
     except:
@@ -12094,7 +12409,8 @@ def batt(S, I):
         t2944 = replace(t2575, t251, t246)
     except:
         t2944 = None
-    check_done('f8c80d96', 't2944', t2944)
+    if t2944 == O:
+        return True, f'f8c80d96 - t2944'
     try:
         t2945 = chain(t270, t2743, t2883)
     except:
@@ -12123,7 +12439,8 @@ def batt(S, I):
         t2951 = paint(t296, t2890)
     except:
         t2951 = None
-    check_done('539a4f51', 't2951', t2951)
+    if t2951 == O:
+        return True, f'539a4f51 - t2951'
     try:
         t2952 = mir_rot_t(t2891, R0)
     except:
@@ -12152,7 +12469,8 @@ def batt(S, I):
         t2958 = fill(t2599, t264, t2897)
     except:
         t2958 = None
-    check_done('941d9a10', 't2958', t2958)
+    if t2958 == O:
+        return True, f'941d9a10 - t2958'
     try:
         t2959 = canvas(t251, t1582)
     except:
@@ -12161,7 +12479,8 @@ def batt(S, I):
         t2960 = cover(t2012, t2898)
     except:
         t2960 = None
-    check_done('e21d9049', 't2960', t2960)
+    if t2960 == O:
+        return True, f'e21d9049 - t2960'
     try:
         t2961 = get_arg_rank_f(t2900, size, F0)
     except:
@@ -12194,7 +12513,8 @@ def batt(S, I):
         t2968 = vconcat(t2842, t2908)
     except:
         t2968 = None
-    check_done('cdecee7f', 't2968', t2968)
+    if t2968 == O:
+        return True, f'cdecee7f - t2968'
     try:
         t2969 = cover(t2306, t2909)
     except:
@@ -12211,22 +12531,26 @@ def batt(S, I):
         t2972 = fill(I, t2, t2912)
     except:
         t2972 = None
-    check_done('e8dc4411', 't2972', t2972)
+    if t2972 == O:
+        return True, f'e8dc4411 - t2972'
     try:
         t2973 = paint(t2699, t2913)
     except:
         t2973 = None
-    check_done('469497ad', 't2973', t2973)
+    if t2973 == O:
+        return True, f'469497ad - t2973'
     try:
         t2974 = branch(t535, t2430, t2914)
     except:
         t2974 = None
-    check_done('4522001f', 't2974', t2974)
+    if t2974 == O:
+        return True, f'4522001f - t2974'
     try:
         t2975 = paint(I, t2915)
     except:
         t2975 = None
-    check_done('caa06a1f', 't2975', t2975)
+    if t2975 == O:
+        return True, f'caa06a1f - t2975'
     try:
         t2976 = apply(t2851, t2916)
     except:
@@ -12335,7 +12659,8 @@ def batt(S, I):
         t3002 = fill(t2670, t1853, t2950)
     except:
         t3002 = None
-    check_done('95990924', 't3002', t3002)
+    if t3002 == O:
+        return True, f'95990924 - t3002'
     try:
         t3003 = compose(t2953, toindices)
     except:
@@ -12388,7 +12713,8 @@ def batt(S, I):
         t3015 = fill(I, BLACK, t2970)
     except:
         t3015 = None
-    check_done('3bdb4ada', 't3015', t3015)
+    if t3015 == O:
+        return True, f'3bdb4ada - t3015'
     try:
         t3016 = chain(t2971, corners, t2422)
     except:
@@ -12425,7 +12751,8 @@ def batt(S, I):
         t3024 = vconcat(t2860, t2983)
     except:
         t3024 = None
-    check_done('b0c4d837', 't3024', t3024)
+    if t3024 == O:
+        return True, f'b0c4d837 - t3024'
     try:
         t3025 = corners(t1924)
     except:
@@ -12462,7 +12789,8 @@ def batt(S, I):
         t3033 = move(t2471, t2807, t2993)
     except:
         t3033 = None
-    check_done('228f6490', 't3033', t3033)
+    if t3033 == O:
+        return True, f'228f6490 - t3033'
     try:
         t3034 = sfilter_t(t2938, t10)
     except:
@@ -12507,7 +12835,8 @@ def batt(S, I):
         t3044 = replace(t2888, t2949, t264)
     except:
         t3044 = None
-    check_done('54d9e175', 't3044', t3044)
+    if t3044 == O:
+        return True, f'54d9e175 - t3044'
     try:
         t3045 = fork(shift, identity, t3003)
     except:
@@ -12612,12 +12941,14 @@ def batt(S, I):
         t3070 = fill(t2928, t50, t3026)
     except:
         t3070 = None
-    check_done('06df4c85', 't3070', t3070)
+    if t3070 == O:
+        return True, f'06df4c85 - t3070'
     try:
         t3071 = underfill(t2351, CYAN, t3027)
     except:
         t3071 = None
-    check_done('673ef223', 't3071', t3071)
+    if t3071 == O:
+        return True, f'673ef223 - t3071'
     try:
         t3072 = get_nth_t(t2988, F0)
     except:
@@ -12646,12 +12977,14 @@ def batt(S, I):
         t3078 = subgrid(t427, t3035)
     except:
         t3078 = None
-    check_done('f9012d9b', 't3078', t3078)
+    if t3078 == O:
+        return True, f'f9012d9b - t3078'
     try:
         t3079 = fill(t2370, t807, t3036)
     except:
         t3079 = None
-    check_done('8403a5d5', 't3079', t3079)
+    if t3079 == O:
+        return True, f'8403a5d5 - t3079'
     try:
         t3080 = increment(t2572)
     except:
@@ -12696,7 +13029,8 @@ def batt(S, I):
         t3090 = fill(t2829, t246, t3049)
     except:
         t3090 = None
-    check_done('db93a21d', 't3090', t3090)
+    if t3090 == O:
+        return True, f'db93a21d - t3090'
     try:
         t3091 = extract(t3007, t3050)
     except:
@@ -12773,7 +13107,8 @@ def batt(S, I):
         t3109 = fill(t763, t807, t3066)
     except:
         t3109 = None
-    check_done('834ec97d', 't3109', t3109)
+    if t3109 == O:
+        return True, f'834ec97d - t3109'
     try:
         t3110 = rbind(colorcount_f, BLACK)
     except:
@@ -12918,7 +13253,8 @@ def batt(S, I):
         t3145 = paint(I, t3103)
     except:
         t3145 = None
-    check_done('82819916', 't3145', t3145)
+    if t3145 == O:
+        return True, f'82819916 - t3145'
     try:
         t3146 = compose(t547, t3105)
     except:
@@ -13003,7 +13339,8 @@ def batt(S, I):
         t3166 = replace(t2952, t251, t246)
     except:
         t3166 = None
-    check_done('e179c5f4', 't3166', t3166)
+    if t3166 == O:
+        return True, f'e179c5f4 - t3166'
     try:
         t3167 = apply(normalize, t3129)
     except:
@@ -13012,7 +13349,8 @@ def batt(S, I):
         t3168 = paint(t2495, t3130)
     except:
         t3168 = None
-    check_done('72322fa7', 't3168', t3168)
+    if t3168 == O:
+        return True, f'72322fa7 - t3168'
     try:
         t3169 = merge_f(t3131)
     except:
@@ -13041,7 +13379,8 @@ def batt(S, I):
         t3175 = paint(t700, t3139)
     except:
         t3175 = None
-    check_done('e6721834', 't3175', t3175)
+    if t3175 == O:
+        return True, f'e6721834 - t3175'
     try:
         t3176 = toobject(t3140, t3098)
     except:
@@ -13054,7 +13393,8 @@ def batt(S, I):
         t3178 = fill(t2696, BLACK, t3143)
     except:
         t3178 = None
-    check_done('3befdf3e', 't3178', t3178)
+    if t3178 == O:
+        return True, f'3befdf3e - t3178'
     try:
         t3179 = mapply(t2780, t3144)
     except:
@@ -13099,7 +13439,8 @@ def batt(S, I):
         t3189 = hupscale(t3153, THREE)
     except:
         t3189 = None
-    check_done('995c5fa3', 't3189', t3189)
+    if t3189 == O:
+        return True, f'995c5fa3 - t3189'
     try:
         t3190 = shift(t2871, t3154)
     except:
@@ -13112,17 +13453,20 @@ def batt(S, I):
         t3192 = fill(t2731, CYAN, t3156)
     except:
         t3192 = None
-    check_done('9aec4887', 't3192', t3192)
+    if t3192 == O:
+        return True, f'9aec4887 - t3192'
     try:
         t3193 = paint(t242, t3157)
     except:
         t3193 = None
-    check_done('2bcee788', 't3193', t3193)
+    if t3193 == O:
+        return True, f'2bcee788 - t3193'
     try:
         t3194 = underfill(I, t807, t3158)
     except:
         t3194 = None
-    check_done('2bee17df', 't3194', t3194)
+    if t3194 == O:
+        return True, f'2bee17df - t3194'
     try:
         t3195 = apply(t298, t1227)
     except:
@@ -13203,7 +13547,8 @@ def batt(S, I):
         t3214 = paint(I, t3179)
     except:
         t3214 = None
-    check_done('447fd412', 't3214', t3214)
+    if t3214 == O:
+        return True, f'447fd412 - t3214'
     try:
         t3215 = insert(t28, t2853)
     except:
@@ -13244,7 +13589,8 @@ def batt(S, I):
         t3224 = underpaint(t861, t3188)
     except:
         t3224 = None
-    check_done('99fa7670', 't3224', t3224)
+    if t3224 == O:
+        return True, f'99fa7670 - t3224'
     try:
         t3225 = paint(t24, t3190)
     except:
@@ -13273,12 +13619,14 @@ def batt(S, I):
         t3231 = replace(t3202, t251, BLACK)
     except:
         t3231 = None
-    check_done('a78176bb', 't3231', t3231)
+    if t3231 == O:
+        return True, f'a78176bb - t3231'
     try:
         t3232 = paint(t136, t3203)
     except:
         t3232 = None
-    check_done('a8c38be5', 't3232', t3232)
+    if t3232 == O:
+        return True, f'a8c38be5 - t3232'
     try:
         t3233 = f_ofcolor(t3204, ONE)
     except:
@@ -13451,7 +13799,8 @@ def batt(S, I):
         t3275 = fill(t3112, t3222, t3248)
     except:
         t3275 = None
-    check_done('272f95fa', 't3275', t3275)
+    if t3275 == O:
+        return True, f'272f95fa - t3275'
     try:
         t3276 = lbind(compose, t3249)
     except:
@@ -13468,7 +13817,8 @@ def batt(S, I):
         t3279 = paint(I, t3252)
     except:
         t3279 = None
-    check_done('39e1d7f9', 't3279', t3279)
+    if t3279 == O:
+        return True, f'39e1d7f9 - t3279'
     try:
         t3280 = extract(t3196, t3253)
     except:
@@ -13525,7 +13875,8 @@ def batt(S, I):
         t3293 = fill(t3210, t1861, t3265)
     except:
         t3293 = None
-    check_done('f1cefba8', 't3293', t3293)
+    if t3293 == O:
+        return True, f'f1cefba8 - t3293'
     try:
         t3294 = shift(t3176, t3266)
     except:
@@ -13614,12 +13965,14 @@ def batt(S, I):
         t3315 = paint(I, t3292)
     except:
         t3315 = None
-    check_done('6aa20dc0', 't3315', t3315)
+    if t3315 == O:
+        return True, f'6aa20dc0 - t3315'
     try:
         t3316 = paint(t1690, t3294)
     except:
         t3316 = None
-    check_done('6d0160f0', 't3316', t3316)
+    if t3316 == O:
+        return True, f'6d0160f0 - t3316'
     try:
         t3317 = fork(subtract, t1210, t3267)
     except:
@@ -13632,7 +13985,8 @@ def batt(S, I):
         t3319 = t2323(t3296)
     except:
         t3319 = None
-    check_done('28e73c20', 't3319', t3319)
+    if t3319 == O:
+        return True, f'28e73c20 - t3319'
     try:
         t3320 = size_f(t17)
     except:
@@ -13649,7 +14003,8 @@ def batt(S, I):
         t3323 = fill(t3183, t3219, t3299)
     except:
         t3323 = None
-    check_done('d07ae81c', 't3323', t3323)
+    if t3323 == O:
+        return True, f'd07ae81c - t3323'
     try:
         t3324 = fork(both, t3274, t3300)
     except:
@@ -13686,7 +14041,8 @@ def batt(S, I):
         t3332 = paint(I, t3307)
     except:
         t3332 = None
-    check_done('36d67576', 't3332', t3332)
+    if t3332 == O:
+        return True, f'36d67576 - t3332'
     try:
         t3333 = chain(t3229, t3284, t3308)
     except:
@@ -13715,7 +14071,8 @@ def batt(S, I):
         t3339 = underfill(I, t2604, t3314)
     except:
         t3339 = None
-    check_done('1e32b0e9', 't3339', t3339)
+    if t3339 == O:
+        return True, f'1e32b0e9 - t3339'
     try:
         t3340 = fork(shoot, t3267, t3317)
     except:
@@ -13764,7 +14121,8 @@ def batt(S, I):
         t3351 = paint(t3303, t106)
     except:
         t3351 = None
-    check_done('57aa92db', 't3351', t3351)
+    if t3351 == O:
+        return True, f'57aa92db - t3351'
     try:
         t3352 = shift(t3159, t3329)
     except:
@@ -13841,12 +14199,14 @@ def batt(S, I):
         t3370 = paint(t3225, t3349)
     except:
         t3370 = None
-    check_done('f8a8fe49', 't3370', t3370)
+    if t3370 == O:
+        return True, f'f8a8fe49 - t3370'
     try:
         t3371 = paint(t2881, t3352)
     except:
         t3371 = None
-    check_done('4c5c2cf0', 't3371', t3371)
+    if t3371 == O:
+        return True, f'4c5c2cf0 - t3371'
     try:
         t3372 = astuple(t826, t2998)
     except:
@@ -14011,7 +14371,8 @@ def batt(S, I):
         t3412 = paint(t3395, t187)
     except:
         t3412 = None
-    check_done('508bd3b6', 't3412', t3412)
+    if t3412 == O:
+        return True, f'508bd3b6 - t3412'
     try:
         t3413 = occurrences(t3337, t3378)
     except:
@@ -14036,7 +14397,8 @@ def batt(S, I):
         t3418 = fill(t2716, YELLOW, t3401)
     except:
         t3418 = None
-    check_done('aba27056', 't3418', t3418)
+    if t3418 == O:
+        return True, f'aba27056 - t3418'
     try:
         t3419 = compose(vline_i, t2985)
     except:
@@ -14081,7 +14443,8 @@ def batt(S, I):
         t3429 = paint(I, t3414)
     except:
         t3429 = None
-    check_done('3e980e27', 't3429', t3429)
+    if t3429 == O:
+        return True, f'3e980e27 - t3429'
     try:
         t3430 = mapply(t3415, t2609)
     except:
@@ -14186,7 +14549,8 @@ def batt(S, I):
         t3455 = paint(I, t3440)
     except:
         t3455 = None
-    check_done('d22278a0', 't3455', t3455)
+    if t3455 == O:
+        return True, f'd22278a0 - t3455'
     try:
         t3456 = shoot(t3394, LEFT)
     except:
@@ -14247,7 +14611,8 @@ def batt(S, I):
         t3470 = downscale(t3454, t2124)
     except:
         t3470 = None
-    check_done('7837ac64', 't3470', t3470)
+    if t3470 == O:
+        return True, f'7837ac64 - t3470'
     try:
         t3471 = shoot(t3394, RIGHT)
     except:
@@ -14356,7 +14721,8 @@ def batt(S, I):
         t3497 = cover(t3468, t3483)
     except:
         t3497 = None
-    check_done('0e206a2e', 't3497', t3497)
+    if t3497 == O:
+        return True, f'0e206a2e - t3497'
     try:
         t3498 = get_color_rank_t(t268, F0)
     except:
@@ -14397,7 +14763,8 @@ def batt(S, I):
         t3507 = t749(t3493)
     except:
         t3507 = None
-    check_done('b7249182', 't3507', t3507)
+    if t3507 == O:
+        return True, f'b7249182 - t3507'
     try:
         t3508 = fork(mapply, t3185, t3494)
     except:
@@ -14462,7 +14829,8 @@ def batt(S, I):
         t3523 = fill(t3484, t3498, t3511)
     except:
         t3523 = None
-    check_done('264363fd', 't3523', t3523)
+    if t3523 == O:
+        return True, f'264363fd - t3523'
     try:
         t3524 = crement(t3512)
     except:
@@ -14475,7 +14843,8 @@ def batt(S, I):
         t3526 = fill(t3443, t264, t3514)
     except:
         t3526 = None
-    check_done('150deff5', 't3526', t3526)
+    if t3526 == O:
+        return True, f'150deff5 - t3526'
     try:
         t3527 = apply(t175, t3515)
     except:
@@ -14496,7 +14865,8 @@ def batt(S, I):
         t3531 = fill(I, ONE, t3519)
     except:
         t3531 = None
-    check_done('7df24a62', 't3531', t3531)
+    if t3531 == O:
+        return True, f'7df24a62 - t3531'
     try:
         t3532 = combine_f(t3465, t3520)
     except:
@@ -14537,7 +14907,8 @@ def batt(S, I):
         t3541 = underfill(t3111, THREE, t3532)
     except:
         t3541 = None
-    check_done('b527c5c6', 't3541', t3541)
+    if t3541 == O:
+        return True, f'b527c5c6 - t3541'
     try:
         t3542 = apply(tojvec, t3533)
     except:
@@ -14578,7 +14949,8 @@ def batt(S, I):
         t3551 = apply(t175, t3543)
     except:
         t3551 = None
-    check_done('9d9215db', 't3551', t3551)
+    if t3551 == O:
+        return True, f'9d9215db - t3551'
     try:
         t3552 = fill(t3204, ONE, t3544)
     except:
@@ -14591,7 +14963,8 @@ def batt(S, I):
         t3554 = apply(t175, t3546)
     except:
         t3554 = None
-    check_done('9ddd00f0', 't3554', t3554)
+    if t3554 == O:
+        return True, f'9ddd00f0 - t3554'
     try:
         t3555 = fork(recolor_o, t3547, t3516)
     except:
@@ -14600,7 +14973,8 @@ def batt(S, I):
         t3556 = apply(t175, t3548)
     except:
         t3556 = None
-    check_done('5751f35e', 't3556', t3556)
+    if t3556 == O:
+        return True, f'5751f35e - t3556'
     try:
         t3557 = get_nth_f(t3549, F0)
     except:
@@ -14653,7 +15027,8 @@ def batt(S, I):
         t3569 = t2554(t3564)
     except:
         t3569 = None
-    check_done('f15e1fac', 't3569', t3569)
+    if t3569 == O:
+        return True, f'f15e1fac - t3569'
     try:
         t3570 = compose(t897, numcolors_f)
     except:
@@ -14662,7 +15037,8 @@ def batt(S, I):
         t3571 = replace(t3565, ONE, THREE)
     except:
         t3571 = None
-    check_done('2dd70a9a', 't3571', t3571)
+    if t3571 == O:
+        return True, f'2dd70a9a - t3571'
     try:
         t3572 = mir_rot_t(t3566, R4)
     except:
@@ -14683,7 +15059,8 @@ def batt(S, I):
         t3576 = paint(t3572, t3525)
     except:
         t3576 = None
-    check_done('4290ef0e', 't3576', t3576)
+    if t3576 == O:
+        return True, f'4290ef0e - t3576'
     try:
         t3577 = fork(multiply, shape_f, t2907)
     except:
@@ -14704,8 +15081,10 @@ def batt(S, I):
         t3581 = paint(t3578, t3557)
     except:
         t3581 = None
-    check_done('234bbc79', 't3581', t3581)
-    check_done('d017b73f', 't3581', t3581)
+    if t3581 == O:
+        return True, f'234bbc79 - t3581'
+    if t3581 == O:
+        return True, f'd017b73f - t3581'
     try:
         t3582 = mapply(t3409, t3579)
     except:
@@ -14778,7 +15157,8 @@ def batt(S, I):
         t3599 = paint(t3567, t3597)
     except:
         t3599 = None
-    check_done('b775ac94', 't3599', t3599)
+    if t3599 == O:
+        return True, f'b775ac94 - t3599'
     try:
         t3600 = chain(flip, t3596, t3598)
     except:
@@ -14799,4 +15179,6 @@ def batt(S, I):
         t3604 = paint(t3584, t3603)
     except:
         t3604 = None
-    check_done('97a05b5b', 't3604', t3604)
+    if t3604 == O:
+        return True, f'97a05b5b - t3604'
+    return False, None

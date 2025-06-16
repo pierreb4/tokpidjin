@@ -167,7 +167,8 @@ def main(file):
 
             # Was the left side O?
             if old_name == 'O':
-                print(f"    check_done('{task_id}', '{t_name[old_call]}', {t_name[old_call]})", file=file)
+                print(f"    if {t_name[old_call]} == O:", file=file)
+                print(f"        return True, f'{task_id} - {t_name[old_call]}'", file=f)
 
             # Replace x1 with t_name[x_call] in rest of solver
             for x_name, x_call in equals[task_id].items():
@@ -181,5 +182,6 @@ if __name__ == "__main__":
         print("from constants import *", file=f)
         print("from dsl import *", file=f)
         print("\n", file=f)
-        print("def batt(S, I):", file=f)
+        print("def batt(S, I, O):", file=f)
         main(f)
+        print("    return False, None", file=f)

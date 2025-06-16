@@ -31,14 +31,20 @@ def main():
         k=1
     )[0]
 
-    task = total_data['train'][task_id] + total_data['test'][task_id]
+    print(f"Selected task: {task_id}")
+    train_task = total_data['train'][task_id]
+    test_task = total_data['test'][task_id]
+    total_task = total_data['train'][task_id] + total_data['test'][task_id]
 
-    for sample in task:
-        S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
+    S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
+    for i, sample in enumerate(train_task):
         I = sample['input']
-        
-        batt(S, I)
-
+        O = sample['output']
+        print(f"Sample: {i+1}/{len(train_task)} - {batt(S, I, O)[1]}")
+    for i, sample in enumerate(test_task):
+        I = sample['input']
+        O = sample['output']        
+        print(f"Sample: {i+1}/{len(test_task)} - {batt(S, I, O)[1]}")
 
 if __name__ == "__main__":
     main()

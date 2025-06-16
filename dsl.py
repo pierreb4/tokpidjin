@@ -14,13 +14,6 @@ def identity(
     return x
 
 
-def check_done(t_id, n, t):
-    if hasattr(t, '__len__'):
-        print(f'{t_id} - {n} - {len(t) = }')
-        return
-    print(f'{t_id} - {n} - {t}')
-
-
 def first(container: 'Container') -> 'Any':
     """First item of container"""
     iterator = iter(container)
