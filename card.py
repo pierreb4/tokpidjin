@@ -101,7 +101,7 @@ def get_equals(solver):
     return equals
 
 
-def main():
+def main(file):
     solvers = get_solvers()
 
     # print_l(solvers.keys())
@@ -157,11 +157,17 @@ def main():
 
                 # Print new source code
                 t_source = f"{t_k} = {t_call[t_k]}"
-                print(f'    {t_source}')
+                # print(f'    {t_source}', file=file)
+
+                print(f'    try:', file=file)
+                print(f'        {t_source}', file=file)
+                print(f'    except:', file=file)
+                print(f'        {t_k} = None', file=file)
+
 
             # Was the left side O?
             if old_name == 'O':
-                print(f'    check_done({t_name[old_call]}) # For task: {task_id}')
+                print(f"    check_done('{task_id}', '{t_name[old_call]}', {t_name[old_call]})", file=file)
 
             # Replace x1 with t_name[x_call] in rest of solver
             for x_name, x_call in equals[task_id].items():
@@ -170,4 +176,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Open file for writing
+    with open('batt.py', 'w') as f:
+        print("from constants import *", file=f)
+        print("from dsl import *", file=f)
+        print("\n", file=f)
+        print("def batt(S, I):", file=f)
+        main(f)
