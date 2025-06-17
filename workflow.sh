@@ -72,7 +72,7 @@ while true
 g='c_iz_n c_zo_n a_mr'
 while true
   do for izzo in $g
-    do echo -n $izzo
+    do echo -en "$izzo\t"
       grep $izzo solvers_evo.py | wc -l
     done
     sleep 60
@@ -82,9 +82,9 @@ while true
 clear; time timeout 15s python regen.py
 
 # Lower right
+scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_evo/ && \
 python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py && \
 python main.py --solvers solvers_evo.py
-
 
 # Smallest solvers in solver_pre/ but not in solver_evo/
 for f in `cd solver_pre && ls *.def`
