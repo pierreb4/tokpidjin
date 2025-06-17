@@ -168,22 +168,26 @@ def main(file):
             # Was the left side O?
             if old_name == 'O':
                 print(f"    if {t_name[old_call]} == O:", file=file)
-                # print(f"        return True, '{task_id} - {t_name[old_call]}'", file=f)
-                print(f"        o.append(('{task_id}', '{t_name[old_call]}'))", file=f)
+                # print(f"        return True, '{task_id} - {t_name[old_call]}'", file=file)
+                print(f"        o.append(('{task_id}', '{t_name[old_call]}'))", file=file)
 
             # Replace x1 with t_name[x_call] in rest of solver
             for x_name, x_call in equals[task_id].items():
                 if old_name in x_call:
                     equals[task_id][x_name] = re.sub(rf'\b{old_name}\b', t_name[old_call], x_call)
 
+    # Write t_call into new file call.py
+    with open('call.py', 'w') as call_file:
+        print(f'{t_call = }', file=call_file)
+
 
 if __name__ == "__main__":
     # Open file for writing
-    with open('batt.py', 'w') as f:
-        print("from constants import *", file=f)
-        print("from dsl import *", file=f)
-        print("\n", file=f)
-        print("def batt(S, I, O):", file=f)
-        print("    o = []", file=f)
-        main(f)
-        print("    return o", file=f)
+    with open('batt.py', 'w') as batt_file:
+        print("from constants import *", file=batt_file)
+        print("from dsl import *", file=batt_file)
+        print("\n", file=batt_file)
+        print("def batt(S, I, O):", file=batt_file)
+        print("    o = []", file=batt_file)
+        main(batt_file)
+        print("    return o", file=batt_file)

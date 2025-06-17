@@ -922,7 +922,7 @@ def rbind(
         return lambda x, y, z: function(x, y, z, fixed)
 
 
-# def rbind_2(
+# def rbind_1(
 #     function: 'Callable',
 #     fixed: 'Any'
 # ) -> 'Callable':
@@ -930,7 +930,7 @@ def rbind(
 #     return lambda x: function(x, fixed)
 
 
-# def rbind_3(
+# def rbind_2(
 #     function: 'Callable',
 #     fixed: 'Any'
 # ) -> 'Callable':
@@ -938,7 +938,7 @@ def rbind(
 #     return lambda x, y: function(x, y, fixed)
 
 
-# def rbind_4(
+# def rbind_3(
 #     function: 'Callable',
 #     fixed: 'Any'
 # ) -> 'Callable':
@@ -965,7 +965,7 @@ def lbind(
         return lambda y, z, a: function(fixed, y, z, a)
 
 
-# def lbind_2(
+# def lbind_1(
 #     function: 'Callable',
 #     fixed: 'Any'
 # ) -> 'Callable':
@@ -973,7 +973,7 @@ def lbind(
 #     return lambda y: function(fixed, y)
 
 
-# def lbind_3(
+# def lbind_2(
 #     function: 'Callable',
 #     fixed: 'Any'
 # ) -> 'Callable':
@@ -981,7 +981,7 @@ def lbind(
 #     return lambda y, z: function(fixed, y, z)
 
 
-# def lbind_4(
+# def lbind_3(
 #     function: 'Callable',
 #     fixed: 'Any'
 # ) -> 'Callable':
