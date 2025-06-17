@@ -1,2 +1,0 @@
-def solve_99b1bc43(S, I):
-    return fill(canvas(ZERO, shape_t(tophalf(I))), THREE, difference(combine_f(f_ofcolor(tophalf(I), ZERO), f_ofcolor(bottomhalf(I), ZERO)), intersection(f_ofcolor(tophalf(I), ZERO), f_ofcolor(bottomhalf(I), ZERO))))

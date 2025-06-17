@@ -31,20 +31,41 @@ def main():
         k=1
     )[0]
 
+    task_id = '662c240a'
+
     print(f"Selected task: {task_id}")
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
     total_task = total_data['train'][task_id] + total_data['test'][task_id]
 
+    o = {}
+    o['train'] = {}
+    o['test'] = {}
+
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
+
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
-        print(f"Sample: {i+1}/{len(train_task)} - {batt(S, I, O)[1]}")
+        o['train'][i] = batt(S, I, O)
+        print(f"Sample: {i+1}/{len(train_task)} - {o['train'][i] = }")
+
     for i, sample in enumerate(test_task):
         I = sample['input']
-        O = sample['output']        
-        print(f"Sample: {i+1}/{len(test_task)} - {batt(S, I, O)[1]}")
+        O = sample['output']
+        o['test'][i] = batt(S, I, O)
+        print(f"Sample: {i+1}/{len(test_task)} - {o['test'][i]} = ")
+
+    # Values present in all output lists are valid solutions
+    valid_solutions = set(o['train'][0])
+    for task_id in o['train']:
+        valid_solutions.intersection_update(set(o['train'][task_id]))
+    for task_id in o['test']:
+        valid_solutions.intersection_update(set(o['test'][task_id]))
+    print(f"Valid solutions: {len(valid_solutions)}")
+    # Print valid solutions
+    for solution in valid_solutions:
+        print(f"Valid solution: {solution}")
 
 if __name__ == "__main__":
     main()

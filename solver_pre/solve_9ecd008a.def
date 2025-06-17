@@ -1,2 +1,0 @@
-def solve_9ecd008a(S, I):
-    return subgrid(f_ofcolor(I, ZERO), mir_rot_t(I, R2))

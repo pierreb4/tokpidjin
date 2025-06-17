@@ -1,2 +1,0 @@
-def solve_1c786137(S, I):
-    return trim(subgrid(get_arg_rank_f(o_g(I, R4), height_f, F0), I))

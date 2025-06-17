@@ -1,2 +1,0 @@
-def solve_63613498(S, I):
-    return paint(fill(I, FIVE, mfilter_f(o_g(I, R5), matcher(compose(toindices, normalize), normalize(difference(asindices(crop(I, ORIGIN, THREE_BY_THREE)), f_ofcolor(crop(I, ORIGIN, THREE_BY_THREE), ZERO)))))), asobject(crop(I, ORIGIN, THREE_BY_THREE)))

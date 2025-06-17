@@ -1,2 +1,0 @@
-def solve_178fcbfb(S, I):
-    return paint(fill(I, RED, mapply(vfrontier, f_ofcolor(I, RED))), mapply(fork(recolor_i, color, compose(hfrontier, center)), difference(o_g(I, R5), colorfilter(o_g(I, R5), RED))))

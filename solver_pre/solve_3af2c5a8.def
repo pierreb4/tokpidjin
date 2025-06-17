@@ -1,2 +1,0 @@
-def solve_3af2c5a8(S, I):
-    return vconcat(hconcat(I, mir_rot_t(I, R2)), mir_rot_t(hconcat(I, mir_rot_t(I, R2)), R0))

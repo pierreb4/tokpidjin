@@ -1,2 +1,0 @@
-def solve_a61ba2ce(S, I):
-    return vconcat(hconcat(chain(rbind(subgrid, I), lbind(extract, o_g(I, R5)), lbind(compose, matcher(lbind(index, I), ZERO)))(rbind(corner, R3)), chain(rbind(subgrid, I), lbind(extract, o_g(I, R5)), lbind(compose, matcher(lbind(index, I), ZERO)))(rbind(corner, R2))), hconcat(chain(rbind(subgrid, I), lbind(extract, o_g(I, R5)), lbind(compose, matcher(lbind(index, I), ZERO)))(rbind(corner, R1)), chain(rbind(subgrid, I), lbind(extract, o_g(I, R5)), lbind(compose, matcher(lbind(index, I), ZERO)))(rbind(corner, R0))))

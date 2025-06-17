@@ -1,6 +1,0 @@
-# Not intended to run standalone!
-
-def solve_b91ae062(S, I):
-    return upscale_t(I, decrement(numcolors_t(I)))
-
-# t - step = 68 in 33.3s

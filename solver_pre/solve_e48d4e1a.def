@@ -1,2 +1,0 @@
-def solve_e48d4e1a(S, I):
-    return fill(canvas(ZERO, shape_t(I)), get_color_rank_t(fill(I, ZERO, f_ofcolor(I, FIVE)), L1), fork(combine, vfrontier, hfrontier)(add(multiply(DOWN_LEFT, size_f(f_ofcolor(I, FIVE))), extract(f_ofcolor(I, get_color_rank_t(fill(I, ZERO, f_ofcolor(I, FIVE)), L1)), matcher(chain(rbind(colorcount_f, get_color_rank_t(fill(I, ZERO, f_ofcolor(I, FIVE)), L1)), rbind(toobject, I), dneighbors), FOUR)))))

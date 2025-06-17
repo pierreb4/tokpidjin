@@ -1,6 +1,0 @@
-# Not intended to run standalone!
-
-def solve_6fa7a44f(S, I):
-    return vconcat(I, mir_rot_t(I, R0))
-
-# t - step = 41 in 48.2s

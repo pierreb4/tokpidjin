@@ -1,2 +1,0 @@
-def solve_41e4d17e(S, I):
-    return underfill(I, SIX, mapply(compose(fork(combine, vfrontier, hfrontier), center), o_g(I, R5)))

@@ -1,6 +1,0 @@
-# Not intended to run standalone!
-
-def solve_1f85a75f(S, I):
-    return subgrid(f_ofcolor(I, get_color_rank_t(I, L1)), I)
-
-# t - step = 68 in 41.6s

@@ -1,2 +1,0 @@
-def solve_7447852a(S, I):
-    return fill(I, FOUR, mapply(rbind(get_nth_f, F0), sfilter_t(pair(order(colorfilter(o_g(I, R4), ZERO), compose(rbind(get_nth_f, L1), center)), interval(ZERO, size_t(order(colorfilter(o_g(I, R4), ZERO), compose(rbind(get_nth_f, L1), center))), ONE)), compose(rbind(contained, interval(ZERO, size_t(order(colorfilter(o_g(I, R4), ZERO), compose(rbind(get_nth_f, L1), center))), THREE)), rbind(get_nth_f, L1)))))

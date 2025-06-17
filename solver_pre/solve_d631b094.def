@@ -1,2 +1,0 @@
-def solve_d631b094(S, I):
-    return canvas(other_f(palette_t(I), ZERO), astuple(ONE, size_f(f_ofcolor(I, other_f(palette_t(I), ZERO)))))

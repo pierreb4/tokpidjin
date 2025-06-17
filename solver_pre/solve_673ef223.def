@@ -1,2 +1,0 @@
-def solve_673ef223(S, I):
-    return underfill(underfill(replace(I, EIGHT, FOUR), EIGHT, mapply(rbind(shoot, branch(equality(col_row(get_arg_rank_f(o_g(I, R5), rbind(col_row, R1), L1), R2), ZERO), LEFT, RIGHT)), f_ofcolor(I, EIGHT))), EIGHT, mapply(hfrontier, shift(f_ofcolor(I, EIGHT), toivec(fork(subtract, rbind(get_rank, F0), rbind(get_rank, L1))(apply(rbind(col_row, R1), colorfilter(o_g(I, R5), TWO)))))))

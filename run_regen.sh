@@ -15,7 +15,7 @@ if [ $# -eq 0 ]; then
 fi
 
 FACTOR=${1}
-CYCLE=${2}
+BUILD=${2}
 SLEEP=$((FACTOR / 3))
 TIMEOUT=$((SLEEP * 2))
 

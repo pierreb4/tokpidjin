@@ -1,2 +1,0 @@
-def solve_6e19193c(S, I):
-    return fill(fill(I, get_color_rank_t(I, L1), mapply(fork(shoot, compose(rbind(get_nth_f, F0), delta), fork(subtract, compose(rbind(get_nth_f, F0), delta), chain(rbind(get_nth_f, F0), rbind(sfilter, chain(matcher(rbind(colorcount_f, get_color_rank_t(I, L1)), TWO), rbind(toobject, I), dneighbors)), toindices))), o_g(I, R5))), ZERO, mapply(delta, o_g(I, R5)))

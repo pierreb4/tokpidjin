@@ -1,2 +1,0 @@
-def solve_eb281b96(S, I):
-    return vconcat(vconcat(I, mir_rot_t(crop(I, ORIGIN, astuple(decrement(height_t(I)), width_t(I))), R0)), crop(vconcat(I, mir_rot_t(crop(I, ORIGIN, astuple(decrement(height_t(I)), width_t(I))), R0)), DOWN, astuple(double(decrement(height_t(I))), width_t(I))))

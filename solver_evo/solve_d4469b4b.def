@@ -1,2 +1,0 @@
-def solve_d4469b4b(S, I):
-    return fill(canvas(BLACK, THREE_BY_THREE), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), fork(combine, vfrontier, hfrontier)(branch(equality(other_f(palette_t(I), BLACK), c_iz_n(S, identity(p_g), rbind(get_nth_t, F1))), RIGHT, branch(equality(other_f(palette_t(I), BLACK), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), UNITY, TWO_BY_TWO))))

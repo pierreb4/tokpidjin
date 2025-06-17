@@ -1,2 +1,0 @@
-def solve_b8825c91(S, I):
-    return mir_rot_t(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, apply(lbind(apply, rbind(get_rank, F0)), papply(pair, replace(I, FOUR, ZERO), mir_rot_t(replace(I, FOUR, ZERO), R1))), mir_rot_t(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, replace(I, FOUR, ZERO), mir_rot_t(replace(I, FOUR, ZERO), R1))), R3))), R3)

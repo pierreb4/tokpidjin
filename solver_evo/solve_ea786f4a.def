@@ -1,6 +1,0 @@
-# Not intended to run standalone!
-
-def solve_ea786f4a(S, I):
-    return fill(mir_rot_t(I, R2), color(get_nth_f(o_g(I, R5), F0)), mapply(lbind(shoot, center(get_nth_f(o_g(I, R5), F0))), combine(astuple(UNITY, NEG_UNITY), astuple(UP_RIGHT, DOWN_LEFT))))
-
-# t - step = 248 in 51.2s

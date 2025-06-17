@@ -3,6 +3,7 @@ from dsl import *
 
 
 def batt(S, I, O):
+    o = []
     try:
         t1 = identity(p_g)
     except:
@@ -92,7 +93,7 @@ def batt(S, I, O):
     except:
         t22 = None
     if t22 == O:
-        return True, f'ed36ccf7 - t22'
+        o.append(('ed36ccf7', 't22'))
     try:
         t23 = rbind(get_nth_f, L1)
     except:
@@ -106,7 +107,7 @@ def batt(S, I, O):
     except:
         t25 = None
     if t25 == O:
-        return True, f'74dd1130 - t25'
+        o.append(('74dd1130', 't25'))
     try:
         t26 = asindices(I)
     except:
@@ -116,7 +117,7 @@ def batt(S, I, O):
     except:
         t27 = None
     if t27 == O:
-        return True, f'6150a2bd - t27'
+        o.append(('6150a2bd', 't27'))
     try:
         t28 = astuple(TWO, ONE)
     except:
@@ -218,7 +219,7 @@ def batt(S, I, O):
     except:
         t52 = None
     if t52 == O:
-        return True, f'60c09cac - t52'
+        o.append(('60c09cac', 't52'))
     try:
         t53 = f_ofcolor(I, GREEN)
     except:
@@ -264,7 +265,7 @@ def batt(S, I, O):
     except:
         t63 = None
     if t27 == O:
-        return True, f'3c9b0459 - t27'
+        o.append(('3c9b0459', 't27'))
     try:
         t64 = astuple(ZERO, ORIGIN)
     except:
@@ -290,7 +291,7 @@ def batt(S, I, O):
     except:
         t69 = None
     if t69 == O:
-        return True, f'd10ecb37 - t69'
+        o.append(('d10ecb37', 't69'))
     try:
         t70 = replace(I, RED, BLACK)
     except:
@@ -316,7 +317,7 @@ def batt(S, I, O):
     except:
         t75 = None
     if t3 == O:
-        return True, f'67a3c6ac - t3'
+        o.append(('67a3c6ac', 't3'))
     try:
         t76 = frontiers(I)
     except:
@@ -334,19 +335,19 @@ def batt(S, I, O):
     except:
         t79 = None
     if t52 == O:
-        return True, f'c59eb873 - t52'
+        o.append(('c59eb873', 't52'))
     try:
         t80 = shoot(ORIGIN, UNITY)
     except:
         t80 = None
     if t25 == O:
-        return True, f'9dfd6313 - t25'
+        o.append(('9dfd6313', 't25'))
     try:
         t81 = switch(I, FIVE, EIGHT)
     except:
         t81 = None
     if t81 == O:
-        return True, f'd511f180 - t81'
+        o.append(('d511f180', 't81'))
     try:
         t82 = replace(I, GREEN, BLACK)
     except:
@@ -368,7 +369,7 @@ def batt(S, I, O):
     except:
         t86 = None
     if t86 == O:
-        return True, f'9172f3a0 - t86'
+        o.append(('9172f3a0', 't86'))
     try:
         t87 = astuple(TEN, TEN)
     except:
@@ -562,7 +563,7 @@ def batt(S, I, O):
     except:
         t134 = None
     if t97 == O:
-        return True, f'6d0aefbc - t97'
+        o.append(('6d0aefbc', 't97'))
     try:
         t135 = get_nth_f(t29, F0)
     except:
@@ -592,7 +593,7 @@ def batt(S, I, O):
     except:
         t141 = None
     if t141 == O:
-        return True, f'6fa7a44f - t141'
+        o.append(('6fa7a44f', 't141'))
     try:
         t142 = colorfilter(t7, GRAY)
     except:
@@ -714,7 +715,7 @@ def batt(S, I, O):
     except:
         t171 = None
     if t127 == O:
-        return True, f'2dee498d - t127'
+        o.append(('2dee498d', 't127'))
     try:
         t172 = asindices(t35)
     except:
@@ -740,7 +741,7 @@ def batt(S, I, O):
     except:
         t177 = None
     if t97 == O:
-        return True, f'c9e6f938 - t97'
+        o.append(('c9e6f938', 't97'))
     try:
         t178 = mapply(vfrontier, t6)
     except:
@@ -762,7 +763,7 @@ def batt(S, I, O):
     except:
         t182 = None
     if t182 == O:
-        return True, f'4c4377d9 - t182'
+        o.append(('4c4377d9', 't182'))
     try:
         t183 = multiply(t68, THREE)
     except:
@@ -792,7 +793,7 @@ def batt(S, I, O):
     except:
         t189 = None
     if t189 == O:
-        return True, f'5582e5ca - t189'
+        o.append(('5582e5ca', 't189'))
     try:
         t190 = decrement(t19)
     except:
@@ -934,7 +935,7 @@ def batt(S, I, O):
     except:
         t224 = None
     if t224 == O:
-        return True, f'5bd6f4ac - t224'
+        o.append(('5bd6f4ac', 't224'))
     try:
         t225 = recolor_i(BLACK, t6)
     except:
@@ -1020,7 +1021,7 @@ def batt(S, I, O):
     except:
         t245 = None
     if t141 == O:
-        return True, f'8be77c9e - t141'
+        o.append(('8be77c9e', 't141'))
     try:
         t246 = c_zo_n(S, t1, t89)
     except:
@@ -1066,7 +1067,7 @@ def batt(S, I, O):
     except:
         t256 = None
     if t256 == O:
-        return True, f'25ff71a9 - t256'
+        o.append(('25ff71a9', 't256'))
     try:
         t257 = compose(t10, delta)
     except:
@@ -1088,7 +1089,7 @@ def batt(S, I, O):
     except:
         t261 = None
     if t261 == O:
-        return True, f'b91ae062 - t261'
+        o.append(('b91ae062', 't261'))
     try:
         t262 = fork(recolor_i, color, t104)
     except:
@@ -1194,7 +1195,7 @@ def batt(S, I, O):
     except:
         t287 = None
     if t287 == O:
-        return True, f'68b16354 - t287'
+        o.append(('68b16354', 't287'))
     try:
         t288 = merge_f(t125)
     except:
@@ -1204,7 +1205,7 @@ def batt(S, I, O):
     except:
         t289 = None
     if t289 == O:
-        return True, f'be94b721 - t289'
+        o.append(('be94b721', 't289'))
     try:
         t290 = remove_t(t127, t33)
     except:
@@ -1226,7 +1227,7 @@ def batt(S, I, O):
     except:
         t294 = None
     if t294 == O:
-        return True, f'c909285e - t294'
+        o.append(('c909285e', 't294'))
     try:
         t295 = subgrid(t114, I)
     except:
@@ -1284,7 +1285,7 @@ def batt(S, I, O):
     except:
         t308 = None
     if t308 == O:
-        return True, f'f25ffba3 - t308'
+        o.append(('f25ffba3', 't308'))
     try:
         t309 = switch(t22, ONE, TWO)
     except:
@@ -1382,7 +1383,7 @@ def batt(S, I, O):
     except:
         t332 = None
     if t294 == O:
-        return True, f'1f85a75f - t294'
+        o.append(('1f85a75f', 't294'))
     try:
         t333 = get_nth_f(t171, F0)
     except:
@@ -1476,7 +1477,7 @@ def batt(S, I, O):
     except:
         t355 = None
     if t294 == O:
-        return True, f'0b148d64 - t294'
+        o.append(('0b148d64', 't294'))
     try:
         t356 = o_g(t11, R5)
     except:
@@ -1550,7 +1551,7 @@ def batt(S, I, O):
     except:
         t373 = None
     if t261 == O:
-        return True, f'ac0a08a4 - t261'
+        o.append(('ac0a08a4', 't261'))
     try:
         t374 = compose(size, delta)
     except:
@@ -1720,7 +1721,7 @@ def batt(S, I, O):
     except:
         t415 = None
     if t294 == O:
-        return True, f'23b5c85d - t294'
+        o.append(('23b5c85d', 't294'))
     try:
         t416 = prapply(connect, t6, t54)
     except:
@@ -1754,7 +1755,7 @@ def batt(S, I, O):
     except:
         t423 = None
     if t423 == O:
-        return True, f'7b7f7511 - t423'
+        o.append(('7b7f7511', 't423'))
     try:
         t424 = fork(equality, size, t195)
     except:
@@ -1780,7 +1781,7 @@ def batt(S, I, O):
     except:
         t429 = None
     if t429 == O:
-        return True, f'67e8384a - t429'
+        o.append(('67e8384a', 't429'))
     try:
         t430 = height_t(t255)
     except:
@@ -1826,7 +1827,7 @@ def batt(S, I, O):
     except:
         t440 = None
     if t440 == O:
-        return True, f'28bf18c6 - t440'
+        o.append(('28bf18c6', 't440'))
     try:
         t441 = vconcat(t267, t107)
     except:
@@ -1868,7 +1869,7 @@ def batt(S, I, O):
     except:
         t450 = None
     if t450 == O:
-        return True, f'1c786137 - t450'
+        o.append(('1c786137', 't450'))
     try:
         t451 = fork(multiply, sign, identity)
     except:
@@ -1890,7 +1891,7 @@ def batt(S, I, O):
     except:
         t455 = None
     if t455 == O:
-        return True, f'2dc579da - t455'
+        o.append(('2dc579da', 't455'))
     try:
         t456 = cover(I, t288)
     except:
@@ -1944,7 +1945,7 @@ def batt(S, I, O):
     except:
         t468 = None
     if t468 == O:
-        return True, f'7468f01a - t468'
+        o.append(('7468f01a', 't468'))
     try:
         t469 = o_g(t148, R5)
     except:
@@ -2006,13 +2007,13 @@ def batt(S, I, O):
     except:
         t483 = None
     if t429 == O:
-        return True, f'3af2c5a8 - t429'
+        o.append(('3af2c5a8', 't429'))
     try:
         t484 = vconcat(t317, t153)
     except:
         t484 = None
     if t484 == O:
-        return True, f'0c786b71 - t484'
+        o.append(('0c786b71', 't484'))
     try:
         t485 = corner(t318, R0)
     except:
@@ -2026,7 +2027,7 @@ def batt(S, I, O):
     except:
         t487 = None
     if t487 == O:
-        return True, f'1e0a9b12 - t487'
+        o.append(('1e0a9b12', 't487'))
     try:
         t488 = branch(t156, identity, t18)
     except:
@@ -2036,7 +2037,7 @@ def batt(S, I, O):
     except:
         t489 = None
     if t429 == O:
-        return True, f'62c24649 - t429'
+        o.append(('62c24649', 't429'))
     try:
         t490 = difference(t8, t209)
     except:
@@ -2074,7 +2075,7 @@ def batt(S, I, O):
     except:
         t498 = None
     if t498 == O:
-        return True, f'56ff96f3 - t498'
+        o.append(('56ff96f3', 't498'))
     try:
         t499 = col_row(t53, R1)
     except:
@@ -2084,7 +2085,7 @@ def batt(S, I, O):
     except:
         t500 = None
     if t500 == O:
-        return True, f'ae4f1146 - t500'
+        o.append(('ae4f1146', 't500'))
     try:
         t501 = rbind(upscale_f, RED)
     except:
@@ -2106,7 +2107,7 @@ def batt(S, I, O):
     except:
         t505 = None
     if t505 == O:
-        return True, f'4347f46a - t505'
+        o.append(('4347f46a', 't505'))
     try:
         t506 = lbind(matcher, t10)
     except:
@@ -2248,7 +2249,7 @@ def batt(S, I, O):
     except:
         t540 = None
     if t540 == O:
-        return True, f'42a50994 - t540'
+        o.append(('42a50994', 't540'))
     try:
         t541 = fork(difference, asindices, t233)
     except:
@@ -2318,7 +2319,7 @@ def batt(S, I, O):
     except:
         t557 = None
     if t557 == O:
-        return True, f'b1948b0a - t557'
+        o.append(('b1948b0a', 't557'))
     try:
         t558 = subgrid(t381, I)
     except:
@@ -2328,7 +2329,7 @@ def batt(S, I, O):
     except:
         t559 = None
     if t559 == O:
-        return True, f'3618c87e - t559'
+        o.append(('3618c87e', 't559'))
     try:
         t560 = mir_rot_t(t382, R0)
     except:
@@ -2386,7 +2387,7 @@ def batt(S, I, O):
     except:
         t573 = None
     if t557 == O:
-        return True, f'0d3d703e - t557'
+        o.append(('0d3d703e', 't557'))
     try:
         t574 = rbind(adjacent, t221)
     except:
@@ -2428,7 +2429,7 @@ def batt(S, I, O):
     except:
         t583 = None
     if t583 == O:
-        return True, f'aabf363d - t583'
+        o.append(('aabf363d', 't583'))
     try:
         t584 = vconcat(t153, t317)
     except:
@@ -2482,7 +2483,7 @@ def batt(S, I, O):
     except:
         t596 = None
     if t596 == O:
-        return True, f'f25fbde4 - t596'
+        o.append(('f25fbde4', 't596'))
     try:
         t597 = rbind(sfilter, t417)
     except:
@@ -2500,7 +2501,7 @@ def batt(S, I, O):
     except:
         t600 = None
     if t600 == O:
-        return True, f'46f33fce - t600'
+        o.append(('46f33fce', 't600'))
     try:
         t601 = compose(merge, t421)
     except:
@@ -2630,7 +2631,7 @@ def batt(S, I, O):
     except:
         t632 = None
     if t632 == O:
-        return True, f'5614dbcf - t632'
+        o.append(('5614dbcf', 't632'))
     try:
         t633 = lbind(apply, t451)
     except:
@@ -2652,7 +2653,7 @@ def batt(S, I, O):
     except:
         t637 = None
     if t637 == O:
-        return True, f'2013d3e2 - t637'
+        o.append(('2013d3e2', 't637'))
     try:
         t638 = get_arg_rank_f(t9, t195, F0)
     except:
@@ -2822,7 +2823,7 @@ def batt(S, I, O):
     except:
         t679 = None
     if t679 == O:
-        return True, f'662c240a - t679'
+        o.append(('662c240a', 't679'))
     try:
         t680 = rbind(colorcount_f, t322)
     except:
@@ -2904,7 +2905,7 @@ def batt(S, I, O):
     except:
         t699 = None
     if t637 == O:
-        return True, f'73182012 - t637'
+        o.append(('73182012', 't637'))
     try:
         t700 = get_nth_f(t512, F0)
     except:
@@ -2930,7 +2931,7 @@ def batt(S, I, O):
     except:
         t705 = None
     if t705 == O:
-        return True, f'22eb0ac0 - t705'
+        o.append(('22eb0ac0', 't705'))
     try:
         t706 = sizefilter(t8, THREE)
     except:
@@ -3032,7 +3033,7 @@ def batt(S, I, O):
     except:
         t730 = None
     if t730 == O:
-        return True, f'e98196ab - t730'
+        o.append(('e98196ab', 't730'))
     try:
         t731 = compose(vfrontier, tojvec)
     except:
@@ -3062,7 +3063,7 @@ def batt(S, I, O):
     except:
         t737 = None
     if t737 == O:
-        return True, f'445eab21 - t737'
+        o.append(('445eab21', 't737'))
     try:
         t738 = fork(toobject, t541, identity)
     except:
@@ -3120,7 +3121,7 @@ def batt(S, I, O):
     except:
         t751 = None
     if t751 == O:
-        return True, f'8efcae92 - t751'
+        o.append(('8efcae92', 't751'))
     try:
         t752 = extract(t207, t553)
     except:
@@ -3370,7 +3371,7 @@ def batt(S, I, O):
     except:
         t813 = None
     if t813 == O:
-        return True, f'4258a5f9 - t813'
+        o.append(('4258a5f9', 't813'))
     try:
         t814 = center(t73)
     except:
@@ -3404,7 +3405,7 @@ def batt(S, I, O):
     except:
         t821 = None
     if t821 == O:
-        return True, f'd037b0a7 - t821'
+        o.append(('d037b0a7', 't821'))
     try:
         t822 = upscale_f(t616, THREE)
     except:
@@ -3486,7 +3487,7 @@ def batt(S, I, O):
     except:
         t841 = None
     if t841 == O:
-        return True, f'e9afcf9a - t841'
+        o.append(('e9afcf9a', 't841'))
     try:
         t842 = color(t638)
     except:
@@ -3500,7 +3501,7 @@ def batt(S, I, O):
     except:
         t844 = None
     if t844 == O:
-        return True, f'32597951 - t844'
+        o.append(('32597951', 't844'))
     try:
         t845 = f_ofcolor(t641, BURGUNDY)
     except:
@@ -3518,7 +3519,7 @@ def batt(S, I, O):
     except:
         t848 = None
     if t848 == O:
-        return True, f'b94a9452 - t848'
+        o.append(('b94a9452', 't848'))
     try:
         t849 = f_ofcolor(I, t647)
     except:
@@ -3584,7 +3585,7 @@ def batt(S, I, O):
     except:
         t864 = None
     if t864 == O:
-        return True, f'c1d99e64 - t864'
+        o.append(('c1d99e64', 't864'))
     try:
         t865 = center(t106)
     except:
@@ -3594,25 +3595,25 @@ def batt(S, I, O):
     except:
         t866 = None
     if t866 == O:
-        return True, f'3906de3d - t866'
+        o.append(('3906de3d', 't866'))
     try:
         t867 = paint(t48, t666)
     except:
         t867 = None
     if t867 == O:
-        return True, f'e3497940 - t867'
+        o.append(('e3497940', 't867'))
     try:
         t868 = vconcat(t149, t667)
     except:
         t868 = None
     if t868 == O:
-        return True, f'46442a0e - t868'
+        o.append(('46442a0e', 't868'))
     try:
         t869 = fill(t478, CYAN, t80)
     except:
         t869 = None
     if t869 == O:
-        return True, f'd0f5fe59 - t869'
+        o.append(('d0f5fe59', 't869'))
     try:
         t870 = increment(t668)
     except:
@@ -3686,7 +3687,7 @@ def batt(S, I, O):
     except:
         t887 = None
     if t887 == O:
-        return True, f'928ad970 - t887'
+        o.append(('928ad970', 't887'))
     try:
         t888 = difference(t20, t165)
     except:
@@ -3756,7 +3757,7 @@ def batt(S, I, O):
     except:
         t904 = None
     if t844 == O:
-        return True, f'6d75e8bb - t844'
+        o.append(('6d75e8bb', 't844'))
     try:
         t905 = fork(add, t10, t23)
     except:
@@ -3878,7 +3879,7 @@ def batt(S, I, O):
     except:
         t934 = None
     if t868 == O:
-        return True, f'7fe24cdd - t868'
+        o.append(('7fe24cdd', 't868'))
     try:
         t935 = compose(flip, t733)
     except:
@@ -4000,7 +4001,7 @@ def batt(S, I, O):
     except:
         t964 = None
     if t964 == O:
-        return True, f'48d8fb45 - t964'
+        o.append(('48d8fb45', 't964'))
     try:
         t965 = mfilter_f(t767, square_f)
     except:
@@ -4046,7 +4047,7 @@ def batt(S, I, O):
     except:
         t975 = None
     if t975 == O:
-        return True, f'60b61512 - t975'
+        o.append(('60b61512', 't975'))
     try:
         t976 = combine(t80, t776)
     except:
@@ -4116,7 +4117,7 @@ def batt(S, I, O):
     except:
         t992 = None
     if t992 == O:
-        return True, f'8d5021e8 - t992'
+        o.append(('8d5021e8', 't992'))
     try:
         t993 = mir_rot_f(t790, R2)
     except:
@@ -4242,7 +4243,7 @@ def batt(S, I, O):
     except:
         t1023 = None
     if t1023 == O:
-        return True, f'50cb2852 - t1023'
+        o.append(('50cb2852', 't1023'))
     try:
         t1024 = astuple(NEG_TWO, NEG_TWO)
     except:
@@ -4412,7 +4413,7 @@ def batt(S, I, O):
     except:
         t1065 = None
     if t1065 == O:
-        return True, f'c9f8e694 - t1065'
+        o.append(('c9f8e694', 't1065'))
     try:
         t1066 = branch(t479, t668, t870)
     except:
@@ -4430,7 +4431,7 @@ def batt(S, I, O):
     except:
         t1069 = None
     if t1065 == O:
-        return True, f'c7d4e6ad - t1065'
+        o.append(('c7d4e6ad', 't1065'))
     try:
         t1070 = sfilter_f(t12, t874)
     except:
@@ -4484,7 +4485,7 @@ def batt(S, I, O):
     except:
         t1082 = None
     if t1082 == O:
-        return True, f'b27ca6d3 - t1082'
+        o.append(('b27ca6d3', 't1082'))
     try:
         t1083 = apply(t58, t884)
     except:
@@ -4542,13 +4543,13 @@ def batt(S, I, O):
     except:
         t1096 = None
     if t1096 == O:
-        return True, f'05f2a901 - t1096'
+        o.append(('05f2a901', 't1096'))
     try:
         t1097 = mir_rot_t(t899, R6)
     except:
         t1097 = None
     if t1097 == O:
-        return True, f'90c28cc7 - t1097'
+        o.append(('90c28cc7', 't1097'))
     try:
         t1098 = paint(I, t900)
     except:
@@ -4558,7 +4559,7 @@ def batt(S, I, O):
     except:
         t1099 = None
     if t1099 == O:
-        return True, f'5168d44c - t1099'
+        o.append(('5168d44c', 't1099'))
     try:
         t1100 = t902(t295)
     except:
@@ -4588,7 +4589,7 @@ def batt(S, I, O):
     except:
         t1106 = None
     if t1106 == O:
-        return True, f'08ed6ac7 - t1106'
+        o.append(('08ed6ac7', 't1106'))
     try:
         t1107 = difference(t704, t907)
     except:
@@ -4634,7 +4635,7 @@ def batt(S, I, O):
     except:
         t1117 = None
     if t1117 == O:
-        return True, f'5521c0d9 - t1117'
+        o.append(('5521c0d9', 't1117'))
     try:
         t1118 = lbind(power, outbox)
     except:
@@ -4688,7 +4689,7 @@ def batt(S, I, O):
     except:
         t1130 = None
     if t1130 == O:
-        return True, f'ce22a75a - t1130'
+        o.append(('ce22a75a', 't1130'))
     try:
         t1131 = chain(double, decrement, width_f)
     except:
@@ -4726,7 +4727,7 @@ def batt(S, I, O):
     except:
         t1139 = None
     if t1139 == O:
-        return True, f'85c4e7cd - t1139'
+        o.append(('85c4e7cd', 't1139'))
     try:
         t1140 = bottomhalf(t148)
     except:
@@ -4780,7 +4781,7 @@ def batt(S, I, O):
     except:
         t1152 = None
     if t1152 == O:
-        return True, f'09629e4f - t1152'
+        o.append(('09629e4f', 't1152'))
     try:
         t1153 = o_g(t948, R5)
     except:
@@ -4818,7 +4819,7 @@ def batt(S, I, O):
     except:
         t1161 = None
     if t1161 == O:
-        return True, f'f8ff0b80 - t1161'
+        o.append(('f8ff0b80', 't1161'))
     try:
         t1162 = sfilter_f(t957, square_f)
     except:
@@ -4828,7 +4829,7 @@ def batt(S, I, O):
     except:
         t1163 = None
     if t1163 == O:
-        return True, f'007bbfb7 - t1163'
+        o.append(('007bbfb7', 't1163'))
     try:
         t1164 = mir_rot_t(t437, R1)
     except:
@@ -4842,7 +4843,7 @@ def batt(S, I, O):
     except:
         t1166 = None
     if t1166 == O:
-        return True, f'dc1df850 - t1166'
+        o.append(('dc1df850', 't1166'))
     try:
         t1167 = apply(t764, t962)
     except:
@@ -4856,7 +4857,7 @@ def batt(S, I, O):
     except:
         t1169 = None
     if t1169 == O:
-        return True, f'3aa6fb7a - t1169'
+        o.append(('3aa6fb7a', 't1169'))
     try:
         t1170 = apply(t567, t967)
     except:
@@ -4886,13 +4887,13 @@ def batt(S, I, O):
     except:
         t1176 = None
     if t1176 == O:
-        return True, f'ea786f4a - t1176'
+        o.append(('ea786f4a', 't1176'))
     try:
         t1177 = paint(I, t977)
     except:
         t1177 = None
     if t1177 == O:
-        return True, f'9edfc990 - t1177'
+        o.append(('9edfc990', 't1177'))
     try:
         t1178 = chain(t394, t10, t823)
     except:
@@ -4906,7 +4907,7 @@ def batt(S, I, O):
     except:
         t1180 = None
     if t1180 == O:
-        return True, f'b9b7f026 - t1180'
+        o.append(('b9b7f026', 't1180'))
     try:
         t1181 = mapply(t780, t7)
     except:
@@ -4960,7 +4961,7 @@ def batt(S, I, O):
     except:
         t1193 = None
     if t1193 == O:
-        return True, f'496994bd - t1193'
+        o.append(('496994bd', 't1193'))
     try:
         t1194 = lbind(shift, t993)
     except:
@@ -5026,7 +5027,7 @@ def batt(S, I, O):
     except:
         t1209 = None
     if t1169 == O:
-        return True, f'44d8ac46 - t1169'
+        o.append(('44d8ac46', 't1169'))
     try:
         t1210 = rbind(corner, R1)
     except:
@@ -5068,7 +5069,7 @@ def batt(S, I, O):
     except:
         t1219 = None
     if t1219 == O:
-        return True, f'a699fb00 - t1219'
+        o.append(('a699fb00', 't1219'))
     try:
         t1220 = apply(t811, t1012)
     except:
@@ -5142,7 +5143,7 @@ def batt(S, I, O):
     except:
         t1237 = None
     if t1237 == O:
-        return True, f'5c0a986e - t1237'
+        o.append(('5c0a986e', 't1237'))
     try:
         t1238 = occurrences(I, t1032)
     except:
@@ -5180,7 +5181,7 @@ def batt(S, I, O):
     except:
         t1246 = None
     if t1246 == O:
-        return True, f'aedd82e4 - t1246'
+        o.append(('aedd82e4', 't1246'))
     try:
         t1247 = sfilter_f(t634, t1039)
     except:
@@ -5226,7 +5227,7 @@ def batt(S, I, O):
     except:
         t1257 = None
     if t1257 == O:
-        return True, f'a1570a43 - t1257'
+        o.append(('a1570a43', 't1257'))
     try:
         t1258 = order(t9, t302)
     except:
@@ -5264,7 +5265,7 @@ def batt(S, I, O):
     except:
         t1266 = None
     if t1266 == O:
-        return True, f'd13f3404 - t1266'
+        o.append(('d13f3404', 't1266'))
     try:
         t1267 = fill(I, t300, t1055)
     except:
@@ -5330,7 +5331,7 @@ def batt(S, I, O):
     except:
         t1282 = None
     if t1282 == O:
-        return True, f'1190e5a7 - t1282'
+        o.append(('1190e5a7', 't1282'))
     try:
         t1283 = rbind(repeat, t671)
     except:
@@ -5348,7 +5349,7 @@ def batt(S, I, O):
     except:
         t1286 = None
     if t1286 == O:
-        return True, f'dc433765 - t1286'
+        o.append(('dc433765', 't1286'))
     try:
         t1287 = mapply(ineighbors, t1073)
     except:
@@ -5438,7 +5439,7 @@ def batt(S, I, O):
     except:
         t1308 = None
     if t1308 == O:
-        return True, f'7f4411dc - t1308'
+        o.append(('7f4411dc', 't1308'))
     try:
         t1309 = fork(difference, identity, t1094)
     except:
@@ -5512,7 +5513,7 @@ def batt(S, I, O):
     except:
         t1326 = None
     if t1326 == O:
-        return True, f'9565186b - t1326'
+        o.append(('9565186b', 't1326'))
     try:
         t1327 = compose(toivec, numcolors_f)
     except:
@@ -5574,7 +5575,7 @@ def batt(S, I, O):
     except:
         t1341 = None
     if t1341 == O:
-        return True, f'c8f0f002 - t1341'
+        o.append(('c8f0f002', 't1341'))
     try:
         t1342 = mapply(t530, t1124)
     except:
@@ -5624,7 +5625,7 @@ def batt(S, I, O):
     except:
         t1353 = None
     if t1353 == O:
-        return True, f'd23f8c26 - t1353'
+        o.append(('d23f8c26', 't1353'))
     try:
         t1354 = cover(I, t1126)
     except:
@@ -5666,7 +5667,7 @@ def batt(S, I, O):
     except:
         t1363 = None
     if t1341 == O:
-        return True, f'a740d043 - t1341'
+        o.append(('a740d043', 't1341'))
     try:
         t1364 = paint(t747, t1150)
     except:
@@ -5708,7 +5709,7 @@ def batt(S, I, O):
     except:
         t1373 = None
     if t1373 == O:
-        return True, f'6f8cd79b - t1373'
+        o.append(('6f8cd79b', 't1373'))
     try:
         t1374 = mfilter_f(t961, t384)
     except:
@@ -5762,7 +5763,7 @@ def batt(S, I, O):
     except:
         t1386 = None
     if t1386 == O:
-        return True, f'bb43febb - t1386'
+        o.append(('bb43febb', 't1386'))
     try:
         t1387 = t1178(TWO)
     except:
@@ -5780,7 +5781,7 @@ def batt(S, I, O):
     except:
         t1390 = None
     if t1390 == O:
-        return True, f'fcb5c309 - t1390'
+        o.append(('fcb5c309', 't1390'))
     try:
         t1391 = compose(invert, t1183)
     except:
@@ -5810,13 +5811,13 @@ def batt(S, I, O):
     except:
         t1397 = None
     if t1397 == O:
-        return True, f'41e4d17e - t1397'
+        o.append(('41e4d17e', 't1397'))
     try:
         t1398 = replace(t403, t251, t246)
     except:
         t1398 = None
     if t1398 == O:
-        return True, f'a79310a0 - t1398'
+        o.append(('a79310a0', 't1398'))
     try:
         t1399 = mir_rot_t(t1190, R0)
     except:
@@ -5858,7 +5859,7 @@ def batt(S, I, O):
     except:
         t1408 = None
     if t1408 == O:
-        return True, f'3f7978a0 - t1408'
+        o.append(('3f7978a0', 't1408'))
     try:
         t1409 = branch(t1002, lefthalf, tophalf)
     except:
@@ -5936,7 +5937,7 @@ def batt(S, I, O):
     except:
         t1427 = None
     if t1427 == O:
-        return True, f'44f52bb0 - t1427'
+        o.append(('44f52bb0', 't1427'))
     try:
         t1428 = f_ofcolor(t1222, BLACK)
     except:
@@ -6022,13 +6023,13 @@ def batt(S, I, O):
     except:
         t1448 = None
     if t1448 == O:
-        return True, f'1f876c06 - t1448'
+        o.append(('1f876c06', 't1448'))
     try:
         t1449 = fill(t1036, GRAY, t1242)
     except:
         t1449 = None
     if t1449 == O:
-        return True, f'b60334d2 - t1449'
+        o.append(('b60334d2', 't1449'))
     try:
         t1450 = insert(UNITY, t1243)
     except:
@@ -6042,7 +6043,7 @@ def batt(S, I, O):
     except:
         t1452 = None
     if t1452 == O:
-        return True, f'ded97339 - t1452'
+        o.append(('ded97339', 't1452'))
     try:
         t1453 = fill(t3, t246, t1247)
     except:
@@ -6052,7 +6053,7 @@ def batt(S, I, O):
     except:
         t1454 = None
     if t1454 == O:
-        return True, f'a5313dff - t1454'
+        o.append(('a5313dff', 't1454'))
     try:
         t1455 = lbind(recolor_o, BLACK)
     except:
@@ -6082,7 +6083,7 @@ def batt(S, I, O):
     except:
         t1461 = None
     if t1461 == O:
-        return True, f'cf98881b - t1461'
+        o.append(('cf98881b', 't1461'))
     try:
         t1462 = mapply(t458, t427)
     except:
@@ -6100,7 +6101,7 @@ def batt(S, I, O):
     except:
         t1465 = None
     if t1465 == O:
-        return True, f'd631b094 - t1465'
+        o.append(('d631b094', 't1465'))
     try:
         t1466 = f_ofcolor(t1263, BLUE)
     except:
@@ -6126,7 +6127,7 @@ def batt(S, I, O):
     except:
         t1471 = None
     if t1471 == O:
-        return True, f'7ddcd7ec - t1471'
+        o.append(('7ddcd7ec', 't1471'))
     try:
         t1472 = mapply(t139, t1270)
     except:
@@ -6144,7 +6145,7 @@ def batt(S, I, O):
     except:
         t1475 = None
     if t1475 == O:
-        return True, f'8f2ea7aa - t1475'
+        o.append(('8f2ea7aa', 't1475'))
     try:
         t1476 = matcher(t10, BLACK)
     except:
@@ -6162,7 +6163,7 @@ def batt(S, I, O):
     except:
         t1479 = None
     if t1479 == O:
-        return True, f'25d487eb - t1479'
+        o.append(('25d487eb', 't1479'))
     try:
         t1480 = fork(vmatching, t10, t23)
     except:
@@ -6192,7 +6193,7 @@ def batt(S, I, O):
     except:
         t1486 = None
     if t1486 == O:
-        return True, f'f76d97a5 - t1486'
+        o.append(('f76d97a5', 't1486'))
     try:
         t1487 = greater(t1284, ONE)
     except:
@@ -6202,13 +6203,13 @@ def batt(S, I, O):
     except:
         t1488 = None
     if t1488 == O:
-        return True, f'b8cdaf2b - t1488'
+        o.append(('b8cdaf2b', 't1488'))
     try:
         t1489 = underfill(t155, t246, t1287)
     except:
         t1489 = None
     if t1489 == O:
-        return True, f'10fcaaa3 - t1489'
+        o.append(('10fcaaa3', 't1489'))
     try:
         t1490 = gravitate(t6, t1288)
     except:
@@ -6318,7 +6319,7 @@ def batt(S, I, O):
     except:
         t1516 = None
     if t1516 == O:
-        return True, f'cce03e0d - t1516'
+        o.append(('cce03e0d', 't1516'))
     try:
         t1517 = halve(t1318)
     except:
@@ -6328,7 +6329,7 @@ def batt(S, I, O):
     except:
         t1518 = None
     if t1518 == O:
-        return True, f'67385a82 - t1518'
+        o.append(('67385a82', 't1518'))
     try:
         t1519 = insert(t22, t1320)
     except:
@@ -6338,7 +6339,7 @@ def batt(S, I, O):
     except:
         t1520 = None
     if t1520 == O:
-        return True, f'bda2d7a6 - t1520'
+        o.append(('bda2d7a6', 't1520'))
     try:
         t1521 = rbind(compose, initset)
     except:
@@ -6372,7 +6373,7 @@ def batt(S, I, O):
     except:
         t1528 = None
     if t1528 == O:
-        return True, f'f5b8619d - t1528'
+        o.append(('f5b8619d', 't1528'))
     try:
         t1529 = fork(shift, identity, t1334)
     except:
@@ -6410,7 +6411,7 @@ def batt(S, I, O):
     except:
         t1537 = None
     if t1537 == O:
-        return True, f'e76a88a6 - t1537'
+        o.append(('e76a88a6', 't1537'))
     try:
         t1538 = get_nth_f(t725, F0)
     except:
@@ -6452,7 +6453,7 @@ def batt(S, I, O):
     except:
         t1547 = None
     if t1547 == O:
-        return True, f'bd4472b8 - t1547'
+        o.append(('bd4472b8', 't1547'))
     try:
         t1548 = compose(t1359, initset)
     except:
@@ -6462,7 +6463,7 @@ def batt(S, I, O):
     except:
         t1549 = None
     if t1549 == O:
-        return True, f'ce9e57f2 - t1549'
+        o.append(('ce9e57f2', 't1549'))
     try:
         t1550 = divide(t1362, THREE)
     except:
@@ -6484,7 +6485,7 @@ def batt(S, I, O):
     except:
         t1554 = None
     if t1554 == O:
-        return True, f'681b3aeb - t1554'
+        o.append(('681b3aeb', 't1554'))
     try:
         t1555 = decrement(t1151)
     except:
@@ -6498,7 +6499,7 @@ def batt(S, I, O):
     except:
         t1557 = None
     if t1557 == O:
-        return True, f'1f642eb9 - t1557'
+        o.append(('1f642eb9', 't1557'))
     try:
         t1558 = get_arg_rank_f(t1367, size, F0)
     except:
@@ -6528,7 +6529,7 @@ def batt(S, I, O):
     except:
         t1564 = None
     if t1564 == O:
-        return True, f'1cf80156 - t1564'
+        o.append(('1cf80156', 't1564'))
     try:
         t1565 = other_f(t758, t1371)
     except:
@@ -6546,7 +6547,7 @@ def batt(S, I, O):
     except:
         t1568 = None
     if t1568 == O:
-        return True, f'2c608aff - t1568'
+        o.append(('2c608aff', 't1568'))
     try:
         t1569 = mapply(t386, t1375)
     except:
@@ -6580,7 +6581,7 @@ def batt(S, I, O):
     except:
         t1576 = None
     if t1576 == O:
-        return True, f'5117e062 - t1576'
+        o.append(('5117e062', 't1576'))
     try:
         t1577 = get_nth_t(t1384, L1)
     except:
@@ -6646,7 +6647,7 @@ def batt(S, I, O):
     except:
         t1592 = None
     if t1592 == O:
-        return True, f'bbc9ae5d - t1592'
+        o.append(('bbc9ae5d', 't1592'))
     try:
         t1593 = mapply(t998, t208)
     except:
@@ -6668,7 +6669,7 @@ def batt(S, I, O):
     except:
         t1597 = None
     if t1597 == O:
-        return True, f'31aa019c - t1597'
+        o.append(('31aa019c', 't1597'))
     try:
         t1598 = get_arg_rank_f(t1206, t1412, F0)
     except:
@@ -6678,7 +6679,7 @@ def batt(S, I, O):
     except:
         t1599 = None
     if t1454 == O:
-        return True, f'00d62c1b - t1454'
+        o.append(('00d62c1b', 't1454'))
     try:
         t1600 = get_nth_f(t1414, F0)
     except:
@@ -6688,7 +6689,7 @@ def batt(S, I, O):
     except:
         t1601 = None
     if t1601 == O:
-        return True, f'8e5a5113 - t1601'
+        o.append(('8e5a5113', 't1601'))
     try:
         t1602 = shift(t1417, UNITY)
     except:
@@ -6706,7 +6707,7 @@ def batt(S, I, O):
     except:
         t1605 = None
     if t1605 == O:
-        return True, f'22168020 - t1605'
+        o.append(('22168020', 't1605'))
     try:
         t1606 = t602(t1422)
     except:
@@ -6784,7 +6785,7 @@ def batt(S, I, O):
     except:
         t1624 = None
     if t1624 == O:
-        return True, f'890034e9 - t1624'
+        o.append(('890034e9', 't1624'))
     try:
         t1625 = chain(positive, size, t1445)
     except:
@@ -6798,7 +6799,7 @@ def batt(S, I, O):
     except:
         t1627 = None
     if t1627 == O:
-        return True, f'd8c310e9 - t1627'
+        o.append(('d8c310e9', 't1627'))
     try:
         t1628 = lbind(shift, t1450)
     except:
@@ -6816,7 +6817,7 @@ def batt(S, I, O):
     except:
         t1631 = None
     if t1631 == O:
-        return True, f'd406998b - t1631'
+        o.append(('d406998b', 't1631'))
     try:
         t1632 = chain(toindices, t501, normalize)
     except:
@@ -6846,7 +6847,7 @@ def batt(S, I, O):
     except:
         t1638 = None
     if t1638 == O:
-        return True, f'363442ee - t1638'
+        o.append(('363442ee', 't1638'))
     try:
         t1639 = lbind(greater, t247)
     except:
@@ -6860,7 +6861,7 @@ def batt(S, I, O):
     except:
         t1641 = None
     if t1641 == O:
-        return True, f'a5f85a15 - t1641'
+        o.append(('a5f85a15', 't1641'))
     try:
         t1642 = corner(t1466, R0)
     except:
@@ -6870,7 +6871,7 @@ def batt(S, I, O):
     except:
         t1643 = None
     if t1643 == O:
-        return True, f'623ea044 - t1643'
+        o.append(('623ea044', 't1643'))
     try:
         t1644 = inbox(t650)
     except:
@@ -6956,7 +6957,7 @@ def batt(S, I, O):
     except:
         t1664 = None
     if t1664 == O:
-        return True, f'de1cd16c - t1664'
+        o.append(('de1cd16c', 't1664'))
     try:
         t1665 = mapply(neighbors, t73)
     except:
@@ -6966,7 +6967,7 @@ def batt(S, I, O):
     except:
         t1666 = None
     if t1666 == O:
-        return True, f'7e0986d6 - t1666'
+        o.append(('7e0986d6', 't1666'))
     try:
         t1667 = t1494(ORIGIN)
     except:
@@ -6976,7 +6977,7 @@ def batt(S, I, O):
     except:
         t1668 = None
     if t1668 == O:
-        return True, f'6b9890af - t1668'
+        o.append(('6b9890af', 't1668'))
     try:
         t1669 = apply(tojvec, t1496)
     except:
@@ -6986,13 +6987,13 @@ def batt(S, I, O):
     except:
         t1670 = None
     if t1670 == O:
-        return True, f'80af3007 - t1670'
+        o.append(('80af3007', 't1670'))
     try:
         t1671 = crop(t1297, DOWN, t1498)
     except:
         t1671 = None
     if t1671 == O:
-        return True, f'f8b3ba0a - t1671'
+        o.append(('f8b3ba0a', 't1671'))
     try:
         t1672 = vconcat(t1298, t1499)
     except:
@@ -7014,7 +7015,7 @@ def batt(S, I, O):
     except:
         t1676 = None
     if t1676 == O:
-        return True, f'3de23699 - t1676'
+        o.append(('3de23699', 't1676'))
     try:
         t1677 = apply(t687, t1503)
     except:
@@ -7108,7 +7109,7 @@ def batt(S, I, O):
     except:
         t1699 = None
     if t1699 == O:
-        return True, f'178fcbfb - t1699'
+        o.append(('178fcbfb', 't1699'))
     try:
         t1700 = extract(t1329, t23)
     except:
@@ -7118,7 +7119,7 @@ def batt(S, I, O):
     except:
         t1701 = None
     if t1701 == O:
-        return True, f'4be741c5 - t1701'
+        o.append(('4be741c5', 't1701'))
     try:
         t1702 = fork(sfilter, t10, t1527)
     except:
@@ -7128,7 +7129,7 @@ def batt(S, I, O):
     except:
         t1703 = None
     if t1703 == O:
-        return True, f'0520fde7 - t1703'
+        o.append(('0520fde7', 't1703'))
     try:
         t1704 = mapply(t1529, t9)
     except:
@@ -7238,7 +7239,7 @@ def batt(S, I, O):
     except:
         t1730 = None
     if t1730 == O:
-        return True, f'5ad4f10b - t1730'
+        o.append(('5ad4f10b', 't1730'))
     try:
         t1731 = paint(t744, t1054)
     except:
@@ -7272,7 +7273,7 @@ def batt(S, I, O):
     except:
         t1738 = None
     if t1738 == O:
-        return True, f'1fad071e - t1738'
+        o.append(('1fad071e', 't1738'))
     try:
         t1739 = mapply(delta, t755)
     except:
@@ -7294,7 +7295,7 @@ def batt(S, I, O):
     except:
         t1743 = None
     if t1743 == O:
-        return True, f'd9fac9be - t1743'
+        o.append(('d9fac9be', 't1743'))
     try:
         t1744 = mir_rot_t(t1566, R3)
     except:
@@ -7304,7 +7305,7 @@ def batt(S, I, O):
     except:
         t1745 = None
     if t1745 == O:
-        return True, f'47c1f68c - t1745'
+        o.append(('47c1f68c', 't1745'))
     try:
         t1746 = o_g(t762, R1)
     except:
@@ -7314,7 +7315,7 @@ def batt(S, I, O):
     except:
         t1747 = None
     if t1747 == O:
-        return True, f'8eb1be9a - t1747'
+        o.append(('8eb1be9a', 't1747'))
     try:
         t1748 = get_arg_rank_f(t1376, t1570, F0)
     except:
@@ -7428,13 +7429,13 @@ def batt(S, I, O):
     except:
         t1775 = None
     if t1775 == O:
-        return True, f'11852cab - t1775'
+        o.append(('11852cab', 't1775'))
     try:
         t1776 = underpaint(I, t1593)
     except:
         t1776 = None
     if t1776 == O:
-        return True, f'444801d8 - t1776'
+        o.append(('444801d8', 't1776'))
     try:
         t1777 = branch(t999, t714, t72)
     except:
@@ -7460,7 +7461,7 @@ def batt(S, I, O):
     except:
         t1782 = None
     if t1782 == O:
-        return True, f'137eaa0f - t1782'
+        o.append(('137eaa0f', 't1782'))
     try:
         t1783 = compose(t65, t1603)
     except:
@@ -7534,7 +7535,7 @@ def batt(S, I, O):
     except:
         t1800 = None
     if t1800 == O:
-        return True, f'd5d6de2d - t1800'
+        o.append(('d5d6de2d', 't1800'))
     try:
         t1801 = toindices(t616)
     except:
@@ -7544,7 +7545,7 @@ def batt(S, I, O):
     except:
         t1802 = None
     if t1802 == O:
-        return True, f'025d127b - t1802'
+        o.append(('025d127b', 't1802'))
     try:
         t1803 = mfilter_f(t7, t1619)
     except:
@@ -7554,7 +7555,7 @@ def batt(S, I, O):
     except:
         t1804 = None
     if t1804 == O:
-        return True, f'017c7c7b - t1804'
+        o.append(('017c7c7b', 't1804'))
     try:
         t1805 = f_ofcolor(t86, t50)
     except:
@@ -7588,7 +7589,7 @@ def batt(S, I, O):
     except:
         t1812 = None
     if t1812 == O:
-        return True, f'810b9b61 - t1812'
+        o.append(('810b9b61', 't1812'))
     try:
         t1813 = compose(t839, t1630)
     except:
@@ -7694,7 +7695,7 @@ def batt(S, I, O):
     except:
         t1838 = None
     if t1838 == O:
-        return True, f'67a423a3 - t1838'
+        o.append(('67a423a3', 't1838'))
     try:
         t1839 = t1485(t1659)
     except:
@@ -7704,7 +7705,7 @@ def batt(S, I, O):
     except:
         t1840 = None
     if t1840 == O:
-        return True, f'239be575 - t1840'
+        o.append(('239be575', 't1840'))
     try:
         t1841 = gravitate(t1288, t6)
     except:
@@ -7738,7 +7739,7 @@ def batt(S, I, O):
     except:
         t1848 = None
     if t1848 == O:
-        return True, f'1b2d62fb - t1848'
+        o.append(('1b2d62fb', 't1848'))
     try:
         t1849 = lbind(t193, t1675)
     except:
@@ -7784,13 +7785,13 @@ def batt(S, I, O):
     except:
         t1859 = None
     if t1859 == O:
-        return True, f'ce4f8723 - t1859'
+        o.append(('ce4f8723', 't1859'))
     try:
         t1860 = vconcat(t1511, t1687)
     except:
         t1860 = None
     if t1860 == O:
-        return True, f'3ac3eb23 - t1860'
+        o.append(('3ac3eb23', 't1860'))
     try:
         t1861 = get_color_rank_t(t1688, L1)
     except:
@@ -7820,7 +7821,7 @@ def batt(S, I, O):
     except:
         t1867 = None
     if t1867 == O:
-        return True, f'25d8a9c8 - t1867'
+        o.append(('25d8a9c8', 't1867'))
     try:
         t1868 = fork(difference, identity, t1323)
     except:
@@ -7850,13 +7851,13 @@ def batt(S, I, O):
     except:
         t1874 = None
     if t1874 == O:
-        return True, f'72ca375d - t1874'
+        o.append(('72ca375d', 't1874'))
     try:
         t1875 = paint(t348, t1704)
     except:
         t1875 = None
     if t1875 == O:
-        return True, f'1caeab9d - t1875'
+        o.append(('1caeab9d', 't1875'))
     try:
         t1876 = lbind(rapply, t1705)
     except:
@@ -7886,7 +7887,7 @@ def batt(S, I, O):
     except:
         t1882 = None
     if t1882 == O:
-        return True, f'eb281b96 - t1882'
+        o.append(('eb281b96', 't1882'))
     try:
         t1883 = astuple(t1343, t1713)
     except:
@@ -7904,13 +7905,13 @@ def batt(S, I, O):
     except:
         t1886 = None
     if t1874 == O:
-        return True, f'd56f2372 - t1874'
+        o.append(('d56f2372', 't1874'))
     try:
         t1887 = fill(I, CYAN, t1717)
     except:
         t1887 = None
     if t1887 == O:
-        return True, f'760b3cac - t1887'
+        o.append(('760b3cac', 't1887'))
     try:
         t1888 = rbind(interval, t1718)
     except:
@@ -7952,7 +7953,7 @@ def batt(S, I, O):
     except:
         t1897 = None
     if t1848 == O:
-        return True, f'e345f17b - t1848'
+        o.append(('e345f17b', 't1848'))
     try:
         t1898 = fork(vconcat, t364, t1726)
     except:
@@ -7974,7 +7975,7 @@ def batt(S, I, O):
     except:
         t1902 = None
     if t1902 == O:
-        return True, f'feca6190 - t1902'
+        o.append(('feca6190', 't1902'))
     try:
         t1903 = compose(dneighbors, t23)
     except:
@@ -8008,7 +8009,7 @@ def batt(S, I, O):
     except:
         t1910 = None
     if t1910 == O:
-        return True, f'543a7ed5 - t1910'
+        o.append(('543a7ed5', 't1910'))
     try:
         t1911 = mapply(t1369, t1740)
     except:
@@ -8034,13 +8035,13 @@ def batt(S, I, O):
     except:
         t1916 = None
     if t1916 == O:
-        return True, f'e50d258f - t1916'
+        o.append(('e50d258f', 't1916'))
     try:
         t1917 = fill(t966, t246, t1749)
     except:
         t1917 = None
     if t1917 == O:
-        return True, f'0ca9ddb6 - t1917'
+        o.append(('0ca9ddb6', 't1917'))
     try:
         t1918 = paint(t1571, t1750)
     except:
@@ -8050,7 +8051,7 @@ def batt(S, I, O):
     except:
         t1919 = None
     if t1919 == O:
-        return True, f'ff805c23 - t1919'
+        o.append(('ff805c23', 't1919'))
     try:
         t1920 = canvas(CYAN, t1753)
     except:
@@ -8088,7 +8089,7 @@ def batt(S, I, O):
     except:
         t1928 = None
     if t1928 == O:
-        return True, f'6ecd11f4 - t1928'
+        o.append(('6ecd11f4', 't1928'))
     try:
         t1929 = extract(t880, t553)
     except:
@@ -8110,7 +8111,7 @@ def batt(S, I, O):
     except:
         t1933 = None
     if t1933 == O:
-        return True, f'c444b776 - t1933'
+        o.append(('c444b776', 't1933'))
     try:
         t1934 = replace(t1399, t226, t1766)
     except:
@@ -8124,7 +8125,7 @@ def batt(S, I, O):
     except:
         t1936 = None
     if t1848 == O:
-        return True, f'f2829549 - t1848'
+        o.append(('f2829549', 't1848'))
     try:
         t1937 = f_ofcolor(t1769, CYAN)
     except:
@@ -8186,7 +8187,7 @@ def batt(S, I, O):
     except:
         t1951 = None
     if t1848 == O:
-        return True, f'66f2d22f - t1848'
+        o.append(('66f2d22f', 't1848'))
     try:
         t1952 = extract(t422, t1785)
     except:
@@ -8220,7 +8221,7 @@ def batt(S, I, O):
     except:
         t1959 = None
     if t1959 == O:
-        return True, f'94f9d214 - t1959'
+        o.append(('94f9d214', 't1959'))
     try:
         t1960 = asobject(t1792)
     except:
@@ -8262,7 +8263,7 @@ def batt(S, I, O):
     except:
         t1969 = None
     if t1969 == O:
-        return True, f'd2abd087 - t1969'
+        o.append(('d2abd087', 't1969'))
     try:
         t1970 = difference(t1438, t1805)
     except:
@@ -8280,7 +8281,7 @@ def batt(S, I, O):
     except:
         t1973 = None
     if t1973 == O:
-        return True, f'a68b268e - t1973'
+        o.append(('a68b268e', 't1973'))
     try:
         t1974 = chain(t1521, t1359, initset)
     except:
@@ -8306,7 +8307,7 @@ def batt(S, I, O):
     except:
         t1979 = None
     if t1979 == O:
-        return True, f'dbc1a6ce - t1979'
+        o.append(('dbc1a6ce', 't1979'))
     try:
         t1980 = astuple(t185, ONE)
     except:
@@ -8320,7 +8321,7 @@ def batt(S, I, O):
     except:
         t1982 = None
     if t1982 == O:
-        return True, f'd364b489 - t1982'
+        o.append(('d364b489', 't1982'))
     try:
         t1983 = combine(t1458, t1817)
     except:
@@ -8342,7 +8343,7 @@ def batt(S, I, O):
     except:
         t1987 = None
     if t1959 == O:
-        return True, f'6430c8c4 - t1959'
+        o.append(('6430c8c4', 't1959'))
     try:
         t1988 = apply(t1210, t729)
     except:
@@ -8360,7 +8361,7 @@ def batt(S, I, O):
     except:
         t1991 = None
     if t1959 == O:
-        return True, f'0c9aba6e - t1959'
+        o.append(('0c9aba6e', 't1959'))
     try:
         t1992 = matcher(numcolors_f, BLUE)
     except:
@@ -8402,7 +8403,7 @@ def batt(S, I, O):
     except:
         t2001 = None
     if t2001 == O:
-        return True, f'ddf7fa4f - t2001'
+        o.append(('ddf7fa4f', 't2001'))
     try:
         t2002 = pair(t1481, t1835)
     except:
@@ -8432,7 +8433,7 @@ def batt(S, I, O):
     except:
         t2008 = None
     if t1959 == O:
-        return True, f'fafffa47 - t1959'
+        o.append(('fafffa47', 't1959'))
     try:
         t2009 = hsplit(t1846, THREE)
     except:
@@ -8454,7 +8455,7 @@ def batt(S, I, O):
     except:
         t2013 = None
     if t2013 == O:
-        return True, f'ba26e723 - t2013'
+        o.append(('ba26e723', 't2013'))
     try:
         t2014 = shift(t6, UP_RIGHT)
     except:
@@ -8480,7 +8481,7 @@ def batt(S, I, O):
     except:
         t2019 = None
     if t2019 == O:
-        return True, f'253bf280 - t2019'
+        o.append(('253bf280', 't2019'))
     try:
         t2020 = other_f(t123, t1861)
     except:
@@ -8502,13 +8503,13 @@ def batt(S, I, O):
     except:
         t2024 = None
     if t2024 == O:
-        return True, f'7b6016b9 - t2024'
+        o.append(('7b6016b9', 't2024'))
     try:
         t2025 = fill(I, t246, t1865)
     except:
         t2025 = None
     if t2025 == O:
-        return True, f'e9614598 - t2025'
+        o.append(('e9614598', 't2025'))
     try:
         t2026 = mir_rot_t(t1866, R2)
     except:
@@ -8558,7 +8559,7 @@ def batt(S, I, O):
     except:
         t2037 = None
     if t2037 == O:
-        return True, f'b2862040 - t2037'
+        o.append(('b2862040', 't2037'))
     try:
         t2038 = combine(t1710, t1880)
     except:
@@ -8584,7 +8585,7 @@ def batt(S, I, O):
     except:
         t2043 = None
     if t2043 == O:
-        return True, f'eb5a1d5d - t2043'
+        o.append(('eb5a1d5d', 't2043'))
     try:
         t2044 = width_t(t523)
     except:
@@ -8634,13 +8635,13 @@ def batt(S, I, O):
     except:
         t2055 = None
     if t2055 == O:
-        return True, f'54d82841 - t2055'
+        o.append(('54d82841', 't2055'))
     try:
         t2056 = fill(t200, GRAY, t1900)
     except:
         t2056 = None
     if t2056 == O:
-        return True, f'a48eeaf7 - t2056'
+        o.append(('a48eeaf7', 't2056'))
     try:
         t2057 = rbind(chain, t1903)
     except:
@@ -8702,7 +8703,7 @@ def batt(S, I, O):
     except:
         t2071 = None
     if t2071 == O:
-        return True, f'63613498 - t2071'
+        o.append(('63613498', 't2071'))
     try:
         t2072 = subtract(SIX, t1574)
     except:
@@ -8732,7 +8733,7 @@ def batt(S, I, O):
     except:
         t2078 = None
     if t2078 == O:
-        return True, f'beb8660c - t2078'
+        o.append(('beb8660c', 't2078'))
     try:
         t2079 = fork(add, t1391, t1927)
     except:
@@ -8762,7 +8763,7 @@ def batt(S, I, O):
     except:
         t2085 = None
     if t2085 == O:
-        return True, f'1bfc4729 - t2085'
+        o.append(('1bfc4729', 't2085'))
     try:
         t2086 = chain(palette_t, trim, t55)
     except:
@@ -8816,7 +8817,7 @@ def batt(S, I, O):
     except:
         t2098 = None
     if t2098 == O:
-        return True, f'd4f3cd78 - t2098'
+        o.append(('d4f3cd78', 't2098'))
     try:
         t2099 = shift(t1948, UNITY)
     except:
@@ -8838,7 +8839,7 @@ def batt(S, I, O):
     except:
         t2103 = None
     if t2103 == O:
-        return True, f'dae9d2b5 - t2103'
+        o.append(('dae9d2b5', 't2103'))
     try:
         t2104 = rbind(vsplit, t47)
     except:
@@ -8872,7 +8873,7 @@ def batt(S, I, O):
     except:
         t2111 = None
     if t2111 == O:
-        return True, f'bdad9b1f - t2111'
+        o.append(('bdad9b1f', 't2111'))
     try:
         t2112 = interval(t1962, TEN, FOUR)
     except:
@@ -8898,7 +8899,7 @@ def batt(S, I, O):
     except:
         t2117 = None
     if t2117 == O:
-        return True, f'99b1bc43 - t2117'
+        o.append(('99b1bc43', 't2117'))
     try:
         t2118 = upscale_t(t1228, t1966)
     except:
@@ -8916,7 +8917,7 @@ def batt(S, I, O):
     except:
         t2121 = None
     if t2121 == O:
-        return True, f'c3e719e8 - t2121'
+        o.append(('c3e719e8', 't2121'))
     try:
         t2122 = index(I, t1233)
     except:
@@ -8938,7 +8939,7 @@ def batt(S, I, O):
     except:
         t2126 = None
     if t2126 == O:
-        return True, f'6cdd2623 - t2126'
+        o.append(('6cdd2623', 't2126'))
     try:
         t2127 = chain(t170, t1626, normalize)
     except:
@@ -9008,7 +9009,7 @@ def batt(S, I, O):
     except:
         t2143 = None
     if t2143 == O:
-        return True, f'b548a754 - t2143'
+        o.append(('b548a754', 't2143'))
     try:
         t2144 = paint(t855, t1995)
     except:
@@ -9074,13 +9075,13 @@ def batt(S, I, O):
     except:
         t2159 = None
     if t2117 == O:
-        return True, f'31d5ba1a - t2117'
+        o.append(('31d5ba1a', 't2117'))
     try:
         t2160 = merge_t(t2009)
     except:
         t2160 = None
     if t2160 == O:
-        return True, f'ff28f65a - t2160'
+        o.append(('ff28f65a', 't2160'))
     try:
         t2161 = occurrences(t885, t1847)
     except:
@@ -9146,7 +9147,7 @@ def batt(S, I, O):
     except:
         t2176 = None
     if t2176 == O:
-        return True, f'd43fd935 - t2176'
+        o.append(('d43fd935', 't2176'))
     try:
         t2177 = hconcat(t1325, t2029)
     except:
@@ -9192,7 +9193,7 @@ def batt(S, I, O):
     except:
         t2187 = None
     if t2187 == O:
-        return True, f'88a10436 - t2187'
+        o.append(('88a10436', 't2187'))
     try:
         t2188 = rbind(vmatching, t187)
     except:
@@ -9218,7 +9219,7 @@ def batt(S, I, O):
     except:
         t2193 = None
     if t2121 == O:
-        return True, f'27f8ce4f - t2121'
+        o.append(('27f8ce4f', 't2121'))
     try:
         t2194 = lbind(recolor_i, BLACK)
     except:
@@ -9240,7 +9241,7 @@ def batt(S, I, O):
     except:
         t2198 = None
     if t2198 == O:
-        return True, f'e8593010 - t2198'
+        o.append(('e8593010', 't2198'))
     try:
         t2199 = tophalf(t148)
     except:
@@ -9282,7 +9283,7 @@ def batt(S, I, O):
     except:
         t2208 = None
     if t2208 == O:
-        return True, f'3eda0437 - t2208'
+        o.append(('3eda0437', 't2208'))
     try:
         t2209 = apply(color, t209)
     except:
@@ -9296,19 +9297,19 @@ def batt(S, I, O):
     except:
         t2211 = None
     if t2211 == O:
-        return True, f'b8825c91 - t2211'
+        o.append(('b8825c91', 't2211'))
     try:
         t2212 = fill(t959, t246, t2066)
     except:
         t2212 = None
     if t2212 == O:
-        return True, f'd90796e8 - t2212'
+        o.append(('d90796e8', 't2212'))
     try:
         t2213 = replace(t2067, NEG_ONE, BLACK)
     except:
         t2213 = None
     if t2213 == O:
-        return True, f'af902bf9 - t2213'
+        o.append(('af902bf9', 't2213'))
     try:
         t2214 = lbind(greater, t2068)
     except:
@@ -9318,7 +9319,7 @@ def batt(S, I, O):
     except:
         t2215 = None
     if t2215 == O:
-        return True, f'05269061 - t2215'
+        o.append(('05269061', 't2215'))
     try:
         t2216 = merge_f(t2070)
     except:
@@ -9340,9 +9341,9 @@ def batt(S, I, O):
     except:
         t2220 = None
     if t2220 == O:
-        return True, f'746b3537 - t2220'
+        o.append(('746b3537', 't2220'))
     if t2117 == O:
-        return True, f'3428a4f5 - t2117'
+        o.append(('3428a4f5', 't2117'))
     try:
         t2221 = position(t393, t1924)
     except:
@@ -9436,7 +9437,7 @@ def batt(S, I, O):
     except:
         t2243 = None
     if t2243 == O:
-        return True, f'7c008303 - t2243'
+        o.append(('7c008303', 't2243'))
     try:
         t2244 = mapply(t470, t2099)
     except:
@@ -9510,7 +9511,7 @@ def batt(S, I, O):
     except:
         t2261 = None
     if t2261 == O:
-        return True, f'93b581b8 - t2261'
+        o.append(('93b581b8', 't2261'))
     try:
         t2262 = astuple(t2122, ORIGIN)
     except:
@@ -9536,7 +9537,7 @@ def batt(S, I, O):
     except:
         t2267 = None
     if t2267 == O:
-        return True, f'6c434453 - t2267'
+        o.append(('6c434453', 't2267'))
     try:
         t2268 = chain(t117, t1977, t1331)
     except:
@@ -9550,13 +9551,13 @@ def batt(S, I, O):
     except:
         t2270 = None
     if t2270 == O:
-        return True, f'3bd67248 - t2270'
+        o.append(('3bd67248', 't2270'))
     try:
         t2271 = mir_rot_t(t2131, R2)
     except:
         t2271 = None
     if t2271 == O:
-        return True, f'cd3c21df - t2271'
+        o.append(('cd3c21df', 't2271'))
     try:
         t2272 = shoot(t2132, UP_RIGHT)
     except:
@@ -9566,7 +9567,7 @@ def batt(S, I, O):
     except:
         t2273 = None
     if t2273 == O:
-        return True, f'2281f1f4 - t2273'
+        o.append(('2281f1f4', 't2273'))
     try:
         t2274 = sfilter_f(t125, t2135)
     except:
@@ -9628,7 +9629,7 @@ def batt(S, I, O):
     except:
         t2288 = None
     if t2288 == O:
-        return True, f'b190f7f5 - t2288'
+        o.append(('b190f7f5', 't2288'))
     try:
         t2289 = branch(t2157, width_f, height_f)
     except:
@@ -9698,7 +9699,7 @@ def batt(S, I, O):
     except:
         t2305 = None
     if t2305 == O:
-        return True, f'1b60fb0c - t2305'
+        o.append(('1b60fb0c', 't2305'))
     try:
         t2306 = apply(t175, t2179)
     except:
@@ -9708,13 +9709,13 @@ def batt(S, I, O):
     except:
         t2307 = None
     if t2307 == O:
-        return True, f'fcc82909 - t2307'
+        o.append(('fcc82909', 't2307'))
     try:
         t2308 = paint(t437, t2181)
     except:
         t2308 = None
     if t2308 == O:
-        return True, f'a61f2674 - t2308'
+        o.append(('a61f2674', 't2308'))
     try:
         t2309 = compose(t10, t2182)
     except:
@@ -9724,7 +9725,7 @@ def batt(S, I, O):
     except:
         t2310 = None
     if t2310 == O:
-        return True, f'ea32f347 - t2310'
+        o.append(('ea32f347', 't2310'))
     try:
         t2311 = interval(ZERO, t2184, ONE)
     except:
@@ -9742,7 +9743,7 @@ def batt(S, I, O):
     except:
         t2314 = None
     if t2314 == O:
-        return True, f'bc1d5164 - t2314'
+        o.append(('bc1d5164', 't2314'))
     try:
         t2315 = rbind(greater, t929)
     except:
@@ -9768,7 +9769,7 @@ def batt(S, I, O):
     except:
         t2320 = None
     if t2320 == O:
-        return True, f'321b1fc6 - t2320'
+        o.append(('321b1fc6', 't2320'))
     try:
         t2321 = toivec(t2196)
     except:
@@ -9802,7 +9803,7 @@ def batt(S, I, O):
     except:
         t2328 = None
     if t2328 == O:
-        return True, f'794b24be - t2328'
+        o.append(('794b24be', 't2328'))
     try:
         t2329 = get_nth_f(t1556, F0)
     except:
@@ -9816,7 +9817,7 @@ def batt(S, I, O):
     except:
         t2331 = None
     if t2271 == O:
-        return True, f'ce602527 - t2271'
+        o.append(('ce602527', 't2271'))
     try:
         t2332 = other_f(t2209, t2064)
     except:
@@ -9842,7 +9843,7 @@ def batt(S, I, O):
     except:
         t2337 = None
     if t2337 == O:
-        return True, f'd4a91cb9 - t2337'
+        o.append(('d4a91cb9', 't2337'))
     try:
         t2338 = lbind(multiply, t2221)
     except:
@@ -9868,7 +9869,7 @@ def batt(S, I, O):
     except:
         t2343 = None
     if t2343 == O:
-        return True, f'694f12f3 - t2343'
+        o.append(('694f12f3', 't2343'))
     try:
         t2344 = mfilter_f(t7, t2229)
     except:
@@ -9886,7 +9887,7 @@ def batt(S, I, O):
     except:
         t2347 = None
     if t2347 == O:
-        return True, f'3345333e - t2347'
+        o.append(('3345333e', 't2347'))
     try:
         t2348 = corner(t1588, R0)
     except:
@@ -9968,13 +9969,13 @@ def batt(S, I, O):
     except:
         t2367 = None
     if t2367 == O:
-        return True, f'5c2c9af4 - t2367'
+        o.append(('5c2c9af4', 't2367'))
     try:
         t2368 = fill(t812, t246, t2252)
     except:
         t2368 = None
     if t2368 == O:
-        return True, f'23581191 - t2368'
+        o.append(('23581191', 't2368'))
     try:
         t2369 = extract(t2253, t1014)
     except:
@@ -10004,7 +10005,7 @@ def batt(S, I, O):
     except:
         t2375 = None
     if t2375 == O:
-        return True, f'77fdfe62 - t2375'
+        o.append(('77fdfe62', 't2375'))
     try:
         t2376 = rbind(subgrid, t436)
     except:
@@ -10114,7 +10115,7 @@ def batt(S, I, O):
     except:
         t2402 = None
     if t2402 == O:
-        return True, f'6e02f1e3 - t2402'
+        o.append(('6e02f1e3', 't2402'))
     try:
         t2403 = t2289(t1288)
     except:
@@ -10124,7 +10125,7 @@ def batt(S, I, O):
     except:
         t2404 = None
     if t2404 == O:
-        return True, f'4093f84a - t2404'
+        o.append(('4093f84a', 't2404'))
     try:
         t2405 = fill(I, GREEN, t2291)
     except:
@@ -10142,7 +10143,7 @@ def batt(S, I, O):
     except:
         t2408 = None
     if t2408 == O:
-        return True, f'952a094c - t2408'
+        o.append(('952a094c', 't2408'))
     try:
         t2409 = mapply(t2294, t125)
     except:
@@ -10184,7 +10185,7 @@ def batt(S, I, O):
     except:
         t2418 = None
     if t2418 == O:
-        return True, f'6cf79266 - t2418'
+        o.append(('6cf79266', 't2418'))
     try:
         t2419 = lbind(recolor_i, ZERO)
     except:
@@ -10258,7 +10259,7 @@ def batt(S, I, O):
     except:
         t2436 = None
     if t2436 == O:
-        return True, f'ea9794b1 - t2436'
+        o.append(('ea9794b1', 't2436'))
     try:
         t2437 = even(t74)
     except:
@@ -10280,7 +10281,7 @@ def batt(S, I, O):
     except:
         t2441 = None
     if t2436 == O:
-        return True, f'75b8110e - t2436'
+        o.append(('75b8110e', 't2436'))
     try:
         t2442 = t2206(t2329)
     except:
@@ -10306,7 +10307,7 @@ def batt(S, I, O):
     except:
         t2447 = None
     if t2447 == O:
-        return True, f'868de0fa - t2447'
+        o.append(('868de0fa', 't2447'))
     try:
         t2448 = hconcat(t1920, t2335)
     except:
@@ -10360,13 +10361,13 @@ def batt(S, I, O):
     except:
         t2460 = None
     if t2460 == O:
-        return True, f'b6afb2da - t2460'
+        o.append(('b6afb2da', 't2460'))
     try:
         t2461 = paint(I, t2350)
     except:
         t2461 = None
     if t2461 == O:
-        return True, f'045e512c - t2461'
+        o.append(('045e512c', 't2461'))
     try:
         t2462 = t1201(t2354, TWO)
     except:
@@ -10440,7 +10441,7 @@ def batt(S, I, O):
     except:
         t2479 = None
     if t2479 == O:
-        return True, f'6e19193c - t2479'
+        o.append(('6e19193c', 't2479'))
     try:
         t2480 = corner(t2374, R0)
     except:
@@ -10482,7 +10483,7 @@ def batt(S, I, O):
     except:
         t2489 = None
     if t2489 == O:
-        return True, f'1a07d186 - t2489'
+        o.append(('1a07d186', 't2489'))
     try:
         t2490 = sfilter_f(t26, t2386)
     except:
@@ -10512,7 +10513,7 @@ def batt(S, I, O):
     except:
         t2496 = None
     if t2496 == O:
-        return True, f'6e82a1ae - t2496'
+        o.append(('6e82a1ae', 't2496'))
     try:
         t2497 = t2393(t42)
     except:
@@ -10558,7 +10559,7 @@ def batt(S, I, O):
     except:
         t2507 = None
     if t2507 == O:
-        return True, f'913fb3ed - t2507'
+        o.append(('913fb3ed', 't2507'))
     try:
         t2508 = t1494(t190)
     except:
@@ -10568,7 +10569,7 @@ def batt(S, I, O):
     except:
         t2509 = None
     if t2509 == O:
-        return True, f'd89b689b - t2509'
+        o.append(('d89b689b', 't2509'))
     try:
         t2510 = lbind(hmatching, t91)
     except:
@@ -10586,7 +10587,7 @@ def batt(S, I, O):
     except:
         t2513 = None
     if t2513 == O:
-        return True, f'22233c11 - t2513'
+        o.append(('22233c11', 't2513'))
     try:
         t2514 = compose(dedupe, totuple)
     except:
@@ -10632,7 +10633,7 @@ def batt(S, I, O):
     except:
         t2524 = None
     if t2524 == O:
-        return True, f'1f0c79e5 - t2524'
+        o.append(('1f0c79e5', 't2524'))
     try:
         t2525 = compose(t2315, t302)
     except:
@@ -10658,7 +10659,7 @@ def batt(S, I, O):
     except:
         t2530 = None
     if t2530 == O:
-        return True, f'd4469b4b - t2530'
+        o.append(('d4469b4b', 't2530'))
     try:
         t2531 = chain(t170, t2433, t1309)
     except:
@@ -10688,7 +10689,7 @@ def batt(S, I, O):
     except:
         t2537 = None
     if t2537 == O:
-        return True, f'a416b8f3 - t2537'
+        o.append(('a416b8f3', 't2537'))
     try:
         t2538 = t2206(t1736)
     except:
@@ -10710,9 +10711,9 @@ def batt(S, I, O):
     except:
         t2542 = None
     if t2542 == O:
-        return True, f'83302e8f - t2542'
+        o.append(('83302e8f', 't2542'))
     if t2537 == O:
-        return True, f'963e52fc - t2537'
+        o.append(('963e52fc', 't2537'))
     try:
         t2543 = sfilter_f(t26, t2446)
     except:
@@ -10726,7 +10727,7 @@ def batt(S, I, O):
     except:
         t2545 = None
     if t2545 == O:
-        return True, f'36fdfd69 - t2545'
+        o.append(('36fdfd69', 't2545'))
     try:
         t2546 = apply(t2338, t1012)
     except:
@@ -10756,13 +10757,13 @@ def batt(S, I, O):
     except:
         t2552 = None
     if t2489 == O:
-        return True, f'd687bc17 - t2489'
+        o.append(('d687bc17', 't2489'))
     try:
         t2553 = fill(I, t246, t2457)
     except:
         t2553 = None
     if t2553 == O:
-        return True, f'e73095fd - t2553'
+        o.append(('e73095fd', 't2553'))
     try:
         t2554 = chain(t582, t1401, t2458)
     except:
@@ -10772,7 +10773,7 @@ def batt(S, I, O):
     except:
         t2555 = None
     if t2555 == O:
-        return True, f'8a004b2b - t2555'
+        o.append(('8a004b2b', 't2555'))
     try:
         t2556 = add(t19, DOWN_LEFT)
     except:
@@ -10790,7 +10791,7 @@ def batt(S, I, O):
     except:
         t2559 = None
     if t2559 == O:
-        return True, f'0962bcdd - t2559'
+        o.append(('0962bcdd', 't2559'))
     try:
         t2560 = t2464(I)
     except:
@@ -10884,7 +10885,7 @@ def batt(S, I, O):
     except:
         t2582 = None
     if t2582 == O:
-        return True, f'91714a58 - t2582'
+        o.append(('91714a58', 't2582'))
     try:
         t2583 = compose(t2387, t2491)
     except:
@@ -10918,7 +10919,7 @@ def batt(S, I, O):
     except:
         t2590 = None
     if t2590 == O:
-        return True, f'db3e9e38 - t2590'
+        o.append(('db3e9e38', 't2590'))
     try:
         t2591 = mfilter_f(t7, t2499)
     except:
@@ -10928,13 +10929,13 @@ def batt(S, I, O):
     except:
         t2592 = None
     if t2592 == O:
-        return True, f'cbded52d - t2592'
+        o.append(('cbded52d', 't2592'))
     try:
         t2593 = fill(t861, t246, t2501)
     except:
         t2593 = None
     if t2593 == O:
-        return True, f'97999447 - t2593'
+        o.append(('97999447', 't2593'))
     try:
         t2594 = normalize(t2502)
     except:
@@ -11048,7 +11049,7 @@ def batt(S, I, O):
     except:
         t2621 = None
     if t2621 == O:
-        return True, f'c0f76784 - t2621'
+        o.append(('c0f76784', 't2621'))
     try:
         t2622 = mir_rot_t(t2316, R5)
     except:
@@ -11102,7 +11103,7 @@ def batt(S, I, O):
     except:
         t2634 = None
     if t2634 == O:
-        return True, f'ae3edfdc - t2634'
+        o.append(('ae3edfdc', 't2634'))
     try:
         t2635 = chain(initset, t2223, t1950)
     except:
@@ -11272,7 +11273,7 @@ def batt(S, I, O):
     except:
         t2676 = None
     if t2676 == O:
-        return True, f'776ffc46 - t2676'
+        o.append(('776ffc46', 't2676'))
     try:
         t2677 = shift(t2594, UNITY)
     except:
@@ -11286,7 +11287,7 @@ def batt(S, I, O):
     except:
         t2679 = None
     if t2679 == O:
-        return True, f'7447852a - t2679'
+        o.append(('7447852a', 't2679'))
     try:
         t2680 = compose(initset, t689)
     except:
@@ -11392,7 +11393,7 @@ def batt(S, I, O):
     except:
         t2705 = None
     if t2705 == O:
-        return True, f'4938f0c2 - t2705'
+        o.append(('4938f0c2', 't2705'))
     try:
         t2706 = fork(other, palette_f, t937)
     except:
@@ -11426,7 +11427,7 @@ def batt(S, I, O):
     except:
         t2713 = None
     if t2713 == O:
-        return True, f'a61ba2ce - t2713'
+        o.append(('a61ba2ce', 't2713'))
     try:
         t2714 = subtract(t2631, TEN)
     except:
@@ -11484,7 +11485,7 @@ def batt(S, I, O):
     except:
         t2727 = None
     if t2727 == O:
-        return True, f'b782dc8a - t2727'
+        o.append(('b782dc8a', 't2727'))
     try:
         t2728 = fork(apply, t2466, t2648)
     except:
@@ -11554,7 +11555,7 @@ def batt(S, I, O):
     except:
         t2744 = None
     if t2744 == O:
-        return True, f'49d1d64f - t2744'
+        o.append(('49d1d64f', 't2744'))
     try:
         t2745 = chain(t905, t633, t1630)
     except:
@@ -11596,13 +11597,13 @@ def batt(S, I, O):
     except:
         t2754 = None
     if t2754 == O:
-        return True, f'846bdb03 - t2754'
+        o.append(('846bdb03', 't2754'))
     try:
         t2755 = fill(t2284, BLUE, t2678)
     except:
         t2755 = None
     if t2755 == O:
-        return True, f'8d510a79 - t2755'
+        o.append(('8d510a79', 't2755'))
     try:
         t2756 = fork(insert, t105, t2680)
     except:
@@ -11680,7 +11681,7 @@ def batt(S, I, O):
     except:
         t2774 = None
     if t2774 == O:
-        return True, f'91413438 - t2774'
+        o.append(('91413438', 't2774'))
     try:
         t2775 = o_g(t2699, R5)
     except:
@@ -11694,7 +11695,7 @@ def batt(S, I, O):
     except:
         t2777 = None
     if t2777 == O:
-        return True, f'0a938d79 - t2777'
+        o.append(('0a938d79', 't2777'))
     try:
         t2778 = t4(t2702)
     except:
@@ -11732,7 +11733,7 @@ def batt(S, I, O):
     except:
         t2786 = None
     if t2786 == O:
-        return True, f'5daaa586 - t2786'
+        o.append(('5daaa586', 't2786'))
     try:
         t2787 = add(t2631, TEN)
     except:
@@ -11758,13 +11759,13 @@ def batt(S, I, O):
     except:
         t2792 = None
     if t2792 == O:
-        return True, f'4612dd53 - t2792'
+        o.append(('4612dd53', 't2792'))
     try:
         t2793 = paint(I, t2721)
     except:
         t2793 = None
     if t2793 == O:
-        return True, f'e5062a87 - t2793'
+        o.append(('e5062a87', 't2793'))
     try:
         t2794 = fork(either, vline_o, hline_o)
     except:
@@ -11810,7 +11811,7 @@ def batt(S, I, O):
     except:
         t2804 = None
     if t2804 == O:
-        return True, f'd9f24cd1 - t2804'
+        o.append(('d9f24cd1', 't2804'))
     try:
         t2805 = matcher(t10, t2730)
     except:
@@ -11828,13 +11829,13 @@ def batt(S, I, O):
     except:
         t2808 = None
     if t2808 == O:
-        return True, f'98cf29f8 - t2808'
+        o.append(('98cf29f8', 't2808'))
     try:
         t2809 = fill(t2568, t264, t2736)
     except:
         t2809 = None
     if t2809 == O:
-        return True, f'a85d4709 - t2809'
+        o.append(('a85d4709', 't2809'))
     try:
         t2810 = apply(t2737, t2569)
     except:
@@ -11844,13 +11845,13 @@ def batt(S, I, O):
     except:
         t2811 = None
     if t2811 == O:
-        return True, f'8731374e - t2811'
+        o.append(('8731374e', 't2811'))
     try:
         t2812 = fill(t2478, CYAN, t2740)
     except:
         t2812 = None
     if t2812 == O:
-        return True, f'ecdecbb3 - t2812'
+        o.append(('ecdecbb3', 't2812'))
     try:
         t2813 = multiply(t2572, THREE)
     except:
@@ -11880,7 +11881,7 @@ def batt(S, I, O):
     except:
         t2819 = None
     if t2819 == O:
-        return True, f'ec883f72 - t2819'
+        o.append(('ec883f72', 't2819'))
     try:
         t2820 = mapply(t1459, t2748)
     except:
@@ -11910,7 +11911,7 @@ def batt(S, I, O):
     except:
         t2826 = None
     if t2826 == O:
-        return True, f'29c11459 - t2826'
+        o.append(('29c11459', 't2826'))
     try:
         t2827 = shoot(t2589, t2753)
     except:
@@ -11928,7 +11929,7 @@ def batt(S, I, O):
     except:
         t2830 = None
     if t2830 == O:
-        return True, f'56dc2b01 - t2830'
+        o.append(('56dc2b01', 't2830'))
     try:
         t2831 = astuple(FIVE, FIVE)
     except:
@@ -11942,13 +11943,13 @@ def batt(S, I, O):
     except:
         t2833 = None
     if t2833 == O:
-        return True, f'a2fd1cf0 - t2833'
+        o.append(('a2fd1cf0', 't2833'))
     try:
         t2834 = fill(t2512, t264, t2761)
     except:
         t2834 = None
     if t2834 == O:
-        return True, f'a9f96cdd - t2834'
+        o.append(('a9f96cdd', 't2834'))
     try:
         t2835 = sfilter(t2762, t2602)
     except:
@@ -12002,13 +12003,13 @@ def batt(S, I, O):
     except:
         t2847 = None
     if t2847 == O:
-        return True, f'6d58a25d - t2847'
+        o.append(('6d58a25d', 't2847'))
     try:
         t2848 = fill(t130, t1349, t2778)
     except:
         t2848 = None
     if t2848 == O:
-        return True, f'e48d4e1a - t2848'
+        o.append(('e48d4e1a', 't2848'))
     try:
         t2849 = branch(t2703, t2779, t2316)
     except:
@@ -12082,7 +12083,7 @@ def batt(S, I, O):
     except:
         t2866 = None
     if t2866 == O:
-        return True, f'53b68214 - t2866'
+        o.append(('53b68214', 't2866'))
     try:
         t2867 = mapply(t14, t2797)
     except:
@@ -12132,7 +12133,7 @@ def batt(S, I, O):
     except:
         t2878 = None
     if t2878 == O:
-        return True, f'8e1813be - t2878'
+        o.append(('8e1813be', 't2878'))
     try:
         t2879 = lbind(astuple, BURGUNDY)
     except:
@@ -12178,7 +12179,7 @@ def batt(S, I, O):
     except:
         t2889 = None
     if t2889 == O:
-        return True, f'90f3ed37 - t2889'
+        o.append(('90f3ed37', 't2889'))
     try:
         t2890 = asobject(t2822)
     except:
@@ -12220,7 +12221,7 @@ def batt(S, I, O):
     except:
         t2899 = None
     if t2899 == O:
-        return True, f'780d0b14 - t2899'
+        o.append(('780d0b14', 't2899'))
     try:
         t2900 = sfilter_f(t2763, t2836)
     except:
@@ -12302,7 +12303,7 @@ def batt(S, I, O):
     except:
         t2919 = None
     if t2919 == O:
-        return True, f'855e0971 - t2919'
+        o.append(('855e0971', 't2919'))
     try:
         t2920 = fork(sfilter, identity, t2855)
     except:
@@ -12328,7 +12329,7 @@ def batt(S, I, O):
     except:
         t2925 = None
     if t2925 == O:
-        return True, f'f35d900a - t2925'
+        o.append(('f35d900a', 't2925'))
     try:
         t2926 = fork(astuple, t2079, t2862)
     except:
@@ -12346,7 +12347,7 @@ def batt(S, I, O):
     except:
         t2929 = None
     if t2929 == O:
-        return True, f'e509e548 - t2929'
+        o.append(('e509e548', 't2929'))
     try:
         t2930 = lbind(sfilter, t2867)
     except:
@@ -12368,7 +12369,7 @@ def batt(S, I, O):
     except:
         t2934 = None
     if t2934 == O:
-        return True, f'2204b7a8 - t2934'
+        o.append(('2204b7a8', 't2934'))
     try:
         t2935 = corner(t2873, R0)
     except:
@@ -12410,7 +12411,7 @@ def batt(S, I, O):
     except:
         t2944 = None
     if t2944 == O:
-        return True, f'f8c80d96 - t2944'
+        o.append(('f8c80d96', 't2944'))
     try:
         t2945 = chain(t270, t2743, t2883)
     except:
@@ -12440,7 +12441,7 @@ def batt(S, I, O):
     except:
         t2951 = None
     if t2951 == O:
-        return True, f'539a4f51 - t2951'
+        o.append(('539a4f51', 't2951'))
     try:
         t2952 = mir_rot_t(t2891, R0)
     except:
@@ -12470,7 +12471,7 @@ def batt(S, I, O):
     except:
         t2958 = None
     if t2958 == O:
-        return True, f'941d9a10 - t2958'
+        o.append(('941d9a10', 't2958'))
     try:
         t2959 = canvas(t251, t1582)
     except:
@@ -12480,7 +12481,7 @@ def batt(S, I, O):
     except:
         t2960 = None
     if t2960 == O:
-        return True, f'e21d9049 - t2960'
+        o.append(('e21d9049', 't2960'))
     try:
         t2961 = get_arg_rank_f(t2900, size, F0)
     except:
@@ -12514,7 +12515,7 @@ def batt(S, I, O):
     except:
         t2968 = None
     if t2968 == O:
-        return True, f'cdecee7f - t2968'
+        o.append(('cdecee7f', 't2968'))
     try:
         t2969 = cover(t2306, t2909)
     except:
@@ -12532,25 +12533,25 @@ def batt(S, I, O):
     except:
         t2972 = None
     if t2972 == O:
-        return True, f'e8dc4411 - t2972'
+        o.append(('e8dc4411', 't2972'))
     try:
         t2973 = paint(t2699, t2913)
     except:
         t2973 = None
     if t2973 == O:
-        return True, f'469497ad - t2973'
+        o.append(('469497ad', 't2973'))
     try:
         t2974 = branch(t535, t2430, t2914)
     except:
         t2974 = None
     if t2974 == O:
-        return True, f'4522001f - t2974'
+        o.append(('4522001f', 't2974'))
     try:
         t2975 = paint(I, t2915)
     except:
         t2975 = None
     if t2975 == O:
-        return True, f'caa06a1f - t2975'
+        o.append(('caa06a1f', 't2975'))
     try:
         t2976 = apply(t2851, t2916)
     except:
@@ -12660,7 +12661,7 @@ def batt(S, I, O):
     except:
         t3002 = None
     if t3002 == O:
-        return True, f'95990924 - t3002'
+        o.append(('95990924', 't3002'))
     try:
         t3003 = compose(t2953, toindices)
     except:
@@ -12714,7 +12715,7 @@ def batt(S, I, O):
     except:
         t3015 = None
     if t3015 == O:
-        return True, f'3bdb4ada - t3015'
+        o.append(('3bdb4ada', 't3015'))
     try:
         t3016 = chain(t2971, corners, t2422)
     except:
@@ -12752,7 +12753,7 @@ def batt(S, I, O):
     except:
         t3024 = None
     if t3024 == O:
-        return True, f'b0c4d837 - t3024'
+        o.append(('b0c4d837', 't3024'))
     try:
         t3025 = corners(t1924)
     except:
@@ -12790,7 +12791,7 @@ def batt(S, I, O):
     except:
         t3033 = None
     if t3033 == O:
-        return True, f'228f6490 - t3033'
+        o.append(('228f6490', 't3033'))
     try:
         t3034 = sfilter_t(t2938, t10)
     except:
@@ -12836,7 +12837,7 @@ def batt(S, I, O):
     except:
         t3044 = None
     if t3044 == O:
-        return True, f'54d9e175 - t3044'
+        o.append(('54d9e175', 't3044'))
     try:
         t3045 = fork(shift, identity, t3003)
     except:
@@ -12942,13 +12943,13 @@ def batt(S, I, O):
     except:
         t3070 = None
     if t3070 == O:
-        return True, f'06df4c85 - t3070'
+        o.append(('06df4c85', 't3070'))
     try:
         t3071 = underfill(t2351, CYAN, t3027)
     except:
         t3071 = None
     if t3071 == O:
-        return True, f'673ef223 - t3071'
+        o.append(('673ef223', 't3071'))
     try:
         t3072 = get_nth_t(t2988, F0)
     except:
@@ -12978,13 +12979,13 @@ def batt(S, I, O):
     except:
         t3078 = None
     if t3078 == O:
-        return True, f'f9012d9b - t3078'
+        o.append(('f9012d9b', 't3078'))
     try:
         t3079 = fill(t2370, t807, t3036)
     except:
         t3079 = None
     if t3079 == O:
-        return True, f'8403a5d5 - t3079'
+        o.append(('8403a5d5', 't3079'))
     try:
         t3080 = increment(t2572)
     except:
@@ -13030,7 +13031,7 @@ def batt(S, I, O):
     except:
         t3090 = None
     if t3090 == O:
-        return True, f'db93a21d - t3090'
+        o.append(('db93a21d', 't3090'))
     try:
         t3091 = extract(t3007, t3050)
     except:
@@ -13108,7 +13109,7 @@ def batt(S, I, O):
     except:
         t3109 = None
     if t3109 == O:
-        return True, f'834ec97d - t3109'
+        o.append(('834ec97d', 't3109'))
     try:
         t3110 = rbind(colorcount_f, BLACK)
     except:
@@ -13254,7 +13255,7 @@ def batt(S, I, O):
     except:
         t3145 = None
     if t3145 == O:
-        return True, f'82819916 - t3145'
+        o.append(('82819916', 't3145'))
     try:
         t3146 = compose(t547, t3105)
     except:
@@ -13340,7 +13341,7 @@ def batt(S, I, O):
     except:
         t3166 = None
     if t3166 == O:
-        return True, f'e179c5f4 - t3166'
+        o.append(('e179c5f4', 't3166'))
     try:
         t3167 = apply(normalize, t3129)
     except:
@@ -13350,7 +13351,7 @@ def batt(S, I, O):
     except:
         t3168 = None
     if t3168 == O:
-        return True, f'72322fa7 - t3168'
+        o.append(('72322fa7', 't3168'))
     try:
         t3169 = merge_f(t3131)
     except:
@@ -13380,7 +13381,7 @@ def batt(S, I, O):
     except:
         t3175 = None
     if t3175 == O:
-        return True, f'e6721834 - t3175'
+        o.append(('e6721834', 't3175'))
     try:
         t3176 = toobject(t3140, t3098)
     except:
@@ -13394,7 +13395,7 @@ def batt(S, I, O):
     except:
         t3178 = None
     if t3178 == O:
-        return True, f'3befdf3e - t3178'
+        o.append(('3befdf3e', 't3178'))
     try:
         t3179 = mapply(t2780, t3144)
     except:
@@ -13440,7 +13441,7 @@ def batt(S, I, O):
     except:
         t3189 = None
     if t3189 == O:
-        return True, f'995c5fa3 - t3189'
+        o.append(('995c5fa3', 't3189'))
     try:
         t3190 = shift(t2871, t3154)
     except:
@@ -13454,19 +13455,19 @@ def batt(S, I, O):
     except:
         t3192 = None
     if t3192 == O:
-        return True, f'9aec4887 - t3192'
+        o.append(('9aec4887', 't3192'))
     try:
         t3193 = paint(t242, t3157)
     except:
         t3193 = None
     if t3193 == O:
-        return True, f'2bcee788 - t3193'
+        o.append(('2bcee788', 't3193'))
     try:
         t3194 = underfill(I, t807, t3158)
     except:
         t3194 = None
     if t3194 == O:
-        return True, f'2bee17df - t3194'
+        o.append(('2bee17df', 't3194'))
     try:
         t3195 = apply(t298, t1227)
     except:
@@ -13548,7 +13549,7 @@ def batt(S, I, O):
     except:
         t3214 = None
     if t3214 == O:
-        return True, f'447fd412 - t3214'
+        o.append(('447fd412', 't3214'))
     try:
         t3215 = insert(t28, t2853)
     except:
@@ -13590,7 +13591,7 @@ def batt(S, I, O):
     except:
         t3224 = None
     if t3224 == O:
-        return True, f'99fa7670 - t3224'
+        o.append(('99fa7670', 't3224'))
     try:
         t3225 = paint(t24, t3190)
     except:
@@ -13620,13 +13621,13 @@ def batt(S, I, O):
     except:
         t3231 = None
     if t3231 == O:
-        return True, f'a78176bb - t3231'
+        o.append(('a78176bb', 't3231'))
     try:
         t3232 = paint(t136, t3203)
     except:
         t3232 = None
     if t3232 == O:
-        return True, f'a8c38be5 - t3232'
+        o.append(('a8c38be5', 't3232'))
     try:
         t3233 = f_ofcolor(t3204, ONE)
     except:
@@ -13800,7 +13801,7 @@ def batt(S, I, O):
     except:
         t3275 = None
     if t3275 == O:
-        return True, f'272f95fa - t3275'
+        o.append(('272f95fa', 't3275'))
     try:
         t3276 = lbind(compose, t3249)
     except:
@@ -13818,7 +13819,7 @@ def batt(S, I, O):
     except:
         t3279 = None
     if t3279 == O:
-        return True, f'39e1d7f9 - t3279'
+        o.append(('39e1d7f9', 't3279'))
     try:
         t3280 = extract(t3196, t3253)
     except:
@@ -13876,7 +13877,7 @@ def batt(S, I, O):
     except:
         t3293 = None
     if t3293 == O:
-        return True, f'f1cefba8 - t3293'
+        o.append(('f1cefba8', 't3293'))
     try:
         t3294 = shift(t3176, t3266)
     except:
@@ -13966,13 +13967,13 @@ def batt(S, I, O):
     except:
         t3315 = None
     if t3315 == O:
-        return True, f'6aa20dc0 - t3315'
+        o.append(('6aa20dc0', 't3315'))
     try:
         t3316 = paint(t1690, t3294)
     except:
         t3316 = None
     if t3316 == O:
-        return True, f'6d0160f0 - t3316'
+        o.append(('6d0160f0', 't3316'))
     try:
         t3317 = fork(subtract, t1210, t3267)
     except:
@@ -13986,7 +13987,7 @@ def batt(S, I, O):
     except:
         t3319 = None
     if t3319 == O:
-        return True, f'28e73c20 - t3319'
+        o.append(('28e73c20', 't3319'))
     try:
         t3320 = size_f(t17)
     except:
@@ -14004,7 +14005,7 @@ def batt(S, I, O):
     except:
         t3323 = None
     if t3323 == O:
-        return True, f'd07ae81c - t3323'
+        o.append(('d07ae81c', 't3323'))
     try:
         t3324 = fork(both, t3274, t3300)
     except:
@@ -14042,7 +14043,7 @@ def batt(S, I, O):
     except:
         t3332 = None
     if t3332 == O:
-        return True, f'36d67576 - t3332'
+        o.append(('36d67576', 't3332'))
     try:
         t3333 = chain(t3229, t3284, t3308)
     except:
@@ -14072,7 +14073,7 @@ def batt(S, I, O):
     except:
         t3339 = None
     if t3339 == O:
-        return True, f'1e32b0e9 - t3339'
+        o.append(('1e32b0e9', 't3339'))
     try:
         t3340 = fork(shoot, t3267, t3317)
     except:
@@ -14122,7 +14123,7 @@ def batt(S, I, O):
     except:
         t3351 = None
     if t3351 == O:
-        return True, f'57aa92db - t3351'
+        o.append(('57aa92db', 't3351'))
     try:
         t3352 = shift(t3159, t3329)
     except:
@@ -14200,13 +14201,13 @@ def batt(S, I, O):
     except:
         t3370 = None
     if t3370 == O:
-        return True, f'f8a8fe49 - t3370'
+        o.append(('f8a8fe49', 't3370'))
     try:
         t3371 = paint(t2881, t3352)
     except:
         t3371 = None
     if t3371 == O:
-        return True, f'4c5c2cf0 - t3371'
+        o.append(('4c5c2cf0', 't3371'))
     try:
         t3372 = astuple(t826, t2998)
     except:
@@ -14372,7 +14373,7 @@ def batt(S, I, O):
     except:
         t3412 = None
     if t3412 == O:
-        return True, f'508bd3b6 - t3412'
+        o.append(('508bd3b6', 't3412'))
     try:
         t3413 = occurrences(t3337, t3378)
     except:
@@ -14398,7 +14399,7 @@ def batt(S, I, O):
     except:
         t3418 = None
     if t3418 == O:
-        return True, f'aba27056 - t3418'
+        o.append(('aba27056', 't3418'))
     try:
         t3419 = compose(vline_i, t2985)
     except:
@@ -14444,7 +14445,7 @@ def batt(S, I, O):
     except:
         t3429 = None
     if t3429 == O:
-        return True, f'3e980e27 - t3429'
+        o.append(('3e980e27', 't3429'))
     try:
         t3430 = mapply(t3415, t2609)
     except:
@@ -14550,7 +14551,7 @@ def batt(S, I, O):
     except:
         t3455 = None
     if t3455 == O:
-        return True, f'd22278a0 - t3455'
+        o.append(('d22278a0', 't3455'))
     try:
         t3456 = shoot(t3394, LEFT)
     except:
@@ -14612,7 +14613,7 @@ def batt(S, I, O):
     except:
         t3470 = None
     if t3470 == O:
-        return True, f'7837ac64 - t3470'
+        o.append(('7837ac64', 't3470'))
     try:
         t3471 = shoot(t3394, RIGHT)
     except:
@@ -14722,7 +14723,7 @@ def batt(S, I, O):
     except:
         t3497 = None
     if t3497 == O:
-        return True, f'0e206a2e - t3497'
+        o.append(('0e206a2e', 't3497'))
     try:
         t3498 = get_color_rank_t(t268, F0)
     except:
@@ -14764,7 +14765,7 @@ def batt(S, I, O):
     except:
         t3507 = None
     if t3507 == O:
-        return True, f'b7249182 - t3507'
+        o.append(('b7249182', 't3507'))
     try:
         t3508 = fork(mapply, t3185, t3494)
     except:
@@ -14830,7 +14831,7 @@ def batt(S, I, O):
     except:
         t3523 = None
     if t3523 == O:
-        return True, f'264363fd - t3523'
+        o.append(('264363fd', 't3523'))
     try:
         t3524 = crement(t3512)
     except:
@@ -14844,7 +14845,7 @@ def batt(S, I, O):
     except:
         t3526 = None
     if t3526 == O:
-        return True, f'150deff5 - t3526'
+        o.append(('150deff5', 't3526'))
     try:
         t3527 = apply(t175, t3515)
     except:
@@ -14866,7 +14867,7 @@ def batt(S, I, O):
     except:
         t3531 = None
     if t3531 == O:
-        return True, f'7df24a62 - t3531'
+        o.append(('7df24a62', 't3531'))
     try:
         t3532 = combine_f(t3465, t3520)
     except:
@@ -14908,7 +14909,7 @@ def batt(S, I, O):
     except:
         t3541 = None
     if t3541 == O:
-        return True, f'b527c5c6 - t3541'
+        o.append(('b527c5c6', 't3541'))
     try:
         t3542 = apply(tojvec, t3533)
     except:
@@ -14950,7 +14951,7 @@ def batt(S, I, O):
     except:
         t3551 = None
     if t3551 == O:
-        return True, f'9d9215db - t3551'
+        o.append(('9d9215db', 't3551'))
     try:
         t3552 = fill(t3204, ONE, t3544)
     except:
@@ -14964,7 +14965,7 @@ def batt(S, I, O):
     except:
         t3554 = None
     if t3554 == O:
-        return True, f'9ddd00f0 - t3554'
+        o.append(('9ddd00f0', 't3554'))
     try:
         t3555 = fork(recolor_o, t3547, t3516)
     except:
@@ -14974,7 +14975,7 @@ def batt(S, I, O):
     except:
         t3556 = None
     if t3556 == O:
-        return True, f'5751f35e - t3556'
+        o.append(('5751f35e', 't3556'))
     try:
         t3557 = get_nth_f(t3549, F0)
     except:
@@ -15028,7 +15029,7 @@ def batt(S, I, O):
     except:
         t3569 = None
     if t3569 == O:
-        return True, f'f15e1fac - t3569'
+        o.append(('f15e1fac', 't3569'))
     try:
         t3570 = compose(t897, numcolors_f)
     except:
@@ -15038,7 +15039,7 @@ def batt(S, I, O):
     except:
         t3571 = None
     if t3571 == O:
-        return True, f'2dd70a9a - t3571'
+        o.append(('2dd70a9a', 't3571'))
     try:
         t3572 = mir_rot_t(t3566, R4)
     except:
@@ -15060,7 +15061,7 @@ def batt(S, I, O):
     except:
         t3576 = None
     if t3576 == O:
-        return True, f'4290ef0e - t3576'
+        o.append(('4290ef0e', 't3576'))
     try:
         t3577 = fork(multiply, shape_f, t2907)
     except:
@@ -15082,9 +15083,9 @@ def batt(S, I, O):
     except:
         t3581 = None
     if t3581 == O:
-        return True, f'234bbc79 - t3581'
+        o.append(('234bbc79', 't3581'))
     if t3581 == O:
-        return True, f'd017b73f - t3581'
+        o.append(('d017b73f', 't3581'))
     try:
         t3582 = mapply(t3409, t3579)
     except:
@@ -15158,7 +15159,7 @@ def batt(S, I, O):
     except:
         t3599 = None
     if t3599 == O:
-        return True, f'b775ac94 - t3599'
+        o.append(('b775ac94', 't3599'))
     try:
         t3600 = chain(flip, t3596, t3598)
     except:
@@ -15180,5 +15181,5 @@ def batt(S, I, O):
     except:
         t3604 = None
     if t3604 == O:
-        return True, f'97a05b5b - t3604'
-    return False, None
+        o.append(('97a05b5b', 't3604'))
+    return o

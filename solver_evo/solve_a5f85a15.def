@@ -1,2 +1,0 @@
-def solve_a5f85a15(S, I):
-    return fill(I, YELLOW, mapply(lbind(shift, papply(astuple, apply(decrement, apply(double, interval(ONE, NINE, ONE))), apply(decrement, apply(double, interval(ONE, NINE, ONE))))), apply(rbind(corner, R0), o_g(I, R7))))

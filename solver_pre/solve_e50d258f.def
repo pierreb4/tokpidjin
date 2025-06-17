@@ -1,2 +1,0 @@
-def solve_e50d258f(S, I):
-    return subgrid(get_arg_rank_f(o_g(vconcat(I, canvas(ZERO, astuple(NINE, width_t(I)))), R1), rbind(colorcount_f, TWO), F0), I)

@@ -1,2 +1,0 @@
-def solve_44d8ac46(S, I):
-    return fill(I, TWO, mfilter_f(apply(delta, o_g(I, R5)), square_f))

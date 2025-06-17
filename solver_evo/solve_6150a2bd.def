@@ -1,6 +1,0 @@
-# Not intended to run standalone!
-
-def solve_6150a2bd(S, I):
-    return mir_rot_t(I, identity(a_mr(S)))
-
-# t - step = 31 in 52.2s

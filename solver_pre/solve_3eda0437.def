@@ -1,2 +1,0 @@
-def solve_3eda0437(S, I):
-    return fill(I, SIX, get_arg_rank_f(mapply(chain(fork(apply, lbind(lbind, shift), lbind(occurrences, I)), asobject, lbind(canvas, ZERO)), prapply(astuple, interval(TWO, TEN, ONE), interval(TWO, TEN, ONE))), size, F0))

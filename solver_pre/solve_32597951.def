@@ -1,2 +1,0 @@
-def solve_32597951(S, I):
-    return fill(I, THREE, delta(f_ofcolor(I, EIGHT)))

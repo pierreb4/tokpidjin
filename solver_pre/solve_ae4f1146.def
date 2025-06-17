@@ -1,2 +1,0 @@
-def solve_ae4f1146(S, I):
-    return subgrid(get_arg_rank_f(o_g(I, R1), rbind(colorcount_f, ONE), F0), I)

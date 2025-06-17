@@ -1,2 +1,0 @@
-def solve_017c7c7b(S, I):
-    return replace(vconcat(I, branch(equality(tophalf(I), bottomhalf(I)), bottomhalf(I), crop(I, TWO_BY_ZERO, THREE_BY_THREE))), ONE, TWO)

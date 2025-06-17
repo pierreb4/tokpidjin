@@ -1,2 +1,0 @@
-def solve_a416b8f3(S, I):
-    return hconcat(I, I)

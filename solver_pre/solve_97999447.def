@@ -1,2 +1,0 @@
-def solve_97999447(S, I):
-    return fill(paint(I, mapply(fork(recolor_i, color, compose(rbind(shoot, RIGHT), center)), o_g(I, R5))), FIVE, merge_f(prapply(shift, apply(toindices, o_g(I, R5)), apply(tojvec, apply(increment, apply(double, interval(ZERO, FIVE, ONE)))))))

@@ -1,2 +1,0 @@
-def solve_ea32f347(S, I):
-    return fill(fill(replace(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F2))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), get_arg_rank_f(o_g(I, R5), size, F0)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), get_arg_rank_f(o_g(I, R5), size, L1))

@@ -1,2 +1,0 @@
-def solve_444801d8(S, I):
-    return underpaint(I, mapply(fork(recolor_i, chain(rbind(get_color_rank_f, L1), rbind(toobject, I), delta), compose(rbind(shift, UP), backdrop)), colorfilter(o_g(I, R5), BLUE)))

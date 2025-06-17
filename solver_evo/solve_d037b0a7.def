@@ -1,6 +1,0 @@
-# Not intended to run standalone!
-
-def solve_d037b0a7(S, I):
-    return paint(I, mapply(fork(recolor_i, color, compose(rbind(shoot, DOWN), center)), o_g(I, R5)))
-
-# t - step = 162 in 43.8s

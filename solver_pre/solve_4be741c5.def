@@ -1,2 +1,0 @@
-def solve_4be741c5(S, I):
-    return branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(apply(dedupe, crop(branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(I), ORIGIN, astuple(ONE, branch(portrait_t(I), height_t, width_t)(I)))))

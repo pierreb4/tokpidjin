@@ -1,2 +1,0 @@
-def solve_54d9e175(S, I):
-    return replace(replace(replace(replace(paint(I, mapply(fork(recolor_i, color, compose(neighbors, center)), sizefilter(o_g(I, R5), ONE))), c_iz_n(S, identity(p_g), rbind(get_nth_t, F1)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F2))), c_iz_n(S, identity(p_g), rbind(get_nth_t, F4)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F3))), c_iz_n(S, identity(p_g), rbind(get_nth_t, F2)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0))), c_iz_n(S, identity(p_g), rbind(get_nth_t, F3)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)))

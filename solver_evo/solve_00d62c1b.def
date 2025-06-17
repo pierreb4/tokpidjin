@@ -1,2 +1,0 @@
-def solve_00d62c1b(S, I):
-    return fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mfilter_f(colorfilter(o_g(I, R4), BLACK), compose(flip, rbind(bordering, I))))

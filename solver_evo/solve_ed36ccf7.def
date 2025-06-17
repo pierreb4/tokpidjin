@@ -1,6 +1,0 @@
-# Not intended to run standalone!
-
-def solve_ed36ccf7(S, I):
-    return fill(mir_rot_t(I, R6), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), delta(f_ofcolor(I, CYAN)))
-
-# t - step = 26 in 32.4s

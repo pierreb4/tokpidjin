@@ -1,2 +1,0 @@
-def solve_3eda0437(S, I):
-    return fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), get_arg_rank_f(mapply(chain(fork(apply, lbind(lbind, shift), lbind(occurrences, I)), asobject, lbind(canvas, BLACK)), prapply(astuple, interval(TWO, TEN, ONE), interval(TWO, TEN, ONE))), size, F0))

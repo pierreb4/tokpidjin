@@ -1,2 +1,0 @@
-def solve_d4469b4b(S, I):
-    return fill(canvas(ZERO, THREE_BY_THREE), FIVE, fork(combine, vfrontier, hfrontier)(branch(equality(other_f(palette_t(I), ZERO), TWO), RIGHT, branch(equality(other_f(palette_t(I), ZERO), ONE), UNITY, TWO_BY_TWO))))

@@ -1,2 +1,0 @@
-def solve_49d1d64f(S, I):
-    return paint(paint(canvas(BLACK, add(shape_t(I), TWO)), shift(asobject(I), UNITY)), apply(fork(astuple, chain(rbind(get_nth_f, F0), lbind(rbind(get_arg_rank, L1), shift(asobject(I), UNITY)), chain(rbind(compose, initset), lbind(lbind, manhattan), initset)), identity), fork(difference, box, corners)(asindices(canvas(BLACK, add(shape_t(I), TWO))))))

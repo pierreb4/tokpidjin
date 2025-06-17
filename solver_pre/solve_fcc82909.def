@@ -1,2 +1,0 @@
-def solve_fcc82909(S, I):
-    return fill(I, THREE, mapply(compose(box, fork(astuple, compose(rbind(add, DOWN), rbind(corner, R2)), fork(add, rbind(corner, R3), compose(toivec, numcolors_f)))), o_g(I, R3)))

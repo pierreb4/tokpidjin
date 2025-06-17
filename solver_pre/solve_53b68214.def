@@ -1,2 +1,0 @@
-def solve_53b68214(S, I):
-    return paint(paint(canvas(ZERO, astuple(width_t(I), width_t(I))), get_nth_f(o_g(I, R7), F0)), branch(portrait_f(get_nth_f(o_g(I, R7), F0)), mapply(lbind(shift, get_nth_f(o_g(I, R7), F0)), apply(lbind(multiply, toivec(vperiod(get_nth_f(o_g(I, R7), F0)))), interval(ZERO, NINE, ONE))), shift(get_nth_f(o_g(I, R7), F0), decrement(add(DOWN, shape_f(get_nth_f(o_g(I, R7), F0)))))))

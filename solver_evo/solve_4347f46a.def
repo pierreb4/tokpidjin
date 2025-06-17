@@ -1,2 +1,0 @@
-def solve_4347f46a(S, I):
-    return fill(I, BLACK, mapply(fork(difference, toindices, box), o_g(I, R5)))

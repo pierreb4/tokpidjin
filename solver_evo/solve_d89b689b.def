@@ -1,2 +1,0 @@
-def solve_d89b689b(S, I):
-    return paint(cover(I, merge_f(sizefilter(o_g(I, R5), ONE))), mapply(fork(recolor_i, color, compose(lbind(rbind(get_arg_rank, L1), apply(initset, f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))))), lbind(rbind, manhattan))), sizefilter(o_g(I, R5), ONE)))

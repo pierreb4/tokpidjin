@@ -1,2 +1,0 @@
-def solve_bb43febb(S, I):
-    return fill(I, TWO, mapply(compose(backdrop, inbox), colorfilter(o_g(I, R4), FIVE)))

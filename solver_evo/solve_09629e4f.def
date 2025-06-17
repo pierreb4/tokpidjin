@@ -1,2 +1,0 @@
-def solve_09629e4f(S, I):
-    return fill(paint(I, upscale_f(normalize(get_arg_rank(o_g(I, R3), numcolors_f, L1)), FOUR)), GRAY, f_ofcolor(I, GRAY))

@@ -1,2 +1,0 @@
-def solve_ba26e723(S, I):
-    return fill(I, SIX, sfilter_f(f_ofcolor(I, FOUR), compose(fork(equality, identity, compose(rbind(multiply, THREE), rbind(divide, THREE))), rbind(get_nth_f, L1))))

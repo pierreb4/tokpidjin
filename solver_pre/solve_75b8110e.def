@@ -1,2 +1,0 @@
-def solve_75b8110e(S, I):
-    return paint(paint(paint(tophalf(lefthalf(I)), fork(toobject, fork(difference, asindices, rbind(f_ofcolor, ZERO)), identity)(bottomhalf(righthalf(I)))), fork(toobject, fork(difference, asindices, rbind(f_ofcolor, ZERO)), identity)(bottomhalf(lefthalf(I)))), fork(toobject, fork(difference, asindices, rbind(f_ofcolor, ZERO)), identity)(tophalf(righthalf(I))))

@@ -1,6 +1,0 @@
-# Not intended to run standalone!
-
-def solve_99b1bc43(S, I):
-    return fill(canvas(BLACK, shape_t(tophalf(I))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), difference(combine_f(f_ofcolor(tophalf(I), BLACK), f_ofcolor(bottomhalf(I), BLACK)), intersection(f_ofcolor(tophalf(I), BLACK), f_ofcolor(bottomhalf(I), BLACK))))
-
-# t - step = 104 in 49.8s

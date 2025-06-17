@@ -1,2 +1,0 @@
-def solve_7468f01a(S, I):
-    return mir_rot_t(subgrid(get_nth_f(o_g(I, R3), F0), I), R2)

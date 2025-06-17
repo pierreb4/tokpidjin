@@ -1,2 +1,0 @@
-def solve_662c240a(S, I):
-    return extract(vsplit(I, THREE), compose(flip, fork(equality, rbind(mir_rot_t, R1), identity)))

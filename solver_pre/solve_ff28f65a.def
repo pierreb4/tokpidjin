@@ -1,2 +1,0 @@
-def solve_ff28f65a(S, I):
-    return merge_t(hsplit(fill(canvas(ZERO, astuple(ONE, NINE)), ONE, apply(tojvec, interval(ZERO, double(size_f(o_g(I, R5))), TWO))), THREE))

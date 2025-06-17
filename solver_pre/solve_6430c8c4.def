@@ -1,2 +1,0 @@
-def solve_6430c8c4(S, I):
-    return fill(canvas(ZERO, astuple(FOUR, FOUR)), THREE, intersection(f_ofcolor(tophalf(I), ZERO), f_ofcolor(bottomhalf(I), ZERO)))

@@ -1,2 +1,0 @@
-def solve_623ea044(S, I):
-    return fill(I, color(get_nth_f(o_g(I, R5), F0)), mapply(lbind(shoot, center(get_nth_f(o_g(I, R5), F0))), combine(astuple(UNITY, NEG_UNITY), astuple(UP_RIGHT, DOWN_LEFT))))
