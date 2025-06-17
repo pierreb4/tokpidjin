@@ -1,2 +1,0 @@
-def solve_60b61512(S, I):
-    return fill(I, SEVEN, mapply(delta, o_g(I, R7)))

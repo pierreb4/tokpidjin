@@ -1,2 +1,0 @@
-def solve_1f0c79e5(S, I):
-    return paint(I, mapply(lbind(shift, recolor_i(get_color_rank_t(replace(I, RED, BLACK), L1), combine_f(f_ofcolor(I, RED), f_ofcolor(replace(I, RED, BLACK), get_color_rank_t(replace(I, RED, BLACK), L1))))), prapply(multiply, apply(compose(decrement, double), shift(f_ofcolor(I, RED), invert(corner(combine_f(f_ofcolor(I, RED), f_ofcolor(replace(I, RED, BLACK), get_color_rank_t(replace(I, RED, BLACK), L1))), R0)))), interval(ZERO, NINE, ONE))))

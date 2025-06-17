@@ -1,2 +1,0 @@
-def solve_11852cab(S, I):
-    return paint(paint(paint(paint(I, mir_rot_f(merge_f(o_g(I, R7)), R0)), mir_rot_f(merge_f(o_g(I, R7)), R2)), mir_rot_f(merge_f(o_g(I, R7)), R1)), mir_rot_f(merge_f(o_g(I, R7)), R3))

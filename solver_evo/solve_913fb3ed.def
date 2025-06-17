@@ -1,2 +1,0 @@
-def solve_913fb3ed(S, I):
-    return fill(fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), mapply(neighbors, f_ofcolor(I, GREEN))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F2)), mapply(neighbors, f_ofcolor(I, CYAN))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(neighbors, f_ofcolor(I, RED)))

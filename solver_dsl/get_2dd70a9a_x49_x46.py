@@ -1,7 +1,0 @@
-def get_2dd70a9a_x49_x46(a1: Union[int, Tuple[int, int]], a2: Union[int, Tuple[int, int]], a3: Tuple[int, int]) -> Union[int, Tuple[int, int]]:
-    return connect(add(a1, a2), a3)
-
-# {'a3': 'Tuple[int, int]', 'return': 'Union[int, Tuple[int, int]]', 'a1': 'Union[int, Tuple[int, int]]', 'a2': 'Union[int, Tuple[int, int]]'}
-
-func_d = {('get_2dd70a9a_x49_x46', 'Union[int, Tuple[int, int]]', 'Union[int, Tuple[int, int]]', 'Union[int, Tuple[int, int]]', 'Tuple[int, int]'): 'connect(add(a1, a2), a3)'}
-

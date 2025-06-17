@@ -1,7 +1,0 @@
-def get_5daaa586_x17_x16(a1: int, a2: FrozenSet) -> int:
-    return greater(a1, size_f(a2))
-
-# {'a1': 'int', 'return': 'int', 'a2': 'FrozenSet'}
-
-func_d = {('get_5daaa586_x17_x16', 'int', 'int', 'FrozenSet'): 'greater(a1, size_f(a2))'}
-

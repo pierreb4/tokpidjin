@@ -1,2 +1,0 @@
-def solve_c3f564a4(S, I):
-    return paint(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, I, mir_rot_t(I, R1))), mapply(lbind(shift, toobject(difference(asindices(I), f_ofcolor(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, I, mir_rot_t(I, R1))), ZERO)), apply(lbind(apply, rbind(get_rank, F0)), papply(pair, I, mir_rot_t(I, R1))))), pair(interval(invert(NINE), NINE, ONE), interval(NINE, invert(NINE), NEG_ONE))))

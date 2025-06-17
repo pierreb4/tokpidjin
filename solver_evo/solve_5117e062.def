@@ -1,2 +1,0 @@
-def solve_5117e062(S, I):
-    return replace(subgrid(extract(o_g(I, R3), matcher(numcolors_f, RED)), I), c_iz_n(S, identity(p_g), rbind(get_nth_t, F1)), get_color_rank_f(extract(o_g(I, R3), matcher(numcolors_f, RED)), F0))

@@ -1,2 +1,0 @@
-def solve_46f33fce(S, I):
-    return upscale_t(mir_rot_t(downscale(mir_rot_t(I, R5), TWO), R5), FOUR)

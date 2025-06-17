@@ -1,2 +1,0 @@
-def solve_1f642eb9(S, I):
-    return paint(I, mapply(fork(shift, identity, compose(crement, rbind(gravitate, get_nth_f(difference(o_g(I, R5), sizefilter(o_g(I, R5), ONE)), F0)))), sizefilter(o_g(I, R5), ONE)))

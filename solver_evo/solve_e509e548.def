@@ -1,2 +1,0 @@
-def solve_e509e548(S, I):
-    return fill(fill(replace(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F2))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), mfilter_f(o_g(I, R5), compose(lbind(contained, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), chain(palette_t, trim, rbind(subgrid, I))))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mfilter_f(o_g(I, R5), fork(equality, size, compose(decrement, fork(add, height_f, width_f)))))

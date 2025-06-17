@@ -1,2 +1,0 @@
-def solve_d4a91cb9(S, I):
-    return underfill(I, FOUR, combine_f(connect(astuple(get_nth_f(get_nth_f(f_ofcolor(I, TWO), F0), F0), get_nth_t(get_nth_f(f_ofcolor(I, EIGHT), F0), L1)), get_nth_f(f_ofcolor(I, EIGHT), F0)), connect(astuple(get_nth_f(get_nth_f(f_ofcolor(I, TWO), F0), F0), get_nth_t(get_nth_f(f_ofcolor(I, EIGHT), F0), L1)), get_nth_f(f_ofcolor(I, TWO), F0))))

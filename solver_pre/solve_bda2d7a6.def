@@ -1,2 +1,0 @@
-def solve_bda2d7a6(S, I):
-    return paint(I, mpapply(recolor_o, apply(color, order(partition(I), size)), combine_t(repeat(get_nth_t(order(partition(I), size), L1), ONE), remove_f(get_nth_t(order(partition(I), size), L1), order(partition(I), size)))))

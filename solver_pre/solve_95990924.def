@@ -1,2 +1,0 @@
-def solve_95990924(S, I):
-    return fill(fill(fill(fill(I, ONE, apply(rbind(corner, R0), apply(outbox, o_g(I, R5)))), TWO, apply(rbind(corner, R1), apply(outbox, o_g(I, R5)))), THREE, apply(rbind(corner, R2), apply(outbox, o_g(I, R5)))), FOUR, apply(rbind(corner, R3), apply(outbox, o_g(I, R5))))

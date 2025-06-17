@@ -1,2 +1,0 @@
-def solve_23b5c85d(S, I):
-    return subgrid(get_arg_rank_f(o_g(I, R7), size, L1), I)

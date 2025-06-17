@@ -1,2 +1,0 @@
-def solve_ded97339(S, I):
-    return underfill(I, CYAN, mfilter_f(apply(fork(connect, rbind(get_nth_f, F0), rbind(get_nth_f, L1)), product(f_ofcolor(I, CYAN), f_ofcolor(I, CYAN))), fork(either, vline_i, hline_i)))

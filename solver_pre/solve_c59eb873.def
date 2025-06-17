@@ -1,2 +1,0 @@
-def solve_c59eb873(S, I):
-    return upscale_t(I, TWO)

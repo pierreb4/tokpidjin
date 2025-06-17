@@ -1,2 +1,0 @@
-def solve_d23f8c26(S, I):
-    return fill(I, BLACK, sfilter_f(asindices(I), compose(flip, matcher(rbind(get_nth_f, L1), halve(width_t(I))))))

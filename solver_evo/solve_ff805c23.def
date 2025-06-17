@@ -1,2 +1,0 @@
-def solve_ff805c23(S, I):
-    return branch(contained(c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)), palette_t(subgrid(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), mir_rot_t(I, R0)))), subgrid(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), mir_rot_t(I, R2)), subgrid(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), mir_rot_t(I, R0)))

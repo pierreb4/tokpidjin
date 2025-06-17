@@ -1,2 +1,0 @@
-def solve_6e02f1e3(S, I):
-    return fill(canvas(ZERO, THREE_BY_THREE), FIVE, connect(branch(equality(numcolors_t(I), THREE), TWO_BY_ZERO, ORIGIN), branch(equality(numcolors_t(I), TWO), TWO_BY_TWO, ZERO_BY_TWO)))

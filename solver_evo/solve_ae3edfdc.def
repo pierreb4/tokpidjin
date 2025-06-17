@@ -1,2 +1,0 @@
-def solve_ae3edfdc(S, I):
-    return paint(paint(replace(replace(I, GREEN, BLACK), ORANGE, BLACK), mapply(fork(shift, identity, chain(lbind(rbind, gravitate), rbind(get_nth_f, F0), lbind(colorfilter, o_g(I, R5)))(TWO)), lbind(colorfilter, o_g(I, R5))(THREE))), mapply(fork(shift, identity, chain(lbind(rbind, gravitate), rbind(get_nth_f, F0), lbind(colorfilter, o_g(I, R5)))(ONE)), lbind(colorfilter, o_g(I, R5))(SEVEN)))

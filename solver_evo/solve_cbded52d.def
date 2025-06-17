@@ -1,2 +1,0 @@
-def solve_cbded52d(S, I):
-    return paint(I, mapply(fork(recolor_i, compose(color, rbind(get_nth_f, F0)), chain(initset, center, fork(connect, compose(center, rbind(get_nth_f, F0)), compose(center, rbind(get_nth_f, L1))))), sfilter_f(product(sizefilter(o_g(I, R5), ONE), sizefilter(o_g(I, R5), ONE)), fork(either, fork(vmatching, rbind(get_nth_f, F0), rbind(get_nth_f, L1)), fork(hmatching, rbind(get_nth_f, F0), rbind(get_nth_f, L1))))))

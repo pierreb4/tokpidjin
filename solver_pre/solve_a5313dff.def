@@ -1,2 +1,0 @@
-def solve_a5313dff(S, I):
-    return fill(I, ONE, mfilter_f(colorfilter(o_g(I, R4), ZERO), compose(flip, rbind(bordering, I))))

@@ -1,2 +1,0 @@
-def solve_3ac3eb23(S, I):
-    return vconcat(get_nth_f(vsplit(paint(I, mapply(fork(recolor_i, color, chain(ineighbors, rbind(get_nth_f, L1), rbind(get_nth_f, F0))), o_g(I, R5))), THREE), F0), vconcat(get_nth_f(vsplit(paint(I, mapply(fork(recolor_i, color, chain(ineighbors, rbind(get_nth_f, L1), rbind(get_nth_f, F0))), o_g(I, R5))), THREE), F0), get_nth_f(vsplit(paint(I, mapply(fork(recolor_i, color, chain(ineighbors, rbind(get_nth_f, L1), rbind(get_nth_f, F0))), o_g(I, R5))), THREE), F0)))

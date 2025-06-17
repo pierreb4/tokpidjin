@@ -1,2 +1,0 @@
-def solve_f5b8619d(S, I):
-    return vconcat(hconcat(underfill(I, EIGHT, mapply(vfrontier, f_ofcolor(I, get_color_rank_t(I, L1)))), underfill(I, EIGHT, mapply(vfrontier, f_ofcolor(I, get_color_rank_t(I, L1))))), hconcat(underfill(I, EIGHT, mapply(vfrontier, f_ofcolor(I, get_color_rank_t(I, L1)))), underfill(I, EIGHT, mapply(vfrontier, f_ofcolor(I, get_color_rank_t(I, L1))))))

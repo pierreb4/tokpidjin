@@ -1,2 +1,0 @@
-def solve_67a3c6ac(S, I):
-    return mir_rot_t(I, R2)

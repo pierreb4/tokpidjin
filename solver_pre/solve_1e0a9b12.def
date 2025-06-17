@@ -1,2 +1,0 @@
-def solve_1e0a9b12(S, I):
-    return mir_rot_t(apply(rbind(order, identity), mir_rot_t(I, R6)), R4)

@@ -1,2 +1,0 @@
-def solve_3bdb4ada(S, I):
-    return fill(I, ZERO, mapply(fork(sfilter, rbind(get_nth_f, F0), compose(lbind(compose, compose(even, fork(subtract, compose(rbind(get_nth_f, L1), rbind(get_nth_f, F0)), power(rbind(get_nth_f, L1), TWO)))), lbind(rbind, astuple))), pair(papply(connect, apply(compose(increment, rbind(corner, R0)), totuple(o_g(I, R5))), apply(compose(decrement, rbind(corner, R3)), totuple(o_g(I, R5)))), apply(rbind(get_nth_f, L1), apply(compose(increment, rbind(corner, R0)), totuple(o_g(I, R5)))))))

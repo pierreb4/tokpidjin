@@ -1,2 +1,0 @@
-def solve_a699fb00(S, I):
-    return fill(I, TWO, intersection(shift(f_ofcolor(I, ONE), RIGHT), shift(f_ofcolor(I, ONE), LEFT)))

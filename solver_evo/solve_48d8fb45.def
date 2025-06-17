@@ -1,2 +1,0 @@
-def solve_48d8fb45(S, I):
-    return subgrid(extract(o_g(I, R7), lbind(adjacent, extract(o_g(I, R7), matcher(size, BLUE)))), I)

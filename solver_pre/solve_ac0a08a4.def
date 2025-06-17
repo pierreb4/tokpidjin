@@ -1,2 +1,0 @@
-def solve_ac0a08a4(S, I):
-    return upscale_t(I, subtract(NINE, colorcount_t(I, ZERO)))

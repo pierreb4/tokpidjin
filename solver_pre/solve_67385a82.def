@@ -1,2 +1,0 @@
-def solve_67385a82(S, I):
-    return fill(I, EIGHT, merge_f(difference(colorfilter(o_g(I, R4), THREE), sizefilter(colorfilter(o_g(I, R4), THREE), ONE))))

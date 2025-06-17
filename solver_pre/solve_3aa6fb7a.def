@@ -1,2 +1,0 @@
-def solve_3aa6fb7a(S, I):
-    return underfill(I, ONE, mapply(corners, o_g(I, R5)))

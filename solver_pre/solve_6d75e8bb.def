@@ -1,2 +1,0 @@
-def solve_6d75e8bb(S, I):
-    return paint(I, shift(asobject(replace(subgrid(get_nth_f(o_g(I, R5), F0), I), ZERO, TWO)), corner(get_nth_f(o_g(I, R5), F0), R0)))

@@ -1,2 +1,0 @@
-def solve_a48eeaf7(S, I):
-    return fill(cover(I, f_ofcolor(I, FIVE)), FIVE, mapply(compose(lbind(rbind(get_arg_rank, L1), apply(initset, outbox(f_ofcolor(I, TWO)))), compose(lbind(lbind, manhattan), initset)), f_ofcolor(I, FIVE)))

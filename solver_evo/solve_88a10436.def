@@ -1,2 +1,0 @@
-def solve_88a10436(S, I):
-    return paint(I, shift(shift(normalize(get_nth_f(difference(o_g(I, R1), colorfilter(o_g(I, R1), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)))), F0)), center(get_nth_f(colorfilter(o_g(I, R1), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), F0))), NEG_UNITY))

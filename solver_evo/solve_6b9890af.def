@@ -1,2 +1,0 @@
-def solve_6b9890af(S, I):
-    return paint(subgrid(f_ofcolor(I, RED), I), shift(normalize(upscale_f(get_arg_rank_f(o_g(I, R7), size, L1), divide(width_t(subgrid(f_ofcolor(I, RED), I)), THREE))), UNITY))

@@ -1,2 +1,0 @@
-def solve_6e02f1e3(S, I):
-    return fill(canvas(c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), THREE_BY_THREE), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), connect(branch(equality(numcolors_t(I), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), TWO_BY_ZERO, ORIGIN), branch(equality(numcolors_t(I), c_iz_n(S, identity(p_g), rbind(get_nth_t, F1))), TWO_BY_TWO, ZERO_BY_TWO)))

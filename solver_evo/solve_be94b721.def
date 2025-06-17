@@ -1,2 +1,0 @@
-def solve_be94b721(S, I):
-    return subgrid(get_arg_rank_f(o_g(I, R5), size, F0), I)

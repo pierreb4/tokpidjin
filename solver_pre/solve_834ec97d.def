@@ -1,2 +1,0 @@
-def solve_834ec97d(S, I):
-    return fill(paint(fill(I, ZERO, get_nth_f(o_g(I, R5), F0)), shift(get_nth_f(o_g(I, R5), F0), DOWN)), FOUR, sfilter_f(sfilter_f(asindices(I), compose(lbind(greater, col_row(shift(get_nth_f(o_g(I, R5), F0), DOWN), R1)), rbind(get_nth_f, F0))), compose(rbind(contained, interval(subtract(col_row(shift(get_nth_f(o_g(I, R5), F0), DOWN), R2), TEN), add(col_row(shift(get_nth_f(o_g(I, R5), F0), DOWN), R2), TEN), TWO)), rbind(get_nth_f, L1))))

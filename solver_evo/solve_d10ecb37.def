@@ -1,2 +1,0 @@
-def solve_d10ecb37(S, I):
-    return crop(I, ORIGIN, TWO_BY_TWO)

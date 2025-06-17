@@ -1,2 +1,0 @@
-def solve_aedd82e4(S, I):
-    return fill(I, ONE, merge_f(sizefilter(colorfilter(o_g(I, R4), TWO), ONE)))
