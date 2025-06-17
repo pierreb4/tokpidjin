@@ -1,6 +1,2 @@
-# Not intended to run standalone!
-
 def solve_496994bd(S, I):
     return vconcat(crop(I, ORIGIN, astuple(halve(height_t(I)), width_t(I))), mir_rot_t(crop(I, ORIGIN, astuple(halve(height_t(I)), width_t(I))), R0))
-
-# t - step = 135 in 32.3s

@@ -1,6 +1,2 @@
-# Not intended to run standalone!
-
 def solve_c8f0f002(S, I):
     return replace(subgrid(merge_f(o_g(I, R7)), I), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)))
-
-# t - step = 21 in 33.9s

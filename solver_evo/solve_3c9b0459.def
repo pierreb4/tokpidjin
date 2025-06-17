@@ -1,6 +1,2 @@
-# Not intended to run standalone!
-
 def solve_3c9b0459(S, I):
-    return mir_rot_t(I, identity(a_mr(S)))
-
-# t - step = 30 in 51.0s
+    return mir_rot_t(I, R5)

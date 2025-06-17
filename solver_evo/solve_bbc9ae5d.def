@@ -1,6 +1,2 @@
-# Not intended to run standalone!
-
 def solve_bbc9ae5d(S, I):
     return fill(vupscale(I, halve(width_t(I))), other_f(palette_t(I), BLACK), mapply(rbind(shoot, UNITY), f_ofcolor(vupscale(I, halve(width_t(I))), other_f(palette_t(I), BLACK))))
-
-# t - step = 165 in 49.3s

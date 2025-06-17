@@ -1,6 +1,2 @@
-# Not intended to run standalone!
-
 def solve_794b24be(S, I):
     return fill(canvas(BLACK, THREE_BY_THREE), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), branch(equality(size_f(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)))), YELLOW), insert(UNITY, connect(ORIGIN, tojvec(decrement(size_f(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)))))))), connect(ORIGIN, tojvec(decrement(size_f(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)))))))))
-
-# t - step = 28 in 50.8s
