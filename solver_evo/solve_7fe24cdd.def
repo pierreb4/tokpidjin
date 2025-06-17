@@ -1,6 +1,2 @@
-# Not intended to run standalone!
-
 def solve_7fe24cdd(S, I):
     return vconcat(hconcat(I, mir_rot_t(I, R4)), hconcat(mir_rot_t(I, R6), mir_rot_t(I, R5)))
-
-# t - step = 122 in 53.1s

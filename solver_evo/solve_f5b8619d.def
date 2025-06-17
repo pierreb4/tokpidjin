@@ -1,6 +1,2 @@
-# Not intended to run standalone!
-
 def solve_f5b8619d(S, I):
     return vconcat(hconcat(underfill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(vfrontier, f_ofcolor(I, get_color_rank_t(I, L1)))), underfill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(vfrontier, f_ofcolor(I, get_color_rank_t(I, L1))))), hconcat(underfill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(vfrontier, f_ofcolor(I, get_color_rank_t(I, L1)))), underfill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), mapply(vfrontier, f_ofcolor(I, get_color_rank_t(I, L1))))))
-
-# t - step = 63 in 44.5s

@@ -1,6 +1,2 @@
-# Not intended to run standalone!
-
 def solve_44f52bb0(S, I):
     return canvas(branch(equality(mir_rot_t(I, R2), I), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1))), UNITY)
-
-# t - step = 10 in 58.2s
