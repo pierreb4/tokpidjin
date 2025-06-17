@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_e9afcf9a(S, I):
-    return hconcat(hconcat(hconcat(crop(I, ORIGIN, astuple(TWO, ONE)), mir_rot_t(crop(I, ORIGIN, astuple(TWO, ONE)), R0)), hconcat(crop(I, ORIGIN, astuple(TWO, ONE)), mir_rot_t(crop(I, ORIGIN, astuple(TWO, ONE)), R0))), hconcat(crop(I, ORIGIN, astuple(TWO, ONE)), mir_rot_t(crop(I, ORIGIN, astuple(TWO, ONE)), R0)))
+    return hconcat(hconcat(hconcat(crop(I, ORIGIN, astuple(TWO, ONE)), vconcat(mir_rot_t(crop(I, ORIGIN, astuple(TWO, ONE)), R0), crop(I, ORIGIN, astuple(TWO, ONE)))), hconcat(crop(I, ORIGIN, astuple(TWO, ONE)), vconcat(mir_rot_t(crop(I, ORIGIN, astuple(TWO, ONE)), R0), crop(I, ORIGIN, astuple(TWO, ONE))))), hconcat(crop(I, ORIGIN, astuple(TWO, ONE)), vconcat(mir_rot_t(crop(I, ORIGIN, astuple(TWO, ONE)), R0), crop(I, ORIGIN, astuple(TWO, ONE)))))
+
+# t - step = 124 in 44.9s

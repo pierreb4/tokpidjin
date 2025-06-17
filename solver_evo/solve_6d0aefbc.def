@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_6d0aefbc(S, I):
     return hconcat(I, mir_rot_t(I, R2))
+
+# t - step = 53 in 43.3s

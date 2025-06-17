@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_c3e719e8(S, I):
     return fill(vconcat(vconcat(hconcat(hconcat(I, I), I), hconcat(hconcat(I, I), I)), hconcat(hconcat(I, I), I)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), difference(asindices(upscale_t(I, THREE)), f_ofcolor(upscale_t(I, THREE), get_color_rank_t(I, F0))))
+
+# t - step = 110 in 31.9s

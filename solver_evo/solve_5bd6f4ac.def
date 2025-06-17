@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_5bd6f4ac(S, I):
     return crop(I, tojvec(SIX), THREE_BY_THREE)
+
+# t - step = 46 in 31.1s

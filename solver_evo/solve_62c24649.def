@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_62c24649(S, I):
     return vconcat(hconcat(I, mir_rot_t(I, R2)), mir_rot_t(hconcat(I, mir_rot_t(I, R2)), R0))
+
+# t - step = 90 in 50.9s

@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_d631b094(S, I):
     return canvas(other_f(palette_t(I), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))), astuple(ONE, size_f(f_ofcolor(I, other_f(palette_t(I), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)))))))
+
+# t - step = 49 in 33.1s

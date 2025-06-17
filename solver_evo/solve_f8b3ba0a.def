@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_f8b3ba0a(S, I):
-    return crop(merge_t(apply(rbind(canvas, UNITY), order(palette_t(compress(I)), compose(invert, lbind(colorcount_t, compress(I)))))), DOWN, astuple(THREE, ONE))
+    return crop(merge_t(mapply(rbind(canvas, UNITY), apply(toivec, order(palette_t(compress(I)), compose(invert, lbind(colorcount_t, compress(I))))))), DOWN, astuple(THREE, ONE))
+
+# t - step = 173 in 51.5s

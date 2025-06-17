@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_b0c4d837(S, I):
     return vconcat(vconcat(get_nth_t(hsplit(hconcat(canvas(CYAN, astuple(ONE, subtract(decrement(height_f(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))))), height_f(f_ofcolor(I, CYAN))))), canvas(BLACK, astuple(ONE, subtract(SIX, subtract(decrement(height_f(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))))), height_f(f_ofcolor(I, CYAN))))))), TWO), F0), mir_rot_t(get_nth_t(hsplit(hconcat(canvas(CYAN, astuple(ONE, subtract(decrement(height_f(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))))), height_f(f_ofcolor(I, CYAN))))), canvas(BLACK, astuple(ONE, subtract(SIX, subtract(decrement(height_f(f_ofcolor(I, c_iz_n(S, identity(p_g), rbind(get_nth_t, F0))))), height_f(f_ofcolor(I, CYAN))))))), TWO), L1), R2)), canvas(BLACK, astuple(ONE, THREE)))
+
+# t - step = 245 in 57.6s

@@ -1,2 +1,6 @@
+# Not intended to run standalone!
+
 def solve_25d8a9c8(S, I):
-    return fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), toindices(mfilter_f(sizefilter(o_g(I, R4), THREE), hline_o))), BLACK, difference(asindices(I), toindices(mfilter_f(sizefilter(o_g(I, R4), THREE), hline_o))))
+    return fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), toindices(mfilter_f(sizefilter(o_g(I, R4), THREE), hline_o))), c_zo_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F0))), difference(asindices(I), toindices(mfilter_f(sizefilter(o_g(I, R4), THREE), hline_o))))
+
+# t - step = 189 in 54.2s
