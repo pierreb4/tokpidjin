@@ -1,2 +1,0 @@
-def solve_0b148d64(S, I):
-    return subgrid(get_arg_rank_f(partition(I), size, L1), I)

@@ -1,2 +1,0 @@
-def solve_9dfd6313(S, I):
-    return mir_rot_t(I, R1)

@@ -1,2 +1,0 @@
-def solve_95990924(S, I):
-    return fill(fill(fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), apply(rbind(corner, R0), apply(outbox, o_g(I, R5)))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), apply(rbind(corner, R1), apply(outbox, o_g(I, R5)))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F2)), apply(rbind(corner, R2), apply(outbox, o_g(I, R5)))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F3)), apply(rbind(corner, R3), apply(outbox, o_g(I, R5))))

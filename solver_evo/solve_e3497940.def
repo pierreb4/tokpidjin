@@ -1,2 +1,0 @@
-def solve_e3497940(S, I):
-    return paint(lefthalf(I), merge_f(o_g(mir_rot_t(righthalf(I), R2), R5)))

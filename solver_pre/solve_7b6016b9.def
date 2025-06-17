@@ -1,2 +1,0 @@
-def solve_7b6016b9(S, I):
-    return replace(fill(I, TWO, mfilter_f(o_g(I, R4), compose(flip, rbind(bordering, I)))), ZERO, THREE)

@@ -1,2 +1,0 @@
-def solve_746b3537(S, I):
-    return branch(equality(chain(size, dedupe, rbind(get_nth_f, F0))(I), BLUE), rbind(mir_rot_t, R1), identity)(repeat(apply(color, order(o_g(branch(equality(chain(size, dedupe, rbind(get_nth_f, F0))(I), BLUE), rbind(mir_rot_t, R1), identity)(I), R4), rbind(col_row, R2))), BLUE))

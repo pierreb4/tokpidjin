@@ -1,2 +1,0 @@
-def solve_22eb0ac0(S, I):
-    return paint(I, mfilter_f(apply(fork(recolor_i, color, backdrop), fgpartition(I)), hline_o))

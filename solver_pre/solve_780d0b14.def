@@ -1,2 +1,0 @@
-def solve_780d0b14(S, I):
-    return mir_rot_t(sfilter(mir_rot_t(sfilter(paint(fill(I, ZERO, asindices(I)), pair(apply(color, totuple(sfilter(o_g(I, R7), compose(rbind(greater, TWO), size)))), apply(center, totuple(sfilter(o_g(I, R7), compose(rbind(greater, TWO), size)))))), chain(rbind(greater, ONE), size, compose(dedupe, totuple))), R4), chain(rbind(greater, ONE), size, compose(dedupe, totuple))), R6)

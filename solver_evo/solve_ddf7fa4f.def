@@ -1,2 +1,0 @@
-def solve_ddf7fa4f(S, I):
-    return paint(I, mapply(fork(recolor_o, compose(color, rbind(get_nth_f, F0)), rbind(get_nth_f, L1)), sfilter_f(product(sizefilter(o_g(I, R5), ONE), colorfilter(o_g(I, R5), GRAY)), fork(vmatching, rbind(get_nth_f, F0), rbind(get_nth_f, L1)))))

@@ -1,2 +1,0 @@
-def solve_045e512c(S, I):
-    return paint(I, mapply(fork(recolor_o, color, compose(lbind(mapply, lbind(shift, get_arg_rank_f(o_g(I, R7), size, F0))), chain(rbind(apply, interval(FOUR, double(TEN), FOUR)), lbind(rbind, multiply), lbind(position, get_arg_rank_f(o_g(I, R7), size, F0))))), remove_f(get_arg_rank_f(o_g(I, R7), size, F0), o_g(I, R7))))

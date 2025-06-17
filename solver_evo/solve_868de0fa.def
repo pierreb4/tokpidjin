@@ -1,2 +1,0 @@
-def solve_868de0fa(S, I):
-    return fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), merge_f(sfilter_f(sfilter_f(o_g(I, R4), square_f), compose(even, height_f)))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), recolor_o(c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), merge_f(difference(sfilter_f(o_g(I, R4), square_f), sfilter_f(sfilter_f(o_g(I, R4), square_f), compose(even, height_f))))))

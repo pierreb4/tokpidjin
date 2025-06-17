@@ -1,2 +1,0 @@
-def solve_a87f7484(S, I):
-    return branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(extract(hsplit(branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(I), decrement(numcolors_t(I))), matcher(rbind(f_ofcolor, ZERO), get_common_rank_t(apply(rbind(f_ofcolor, ZERO), hsplit(branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(I), decrement(numcolors_t(I)))), L1))))

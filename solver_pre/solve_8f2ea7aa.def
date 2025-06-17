@@ -1,2 +1,0 @@
-def solve_8f2ea7aa(S, I):
-    return cellwise(upscale_t(subgrid(merge_f(o_g(I, R5)), I), THREE), vconcat(vconcat(hconcat(hconcat(subgrid(merge_f(o_g(I, R5)), I), subgrid(merge_f(o_g(I, R5)), I)), subgrid(merge_f(o_g(I, R5)), I)), hconcat(hconcat(subgrid(merge_f(o_g(I, R5)), I), subgrid(merge_f(o_g(I, R5)), I)), subgrid(merge_f(o_g(I, R5)), I))), hconcat(hconcat(subgrid(merge_f(o_g(I, R5)), I), subgrid(merge_f(o_g(I, R5)), I)), subgrid(merge_f(o_g(I, R5)), I))), ZERO)

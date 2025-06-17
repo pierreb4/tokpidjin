@@ -1,2 +1,0 @@
-def solve_363442ee(S, I):
-    return paint(I, mapply(compose(lbind(shift, asobject(crop(I, ORIGIN, THREE_BY_THREE))), decrement), f_ofcolor(I, ONE)))

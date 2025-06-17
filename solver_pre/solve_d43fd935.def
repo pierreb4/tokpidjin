@@ -1,2 +1,0 @@
-def solve_d43fd935(S, I):
-    return paint(I, mapply(fork(recolor_i, color, fork(connect, center, fork(add, center, rbind(gravitate, f_ofcolor(I, THREE))))), sfilter_f(sizefilter(o_g(I, R5), ONE), fork(either, rbind(vmatching, f_ofcolor(I, THREE)), rbind(hmatching, f_ofcolor(I, THREE))))))

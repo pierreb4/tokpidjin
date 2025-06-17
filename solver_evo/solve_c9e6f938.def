@@ -1,2 +1,0 @@
-def solve_c9e6f938(S, I):
-    return hconcat(I, mir_rot_t(I, R2))

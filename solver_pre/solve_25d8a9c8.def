@@ -1,2 +1,0 @@
-def solve_25d8a9c8(S, I):
-    return fill(fill(I, FIVE, toindices(mfilter_f(sizefilter(o_g(I, R4), THREE), hline_o))), ZERO, difference(asindices(I), toindices(mfilter_f(sizefilter(o_g(I, R4), THREE), hline_o))))

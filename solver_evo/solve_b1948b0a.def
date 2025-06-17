@@ -1,2 +1,0 @@
-def solve_b1948b0a(S, I):
-    return switch(switch(switch(switch(I, THREE, FOUR), EIGHT, NINE), TWO, SIX), ONE, FIVE)

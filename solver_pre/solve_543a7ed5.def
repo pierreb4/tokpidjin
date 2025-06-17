@@ -1,2 +1,0 @@
-def solve_543a7ed5(S, I):
-    return fill(fill(I, THREE, mapply(outbox, colorfilter(o_g(I, R5), SIX))), FOUR, mapply(delta, colorfilter(o_g(I, R5), SIX)))

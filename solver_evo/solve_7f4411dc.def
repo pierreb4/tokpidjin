@@ -1,2 +1,0 @@
-def solve_7f4411dc(S, I):
-    return fill(I, BLACK, sfilter_f(f_ofcolor(I, get_color_rank_t(I, L1)), compose(chain(rbind(greater, RED), size, rbind(difference, f_ofcolor(I, get_color_rank_t(I, L1)))), dneighbors)))

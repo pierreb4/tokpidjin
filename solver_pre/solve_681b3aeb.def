@@ -1,2 +1,0 @@
-def solve_681b3aeb(S, I):
-    return mir_rot_t(paint(canvas(color(get_arg_rank_f(o_g(mir_rot_t(I, R6), R5), size, L1)), THREE_BY_THREE), normalize(get_arg_rank_f(o_g(mir_rot_t(I, R6), R5), size, F0))), R4)

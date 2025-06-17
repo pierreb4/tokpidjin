@@ -1,2 +1,0 @@
-def solve_321b1fc6(S, I):
-    return paint(cover(I, get_nth_f(difference(o_g(I, R1), colorfilter(o_g(I, R1), EIGHT)), F0)), mapply(lbind(shift, normalize(get_nth_f(difference(o_g(I, R1), colorfilter(o_g(I, R1), EIGHT)), F0))), apply(rbind(corner, R0), colorfilter(o_g(I, R1), EIGHT))))

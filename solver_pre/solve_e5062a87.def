@@ -1,2 +1,0 @@
-def solve_e5062a87(S, I):
-    return paint(I, recolor_o(TWO, merge_f(sfilter_f(apply(lbind(shift, normalize(recolor_i(ZERO, f_ofcolor(I, TWO)))), occurrences(I, recolor_i(ZERO, f_ofcolor(I, TWO)))), chain(flip, rbind(contained, insert(astuple(TWO, SIX), insert(astuple(FIVE, ONE), initset(astuple(ONE, THREE))))), rbind(corner, R0))))))

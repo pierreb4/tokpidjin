@@ -1,2 +1,0 @@
-def solve_cd3c21df(S, I):
-    return mir_rot_t(subgrid(get_arg_rank_t(remove_f(get_nth_t(order(fgpartition(mir_rot_t(I, R2)), size), L1), order(fgpartition(mir_rot_t(I, R2)), size)), chain(size, rbind(intersection, compose(toindices, normalize)(get_nth_t(order(fgpartition(mir_rot_t(I, R2)), size), L1))), chain(toindices, rbind(upscale_f, RED), normalize)), F0), mir_rot_t(I, R2)), R2)

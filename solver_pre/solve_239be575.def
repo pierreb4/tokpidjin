@@ -1,2 +1,0 @@
-def solve_239be575(S, I):
-    return canvas(branch(greater(size_f(sfilter_f(o_g(I, R3), compose(lbind(contained, TWO), palette_f))), ONE), ZERO, EIGHT), UNITY)

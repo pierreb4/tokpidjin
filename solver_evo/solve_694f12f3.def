@@ -1,2 +1,0 @@
-def solve_694f12f3(S, I):
-    return fill(fill(I, c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), compose(backdrop, inbox)(get_arg_rank_f(colorfilter(o_g(I, R4), YELLOW), size, L1))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F1)), compose(backdrop, inbox)(get_arg_rank_f(colorfilter(o_g(I, R4), YELLOW), size, F0)))

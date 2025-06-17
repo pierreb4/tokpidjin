@@ -1,2 +1,0 @@
-def solve_5c0a986e(S, I):
-    return fill(fill(I, TWO, shoot(corner(f_ofcolor(I, TWO), R3), UNITY)), ONE, shoot(corner(f_ofcolor(I, ONE), R0), NEG_UNITY))

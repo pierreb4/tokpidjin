@@ -1,2 +1,0 @@
-def solve_b548a754(S, I):
-    return fill(fill(I, get_color_rank_t(replace(I, EIGHT, ZERO), L1), backdrop(merge_f(o_g(I, R5)))), get_color_rank_t(replace(replace(I, EIGHT, ZERO), get_color_rank_t(replace(I, EIGHT, ZERO), L1), ZERO), L1), box(merge_f(o_g(I, R5))))

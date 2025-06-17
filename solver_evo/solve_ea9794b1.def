@@ -1,2 +1,0 @@
-def solve_ea9794b1(S, I):
-    return paint(paint(paint(tophalf(lefthalf(I)), fork(toobject, fork(difference, asindices, rbind(f_ofcolor, BLACK)), identity)(bottomhalf(righthalf(I)))), fork(toobject, fork(difference, asindices, rbind(f_ofcolor, BLACK)), identity)(bottomhalf(lefthalf(I)))), fork(toobject, fork(difference, asindices, rbind(f_ofcolor, BLACK)), identity)(tophalf(righthalf(I))))

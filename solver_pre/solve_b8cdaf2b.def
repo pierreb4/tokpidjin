@@ -1,2 +1,0 @@
-def solve_b8cdaf2b(S, I):
-    return underfill(I, get_color_rank_t(I, L1), combine(shoot(corner(shift(f_ofcolor(I, get_color_rank_t(I, L1)), UP), R0), NEG_UNITY), shoot(corner(shift(f_ofcolor(I, get_color_rank_t(I, L1)), UP), R1), UP_RIGHT)))

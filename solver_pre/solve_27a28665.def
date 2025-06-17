@@ -1,2 +1,0 @@
-def solve_27a28665(S, I):
-    return canvas(branch(equality(get_val_rank_f(o_g(I, R4), size, F0), FIVE), SIX, branch(equality(get_val_rank_f(o_g(I, R4), size, F0), FOUR), THREE, branch(equality(get_val_rank_f(o_g(I, R4), size, F0), ONE), TWO, ONE))), UNITY)

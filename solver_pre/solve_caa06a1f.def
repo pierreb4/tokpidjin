@@ -1,2 +1,0 @@
-def solve_caa06a1f(S, I):
-    return paint(I, mapply(lbind(shift, shift(get_nth_f(o_g(paint(canvas(index(I, decrement(shape_t(I))), double(shape_t(I))), asobject(I)), R1), F0), LEFT)), apply(lbind(multiply, astuple(vperiod(shift(get_nth_f(o_g(paint(canvas(index(I, decrement(shape_t(I))), double(shape_t(I))), asobject(I)), R1), F0), LEFT)), hperiod(shift(get_nth_f(o_g(paint(canvas(index(I, decrement(shape_t(I))), double(shape_t(I))), asobject(I)), R1), F0), LEFT)))), power(lbind(mapply, neighbors), TWO)(neighbors(ORIGIN)))))

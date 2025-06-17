@@ -1,2 +1,0 @@
-def solve_25ff71a9(S, I):
-    return move(I, get_nth_f(o_g(I, R7), F0), DOWN)

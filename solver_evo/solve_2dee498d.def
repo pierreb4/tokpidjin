@@ -1,2 +1,0 @@
-def solve_2dee498d(S, I):
-    return get_nth_t(hsplit(I, THREE), F0)

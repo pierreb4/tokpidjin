@@ -1,2 +1,0 @@
-def solve_ce9e57f2(S, I):
-    return switch(fill(I, EIGHT, mapply(fork(connect, rbind(corner, R0), centerofmass), o_g(I, R5))), EIGHT, TWO)

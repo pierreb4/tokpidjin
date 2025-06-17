@@ -1,2 +1,0 @@
-def solve_c444b776(S, I):
-    return paint(I, mapply(compose(lbind(shift, normalize(toobject(backdrop(get_arg_rank_f(colorfilter(o_g(I, R4), BLACK), size, L1)), I))), rbind(corner, R0)), colorfilter(o_g(I, R4), BLACK)))

@@ -1,2 +1,0 @@
-def solve_47c1f68c(S, I):
-    return replace(compress(cellwise(cellwise(I, mir_rot_t(I, R2), get_color_rank_t(I, L1)), mir_rot_t(cellwise(I, mir_rot_t(I, R2), get_color_rank_t(I, L1)), R0), get_color_rank_t(I, L1))), get_color_rank_t(I, L1), get_color_rank_f(merge_f(o_g(I, R7)), F0))

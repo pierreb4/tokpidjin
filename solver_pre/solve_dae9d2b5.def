@@ -1,2 +1,0 @@
-def solve_dae9d2b5(S, I):
-    return fill(lefthalf(I), SIX, combine_f(f_ofcolor(lefthalf(I), FOUR), f_ofcolor(righthalf(I), THREE)))

@@ -1,2 +1,0 @@
-def solve_ed36ccf7(S, I):
-    return mir_rot_t(I, R6)

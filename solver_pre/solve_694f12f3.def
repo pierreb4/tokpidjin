@@ -1,2 +1,0 @@
-def solve_694f12f3(S, I):
-    return fill(fill(I, ONE, compose(backdrop, inbox)(get_arg_rank_f(colorfilter(o_g(I, R4), FOUR), size, L1))), TWO, compose(backdrop, inbox)(get_arg_rank_f(colorfilter(o_g(I, R4), FOUR), size, F0)))

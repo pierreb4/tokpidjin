@@ -1,2 +1,0 @@
-def solve_9172f3a0(S, I):
-    return upscale_t(I, THREE)

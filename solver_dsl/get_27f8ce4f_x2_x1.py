@@ -1,7 +1,0 @@
-def get_27f8ce4f_x2_x1(a1: Tuple[Tuple[int]]) -> Tuple[Tuple[int]]:
-    return hconcat(hconcat(a1, a1), a1)
-
-# {'a1': 'Tuple[Tuple[int]]', 'return': 'Tuple[Tuple[int]]'}
-
-func_d = {('get_27f8ce4f_x2_x1', 'Tuple[Tuple[int]]', 'Tuple[Tuple[int]]'): 'hconcat(hconcat(a1, a1), a1)'}
-

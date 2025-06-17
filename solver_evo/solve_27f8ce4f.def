@@ -1,2 +1,0 @@
-def solve_27f8ce4f(S, I):
-    return fill(vconcat(vconcat(hconcat(hconcat(I, I), I), hconcat(hconcat(I, I), I)), hconcat(hconcat(I, I), I)), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), difference(asindices(upscale_t(I, THREE)), f_ofcolor(upscale_t(I, THREE), get_color_rank_t(I, F0))))

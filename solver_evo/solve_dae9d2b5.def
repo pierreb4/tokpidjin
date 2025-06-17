@@ -1,2 +1,0 @@
-def solve_dae9d2b5(S, I):
-    return fill(lefthalf(I), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), combine_f(f_ofcolor(lefthalf(I), c_iz_n(S, identity(p_g), rbind(get_nth_t, F1))), f_ofcolor(righthalf(I), c_iz_n(S, identity(p_g), rbind(get_nth_t, F0)))))

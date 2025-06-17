@@ -1,2 +1,0 @@
-def solve_9565186b(S, I):
-    return paint(canvas(FIVE, shape_t(I)), get_arg_rank_f(o_g(I, R4), size, F0))

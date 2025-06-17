@@ -1,2 +1,0 @@
-def solve_bd4472b8(S, I):
-    return vconcat(crop(I, ORIGIN, astuple(TWO, width_t(I))), merge_t(repeat(hupscale(mir_rot_t(tophalf(crop(I, ORIGIN, astuple(TWO, width_t(I)))), R1), width_t(I)), RED)))

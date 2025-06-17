@@ -1,2 +1,0 @@
-def solve_ce22a75a(S, I):
-    return fill(I, ONE, mapply(backdrop, apply(outbox, o_g(I, R5))))

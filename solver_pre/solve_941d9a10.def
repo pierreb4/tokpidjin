@@ -1,2 +1,0 @@
-def solve_941d9a10(S, I):
-    return fill(fill(fill(I, ONE, compose(lbind(extract, apply(toindices, colorfilter(o_g(I, R4), ZERO))), lbind(lbind, contained))(ORIGIN)), THREE, compose(lbind(extract, apply(toindices, colorfilter(o_g(I, R4), ZERO))), lbind(lbind, contained))(decrement(shape_t(I)))), TWO, compose(lbind(extract, apply(toindices, colorfilter(o_g(I, R4), ZERO))), lbind(lbind, contained))(astuple(FIVE, FIVE)))

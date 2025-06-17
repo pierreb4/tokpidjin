@@ -1,2 +1,0 @@
-def solve_1b2d62fb(S, I):
-    return fill(canvas(BLACK, shape_t(lefthalf(I))), c_zo_n(S, identity(p_g), rbind(get_nth_t, F0)), intersection(f_ofcolor(lefthalf(I), BLACK), f_ofcolor(righthalf(I), BLACK)))
