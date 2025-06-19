@@ -94,7 +94,7 @@ class Env:
         if c == dsl.a_mr(S) and random.random() < 0.5:
             # Change the score at substitution time
             self.score -= 1
-            return f'identity(a_mr(S))'        
+            return 'identity(a_mr(S))'        
         elif random.random() < budget_random:
             # Same as usual random replacement
             return random.choice(list(constant_dict.keys()))
@@ -110,11 +110,11 @@ class Env:
             return None
 
         hints = get_hints(func.__name__)
-        print_l(f'{func.__name__ = }, {args = }, {hints = }')
+        # print_l(f'{func.__name__ = }, {args = }, {hints = }')
 
         # Then apply hint-based substitutions
         for i, arg in enumerate(args):
-            if arg is None or i >= len(hints):
+            if arg is None or hints is None or i >= len(hints):
                 continue
                 
             hint = hints[i]
@@ -149,7 +149,7 @@ class Env:
             result = func(*args)
         except Exception as e:
             # show_exception("", e)
-            print("traceback: ", traceback.format_exc())
+            # print("traceback: ", traceback.format_exc())
             result = None
 
 
