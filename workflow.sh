@@ -64,13 +64,23 @@ clear; bash run_regen.sh 12
 # Or check on simone
 while true
   do date +'%F %T'
-    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh'
+    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh' >last_s_count.txt
+    cat last_s_count.txt
+    cmp -s last_s_count.txt best_s_count.txt 
+    if [ $? -ne 0 ]; then
+      echo "Files are different"
+      cp last_s_count.txt best_s_count.txt
+      npx mudslide send 46708818434 "`cat last_s_count.txt`"
+    # else
+      # echo "Files are the same"
+    fi
     sleep 60
   done
 
 # 2nd from upper left
 g='c_iz_n c_zo_n a_mr'
 while true
+  scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_evo/
   do for izzo in $g
     do echo -en "$izzo\t"
       grep $izzo solvers_evo.py | wc -l
