@@ -23,6 +23,7 @@ class Env:
         self.SEED = SEED
         self.S = S
         self.score = 0
+        self.arg_dict = {}
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
@@ -110,6 +111,7 @@ class Env:
             return None
 
         hints = get_hints(func.__name__)
+        self.arg_dict[t_num] = (0, func, inspect.signature(func))
         # print_l(f'{func.__name__ = }, {args = }, {hints = }')
 
         # Then apply hint-based substitutions
@@ -144,6 +146,7 @@ class Env:
                 ]:
                 print_l(f'{hint = }')
 
+            self.arg_dict[t_num] = (i + 1, arg, hint)
 
         try:
             result = func(*args)
@@ -154,3 +157,6 @@ class Env:
 
 
         return result
+
+    def print_arg_dict(self):
+        print(f'{self.arg_dict = }')

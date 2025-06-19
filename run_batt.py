@@ -174,8 +174,8 @@ def pick_rnd_task(task_list, total_data):
 
 
 def main(do_list):
-    train_data = get_data(train=True)
-    eval_data = get_data(train=False)
+    train_data = get_data(train=True, sort_by_size=True)
+    eval_data = get_data(train=False, sort_by_size=True)
     total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
 
     # NOTE We could have a task list just for unsolved tasks
