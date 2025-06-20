@@ -1,5 +1,6 @@
 import inspect
 import traceback
+import re
 
 from utils import *
 from constants import *
@@ -23,7 +24,7 @@ class Env:
         self.SEED = SEED
         self.S = S
         self.score = 0
-        self.arg_dict = {}
+        # self.arg_dict = {}
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
@@ -106,21 +107,21 @@ class Env:
     def do_fluff(self, t_num, t):
         func = t[0]
         args = t[1:]
-        
+
         if t is None or func is None:
             return None
 
         hints = get_hints(func.__name__)
-        self.arg_dict[t_num] = (0, func, inspect.signature(func))
+        # self.arg_dict[t_num] = (0, func, inspect.signature(func))
         # print_l(f'{func.__name__ = }, {args = }, {hints = }')
 
         # Then apply hint-based substitutions
         for i, arg in enumerate(args):
             if arg is None or hints is None or i >= len(hints):
                 continue
-                
+
             hint = hints[i]
-            
+
             if hint in ['Any', 'C_']:
                 args[i] = self.substitute_color(arg)
             elif hint == 'FL':
@@ -146,7 +147,10 @@ class Env:
                 ]:
                 print_l(f'{hint = }')
 
-            self.arg_dict[t_num] = (i + 1, arg, hint)
+            # self.arg_dict[t_num] = (i + 1, arg, hint)
+
+            # if re.fullmatch(r't\d+', arg):
+            #     print_f(f'Found t: {arg}')
 
         try:
             result = func(*args)

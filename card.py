@@ -120,6 +120,7 @@ def main(file, seed):
     t_name = {}
     # Start from t1
     t_num = 1
+    has_mutation = {}
     for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
@@ -139,6 +140,7 @@ def main(file, seed):
             del equals[task_id][old_name]
 
             # Else is the right side new?
+            has_mutation[task_id] = False
             if old_call not in t_name.keys():
                 # Then add it to t_call/t_name
                 t_k = f't{t_num}'
@@ -147,12 +149,24 @@ def main(file, seed):
                 t_num += 1
 
                 call = t_call[t_k].replace('(', ', ').replace(')', '')
-                print(f'    {t_k} = env.do_fluff({t_num - 1}, [{call}])', file=file)
+
+                # Add possible mutations
+                if random.random() < 0.5:
+                    if t_list := re.findall(r't(\d+)', call):
+                        for t_num_offset in t_list:
+                            if random.random() < 0.5:
+                                offset = random.randint(1, 9)
+                                t_num_offset = t_num - offset
+                                if t_num_offset > 0:
+                                    has_mutation[task_id] = True
+                                    call = re.sub(rf'\bt{t_num}\b', f't{t_num_offset}', call)
+                                    
+                print(f'    {t_k} = env.do_fluff({t_num - 1}, [{call}]) # {task_id} - {has_mutation[task_id]}', file=file)
 
             # Was the left side O?
             if old_name == 'O':
                 print(f"    if {t_name[old_call]} == O:", file=file)
-                print(f"        o.append(('{task_id}', '{t_name[old_call]}'))", file=file)
+                print(f"        o.append(('{task_id}', '{t_name[old_call]}', {has_mutation[task_id]}))", file=file)
 
             # Replace x1 with t_name[x_call] in rest of solver
             for x_name, x_call in equals[task_id].items():
