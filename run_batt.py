@@ -139,6 +139,9 @@ def run_batt(total_data, task_id, start_time):
         with open(f'solver_tst/solve_{task_id}{suffix}.def', 'w') as f:
             f.write(inline_variables(solver_source))
             f.write('\n')
+
+
+def track_solution(t_var, done):
     if done is None:
         done = set()
 

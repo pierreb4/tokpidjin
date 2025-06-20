@@ -1,6 +1,7 @@
 import inspect
 import traceback
 import re
+import stopit
 
 from utils import *
 from constants import *
@@ -153,7 +154,11 @@ class Env:
             #     print_f(f'Found t: {arg}')
 
         try:
-            result = func(*args)
+            with stopit.ThreadingTimeout(5) as cm:
+                result = func(*args)
+            if cm.state == stopit.TimeoutException:
+                print_l(f'Timeout in {func.__name__}({args})')
+                result = None
         except Exception as e:
             # show_exception("", e)
             # print("traceback: ", traceback.format_exc())
