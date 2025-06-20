@@ -247,8 +247,8 @@ def generate_expanded_function(func_name, func_params, steps):
     # Start with function definition
     # lines = [f"def {func_name}({func_params}):"]
     # Adding arg x for introspection
-    lines = [f"def {func_name}(S, I, x=0):"]
-    # lines = [f"def {func_name}(S, I):"]
+    # lines = [f"def {func_name}(S, I, x=0):"]
+    lines = [f"def {func_name}(S, I):"]
     
     # Filter out empty steps and ensure unique lines
     unique_steps = []
@@ -292,8 +292,8 @@ def generate_expanded_function(func_name, func_params, steps):
             new_retx = f"    return {new_var}" 
         
         processed_lines.append(f"    {new_line}")
-        processed_lines.append(f"    {new_test}")
-        processed_lines.append(f"    {new_retx}")
+        # processed_lines.append(f"    {new_test}")
+        # processed_lines.append(f"    {new_retx}")
 
     # Add all processed lines
     lines.extend(processed_lines)
