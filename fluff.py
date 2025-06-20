@@ -164,3 +164,7 @@ class Env:
 
     def print_arg_dict(self):
         print(f'{self.arg_dict = }')
+
+
+    def get_seed(self):
+        return self.SEED

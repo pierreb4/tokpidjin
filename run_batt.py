@@ -133,7 +133,13 @@ def run_batt(total_data, task_id, start_time):
         # print(solver_source)
 
         # Write inlined source to file
-        with open(f'solver_tst/solve_{task_id}.def', 'w') as f:
+        if solution[2]:
+            suffix = f'_{solution[3]}'
+        else:
+            suffix = ''
+        if not os.path.exists('solver_tst'):
+            os.makedirs('solver_tst')
+        with open(f'solver_tst/solve_{task_id}{suffix}.def', 'w') as f:
             f.write(inline_variables(solver_source))
             f.write('\n')
 

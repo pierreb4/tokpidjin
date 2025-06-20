@@ -166,7 +166,7 @@ def main(file, seed):
             # Was the left side O?
             if old_name == 'O':
                 print(f"    if {t_name[old_call]} == O:", file=file)
-                print(f"        o.append(('{task_id}', '{t_name[old_call]}', {has_mutation[task_id]}))", file=file)
+                print(f"        o.append(('{task_id}', '{t_name[old_call]}', {has_mutation[task_id]}, env.get_seed()))", file=file)
 
             # Replace x1 with t_name[x_call] in rest of solver
             for x_name, x_call in equals[task_id].items():
