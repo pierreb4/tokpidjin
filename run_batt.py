@@ -154,14 +154,14 @@ def run_batt(total_data, task_id, start_time):
  
         solve_task = f'solver_lnk/solve_{task_id}'
         try:
-            os.symlink(f'{solve_name}.def', f'{solve_task}.def')
-            os.symlink(f'{solve_name}_xxx.py', f'{solve_task}_xxx.py')
+            os.symlink(f'../{solve_name}.def', f'{solve_task}.def')
+            os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
         except FileExistsError:
             # If the symlink already exists, remove it and create a new one
             os.remove(f'{solve_task}.def')
             os.remove(f'{solve_task}_xxx.py')
-            os.symlink(f'{solve_name}.def', f'{solve_task}.def')
-            os.symlink(f'{solve_name}_xxx.py', f'{solve_task}_xxx.py')
+            os.symlink(f'../{solve_name}.def', f'{solve_task}.def')
+            os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
 
 
 def track_solution(t_var, done):
