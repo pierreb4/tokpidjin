@@ -90,14 +90,16 @@ def run_batt(total_data, task_id, start_time):
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
-        o['train'][i] = batt(S, I, O)
+        # o['train'][i] = batt(S, I, O)
+        o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=5)
         # print(f"Sample: {i+1}/{len(train_task)} - {o['train'][i] = }")
         print('-', end='', flush=True)
 
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
-        o['test'][i] = batt(S, I, O)
+        # o['test'][i] = batt(S, I, O)
+        o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=5)
         # print(f"Sample: {i+1}/{len(test_task)} - {o['test'][i]} = ")
         print('-', end='', flush=True)
 

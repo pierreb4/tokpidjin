@@ -2,6 +2,7 @@ import os
 import json
 import inspect
 import ast
+import concurrent.futures
 
 import solvers_pre
 import solvers_evo
@@ -117,6 +118,17 @@ def get_solvers():
             solvers[task_id] = source
 
     return solvers
+
+
+def run_with_timeout(func, args, timeout=5):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(func, *args)
+        try:
+            result = future.result(timeout=timeout)
+        except concurrent.futures.TimeoutError:
+            # print_l(f'Timeout in {func.__name__}({args})')
+            result = None
+    return result
 
 
 def print_l(msg, sep=' ', end='\n', flush=False):

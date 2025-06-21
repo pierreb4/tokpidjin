@@ -154,12 +154,12 @@ class Env:
             #     print_f(f'Found t: {arg}')
 
         try:
-            result = run_with_timeout(func, args, timeout=5)
+            # result = run_with_timeout(func, args, timeout=5)
+            result = func(*args)
         except Exception as e:
             # show_exception("", e)
             # print("traceback: ", traceback.format_exc())
             result = None
-
 
         return result
 
@@ -171,12 +171,12 @@ class Env:
         return self.SEED
 
 
-def run_with_timeout(func, args, timeout=5):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-        future = executor.submit(func, *args)
-        try:
-            result = future.result(timeout=timeout)
-        except concurrent.futures.TimeoutError:
-            print_l(f'Timeout in {func.__name__}({args})')
-            result = None
-    return result
+# def run_with_timeout(func, args, timeout=5):
+#     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+#         future = executor.submit(func, *args)
+#         try:
+#             result = future.result(timeout=timeout)
+#         except concurrent.futures.TimeoutError:
+#             # print_l(f'Timeout in {func.__name__}({args})')
+#             result = None
+#     return result
