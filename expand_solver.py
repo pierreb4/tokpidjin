@@ -50,7 +50,11 @@ import sys
 import ast
 import utils
 import inspect
+import traceback
 import argparse
+
+from utils import *
+
 
 def parse_function_body(content):
     """
@@ -66,7 +70,7 @@ def parse_function_body(content):
     # Find the function definition line
     func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
     if not func_match:
-        print("Failed to match function definition in content")
+        print_l("Failed to match function definition in content")
         return None
 
     func_name = func_match[1]
@@ -75,7 +79,7 @@ def parse_function_body(content):
     # Find the return statement, which might be on a different line
     return_match = re.search(r'return\s+(.*?)$', content, re.MULTILINE)
     if not return_match:
-        print("Failed to find return statement in content")
+        print_l("Failed to find return statement in content")
         return None
 
     return_expr = return_match[1]
@@ -86,11 +90,12 @@ def parse_function_body(content):
         steps, _ = expand_expression(tree.body[0].value)
         return func_name, func_params, steps
     except SyntaxError as e:
-        print(f"Error parsing expression: {return_expr}")
-        print(f"Syntax error: {e}")
+        print_l(f"Error parsing expression: {return_expr}")
+        print_l(f"Syntax error: {e}")
         return None
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        print_l(f"Unexpected error: {e}")
+        print_l(f"- traceback: {traceback.format_exc()}")
         return None
 
 def expand_expression(node, depth=1, parent_expr=None, var_map=None, next_var_id=None):
@@ -130,7 +135,7 @@ def expand_expression(node, depth=1, parent_expr=None, var_map=None, next_var_id
         steps = inner_steps
         args = []
 
-        for arg in enumerate(node.args):
+        for arg in node.args:
             arg_result, current_var_id = expand_expression(arg, current_var_id, node, var_map, current_var_id)
 
             if isinstance(arg_result, list):  # Nested function calls
@@ -349,9 +354,9 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
                 out_f.write(output)
             
             if not quiet:
-                print(f"Successfully generated {py_file} with expanded version")
-                print(f"Original function renamed to {func_name}_one")
-                print(f"Expanded function uses original name {func_name}")
+                print_l(f"Successfully generated {py_file} with expanded version")
+                print_l(f"Original function renamed to {func_name}_one")
+                print_l(f"Expanded function uses original name {func_name}")
             
             # Update solvers_evo.py if specified
             if update_solvers_file:
@@ -361,18 +366,18 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
         else:
             # Print the first few lines to help debug
             if not quiet:
-                print(f"No valid function definition found in {def_file}. File content starts with:")
+                print_l(f"No valid function definition found in {def_file}. File content starts with:")
                 with open(def_file, 'r') as f:
                     head = [next(f) for _ in range(5)]
                     for line in head:
-                        print(f"  > {line.strip()}")
+                        print_l(f"  > {line.strip()}")
             else:
-                print(f"Error: No valid function definition in {def_file}")
+                print_l(f"Error: No valid function definition in {def_file}")
         
         return False
         
     except Exception as e:
-        print(f"Error processing file: {e}")
+        print_l(f"Error processing file: {e}")
         return False
 
 
@@ -389,7 +394,7 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
         tuple: (processed_count, success_count)
     """
     if not os.path.exists(source_dir):
-        print(f"Error: Source directory {source_dir} not found")
+        print_l(f"Error: Source directory {source_dir} not found")
         return 0, 0
     
     # Find all .def files in the directory
@@ -397,11 +402,11 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
     
     if not def_files:
         if not quiet:
-            print(f"No .def files found in {source_dir}")
+            print_l(f"No .def files found in {source_dir}")
         return 0, 0
     
     if not quiet:
-        print(f"Found {len(def_files)} .def files in {source_dir}")
+        print_l(f"Found {len(def_files)} .def files in {source_dir}")
     processed = 0
     succeeded = 0
     
@@ -411,7 +416,7 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
         with open(update_solvers_file, 'w') as f:
             f.write("from dsl import *\nfrom constants import *\n\n\n")
         if not quiet:
-            print(f"Initialized {update_solvers_file} with imports (will overwrite all contents)")
+            print_l(f"Initialized {update_solvers_file} with imports (will overwrite all contents)")
     
     for def_file in def_files:
         def_path = os.path.join(source_dir, def_file)
@@ -419,7 +424,7 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
         py_path = os.path.join(source_dir, py_file)
         
         if not quiet:
-            print(f"Processing {def_file} -> {py_file}...")
+            print_l(f"Processing {def_file} -> {py_file}...")
         processed += 1
         
         # Pass the quiet parameter to process_file
@@ -445,7 +450,7 @@ def update_solvers(solvers_file, func_name, expanded_func, quiet=False):
             with open(solvers_file, 'w') as f:
                 f.write("from dsl import *\nfrom constants import *\n\n\n")
             if not quiet:
-                print(f"Created new solvers file: {solvers_file}")
+                print_l(f"Created new solvers file: {solvers_file}")
 
         with open(solvers_file, 'r') as f:
             content = f.read()
@@ -457,7 +462,7 @@ def update_solvers(solvers_file, func_name, expanded_func, quiet=False):
             # Replace existing function
             new_content = pattern.sub(expanded_func, content)
             if not quiet:
-                print(f"Replaced existing {func_name} in {solvers_file}")
+                print_l(f"Replaced existing {func_name} in {solvers_file}")
         else:
             # Add new function at the end
             if content.endswith('\n\n'):
@@ -470,14 +475,14 @@ def update_solvers(solvers_file, func_name, expanded_func, quiet=False):
             if not expanded_func.endswith('\n\n'):
                 new_content += '\n' if expanded_func.endswith('\n') else '\n\n'
             if not quiet:
-                print(f"Added new {func_name} to {solvers_file}")
+                print_l(f"Added new {func_name} to {solvers_file}")
 
         # Write the updated content back
         with open(solvers_file, 'w') as f:
             f.write(new_content)
 
     except Exception as e:
-        print(f"Error updating {solvers_file}: {e}")
+        print_l(f"Error updating {solvers_file}: {e}")
 
 
 if __name__ == "__main__":
@@ -495,26 +500,26 @@ if __name__ == "__main__":
     if args.def_file and args.py_file:
         # Single file mode
         if not os.path.exists(args.def_file):
-            print(f"Error: Definition file {args.def_file} not found")
+            print_l(f"Error: Definition file {args.def_file} not found")
             sys.exit(1)
         
         if process_file(args.def_file, args.py_file, args.solvers_file, args.quiet):
             if not args.quiet:
-                print("Success!")
+                print_l("Success!")
         else:
-            print("Failed to process file")
+            print_l("Failed to process file")
             sys.exit(1)
     else:
         # Directory mode
         processed, succeeded = process_directory(args.source, args.solvers_file, args.quiet)
         if not args.quiet:
-            print(f"Processed {processed} files, {succeeded} succeeded")
+            print_l(f"Processed {processed} files, {succeeded} succeeded")
             
             if processed > 0 and succeeded == processed:
-                print("All files processed successfully!")
+                print_l("All files processed successfully!")
             elif succeeded > 0:
-                print(f"Partially successful: {succeeded}/{processed} files processed")
+                print_l(f"Partially successful: {succeeded}/{processed} files processed")
         
         if processed == 0 or succeeded == 0:
-            print("Failed to process any files")
+            print_l("Failed to process any files")
             sys.exit(1)
