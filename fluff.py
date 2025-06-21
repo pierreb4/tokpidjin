@@ -1,7 +1,6 @@
 import inspect
 import traceback
 import re
-import concurrent.futures
 
 from utils import *
 from constants import *
@@ -154,8 +153,8 @@ class Env:
             #     print_f(f'Found t: {arg}')
 
         try:
-            # result = run_with_timeout(func, args, timeout=5)
             result = func(*args)
+            result = run_with_timeout(func, args, timeout=0.001)
         except Exception as e:
             # show_exception("", e)
             # print("traceback: ", traceback.format_exc())
@@ -170,13 +169,3 @@ class Env:
     def get_seed(self):
         return self.SEED
 
-
-# def run_with_timeout(func, args, timeout=5):
-#     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-#         future = executor.submit(func, *args)
-#         try:
-#             result = future.result(timeout=timeout)
-#         except concurrent.futures.TimeoutError:
-#             # print_l(f'Timeout in {func.__name__}({args})')
-#             result = None
-#     return result
