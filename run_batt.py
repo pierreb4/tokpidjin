@@ -143,7 +143,8 @@ def run_batt(total_data, task_id, start_time):
         if not os.path.exists('solver_tst'):
             os.makedirs('solver_tst')
         suffix = f'_{solution[3]}' if solution[2] else ''
-        with open(f'solver_tst/{solver_name}{suffix}.def', 'w') as f:
+        # with open(f'solver_tst/{solver_name}{suffix}.def', 'w') as f:
+        with open(f'solver_tst/{md5_hash}.def', 'w') as f:
             f.write(inline_variables(solver_source))
             f.write('\n')
 
