@@ -128,10 +128,10 @@ def run_batt(total_data, task_id, start_time):
 
         # Get md5_hash of the source code
         md5_hash = hashlib.md5(solution[1].encode()).hexdigest()
+        solver_name = f'solve_{task_id}_{md5_hash}'
 
         # Rebuild solution
-        # solver_source = f'def solve_{solution[0]}(S, I):\n'
-        solver_source = f'def solve_{md5_hash}(S, I):\n'
+        solver_source = f'def {solver_name}(S, I):\n'
         for t_var in sorted(done, key=lambda x: int(x[1:])):
             solver_source += f'    {t_var} = {t_call[t_var]}\n'
         solver_source += f'    O = {t_call[solution[1]]}\n'
@@ -140,11 +140,10 @@ def run_batt(total_data, task_id, start_time):
         # print(solver_source)
 
         # Write inlined source to file
-        suffix = f'_{solution[3]}' if solution[2] else ''
         if not os.path.exists('solver_tst'):
             os.makedirs('solver_tst')
-        # with open(f'solver_tst/solve_{task_id}{suffix}.def', 'w') as f:
-        with open(f'solver_tst/solve_{md5_hash}.def', 'w') as f:
+        suffix = f'_{solution[3]}' if solution[2] else ''
+        with open(f'solver_tst/{solver_name}suffix{}.def', 'w') as f:
             f.write(inline_variables(solver_source))
             f.write('\n')
 
