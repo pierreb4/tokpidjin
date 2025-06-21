@@ -66,20 +66,20 @@ def parse_function_body(content):
     # Find the function definition line
     func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
     if not func_match:
-        print(f"Failed to match function definition in content")
+        print("Failed to match function definition in content")
         return None
-        
-    func_name = func_match.group(1)
-    func_params = func_match.group(2)
-    
+
+    func_name = func_match[1]
+    func_params = func_match[2]
+
     # Find the return statement, which might be on a different line
     return_match = re.search(r'return\s+(.*?)$', content, re.MULTILINE)
     if not return_match:
-        print(f"Failed to find return statement in content")
+        print("Failed to find return statement in content")
         return None
-        
-    return_expr = return_match.group(1)
-    
+
+    return_expr = return_match[1]
+
     # Parse the expression using AST
     try:
         tree = ast.parse(return_expr)
@@ -110,33 +110,31 @@ def expand_expression(node, depth=1, parent_expr=None, var_map=None, next_var_id
     """
     if var_map is None:
         var_map = {}
-    
+
     if next_var_id is None:
         next_var_id = 1
-    
+
     # Check if this exact expression has been seen before
     node_str = ast.unparse(node)
     if node_str in var_map:
         # Return the existing variable without generating a new step
         return [(var_map[node_str], "")], next_var_id
-    
+
     # Special case for function applications: f(args)(more_args)
     if isinstance(node, ast.Call) and isinstance(node.func, ast.Call):
         # First expand the inner function call
         inner_steps, current_var_id = expand_expression(node.func, depth, None, var_map, next_var_id)
         inner_var = inner_steps[-1][0]
-        
+
         # Then handle the outer call with the inner result as the function
         steps = inner_steps
         args = []
-        
-        for i, arg in enumerate(node.args):
+
+        for arg in enumerate(node.args):
             arg_result, current_var_id = expand_expression(arg, current_var_id, node, var_map, current_var_id)
-            
+
             if isinstance(arg_result, list):  # Nested function calls
-                arg_result = [s for s in arg_result if s[1]]
-                
-                if arg_result:
+                if arg_result := [s for s in arg_result if s[1]]:
                     steps.extend(arg_result)
                     var_name = arg_result[-1][0]
                 else:
@@ -147,43 +145,40 @@ def expand_expression(node, depth=1, parent_expr=None, var_map=None, next_var_id
                         var_name = f"x{current_var_id}"
                         var_map[node_arg_str] = var_name
                         current_var_id += 1
-                
+
                 args.append(var_name)
             else:  # Simple argument
                 args.append(arg_result)
-        
+
         # Create the function application step
         args_str = ", ".join(str(arg) for arg in args)
-        
+
         # Never use "O" for intermediate variables, only for the final result
         variable = f"x{current_var_id}"
         current_var_id += 1
-        
+
         # Add this function application step
         var_map[node_str] = variable
         step = (variable, f"{variable} = {inner_var}({args_str})")
         steps.append(step)
-        
+
         return steps, current_var_id
-    
-    # Regular function calls
+
     elif isinstance(node, ast.Call):
         # Check if the exact same function call is already in var_map
         if node_str in var_map:
             return [(var_map[node_str], "")], next_var_id
-            
+
         # Process function arguments first
         steps = []
         args = []
         current_var_id = next_var_id
-        
-        for i, arg in enumerate(node.args):
+
+        for arg in node.args:
             arg_result, current_var_id = expand_expression(arg, current_var_id, node, var_map, current_var_id)
-            
+
             if isinstance(arg_result, list):  # Nested function calls
-                arg_result = [s for s in arg_result if s[1]]
-                
-                if arg_result:
+                if arg_result := [s for s in arg_result if s[1]]:
                     steps.extend(arg_result)
                     var_name = arg_result[-1][0]
                 else:
@@ -194,40 +189,40 @@ def expand_expression(node, depth=1, parent_expr=None, var_map=None, next_var_id
                         var_name = f"x{current_var_id}"
                         var_map[node_arg_str] = var_name
                         current_var_id += 1
-                
+
                 args.append(var_name)
             else:  # Simple argument
                 args.append(arg_result)
-        
+
         # Create this function call
         func_name = ast.unparse(node.func).strip()
         args_str = ", ".join(str(arg) for arg in args)
-        
+
         # Assign a new variable name, never use "O" for intermediate variables
         variable = f"x{current_var_id}"
         current_var_id += 1
-        
+
         # Store this expression in the variable map
         var_map[node_str] = variable
-        
+
         # Add this function call as a step
         step = (variable, f"{variable} = {func_name}({args_str})")
         steps.append(step)
-        
+
         return steps, current_var_id
-    
+
     elif isinstance(node, ast.Attribute):
         # Handle attribute access
         return ast.unparse(node), next_var_id
-    
+
     elif isinstance(node, ast.Name):
         # Handle variable names
         return node.id, next_var_id
-    
+
     elif isinstance(node, ast.Constant):
         # Handle constants
         return node.value, next_var_id
-    
+
     else:
         # Handle other types by converting back to source
         return ast.unparse(node), next_var_id
@@ -473,11 +468,7 @@ def update_solvers(solvers_file, func_name, expanded_func, quiet=False):
                 new_content = content + '\n\n' + expanded_func
 
             if not expanded_func.endswith('\n\n'):
-                if expanded_func.endswith('\n'):
-                    new_content += '\n'
-                else:
-                    new_content += '\n\n'
-
+                new_content += '\n' if expanded_func.endswith('\n') else '\n\n'
             if not quiet:
                 print(f"Added new {func_name} to {solvers_file}")
 

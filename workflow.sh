@@ -96,6 +96,12 @@ scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_
 python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py && \
 python main.py --solvers solvers_evo.py
 
+# Same with test
+scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_tst/solve_*.def solver_tst/ && \
+python expand_solver.py -q --source solver_tst/ --solvers-file solvers_tst.py && \
+python main.py --solvers solvers_tst.py
+
+
 # Smallest solvers in solver_pre/ but not in solver_evo/
 for f in `cd solver_pre && ls *.def`
 do ls solver_evo/$f &>/dev/null || ls -l solver_pre/$f
