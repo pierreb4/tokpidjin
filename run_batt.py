@@ -78,7 +78,7 @@ def inline_variables(source_code):
     return ast.unparse(tree)
 
 
-def run_batt(total_data, task_id, start_time):
+def run_batt(total_data, task_num, task_id, start_time):
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
     # total_task = total_data['train'][task_id] + total_data['test'][task_id]
@@ -86,7 +86,7 @@ def run_batt(total_data, task_id, start_time):
     o = {'train': {}, 'test': {}}
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
 
-    print(f'------ {task_id} ', end='')
+    print(f'------ {task_id} - {task_num} ', end='')
 
     for i, sample in enumerate(train_task):
         I = sample['input']
@@ -219,12 +219,13 @@ def main(do_list):
 
     # Run batt for each task in do_list
     start_time = timer()
-    for task_id in do_list:
-        run_batt(total_data, task_id, start_time)
+    for task_num, task_id in enumerate(do_list):
+        run_batt(total_data, task_num, task_id, start_time)
 
 
 if __name__ == "__main__":
-    # TODO Make these proper options
+    # TODO Optionally accept a task_num to restart from there
+    # TODO Make these proper options    
     # Random task
     # do_list = None
     # All tasks
