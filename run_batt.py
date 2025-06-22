@@ -114,13 +114,15 @@ def run_batt(total_data, task_num, task_id, start_time):
 
     if not valid_solutions:
         print('<')
-        print(f"Failed {task_id} after {timer() - start_time:.1f}s")
+        elapsed = timer() - start_time
+        print(f"Failed {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}tps")
     else:
         print('>')
 
     # Print valid solutions
     for solution in valid_solutions:
-        print(f"Solved {task_id} after {timer() - start_time:.1f}s from {solution}")
+        elapsed = timer() - start_time
+        print(f"Solved {task_id} after {elapsed:.1f}s  - {elapsed / (task_num + 1):.1f}tps from {solution}")
 
         # Track calls then reverse sequence to rebuild solver
         t_var = solution[1]
