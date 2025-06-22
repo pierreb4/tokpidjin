@@ -1,12 +1,13 @@
 import re
 import random
 import time
-
+import inspect
 
 from pprint import pprint
 
-
 from utils import *
+from constants import *
+from dsl import *
 
 
 # Combine all solvers in solver_evo into a single one
@@ -107,7 +108,32 @@ def get_equals(solver):
     return equals
 
 
-def mutate(t_num, call, has_mutation, task_id):
+# Borrowed from regin.py maybe can go to utils.py?
+def get_hints(node_name):
+    if node_name not in globals():
+        return None
+
+    global_id = globals()[node_name]
+    if not inspect.isfunction(global_id):
+        return None
+
+    return [t for var, t in global_id.__annotations__.items()]
+
+
+def mutate(t_call, t_num, has_mutation, task_id):
+    call = t_call[f't{t_num}'].replace('(', ', ').replace(')', '')
+
+    # NOTE call is a string representing a list,
+    # like '[mir_rot_t, t2290, R6]' or '[t4, t2291]'
+    items = call.strip('[]').split(',')
+    func_name = items[0].strip()
+    hints = get_hints(func_name)
+
+    print_on = False
+    if random.random() < 0.01:
+        print_l(f'{hints = }')
+        print_on = True
+
     # Add possible t variables substitutions
     if random.random() < 0.5:
         if t_list := re.findall(r't(\d+)', call):
@@ -116,6 +142,18 @@ def mutate(t_num, call, has_mutation, task_id):
                     offset = random.randint(1, 9)
                     t_num_offset = t_num - offset
                     if t_num_offset > 0:
+
+                        call_offset = t_call[f't{t_num_offset}'].replace('(', ', ').replace(')', '')
+                        # print_l(f'{call_offset = }')
+                        items = call_offset.strip('[]').split(',')
+                        func_name = items[0].strip()
+                        hints_offset = get_hints(func_name)
+                        hint_offset = hints_offset[0] if hints_offset else None
+
+                        if print_on:
+                            print_l(f'{call_offset = }')
+                            print_l(f'{hint_offset = }')
+
                         has_mutation[task_id] = True
                         call = re.sub(rf'\bt{t_num}\b', f't{t_num_offset}', call)
     return call
@@ -160,11 +198,10 @@ def main(file, seed):
                 t_k = f't{t_num}'
                 t_call[t_k] = old_call
                 t_name[old_call] = t_k
-                t_num += 1
 
-                call = t_call[t_k].replace('(', ', ').replace(')', '')
-                call = mutate(t_num, call, has_mutation, task_id)                                    
-                print(f'    {t_k} = env.do_fluff({t_num - 1}, [{call}]) # {task_id} - {has_mutation[task_id]}', file=file)
+                call = mutate(t_call, t_num, has_mutation, task_id)                                    
+                print(f'    {t_k} = env.do_fluff({t_num}, [{call}]) # {task_id} - {has_mutation[task_id]}', file=file)
+                t_num += 1
 
             # Was the left side O?
             if old_name == 'O':

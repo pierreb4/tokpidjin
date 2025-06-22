@@ -100,11 +100,7 @@ def get_solvers():
     train_data = get_data(train=True)
     eval_data = get_data(train=False)
 
-    # Group 'train' and 'eval' datasets, each task has 'train' and 'test' samples
-    total_data = {}
-    for k in ['train', 'test']:
-        total_data[k] = {**train_data[k], **eval_data[k]}
-
+    total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
     task_list = list(total_data['train'].keys())
 
     # Exclude known bad solvers

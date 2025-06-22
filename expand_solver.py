@@ -53,6 +53,8 @@ import inspect
 import traceback
 import argparse
 
+from pathlib import Path
+
 from utils import *
 
 
@@ -341,6 +343,10 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
         if func_parsed := parse_function_body(content):
             func_name, func_params, steps = func_parsed
             
+            # Get function name from .def file name
+            # XXX This here might involve some cleanup
+            func_name = Path(def_file).stem
+
             # Create the original function with _one suffix
             original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")
             
@@ -360,7 +366,7 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
             
             # Update solvers_evo.py if specified
             if update_solvers_file:
-                update_solvers(update_solvers_file, func_name, expanded_func, quiet)
+                update_solvers(update_solvers_file, def_file, func_name, expanded_func, quiet)
                 
             return True
         else:
@@ -434,7 +440,7 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
     return processed, succeeded
 
 
-def update_solvers(solvers_file, func_name, expanded_func, quiet=False):
+def update_solvers(solvers_file, def_file, func_name, expanded_func, quiet=False):
     """
     Update the solvers file with the expanded function
     
@@ -455,14 +461,19 @@ def update_solvers(solvers_file, func_name, expanded_func, quiet=False):
         with open(solvers_file, 'r') as f:
             content = f.read()
 
+        # Get function name from .def file name
+        # XXX This here might involve some cleanup
+        func_name = Path(def_file).stem
+
         # Check if function already exists
         pattern = re.compile(f'^def {func_name}\s*\(.*?\).*?(?=^def|\Z)', re.MULTILINE | re.DOTALL)
 
         if match := pattern.search(content):
             # Replace existing function
-            new_content = pattern.sub(expanded_func, content)
+            # XXX No, we skip
+            # new_content = pattern.sub(expanded_func, content)
             if not quiet:
-                print_l(f"Replaced existing {func_name} in {solvers_file}")
+                print_l(f"Skip existing {func_name} in {solvers_file}")
         else:
             # Add new function at the end
             if content.endswith('\n\n'):
