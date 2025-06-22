@@ -115,14 +115,14 @@ def run_batt(total_data, task_num, task_id, start_time):
     if not valid_solutions:
         print('<')
         elapsed = timer() - start_time
-        print(f"Failed {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}tps")
+        print(f"Failed {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt")
     else:
         print('>')
 
     # Print valid solutions
     for solution in valid_solutions:
         elapsed = timer() - start_time
-        print(f"Solved {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}tps from {solution}")
+        print(f"Solved {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt from {solution}")
 
         # Track calls then reverse sequence to rebuild solver
         t_var = solution[1]
@@ -222,6 +222,7 @@ def main(do_list):
     # Run batt for each task in do_list
     start_time = timer()
     for task_num, task_id in enumerate(do_list):
+        # XXX Maybe we should have a timeout here?
         run_batt(total_data, task_num, task_id, start_time)
 
 
