@@ -91,16 +91,24 @@ def run_batt(total_data, task_num, task_id, start_time):
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
-        o['train'][i] = batt(S, I, O)
-        # o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=5)
+        # o['train'][i] = batt(S, I, O)
+        timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=1)
+        if timed_out:
+            print('|')
+            # Give up on this task
+            return True
         # print(f"Sample: {i+1}/{len(train_task)} - {o['train'][i] = }")
         print('-', end='', flush=True)
 
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
-        o['test'][i] = batt(S, I, O)
-        # o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=5)
+        # o['test'][i] = batt(S, I, O)
+        timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=1)
+        if timed_out:
+            print('|')
+            # Give up on this task
+            return True
         # print(f"Sample: {i+1}/{len(test_task)} - {o['test'][i]} = ")
         print('-', end='', flush=True)
 
@@ -165,6 +173,9 @@ def run_batt(total_data, task_num, task_id, start_time):
             os.symlink(f'../{solve_name}.def', f'{solve_task}.def')
             os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
 
+    # No timeout
+    return False
+
 
 def track_solution(t_var, done):
     if done is None:
@@ -221,9 +232,13 @@ def main(do_list):
 
     # Run batt for each task in do_list
     start_time = timer()
-    for task_num, task_id in enumerate(do_list):
-        # XXX Maybe we should have a timeout here?
-        run_batt(total_data, task_num, task_id, start_time)
+    timeout = sum(
+        1
+        for task_num, task_id in enumerate(do_list)
+        if run_batt(total_data, task_num, task_id, start_time)
+    )
+    
+    print(f'{len(do_list)} tasks - {timeout} timeouts')
 
 
 if __name__ == "__main__":
