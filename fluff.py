@@ -153,8 +153,8 @@ class Env:
             #     print_f(f'Found t: {arg}')
 
         try:
-            # result = func(*args)
-            result = run_with_timeout(func, args, timeout=0.001)
+            result = func(*args)
+            # result = run_with_timeout(func, args, timeout=0.001)
         except Exception as e:
             # show_exception("", e)
             # print("traceback: ", traceback.format_exc())
