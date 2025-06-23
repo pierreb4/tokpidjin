@@ -114,6 +114,7 @@ def run_batt(total_data, task_num, task_id, start_time):
 
 
     # Values present in all output lists are valid solutions
+    # TODO Keep track of partial solutions, then try improving them
     valid_solutions = set(o['train'][0])
     for sample in o['train']:
         valid_solutions.intersection_update(set(o['train'][sample]))

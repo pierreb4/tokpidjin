@@ -109,7 +109,7 @@ python main.py --solvers solvers_lnk.py
 
 rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_tst/solve_*.def solver_tst/ && \
 rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_lnk/solve_*.def solver_lnk/ && \
-python expand_solver.py --source solver_lnk/ --solvers-file solvers_lnk.py && \
+python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py && \
 python main.py --solvers solvers_lnk.py
 
 
