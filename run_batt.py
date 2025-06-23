@@ -232,13 +232,13 @@ def main(do_list):
 
     # Run batt for each task in do_list
     start_time = timer()
-    timeout = 0
-    for task_num, task_id in enumerate(do_list):
-        timed_out = run_batt(total_data, task_num, task_id, start_time)
-        if timed_out:
-            timeout += 1
-
-    print(f'{task_num} tasks - {timeout} timeouts')
+    timeout = sum(
+        1
+        for task_num, task_id in enumerate(do_list)
+        if run_batt(total_data, task_num, task_id, start_time)
+    )
+    
+    print(f'{len(do_list)} tasks - {timeout} timeouts')
 
 
 if __name__ == "__main__":
