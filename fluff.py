@@ -154,8 +154,8 @@ class Env:
 
         try:
             result = func(*args)
-            # result = run_with_timeout(func, args, timeout=0.001)
         except Exception as e:
+            # TODO Display and resolve exceptions
             # show_exception("", e)
             # print("traceback: ", traceback.format_exc())
             result = None
