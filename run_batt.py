@@ -232,7 +232,7 @@ def main(do_list):
 
     # Run batt for each task in do_list
     start_time = timer()
-    timeout = sum(bool(run_batt(total_data, task_num, task_id, start_time))
+    timeout = sum(run_batt(total_data, task_num, task_id, start_time)
               for task_num, task_id in enumerate(do_list))
     
     print(f'{len(do_list)} tasks - {timeout} timeouts')

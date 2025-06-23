@@ -72,18 +72,8 @@ def mutate(t_call, t_num, has_mutation, task_id):
                         new_hint = new_hints[0] if new_hints else None
 
                         if new_hint == old_hint:
-                        # if random.random() < 0.01:
-                        #     print_l(f'{t_num = }')
-                        #     print_l(f'{old_items = }')
-                        #     print_l(f'{old_hints = }')
-                        #     print_l(f'{arg = }')
-                        #     print_l(f'{old_hint = }')
-                        #     print_l(f'{t_offset = }')
-                        #     print_l(f'{new_call = }')
-                        #     print_l(f'{new_hint = }')
-                        #     print_l('--')
                             has_mutation[task_id] = True
-                            ret_call = re.sub(rf'\bt{t_num}\b', f't{t_offset}', new_call)
+                            ret_call = re.sub(rf'\bt{t_num}\b', f't{t_offset}', ret_call)
 
     return ret_call
 
