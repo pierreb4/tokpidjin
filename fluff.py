@@ -108,7 +108,7 @@ class Env:
         func = t[0]
         args = t[1:]
 
-        if t is None or func is None:
+        if t is None or func is None or not inspect.isfunction(func):
             return None
 
         hints = get_hints(func.__name__)
