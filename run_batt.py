@@ -95,6 +95,7 @@ def run_batt(total_data, task_num, task_id, start_time):
         timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=1)
         if timed_out:
             print('|')
+            # Give up on this task
             return True
         # print(f"Sample: {i+1}/{len(train_task)} - {o['train'][i] = }")
         print('-', end='', flush=True)
@@ -106,6 +107,7 @@ def run_batt(total_data, task_num, task_id, start_time):
         timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=1)
         if timed_out:
             print('|')
+            # Give up on this task
             return True
         # print(f"Sample: {i+1}/{len(test_task)} - {o['test'][i]} = ")
         print('-', end='', flush=True)
