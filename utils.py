@@ -123,7 +123,7 @@ def run_with_timeout(func, args, timeout=5):
             result = (False, future.result(timeout=timeout))
         except concurrent.futures.TimeoutError:
             # print_l(f'Timeout in {func.__name__}({args})')
-            print_l(f'Timeout in {func.__name__}')
+            # print_l(f'Timeout in {func.__name__}')
             result = (True, None)
     return result
 
