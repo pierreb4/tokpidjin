@@ -134,8 +134,8 @@ class Code:
         old_func_name = old_items[0].strip()
         old_hints = get_hints(old_func_name)
 
-        if random.random() > 0.5:
-            return ret_call
+        # if random.random() > 0.5:
+        #     return ret_call
         
         if old_args := re.findall(r'\b(\w+)\b', old_call):
             # TODO Track t variables to get to hints
@@ -147,7 +147,7 @@ class Code:
                 if old_arg.startswith('t') and old_arg[1:].isdigit():
                     t_num = int(old_arg[1:])
 
-                    while random.random() < 0.5:
+                    while random.random() < 0.67:
                         t_offset = t_num - random.randint(1, 9)
                         if t_offset > 0:
                             new_call = clean_call(t_call[f't{t_offset}'])
