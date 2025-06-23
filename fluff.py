@@ -105,10 +105,13 @@ class Env:
 
 
     def do_fluff(self, t_num, t):
+        if t is None:
+            return None
+
         func = t[0]
         args = t[1:]
 
-        if t is None or func is None:
+        if func is None or not inspect.isfunction(func):
             return None
 
         hints = get_hints(func.__name__)

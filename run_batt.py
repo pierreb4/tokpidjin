@@ -98,7 +98,7 @@ def run_batt(total_data, task_num, task_id, start_time):
             # Give up on this task
             return True
         # print(f"Sample: {i+1}/{len(train_task)} - {o['train'][i] = }")
-        print('-', end='', flush=True)
+        print('+', end='', flush=True)
 
     for i, sample in enumerate(test_task):
         I = sample['input']
@@ -232,11 +232,8 @@ def main(do_list):
 
     # Run batt for each task in do_list
     start_time = timer()
-    timeout = sum(
-        1
-        for task_num, task_id in enumerate(do_list)
-        if run_batt(total_data, task_num, task_id, start_time)
-    )
+    timeout = sum(run_batt(total_data, task_num, task_id, start_time)
+              for task_num, task_id in enumerate(do_list))
     
     print(f'{len(do_list)} tasks - {timeout} timeouts')
 

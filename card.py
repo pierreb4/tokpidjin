@@ -10,92 +10,6 @@ from constants import *
 from dsl import *
 
 
-# Combine all solvers in solver_evo into a single one
-
-# Outline with examples:
-
-# 1. Read all source files in the solver_evo directory
-"""
-def solve_f25fbde4(S, I):
-    x1 = o_g(I, R7)
-    x2 = get_nth_f(x1, F0)
-    x3 = subgrid(x2, I)
-    O = upscale_t(x3, TWO)
-    return O
-
-def solve_a740d043(S, I):
-    x1 = o_g(I, R7)
-    x2 = merge_f(x1)
-    x3 = subgrid(x2, I)
-    O = replace(x3, ONE, ZERO)
-    return O
-
-# 2. Rename all variables to avoid conflicts
-def solve_f25fbde4(S, I):
-    t[0] = x1 = o_g(I, R7)
-idx['x1']['f25fbde4'] = 0
-
-def solve_a740d043(S, I):
-    t[0] = x1 = o_g(I, R7)
-idx['x1']['solve_a740d043'] = 0
-next_idx = 1
-
-def solve_f25fbde4(S, I):
-    t[0] = x1 = o_g(I, R7)
-    t[1] = x2 = get_nth_f(t[0], F0)
-idx['x2']['f25fbde4'] = 1
-
-def solve_a740d043(S, I):
-    t[0] = x1 = o_g(I, R7)
-    t[2] = x2 = merge_f(t[0])
-idx['x2']['solve_a740d043'] = 2
-next_idx = 3
-
-def solve_f25fbde4(S, I):
-    t[0] = x1 = o_g(I, R7)
-    t[1] = x2 = get_nth_f(t[0], F0)
-    t[3] = x3 = subgrid(t[1], I)
-idx['x3']['f25fbde4'] = 3
-
-def solve_a740d043(S, I):
-    t[0] = x1 = o_g(I, R7)
-    t[2] = x2 = merge_f(t[0])
-    t[4] = x3 = subgrid(t[2], I)
-idx['x3']['solve_a740d043'] = 4
-next_idx = 5
-
-def solve_f25fbde4(S, I):
-    t[0] = x1 = o_g(I, R7)
-    t[1] = x2 = get_nth_f(t[0], F0)
-    t[3] = x3 = subgrid(t[1], I)
-    t[5] = O = upscale_t(t[3], TWO)
-    O -> check_done(t[5])
-
-def solve_a740d043(S, I):
-    t[0] = x1 = o_g(I, R7)
-    t[2] = x2 = merge_f(t[0])
-    t[4] = x3 = subgrid(t[2], I)
-    t[6] = O = replace(t[4], ONE, ZERO)
-    O -> check_done(t[6])
-
-
-- Start from x1
-  - Go through each solver
-    - Is it empty?
-    - Then remove it from solver list
-    - Else take the first assignment - x1 = call(...)
-      - Remove entry from equals
-      - Was the left side O?
-      - Then add check_done(O) to new solver
-      - Else is the right side new?
-        - Then add it to t_call/t_name
-      - Replace x1 with t_name[x_call] in rest of solver
-
-# 3. Output a single file, batt.py
-
-"""
-
-
 def get_equals(solver):
     # Catalog assignments in solvers
     equals = {}
@@ -120,43 +34,48 @@ def get_hints(node_name):
     return [t for var, t in global_id.__annotations__.items()]
 
 
+def clean_call(call):
+    return call.replace('(', ', ').replace(')', '')
+
+def get_items(call):
+    return call.strip('[]').split(',')
+
+
 def mutate(t_call, t_num, has_mutation, task_id):
-    call = t_call[f't{t_num}'].replace('(', ', ').replace(')', '')
+    old_call = clean_call(t_call[f't{t_num}'])
+    ret_call = old_call
 
-    # NOTE call is a string representing a list,
-    # like '[mir_rot_t, t2290, R6]' or '[t4, t2291]'
-    items = call.strip('[]').split(',')
-    func_name = items[0].strip()
-    hints = get_hints(func_name)
+    old_items = get_items(old_call)
+    old_func_name = old_items[0].strip()
+    old_hints = get_hints(old_func_name)
 
-    print_on = False
-    if random.random() < 0.01:
-        print_l(f'{hints = }')
-        print_on = True
+    if random.random() > 0.5:
+        return ret_call
+    
+    if arg_list := re.findall(r'\b(\w+)\b', old_call):
+        # TODO Track t variables to get to hints
+        if old_hints is None:
+            return ret_call
 
-    # Add possible t variables substitutions
-    if random.random() < 0.5:
-        if t_list := re.findall(r't(\d+)', call):
-            for t_num_offset in t_list:
-                if random.random() < 0.5:
-                    offset = random.randint(1, 9)
-                    t_num_offset = t_num - offset
-                    if t_num_offset > 0:
+        for arg, old_hint in zip(arg_list, old_hints):
+            # First deal with t variables
+            if arg.startswith('t') and arg[1:].isdigit():
+                t_num = int(arg[1:])
 
-                        call_offset = t_call[f't{t_num_offset}'].replace('(', ', ').replace(')', '')
-                        # print_l(f'{call_offset = }')
-                        items = call_offset.strip('[]').split(',')
-                        func_name = items[0].strip()
-                        hints_offset = get_hints(func_name)
-                        hint_offset = hints_offset[0] if hints_offset else None
+                while random.random() < 0.5:
+                    t_offset = t_num - random.randint(1, 9)
+                    if t_offset > 0:
+                        new_call = clean_call(t_call[f't{t_offset}'])
+                        new_items = get_items(new_call)
+                        new_func_name = new_items[0].strip()
+                        new_hints = get_hints(new_func_name)
+                        new_hint = new_hints[0] if new_hints else None
 
-                        if print_on:
-                            print_l(f'{call_offset = }')
-                            print_l(f'{hint_offset = }')
+                        if new_hint == old_hint:
+                            has_mutation[task_id] = True
+                            ret_call = re.sub(rf'\bt{t_num}\b', f't{t_offset}', ret_call)
 
-                        has_mutation[task_id] = True
-                        call = re.sub(rf'\bt{t_num}\b', f't{t_num_offset}', call)
-    return call
+    return ret_call
 
 
 def main(file, seed):
