@@ -92,7 +92,7 @@ def run_batt(total_data, task_num, task_id, start_time):
         I = sample['input']
         O = sample['output']
         # o['train'][i] = batt(S, I, O)
-        timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=1)
+        timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=2)
         if timed_out:
             print('|')
             # Give up on this task
@@ -104,7 +104,7 @@ def run_batt(total_data, task_num, task_id, start_time):
         I = sample['input']
         O = sample['output']
         # o['test'][i] = batt(S, I, O)
-        timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=1)
+        timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=2)
         if timed_out:
             print('|')
             # Give up on this task

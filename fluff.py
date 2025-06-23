@@ -23,7 +23,7 @@ class Env:
     def __init__(self, SEED, S, score=0):
         self.SEED = SEED
         self.S = S
-        self.score = 0
+        self.score = score
         # self.arg_dict = {}
 
 
@@ -111,44 +111,44 @@ class Env:
         func = t[0]
         args = t[1:]
 
-        if func is None or not inspect.isfunction(func):
-            return None
+        # if func is None or not inspect.isfunction(func):
+        #     return None
 
-        hints = get_hints(func.__name__)
-        # self.arg_dict[t_num] = (0, func, inspect.signature(func))
-        # print_l(f'{func.__name__ = }, {args = }, {hints = }')
+        # hints = get_hints(func.__name__)
+        # # self.arg_dict[t_num] = (0, func, inspect.signature(func))
+        # # print_l(f'{func.__name__ = }, {args = }, {hints = }')
 
-        # Then apply hint-based substitutions
-        for i, arg in enumerate(args):
-            if arg is None or hints is None or i >= len(hints):
-                continue
+        # # Then apply hint-based substitutions
+        # for i, arg in enumerate(args):
+        #     if arg is None or hints is None or i >= len(hints):
+        #         continue
 
-            hint = hints[i]
+        #     hint = hints[i]
 
-            if hint in ['Any', 'C_']:
-                args[i] = self.substitute_color(arg)
-            elif hint == 'FL':
-                args[i] = self.substitute_rank(arg, FL_NAMES)
-            elif hint == 'F_':
-                args[i] = self.substitute_rank(arg, F_NAMES)
-            elif hint == 'L_':
-                args[i] = self.substitute_rank(arg, L_NAMES)
-            elif hint == 'R_':
-                args[i] = self.substitute_symbol(arg, R_NAMES)
-            elif hint == 'R4':
-                args[i] = self.substitute_symbol(arg, R4_NAMES)
-            elif hint == 'R8':
-                args[i] = self.substitute_symbol(arg, R8_NAMES)
-                self.score += 1
-            elif hint == 'A8':
-                args[i] = self.substitute_grid_angle(arg)
-            elif hint not in [ 'Samples', 'Grid', 'Tuple', 
-                    'Object', 'Objects', 'FrozenSet', 'Patch', 
-                    'Callable', 'Container', 'ContainerContainer',
-                    'Integer', 'IntegerSet', 'Numerical', 'Indices', 
-                    'Boolean', 'IJ', 'A4', 
-                ]:
-                print_l(f'{hint = }')
+        #     if hint in ['Any', 'C_']:
+        #         args[i] = self.substitute_color(arg)
+        #     elif hint == 'FL':
+        #         args[i] = self.substitute_rank(arg, FL_NAMES)
+        #     elif hint == 'F_':
+        #         args[i] = self.substitute_rank(arg, F_NAMES)
+        #     elif hint == 'L_':
+        #         args[i] = self.substitute_rank(arg, L_NAMES)
+        #     elif hint == 'R_':
+        #         args[i] = self.substitute_symbol(arg, R_NAMES)
+        #     elif hint == 'R4':
+        #         args[i] = self.substitute_symbol(arg, R4_NAMES)
+        #     elif hint == 'R8':
+        #         args[i] = self.substitute_symbol(arg, R8_NAMES)
+        #         self.score += 1
+        #     elif hint == 'A8':
+        #         args[i] = self.substitute_grid_angle(arg)
+        #     elif hint not in [ 'Samples', 'Grid', 'Tuple', 
+        #             'Object', 'Objects', 'FrozenSet', 'Patch', 
+        #             'Callable', 'Container', 'ContainerContainer',
+        #             'Integer', 'IntegerSet', 'Numerical', 'Indices', 
+        #             'Boolean', 'IJ', 'A4', 
+        #         ]:
+        #         print_l(f'{hint = }')
 
             # self.arg_dict[t_num] = (i + 1, arg, hint)
 

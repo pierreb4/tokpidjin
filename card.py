@@ -7,6 +7,7 @@ from pprint import pprint
 
 from utils import *
 from constants import *
+import dsl
 from dsl import *
 
 
@@ -37,55 +38,177 @@ def get_hints(node_name):
 def clean_call(call):
     return call.replace('(', ', ').replace(')', '')
 
+
 def get_items(call):
     return call.strip('[]').split(',')
 
 
-def mutate(t_call, t_num, has_mutation, task_id):
-    old_call = clean_call(t_call[f't{t_num}'])
-    ret_call = old_call
+class Code:
+    def __init__(self, S, score=0):
+        self.S = S
+        self.score = score
 
-    old_items = get_items(old_call)
-    old_func_name = old_items[0].strip()
-    old_hints = get_hints(old_func_name)
 
-    if random.random() > 0.5:
-        return ret_call
-    
-    if arg_list := re.findall(r'\b(\w+)\b', old_call):
-        # TODO Track t variables to get to hints
-        if old_hints is None:
+    def substitute_color(self, arg, constant_dict=COLORS):
+        budget_random = 0.01
+
+        # Get number corresponding to color constant
+        # NOTE Maybe some x_n variables carry constants and could be replaced?
+        if arg in constant_dict.keys():
+            c = constant_dict[arg]
+        elif arg in CONSTANTS.keys() and CONSTANTS[arg] in constant_dict.values():
+            c = CONSTANTS[arg]
+        else:
+            # Probably 'Any' and not a color constant
+            return arg
+
+        S = self.S
+        c_iz = dsl.c_iz(S, p_g)
+        c_zo = dsl.c_zo(S, p_g)
+
+        if c in c_iz and random.random() < 0.5:
+            # Change the score at substitution time
+            self.score -= 1
+            return f'c_iz_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_iz.index(c)})))'
+        elif c in c_zo and random.random() < 0.5:
+            # Change the score at substitution time
+            self.score -= 1
+            return f'c_zo_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_zo.index(c)})))'
+        elif random.random() < budget_random:
+            # Same as usual random replacement
+            return random.choice(list(constant_dict.keys()))
+
+        # Get name corresponding to number
+        constant_list = list(constant_dict.keys())
+        return constant_list[c]
+
+
+    def substitute_rank(self, arg, constant_dict):
+        budget_random = 0.01
+
+        # Only substitute constants 
+        if arg not in constant_dict.keys():
+            return arg
+        
+        if random.random() < budget_random:
+            return replace_random(arg, list(constant_dict.keys()))
+
+        return arg
+
+
+    def substitute_symbol(self, arg, constant_dict):
+        budget_random = 0.01
+
+        # Substitute constants or calls
+        if random.random() < budget_random:
+            return random.choice(list(constant_dict.keys()))
+
+        return arg
+
+
+    def substitute_grid_angle(self, arg, constant_dict=R8_NAMES):
+        budget_random = 0.01
+
+        # Only substitute constants 
+        if arg not in constant_dict.keys():
+            return arg
+
+        c = constant_dict[arg]
+        S = self.S
+        if c == dsl.a_mr(S) and random.random() < 0.5:
+            # Change the score at substitution time
+            self.score -= 1
+            return 'identity(a_mr(S))'        
+        elif random.random() < budget_random:
+            # Same as usual random replacement
+            return random.choice(list(constant_dict.keys()))
+        
+        return arg
+
+
+    def mutate(self, t_call, t_num, has_mutation, task_id):
+        old_call = clean_call(t_call[f't{t_num}'])
+        ret_call = old_call
+
+        old_items = get_items(old_call)
+        old_func_name = old_items[0].strip()
+        old_hints = get_hints(old_func_name)
+
+        if random.random() > 0.5:
             return ret_call
+        
+        if old_args := re.findall(r'\b(\w+)\b', old_call):
+            # TODO Track t variables to get to hints
+            if old_hints is None:
+                return ret_call
 
-        for arg, old_hint in zip(arg_list, old_hints):
-            # First deal with t variables
-            if arg.startswith('t') and arg[1:].isdigit():
-                t_num = int(arg[1:])
+            for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
+                # First deal with t variables
+                if old_arg.startswith('t') and old_arg[1:].isdigit():
+                    t_num = int(old_arg[1:])
 
-                while random.random() < 0.5:
-                    t_offset = t_num - random.randint(1, 9)
-                    if t_offset > 0:
-                        new_call = clean_call(t_call[f't{t_offset}'])
-                        new_items = get_items(new_call)
-                        new_func_name = new_items[0].strip()
-                        new_hints = get_hints(new_func_name)
-                        new_hint = new_hints[0] if new_hints else None
+                    while random.random() < 0.5:
+                        t_offset = t_num - random.randint(1, 9)
+                        if t_offset > 0:
+                            new_call = clean_call(t_call[f't{t_offset}'])
+                            new_items = get_items(new_call)
+                            new_func_name = new_items[0].strip()
+                            new_hints = get_hints(new_func_name)
+                            new_hint = new_hints[0] if new_hints else None
 
-                        if new_hint == old_hint:
-                            has_mutation[task_id] = True
-                            ret_call = re.sub(rf'\bt{t_num}\b', f't{t_offset}', ret_call)
+                            if new_hint == old_hint:
+                                has_mutation[task_id] = True
+                                ret_call = re.sub(rf'\bt{t_num}\b', f't{t_offset}', ret_call)
+                # Then deal with constants
+                else:
+                    if old_hint in ['Any', 'C_']:
+                        old_args[i] = self.substitute_color(old_arg)
+                    elif old_hint == 'FL':
+                        old_args[i] = self.substitute_rank(old_arg, FL_NAMES)
+                    elif old_hint == 'F_':
+                        old_args[i] = self.substitute_rank(old_arg, F_NAMES)
+                    elif old_hint == 'L_':
+                        old_args[i] = self.substitute_rank(old_arg, L_NAMES)
+                    elif old_hint == 'R_':
+                        old_args[i] = self.substitute_symbol(old_arg, R_NAMES)
+                    elif old_hint == 'R4':
+                        old_args[i] = self.substitute_symbol(old_arg, R4_NAMES)
+                    elif old_hint == 'R8':
+                        old_args[i] = self.substitute_symbol(old_arg, R8_NAMES)
+                        self.score += 1
+                    elif old_hint == 'A8':
+                        old_args[i] = self.substitute_grid_angle(old_arg)
+                    elif old_hint not in [ 'Samples', 'Grid', 'Tuple', 
+                            'Object', 'Objects', 'FrozenSet', 'Patch', 
+                            'Callable', 'Container', 'ContainerContainer',
+                            'Integer', 'IntegerSet', 'Numerical', 'Indices', 
+                            'Boolean', 'IJ', 'A4', 
+                        ]:
+                        print_l(f'{old_hint = }')
+                    if old_args[i] != old_arg:
+                        has_mutation[task_id] = True
+                        ret_call = re.sub(rf'\b{old_arg}\b', f'{old_args[i]}', ret_call)
+                        # XXX We need to be careful of making substitutions in this ret_call
+                    # print_l(f'{old_hint = }')
+                    # print_l(f'{old_arg = }')
+                    # print_l(f'{old_args[i] = }')
+                    # print_l(f'{self.S = }')
 
-    return ret_call
+        return ret_call
 
 
 def main(file, seed):
+    train_data = get_data(train=True, sort_by_size=True)
+    eval_data = get_data(train=False, sort_by_size=True)
+    total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
+
     solvers = get_solvers()
     equals = {task_id: get_equals(source) for task_id, source in solvers.items()}
     # print_l(f"{get_equals(solvers['a85d4709']) = }")
 
     # XXX Limit to first 5
     # solvers = {k: solvers[k] for k in list(solvers.keys())[:5]}
-    solvers = {k: solvers[k] for k in list(solvers.keys())}
+    # solvers = {k: solvers[k] for k in list(solvers.keys())}
 
     t_call = {}
     t_name = {}
@@ -97,6 +220,10 @@ def main(file, seed):
         solvers_copy = solvers.copy()
         for task_id, source in solvers_copy.items():
             # print_l(f"-- {task_id} -----")
+
+            train_task = total_data['train'][task_id]
+            S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
+            code = Code(S)
 
             # Is it empty?
             if not equals[task_id]:
@@ -118,7 +245,7 @@ def main(file, seed):
                 t_call[t_k] = old_call
                 t_name[old_call] = t_k
 
-                call = mutate(t_call, t_num, has_mutation, task_id)                                    
+                call = code.mutate(t_call, t_num, has_mutation, task_id)                                    
                 print(f'    {t_k} = env.do_fluff({t_num}, [{call}]) # {task_id} - {has_mutation[task_id]}', file=file)
                 t_num += 1
 
