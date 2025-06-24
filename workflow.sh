@@ -96,7 +96,7 @@ while true
   python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py
   do for izzo in $g
     do echo -en "$izzo\t"
-      grep $izzo solvers_evo.py | wc -l
+      grep $izzo solvers_lnk.py | wc -l
     done
     sleep 60
   done
