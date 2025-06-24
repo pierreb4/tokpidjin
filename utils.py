@@ -32,14 +32,14 @@ BAD_SOLVERS = {
     'c8cbb738', # Broken in solvers_ref.py
     'd6ad076f', # Broken in solvers_ref.py
     'e40b9e2f', # Broken in solvers_ref.py
-    'a65b410d', # Gets closer, but no solve
-    '6773b310', # Gets closer, but no solve
-    'ef135b50', # Gets closer, but no solve
-    '6a1e5592', # Gets closer, but no solve
-    'a8d7556c', # Gets closer, but no solve
-    'd06dbe63', # Gets closer, but no solve
-    '484b58aa', # Gets closer, but no solve
-    'e26a3af2', # Seems to hang
+    # 'a65b410d', # Gets closer, but no solve
+    # '6773b310', # Gets closer, but no solve
+    # 'ef135b50', # Gets closer, but no solve
+    # '6a1e5592', # Gets closer, but no solve
+    # 'a8d7556c', # Gets closer, but no solve
+    # 'd06dbe63', # Gets closer, but no solve
+    # '484b58aa', # Gets closer, but no solve
+    # 'e26a3af2', # Seems to hang
 } 
 
 def get_data(train=True, sort_by_size=False, task_id=None):

@@ -64,7 +64,7 @@ clear; bash run_regen.sh 12
 # Or check on simone
 while true
   do date +'%F %T'
-    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh' >last_s_count.txt
+    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh solver_evo' >last_s_count.txt
     cat last_s_count.txt
     cmp -s last_s_count.txt best_s_count.txt 
     if [ $? -ne 0 ]; then
