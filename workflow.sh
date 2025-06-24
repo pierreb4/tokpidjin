@@ -80,13 +80,27 @@ while true
 # 2nd from upper left
 g='c_iz_n c_zo_n a_mr'
 while true
-  scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_evo/
+  scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_evo/ && \
+  python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py
   do for izzo in $g
     do echo -en "$izzo\t"
       grep $izzo solvers_evo.py | wc -l
     done
     sleep 60
   done
+
+g='c_iz_n c_zo_n a_mr'
+while true
+  rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/solve_*.def solver_md5/ && \
+  rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_lnk/solve_*.def solver_lnk/ && \
+  python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py
+  do for izzo in $g
+    do echo -en "$izzo\t"
+      grep $izzo solvers_evo.py | wc -l
+    done
+    sleep 60
+  done
+
 
 # Lower left
 clear; time timeout 15s python regen.py
@@ -96,18 +110,8 @@ scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_
 python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py && \
 python main.py --solvers solvers_evo.py
 
-# Same with test solvers
-scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_tst/solve_*.def solver_tst/ && \
-python expand_solver.py -q --source solver_tst/ --solvers-file solvers_tst.py && \
-python main.py --solvers solvers_tst.py
-
-# Same with test and link solvers
-scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_tst/solve_*.def solver_tst/ && \
-scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_lnk/solve_*.def solver_lnk/ && \
-python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py && \
-python main.py --solvers solvers_lnk.py
-
-rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_tst/solve_*.def solver_tst/ && \
+# Same with md5 and link solvers
+rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/solve_*.def solver_md5/ && \
 rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_lnk/solve_*.def solver_lnk/ && \
 python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py && \
 python main.py --solvers solvers_lnk.py

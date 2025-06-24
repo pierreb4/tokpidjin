@@ -6,6 +6,7 @@ import concurrent.futures
 
 import solvers_pre
 import solvers_evo
+import solvers_lnk
 
 
 BAD_SOLVERS = {
@@ -82,20 +83,32 @@ def get_data(train=True, sort_by_size=False, task_id=None):
     }
 
 
-def get_source(task_id):
-    if hasattr(solvers_evo, f'solve_{task_id}'):
-        solver = getattr(solvers_evo, f'solve_{task_id}')
-    elif hasattr(solvers_pre, f'solve_{task_id}'):
-        if task_id in BAD_SOLVERS:
-            return None
-        solver = getattr(solvers_pre, f'solve_{task_id}')
-    else:
-        return None
+def get_source(task_id, imports=None):    
+    if imports is None:
+        imports = [solvers_evo, solvers_pre]
+    for imp in imports:
+        if imp == solvers_pre and task_id in BAD_SOLVERS:
+            # Skip bad solvers from solvers_pre
+            continue
+        if hasattr(imp, f'solve_{task_id}'):
+            solver = getattr(imp, f'solve_{task_id}')
+            return inspect.getsource(solver)
+    return None
 
-    return inspect.getsource(solver)
+
+    # if hasattr(solvers_evo, f'solve_{task_id}'):
+    #     solver = getattr(solvers_evo, f'solve_{task_id}')
+    # elif hasattr(solvers_pre, f'solve_{task_id}'):
+    #     if task_id in BAD_SOLVERS:
+    #         return None
+    #     solver = getattr(solvers_pre, f'solve_{task_id}')
+    # else:
+    #     return None
+
+    # return inspect.getsource(solver)
 
 
-def get_solvers():
+def get_solvers(imports):
     # Get both train and test tasks
     train_data = get_data(train=True)
     eval_data = get_data(train=False)
@@ -109,7 +122,7 @@ def get_solvers():
 
     solvers = {}
     for task_id in task_list:
-        source = get_source(task_id)
+        source = get_source(task_id, imports)
         if source is not None:
             solvers[task_id] = source
 

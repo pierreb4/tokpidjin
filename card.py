@@ -84,16 +84,16 @@ class Code:
 
 
     def substitute_rank(self, arg, constant_dict):
-        budget_random = 0.01
-
-        # Only substitute constants 
         if arg not in constant_dict.keys():
             return arg
-        
-        if random.random() < budget_random:
-            return replace_random(arg, list(constant_dict.keys()))
 
-        return arg
+        budget_random = 0.01
+
+        return (
+            replace_random(arg, list(constant_dict.keys()))
+            if random.random() < budget_random
+            else arg
+        )
 
 
     def substitute_symbol(self, arg, constant_dict):
@@ -202,13 +202,12 @@ def main(file, seed):
     eval_data = get_data(train=False, sort_by_size=True)
     total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
 
-    solvers = get_solvers()
+    solvers = get_solvers([solvers_lnk, solvers_pre])
     equals = {task_id: get_equals(source) for task_id, source in solvers.items()}
     # print_l(f"{get_equals(solvers['a85d4709']) = }")
 
     # XXX Limit to first 5
     # solvers = {k: solvers[k] for k in list(solvers.keys())[:5]}
-    # solvers = {k: solvers[k] for k in list(solvers.keys())}
 
     t_call = {}
     t_name = {}

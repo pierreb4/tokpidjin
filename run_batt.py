@@ -15,10 +15,7 @@ class VariableInliner(ast.NodeTransformer):
         self.assignments = {}
         self.safe_to_inline = set()  # Track which variables are safe to inline
         self.processing = set()      # Track variables being processed to avoid recursion loops
-        # self.func_name = ''
-        # self.all_func_names = set()  # NEW: Track all function names seen
-        # self.func_name_counts = {}   # NEW: Count frequency of each function name
-        # self.func_name_order = []    # NEW: Track order of function names encountered
+
 
     def visit_Assign(self, node):
         # Only handle simple assignments to variable names
@@ -151,11 +148,11 @@ def run_batt(total_data, task_num, task_id, start_time):
         # print(solver_source)
 
         # Write inlined source to file
-        if not os.path.exists('solver_tst'):
-            os.makedirs('solver_tst')
+        if not os.path.exists('solver_md5'):
+            os.makedirs('solver_md5')
         # suffix = f'_{solution[3]}' if solution[2] else ''
-        # with open(f'solver_tst/{solve_name}{suffix}.def', 'w') as f:
-        solve_name = f'solver_tst/solve_{md5_hash}'
+        # with open(f'solver_md5/{solve_name}{suffix}.def', 'w') as f:
+        solve_name = f'solver_md5/solve_{md5_hash}'
         with open(f'{solve_name}.def', 'w') as f:
             f.write(inline_variables(solver_source))
             f.write('\n')
