@@ -22,13 +22,9 @@ TIMEOUT=$((SLEEP * 2))
 clear
 while date; do 
   timeout ${TIMEOUT}s python regen.py
-  # Obsolete?
-  # grep -q '^def ' solvers_gen.py && cat solvers_gen.py
 
-  bash count_solvers.sh
+  bash count_solvers.sh solver_evo
 
-  # d=`date +%F`
-  
   # If we got a third option, build solvers_*.py
   if [ -n "$BUILD" ]; then
     # From solvers_evo.py to solvers_xxx.py
@@ -40,8 +36,6 @@ while date; do
     done
     # From solver_evo/ to solvers_evo.py
     python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py
-
-    # python main.py -q --solvers solvers_evo.py
 
     # From solvers_ref.py to solvers.py
     python replace_func.py -q
