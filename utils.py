@@ -4,8 +4,13 @@ import inspect
 import ast
 import concurrent.futures
 
+from pathlib import Path
+
+
 import solvers_pre
 import solvers_evo
+
+Path('solvers_lnk.py').touch()
 import solvers_lnk
 
 
