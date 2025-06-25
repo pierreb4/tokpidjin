@@ -218,9 +218,9 @@ def main(do_list):
     # NOTE We could have a task list just for unsolved tasks
     full_list = list(total_data['train'].keys())
 
-    # XXX Limit to first 5
-    # task_list = full_list[:5]
-    task_list = full_list
+    # XXX Limit to first few
+    task_list = full_list[:9]
+    # task_list = full_list
 
     if do_list is None:
         do_list = pick_rnd_task(task_list, total_data)

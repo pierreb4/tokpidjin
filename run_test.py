@@ -28,10 +28,9 @@ import constants
 import dsl
 import tests
 import solvers_pre
-import solvers_evo
 
 from grid import *
-from utils import *
+from utils import print_l, load_module
 
 
 def get_data(train=True):
@@ -77,7 +76,7 @@ def run_dsl_tests(dsl_module, test_module, quiet=False):
         print(f"All {len(test_functions)} DSL tests passed.")
 
 
-def test_solvers_formatting(solvers_module, dsl_module, specific_key=None, quiet=False):
+def check_solvers_formatting(solvers_module, dsl_module, specific_key=None, quiet=False):
     """ tests the implemented solvers for formatting """
     with open('constants.py', 'r') as f:
         constants = [c.split(' = ')[0] for c in f.readlines() if ' = ' in c]
@@ -137,13 +136,16 @@ def test_solvers_formatting(solvers_module, dsl_module, specific_key=None, quiet
     print(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
-def test_solvers_correctness(data, solvers_module, specific_key=None, quiet=False, patch=False, update=False):
+def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=False, patch=False, update=False):
     """ tests the implemented solvers for correctness """
+    # functions = get_functions(solvers_module.__file__)
+    # solver_functions = [f for f in functions if f.startswith('solve_')]
+
     definitions = {
         function: inspect.getsource(getattr(solvers_module, function)) \
             for function in get_functions(solvers_module.__file__)
     }
-    
+
     # Filter data and definitions for specific key if provided
     if specific_key:
         if specific_key in data['train']:
@@ -153,16 +155,16 @@ def test_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fals
             return
     else:
         task_keys = data['train'].keys()
-    
+
     n_correct = 0
     n = len(task_keys)
-    
+
     if not quiet and specific_key is None:
         print(f"Testing {n} solver(s) for correctness...")
         iter_keys = tqdm.tqdm(task_keys, total=n)
     else:
         iter_keys = task_keys
-    
+
     correct_train = 0
     correct_test = 0
     for key in iter_keys:
@@ -174,6 +176,7 @@ def test_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fals
         try:
             solver = getattr(solvers_module, f'solve_{key}')
             # print(f'{definitions.get(f"solve_{key}")}')
+
             correct = 1
             for i, ex in enumerate(task):
                 if i < num_train:
@@ -192,7 +195,7 @@ def test_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fals
                     side_by_side( 
                         [ex['input'], ex['output'], solver(S, ex['input'])], 
                         titles=[f'{k_type} Input', f'{k_type} Output', f'{ok} Output'])
-            
+
             n_correct += correct
 
         except NameError as e:
@@ -203,13 +206,13 @@ def test_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fals
                 import re
                 match = re.search(r"name '([^']+)' is not defined", error_msg)
                 if match:
-                    missing_func = match.group(1)
+                    missing_func = match[1]
                     # Try to patch with specialized variants (suffix _t, _f, etc.)
                     patched = patch_missing_function(solvers_module, missing_func, key, ex['input'], quiet, update)
                     if patched:
                         n_correct += 1
                         continue
-            
+
             # If we reach here, either patching wasn't requested, or it failed
             definition = definitions.get(f"solve_{key}", "Solver not found")
             lines = len(definition.split('\n')) if isinstance(definition, str) else 0
@@ -241,7 +244,7 @@ def test_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fals
                 frame = traceback.extract_tb(exc_tb)[-1]
                 filename = frame.filename.split('/')[-1] if frame else "unknown"
                 lineno = frame.lineno if frame else "unknown"
-                
+
                 print_l(f'Exception in {filename}:{lineno}: {e}')
                 print_l(f'Error in {key}:\n{definition}')
             if specific_key:  # Show detailed error for specific key
@@ -255,7 +258,7 @@ def test_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fals
                     side_by_side(
                         [ex['input'], ex['output']],
                         titles=['Input', 'Expected Output'])
-    
+
     print(f'{n_correct} out of {n} tasks solved correctly.')
 
 
@@ -427,6 +430,7 @@ def update_solver_in_file(solver_name, patched_code):
 def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Test ARC solvers")
+    parser.add_argument("--solvers", help="Use this instead of solvers_evo", type=str, default='solvers_evo')
     parser.add_argument("-k", "--key", help="Specific task key to test", type=str)
     parser.add_argument("--skip-tests", help="Skip DSL tests", action="store_true")
     parser.add_argument("-q", "--quiet", help="Show only key errors and line counts", action="store_true")
@@ -443,20 +447,22 @@ def main():
     total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
     
     task_id = args.key
-    if hasattr(solvers_evo, f'solve_{task_id}'):
-        print_l(f"Using solvers_evo solver for task {task_id}")
-        solver = getattr(solvers_evo, f'solve_{task_id}')
-        solvers_module = solvers_evo
-    elif hasattr(solvers_pre, f'solve_{task_id}'):
-        print_l(f"Using solvers_pre solver for task {task_id}")
-        solver = getattr(solvers_pre, f'solve_{task_id}')
-        solvers_module = solvers_pre
-    else:
-        print_l(f"No solver found for task {args.key}")
-        return
 
-    test_solvers_formatting(solvers_module, dsl, args.key, args.quiet)
-    test_solvers_correctness(total_data, solvers_module, args.key, args.quiet, args.patch, args.update)
+    print_l(f'{args.solvers = }')
+
+    # Load the specified solver module or use default
+    if args.solvers:
+        try:
+            solvers_module = load_module(args.solvers)
+            print(f"Using custom solver module: {args.solvers}")
+        except Exception as e:
+            print(f"Error loading solver module {args.solvers}: {e}")
+            return
+    else:
+        solvers_module = solvers_pre  # Use default module
+
+    check_solvers_formatting(solvers_module, dsl, args.key, args.quiet)
+    check_solvers_correctness(total_data, solvers_module, args.key, args.quiet, args.patch, args.update)
 
 if __name__ == "__main__":
     main()

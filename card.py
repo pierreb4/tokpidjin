@@ -5,9 +5,10 @@ import inspect
 
 from pprint import pprint
 
+# import dsl
+
 from utils import *
 from constants import *
-import dsl
 from dsl import *
 
 
@@ -63,17 +64,19 @@ class Code:
             return arg
 
         S = self.S
-        c_iz = dsl.c_iz(S, p_g)
-        c_zo = dsl.c_zo(S, p_g)
+        # c_iz = dsl.c_iz(S, p_g)
+        # c_zo = dsl.c_zo(S, p_g)
+        c_iz_l = c_iz(S, p_g)
+        c_zo_l = c_zo(S, p_g)
 
-        if c in c_iz and random.random() < 0.5:
+        if c in c_iz_l and random.random() < 0.5:
             # Change the score at substitution time
             self.score -= 1
-            return f'c_iz_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_iz.index(c)})))'
-        elif c in c_zo and random.random() < 0.5:
+            return f'c_iz_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_iz_l.index(c)})))'
+        elif c in c_zo_l and random.random() < 0.5:
             # Change the score at substitution time
             self.score -= 1
-            return f'c_zo_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_zo.index(c)})))'
+            return f'c_zo_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_zo_l.index(c)})))'
         elif random.random() < budget_random:
             # Same as usual random replacement
             return random.choice(list(constant_dict.keys()))
@@ -206,8 +209,8 @@ def main(file, seed):
     equals = {task_id: get_equals(source) for task_id, source in solvers.items()}
     # print_l(f"{get_equals(solvers['a85d4709']) = }")
 
-    # XXX Limit to first 5
-    # solvers = {k: solvers[k] for k in list(solvers.keys())[:5]}
+    # XXX Limit to first few
+    # solvers = {k: solvers[k] for k in list(solvers.keys())[:9]}
 
     t_call = {}
     t_name = {}
@@ -222,6 +225,7 @@ def main(file, seed):
 
             train_task = total_data['train'][task_id]
             S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
+            print_l(f'{len(S) = }')
             code = Code(S)
 
             # Is it empty?
@@ -244,7 +248,17 @@ def main(file, seed):
                 t_call[t_k] = old_call
                 t_name[old_call] = t_k
 
-                call = code.mutate(t_call, t_num, has_mutation, task_id)                                    
+
+                print_l(f"{t_call[f't{t_num}'] = }")
+                print_l(f"{clean_call(t_call[f't{t_num}']) = }")
+
+
+                call = code.mutate(t_call, t_num, has_mutation, task_id)
+
+
+                print_l(f'{call = }')
+
+
                 print(f'    {t_k} = env.do_fluff({t_num}, [{call}]) # {task_id} - {has_mutation[task_id]}', file=file)
                 t_num += 1
 

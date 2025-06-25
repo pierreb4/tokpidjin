@@ -51,10 +51,9 @@ Arguments:
 """
 
 import os
-import sys
+# import sys
 import json
 import inspect
-import importlib.util
 import tqdm
 import argparse
 import time
@@ -65,28 +64,7 @@ import dsl
 import tests
 import solvers_pre
 
-from utils import print_l
-
-
-def load_module_from_file(file_path):
-    """
-    Dynamically load a Python module from a file path
-    
-    Args:
-        file_path: Path to the Python file to load
-        
-    Returns:
-        Loaded module object
-    """
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"Module file not found: {file_path}")
-        
-    module_name = os.path.basename(file_path).replace('.py', '')
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
-    spec.loader.exec_module(module)
-    return module
+from utils import print_l, load_module
 
 
 def get_data(train=True):
@@ -139,7 +117,7 @@ def run_dsl_tests(dsl_module, test_module, quiet=False):
         print(f"All {len(test_functions)} DSL tests passed.")
 
 
-def test_solvers_formatting(solvers_module, dsl_module, quiet=False):
+def check_solvers_formatting(solvers_module, dsl_module, quiet=False):
     """ tests the implemented solvers for formatting """
     with open('constants.py', 'r') as f:
         constants = [c.split(' = ')[0] for c in f.readlines() if ' = ' in c]
@@ -225,7 +203,7 @@ def test_solvers_formatting(solvers_module, dsl_module, quiet=False):
     print(f'{n_correct} out of {n} solvers in {os.path.basename(module_file)} formatted correctly.')
 
 
-def test_solvers_correctness(data, solvers_module, quiet=False, timeout_warning=1.0, wait=False):
+def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning=1.0, wait=False):
     """ tests the implemented solvers for correctness """
     functions = get_functions(solvers_module.__file__)
     solver_functions = [f for f in functions if f.startswith('solve_')]
@@ -365,17 +343,14 @@ def main():
                         type=int, default=10)
     parser.add_argument("--stats-output", help="File to save statistics output (default: module_stats.json)",
                         type=str, default="module_stats.json")
-    parser.add_argument("--solvers", help="Path to alternative solvers module (default: solvers.py)",
+    parser.add_argument("--solvers", help="Name of alternative solvers module (default: solvers_pre)",
                         type=str, default=None)
     args = parser.parse_args()
 
     # Load the specified solver module or use default
     if args.solvers:
-        if not os.path.exists(args.solvers):
-            print(f"Error: Solvers module file {args.solvers} not found.")
-            return
         try:
-            solvers_module = load_module_from_file(args.solvers)
+            solvers_module = load_module(args.solvers)
             print(f"Using custom solver module: {args.solvers}")
         except Exception as e:
             print(f"Error loading solver module {args.solvers}: {e}")
@@ -413,7 +388,7 @@ def main():
     # Filter data if a specific key was provided
     if args.key:
         if args.key in total_data['train']:
-            data = {
+            total_data = {
                 'train': {args.key: total_data['train'][args.key]},
                 'test': {args.key: total_data['test'][args.key]}
             }
@@ -423,8 +398,8 @@ def main():
 
     # Run tests with quiet option if specified
     run_dsl_tests(dsl, tests, args.quiet)
-    test_solvers_formatting(solvers_module, dsl, args.quiet)
-    n_correct, avg_time, n_tasks = test_solvers_correctness(total_data, solvers_module, args.quiet, args.timeout, args.wait)
+    check_solvers_formatting(solvers_module, dsl, args.quiet)
+    n_correct, avg_time, n_tasks = check_solvers_correctness(total_data, solvers_module, args.quiet, args.timeout, args.wait)
 
     # Final summary
     print(f"Summary: {n_correct}/{n_tasks} tasks solved correctly with average execution time {avg_time:.4f}s")

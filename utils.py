@@ -3,9 +3,10 @@ import json
 import inspect
 import ast
 import concurrent.futures
+import importlib.util
+import sys
 
 from pathlib import Path
-
 
 import solvers_pre
 import solvers_evo
@@ -132,6 +133,23 @@ def get_solvers(imports):
             solvers[task_id] = source
 
     return solvers
+
+
+def load_module(module_name):
+    """
+    Dynamically load a Python module from a file path
+    Args: module_name: Path to the Python file to load
+    Returns: Loaded module object
+    """
+    file_path = f'{module_name}.py'
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Module file not found: {file_path}")
+        
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 def run_with_timeout(func, args, timeout=5):

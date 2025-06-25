@@ -1,6 +1,6 @@
 #!/opt/homebrew/bin/bash
 
-BUILD='build'
+BUILD=$1
 
 clear
 while date; do 
