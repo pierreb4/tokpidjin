@@ -132,17 +132,23 @@ def run_batt(total_data, task_num, task_id, start_time):
         # Track calls then reverse sequence to rebuild solver
         done = track_solution(solution[1], None)
 
+        # print_l(f'{done = }')
+
         # Build solution body
-        solver_body = ''.join(
-            f'    t{t_num} = {t_call[t_num]}\n'
-            for t_num in sorted(done)
-        )
-        solver_body += f'    O = {t_call[solution[1]]}\n'
-        solver_body += '    return O\n'
+        solver_body = ''
+        for t_num in sorted(done):
+            t = t_call[t_num].split(',')
+            func = t[0]
+            args = t[1:]
+            solver_body += f'    t{t_num} = '
+            solver_body += f'{func}('
+            solver_body += ', '.join(args)
+            solver_body += ')\n'
+        solver_body += f'    return t{solution[1]}\n'
 
         # Get md5_hash of the source code
         md5_hash = hashlib.md5(solver_body.encode()).hexdigest()
-        solver_source = f'def solve{md5_hash}(S, I):\n{solver_body}'
+        solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
 
         # print(solver_source)
 
@@ -174,11 +180,11 @@ def run_batt(total_data, task_num, task_id, start_time):
             os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
 
 
-            # # Check things
-            # python_exp = 'python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py'
-            # python_cmd = f'python run_test.py --solvers solvers_lnk -k {task_id}'
-            # os.system(python_exp)
-            # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
+        # # Check things
+        # python_exp = 'python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py'
+        # python_cmd = f'python run_test.py --solvers solvers_lnk -k {task_id}'
+        # os.system(python_exp)
+        # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
 
 
     # No timeout
@@ -189,7 +195,13 @@ def track_solution(t_num, done):
     if done is None:
         done = set()
 
+    if t_num not in done:
+        done.add(t_num)
+
     call = t_call[t_num]
+
+    # print_l(call)
+
     if t_list := re.findall(r't(\d+)', call):
         for t_str in t_list:
             t_num = int(t_str)
