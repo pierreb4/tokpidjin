@@ -109,7 +109,6 @@ def run_batt(total_data, task_num, task_id, start_time):
         # print(f"Sample: {i+1}/{len(test_task)} - {o['test'][i]} = ")
         print('-', end='', flush=True)
 
-
     # Values present in all output lists are valid solutions
     # TODO Keep track of partial solutions, then try improving them
     valid_solutions = set(o['train'][0])
@@ -131,19 +130,19 @@ def run_batt(total_data, task_num, task_id, start_time):
         print(f"Solved {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt from {solution}")
 
         # Track calls then reverse sequence to rebuild solver
-        t_var = solution[1]
-        done = track_solution(t_var, None)
+        done = track_solution(solution[1], None)
+
+        # Build solution body
+        solver_body = ''.join(
+            f'    t{t_num} = {t_call[t_num]}\n'
+            for t_num in sorted(done)
+        )
+        solver_body += f'    O = {t_call[solution[1]]}\n'
+        solver_body += '    return O\n'
 
         # Get md5_hash of the source code
-        md5_hash = hashlib.md5(solution[1].encode()).hexdigest()
-        solve_hash = f'solve_{md5_hash}'
-
-        # Rebuild solution
-        solver_source = f'def {solve_hash}(S, I):\n'
-        for t_var in sorted(done, key=lambda x: int(x[1:])):
-            solver_source += f'    {t_var} = {t_call[t_var]}\n'
-        solver_source += f'    O = {t_call[solution[1]]}\n'
-        solver_source += '    return O\n'
+        md5_hash = hashlib.md5(solver_body.encode()).hexdigest()
+        solver_source = f'def solve{md5_hash}(S, I):\n{solver_body}'
 
         # print(solver_source)
 
@@ -159,32 +158,44 @@ def run_batt(total_data, task_num, task_id, start_time):
 
         if not os.path.exists('solver_lnk'):
             os.makedirs('solver_lnk')
- 
+
         solve_task = f'solver_lnk/solve_{task_id}'
         try:
             os.symlink(f'../{solve_name}.def', f'{solve_task}.def')
-            os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
         except FileExistsError:
             # If the symlink already exists, remove it and create a new one
             os.remove(f'{solve_task}.def')
-            os.remove(f'{solve_task}_xxx.py')
             os.symlink(f'../{solve_name}.def', f'{solve_task}.def')
+        try:
             os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
+        except FileExistsError:
+            # If the symlink already exists, remove it and create a new one
+            os.remove(f'{solve_task}_xxx.py')
+            os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
+
+
+            # # Check things
+            # python_exp = 'python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py'
+            # python_cmd = f'python run_test.py --solvers solvers_lnk -k {task_id}'
+            # os.system(python_exp)
+            # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
+
 
     # No timeout
     return False
 
 
-def track_solution(t_var, done):
+def track_solution(t_num, done):
     if done is None:
         done = set()
 
-    call = t_call[t_var]
-    if t_list := re.findall(r't\d+', call):
-        for t_var in t_list:
-            if t_var not in done:
-                done.add(t_var)
-                track_solution(t_var, done)
+    call = t_call[t_num]
+    if t_list := re.findall(r't(\d+)', call):
+        for t_str in t_list:
+            t_num = int(t_str)
+            if t_num not in done:
+                done.add(t_num)
+                track_solution(t_num, done)
 
     return done
 
@@ -219,8 +230,8 @@ def main(do_list):
     full_list = list(total_data['train'].keys())
 
     # XXX Limit to first few
-    task_list = full_list[:9]
-    # task_list = full_list
+    # task_list = full_list[:9]
+    task_list = full_list
 
     if do_list is None:
         do_list = pick_rnd_task(task_list, total_data)

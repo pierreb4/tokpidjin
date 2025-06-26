@@ -22,6 +22,7 @@ import inspect
 import tqdm
 import argparse
 import re
+import sys
 
 import arc_types
 import constants
@@ -260,6 +261,7 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
                         titles=['Input', 'Expected Output'])
 
     print(f'{n_correct} out of {n} tasks solved correctly.')
+    return n_correct == n
 
 
 def patch_missing_function(solvers_module, missing_func, key, test_input, quiet=False, update_file=False):
@@ -432,14 +434,14 @@ def main():
     parser = argparse.ArgumentParser(description="Test ARC solvers")
     parser.add_argument("--solvers", help="Use this instead of solvers_evo", type=str, default='solvers_evo')
     parser.add_argument("-k", "--key", help="Specific task key to test", type=str)
-    parser.add_argument("--skip-tests", help="Skip DSL tests", action="store_true")
+    parser.add_argument("--do-tests", help="Skip DSL tests", action="store_true")
     parser.add_argument("-q", "--quiet", help="Show only key errors and line counts", action="store_true")
     parser.add_argument("--patch", help="Attempt to patch functions with NameErrors using specialized variants", action="store_true")
     parser.add_argument("--update", help="Update solvers.py with successful patches", action="store_true")
     args = parser.parse_args()
 
-    # if not args.skip_tests:
-    #     run_dsl_tests(dsl, tests, args.quiet)
+    if args.do_tests:
+        run_dsl_tests(dsl, tests, args.quiet)
 
     # data = get_data(train=True)
     train_data = get_data(train=True)
@@ -462,7 +464,10 @@ def main():
         solvers_module = solvers_pre  # Use default module
 
     check_solvers_formatting(solvers_module, dsl, args.key, args.quiet)
-    check_solvers_correctness(total_data, solvers_module, args.key, args.quiet, args.patch, args.update)
+    return check_solvers_correctness(total_data, solvers_module, args.key, args.quiet, args.patch, args.update)
 
 if __name__ == "__main__":
-    main()
+    if success := main():
+        sys.exit(0)
+
+    sys.exit(1)
