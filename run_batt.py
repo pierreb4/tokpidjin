@@ -153,31 +153,21 @@ def run_batt(total_data, task_num, task_id, start_time):
         # print(solver_source)
 
         # Write inlined source to file
-        if not os.path.exists('solver_md5'):
-            os.makedirs('solver_md5')
-        # suffix = f'_{solution[3]}' if solution[2] else ''
-        # with open(f'solver_md5/{solve_name}{suffix}.def', 'w') as f:
-        solve_name = f'solver_md5/solve_{md5_hash}'
+        ensure_dir('solver_md5')
+
+        solve_name = f'solver_md5/{md5_hash}'
         with open(f'{solve_name}.def', 'w') as f:
             f.write(inline_variables(solver_source))
             f.write('\n')
 
-        if not os.path.exists('solver_lnk'):
-            os.makedirs('solver_lnk')
+        ensure_dir('solver_dir')
+        solve_task = f'solver_dir/solve_{task_id}'
 
-        solve_task = f'solver_lnk/solve_{task_id}'
-        try:
-            os.symlink(f'../{solve_name}.def', f'{solve_task}.def')
-        except FileExistsError:
-            # If the symlink already exists, remove it and create a new one
-            os.remove(f'{solve_task}.def')
-            os.symlink(f'../{solve_name}.def', f'{solve_task}.def')
-        try:
-            os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
-        except FileExistsError:
-            # If the symlink already exists, remove it and create a new one
-            os.remove(f'{solve_task}_xxx.py')
-            os.symlink(f'../{solve_name}_xxx.py', f'{solve_task}_xxx.py')
+        ensure_dir(solve_task)
+        solve_link = f'solver_dir/solve_{task_id}/{md5_hash}'
+
+        symlink(f'{solve_name}.def', f'{solve_link}.def')
+        symlink(f'{solve_name}.py', f'{solve_link}.py')
 
 
         # # Check things
@@ -189,6 +179,25 @@ def run_batt(total_data, task_num, task_id, start_time):
 
     # No timeout
     return False
+
+
+def symlink(file_name, link_name):
+    """
+    Create a symlink for the given file.
+    If the symlink already exists, remove it and create a new one.
+    """
+    full_name = os.path.abspath(file_name)
+    try:
+        os.symlink(full_name, link_name)
+    except FileExistsError:
+        # If the symlink already exists, remove it and create a new one
+        os.remove(link_name)
+        os.symlink(full_name, link_name)
+
+
+def ensure_dir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 
 def track_solution(t_num, done):

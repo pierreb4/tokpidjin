@@ -64,15 +64,13 @@ clear; bash run_regen.sh 12
 # Or check on simone
 while true
   do date +'%F %T'
-    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh solver_evo' >last_s_count.txt
+    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh solver_lnk' >last_s_count.txt
     cat last_s_count.txt
     cmp -s last_s_count.txt best_s_count.txt 
     if [ $? -ne 0 ]; then
-      echo "Files are different"
+      # echo "Files are different"
       cp last_s_count.txt best_s_count.txt
-      npx mudslide send 46708818434 "`cat last_s_count.txt`"
-    # else
-      # echo "Files are the same"
+      # npx mudslide send 46708818434 "`cat last_s_count.txt`"
     fi
     sleep 60
   done
@@ -114,7 +112,7 @@ python main.py --solvers solvers_evo.py
 rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/solve_*.def solver_md5/ && \
 rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_lnk/solve_*.def solver_lnk/ && \
 python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py && \
-python main.py --solvers solvers_lnk.py
+python main.py --solvers solvers_lnk
 
 
 # Smallest solvers in solver_pre/ but not in solver_evo/

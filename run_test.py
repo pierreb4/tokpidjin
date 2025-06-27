@@ -9,7 +9,7 @@ It provides functionality to:
 
 Usage:
   python run_test.py                     # Run all tests
-  python run_test.py -k TASK_KEY         # Test a specific task by key
+  python run_test.py -k TASK_ID          # Test a specific task_id
   python run_test.py --skip-tests        # Skip DSL primitive tests
   python run_test.py -q, --quiet         # Show only key errors and line counts
 
@@ -23,6 +23,7 @@ import tqdm
 import argparse
 import re
 import sys
+import traceback
 
 import arc_types
 import constants
@@ -77,7 +78,7 @@ def run_dsl_tests(dsl_module, test_module, quiet=False):
         print(f"All {len(test_functions)} DSL tests passed.")
 
 
-def check_solvers_formatting(solvers_module, dsl_module, specific_key=None, quiet=False):
+def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet=False):
     """ tests the implemented solvers for formatting """
     with open('constants.py', 'r') as f:
         constants = [c.split(' = ')[0] for c in f.readlines() if ' = ' in c]
@@ -87,8 +88,8 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_key=None, quie
     }
     
     # Filter for specific key if provided
-    if specific_key and f'solve_{specific_key}' in definitions:
-        definitions = {f'solve_{specific_key}': definitions[f'solve_{specific_key}']}
+    if specific_id and f'solve_{specific_id}' in definitions:
+        definitions = {f'solve_{specific_id}': definitions[f'solve_{specific_id}']}
     
     dsl_interface = get_functions(dsl_module.__file__)
     n_correct = 0
@@ -137,7 +138,7 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_key=None, quie
     print(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
-def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=False, patch=False, update=False):
+def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=False, patch=False, update=False):
     """ tests the implemented solvers for correctness """
     # functions = get_functions(solvers_module.__file__)
     # solver_functions = [f for f in functions if f.startswith('solve_')]
@@ -148,23 +149,35 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
     }
 
     # Filter data and definitions for specific key if provided
-    if specific_key:
-        if specific_key in data['train']:
-            task_keys = [specific_key]
+    md5_hash = None
+    solve_func = {} 
+    if specific_id:
+        # if key includes 'solve_', strip it
+        if specific_id.startswith('solve_'):
+            specific_id = specific_id[6:]
+
+        # if key includes md5_hash, strip it
+        if len(specific_id) == 41:
+            md5_hash = specific_id[9:]
+            task_id = specific_id[:8]
+
+        if task_id in data['train']:
+            task_ids = [task_id]
+            solve_func[task_id] = f'solve_{task_id}_{md5_hash}'
         else:
-            print(f"Key '{specific_key}' not found in training data.")
+            print(f"Key '{task_id}' not found in training data.")
             return
     else:
-        task_keys = data['train'].keys()
+        task_ids = data['train'].keys()
 
     n_correct = 0
-    n = len(task_keys)
+    n = len(task_ids)
 
-    if not quiet and specific_key is None:
+    if not quiet and specific_id is None:
         print(f"Testing {n} solver(s) for correctness...")
-        iter_keys = tqdm.tqdm(task_keys, total=n)
+        iter_keys = tqdm.tqdm(task_ids, total=n)
     else:
-        iter_keys = task_keys
+        iter_keys = task_ids
 
     correct_train = 0
     correct_test = 0
@@ -175,15 +188,14 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
 
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
-            solver = getattr(solvers_module, f'solve_{key}')
-            # print(f'{definitions.get(f"solve_{key}")}')
+            if hasattr(solvers_module, solve_func[key]):
+                solver = getattr(solvers_module, solve_func[key])
+            else:
+                continue
 
             correct = 1
             for i, ex in enumerate(task):
-                if i < num_train:
-                    k_type = 'Train'
-                else:
-                    k_type = 'Test'
+                k_type = 'Train' if i < num_train else 'Test'
 
                 ok = 'OK'
                 if quiet:
@@ -192,7 +204,7 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
                     correct = 0
                     ok = 'KO'
 
-                if specific_key:
+                if specific_id:
                     side_by_side( 
                         [ex['input'], ex['output'], solver(S, ex['input'])], 
                         titles=[f'{k_type} Input', f'{k_type} Output', f'{ok} Output'])
@@ -200,7 +212,7 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
             n_correct += correct
 
         except NameError as e:
-            if patch and specific_key:
+            if patch and specific_id:
                 # Try to patch the undefined function with specialized variants
                 error_msg = str(e)
                 # Extract the undefined name from the error message
@@ -221,7 +233,7 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
                 print(f"Error in {key}: {lines} lines")
             else:
                 print(f'Error in {key}:\n{definition}')
-            if specific_key:  # Show detailed error for specific key
+            if specific_id:  # Show detailed error for specific key
                 print(f"NameError: {str(e)}")
                 try:
                     # Try to show output anyway for debugging
@@ -229,7 +241,7 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
                     side_by_side(
                         [ex['input'], ex['output'], output],
                         titles=['Input', 'Expected Output', 'Solver Output'])
-                except:
+                except Exception as e:
                     side_by_side(
                         [ex['input'], ex['output']],
                         titles=['Input', 'Expected Output'])
@@ -240,7 +252,6 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
                 print_l(f"Error in {key}: {lines} lines")
             else:
                 # Include source location in exception message
-                import sys, traceback
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 frame = traceback.extract_tb(exc_tb)[-1]
                 filename = frame.filename.split('/')[-1] if frame else "unknown"
@@ -248,14 +259,14 @@ def check_solvers_correctness(data, solvers_module, specific_key=None, quiet=Fal
 
                 print_l(f'Exception in {filename}:{lineno}: {e}')
                 print_l(f'Error in {key}:\n{definition}')
-            if specific_key:  # Show detailed error for specific key
+            if specific_id:  # Show detailed error for specific key
                 print_l(f"Error: {type(e).__name__}: {str(e)}")
                 try:
                     # Try to show output anyway for debugging
                     side_by_side( 
                         [ex['input'], ex['output'], solver(ex['input'])], 
                         titles=['Input', 'Expected Output', 'Solver Output'])
-                except:
+                except Exception as e:
                     side_by_side(
                         [ex['input'], ex['output']],
                         titles=['Input', 'Expected Output'])

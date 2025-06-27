@@ -57,6 +57,8 @@ import inspect
 import tqdm
 import argparse
 import time
+import sys
+import traceback
 
 import arc_types
 import constants
@@ -214,9 +216,23 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
     }
     
     # Count how many tasks have corresponding solvers
-    task_keys = data["train"].keys()
-    solver_keys = [f.replace('solve_', '') for f in solver_functions]
-    solvable_tasks = {k: True for k in task_keys if k in solver_keys}
+    task_ids = data["train"].keys()
+
+    solver_keys = []
+    solve_func = {} 
+    for f in solver_functions:
+        if f.startswith('solve_'):
+            f = f[6:]
+
+        if len(f) == 41:
+            md5_hash = f[9:]
+            task_id = f[:8]
+
+        if task_id in data['train']:
+            solver_keys.append(task_id)
+            solve_func[task_id] = f'solve_{task_id}_{md5_hash}'
+
+    solvable_tasks = {k: True for k in task_ids if k in solver_keys}
     
     n_correct = 0
     n = len(solvable_tasks)
@@ -240,8 +256,8 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
         
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
-            if hasattr(solvers_module, f'solve_{key}'):
-                solver = getattr(solvers_module, f'solve_{key}')
+            if hasattr(solvers_module, solve_func[key]):
+                solver = getattr(solvers_module, solve_func[key])
             else:
                 continue
             
@@ -287,7 +303,6 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                 lines = len(definition.split('\n')) if isinstance(definition, str) else 0
                 
                 # Add source location information to error message
-                import sys, traceback
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 frame = traceback.extract_tb(exc_tb)[-1]
                 line_info = f" at line {frame.lineno}" if frame else ""
@@ -295,7 +310,6 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                 print_l(f"Error in {key}{line_info}: {lines} lines")
             else:
                 # Include source location in exception message
-                import sys, traceback
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 frame = traceback.extract_tb(exc_tb)[-1]
                 filename = frame.filename.split('/')[-1] if frame else "unknown"

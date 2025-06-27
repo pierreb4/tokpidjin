@@ -341,11 +341,13 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
             content = f.read()
         
         if func_parsed := parse_function_body(content):
-            func_name, func_params, steps = func_parsed
+            _, func_params, steps = func_parsed
             
-            # Get function name from .def file name
-            # XXX This here might involve some cleanup
-            func_name = Path(def_file).stem
+            # Get function name from def_file
+            def_stem = Path(def_file).stem
+            def_dir = Path(def_file).parent
+            def_prefix = Path(def_dir).stem
+            func_name = f'{def_prefix}_{def_stem}'
 
             # Create the original function with _one suffix
             original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")
@@ -362,7 +364,7 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
             if not quiet:
                 print_l(f"Successfully generated {py_file} with expanded version")
                 print_l(f"Original function renamed to {func_name}_one")
-                print_l(f"Expanded function uses original name {func_name}")
+                print_l(f"Expanded function uses name {func_name}")
             
             # Update solvers_evo.py if specified
             if update_solvers_file:
@@ -404,7 +406,8 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
         return 0, 0
     
     # Find all .def files in the directory
-    def_files = [f for f in os.listdir(source_dir) if f.endswith('.def')]
+    # def_files = [f for f in os.listdir(source_dir) if f.endswith('.def')]
+    def_files = [str(f) for f in Path(source_dir).rglob('*.def')]
     
     if not def_files:
         if not quiet:
@@ -413,6 +416,7 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
     
     if not quiet:
         print_l(f"Found {len(def_files)} .def files in {source_dir}")
+
     processed = 0
     succeeded = 0
     
@@ -421,20 +425,20 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
     if update_solvers_file:
         with open(update_solvers_file, 'w') as f:
             f.write("from dsl import *\nfrom constants import *\n\n\n")
+
         if not quiet:
-            print_l(f"Initialized {update_solvers_file} with imports (will overwrite all contents)")
+            print_l(f"Initialized {update_solvers_file} with imports (overwriting all contents)")
     
     for def_file in def_files:
-        def_path = os.path.join(source_dir, def_file)
-        py_file = def_file.replace('.def', '_xxx.py')
-        py_path = os.path.join(source_dir, py_file)
+        py_file = def_file.replace('.def', '.py')
         
         if not quiet:
             print_l(f"Processing {def_file} -> {py_file}...")
+
         processed += 1
         
         # Pass the quiet parameter to process_file
-        if process_file(def_path, py_path, update_solvers_file, quiet):
+        if process_file(def_file, py_file, update_solvers_file, quiet):
             succeeded += 1
     
     return processed, succeeded
