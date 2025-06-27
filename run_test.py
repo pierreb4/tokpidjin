@@ -86,18 +86,18 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
         function: inspect.getsource(getattr(solvers_module, function)) \
             for function in get_functions(solvers_module.__file__)
     }
-    
+
     # Filter for specific key if provided
     if specific_id and f'solve_{specific_id}' in definitions:
         definitions = {f'solve_{specific_id}': definitions[f'solve_{specific_id}']}
-    
+
     dsl_interface = get_functions(dsl_module.__file__)
     n_correct = 0
     n = len(definitions)
-    
+
     if not quiet:
         print(f"Testing {n} solver(s) for formatting...")
-    
+
     for key, definition in definitions.items():
         try:
             lines = definition.split('\n')
@@ -119,22 +119,31 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
                 for arg in args:
                     assert any([
                         arg in variables, arg in dsl_interface,
-                        arg in constants, arg == 'I'
+                        arg in constants, arg == 'I', arg == 'S'
                     ])
             for v in variables:
-                assert sum([
-                    definition.count(vs) for vs in [
-                        f'({v})', f'({v}, ', f', {v})',
-                        f', {v}, ', f' {v} = ', f' {v}('
-                    ]
-                ]) > 1 or v == 'O'
+                assert (
+                    sum(
+                        definition.count(vs)
+                        for vs in [
+                            f'({v})',
+                            f'({v}, ',
+                            f', {v})',
+                            f', {v}, ',
+                            f' {v} = ',
+                            f' {v}(',
+                        ]
+                    )
+                    > 1
+                    or v == 'O'
+                )
             n_correct += 1
-        except:
+        except Exception:
             if quiet:
                 print(f"Error in {key}: {len(lines)} lines")
             else:
                 print(f'Error in {key}:\n{definition}')
-    
+
     print(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
@@ -227,7 +236,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                         continue
 
             # If we reach here, either patching wasn't requested, or it failed
-            definition = definitions.get(f"solve_{key}", "Solver not found")
+            definition = definitions.get(solve_func[key], "Solver not found")
             lines = len(definition.split('\n')) if isinstance(definition, str) else 0
             if quiet:
                 print(f"Error in {key}: {lines} lines")
@@ -246,7 +255,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                         [ex['input'], ex['output']],
                         titles=['Input', 'Expected Output'])
         except Exception as e:
-            definition = definitions.get(f"solve_{key}", "Solver not found")
+            definition = definitions.get(solve_func[key], "Solver not found")
             lines = len(definition.split('\n')) if isinstance(definition, str) else 0
             if quiet:
                 print_l(f"Error in {key}: {lines} lines")

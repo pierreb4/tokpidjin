@@ -34,7 +34,9 @@ def get_hints(node_name):
     if not inspect.isfunction(global_id):
         return None
 
-    return [t for var, t in global_id.__annotations__.items()]
+    hints = [t for var, t in global_id.__annotations__.items()]
+    return hints[-1:] + hints[:-1]
+
 
 
 def clean_call(call):
@@ -43,6 +45,19 @@ def clean_call(call):
 
 def get_items(call):
     return call.strip('[]').split(',')
+
+
+def replace_random(value, input_list):
+    current_idx = input_list.index(value)
+    if current_idx == 0:  # First element
+        offset = 1
+    elif current_idx == len(input_list) - 1:  # Last element
+        offset = -1
+    else:
+        offset = random.choice([-1, 1])
+    
+    new_idx = current_idx + offset
+    return input_list[new_idx]
 
 
 class Code:
@@ -105,14 +120,13 @@ class Code:
         t_call[t_num + 2] = f'rbind, get_nth_t, {f_n}'
         t_call[t_num + 3] = f'identity, t{t_num + 2}'
         t_call[t_num + 4] = f'{c_izzo_n}, t{t_num + 0}, t{t_num + 1}, t{t_num + 3}'
+        self.t_num += 5
 
         print(f'    t{t_num + 0} = env.do_fluff({t_num + 0}, [{t_call[t_num + 0]}]) # {self.task_id} - True', file=self.file)
         print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}]) # {self.task_id} - True', file=self.file)
         print(f'    t{t_num + 2} = env.do_fluff({t_num + 2}, [{t_call[t_num + 2]}]) # {self.task_id} - True', file=self.file)
         print(f'    t{t_num + 3} = env.do_fluff({t_num + 3}, [{t_call[t_num + 3]}]) # {self.task_id} - True', file=self.file)
         print(f'    t{t_num + 4} = env.do_fluff({t_num + 4}, [{t_call[t_num + 4]}]) # {self.task_id} - True', file=self.file)
-
-        self.t_num += 5
         return f't{t_num + 4}'
 
 
@@ -149,14 +163,26 @@ class Code:
         c = constant_dict[arg]
         S = self.S
         if c == a_mr(S) and random.random() < 0.5:
-            # Change the score at substitution time
-            self.score -= 1
-            return 'identity(a_mr(S))'        
+            return self.substitute_grid_angle_mr()
         elif random.random() < budget_random:
             # Same as usual random replacement
             return random.choice(list(constant_dict.keys()))
-        
+
         return arg
+
+    def substitute_grid_angle_mr(self):
+        # Change the score at substitution time
+        self.score -= 1
+        t_call = self.t_call
+        t_num = self.t_num
+
+        t_call[t_num + 0] = 'identity, S'
+        t_call[t_num + 1] = f'a_mr, t{t_num + 0}'
+        self.t_num += 2
+
+        print(f'    t{t_num + 0} = env.do_fluff({t_num + 0}, [{t_call[t_num + 0]}]) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}]) # {self.task_id} - True', file=self.file)
+        return f't{t_num + 1}'
 
 
     def mutate(self):
@@ -211,13 +237,14 @@ class Code:
                     elif old_hint == 'R8':
                         old_args[i] = self.substitute_symbol(old_arg, R8_NAMES)
                         self.score += 1
-                    # elif old_hint == 'A8':
-                    #     old_args[i] = self.substitute_grid_angle(old_arg)
-                    elif old_hint not in [ 'Samples', 'Grid', 'Tuple', 
+                    elif old_hint == 'A8':
+                        # print_l(f'{old_args = } - {old_hints = } - {old_call = }')
+                        old_args[i] = self.substitute_grid_angle(old_arg)
+                    elif old_hint not in [ 'Samples', 'Grid', 'Tuple',
                             'Object', 'Objects', 'FrozenSet', 'Patch', 
                             'Callable', 'Container', 'ContainerContainer',
                             'Integer', 'IntegerSet', 'Numerical', 'Indices', 
-                            'Boolean', 'IJ', 'A4', 
+                            'Boolean', 'IJ', 'A4', 'TupleTuple'
                         ]:
                         print_l(f'{old_hint = }')
                     if old_args[i] != old_arg:
