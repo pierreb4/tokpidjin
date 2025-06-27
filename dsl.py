@@ -2337,6 +2337,8 @@ def f_ofcolor(
     color: 'C_'
 ) -> 'Indices':
     """ indices of all grid cells with value """
+    if isinstance(grid[0], int):
+        return frozenset()
     return frozenset((i, j) for i, r in enumerate(grid) for j, v in enumerate(r) if v == color)
 
 
