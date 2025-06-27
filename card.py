@@ -249,7 +249,7 @@ def main(file, seed):
     eval_data = get_data(train=False, sort_by_size=True)
     total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
 
-    solvers = get_solvers([solvers_lnk, solvers_pre])
+    solvers = get_solvers([solvers_dir, solvers_pre])
     equals = {task_id: get_equals(source) for task_id, source in solvers.items()}
     # print_l(f"{get_equals(solvers['a85d4709']) = }")
 

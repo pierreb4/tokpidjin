@@ -13,6 +13,8 @@ import solvers_evo
 
 Path('solvers_lnk.py').touch()
 import solvers_lnk
+Path('solvers_dir.py').touch()
+import solvers_dir
 
 
 BAD_SOLVERS = {
