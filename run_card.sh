@@ -1,11 +1,12 @@
 #!/opt/homebrew/bin/bash
 
-BUILD=$1
+TIMEOUT=$1
+BUILD=$2
 
 clear
 while date; do 
   python card.py
-  python run_batt.py
+  python run_batt.py -t -to $TIMEOUT
 
   bash count_solvers.sh solver_dir
   

@@ -109,10 +109,10 @@ python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py &&
 python main.py --solvers solvers_evo.py
 
 # Same with md5 and link solvers
-rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/solve_*.def solver_md5/ && \
-rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_lnk/solve_*.def solver_lnk/ && \
-python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py && \
-python main.py --solvers solvers_lnk
+rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
+rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
+python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py && \
+python main.py --solvers solvers_dir
 
 
 # Smallest solvers in solver_pre/ but not in solver_evo/

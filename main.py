@@ -51,7 +51,6 @@ Arguments:
 """
 
 import os
-# import sys
 import json
 import inspect
 import tqdm
@@ -104,7 +103,7 @@ def run_dsl_tests(dsl_module, test_module, quiet=False):
     """ test DSL primitives """
     dsl_functions = get_functions(dsl_module.__file__)
     test_functions = get_functions(test_module.__file__)
-    expected = set([f'test_{f}' for f in dsl_functions])
+    expected = {f'test_{f}' for f in dsl_functions}
 
     try:
         assert set(test_functions) == expected
@@ -114,7 +113,7 @@ def run_dsl_tests(dsl_module, test_module, quiet=False):
 
     for fun in test_functions:
         getattr(test_module, fun)()
-    
+
     if not quiet:
         print(f"All {len(test_functions)} DSL tests passed.")
 
@@ -123,13 +122,13 @@ def check_solvers_formatting(solvers_module, dsl_module, quiet=False):
     """ tests the implemented solvers for formatting """
     with open('constants.py', 'r') as f:
         constants = [c.split(' = ')[0] for c in f.readlines() if ' = ' in c]
-    
+
     module_file = solvers_module.__file__
     functions = get_functions(module_file)
-    
+
     # Filter out non-solver functions
     solver_functions = [f for f in functions if f.startswith('solve_')]
-    
+
     definitions = {
         function: inspect.getsource(getattr(solvers_module, function)) \
             for function in solver_functions
@@ -137,10 +136,10 @@ def check_solvers_formatting(solvers_module, dsl_module, quiet=False):
     dsl_interface = get_functions(dsl_module.__file__)
     n_correct = 0
     n = len(definitions)
-    
+
     if not quiet:
         print(f"Testing {n} solver(s) in {os.path.basename(module_file)} for formatting...")
-    
+
     for key, definition in definitions.items():
         try:
             lines = definition.split('\n')
@@ -180,12 +179,21 @@ def check_solvers_formatting(solvers_module, dsl_module, quiet=False):
                         arg in constants, arg == 'I', arg == 'S'
                     ])
             for v in variables:
-                assert sum([
-                    definition.count(vs) for vs in [
-                        f'({v})', f'({v}, ', f', {v})',
-                        f', {v}, ', f' {v} = ', f' {v}('
-                    ]
-                ]) > 1 or v == 'O'
+                assert (
+                    sum(
+                        definition.count(vs)
+                        for vs in [
+                            f'({v})',
+                            f'({v}, ',
+                            f', {v})',
+                            f', {v}, ',
+                            f' {v} = ',
+                            f' {v}(',
+                        ]
+                    )
+                    > 1
+                    or v == 'O'
+                )
             n_correct += 1
         except Exception as e:
             if quiet:
@@ -201,7 +209,7 @@ def check_solvers_formatting(solvers_module, dsl_module, quiet=False):
                 line_number = frame.lineno if frame else "unknown"
                 print_l(f'Exception at line {line_number}: {e}')
                 print_l(f'Error in {key}:\n{definition}')
-    
+
     print(f'{n_correct} out of {n} solvers in {os.path.basename(module_file)} formatted correctly.')
 
 

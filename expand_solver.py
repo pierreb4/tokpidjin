@@ -44,6 +44,7 @@ The script will:
 5. Optionally update the specified solvers file with the expanded function
 """
 
+import argparse
 import re
 import os
 import sys
@@ -51,7 +52,6 @@ import ast
 import utils
 import inspect
 import traceback
-import argparse
 
 from pathlib import Path
 

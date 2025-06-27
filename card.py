@@ -68,55 +68,15 @@ class Code:
             return arg
 
         S = self.S
-        # c_iz = dsl.c_iz(S, p_g)
-        # c_zo = dsl.c_zo(S, p_g)
         c_iz_l = c_iz(S, p_g)
         c_zo_l = c_zo(S, p_g)
 
         if c in c_iz_l and random.random() < 0.5:
-            # Change the score at substitution time
-            self.score -= 1
-            # return f'c_iz_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_iz_l.index(c)})))'
-
-            t_call = self.t_call
-            t_num = self.t_num
-            t_call[t_num] = 'identity, S'
-            t_call[t_num + 1] = 'identity, p_g'
-            t_call[t_num + 2] = f'rbind, get_nth_t, F{c_iz_l.index(c)}'
-            t_call[t_num + 3] = f'identity, t{t_num + 2}'
-            t_call[t_num + 4] = f'c_iz_n, t{t_num}, t{t_num + 1}, t{t_num + 3}'
-
-            print(f'    t{t_num} = env.do_fluff({t_num}, [{t_call[t_num]}]) # {self.task_id} - True', file=self.file)
-            print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}]) # {self.task_id} - True', file=self.file)
-            print(f'    t{t_num + 2} = env.do_fluff({t_num + 2}, [{t_call[t_num + 2]}]) # {self.task_id} - True', file=self.file)
-            print(f'    t{t_num + 3} = env.do_fluff({t_num + 3}, [{t_call[t_num + 3]}]) # {self.task_id} - True', file=self.file)
-            print(f'    t{t_num + 4} = env.do_fluff({t_num + 4}, [{t_call[t_num + 4]}]) # {self.task_id} - True', file=self.file)
-
-            self.t_num += 5
-            return f't{t_num + 4}'
-
+            f_n = f'F{c_iz_l.index(c)}'
+            return self.substitute_color_izzo('c_iz_n', f_n)
         elif c in c_zo_l and random.random() < 0.5:
-            # Change the score at substitution time
-            self.score -= 1
-            # return f'c_zo_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_zo_l.index(c)})))'
-
-            t_call = self.t_call
-            t_num = self.t_num
-            t_call[t_num] = 'identity, S'
-            t_call[t_num + 1] = 'identity, p_g'
-            t_call[t_num + 2] = f'rbind, get_nth_t, F{c_zo_l.index(c)}'
-            t_call[t_num + 3] = f'identity, t{t_num + 2}'
-            t_call[t_num + 4] = f'c_zo_n, t{t_num}, t{t_num + 1}, t{t_num + 3}'
-
-            print(f'    t{t_num} = env.do_fluff({t_num}, [{t_call[t_num]}]) # {self.task_id} - True', file=self.file)
-            print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}]) # {self.task_id} - True', file=self.file)
-            print(f'    t{t_num + 2} = env.do_fluff({t_num + 2}, [{t_call[t_num + 2]}]) # {self.task_id} - True', file=self.file)
-            print(f'    t{t_num + 3} = env.do_fluff({t_num + 3}, [{t_call[t_num + 3]}]) # {self.task_id} - True', file=self.file)
-            print(f'    t{t_num + 4} = env.do_fluff({t_num + 4}, [{t_call[t_num + 4]}]) # {self.task_id} - True', file=self.file)
-
-            self.t_num += 5
-            return f't{t_num + 4}'
-
+            f_n = f'F{c_zo_l.index(c)}'
+            return self.substitute_color_izzo('c_zo_n', f_n)
         elif random.random() < budget_random:
             # Same as usual random replacement
             return random.choice(list(constant_dict.keys()))
@@ -124,6 +84,27 @@ class Code:
         # Get name corresponding to number
         constant_list = list(constant_dict.keys())
         return constant_list[c]
+
+    def substitute_color_izzo(self, c_izzo_n, f_n):
+        # Change the score at substitution time
+        self.score -= 1
+
+        t_call = self.t_call
+        t_num = self.t_num
+        t_call[t_num] = 'identity, S'
+        t_call[t_num + 1] = 'identity, p_g'
+        t_call[t_num + 2] = f'rbind, get_nth_t, {f_n}'
+        t_call[t_num + 3] = f'identity, t{t_num + 2}'
+        t_call[t_num + 4] = f'{c_izzo_n}, t{t_num}, t{t_num + 1}, t{t_num + 3}'
+
+        print(f'    t{t_num} = env.do_fluff({t_num}, [{t_call[t_num]}]) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}]) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 2} = env.do_fluff({t_num + 2}, [{t_call[t_num + 2]}]) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 3} = env.do_fluff({t_num + 3}, [{t_call[t_num + 3]}]) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 4} = env.do_fluff({t_num + 4}, [{t_call[t_num + 4]}]) # {self.task_id} - True', file=self.file)
+
+        self.t_num += 5
+        return f't{t_num + 4}'
 
 
     def substitute_rank(self, arg, constant_dict):
@@ -233,7 +214,6 @@ class Code:
                     if old_args[i] != old_arg:
                         has_mutation = True
                         self.t_call[self.t_num] = re.sub(rf'\b{old_arg}\b', f'{old_args[i]}', old_call)
-                        # XXX We need to be careful of making substitutions in this ret_call
                     # print_l(f'{old_hint = }')
                     # print_l(f'{old_arg = }')
                     # print_l(f'{old_args[i] = }')

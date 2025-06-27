@@ -1,3 +1,4 @@
+import argparse
 import random
 import re
 import ast
@@ -75,7 +76,7 @@ def inline_variables(source_code):
     return ast.unparse(tree)
 
 
-def run_batt(total_data, task_num, task_id, start_time):
+def run_batt(total_data, task_num, task_id, start_time, timeout=1):
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
     # total_task = total_data['train'][task_id] + total_data['test'][task_id]
@@ -89,7 +90,7 @@ def run_batt(total_data, task_num, task_id, start_time):
         I = sample['input']
         O = sample['output']
         # o['train'][i] = batt(S, I, O)
-        timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=2)
+        timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=timeout)
         if timed_out:
             print('|')
             # Give up on this task
@@ -101,7 +102,7 @@ def run_batt(total_data, task_num, task_id, start_time):
         I = sample['input']
         O = sample['output']
         # o['test'][i] = batt(S, I, O)
-        timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=2)
+        timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=timeout)
         if timed_out:
             print('|')
             # Give up on this task
@@ -242,7 +243,7 @@ def pick_rnd_task(task_list, total_data):
     return [task_id]
 
 
-def main(do_list):
+def main(do_list, start=0, count=0, timeout=1):
     train_data = get_data(train=True, sort_by_size=True)
     eval_data = get_data(train=False, sort_by_size=True)
     total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
@@ -250,9 +251,7 @@ def main(do_list):
     # NOTE We could have a task list just for unsolved tasks
     full_list = list(total_data['train'].keys())
 
-    # XXX Limit to first few
-    # task_list = full_list[:9]
-    task_list = full_list
+    task_list = full_list[start:start + count] if count > 0 else full_list[start:]
 
     if do_list is None:
         do_list = pick_rnd_task(task_list, total_data)
@@ -262,20 +261,22 @@ def main(do_list):
 
     # Run batt for each task in do_list
     start_time = timer()
-    timeout = sum(run_batt(total_data, task_num, task_id, start_time)
+    timeout = sum(run_batt(total_data, task_num, task_id, start_time, timeout)
               for task_num, task_id in enumerate(do_list))
     
     print(f'{len(do_list)} tasks - {timeout} timeouts')
 
 
 if __name__ == "__main__":
-    # TODO Optionally accept a task_num to restart from there
-    # TODO Make these proper options    
-    # Random task
-    # do_list = None
-    # All tasks
-    do_list = []
-    # Specific task(s)
-    # do_list = ['662c240a']
+    parser = argparse.ArgumentParser(description='Run batt on specified tasks')
+    parser.add_argument('--tasks', '-t', nargs='*', default=None,
+                        help='List of task IDs to run (default: random task)')
+    parser.add_argument('--start', '-s', type=int, default=0,
+                        help='Start from this task number (default: 0)')
+    parser.add_argument('--count', '-c', type=int, default=0,
+                        help='Number of tasks to run (default: 0 - all tasks)')
+    parser.add_argument('--timeout', '-to', type=int, default=1,
+                        help='Timeout for each task in seconds (default: 1)')
+    args = parser.parse_args()
 
-    main(do_list)
+    main(do_list=args.tasks, start=args.start, count=args.count, timeout=args.timeout)
