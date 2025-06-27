@@ -32,6 +32,7 @@ def parse_split_solver(file_content: str) -> Dict[str, str]:
     var_defs = {}
 
     # First, try to handle the split solver format
+    # func_pattern = re.compile(r'def\s+solve_[a-f0-9]+_(?:x\d+|O)\s*\(.*?\):(.*?)return', re.DOTALL)
     func_pattern = re.compile(r'def\s+solve_[a-f0-9]+_(?:x\d+|O)\s*\(.*?\):(.*?)return', re.DOTALL)
     var_pattern = re.compile(r'\s+((?:x\d+)|O)\s*=\s*(.+?)$', re.MULTILINE)
 
@@ -45,7 +46,8 @@ def parse_split_solver(file_content: str) -> Dict[str, str]:
     # If no variables were found using the split format, try the regular format
     if not var_defs:
         # Match a single solver function
-        single_func_pattern = re.compile(r'def\s+solve_[a-f0-9]+\s*\(.*?\):(.*?)return', re.DOTALL)
+        # single_func_pattern = re.compile(r'def\s+solve_[a-f0-9]+\s*\(.*?\):(.*?)return', re.DOTALL)
+        single_func_pattern = re.compile(r'def\s+solve_[a-f0-9]+(?:_[a-f0-9]+)*\s*\(.*?\):(.*?)return', re.DOTALL)
         if single_func_match := single_func_pattern.search(file_content):
             func_body = single_func_match[1]
 

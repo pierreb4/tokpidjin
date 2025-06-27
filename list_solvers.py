@@ -75,7 +75,7 @@ def extract_solver_keys(solvers_path: str = "solvers.py", verbose: bool = False)
         return []
     
     # Find all function definitions with the pattern def solve_XXXXX(I):
-    pattern = r'def\s+solve_([a-f0-9]+)\s*\('
+    pattern = r'def\s+solve_([a-f0-9]+(?:_[a-f0-9]+)*)\s*\('
     matches = re.findall(pattern, content)
     
     if verbose:
@@ -97,17 +97,17 @@ def get_solver_details(solvers_path: str = "solvers.py", verbose: bool = False) 
     except FileNotFoundError:
         print(f"Error: Solvers file '{solvers_path}' not found.")
         return []
-    
+
     solvers = []
     current_solver = None
     docstring_lines = []
     in_docstring = False
-    
+
     for i, line in enumerate(lines):
-        # Check for function definition
-        match = re.match(r'def\s+solve_([a-f0-9]+)\s*\(', line)
-        if match:
-            key = match.group(1)
+        if match := re.match(
+            r'def\s+solve_([a-f0-9]+(?:_[a-f0-9]+)*)\s*\(', line
+        ):
+            key = match[1]
             current_solver = {
                 "key": key,
                 "line_number": i + 1,
@@ -118,26 +118,23 @@ def get_solver_details(solvers_path: str = "solvers.py", verbose: bool = False) 
             solvers.append(current_solver)
             docstring_lines = []
             in_docstring = False
-            
+
             # Check for docstring start on the next line
             if i + 1 < len(lines) and '"""' in lines[i + 1]:
                 in_docstring = True
-        
-        # Collect docstring if we're in one
+
         elif current_solver and in_docstring:
             docstring_lines.append(line.strip())
             if '"""' in line and len(docstring_lines) > 1:  # End of docstring
                 current_solver["docstring"] = "\n".join(docstring_lines[:-1]) if len(docstring_lines) > 1 else ""
                 in_docstring = False
-        
-        # Count code lines (non-empty lines after function definition until next function)
-        elif current_solver and not in_docstring:
+
+        elif current_solver:
             if re.match(r'def\s+', line):  # Next function definition
                 current_solver = None
             elif line.strip() and not line.strip().startswith('#'):
-                if current_solver:
-                    current_solver["code_length"] += 1
-    
+                current_solver["code_length"] += 1
+
     return solvers
 
 
