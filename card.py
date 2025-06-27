@@ -280,7 +280,7 @@ def main(file, seed, count=0):
                 code.t_num += 1
                 code.t_call[code.t_num] = old_call
 
-                print_l(f'{code.t_num = } - {old_call = }')
+                # print_l(f'{code.t_num = } - {old_call = }')
 
                 has_mutation = code.mutate()
                 code.t_number[old_call] = code.t_num
