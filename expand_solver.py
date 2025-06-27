@@ -70,7 +70,9 @@ def parse_function_body(content):
         tuple: (func_name, func_params, expanded_steps) if found, None otherwise
     """
     # Find the function definition line
-    func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
+    # func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
+    func_match = re.search(r'def\s+(solve_[a-f0-9]+(?:_[a-f0-9]+)?)\s*\(([^)]*)\)\s*:', content)
+
     if not func_match:
         print_l("Failed to match function definition in content")
         return None
