@@ -1592,7 +1592,7 @@ def leftmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    print('.', end='', flush=True)
+    # print('.', end='', flush=True)
     return min(j for i, j in toindices(patch))
 
 
