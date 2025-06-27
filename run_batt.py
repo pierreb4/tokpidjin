@@ -186,7 +186,8 @@ def symlink(file_name, link_name):
     Create a symlink for the given file.
     If the symlink already exists, remove it and create a new one.
     """
-    full_name = os.path.abspath(file_name)
+    # full_name = os.path.abspath(file_name)
+    full_name = f'../../{file_name}'
     try:
         os.symlink(full_name, link_name)
     except FileExistsError:

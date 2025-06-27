@@ -406,7 +406,6 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
         return 0, 0
     
     # Find all .def files in the directory
-    # def_files = [f for f in os.listdir(source_dir) if f.endswith('.def')]
     def_files = [str(f) for f in Path(source_dir).rglob('*.def')]
     
     if not def_files:

@@ -64,7 +64,7 @@ clear; bash run_regen.sh 12
 # Or check on simone
 while true
   do date +'%F %T'
-    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh solver_lnk' >last_s_count.txt
+    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh solver_dir' >last_s_count.txt
     cat last_s_count.txt
     cmp -s last_s_count.txt best_s_count.txt 
     if [ $? -ne 0 ]; then
@@ -89,12 +89,12 @@ while true
 
 g='c_iz_n c_zo_n a_mr'
 while true
-  rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/solve_*.def solver_md5/ && \
-  rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_lnk/solve_*.def solver_lnk/ && \
-  python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py
+  rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
+  rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
+  python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py
   do for izzo in $g
     do echo -en "$izzo\t"
-      grep $izzo solvers_lnk.py | wc -l
+      grep $izzo solvers_dir.py | wc -l
     done
     sleep 60
   done
