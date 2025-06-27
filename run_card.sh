@@ -7,7 +7,7 @@ while date; do
   python card.py
   python run_batt.py
 
-  bash count_solvers.sh solver_lnk
+  bash count_solvers.sh solver_dir
   
   # TODO Maybe work on md5 solvers?
   # Also think about removing old files
@@ -15,15 +15,15 @@ while date; do
 
   # If we got a third option, build solvers_*.py
   if [ -n "$BUILD" ]; then
-    # From solvers_lnk.py to solvers_yyy.py
-    python replace_func.py -q --input solvers_lnk.py --output solvers_yyy.py
+    # From solvers_dir.py to solvers_yyy.py
+    python replace_func.py -q --input solvers_dir.py --output solvers_yyy.py
     python list_solvers.py -q --input solvers_yyy.py >key_yyy.txt
-    # From solvers_yyy.py to solver_lnk/
+    # From solvers_yyy.py to solver_dir/
     for k in `cat key_yyy.txt`
-    do python replace_arg.py -q --input solvers_yyy.py --output-dir solver_lnk/ $k
+    do python replace_arg.py -q --input solvers_yyy.py --output-dir solver_dir/ $k
     done
-    # From solver_lnk/ to solvers_lnk.py
-    python expand_solver.py -q --source solver_lnk/ --solvers-file solvers_lnk.py
+    # From solver_dir/ to solvers_dir.py
+    python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py
 
     # From solvers_ref.py to solvers.py
     python replace_func.py -q
