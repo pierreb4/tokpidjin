@@ -347,7 +347,11 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
             def_stem = Path(def_file).stem
             def_dir = Path(def_file).parent
             def_prefix = Path(def_dir).stem
-            func_name = f'{def_prefix}_{def_stem}'
+
+            if def_stem[:6] == 'solve_':
+                func_name = def_stem
+            else:
+                func_name = f'{def_prefix}_{def_stem}'
 
             # Create the original function with _one suffix
             original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")
@@ -505,7 +509,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("def_file", nargs="?", help="Path to the .def file", default=None)
     parser.add_argument("py_file", nargs="?", help="Path to the output .py file", default=None)
-    parser.add_argument("--source", help="Process all .def files in directory", default="solver_evo/")
+    parser.add_argument("--source", help="Process all .def files in directory", default="solver_pre/")
     parser.add_argument("--solvers-file", help="Update solver functions in specified file", default=None)
     parser.add_argument("--quiet", "-q", action="store_true", help="Suppress informational output")
     
