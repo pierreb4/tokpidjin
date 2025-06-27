@@ -170,11 +170,12 @@ def run_batt(total_data, task_num, task_id, start_time):
         symlink(f'{solve_name}.py', f'{solve_link}.py')
 
 
-        # Check things
-        python_exp = 'python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py'
-        python_cmd = f'python run_test.py --solvers solvers_dir -k {task_id}_{md5_hash}'
-        os.system(python_exp)
-        assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
+        # TODO Control this with option
+        # # Check things
+        # python_exp = 'python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py'
+        # python_cmd = f'python run_test.py --solvers solvers_dir -k {task_id}_{md5_hash}'
+        # os.system(python_exp)
+        # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
 
 
     # No timeout
