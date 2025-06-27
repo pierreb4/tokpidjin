@@ -1,3 +1,4 @@
+import argparse
 import re
 import random
 import time
@@ -45,11 +46,19 @@ def get_items(call):
 
 
 class Code:
-    def __init__(self, file, task_id, S, t_call, t_num, score=0):
+    def __init__(self, file, task_id=None, S=None, t_call=None, t_number=None, t_num=0, score=0):
         self.file = file
         self.task_id = task_id
         self.S = S
+
+        if t_call is None:
+            t_call = {}
         self.t_call = t_call
+
+        if t_number is None:
+            t_number = {}
+        self.t_number = t_number
+
         self.t_num = t_num
         self.score = score
 
@@ -88,16 +97,16 @@ class Code:
     def substitute_color_izzo(self, c_izzo_n, f_n):
         # Change the score at substitution time
         self.score -= 1
-
         t_call = self.t_call
         t_num = self.t_num
-        t_call[t_num] = 'identity, S'
+
+        t_call[t_num + 0] = 'identity, S'
         t_call[t_num + 1] = 'identity, p_g'
         t_call[t_num + 2] = f'rbind, get_nth_t, {f_n}'
         t_call[t_num + 3] = f'identity, t{t_num + 2}'
-        t_call[t_num + 4] = f'{c_izzo_n}, t{t_num}, t{t_num + 1}, t{t_num + 3}'
+        t_call[t_num + 4] = f'{c_izzo_n}, t{t_num + 0}, t{t_num + 1}, t{t_num + 3}'
 
-        print(f'    t{t_num} = env.do_fluff({t_num}, [{t_call[t_num]}]) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 0} = env.do_fluff({t_num + 0}, [{t_call[t_num + 0]}]) # {self.task_id} - True', file=self.file)
         print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}]) # {self.task_id} - True', file=self.file)
         print(f'    t{t_num + 2} = env.do_fluff({t_num + 2}, [{t_call[t_num + 2]}]) # {self.task_id} - True', file=self.file)
         print(f'    t{t_num + 3} = env.do_fluff({t_num + 3}, [{t_call[t_num + 3]}]) # {self.task_id} - True', file=self.file)
@@ -166,7 +175,7 @@ class Code:
             if old_hints is None:
                 call = self.t_call[self.t_num]
                 print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call}]) # {self.task_id} - {has_mutation}', file=self.file)
-                return self.t_num, old_call
+                return has_mutation
 
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
@@ -221,10 +230,10 @@ class Code:
 
         call = self.t_call[self.t_num]
         print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call}]) # {self.task_id} - {has_mutation}', file=self.file)
-        return self.t_num, has_mutation
+        return has_mutation
 
 
-def main(file, seed):
+def main(file, seed, count=0):
     train_data = get_data(train=True, sort_by_size=True)
     eval_data = get_data(train=False, sort_by_size=True)
     total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
@@ -234,14 +243,11 @@ def main(file, seed):
     print_l(f"{len(solvers) = }")
 
     equals = {task_id: get_equals(source) for task_id, source in solvers.items()}
-    # print_l(f"{get_equals(solvers['a85d4709']) = }")
 
-    # XXX Limit to first few
-    # solvers = {k: solvers[k] for k in list(solvers.keys())[:9]}
+    if count > 0: 
+        solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
 
-    t_call = {}
-    t_num = 1
-    t_number = {}
+    code = Code(file)
     for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
@@ -251,7 +257,9 @@ def main(file, seed):
             train_task = total_data['train'][task_id]
             S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
             # print_l(f'{len(S) = }')
-            code = Code(file, task_id, S, t_call, t_num)
+            # code = Code(file, task_id, S, t_call, t_number, t_num)
+            code.S = S
+            code.task_id = task_id
 
             # Is it empty?
             if not equals[task_id]:
@@ -267,30 +275,38 @@ def main(file, seed):
 
             # Else is the right side new?
             has_mutation = False
-            if old_call not in t_number.keys():
+            if old_call not in code.t_number.keys():
                 # Then add it to t_call/t_number
-                t_call[t_num] = old_call
-                t_number[old_call] = t_num
+                code.t_num += 1
+                code.t_call[code.t_num] = old_call
 
-                t_num, has_mutation = code.mutate()
-                t_num += 1
+                print_l(f'{code.t_num = } - {old_call = }')
+
+                has_mutation = code.mutate()
+                code.t_number[old_call] = code.t_num
 
             # Was the left side O?
             if old_name == 'O':
-                print(f"    if t{t_number[old_call]} == O:", file=file)
-                print(f"        o.append(('{task_id}', {t_number[old_call]}, {has_mutation}, env.get_seed()))", file=file)
+                print(f"    if t{code.t_number[old_call]} == O:", file=file)
+                print(f"        o.append(('{task_id}', {code.t_number[old_call]}, {has_mutation}, env.get_seed()))", file=file)
 
             # Replace x1 with t_name[x_call] in rest of solver
             for x_name, x_call in equals[task_id].items():
                 if old_name in x_call:
-                    equals[task_id][x_name] = re.sub(rf'\b{old_name}\b', f't{t_number[old_call]}', x_call)
+                    equals[task_id][x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
 
     # Write t_call into new file call.py
     with open('call.py', 'w') as call_file:
-        print(f'{t_call = }', file=call_file)
+        print(f't_call = {code.t_call}', file=call_file)
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Run batt on specified tasks')
+    parser.add_argument('--count', '-c', type=int, default=0,
+                        help='Number of tasks to run (default: 0 - all tasks)')
+    args = parser.parse_args()
+
+
     seed = time.time()
     random.seed(seed)
 
@@ -305,5 +321,5 @@ from fluff import *
 def batt(S, I, O):
     env = Env({seed}, S)
     o = []""", file=batt_file)
-        main(batt_file, seed)
+        main(batt_file, seed, args.count)
         print("    return o", file=batt_file)
