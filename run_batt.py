@@ -187,13 +187,10 @@ def symlink(file_name, link_name):
     Create a symlink for the given file.
     If the symlink already exists, remove it and create a new one.
     """
-    # full_name = os.path.abspath(file_name)
-    # print_l(f'{file_name = }, {link_name = }')
     full_name = f'../../{file_name}'
     try:
         os.symlink(full_name, link_name)
     except FileExistsError:
-        # If the symlink already exists, remove it and create a new one
         os.remove(link_name)
         os.symlink(full_name, link_name)
 
@@ -254,8 +251,8 @@ def main(do_list):
     full_list = list(total_data['train'].keys())
 
     # XXX Limit to first few
-    task_list = full_list[:9]
-    # task_list = full_list
+    # task_list = full_list[:9]
+    task_list = full_list
 
     if do_list is None:
         do_list = pick_rnd_task(task_list, total_data)
