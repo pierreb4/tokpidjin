@@ -77,10 +77,10 @@ while true
 
 # 2nd from upper left
 g='c_iz_n c_zo_n a_mr'
-while true
+while true; do
   scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_evo/ && \
   python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py
-  do for izzo in $g
+  for izzo in $g
     do echo -en "$izzo\t"
       grep $izzo solvers_evo.py | wc -l
     done
@@ -88,11 +88,11 @@ while true
   done
 
 g='c_iz_n c_zo_n a_mr'
-while true
+while true; do
   rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
   rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
   python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py
-  do for izzo in $g
+  for izzo in $g
     do echo -en "$izzo\t"
       grep $izzo solvers_dir.py | wc -l
     done

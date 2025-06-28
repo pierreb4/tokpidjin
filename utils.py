@@ -5,6 +5,7 @@ import ast
 import concurrent.futures
 import importlib.util
 import sys
+import random
 
 from pathlib import Path
 
@@ -98,8 +99,19 @@ def get_source(task_id, imports=None):
         if imp == solvers_pre and task_id in BAD_SOLVERS:
             # Skip bad solvers from solvers_pre
             continue
-        if hasattr(imp, f'solve_{task_id}'):
-            solver = getattr(imp, f'solve_{task_id}')
+
+        func_name = f'solve_{task_id}'
+
+        if func_list := [
+            f for f in dir(imp) if f.startswith(func_name)
+        ]:
+            func_name = random.choice(func_list)
+            solver = getattr(imp, func_name)
+            print_l(f'Found solver: {func_name} in {imp.__name__}')
+            return inspect.getsource(solver)
+        elif hasattr(imp, func_name):
+            solver = getattr(imp, func_name)
+            print_l(f'Found solver: {func_name} in {imp.__name__}')
             return inspect.getsource(solver)
     return None
 

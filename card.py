@@ -275,6 +275,7 @@ def main(file, seed, count=0):
         solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
 
     code = Code(file)
+    uses = {}
     for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
@@ -294,8 +295,9 @@ def main(file, seed, count=0):
                 del solvers[task_id]
                 continue
 
-            # Else take the first assignment - x1 = call(...)
+            # Else take next assignment - x_n = call(...)
             old_name, old_call = next(iter(equals[task_id].items()))
+            uses[old_call] = 0
 
             # Remove entry from equals
             del equals[task_id][old_name]
@@ -317,10 +319,20 @@ def main(file, seed, count=0):
                 print(f"    if t{code.t_number[old_call]} == O:", file=file)
                 print(f"        o.append(('{task_id}', {code.t_number[old_call]}, {has_mutation}, env.get_seed()))", file=file)
 
-            # Replace x1 with t_name[x_call] in rest of solver
+            # Replace x_n with t_name[x_call] in rest of solver
             for x_name, x_call in equals[task_id].items():
                 if old_name in x_call:
+                    uses[old_call] += 1
                     equals[task_id][x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+                    # print_l(f'{x_name} = {x_call} -> t{code.t_number[old_call]} = {equals[task_id][x_name]}')
+            # if uses[old_call] > 9:
+            #     print(f't{code.t_number[old_call]} - {old_call = } - {uses[old_call] = }')
+
+    # for call in code.t_number.keys():
+    #     # if uses[call] > 9:
+    #         print(f'{uses[call] = } - {call = } - {code.t_number[call] = }')
+    # print_l(f'{len(code.t_number.keys()) = }')
+        
 
     # Write t_call into new file call.py
     with open('call.py', 'w') as call_file:
