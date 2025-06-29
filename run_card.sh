@@ -16,13 +16,22 @@ while date; do
 
   # If we got a third option, build solvers_*.py
   if [ -n "$BUILD" ]; then
-    # From solvers_dir.py to solvers_yyy.py
-    python replace_func.py -q --input solvers_dir.py --output solvers_yyy.py
-    python list_solvers.py -q --input solvers_yyy.py >key_yyy.txt
-    # From solvers_yyy.py to solver_dir/
-    for k in `cat key_yyy.txt`
-    do python replace_arg.py -q --input solvers_yyy.py --output-dir solver_dir/ $k
-    done
+
+    # TODO Reactivate when we start replacements again
+    #      Make it more efficient
+
+    # # From solvers_dir.py to solvers_yyy.py
+    # python replace_func.py -q --input solvers_dir.py --output solvers_yyy.py
+    # python list_solvers.py -q --input solvers_yyy.py >key_yyy.txt
+    # # From solvers_yyy.py to solver_dir/
+    # for k in `cat key_yyy.txt`
+    # do python replace_arg.py -q --input solvers_yyy.py --output-dir solver_dir/ $k
+    # done
+
+    for f in solver_dir/*; do bash clean_def.sh $f; done
+    for f in `ls solver_md5 | grep 'def$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
+    for f in `ls solver_md5 | grep 'py$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
+
     # From solver_dir/ to solvers_dir.py
     python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py
 

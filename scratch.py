@@ -85,3 +85,9 @@ def solve_46442a0e(S, I, x=0):
     O = vconcat(x2, x5)
     return O
 
+
+
+
+for f in solver_dir/*; do bash clean_def.sh $f; done
+for f in `ls solver_md5 | grep 'def$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
+for f in `ls solver_md5 | grep 'py$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done

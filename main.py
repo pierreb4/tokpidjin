@@ -281,7 +281,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                     success = False
                     if not quiet:
                         # print(f'{definitions.get(f"solve_{key}")}')
-                        print(f"\nError: {solve_func[task_id]} example {i+1} produced incorrect output")
+                        print(f"\nError: {solve_func[key]} example {i+1} produced incorrect output")
                         print(f"Expected: {ex['output']}")
                         print(f"Got:      {result}")
                     break
@@ -295,7 +295,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                 
                 # Check if execution took too long
                 if execution_time > timeout_warning:
-                    print(f"\nWARNING: {solve_func[task_id]} example {i+1} took {execution_time:.2f}s")
+                    print(f"\nWARNING: {solve_func[key]} example {i+1} took {execution_time:.2f}s")
                     slow_solvers.append((key, i+1, execution_time))
                     
                     # If wait is enabled, pause for user inspection
@@ -306,7 +306,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                 n_correct += 1
                 
         except Exception as e:
-            definition = definitions.get(solve_func[task_id], "Solver not found")
+            definition = definitions.get(solve_func[key], "Solver not found")
             if quiet:
                 lines = len(definition.split('\n')) if isinstance(definition, str) else 0
                 
@@ -315,7 +315,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                 frame = traceback.extract_tb(exc_tb)[-1]
                 line_info = f" at line {frame.lineno}" if frame else ""
                 
-                print_l(f"Error in {solve_func[task_id]}{line_info}: {lines} lines")
+                print_l(f"Error in {solve_func[key]}{line_info}: {lines} lines")
             else:
                 # Include source location in exception message
                 exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -324,8 +324,8 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                 lineno = frame.lineno if frame else "unknown"
                 
                 print_l(f'Exception in {filename}:{lineno}: {e}')
-                # print_l(f"- traceback: {traceback.format_exc()}")
-                print_l(f'Error in {solve_func[task_id]}:\n{definition}')
+                print_l(f"- traceback: {traceback.format_exc()}")
+                print_l(f'Error in {solve_func[key]}:\n{definition}')
                 if wait:
                     input("Press Enter to continue...")
     

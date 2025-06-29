@@ -1571,6 +1571,10 @@ def uppermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
+    if not hasattr(patch, '__len__'):
+        return None
+    if len(patch) == 0:
+        return None
     return min(i for i, j in toindices(patch))
 
 
@@ -1592,7 +1596,10 @@ def leftmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    # print('.', end='', flush=True)
+    if not hasattr(patch, '__len__'):
+        return None
+    if len(patch) == 0:
+        return None
     return min(j for i, j in toindices(patch))
 
 
@@ -2056,6 +2063,8 @@ def backdrop(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices in bounding box of patch """
+    if not hasattr(patch, '__len__'):
+        return frozenset({})
     if len(patch) == 0:
         return frozenset({})
     indices = toindices(patch)
