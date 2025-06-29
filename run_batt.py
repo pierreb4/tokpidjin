@@ -113,19 +113,8 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
     # Values present in all output lists are valid solutions
     # TODO Keep track of partial solutions, then try improving them
     valid_solutions = set(o['train'][0])
-    for sample in o['train']:
-        valid_solutions.intersection_update(set(o['train'][sample]))
-    for sample in o['test']:
-        valid_solutions.intersection_update(set(o['test'][sample]))
 
-    if not valid_solutions:
-        print('<')
-        elapsed = timer() - start_time
-        print(f"Failed {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt")
-    else:
-        print('>')
-
-    # Print valid solutions
+    # Save partial solutions
     for solution in valid_solutions:
         elapsed = timer() - start_time
         print(f"Solved {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt from {solution}")
@@ -149,7 +138,65 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
 
         # Get md5_hash of the source code
         md5_hash = hashlib.md5(solver_body.encode()).hexdigest()
-        solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
+        solver_source = f'def solve_{task_id}_{md5_hash}(S, I):\n{solver_body}'
+
+        # print(solver_source)
+
+        # Write inlined source to file
+        ensure_dir('solver_md5')
+
+        solve_name = f'solver_md5/{md5_hash}'
+        with open(f'{solve_name}.def', 'w') as f:
+            f.write(inline_variables(solver_source))
+            f.write('\n')
+
+        ensure_dir('solver_dir')
+        solve_task = f'solver_dir/solve_{task_id}_Z'
+
+        ensure_dir(solve_task)
+        solve_link = f'solver_dir/solve_{task_id}_Z/{md5_hash}'
+
+        symlink(f'{solve_name}.def', f'{solve_link}.def')
+        symlink(f'{solve_name}.py', f'{solve_link}.py')
+
+
+    for sample in o['train']:
+        valid_solutions.intersection_update(set(o['train'][sample]))
+    for sample in o['test']:
+        valid_solutions.intersection_update(set(o['test'][sample]))
+
+    if not valid_solutions:
+        print('<')
+        elapsed = timer() - start_time
+        print(f"Failed {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt")
+    else:
+        print('>')
+
+    # Save valid solutions
+    for solution in valid_solutions:
+        elapsed = timer() - start_time
+        print(f"Solved {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt from {solution}")
+
+        # Track calls then reverse sequence to rebuild solver
+        done = track_solution(solution[1], None)
+
+        # print_l(f'{done = }')
+
+        # Build solution body
+        solver_body = ''
+        for t_num in sorted(done):
+            t = t_call[t_num].split(',')
+            func = t[0]
+            args = t[1:]
+            solver_body += f'    t{t_num} = '
+            solver_body += f'{func}('
+            solver_body += ', '.join(args)
+            solver_body += ')\n'
+        solver_body += f'    return t{solution[1]}\n'
+
+        # Get md5_hash of the source code
+        md5_hash = hashlib.md5(solver_body.encode()).hexdigest()
+        solver_source = f'def solve_{task_id}_{md5_hash}(S, I):\n{solver_body}'
 
         # print(solver_source)
 

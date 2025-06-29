@@ -62,18 +62,18 @@ python expand_solver.py --source solver_pre/ --solvers-file solvers.py
 # Upper left term
 clear; bash run_regen.sh 12
 # Or check on simone
-while true
-  do date +'%F %T'
-    ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh solver_dir' >last_s_count.txt
-    cat last_s_count.txt
-    cmp -s last_s_count.txt best_s_count.txt 
-    if [ $? -ne 0 ]; then
-      # echo "Files are different"
-      cp last_s_count.txt best_s_count.txt
-      # npx mudslide send 46708818434 "`cat last_s_count.txt`"
-    fi
-    sleep 60
-  done
+while true; do
+  date +'%F %T'
+  ssh simone 'cd /home/jupyter/dsl/tokpidjin; bash count_solvers.sh solver_dir' >last_s_count.txt
+  cat last_s_count.txt
+  cmp -s last_s_count.txt best_s_count.txt 
+  if [ $? -ne 0 ]; then
+    # echo "Files are different"
+    cp last_s_count.txt best_s_count.txt
+    # npx mudslide send 46708818434 "`cat last_s_count.txt`"
+  fi
+  sleep 60
+done
 
 # 2nd from upper left
 g='c_iz_n c_zo_n a_mr'
@@ -89,15 +89,16 @@ while true; do
 
 g='c_iz_n c_zo_n a_mr'
 while true; do
-  rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
-  rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
-  python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py
-  for izzo in $g
-    do echo -en "$izzo\t"
-      grep $izzo solvers_dir.py | wc -l
-    done
-    sleep 60
+  rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
+  rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
+  python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py && \
+  python main.py --solvers solvers_dir
+  for izzo in $g; do
+    echo -en "$izzo\t"
+    grep $izzo solvers_dir.py | wc -l
   done
+  sleep 60
+done
 
 
 # Lower left
@@ -109,8 +110,8 @@ python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py &&
 python main.py --solvers solvers_evo.py
 
 # Same with md5 and link solvers
-rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
-rsync -az -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
+rsync -a -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
+rsync -a -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
 python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py && \
 python main.py --solvers solvers_dir
 
@@ -122,19 +123,19 @@ done | sort -rnk5
 
 # Regenerate train solvers starting from smallest one
 clear
-while date
-do for f in `cd solver_pre && ls *.def`
-  do ls solver_evo/$f &>/dev/null || ls -l solver_pre/$f
+while date; do
+  for f in `cd solver_pre && ls *.def`; do
+    ls solver_evo/$f &>/dev/null || ls -l solver_pre/$f
   done | sort -rnk5 | tail -5
-python regen_dev.py `cat next_task_dev.txt`
-sleep 120
+  python regen_dev.py `cat next_task_dev.txt`
+  sleep 120
 done
 
 # Regenerate any solver, preferring smallest tasks
 clear
-while date
-do python regen_dev.py
-sleep 60
+while date; do
+  python regen_dev.py
+  sleep 60
 done
 
 # Remove bad evo solvers and check
