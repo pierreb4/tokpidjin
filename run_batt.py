@@ -138,7 +138,7 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
 
         # Get md5_hash of the source code
         md5_hash = hashlib.md5(solver_body.encode()).hexdigest()
-        solver_source = f'def solve_{task_id}_{md5_hash}(S, I):\n{solver_body}'
+        solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
 
         # print(solver_source)
 
@@ -196,7 +196,7 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
 
         # Get md5_hash of the source code
         md5_hash = hashlib.md5(solver_body.encode()).hexdigest()
-        solver_source = f'def solve_{task_id}_{md5_hash}(S, I):\n{solver_body}'
+        solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
 
         # print(solver_source)
 
