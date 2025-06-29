@@ -136,8 +136,10 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
             solver_body += ')\n'
         solver_body += f'    return t{solution[1]}\n'
 
+        inlined_body = inline_variables(solver_body)
+
         # Get md5_hash of the source code
-        md5_hash = hashlib.md5(solver_body.encode()).hexdigest()
+        md5_hash = hashlib.md5(inlined_body.encode()).hexdigest()
         solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
 
         # print(solver_source)
@@ -147,7 +149,8 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
 
         solve_name = f'solver_md5/{md5_hash}'
         with open(f'{solve_name}.def', 'w') as f:
-            f.write(inline_variables(solver_source))
+            f.write(f'def solve_{md5_hash}(S, I):\n')
+            f.write(inlined_body)
             f.write('\n')
 
         ensure_dir('solver_dir')
@@ -194,8 +197,10 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
             solver_body += ')\n'
         solver_body += f'    return t{solution[1]}\n'
 
+        inlined_body = inline_variables(solver_body)
+
         # Get md5_hash of the source code
-        md5_hash = hashlib.md5(solver_body.encode()).hexdigest()
+        md5_hash = hashlib.md5(inlined_body.encode()).hexdigest()
         solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
 
         # print(solver_source)
@@ -205,7 +210,8 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
 
         solve_name = f'solver_md5/{md5_hash}'
         with open(f'{solve_name}.def', 'w') as f:
-            f.write(inline_variables(solver_source))
+            f.write(f'def solve_{md5_hash}(S, I):\n')
+            f.write(inlined_body)
             f.write('\n')
 
         ensure_dir('solver_dir')

@@ -227,7 +227,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
     task_ids = data["train"].keys()
 
     solver_keys = []
-    solve_func = {} 
+    solve_func = {}
     for f in solver_functions:
         if f.startswith('solve_'):
             f = f[6:]
@@ -236,9 +236,9 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             md5_hash = f[9:]
             task_id = f[:8]
 
-        if task_id in data['train']:
-            solver_keys.append(task_id)
-            solve_func[task_id] = f'solve_{task_id}_{md5_hash}'
+            if task_id in data['train']:
+                solver_keys.append(task_id)
+                solve_func[task_id] = f'solve_{task_id}_{md5_hash}'
 
     solvable_tasks = {k: True for k in task_ids if k in solver_keys}
     

@@ -2,11 +2,17 @@
 
 # Check if a directory argument is provided
 if [ -z "$1" ]; then
-    echo "Usage: $0 <directory>"
+    echo "Usage: $0 <directory> [<max_num_files>]"
     exit 1
 fi
 
 SOLVER_DIR="$HOME/dsl/tokpidjin/$1"
+
+if [ -z "$2" ]; then
+    MAX_NUM_FILES=49
+fi
+
+MAX_NUM_FILES="$2"
 
 # Check if the provided argument is a valid directory
 if [ ! -d $SOLVER_DIR ]; then
@@ -18,7 +24,7 @@ fi
 cd $SOLVER_DIR || exit 1
 
 # Step 1: Select 10 random files to keep
-mapfile -t keep < <(ls | shuf -n 49)
+mapfile -t keep < <(ls | shuf -n "$MAX_NUM_FILES")
 
 # Step 2: For each .def file, also keep the corresponding .py file
 for file in "${keep[@]}"; do
