@@ -107,11 +107,11 @@ def get_source(task_id, imports=None):
         ]:
             func_name = random.choice(func_list)
             solver = getattr(imp, func_name)
-            print_l(f'Found solver: {func_name} in {imp.__name__}')
+            # print_l(f'Found solver: {func_name} in {imp.__name__}')
             return inspect.getsource(solver)
         elif hasattr(imp, func_name):
             solver = getattr(imp, func_name)
-            print_l(f'Found solver: {func_name} in {imp.__name__}')
+            # print_l(f'Found solver: {func_name} in {imp.__name__}')
             return inspect.getsource(solver)
     return None
 
