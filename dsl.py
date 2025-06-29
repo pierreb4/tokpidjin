@@ -29,6 +29,8 @@ def second(container: 'Container') -> 'Any':
 
 def difference_tuple(a: 'Tuple', b: 'Tuple') -> 'Tuple':
     """Set difference"""
+    if a is None or b is None:
+        return None
     return type(a)(e for e in a if e not in b)
 
 
@@ -600,6 +602,8 @@ def dedupe(
     tup: 'Tuple'
 ) -> 'Tuple':
     """ remove duplicates """
+    if tup is None:
+        return None
     return tuple(e for i, e in enumerate(tup) if tup.index(e) == i)
 
 
@@ -652,7 +656,11 @@ def merge_t(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    return type(containers)(e for c in containers for e in c)
+    try:
+        return type(containers)(e for c in containers for e in c)
+    except TypeError:
+        return None
+
 
 # See get_rank
 def maximum(
@@ -807,7 +815,7 @@ def extract(
     condition: 'Callable'
 ) -> 'Any':
     """ first element of container that satisfies condition """
-    return next(e for e in container if condition(e))
+    return next((e for e in container if condition(e)), None)
 
 
 def totuple(
@@ -2228,6 +2236,8 @@ def toindices(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices of object cells """
+    if not hasattr(patch, '__len__'):
+        return frozenset()
     if len(patch) == 0:
         return frozenset()
     if isinstance(next(iter(patch))[1], tuple):
@@ -2657,7 +2667,10 @@ def manhattan(
     b: 'Patch'
 ) -> 'Integer':
     """ closest manhattan distance between two patches """
-    return min(abs(ai - bi) + abs(aj - bj) for ai, aj in toindices(a) for bi, bj in toindices(b))
+    try:
+        return min(abs(ai - bi) + abs(aj - bj) for ai, aj in toindices(a) for bi, bj in toindices(b))
+    except ValueError:
+        return None
 
 
 def adjacent(
@@ -2708,7 +2721,8 @@ def color(
     obj: 'Object'
 ) -> 'Integer':
     """ color of object """
-    return next(iter(obj))[0]
+    first_element = next(iter(obj))
+    return first_element[0] if isinstance(first_element, tuple) else first_element
 
 
 def toobject(
