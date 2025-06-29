@@ -26,6 +26,12 @@ cd $SOLVER_DIR || exit 1
 # Step 1: Select 10 random files to keep
 mapfile -t keep < <(ls | shuf -n "$MAX_NUM_FILES")
 
+if [[ -z "${keep[@]}" ]]; then
+    echo "keep is empty"
+    rmdir "$SOLVER_DIR"
+    exit 1
+fi
+
 # Step 2: For each .def file, also keep the corresponding .py file
 for file in "${keep[@]}"; do
     if [[ "$file" == *.def ]]; then
