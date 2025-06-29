@@ -18,7 +18,7 @@ while date; do
   if [ -n "$BUILD" ]; then
 
     # TODO Reactivate when we start replacements again
-    #      Make it more efficient
+    #      Make more efficient
 
     # # From solvers_dir.py to solvers_yyy.py
     # python replace_func.py -q --input solvers_dir.py --output solvers_yyy.py
@@ -35,15 +35,15 @@ while date; do
     # From solver_dir/ to solvers_dir.py
     python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py
 
-    # From solvers_ref.py to solvers.py
-    python replace_func.py -q
-    python list_solvers.py -q --input solvers.py >key_pre.txt
-    # From solvers.py to solver_pre/
-    for k in `cat key_pre.txt`
-    do python replace_arg.py -q --input solvers.py --output-dir solver_pre/ $k
-    done
-    # From solver_pre/ to solvers_pre.py
-    python expand_solver.py -q --source solver_pre/ --solvers-file solvers_pre.py
+    # # From solvers_ref.py to solvers.py
+    # python replace_func.py -q
+    # python list_solvers.py -q --input solvers.py >key_pre.txt
+    # # From solvers.py to solver_pre/
+    # for k in `cat key_pre.txt`
+    # do python replace_arg.py -q --input solvers.py --output-dir solver_pre/ $k
+    # done
+    # # From solver_pre/ to solvers_pre.py
+    # python expand_solver.py -q --source solver_pre/ --solvers-file solvers_pre.py
   fi
 
 done
