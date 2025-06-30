@@ -2,6 +2,7 @@
 
 TIMEOUT=$1
 BUILD=$2
+TMPFILE=$(mktemp)
 
 clear
 while date; do 
@@ -33,7 +34,8 @@ while date; do
     for f in `ls solver_md5 | grep 'py$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
 
     # From solver_dir/ to solvers_dir.py
-    python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py
+    python expand_solver.py -q --source solver_dir/ --solvers-file $TMPFILE && \
+    mv -f $TMPFILE solvers_dir.py
 
     # # From solvers_ref.py to solvers.py
     # python replace_func.py -q

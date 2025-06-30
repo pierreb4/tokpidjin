@@ -222,7 +222,7 @@ class Code:
                                 self.t_call[self.t_num] = re.sub(rf'\bt{t_n}\b', f't{t_offset}', old_call)
                 # Then deal with constants
                 else:
-                    if old_hint in ['Any', 'C_']:
+                    if old_hint in ['C_']:
                         old_args[i] = self.substitute_color(old_arg)
                     elif old_hint == 'FL':
                         old_args[i] = self.substitute_rank(old_arg, FL_NAMES)
@@ -244,7 +244,7 @@ class Code:
                             'Object', 'Objects', 'FrozenSet', 'Patch', 
                             'Callable', 'Container', 'ContainerContainer',
                             'Integer', 'IntegerSet', 'Numerical', 'Indices', 
-                            'Boolean', 'IJ', 'A4', 'TupleTuple'
+                            'Boolean', 'IJ', 'A4', 'TupleTuple', 'Any'
                         ]:
                         print_l(f'{old_hint = }')
                     if old_args[i] != old_arg:

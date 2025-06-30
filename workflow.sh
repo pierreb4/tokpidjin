@@ -88,10 +88,12 @@ while date; do
   done
 
 g='c_iz_n c_zo_n a_mr'
+TMPFILE=$(mktemp)
 while date; do
   rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
   rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
-  python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py && \
+  python expand_solver.py -q --source solver_dir/ --solvers-file $TMPFILE && \
+  mv -f $TMPFILE solvers_dir.py && \
   python main.py --solvers solvers_dir
   for izzo in $g; do
     echo -en "$izzo\t"

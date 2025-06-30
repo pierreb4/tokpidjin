@@ -410,6 +410,8 @@ def get_color_rank_f( obj: 'Object', rank: 'FL' ) -> 'C_':
 
 
 def get_rank( container: 'IntegerSet', rank: 'FL') -> 'Integer':
+    if not all(isinstance(e, int) for e in container):
+        return None
     ranked = sorted(container, reverse=True)
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else 0
 
@@ -2240,6 +2242,8 @@ def toindices(
         return frozenset()
     if len(patch) == 0:
         return frozenset()
+    if not hasattr(next(iter(patch)), '__len__'):
+        return frozenset()
     if isinstance(next(iter(patch))[1], tuple):
         return frozenset(index for value, index in patch)
     return patch
@@ -2745,6 +2749,8 @@ def rot90(
     grid: 'Grid'
 ) -> 'Grid':
     """ quarter clockwise rotation """
+    if isinstance(grid, frozenset):
+        return None
     return tuple(row for row in zip(*grid[::-1]))
 
 
