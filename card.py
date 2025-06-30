@@ -262,14 +262,15 @@ class Code:
 
 def main(file, seed, count=0):
     train_data = get_data(train=True, sort_by_size=True)
-    eval_data = get_data(train=False, sort_by_size=True)
-    total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
+    # eval_data = get_data(train=False, sort_by_size=True)
+    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
+    total_data = train_data
 
     solvers = get_solvers([solvers_dir, solvers_pre])
 
     print_l(f"{len(solvers) = }")
 
-    equals = {task_id: get_equals(source) for task_id, source in solvers.items()}
+    equals = {task_id: get_equals(source) for task_id, (_, source) in solvers.items()}
 
     if count > 0: 
         solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
@@ -279,8 +280,11 @@ def main(file, seed, count=0):
     for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
-        for task_id, source in solvers_copy.items():
+        for task_id, (func_name, source) in solvers_copy.items():
             # print_l(f"-- {task_id} -----")
+
+            if task_id not in total_data['train']:
+                continue
 
             train_task = total_data['train'][task_id]
             S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
@@ -317,7 +321,8 @@ def main(file, seed, count=0):
             # Was the left side O?
             if old_name == 'O':
                 print(f"    if t{code.t_number[old_call]} == O:", file=file)
-                print(f"        o.append(('{task_id}', {code.t_number[old_call]}, {has_mutation}, env.get_seed()))", file=file)
+                # print(f"        o.append(('{task_id}', {code.t_number[old_call]}, {has_mutation}, env.get_seed()))", file=file)
+                print(f"        o.append(('{task_id}', '{func_name.split('_')[-1]}', {code.t_number[old_call]}, {has_mutation}, env.get_seed()))", file=file)
 
             # Replace x_n with t_name[x_call] in rest of solver
             for x_name, x_call in equals[task_id].items():

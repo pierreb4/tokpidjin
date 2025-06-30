@@ -102,18 +102,29 @@ def get_source(task_id, imports=None):
 
         func_name = f'solve_{task_id}'
 
-        if func_list := [
-            f for f in dir(imp) if f.startswith(func_name)
-        ]:
-            func_name = random.choice(func_list)
+        solve = {}
+        if func_list := [f for f in dir(imp) if f.startswith(func_name)]:
+
+            weights = []
+            for f in func_list:
+                # Split the function name
+                func_split = f.split('_')
+                solve[f] = int(func_split[3]) if len(func_split) > 3 and func_split[2] != 'Z' else 1
+                weights.append(solve[f])
+                # print_l(f'{func_split = } - {solve[f] = }')
+
+            func_name = random.choices(func_list, weights=weights, k=1)[0]
+            # func_name = random.choice(func_list)
+            # print_l(f'{func_name = }')
+
             solver = getattr(imp, func_name)
             # print_l(f'Found solver: {func_name} in {imp.__name__}')
-            return inspect.getsource(solver)
+            return func_name, inspect.getsource(solver)
         elif hasattr(imp, func_name):
             solver = getattr(imp, func_name)
             # print_l(f'Found solver: {func_name} in {imp.__name__}')
-            return inspect.getsource(solver)
-    return None
+            return func_name, inspect.getsource(solver)
+    return None, None
 
 
     # if hasattr(solvers_evo, f'solve_{task_id}'):
@@ -142,9 +153,9 @@ def get_solvers(imports):
 
     solvers = {}
     for task_id in task_list:
-        source = get_source(task_id, imports)
+        func_name, source = get_source(task_id, imports)
         if source is not None:
-            solvers[task_id] = source
+            solvers[task_id] = (func_name, source)
 
     return solvers
 
