@@ -173,7 +173,10 @@ def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
 def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
     """Returns pick of a color value from the input-output difference"""
     ret_tuple = c_iz(S, function)
-    return pick(ret_tuple)
+    if callable(pick):
+        return pick(ret_tuple)
+    else:
+        return None
 
 
 def c_zo(S: 'Samples', function: 'Callable') -> 'Any':

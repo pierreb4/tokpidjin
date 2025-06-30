@@ -208,7 +208,7 @@ class Code:
                 if old_arg.startswith('t') and old_arg[1:].isdigit():
                     t_n = int(old_arg[1:])
 
-                    while random.random() < 0.33:
+                    while random.random() < 0.9:
                         t_offset = t_n - random.randint(1, 9)
                         if t_offset > 0:
                             new_call = clean_call(self.t_call[t_offset])
