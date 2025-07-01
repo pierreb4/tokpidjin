@@ -346,9 +346,9 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
             _, func_params, steps = func_parsed
             
             # Get function name from def_file
-            print_l(f'{def_file = }')
+            # print_l(f'{def_file = }')
             def_stem_split = Path(def_file).stem.split('_')
-            print_l(f'{def_stem_split = }')
+            # print_l(f'{def_stem_split = }')
             func_name = f'solve_{def_stem_split[0]}'
 
             # Create the original function with _one suffix
