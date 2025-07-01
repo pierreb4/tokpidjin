@@ -29,7 +29,7 @@ while date; do
     # do python replace_arg.py -q --input solvers_yyy.py --output-dir solver_dir/ $k
     # done
 
-    for f in solver_dir/*; do bash clean_def.sh $f; done
+    for f in solver_dir/solve_*; do bash clean_def.sh $f; done
 
     # From solver_dir/ to solvers_dir.py
     python expand_solver.py -q --source solver_dir/ --solvers-file $TMPFILE && \
