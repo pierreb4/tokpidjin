@@ -6,6 +6,7 @@ import concurrent.futures
 import importlib.util
 import sys
 import random
+import glob
 
 from pathlib import Path
 
@@ -100,30 +101,43 @@ def get_source(task_id, imports=None):
             # Skip bad solvers from solvers_pre
             continue
 
-        func_name = f'solve_{task_id}'
-
-        solve = {}
-        if func_list := [f for f in dir(imp) if f.startswith(func_name)]:
-
+        if imp == solvers_dir:
+            mod_list = []
             weights = []
-            for f in func_list:
-                # Split the function name
-                func_split = f.split('_')
-                solve[f] = int(func_split[3]) if len(func_split) > 3 and func_split[2] != 'Z' else 1
-                weights.append(solve[f])
-                # print_l(f'{func_split = } - {solve[f] = }')
+            # list files in solver_dir/solve_{task_id}/*
+            files = glob.glob(f'solver_dir/solve_{task_id}/*/*.py')
+            if not files:
+                continue
+            for file in files:
+                # print_l(f'Processing file: {file}')
+                sections = file.split('/')
+                # print_l(f'{sections = }')
+                mod_list.append({
+                    'path': file,
+                    'score': sections[-2],
+                    'name': f'solve_{sections[-1][:-3]}'})
+                weights.append(int(sections[-2]))
 
-            func_name = random.choices(func_list, weights=weights, k=1)[0]
-            # func_name = random.choice(func_list)
-            # print_l(f'{func_name = }')
+            mod_item = random.choices(mod_list, weights=weights, k=1)[0]
 
-            solver = getattr(imp, func_name)
-            # print_l(f'Found solver: {func_name} in {imp.__name__}')
+            # print_l(f'{mod_list = }')
+            # print_l(f'{mod_item = }')
+            # assert False               
+
+            solver_module = load_path(mod_item['path'])
+            func_name = mod_item['name']
+
+            solver = getattr(solver_module, func_name)
+            print_l(f'Found solver: {func_name} in {solver_module.__name__}')
             return func_name, inspect.getsource(solver)
-        elif hasattr(imp, func_name):
-            solver = getattr(imp, func_name)
-            # print_l(f'Found solver: {func_name} in {imp.__name__}')
-            return func_name, inspect.getsource(solver)
+
+
+        else:
+            func_name = f'solve_{task_id}'
+            if hasattr(imp, func_name):
+                solver = getattr(imp, func_name)
+                # print_l(f'Found solver: {func_name} in {imp.__name__}')
+                return func_name, inspect.getsource(solver)
     return None, None
 
 
@@ -158,6 +172,23 @@ def get_solvers(imports):
             solvers[task_id] = (func_name, source)
 
     return solvers
+
+
+def load_path(file_path):
+    """
+    Dynamically load a Python module from a file path
+    Args: module_name: Path to the Python file to load
+    Returns: Loaded module object
+    """
+    module_name = file_path[:-3].replace('/', '.')
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Module file not found: {file_path}")
+        
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 def load_module(module_name):

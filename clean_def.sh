@@ -22,7 +22,7 @@ fi
 # Change to your target directory
 cd $SOLVER_DIR || exit 1
 
-ls | shuf -n "$MAX_NUM_FILES" || {
+ls */* | shuf -n "$MAX_NUM_FILES" || {
     echo "Error: Failed to list or shuffle files."
     exit 1
 }

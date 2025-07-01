@@ -159,18 +159,19 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         # Write inlined source to file
         ensure_dir('solver_dir')
         solve_task = f'solver_dir/solve_{task_id}'
-
         ensure_dir(solve_task)
-        ensure_dir('solver_md5')
 
-        long_hash = f'{md5_hash}_{score[sol_t]}'
-        solve_name = f'solver_md5/{long_hash}'
+        ensure_dir('solver_md5')
+        # long_hash = f'{md5_hash}_{score[sol_t]}'
+        solve_name = f'solver_md5/{md5_hash}'
 
         with open(f'{solve_name}.def', 'w') as f:
             f.write(actual_inlined_source)
             f.write('\n')
 
-        solve_link = f'solver_dir/solve_{task_id}/{long_hash}'
+        solve_score = f'solver_dir/solve_{task_id}/{score[sol_t]}'
+        ensure_dir(solve_score)
+        solve_link = f'{solve_score}/{md5_hash}'
 
         symlink(f'{solve_name}.def', f'{solve_link}.def')
         symlink(f'{solve_name}.py', f'{solve_link}.py')
@@ -193,7 +194,7 @@ def symlink(file_name, link_name):
     Create a symlink for the given file.
     If the symlink already exists, remove it and create a new one.
     """
-    full_name = f'../../{file_name}'
+    full_name = f'../../../{file_name}'
     try:
         os.symlink(full_name, link_name)
     except FileExistsError:
