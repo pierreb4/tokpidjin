@@ -19,7 +19,7 @@ if [ ! -d $SOLVER_DIR ]; then
     exit 1
 fi
 
-# Change to your target directory
+# Change to your target directory (solver_dir/solve_*)
 cd $SOLVER_DIR || exit 1
 
 ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" || {
