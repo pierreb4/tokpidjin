@@ -346,14 +346,10 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
             _, func_params, steps = func_parsed
             
             # Get function name from def_file
-            def_stem = Path(def_file).stem
-            def_dir = Path(def_file).parent
-            def_prefix = Path(def_dir).stem
-
-            if def_stem[:6] == 'solve_':
-                func_name = def_stem
-            else:
-                func_name = f'{def_prefix}_{def_stem}'
+            print_l(f'{def_file = }')
+            def_stem_split = Path(def_file).stem.split('_')
+            print_l(f'{def_stem_split = }')
+            func_name = f'solve_{def_stem_split[0]}'
 
             # Create the original function with _one suffix
             original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")

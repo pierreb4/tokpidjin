@@ -96,7 +96,7 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         t_set = set()
         if o['train'][i] is not None:
             all_o = all_o.union(o['train'][i])
-            for i, m, t, e, s in o['train'][i]:
+            for t, e, i, m in o['train'][i]:
                 t_set.add(t)
 
             # Add 1 just once for each t value
@@ -113,7 +113,7 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         t_set = set()
         if o['test'][i] is not None:
             all_o = all_o.union(o['test'][i]) 
-            for i, m, t, e, s in o['test'][i]:
+            for t, e, i, m in o['test'][i]:
                 t_set.add(t)
 
             # Add 1 just once for each t value
@@ -128,11 +128,13 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
 
     # Save solutions
     for solution in all_o:
+        sol_t, sol_e, sol_i, sol_m = solution
+
         # if not solution[3]:
         #     continue
 
         # Track calls then reverse sequence to rebuild solver
-        done = track_solution(solution[2], None)
+        done = track_solution(sol_t, None)
 
         # Build solution body
         solver_body = ''
@@ -144,7 +146,7 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
             solver_body += f'{func}('
             solver_body += ', '.join(args)
             solver_body += ')\n'
-        solver_body += f'    return t{solution[2]}\n'
+        solver_body += f'    return t{sol_t}\n'
 
         # Get md5_hash of generic source code
         generic_solver_source = f'def solve(S, I):\n{solver_body}'
@@ -161,7 +163,7 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         ensure_dir(solve_task)
         ensure_dir('solver_md5')
 
-        long_hash = f'{md5_hash}_{score[solution[2]]}'
+        long_hash = f'{md5_hash}_{score[sol_t]}'
         solve_name = f'solver_md5/{long_hash}'
 
         with open(f'{solve_name}.def', 'w') as f:
