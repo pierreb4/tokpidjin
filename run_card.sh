@@ -30,8 +30,22 @@ while date; do
     # done
 
     for f in solver_dir/*; do bash clean_def.sh $f; done
-    for f in `ls solver_md5 | grep 'def$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
-    for f in `ls solver_md5 | grep 'py$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
+
+    # for f in `ls solver_md5 | grep 'def$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
+    for f in `ls solver_md5 | grep -o '^................................'`; do 
+      ls solver_dir/*/${f}.def &>/dev/null || \
+      rm solver_md5/${f}.def
+      ls solver_dir/*/${f}_*.def &>/dev/null || \
+      rm solver_md5/${f}_*.def
+    done
+
+    # for f in `ls solver_md5 | grep 'py$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
+    for f in `ls solver_md5 | grep -o '^................................'`; do 
+      ls solver_dir/*/${f}.py &>/dev/null || \
+      rm solver_md5/${f}.py
+      ls solver_dir/*/${f}_*.py &>/dev/null || \
+      rm solver_md5/${f}_*.py
+    done
 
     # From solver_dir/ to solvers_dir.py
     python expand_solver.py -q --source solver_dir/ --solvers-file $TMPFILE && \
