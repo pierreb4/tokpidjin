@@ -305,6 +305,8 @@ def get_nth_t(container: 'Tuple', rank: 'FL') -> 'Any':
 
 def get_nth_f(container: 'FrozenSet', rank: 'FL') -> 'Any':
     """Nth item of container, 0-based"""
+    if not hasattr(container, '__iter__'):
+        return None
     if rank < 0:
         # For negative rank, reverse the iterator
         iterator = iter(reversed(tuple(container)))
@@ -477,6 +479,8 @@ def add(
     b: 'Numerical'
 ) -> 'Numerical':
     """ addition """
+    if a is None or b is None:
+        return None
     if isinstance(a, int) and isinstance(b, int):
         return a + b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -491,6 +495,8 @@ def subtract(
     b: 'Numerical'
 ) -> 'Numerical':
     """ subtraction """
+    if a is None or b is None:
+        return None
     if isinstance(a, int) and isinstance(b, int):
         return a - b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -505,6 +511,8 @@ def multiply(
     b: 'Numerical'
 ) -> 'Numerical':
     """ multiplication """
+    if a is None or b is None:
+        return None
     if isinstance(a, int) and isinstance(b, int):
         return a * b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -519,6 +527,8 @@ def divide(
     b: 'Numerical'
 ) -> 'Numerical':
     """ floor division """
+    if a is None or b is None:
+        return None
     if isinstance(a, int) and isinstance(b, int):
         return a // b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -592,6 +602,8 @@ def intersection(
     b: 'FrozenSet'
 ) -> 'FrozenSet':
     """ returns the intersection of two containers """
+    if not isinstance(a, frozenset) or not isinstance(b, frozenset):
+        return None
     return a & b
 
 
@@ -633,6 +645,8 @@ def greater(
     b: 'Integer'
 ) -> 'Boolean':
     """ greater """
+    if a is None or b is None:
+        return None
     return a > b
 
 
@@ -640,6 +654,8 @@ def size(
     container: 'Container'
 ) -> 'Integer':
     """ cardinality """
+    if container is None:
+        return None
     return len(container)
 
 
@@ -647,14 +663,20 @@ def merge(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    return type(containers)(e for c in containers for e in c)
+    try:
+        return type(containers)(e for c in containers for e in c)
+    except TypeError:
+        return None
 
 
 def merge_f(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    return type(containers)(e for c in containers for e in c)
+    try:
+        return type(containers)(e for c in containers for e in c)
+    except TypeError:
+        return None
 
 
 def merge_t(
@@ -1563,6 +1585,8 @@ def lowermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
+    if not hasattr(patch, '__len__') or len(patch) == 0:
+        return None
     return max(i for i, j in toindices(patch))
 
 
@@ -1584,9 +1608,7 @@ def uppermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    if not hasattr(patch, '__len__'):
-        return None
-    if len(patch) == 0:
+    if not hasattr(patch, '__len__') or len(patch) == 0:
         return None
     return min(i for i, j in toindices(patch))
 
@@ -1609,9 +1631,7 @@ def leftmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    if not hasattr(patch, '__len__'):
-        return None
-    if len(patch) == 0:
+    if not hasattr(patch, '__len__') or len(patch) == 0:
         return None
     return min(j for i, j in toindices(patch))
 
@@ -1634,6 +1654,8 @@ def rightmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of rightmost occupied cell """
+    if not hasattr(patch, '__len__') or len(patch) == 0:
+        return None
     return max(j for i, j in toindices(patch))
 
 
@@ -1935,6 +1957,10 @@ def center(
     patch: 'Patch'
 ) -> 'IJ':
     """ center of the patch """
+    if uppermost(patch) is None:
+        return None
+    if leftmost(patch) is None:
+        return None
     return (uppermost(patch) + height_f(patch) // 2, leftmost(patch) + width_f(patch) // 2)
 
 
@@ -2333,6 +2359,8 @@ def colorcount_f(
     color: 'C_'
 ) -> 'Integer':
     """ number of cells with color """
+    if not isinstance(obj, frozenset):
+        return None
     return sum(v == color for v, _ in obj)
 
 
@@ -2483,6 +2511,8 @@ def recolor_i(
     indices: 'Indices'
 ) -> 'Object':
     """ recolor indices """
+    if color is None or indices is None:
+        return None
     return frozenset((color, index) for index in toindices_i(indices))
 
 
@@ -2491,6 +2521,8 @@ def recolor_o(
     obj: 'Object'
 ) -> 'Object':
     """ recolor obj """
+    if color is None or obj is None:
+        return None
     return frozenset((color, index) for index in toindices_o(obj))
 
 
@@ -2499,6 +2531,8 @@ def shift(
     directions: 'IJ'
 ) -> 'Patch':
     """ shift patch """
+    if patch is None or directions is None:
+        return None
     if len(patch) == 0:
         return patch
     di, dj = directions
@@ -2529,6 +2563,8 @@ def dneighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ directly adjacent indices """
+    if loc is None:
+        return None
     return frozenset({(loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]), (loc[0], loc[1] - 1), (loc[0], loc[1] + 1)})
 
 
@@ -2536,6 +2572,8 @@ def ineighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ diagonally adjacent indices """
+    if loc is None:
+        return None
     return frozenset({(loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1)})
 
 
@@ -2543,6 +2581,8 @@ def neighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ adjacent indices """
+    if loc is None:
+        return None
     return dneighbors(loc) | ineighbors(loc)
 
 

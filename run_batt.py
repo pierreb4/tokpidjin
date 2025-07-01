@@ -216,12 +216,14 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         ensure_dir(solve_task)
         ensure_dir('solver_md5')
 
-        solve_name = f'solver_md5/{md5_hash}'
+        long_hash = f'{md5_hash}_{score[solution[2]]}'
+        solve_name = f'solver_md5/{long_hash}'
+
         with open(f'{solve_name}.def', 'w') as f:
             f.write(actual_inlined_source)
             f.write('\n')
 
-        solve_link = f'solver_dir/solve_{task_id}/{md5_hash}_{score[solution[2]]}'
+        solve_link = f'solver_dir/solve_{task_id}/{long_hash}'
 
         symlink(f'{solve_name}.def', f'{solve_link}.def')
         symlink(f'{solve_name}.py', f'{solve_link}.py')
