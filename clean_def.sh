@@ -7,12 +7,11 @@ if [ -z "$1" ]; then
 fi
 
 SOLVER_DIR="$HOME/dsl/tokpidjin/$1"
+MAX_NUM_FILES="$2"
 
-if [ -z "$2" ]; then
+if [ -z "$MAX_NUM_FILES" ]; then
     MAX_NUM_FILES=49
 fi
-
-MAX_NUM_FILES="$2"
 
 # Check if the provided argument is a valid directory
 if [ ! -d $SOLVER_DIR ]; then
@@ -24,8 +23,6 @@ fi
 cd $SOLVER_DIR || exit 1
 
 ls | shuf -n "$MAX_NUM_FILES" || {
-    echo $MAX_NUM_FILES
-    pwd
     echo "Error: Failed to list or shuffle files."
     exit 1
 }
