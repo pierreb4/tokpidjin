@@ -93,11 +93,11 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         O = sample['output']
         # o['train'][i] = batt(S, I, O)
         timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=timeout)
-        all_o = all_o.union(o['train'][i]) 
 
-        # print()
         t_set = set()
         if o['train'][i] is not None:
+            all_o = all_o.union(o['train'][i])
+
             for i, m, t, e, s in o['train'][i]:
                 t_set.add(t)
                 # print_l(f'{i = } - {m = }- {t = } - {e = } - {s = }')
@@ -121,11 +121,10 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         O = sample['output']
         # o['test'][i] = batt(S, I, O)
         timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=timeout)
-        all_o = all_o.union(o['test'][i]) 
 
-        # print()
         t_set = set()
         if o['test'][i] is not None:
+            all_o = all_o.union(o['test'][i]) 
             for i, m, t, e, s in o['test'][i]:
                 t_set.add(t)
                 # print_l(f'{i = } - {m = }- {t = } - {e = } - {s = }')
