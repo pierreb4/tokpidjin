@@ -7,7 +7,7 @@ TMPFILE=$(mktemp)
 clear
 while date; do 
   python card.py
-  python run_batt.py -t -to $TIMEOUT -c 100
+  python run_batt.py -t -to $TIMEOUT -c 500
 
   bash count_solvers.sh solver_dir
   
