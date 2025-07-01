@@ -325,8 +325,6 @@ def main(file, seed, count=0):
                 else:
                     num_sol = '0' 
                 print(f"    if t{code.t_number[old_call]} == O:", file=file)
-                # print(f"        o.append(('{task_id}', {code.t_number[old_call]}, {has_mutation}, env.get_seed()))", file=file)
-                # print(f"        o.append(('{task_id}', '{func_name.split('_')[-1]}', {code.t_number[old_call]}, {has_mutation}, env.get_seed()))", file=file)
                 print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '{num_sol}'))", file=file)
 
             # Replace x_n with t_name[x_call] in rest of solver

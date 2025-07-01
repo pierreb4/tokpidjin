@@ -58,6 +58,7 @@ import argparse
 import time
 import sys
 import traceback
+import glob
 
 import arc_types
 import constants
@@ -226,19 +227,37 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
     # Count how many tasks have corresponding solvers
     task_ids = data["train"].keys()
 
+    # TODO Turn this around to go through task_ids 
+    #      and find the best solver function
+
     solver_keys = []
     solve_func = {}
-    for f in solver_functions:
-        if f.startswith('solve_'):
-            f = f[6:]
+    # for f in solver_functions:
+    #     if f.startswith('solve_'):
+    #         f = f[6:]
 
-        if len(f) == 41:
-            md5_hash = f[9:]
-            task_id = f[:8]
+    for task_id in data['train'].keys():
 
-            if task_id in data['train']:
-                solver_keys.append(task_id)
-                solve_func[task_id] = f'solve_{task_id}_{md5_hash}'
+        # print_l(f'{f = }')
+
+        module = None
+        files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/*.py')
+        for file in files:
+            sections = file.split('/')
+            score = int(sections[-2])
+            if module is None or score > module['score']:
+                module = {
+                    'path': file,
+                    'score': score,
+                    'name': f'solve_{sections[-1][:-3]}'}
+
+        if module is None:
+            continue
+
+        if task_id in data['train'].keys():
+            solver_keys.append(task_id)
+            solve_func[task_id] = module['name']
+
 
     solvable_tasks = {k: True for k in task_ids if k in solver_keys}
     
