@@ -85,41 +85,29 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
     all_o = set()
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
 
-    print(f'------ {task_id} - {task_num} ', end='')
+    print(f'------ {task_id} - {task_num}')
 
     score = {}
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
-        # o['train'][i] = batt(S, I, O)
         timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=timeout)
 
         t_set = set()
         if o['train'][i] is not None:
             all_o = all_o.union(o['train'][i])
-
             for i, m, t, e, s in o['train'][i]:
                 t_set.add(t)
-                # print_l(f'{i = } - {m = }- {t = } - {e = } - {s = }')
+
             # Add 1 just once for each t value
             for t in t_set:
                 if t not in score:
                     score[t] = 0
                 score[t] += 1
         
-        # print_l(f'{score = }')
-
-        if timed_out:
-            print('|')
-            # Give up on this task
-            # return True
-        # print(f"Sample: {i+1}/{len(train_task)} - {o['train'][i] = }")
-        print('+', end='', flush=True)
-
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
-        # o['test'][i] = batt(S, I, O)
         timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=timeout)
 
         t_set = set()
@@ -127,64 +115,23 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
             all_o = all_o.union(o['test'][i]) 
             for i, m, t, e, s in o['test'][i]:
                 t_set.add(t)
-                # print_l(f'{i = } - {m = }- {t = } - {e = } - {s = }')
+
             # Add 1 just once for each t value
             for t in t_set:
                 if t not in score:
                     score[t] = 0                    
                 score[t] += 1
-        
-        # print_l(f'{score = }')
 
-        if timed_out:
-            print('|')
-            # Give up on this task
-            # return True
-        # print(f"Sample: {i+1}/{len(test_task)} - {o['test'][i]} = ")
-        print('-', end='', flush=True)
+    elapsed = timer() - start_time
+    print(f'Result {task_id} - {len(all_o)}/{len(train_task) + len(test_task)} - {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt')
 
-
-    # print()
-    # for i, _ in enumerate(train_task):
-    #     print_l(f"{i = } - {o['train'][i] = }")
-
-    # for i, _ in enumerate(test_task):
-    #     print_l(f"{i = } - {o['test'][i] = }")
-
-    # print()
-    # print(f'{score = }')
-
-    # # Values present in all output lists are valid solutions
-    # # TODO Keep track of partial solutions, then try improving them
-    # valid_solutions = set(o['train'][0])
-
-    # for sample in o['train']:
-    #     valid_solutions.intersection_update(set(o['train'][sample]))
-    # for sample in o['test']:
-    #     valid_solutions.intersection_update(set(o['test'][sample]))
-
-    # if not valid_solutions:
-    #     print('<')
-    #     elapsed = timer() - start_time
-    #     print(f"Failed {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt")
-    # else:
-    #     print('>')
-
-    # print_l(f'{score = }')
-
-    # Save valid solutions
-    # for solution in valid_solutions:
+    # Save solutions
     for solution in all_o:
         # if not solution[3]:
         #     continue
 
-        elapsed = timer() - start_time
-        print(f"Solved {task_id} after {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt from {solution}")
-
         # Track calls then reverse sequence to rebuild solver
         done = track_solution(solution[2], None)
-
-        # print_l(f'{done = }')
 
         # Build solution body
         solver_body = ''
@@ -205,8 +152,6 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
 
         actual_solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
         actual_inlined_source = inline_variables(actual_solver_source)
-
-        # print(solver_source)
 
         # Write inlined source to file
         ensure_dir('solver_dir')
