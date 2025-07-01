@@ -31,6 +31,10 @@ while date; do
 
     for f in solver_dir/*; do bash clean_def.sh $f; done
 
+    # From solver_dir/ to solvers_dir.py
+    python expand_solver.py -q --source solver_dir/ --solvers-file $TMPFILE && \
+    mv -f $TMPFILE solvers_dir.py
+
     # for f in `ls solver_md5 | grep 'def$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
     for f in `ls solver_md5 | grep -o '^................................'`; do 
       ls solver_dir/*/${f}.def &>/dev/null || \
@@ -46,10 +50,6 @@ while date; do
       ls solver_dir/*/${f}_*.py &>/dev/null || \
       rm solver_md5/${f}_*.py
     done
-
-    # From solver_dir/ to solvers_dir.py
-    python expand_solver.py -q --source solver_dir/ --solvers-file $TMPFILE && \
-    mv -f $TMPFILE solvers_dir.py
 
     # # From solvers_ref.py to solvers.py
     # python replace_func.py -q
