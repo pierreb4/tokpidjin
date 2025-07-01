@@ -23,6 +23,11 @@ fi
 # Change to your target directory
 cd $SOLVER_DIR || exit 1
 
+ls | shuf -n "$MAX_NUM_FILES" || {
+    echo "Error: Failed to list or shuffle files."
+    exit 1
+}
+
 # Step 1: Select 10 random files to keep
 mapfile -t keep < <(ls | shuf -n "$MAX_NUM_FILES")
 
