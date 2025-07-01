@@ -171,7 +171,7 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
     # else:
     #     print('>')
 
-    print_l(f'{score = }')
+    # print_l(f'{score = }')
 
     # Save valid solutions
     # for solution in valid_solutions:
