@@ -91,8 +91,11 @@ g='c_iz_n c_zo_n a_mr'
 TMPFILE=$(mktemp)
 while date; do
   rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
-  rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/ && \
-  rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solvers_dir.py . && \
+  rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/
+  # rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solvers_dir.py . && \
+  >solvers_dir.py
+  echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py 
+  find solver_md5 -type f -name '*.py' -exec cat {} >>solvers_dir.py \; -exec echo -e "\n" >>solvers_dir.py \;
   python main.py --solvers solvers_dir
   for izzo in $g; do
     echo -en "$izzo\t"
