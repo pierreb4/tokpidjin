@@ -427,77 +427,111 @@ def scale_f( obj: 'Object', factor: 'S4' ) -> 'Object':
 # NOTE rank can go positive or negative
 # rank=0: most common, rank=-1: least common
 def get_color_rank_t( grid: 'Grid', rank: 'FL' ) -> 'C_':
-    colors = [v for row in grid for v in row]
-    ranked = Counter(colors).most_common()
-    return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else None
+    try:
+        colors = [v for row in grid for v in row]
+        ranked = Counter(colors).most_common()
+        return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else None
+    except Exception:
+        return None
 
 
 # NOTE rank can go positive or negative
 # rank=0: most common, rank=-1: least common
 def get_color_rank_f( obj: 'Object', rank: 'FL' ) -> 'C_':
-    colors = [v for v, _ in obj]
-    ranked = Counter(colors).most_common()
-    return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else None
+    try:
+        colors = [v for v, _ in obj]
+        ranked = Counter(colors).most_common()
+        return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else None
+    except Exception:
+        return None
 
 
 def get_rank( container: 'IntegerSet', rank: 'FL') -> 'Integer':
-    if not all(isinstance(e, int) for e in container):
+    try:
+        ranked = sorted(container, reverse=True)
+        return ranked[rank] if -len(ranked) <= rank < len(ranked) else 0
+    except Exception:
         return None
-    ranked = sorted(container, reverse=True)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else 0
 
 
 def get_arg_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    ranked = sorted(container, key=compfunc, reverse=True)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    try:
+        ranked = sorted(container, key=compfunc, reverse=True)
+        return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    except Exception:
+        return None
 
 
 def get_arg_rank_t( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    ranked = sorted(container, key=compfunc, reverse=True)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    try:
+        ranked = sorted(container, key=compfunc, reverse=True)
+        return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    except Exception:
+        return None
 
 
 def get_arg_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    ranked = sorted(container, key=compfunc, reverse=True)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    try:
+        ranked = sorted(container, key=compfunc, reverse=True)
+        return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    except Exception:
+        return None
 
 
 def get_val_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    ranked = sorted(container, key=compfunc)
-    if -len(ranked) <= rank < len(ranked):
-        return compfunc(ranked[rank])
-    return compfunc(0)
+    try:
+        ranked = sorted(container, key=compfunc)
+        if -len(ranked) <= rank < len(ranked):
+            return compfunc(ranked[rank])
+        return compfunc(0)
+    except Exception:
+        return None
 
 
 def get_val_rank_t( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    ranked = sorted(container, key=compfunc)
-    if -len(ranked) <= rank < len(ranked):
-        return compfunc(ranked[rank])
-    return compfunc(0)
+    try:
+        ranked = sorted(container, key=compfunc)
+        if -len(ranked) <= rank < len(ranked):
+            return compfunc(ranked[rank])
+        return compfunc(0)
+    except Exception:
+        return None
 
 
 def get_val_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    ranked = sorted(container, key=compfunc)
-    if -len(ranked) <= rank < len(ranked):
-        return compfunc(ranked[rank])
-    return compfunc(0)
+    try:
+        ranked = sorted(container, key=compfunc)
+        if -len(ranked) <= rank < len(ranked):
+            return compfunc(ranked[rank])
+        return compfunc(0)
+    except Exception:
+        return None
 
 
 def get_common_rank( container: 'Container', rank: 'FL') -> 'Any':
-    ranked = sorted(set(container), key=container.count)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    try:
+        ranked = sorted(set(container), key=container.count)
+        return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    except Exception:
+        return None
 
 
 def get_common_rank_t( container: 'Tuple', rank: 'FL') -> 'Any':
-    ranked = sorted(set(container), key=container.count)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    try:
+        ranked = sorted(set(container), key=container.count)
+        return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    except Exception:
+        return None
 
 
 def get_common_rank_f( container: 'FrozenSet', rank: 'FL') -> 'Any':
     # Since frozensets have unique elements, convert to list first
-    container_list = list(container)
-    ranked = sorted(set(container_list), key=container_list.count)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    try:
+        container_list = list(container)
+        ranked = sorted(set(container_list), key=container_list.count)
+        return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    except Exception:
+        return None
 
 
 def add(
@@ -849,14 +883,21 @@ def increment(
     x: 'Numerical'
 ) -> 'Numerical':
     """ incrementing """
-    return x + 1 if isinstance(x, int) else (x[0] + 1, x[1] + 1)
+    try:
+        return x + 1 if isinstance(x, int) else (x[0] + 1, x[1] + 1)
+    except Exception:
+        return None
 
 
 def decrement(
     x: 'Numerical'
 ) -> 'Numerical':
     """ decrementing """
-    return x - 1 if isinstance(x, int) else (x[0] - 1, x[1] - 1)
+    try:
+        return x - 1 if isinstance(x, int) else (x[0] - 1, x[1] - 1)
+    except Exception:
+        return None
+
 
 
 def crement(
@@ -1408,7 +1449,10 @@ def apply(
     container: 'Container'
 ) -> 'Container':
     """ apply function to each item in container """
-    return type(container)(function(e) for e in container) if callable(function) else None
+    try:
+        return type(container)(function(e) for e in container) if callable(function) else None
+    except Exception:
+        return None
 
 
 def apply_t(
@@ -1514,16 +1558,22 @@ def mostcolor_t(
     grid: 'Grid'
 ) -> 'Integer':
     """ most common color """
-    values = [v for r in grid for v in r]
-    return max(set(values), key=values.count) if values else None
+    try:
+        values = [v for r in grid for v in r]
+        return max(set(values), key=values.count)
+    except Exception:
+        return None
     
 
 def mostcolor_f(
     obj: 'Object'
 ) -> 'Integer':
     """ most common color """
-    values = [v for v, _ in obj]
-    return max(set(values), key=values.count) if values else None
+    try:
+        values = [v for v, _ in obj]
+        return max(set(values), key=values.count)
+    except Exception:
+        return None
     
 
 # def leastcolor(
@@ -1538,20 +1588,22 @@ def leastcolor_t(
     grid: 'Grid'
 ) -> 'Integer':
     """ least common color """
-    values = [v for r in grid for v in r]
-    if not values:
+    try:
+        values = [v for r in grid for v in r]
+        return min(set(values), key=values.count)
+    except Exception:
         return None
-    return min(set(values), key=values.count)
 
 
 def leastcolor_f(
     obj: 'Object'
 ) -> 'Integer':
     """ least common color """
-    values = [v for v, _ in obj]
-    if not values:
+    try:
+        values = [v for v, _ in obj]
+        return min(set(values), key=values.count)
+    except Exception:
         return None
-    return min(set(values), key=values.count)
 
 
 # def height(
@@ -1580,70 +1632,100 @@ def height_t(
     piece: 'Tuple'
 ) -> 'Integer':
     """ height of grid """
-    return len(piece)
+    try:
+        return len(piece)
+    except Exception:
+        return None
 
 
 def height_f(
     piece: 'Indices'
 ) -> 'Integer':
     """ height of patch """
-    return 0 if len(piece) == 0 else lowermost(piece) - uppermost(piece) + 1
+    try:
+        return 0 if len(piece) == 0 else lowermost(piece) - uppermost(piece) + 1
+    except Exception:
+        return None
 
 
 def height_i(
     piece: 'Indices'
 ) -> 'Integer':
     """ height of patch """
-    return 0 if len(piece) == 0 else lowermost_i(piece) - uppermost_i(piece) + 1
+    try:
+        return 0 if len(piece) == 0 else lowermost_i(piece) - uppermost_i(piece) + 1
+    except Exception:
+        return None
 
 
 def height_o(
     piece: 'Object'
 ) -> 'Integer':
     """ height of patch """
-    return 0 if len(piece) == 0 else lowermost_o(piece) - uppermost_o(piece) + 1
+    try:
+        return 0 if len(piece) == 0 else lowermost_o(piece) - uppermost_o(piece) + 1
+    except Exception:
+        return None
 
 
 def width_t(
     piece: 'Tuple'
 ) -> 'Integer':
     """ width of grid """
-    return len(piece[0]) if piece else 0
+    try:
+        return len(piece[0]) if piece else 0
+    except Exception:
+        return None
 
 
 def width_f(
     piece: 'Indices'
 ) -> 'Integer':
     """ width of patch """
-    return 0 if len(piece) == 0 else rightmost(piece) - leftmost(piece) + 1
+    try:
+        return 0 if len(piece) == 0 else rightmost(piece) - leftmost(piece) + 1
+    except Exception:
+        return None
 
 
 def width_i(
     piece: 'Indices'
 ) -> 'Integer':
     """ width of patch """
-    return 0 if len(piece) == 0 else rightmost_i(piece) - leftmost_i(piece) + 1
+    try:
+        return 0 if len(piece) == 0 else rightmost_i(piece) - leftmost_i(piece) + 1
+    except Exception:
+        return None
 
 
 def width_o(
     piece: 'Object'
 ) -> 'Integer':
     """ width of patch """
-    return 0 if len(piece) == 0 else rightmost_o(piece) - leftmost_o(piece) + 1
+    try:
+        return 0 if len(piece) == 0 else rightmost_o(piece) - leftmost_o(piece) + 1
+    except Exception:
+        return None
 
 
 def shape_t(
     piece: 'Tuple'
 ) -> 'IJ':
     """ height and width of grid """
-    return (len(piece), len(piece[0]) if piece else 0)
+    try:
+        return (len(piece), len(piece[0]) if piece else 0)
+    except Exception:
+        return None
 
 
 def shape_f(
     piece: 'FrozenSet'
 ) -> 'IJ':
     """ height and width of patch """
-    return (height_f(piece), width_f(piece))
+    try:
+        return (height_f(piece), width_f(piece))
+    except Exception:
+        return None
 
 
 def col_row(
@@ -2105,11 +2187,14 @@ def index(
     loc: 'IJ'
 ) -> 'Integer':
     """ color at location """
-    i, j = loc
-    h, w = len(grid), len(grid[0])
-    if not (0 <= i < h and 0 <= j < w):
+    try:
+        i, j = loc
+        h, w = len(grid), len(grid[0])
+        if not (0 <= i < h and 0 <= j < w):
+            return None
+        return grid[loc[0]][loc[1]]
+    except Exception:
         return None
-    return grid[loc[0]][loc[1]] 
 
 
 def canvas(
@@ -2117,7 +2202,10 @@ def canvas(
     dimensions: 'IJ'
 ) -> 'Grid':
     """ grid construction """
-    return tuple(tuple(color for j in range(dimensions[1])) for i in range(dimensions[0]))
+    try:
+        return tuple(tuple(color for j in range(dimensions[1])) for i in range(dimensions[0]))
+    except Exception:
+        return None
 
 
 def corners(
@@ -2133,27 +2221,24 @@ def connect(
 ) -> 'Indices':
     """ line between two points """
     # print(f"Connecting {a} to {b}")
-    if a is None or b is None:
+    try:
+        ai, aj = a
+        bi, bj = b
+        si = min(ai, bi)
+        ei = max(ai, bi) + 1
+        sj = min(aj, bj)
+        ej = max(aj, bj) + 1
+        if ai == bi:
+            return frozenset((ai, j) for j in range(sj, ej))
+        elif aj == bj:
+            return frozenset((i, aj) for i in range(si, ei))
+        elif bi - ai == bj - aj:
+            return frozenset((i, j) for i, j in zip(range(si, ei), range(sj, ej)))
+        elif bi - ai == aj - bj:
+            return frozenset((i, j) for i, j in zip(range(si, ei), range(ej - 1, sj - 1, -1)))
+        return frozenset()
+    except Exception:
         return None
-    ai, aj = a
-    if ai is None or aj is None:
-        return None
-    bi, bj = b
-    if bi is None or bj is None:
-        return None
-    si = min(ai, bi)
-    ei = max(ai, bi) + 1
-    sj = min(aj, bj)
-    ej = max(aj, bj) + 1
-    if ai == bi:
-        return frozenset((ai, j) for j in range(sj, ej))
-    elif aj == bj:
-        return frozenset((i, aj) for i in range(si, ei))
-    elif bi - ai == bj - aj:
-        return frozenset((i, j) for i, j in zip(range(si, ei), range(sj, ej)))
-    elif bi - ai == aj - bj:
-        return frozenset((i, j) for i, j in zip(range(si, ei), range(ej - 1, sj - 1, -1)))
-    return frozenset()
 
 
 def cover(
@@ -2410,15 +2495,12 @@ def toindices(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices of object cells """
-    if not hasattr(patch, '__len__'):
-        return frozenset()
-    if len(patch) == 0:
-        return frozenset()
-    if not hasattr(next(iter(patch)), '__len__'):
-        return frozenset()
-    if isinstance(next(iter(patch))[1], tuple):
-        return frozenset(index for value, index in patch)
-    return patch
+    try:
+        if isinstance(next(iter(patch))[1], tuple):
+            return frozenset(index for value, index in patch)
+        return patch
+    except Exception:
+        return None
 
 
 def toindices_i(
@@ -2448,14 +2530,20 @@ def shape_t(
     grid: 'Grid'
 ) -> 'IJ':
     """ height and width of grid or patch """
-    return (height_t(grid), width_t(grid))
+    try:
+        return (height_t(grid), width_t(grid))
+    except Exception:
+        return None
 
 
 def shape_f(
     patch: 'Patch'
 ) -> 'IJ':
     """ height and width of grid or patch """
-    return (height_f(patch), width_f(patch))
+    try:
+        return (height_f(patch), width_f(patch))
+    except Exception:
+        return None
 
 
 # def portrait(
@@ -2469,14 +2557,20 @@ def portrait_t(
     grid: 'Grid'
 ) -> 'Boolean':
     """ whether height is greater than width """
-    return height_t(grid) > width_t(grid)
+    try:
+        return height_t(grid) > width_t(grid)
+    except Exception:
+        return None
 
 
 def portrait_f(
     patch: 'Patch'
 ) -> 'Boolean':
     """ whether height is greater than width """
-    return height_f(patch) > width_f(patch)
+    try:
+        return height_f(patch) > width_f(patch)
+    except Exception:
+        return None
 
 
 # def colorcount(
@@ -2494,7 +2588,11 @@ def colorcount_t(
     color: 'C_'
 ) -> 'Integer':
     """ number of cells with color """
-    return sum(row.count(color) for row in grid)
+    try:
+        return sum(row.count(color) for row in grid)
+    except Exception:
+        return None
+
 
 
 def colorcount_f(
@@ -2502,9 +2600,10 @@ def colorcount_f(
     color: 'C_'
 ) -> 'Integer':
     """ number of cells with color """
-    if not isinstance(obj, frozenset):
+    try:
+        return sum(v == color for v, _ in obj)
+    except Exception:
         return None
-    return sum(v == color for v, _ in obj)
 
 
 def colorfilter(
@@ -2512,7 +2611,10 @@ def colorfilter(
     color: 'C_'
 ) -> 'Objects':
     """ filter objects by color """
-    return frozenset(obj for obj in objs if next(iter(obj))[0] == color)
+    try:
+        return frozenset(obj for obj in objs if next(iter(obj))[0] == color)
+    except Exception:
+        return None
 
 
 def sizefilter(
@@ -2520,14 +2622,20 @@ def sizefilter(
     n: 'Integer'
 ) -> 'Object':
     """ filter items by size """
-    return frozenset(item for item in container if len(item) == n)
+    try:
+        return frozenset(item for item in container if len(item) == n)
+    except Exception:
+        return None
 
 
 def asindices(
     grid: 'Grid'
 ) -> 'Indices':
     """ indices of all grid cells """
-    return frozenset((i, j) for i in range(len(grid)) for j in range(len(grid[0])))
+    try:
+        return frozenset((i, j) for i in range(len(grid)) for j in range(len(grid[0])))
+    except Exception:
+        return None
 
 
 def f_ofcolor(
@@ -2741,33 +2849,36 @@ def objects(
     without_bg: 'Boolean'
 ) -> 'Objects':
     """ objects occurring on the grid """
-    bg = mostcolor_t(grid) if without_bg else None
-    objs = set()
-    occupied = set()
-    h, w = len(grid), len(grid[0])
-    unvisited = asindices(grid)
-    diagfun = neighbors if diagonal else dneighbors
-    for loc in unvisited:
-        if loc in occupied:
-            continue
-        val = grid[loc[0]][loc[1]]
-        if val == bg:
-            continue
-        obj = {(val, loc)}
-        cands = {loc}
-        while len(cands) > 0:
-            neighborhood = set()
-            for cand in cands:
-                v = grid[cand[0]][cand[1]]
-                if (val == v) if univalued else (v != bg):
-                    obj.add((v, cand))
-                    occupied.add(cand)
-                    neighborhood |= {
-                        (i, j) for i, j in diagfun(cand) if 0 <= i < h and 0 <= j < w
-                    }
-            cands = neighborhood - occupied
-        objs.add(frozenset(obj))
-    return frozenset(objs)
+    try:
+        bg = mostcolor_t(grid) if without_bg else None
+        objs = set()
+        occupied = set()
+        h, w = len(grid), len(grid[0])
+        unvisited = asindices(grid)
+        diagfun = neighbors if diagonal else dneighbors
+        for loc in unvisited:
+            if loc in occupied:
+                continue
+            val = grid[loc[0]][loc[1]]
+            if val == bg:
+                continue
+            obj = {(val, loc)}
+            cands = {loc}
+            while len(cands) > 0:
+                neighborhood = set()
+                for cand in cands:
+                    v = grid[cand[0]][cand[1]]
+                    if (val == v) if univalued else (v != bg):
+                        obj.add((v, cand))
+                        occupied.add(cand)
+                        neighborhood |= {
+                            (i, j) for i, j in diagfun(cand) if 0 <= i < h and 0 <= j < w
+                        }
+                cands = neighborhood - occupied
+            objs.add(frozenset(obj))
+        return frozenset(objs)
+    except Exception:
+        return None
 
 
 def partition(
