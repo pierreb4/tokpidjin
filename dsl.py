@@ -398,6 +398,32 @@ def mir_rot_f( patch: 'Patch', type: 'A4' ) -> 'Patch':
     return patch
 
 
+def scale_t( grid: 'Grid', factor: 'S4' ) -> 'Grid':
+    if factor == 2:
+        return upscale_t(grid, 2)
+    elif factor ==3:
+        return upscale_t(grid, 3)
+    elif factor == -2:
+        return downscale(grid, 2)
+    elif factor == -3:
+        return downscale(grid, 3)
+    else:
+        return grid
+
+
+def scale_f( obj: 'Object', factor: 'S4' ) -> 'Object':
+    if factor == 2:
+        return upscale_f(grid, 2)
+    elif factor ==3:
+        return upscale_f(grid, 3)
+    elif factor == -2:
+        return downscale(grid, 2)
+    elif factor == -3:
+        return downscale(grid, 3)
+    else:
+        return obj
+
+
 # NOTE rank can go positive or negative
 # rank=0: most common, rank=-1: least common
 def get_color_rank_t( grid: 'Grid', rank: 'FL' ) -> 'C_':
@@ -874,6 +900,8 @@ def extract(
     condition: 'Callable'
 ) -> 'Any':
     """ first element of container that satisfies condition """
+    if not callable(condition):
+        return None
     return next((e for e in container if condition(e)), None)
 
 
@@ -2825,7 +2853,10 @@ def asobject(
     grid: 'Grid'
 ) -> 'Object':
     """ conversion of grid to object """
-    return frozenset((v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r))
+    try:
+        return frozenset((v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r))
+    except Exception:
+        return None
 
 
 def rot90(

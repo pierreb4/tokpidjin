@@ -21,12 +21,18 @@ while date; do
     # TODO Reactivate when we start replacements again
     #      Make more efficient
 
+    >solvers_dir.py
+    echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py 
+    find solver_md5 -type f -name '*.py' -exec cat {} >>solvers_dir.py \; -exec echo >>solvers_dir.py \; -exec echo >>solvers_dir.py \;
+
+    # This should be a one-time thing after a change in replace_*.py
+
     # # From solvers_dir.py to solvers_yyy.py
     # python replace_func.py -q --input solvers_dir.py --output solvers_yyy.py
     # python list_solvers.py -q --input solvers_yyy.py >key_yyy.txt
-    # # From solvers_yyy.py to solver_dir/
+    # # From solvers_yyy.py to solver_md5/
     # for k in `cat key_yyy.txt`
-    # do python replace_arg.py -q --input solvers_yyy.py --output-dir solver_dir/ $k
+    # do python replace_arg.py -q --input solvers_yyy.py --output-dir solver_md5/ $k
     # done
 
     for f in solver_dir/solve_*; do bash clean_def.sh $f; done
@@ -36,13 +42,13 @@ while date; do
     # mv -f $TMPFILE solvers_dir.py
 
     # for f in `ls solver_md5 | grep 'def$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
-    for f in `ls solver_md5/*.def | grep -o '^................................'`; do 
+    for f in `cd solver_md5; ls *.def | grep -o '^................................'`; do 
       ls solver_dir/*/*/${f}.def &>/dev/null || \
       rm solver_md5/${f}.def
     done
 
     # for f in `ls solver_md5 | grep 'py$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
-    for f in `ls solver_md5/*.py | grep -o '^................................'`; do 
+    for f in `cd solver_md5; ls *.py | grep -o '^................................'`; do 
       ls solver_dir/*/*/${f}.py &>/dev/null || \
       rm solver_md5/${f}.py
     done
@@ -54,8 +60,15 @@ while date; do
     # for k in `cat key_pre.txt`
     # do python replace_arg.py -q --input solvers.py --output-dir solver_pre/ $k
     # done
+
     # # From solver_pre/ to solvers_pre.py
-    # python expand_solver.py -q --source solver_pre/ --solvers-file solvers_pre.py
+    # Old: python expand_solver.py -q --source solver_pre/ --solvers-file solvers_pre.py
+    # SOLVER_PRE="solver_pre.py"
+    # >$SOLVER_PRE
+    # echo -e "from dsl import *\nfrom constants import *\n\n" >>$SOLVER_PRE
+    # find solver_pre -type f -name 'solve_????????.py' -exec cat {} >>$SOLVER_PRE \; -exec echo >>$SOLVER_PRE \; -exec echo >>$SOLVER_PRE \;
+
+
   fi
 
 done

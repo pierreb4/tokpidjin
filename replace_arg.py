@@ -21,7 +21,7 @@ def load_solver(identifier, input_file="solvers.py"):
     """
     # If the identifier doesn't start with 'solve_', assume it's a key and prepend 'solve_'
     if not identifier.startswith('solve_'):
-        identifier = f'solve_{identifier}'
+        identifier = f'solve_{identifier}('
 
     # Check if the input file exists
     if not os.path.exists(input_file):
@@ -196,13 +196,15 @@ if __name__ == "__main__":
         # Transform the code
         transformed_code = transform_code(solver_code)
         
+        # print_l(f'{transformed_code = }')
+
         # Parse and inline the variables
         var_defs = parse_split_solver(transformed_code)
         inline_solver = inline_variables(args.key, var_defs)
         
         # Save the transformed code to a new file
         output_path = args.key.replace('_', '/')
-        output_file = os.path.join(args.output_dir, f'solve_{output_path}.def')
+        output_file = os.path.join(args.output_dir, f'{output_path}.def')
         with open(output_file, 'w') as f:
             f.write(inline_solver + '\n')
         

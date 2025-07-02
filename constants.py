@@ -129,6 +129,15 @@ A8_NAMES = {
     'A4': 4, 'A5': 5, 'A6': 6, 'A7': 7,
 }
 
+# Scale constants for scale_[tf]
+SM2 = 2
+SM3 = 3
+SD2 = -2
+SD3 = -3
+S4_NAMES = {
+    'SM2': 2, 'SM3': 3, 'SD2': -2, 'SD3': -3,
+}
+
 # Generic pair constants
 DOWN = (1, 0)
 RIGHT = (0, 1)
