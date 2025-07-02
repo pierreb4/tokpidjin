@@ -484,9 +484,17 @@ def add(
     if isinstance(a, int) and isinstance(b, int):
         return a + b
     elif isinstance(a, tuple) and isinstance(b, tuple):
+        if a[0] is None or a[1] is None:
+            return None
+        if b[0] is None or b[1] is None:
+            return None
         return (a[0] + b[0], a[1] + b[1])
     elif isinstance(a, int) and isinstance(b, tuple):
+        if b[0] is None or b[1] is None:
+            return None
         return (a + b[0], a + b[1])
+    if a[0] is None or a[1] is None:
+        return None
     return (a[0] + b, a[1] + b)
 
 
@@ -500,9 +508,17 @@ def subtract(
     if isinstance(a, int) and isinstance(b, int):
         return a - b
     elif isinstance(a, tuple) and isinstance(b, tuple):
+        if a[0] is None or a[1] is None:
+            return None
+        if b[0] is None or b[1] is None:
+            return None
         return (a[0] - b[0], a[1] - b[1])
     elif isinstance(a, int) and isinstance(b, tuple):
+        if b[0] is None or b[1] is None:
+            return None
         return (a - b[0], a - b[1])
+    if a[0] is None or a[1] is None:
+        return None
     return (a[0] - b, a[1] - b)
 
 
@@ -516,9 +532,17 @@ def multiply(
     if isinstance(a, int) and isinstance(b, int):
         return a * b
     elif isinstance(a, tuple) and isinstance(b, tuple):
+        if a[0] is None or a[1] is None:
+            return None
+        if b[0] is None or b[1] is None:
+            return None
         return (a[0] * b[0], a[1] * b[1])
     elif isinstance(a, int) and isinstance(b, tuple):
+        if b[0] is None or b[1] is None:
+            return None
         return (a * b[0], a * b[1])
+    if a[0] is None or a[1] is None:
+        return None
     return (a[0] * b, a[1] * b)
     
 
@@ -532,9 +556,17 @@ def divide(
     if isinstance(a, int) and isinstance(b, int):
         return a // b
     elif isinstance(a, tuple) and isinstance(b, tuple):
+        if a[0] is None or a[1] is None:
+            return None
+        if b[0] is None or b[1] is None:
+            return None
         return (a[0] // b[0], a[1] // b[1])
     elif isinstance(a, int) and isinstance(b, tuple):
+        if b[0] is None or b[1] is None:
+            return None
         return (a // b[0], a // b[1])
+    if a[0] is None or a[1] is None:
+        return None
     return (a[0] // b, a[1] // b)
 
 
@@ -1439,6 +1471,8 @@ def mostcolor_t(
 ) -> 'Integer':
     """ most common color """
     values = [v for r in grid for v in r]
+    if not values:
+        return None
     return max(set(values), key=values.count)
     
 
@@ -1447,6 +1481,8 @@ def mostcolor_f(
 ) -> 'Integer':
     """ most common color """
     values = [v for v, _ in obj]
+    if not values:
+        return None
     return max(set(values), key=values.count)
     
 
@@ -1463,6 +1499,8 @@ def leastcolor_t(
 ) -> 'Integer':
     """ least common color """
     values = [v for r in grid for v in r]
+    if not values:
+        return None
     return min(set(values), key=values.count)
 
 
@@ -1471,6 +1509,8 @@ def leastcolor_f(
 ) -> 'Integer':
     """ least common color """
     values = [v for v, _ in obj]
+    if not values:
+        return None
     return min(set(values), key=values.count)
 
 
