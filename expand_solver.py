@@ -368,7 +368,7 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
                 print_l(f"Original function renamed to {func_name}_one")
                 print_l(f"Expanded function uses name {func_name}")
             
-            # Update solvers_evo.py if specified
+            # Update solvers_*.py if specified
             if update_solvers_file:
                 update_solvers(update_solvers_file, def_file, func_name, expanded_func, quiet)
                 

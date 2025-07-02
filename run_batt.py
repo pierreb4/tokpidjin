@@ -9,6 +9,7 @@ from timeit import default_timer as timer
 from utils import *
 from batt import batt
 from call import t_call
+from expand_solver import process_file
 
 
 class VariableInliner(ast.NodeTransformer):
@@ -168,6 +169,9 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         with open(f'{solve_name}.def', 'w') as f:
             f.write(actual_inlined_source)
             f.write('\n')
+
+        # Expand to .py file
+        process_file(f'{solve_name}.def', f'{solve_name}.py')
 
         solve_score = f'solver_dir/solve_{task_id}/{score[sol_t]}'
         ensure_dir(solve_score)
