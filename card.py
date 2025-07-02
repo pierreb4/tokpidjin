@@ -79,7 +79,7 @@ class Code:
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
-        budget_random = 0.01
+        budget_random = 0.1
 
         # Get number corresponding to color constant
         # NOTE Maybe some x_n variables carry constants and could be replaced?
@@ -134,7 +134,7 @@ class Code:
         if arg not in constant_dict.keys():
             return arg
 
-        budget_random = 0.01
+        budget_random = 0.1
 
         return (
             replace_random(arg, list(constant_dict.keys()))
@@ -144,7 +144,7 @@ class Code:
 
 
     def substitute_symbol(self, arg, constant_dict):
-        budget_random = 0.01
+        budget_random = 0.1
 
         # Substitute constants or calls
         if random.random() < budget_random:
@@ -154,7 +154,7 @@ class Code:
 
 
     def substitute_grid_angle(self, arg, constant_dict=R8_NAMES):
-        budget_random = 0.01
+        budget_random = 0.1
 
         # Only substitute constants 
         if arg not in constant_dict.keys():
@@ -237,6 +237,8 @@ class Code:
                     elif old_hint == 'R8':
                         old_args[i] = self.substitute_symbol(old_arg, R8_NAMES)
                         self.score += 1
+                    elif old_hint == 'A4':
+                        old_args[i] = self.substitute_symbol(old_arg, A4_NAMES)
                     elif old_hint == 'A8':
                         # print_l(f'{old_args = } - {old_hints = } - {old_call = }')
                         old_args[i] = self.substitute_grid_angle(old_arg)
@@ -244,7 +246,7 @@ class Code:
                             'Object', 'Objects', 'FrozenSet', 'Patch', 
                             'Callable', 'Container', 'ContainerContainer',
                             'Integer', 'IntegerSet', 'Numerical', 'Indices', 
-                            'Boolean', 'IJ', 'A4', 'TupleTuple', 'Any'
+                            'Boolean', 'IJ', 'TupleTuple', 'Any'
                         ]:
                         print_l(f'{old_hint = }')
                     if old_args[i] != old_arg:
@@ -320,10 +322,7 @@ def main(file, seed, count=0):
 
             # Was the left side O?
             if old_name == 'O':
-                if len(func_name.split('_')) == 4:
-                    num_sol = func_name.split('_')[-1]
-                else:
-                    num_sol = '0' 
+                num_sol = func_name.split('_')[-1] if len(func_name.split('_')) == 4 else '0'
                 print(f"    if t{code.t_number[old_call]} == O:", file=file)
                 print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '{num_sol}'))", file=file)
 
@@ -333,14 +332,14 @@ def main(file, seed, count=0):
                     uses[old_call] += 1
                     equals[task_id][x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
                     # print_l(f'{x_name} = {x_call} -> t{code.t_number[old_call]} = {equals[task_id][x_name]}')
-            # if uses[old_call] > 9:
-            #     print(f't{code.t_number[old_call]} - {old_call = } - {uses[old_call] = }')
+                    # if uses[old_call] > 9:
+                    #     print(f't{code.t_number[old_call]} - {old_call = } - {uses[old_call] = }')
 
     # for call in code.t_number.keys():
     #     # if uses[call] > 9:
     #         print(f'{uses[call] = } - {call = } - {code.t_number[call] = }')
     # print_l(f'{len(code.t_number.keys()) = }')
-        
+
 
     # Write t_call into new file call.py
     with open('call.py', 'w') as call_file:
