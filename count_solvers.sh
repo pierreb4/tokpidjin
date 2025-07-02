@@ -3,7 +3,7 @@
   echo -n Total solvers:
   TMPFILE=$(mktemp)
   find $SOLVER_DIR -type l -name '*.def' >$TMPFILE
-  wc -l $TMPFILE
+  cat $TMPFILE | wc -l
   # echo -n Known solvers:
   # while IFS= read -r f; do
   #   for n in `echo $f | grep -o solve_........`; do 
