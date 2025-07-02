@@ -2136,9 +2136,12 @@ def hsplit(
     n: 'Integer'
 ) -> 'Tuple':
     """ split grid horizontally """
-    h, w = len(grid), len(grid[0]) // n
-    offset = len(grid[0]) % n != 0
-    return tuple(crop(grid, (0, w * i + i * offset), (h, w)) for i in range(n))
+    try:
+        h, w = len(grid), len(grid[0]) // n
+        offset = len(grid[0]) % n != 0
+        return tuple(crop(grid, (0, w * i + i * offset), (h, w)) for i in range(n))
+    except Exception:
+        return None
 
 
 def vsplit(
@@ -2146,9 +2149,12 @@ def vsplit(
     n: 'Integer'
 ) -> 'Tuple':
     """ split grid vertically """
-    h, w = len(grid) // n, len(grid[0])
-    offset = len(grid) % n != 0
-    return tuple(crop(grid, (h * i + i * offset, 0), (h, w)) for i in range(n))
+    try:
+        h, w = len(grid) // n, len(grid[0])
+        offset = len(grid) % n != 0
+        return tuple(crop(grid, (h * i + i * offset, 0), (h, w)) for i in range(n))
+    except Exception:
+        return None
 
 
 def cellwise(
@@ -2157,16 +2163,19 @@ def cellwise(
     fallback: 'Integer'
 ) -> 'Grid':
     """ cellwise match of two grids """
-    h, w = len(a), len(a[0])
-    resulting_grid = ()
-    for i in range(h):
-        row = ()
-        for j in range(w):
-            a_value = a[i][j]
-            value = a_value if a_value == b[i][j] else fallback
-            row = row + (value,)
-        resulting_grid = resulting_grid + (row, )
-    return resulting_grid
+    try:
+        h, w = len(a), len(a[0])
+        resulting_grid = ()
+        for i in range(h):
+            row = ()
+            for j in range(w):
+                a_value = a[i][j]
+                value = a_value if a_value == b[i][j] else fallback
+                row = row + (value,)
+            resulting_grid = resulting_grid + (row, )
+        return resulting_grid
+    except Exception:
+        return None
 
 
 def replace(
@@ -2175,7 +2184,10 @@ def replace(
     replacer: 'C_'
 ) -> 'Grid':
     """ color substitution """
-    return tuple(tuple(replacer if v == replacee else v for v in r) for r in grid)
+    try:
+        return tuple(tuple(replacer if v == replacee else v for v in r) for r in grid)
+    except Exception:
+        return None
 
 
 def switch(
@@ -2184,21 +2196,23 @@ def switch(
     b: 'C_'
 ) -> 'Grid':
     """ color switching """
-    return tuple(
-        tuple(v if v not in [a, b] else {a: b, b: a}[v] for v in r)
-        for r in grid
-    )
+    try:
+        return tuple(
+            tuple(v if v not in [a, b] else {a: b, b: a}[v] for v in r)
+            for r in grid
+        )
+    except Exception:
+        return None
 
 
 def center(
     patch: 'Patch'
 ) -> 'IJ':
     """ center of the patch """
-    if uppermost(patch) is None:
+    try:
+        return (uppermost(patch) + height_f(patch) // 2, leftmost(patch) + width_f(patch) // 2)
+    except Exception:
         return None
-    if leftmost(patch) is None:
-        return None
-    return (uppermost(patch) + height_f(patch) // 2, leftmost(patch) + width_f(patch) // 2)
 
 
 def position(
