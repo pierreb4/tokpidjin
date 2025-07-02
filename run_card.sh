@@ -36,13 +36,13 @@ while date; do
     # mv -f $TMPFILE solvers_dir.py
 
     # for f in `ls solver_md5 | grep 'def$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
-    for f in `ls solver_md5 | grep -o '^................................'`; do 
+    for f in `ls solver_md5/*.def | grep -o '^................................'`; do 
       ls solver_dir/*/*/${f}.def &>/dev/null || \
       rm solver_md5/${f}.def
     done
 
     # for f in `ls solver_md5 | grep 'py$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
-    for f in `ls solver_md5 | grep -o '^................................'`; do 
+    for f in `ls solver_md5/*.py | grep -o '^................................'`; do 
       ls solver_dir/*/*/${f}.py &>/dev/null || \
       rm solver_md5/${f}.py
     done
