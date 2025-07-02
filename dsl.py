@@ -2246,14 +2246,20 @@ def cover(
     patch: 'Patch'
 ) -> 'Grid':
     """ remove object from grid """
-    return fill(grid, mostcolor_t(grid), toindices(patch))
+    try:
+        return fill(grid, mostcolor_t(grid), toindices(patch))
+    except Exception:
+        return None
 
 
 def trim(
     grid: 'Grid'
 ) -> 'Grid':
     """ trim border of grid """
-    return tuple(r[1:-1] for r in grid[1:-1])
+    try:
+        return tuple(r[1:-1] for r in grid[1:-1])
+    except Exception:
+        return None
 
 
 def move(
@@ -2262,76 +2268,93 @@ def move(
     offset: 'IJ'
 ) -> 'Grid':
     """ move object on grid """
-    return paint(cover(grid, obj), shift(obj, offset))
+    try:
+        return paint(cover(grid, obj), shift(obj, offset))
+    except Exception:
+        return None
 
 
 def tophalf(
     grid: 'Grid'
 ) -> 'Grid':
     """ upper half of grid """
-    return grid[:len(grid) // 2]
+    try:
+        return grid[:len(grid) // 2]
+    except Exception:
+        return None
 
 
 def bottomhalf(
     grid: 'Grid'
 ) -> 'Grid':
     """ lower half of grid """
-    return grid[len(grid) // 2 + len(grid) % 2:]
+    try:
+        return grid[len(grid) // 2 + len(grid) % 2:]
+    except Exception:
+        return None
 
 
 def lefthalf(
     grid: 'Grid'
 ) -> 'Grid':
     """ left half of grid """
-    return rot270(tophalf(rot90(grid)))
+    try:
+        return rot270(tophalf(rot90(grid)))
+    except Exception:
+        return None
 
 
 def righthalf(
     grid: 'Grid'
 ) -> 'Grid':
     """ right half of grid """
-    return rot270(bottomhalf(rot90(grid)))
+    try:
+        return rot270(bottomhalf(rot90(grid)))
+    except Exception:
+        return None
 
 
 def vfrontier(
     location: 'IJ'
 ) -> 'Indices':
     """ vertical frontier """
-    if not hasattr(location, '__getitem__'):
+    try:
+        return frozenset((i, location[1]) for i in range(30))
+    except Exception:
         return None
-    return frozenset((i, location[1]) for i in range(30))
-
+ 
 
 def hfrontier(
     location: 'IJ'
 ) -> 'Indices':
     """ horizontal frontier """
-    if not hasattr(location, '__getitem__'):
+    try:
+        return frozenset((location[0], j) for j in range(30))
+    except Exception:
         return None
-    return frozenset((location[0], j) for j in range(30))
 
 
 def backdrop(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices in bounding box of patch """
-    if not hasattr(patch, '__len__'):
-        return frozenset({})
-    if len(patch) == 0:
-        return frozenset({})
-    indices = toindices(patch)
-    si, sj = ulcorner(indices)
-    ei, ej = lrcorner(patch)
-    return frozenset((i, j) for i in range(si, ei + 1) for j in range(sj, ej + 1))
+    try:
+        indices = toindices(patch)
+        si, sj = ulcorner(indices)
+        ei, ej = lrcorner(patch)
+        return frozenset((i, j) for i in range(si, ei + 1) for j in range(sj, ej + 1))
+    except Exception:
+        return None
 
 
 def delta(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices in bounding box but not part of patch """
-    if len(patch) == 0:
-        return frozenset({})
-    return backdrop(patch) - toindices(patch)
+    try:
+        return backdrop(patch) - toindices(patch)
+    except Exception:
+        return None
 
 
 def gravitate(
@@ -2339,61 +2362,58 @@ def gravitate(
     destination: 'Patch'
 ) -> 'IJ':
     """ direction to move source until adjacent to destination """
-    if center(source) is None or center(destination) is None:
+    try:
+        if center(source) is None or center(destination) is None:
+            return None
+        si, sj = center(source)
+        di, dj = center(destination)
+        i, j = 0, 0
+        if vmatching(source, destination):
+            i = 1 if si < di else -1
+        else:
+            j = 1 if sj < dj else -1
+        gi, gj = i, j
+        c = 0
+        while not adjacent(source, destination) and c < 42:
+            c += 1
+            gi += i
+            gj += j
+            source = shift(source, (i, j))
+        return (gi - i, gj - j)
+    except Exception:
         return None
-    si, sj = center(source)
-    di, dj = center(destination)
-    i, j = 0, 0
-    if vmatching(source, destination):
-        i = 1 if si < di else -1
-    else:
-        j = 1 if sj < dj else -1
-    gi, gj = i, j
-    c = 0
-    while not adjacent(source, destination) and c < 42:
-        c += 1
-        gi += i
-        gj += j
-        source = shift(source, (i, j))
-    return (gi - i, gj - j)
 
 
 def inbox(
     patch: 'Patch'
 ) -> 'Indices':
     """ inbox for patch """
-    if not patch:
+    try:
+        ai, aj = uppermost(patch) + 1, leftmost(patch) + 1
+        bi, bj = lowermost(patch) - 1, rightmost(patch) - 1
+        si, sj = min(ai, bi), min(aj, bj)
+        ei, ej = max(ai, bi), max(aj, bj)
+        vlines = {(i, sj) for i in range(si, ei + 1)} | {(i, ej) for i in range(si, ei + 1)}
+        hlines = {(si, j) for j in range(sj, ej + 1)} | {(ei, j) for j in range(sj, ej + 1)}
+        return frozenset(vlines | hlines)
+    except Exception:
         return None
-    if uppermost(patch) is None or leftmost(patch) is None:
-        return None
-    if lowermost(patch) is None or rightmost(patch) is None:
-        return None
-    ai, aj = uppermost(patch) + 1, leftmost(patch) + 1
-    bi, bj = lowermost(patch) - 1, rightmost(patch) - 1
-    si, sj = min(ai, bi), min(aj, bj)
-    ei, ej = max(ai, bi), max(aj, bj)
-    vlines = {(i, sj) for i in range(si, ei + 1)} | {(i, ej) for i in range(si, ei + 1)}
-    hlines = {(si, j) for j in range(sj, ej + 1)} | {(ei, j) for j in range(sj, ej + 1)}
-    return frozenset(vlines | hlines)
 
 
 def outbox(
     patch: 'Patch'
 ) -> 'Indices':
     """ outbox for patch """
-    if not patch:
+    try:
+        ai, aj = uppermost(patch) - 1, leftmost(patch) - 1
+        bi, bj = lowermost(patch) + 1, rightmost(patch) + 1
+        si, sj = min(ai, bi), min(aj, bj)
+        ei, ej = max(ai, bi), max(aj, bj)
+        vlines = {(i, sj) for i in range(si, ei + 1)} | {(i, ej) for i in range(si, ei + 1)}
+        hlines = {(si, j) for j in range(sj, ej + 1)} | {(ei, j) for j in range(sj, ej + 1)}
+        return frozenset(vlines | hlines)
+    except Exception:
         return None
-    if uppermost(patch) is None or leftmost(patch) is None:
-        return None
-    if lowermost(patch) is None or rightmost(patch) is None:
-        return None
-    ai, aj = uppermost(patch) - 1, leftmost(patch) - 1
-    bi, bj = lowermost(patch) + 1, rightmost(patch) + 1
-    si, sj = min(ai, bi), min(aj, bj)
-    ei, ej = max(ai, bi), max(aj, bj)
-    vlines = {(i, sj) for i in range(si, ei + 1)} | {(i, ej) for i in range(si, ei + 1)}
-    hlines = {(si, j) for j in range(sj, ej + 1)} | {(ei, j) for j in range(sj, ej + 1)}
-    return frozenset(vlines | hlines)
 
 
 def box(
@@ -2417,7 +2437,10 @@ def shoot(
     direction: 'IJ'
 ) -> 'Indices':
     """ line from starting point and direction """
-    return connect(start, (start[0] + 42 * direction[0], start[1] + 42 * direction[1]))
+    try:
+        return connect(start, (start[0] + 42 * direction[0], start[1] + 42 * direction[1]))
+    except Exception:
+        return None
 
 
 def occurrences(
@@ -2425,21 +2448,24 @@ def occurrences(
     obj: 'Object'
 ) -> 'Indices':
     """ locations of occurrences of object in grid """
-    occs = set()
-    normed = normalize(obj)
-    h, w = len(grid), len(grid[0])
-    oh, ow = shape_f(obj)
-    h2, w2 = h - oh + 1, w - ow + 1
-    for i in range(h2):
-        for j in range(w2):
-            occurs = True
-            for v, (a, b) in shift(normed, (i, j)):
-                if not (0 <= a < h and 0 <= b < w and grid[a][b] == v):
-                    occurs = False
-                    break
-            if occurs:
-                occs.add((i, j))
-    return frozenset(occs)
+    try:
+        occs = set()
+        normed = normalize(obj)
+        h, w = len(grid), len(grid[0])
+        oh, ow = shape_f(obj)
+        h2, w2 = h - oh + 1, w - ow + 1
+        for i in range(h2):
+            for j in range(w2):
+                occurs = True
+                for v, (a, b) in shift(normed, (i, j)):
+                    if not (0 <= a < h and 0 <= b < w and grid[a][b] == v):
+                        occurs = False
+                        break
+                if occurs:
+                    occs.add((i, j))
+        return frozenset(occs)
+    except Exception:
+        return None
 
 
 def frontiers(
