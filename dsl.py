@@ -1148,7 +1148,10 @@ def power(
     n: 'Integer'
 ) -> 'Callable':
     """ power of function """
-    return function if n == 1 else compose(function, power(function, n - 1))
+    try:
+        return function if n == 1 else compose(function, power(function, n - 1))
+    except Exception:
+        return None
 
 
 def fork(
@@ -1157,7 +1160,10 @@ def fork(
     b: 'Callable'
 ) -> 'Callable':
     """ creates a wrapper function """
-    return lambda x: outer(a(x), b(x))
+    try:
+        return lambda x: outer(a(x), b(x))
+    except Exception:
+        return None
 
 
 def combine_t(
@@ -1165,7 +1171,10 @@ def combine_t(
     b: 'Tuple'
 ) -> 'Tuple':
     """ union for tuples """
-    return a + b
+    try:
+        return a + b
+    except Exception:
+        return None
 
 
 def combine_f(
@@ -1173,21 +1182,31 @@ def combine_f(
     b: 'FrozenSet'
 ) -> 'FrozenSet':
     """ union for frozensets """
-    return a | b
+    try:
+        return a | b
+    except Exception:
+        return None
 
 
 def size_t(
     container: 'Tuple'
 ) -> 'Integer':
     """ cardinality of tuple """
-    return len(container)
+    try:
+        return len(container)
+    except Exception:
+        return None
 
 
 def size_f(
     container: 'FrozenSet'
 ) -> 'Integer':
     """ cardinality of frozenset """
-    return len(container)
+    try:
+        return len(container)
+    except Exception:
+        return None
+
 
 # See get_val_rank_t
 def valmax_t(
@@ -1195,7 +1214,10 @@ def valmax_t(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ maximum by custom function for tuples """
-    return compfunc(max(container, key=compfunc, default=0))
+    try:
+        return compfunc(max(container, key=compfunc, default=0))
+    except Exception:
+        return None
 
 
 # See get_val_rank_f
@@ -1204,7 +1226,11 @@ def valmax_f(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ maximum by custom function for frozensets """
-    return compfunc(max(container, key=compfunc, default=0))
+    try:
+        return compfunc(max(container, key=compfunc, default=0))
+    except Exception:
+        return None
+
 
 # See get_val_rank_t
 def valmin_t(
@@ -1212,7 +1238,10 @@ def valmin_t(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ minimum by custom function for tuples """
-    return compfunc(min(container, key=compfunc, default=0))
+    try:
+        return compfunc(min(container, key=compfunc, default=0))
+    except Exception:
+        return None
 
 
 # See get_val_rank_f
@@ -1221,7 +1250,10 @@ def valmin_f(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ minimum by custom function for frozensets """
-    return compfunc(min(container, key=compfunc, default=0))
+    try:
+        return compfunc(min(container, key=compfunc, default=0))
+    except Exception:
+        return None
 
 
 # See get_arg_rank_t
@@ -1230,7 +1262,10 @@ def argmax_t(
     compfunc: 'Callable'
 ) -> 'Any':
     """ largest item by custom order for tuples """
-    return max(container, key=compfunc)
+    try:
+        return max(container, key=compfunc)
+    except Exception:
+        return None
 
 
 # See get_arg_rank_f
@@ -1239,7 +1274,10 @@ def argmax_f(
     compfunc: 'Callable'
 ) -> 'Any':
     """ largest item by custom order for frozensets """
-    return max(container, key=compfunc)
+    try:
+        return max(container, key=compfunc)
+    except Exception:
+        return None
 
 
 # See get_arg_rank_t
@@ -1248,7 +1286,10 @@ def argmin_t(
     compfunc: 'Callable'
 ) -> 'Any':
     """ smallest item by custom order for tuples """
-    return min(container, key=compfunc)
+    try:
+        return min(container, key=compfunc)
+    except Exception:
+        return None
 
 
 # See get_arg_rank_f
@@ -1257,7 +1298,10 @@ def argmin_f(
     compfunc: 'Callable'
 ) -> 'Any':
     """ smallest item by custom order for frozensets """
-    return min(container, key=compfunc)
+    try:
+        return min(container, key=compfunc)
+    except Exception:
+        return None
 
 
 # See get_common_rank_t
@@ -1265,7 +1309,10 @@ def mostcommon_t(
     container: 'Tuple'
 ) -> 'Any':
     """ most common item in tuple """
-    return max(set(container), key=container.count)
+    try:
+        return max(set(container), key=container.count)
+    except Exception:
+        return None
 
 
 # See get_common_rank_f
@@ -1274,8 +1321,11 @@ def mostcommon_f(
 ) -> 'Any':
     """ most common item in frozenset - returns the item itself for frozensets """
     # Since frozensets have unique elements, convert to list first
-    container_list = list(container)
-    return max(set(container_list), key=container_list.count)
+    try:
+        container_list = list(container)
+        return max(set(container_list), key=container_list.count)
+    except Exception:
+        return None
 
 
 # See get_common_rank_t
@@ -1283,7 +1333,10 @@ def leastcommon_t(
     container: 'Tuple'
 ) -> 'Any':
     """ least common item in tuple """
-    return min(set(container), key=container.count)
+    try:
+        return min(set(container), key=container.count)
+    except Exception:
+        return None
 
 
 # See get_common_rank_f
@@ -1292,8 +1345,11 @@ def leastcommon_f(
 ) -> 'Any':
     """ least common item in frozenset - returns the item itself for frozensets """
     # Since frozensets have unique elements, convert to list first
-    container_list = list(container)
-    return min(set(container_list), key=container_list.count)
+    try:
+        container_list = list(container)
+        return min(set(container_list), key=container_list.count)
+    except Exception:
+        return None
 
 
 def sfilter(
