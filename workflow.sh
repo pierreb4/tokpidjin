@@ -87,6 +87,7 @@ while date; do
     sleep 60
   done
 
+# New lower right
 g='c_iz_n c_zo_n a_mr'
 TMPFILE=$(mktemp)
 while date; do
@@ -95,7 +96,7 @@ while date; do
   # rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solvers_dir.py . && \
   >solvers_dir.py
   echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py 
-  find solver_md5 -type f -name '*.py' -exec cat {} >>solvers_dir.py \; -exec echo -e "\n" >>solvers_dir.py \;
+  find solver_md5 -type f -name '*.py' -exec cat {} >>solvers_dir.py \; -exec echo >>solvers_dir.py \; -exec echo >>solvers_dir.py \;
   python main.py --solvers solvers_dir
   for izzo in $g; do
     echo -en "$izzo\t"
@@ -104,14 +105,13 @@ while date; do
   sleep 60
 done
 
-
-# Lower left
-clear; time timeout 15s python regen.py
-
-# Lower right
+# Old lower right
 scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_evo/ && \
 python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py && \
 python main.py --solvers solvers_evo.py
+
+# Lower left
+clear; time timeout 15s python regen.py
 
 # Same with md5 and link solvers
 rsync -a -e ssh jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
