@@ -344,7 +344,8 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                 
                 print_l(f'Exception in {filename}:{lineno}: {e}')
                 print_l(f"- traceback: {traceback.format_exc()}")
-                print_l(f'Error in {solve_func[key]}:\n{definition}')
+                # print_l(f'Error in {solve_func[key]}:\n{definition}')
+                print_l(f'Error in {solve_func[key]}')
                 if wait:
                     input("Press Enter to continue...")
     

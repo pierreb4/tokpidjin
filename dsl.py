@@ -1911,108 +1911,135 @@ def normalize_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ moves upper left corner of grid to origin (no-op for grid) """
-    return piece
+    try:
+        return piece
+    except Exception:
+        return None
 
 
 def normalize(
     indices: 'Indices'
 ) -> 'Indices':
     """ moves upper left corner of indices to origin """
-    if len(indices) == 0:
-        return indices
-    return shift(indices, (-uppermost(indices), -leftmost(indices)))
+    try:
+        if len(indices) == 0:
+            return indices
+        return shift(indices, (-uppermost(indices), -leftmost(indices)))
+    except Exception:
+        return None
 
 
 def normalize_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ moves upper left corner of indices to origin """
-    if len(indices) == 0:
-        return indices
-    return shift(indices, (-uppermost_i(indices), -leftmost_i(indices)))
+    try:
+        if len(indices) == 0:
+            return indices
+        return shift(indices, (-uppermost_i(indices), -leftmost_i(indices)))
+    except Exception:
+        return None
 
 
 def normalize_o(
     obj: 'Object'
 ) -> 'Object':
     """ moves upper left corner of obj to origin """
-    if len(obj) == 0:
-        return obj
-    return shift(obj, (-uppermost_o(obj), -leftmost_o(obj)))
+    try:
+        if len(obj) == 0:
+            return obj
+        return shift(obj, (-uppermost_o(obj), -leftmost_o(obj)))
+    except Exception:
+        return None
 
 
 def hmirror_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ mirroring grid along horizontal """
-    return piece[::-1]
+    try:
+        return piece[::-1]
+    except Exception:
+        return None
 
 
 def hmirror_f(
     piece: 'FrozenSet'
 ) -> 'FrozenSet':
     """ mirroring patch along horizontal """
-    if len(piece) == 0:
-        return frozenset()
-    
-    d = ulcorner(piece)[0] + lrcorner(piece)[0]
-    if isinstance(next(iter(piece))[1], tuple):
-        return frozenset((v, (d - i, j)) for v, (i, j) in piece)
-    return frozenset((d - i, j) for i, j in piece)
+    try:
+        d = ulcorner(piece)[0] + lrcorner(piece)[0]
+        if isinstance(next(iter(piece))[1], tuple):
+            return frozenset((v, (d - i, j)) for v, (i, j) in piece)
+        return frozenset((d - i, j) for i, j in piece)
+    except Exception:
+        return None
 
 
 def vmirror_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ mirroring grid along vertical """
-    return tuple(row[::-1] for row in piece)
+    try:
+        return tuple(row[::-1] for row in piece)
+    except Exception:
+        return None
 
 
 def vmirror_f(
     piece: 'FrozenSet'
 ) -> 'FrozenSet':
     """ mirroring patch along vertical """
-    if len(piece) == 0:
-        return frozenset()
-    
-    d = ulcorner(piece)[1] + lrcorner(piece)[1]
-    if isinstance(next(iter(piece))[1], tuple):
-        return frozenset((v, (i, d - j)) for v, (i, j) in piece)
-    return frozenset((i, d - j) for i, j in piece)
+    try:
+        d = ulcorner(piece)[1] + lrcorner(piece)[1]
+        if isinstance(next(iter(piece))[1], tuple):
+            return frozenset((v, (i, d - j)) for v, (i, j) in piece)
+        return frozenset((i, d - j) for i, j in piece)
+    except Exception:
+        return None
 
 
 def dmirror_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ mirroring grid along diagonal """
-    return tuple(zip(*piece))
+    try:
+        return tuple(zip(*piece))
+    except Exception:
+        return None
 
 
 def dmirror_f(
     piece: 'FrozenSet'
 ) -> 'FrozenSet':
     """ mirroring patch along diagonal """
-    if len(piece) == 0:
-        return frozenset()
-    
-    a, b = ulcorner(piece)
-    if isinstance(next(iter(piece))[1], tuple):
-        return frozenset((v, (j - b + a, i - a + b)) for v, (i, j) in piece)
-    return frozenset((j - b + a, i - a + b) for i, j in piece)
+    try:
+        a, b = ulcorner(piece)
+        if isinstance(next(iter(piece))[1], tuple):
+            return frozenset((v, (j - b + a, i - a + b)) for v, (i, j) in piece)
+        return frozenset((j - b + a, i - a + b) for i, j in piece)
+    except Exception:
+        return None
 
 
 def cmirror_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ mirroring grid along counterdiagonal """
-    return tuple(zip(*(r[::-1] for r in piece[::-1])))
+    try:
+        return tuple(zip(*(r[::-1] for r in piece[::-1])))
+    except Exception:
+        return None
 
 
 def cmirror_f(
     piece: 'FrozenSet'
 ) -> 'FrozenSet':
     """ mirroring patch along counterdiagonal """
-    return frozenset() if len(piece) == 0 else vmirror(dmirror(vmirror(piece)))
+    try:
+        return vmirror(dmirror(vmirror(piece)))
+    except Exception:
+        return None
 
 
 def upscale_t(
@@ -2020,13 +2047,16 @@ def upscale_t(
     factor: 'Integer'
 ) -> 'Tuple':
     """ upscale grid """
-    g = ()
-    for row in element:
-        upscaled_row = ()
-        for value in row:
-            upscaled_row = upscaled_row + tuple(value for _ in range(factor))
-        g = g + tuple(upscaled_row for _ in range(factor))
-    return g
+    try:
+        g = ()
+        for row in element:
+            upscaled_row = ()
+            for value in row:
+                upscaled_row = upscaled_row + tuple(value for _ in range(factor))
+            g = g + tuple(upscaled_row for _ in range(factor))
+        return g
+    except Exception:
+        return None
 
 
 def upscale_f(
@@ -2034,16 +2064,17 @@ def upscale_f(
     factor: 'Integer'
 ) -> 'FrozenSet':
     """ upscale object """
-    if len(element) == 0:
-        return frozenset()
-    di_inv, dj_inv = ulcorner(element)
-    di, dj = (-di_inv, -dj_inv)
-    normed_obj = shift(element, (di, dj))
-    o = set()
-    for value, (i, j) in normed_obj:
-        for io, jo in itertools.product(range(factor), range(factor)):
-            o.add((value, (i * factor + io, j * factor + jo)))
-    return shift(frozenset(o), (di_inv, dj_inv))
+    try:
+        di_inv, dj_inv = ulcorner(element)
+        di, dj = (-di_inv, -dj_inv)
+        normed_obj = shift(element, (di, dj))
+        o = set()
+        for value, (i, j) in normed_obj:
+            for io, jo in itertools.product(range(factor), range(factor)):
+                o.add((value, (i * factor + io, j * factor + jo)))
+        return shift(frozenset(o), (di_inv, dj_inv))
+    except Exception:
+        return None
 
 
 def downscale(
@@ -2051,20 +2082,23 @@ def downscale(
     factor: 'Integer'
 ) -> 'Grid':
     """ downscale grid """
-    h, w = len(grid), len(grid[0])
-    g = ()
-    for i in range(h):
-        r = ()
-        for j in range(w):
-            if j % factor == 0:
-                r = r + (grid[i][j],)
-        g = g + (r, )
-    h = len(g)
-    dsg = ()
-    for i in range(h):
-        if i % factor == 0:
-            dsg = dsg + (g[i],)
-    return dsg
+    try:
+        h, w = len(grid), len(grid[0])
+        g = ()
+        for i in range(h):
+            r = ()
+            for j in range(w):
+                if j % factor == 0:
+                    r = r + (grid[i][j],)
+            g = g + (r, )
+        h = len(g)
+        dsg = ()
+        for i in range(h):
+            if i % factor == 0:
+                dsg = dsg + (g[i],)
+        return dsg
+    except Exception:
+        return None
 
 
 def hconcat(
@@ -2072,7 +2106,10 @@ def hconcat(
     b: 'Grid'
 ) -> 'Grid':
     """ concatenate two grids horizontally """
-    return tuple(i + j for i, j in zip(a, b))
+    try:
+        return tuple(i + j for i, j in zip(a, b))
+    except Exception:
+        return None
 
 
 def vconcat(
@@ -2080,7 +2117,10 @@ def vconcat(
     b: 'Grid'
 ) -> 'Grid':
     """ concatenate two grids vertically """
-    return a + b
+    try:
+        return a + b
+    except Exception:
+        return None
 
 
 def subgrid(
@@ -3101,8 +3141,11 @@ def toobject(
     grid: 'Grid'
 ) -> 'Object':
     """ object from patch and grid """
-    h, w = len(grid), len(grid[0])
-    return frozenset((grid[i][j], (i, j)) for i, j in toindices(patch) if 0 <= i < h and 0 <= j < w)
+    try:
+        h, w = len(grid), len(grid[0])
+        return frozenset((grid[i][j], (i, j)) for i, j in toindices(patch) if 0 <= i < h and 0 <= j < w)
+    except Exception:
+        return None
 
 
 def asobject(
