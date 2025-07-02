@@ -75,7 +75,7 @@ while true; do
   sleep 60
 done
 
-# 2nd from upper left
+# 2nd from upper left term
 g='c_iz_n c_zo_n a_mr'
 while date; do
   scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_evo/ && \
@@ -87,12 +87,12 @@ while date; do
     sleep 60
   done
 
-# New lower right
+# New lower right term
 g='c_iz_n c_zo_n a_mr'
 TMPFILE=$(mktemp)
 while date; do
-  rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
-  rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/
+  rsync -a --delete -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_md5/ solver_md5/ && \
+  rsync -a --delete -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_dir/ solver_dir/
   # rsync -a -e "ssh -o Compression=no" jupyter@simone:/home/jupyter/dsl/tokpidjin/solvers_dir.py . && \
   >solvers_dir.py
   echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py 
@@ -105,12 +105,12 @@ while date; do
   sleep 60
 done
 
-# Old lower right
+# Old lower right term
 scp -q jupyter@simone:/home/jupyter/dsl/tokpidjin/solver_evo/solve_*.def solver_evo/ && \
 python expand_solver.py -q --source solver_evo/ --solvers-file solvers_evo.py && \
 python main.py --solvers solvers_evo.py
 
-# Lower left
+# Lower left term
 clear; time timeout 15s python regen.py
 
 # Same with md5 and link solvers
