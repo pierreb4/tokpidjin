@@ -171,7 +171,7 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
             f.write('\n')
 
         # Expand to .py file
-        process_file(f'{solve_name}.def', f'{solve_name}.py')
+        process_file(f'{solve_name}.def', f'{solve_name}.py', None, True)
 
         solve_score = f'solver_dir/solve_{task_id}/{score[sol_t]}'
         ensure_dir(solve_score)
