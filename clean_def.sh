@@ -22,13 +22,11 @@ fi
 # Change to your target directory (solver_dir/solve_*)
 cd $SOLVER_DIR || exit 1
 
-ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" || {
-    echo "Error: Failed to list or shuffle files."
-    exit 1
-}
-
-# Step 1: Select 10 random files to keep
-mapfile -t keep < <(ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES")
+# Step 1: Select random files to keep
+TMPFILE=$(mktemp)
+ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" >$TMPFILE
+mapfile -t keep < $TMPFILE
+rm $TMPFILE
 
 if [[ -z "${keep[@]}" ]]; then
     echo "keep is empty"
