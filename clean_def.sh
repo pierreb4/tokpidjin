@@ -25,7 +25,7 @@ cd $SOLVER_DIR || exit 1
 # Step 1: Select random files to keep
 TMPFILE=$(mktemp)
 ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" >$TMPFILE
-mapfile -t keep < $TMPFILE
+mapfile -t keep <$TMPFILE
 rm $TMPFILE
 
 if [[ -z "${keep[@]}" ]]; then
