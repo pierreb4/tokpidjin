@@ -28,7 +28,7 @@ ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" || {
 }
 
 # Step 1: Select 10 random files to keep
-mapfile -t keep < <(ls | shuf -n "$MAX_NUM_FILES")
+mapfile -t keep < <(ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES")
 
 if [[ -z "${keep[@]}" ]]; then
     echo "keep is empty"
@@ -47,7 +47,7 @@ for file in "${keep[@]}"; do
 done
 
 # Step 3: Remove all files not in the keep list
-for file in *; do
+for file in [0-9]*/[0-9a-f]*; do
     skip=0
     for k in "${keep[@]}"; do
         if [[ "$file" == "$k" ]]; then
