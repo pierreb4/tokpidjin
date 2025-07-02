@@ -967,7 +967,10 @@ def insert(
     container: 'FrozenSet'
 ) -> 'FrozenSet':
     """ insert item into container """
-    return container.union(frozenset({value}))
+    try:
+        return container.union(frozenset({value}))
+    except Exception:
+        return None
 
 
 def other(
@@ -2935,27 +2938,30 @@ def dneighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ directly adjacent indices """
-    if loc is None:
+    try:
+        return frozenset({(loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]), (loc[0], loc[1] - 1), (loc[0], loc[1] + 1)})
+    except Exception:
         return None
-    return frozenset({(loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]), (loc[0], loc[1] - 1), (loc[0], loc[1] + 1)})
 
 
 def ineighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ diagonally adjacent indices """
-    if loc is None:
+    try:
+        return frozenset({(loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1)})
+    except Exception:
         return None
-    return frozenset({(loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1)})
 
 
 def neighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ adjacent indices """
-    if loc is None:
+    try:
+        return dneighbors(loc) | ineighbors(loc)
+    except Exception:
         return None
-    return dneighbors(loc) | ineighbors(loc)
 
 
 def objects(
@@ -3001,22 +3007,29 @@ def partition(
     grid: 'Grid'
 ) -> 'Objects':
     """ each cell with the same value part of the same object """
-    return frozenset(
-        frozenset(
-            (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
-        ) for value in palette_t(grid)
-    )
+    try:
+        return frozenset(
+            frozenset(
+                (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
+            ) for value in palette_t(grid)
+        )
+    except Exception:
+        return None
 
 
 def fgpartition(
     grid: 'Grid'
 ) -> 'Objects':
     """ each cell with the same value part of the same object without background """
-    return frozenset(
-        frozenset(
-            (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
-        ) for value in palette_t(grid) - {mostcolor_t(grid)}
-    )
+    try:
+        return frozenset(
+            frozenset(
+                (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
+            ) for value in palette_t(grid) - {mostcolor_t(grid)}
+        )
+    except Exception:
+        return None
+
 
 
 # def square(
