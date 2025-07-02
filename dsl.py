@@ -2695,84 +2695,120 @@ def ulcorner(
     patch: 'Patch'
 ) -> 'IJ':
     """ index of upper left corner """
-    return tuple(map(min, zip(*toindices(patch))))
+    try:
+        return tuple(map(min, zip(*toindices(patch))))
+    except Exception:
+        return None
 
 
 def ulcorner_i(
     indices: 'Indices'
 ) -> 'IJ':
     """ index of upper left corner """
-    return tuple(map(min, zip(*toindices_i(indices))))
+    try:
+        return tuple(map(min, zip(*toindices_i(indices))))
+    except Exception:
+        return None
 
 
 def ulcorner_o(
     obj: 'Object'
 ) -> 'IJ':
     """ index of upper left corner """
-    return tuple(map(min, zip(*toindices_o(obj))))
+    try:
+        return tuple(map(min, zip(*toindices_o(obj))))
+    except Exception:
+        return None
 
 
 def urcorner(
     patch: 'Patch'
 ) -> 'IJ':
     """ index of upper right corner """
-    return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices(patch)))))
+    try:
+        return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices(patch)))))
+    except Exception:
+        return None
 
 
 def urcorner_i(
     indices: 'Indices'
 ) -> 'IJ':
     """ index of upper right corner """
-    return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices_i(indices)))))
+    try:
+        return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices_i(indices)))))
+    except Exception:
+        return None
 
 
 def urcorner_o(
     obj: 'Object'
 ) -> 'IJ':
     """ index of upper right corner """
-    return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices_o(obj)))))
+    try:
+        return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices_o(obj)))))
+    except Exception:
+        return None
 
 
 def llcorner(
     patch: 'Patch'
 ) -> 'IJ':
     """ index of lower left corner """
-    return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices(patch)))))
+    try:
+        return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices(patch)))))
+    except Exception:
+        return None
 
 
 def llcorner_i(
     indices: 'Indices'
 ) -> 'IJ':
     """ index of lower left corner """
-    return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices_i(indices)))))
+    try:
+        return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices_i(indices)))))
+    except Exception:
+        return None
 
 
 def llcorner_o(
     obj: 'Object'
 ) -> 'IJ':
     """ index of lower left corner """
-    return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices_o(obj)))))
+    try:
+        return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices_o(obj)))))
+    except Exception:
+        return None
 
 
 def lrcorner(
     patch: 'Patch'
 ) -> 'IJ':
     """ index of lower right corner """
-    return tuple(map(max, zip(*toindices(patch))))
+    try:
+        return tuple(map(max, zip(*toindices(patch))))
+    except Exception:
+        return None
 
 
 def lrcorner_i(
     indices: 'Indices'
 ) -> 'IJ':
     """ index of lower right corner """
-    return tuple(map(max, zip(*toindices_i(indices))))
+    try:
+        return tuple(map(max, zip(*toindices_i(indices))))
+    except Exception:
+        return None
 
 
 def lrcorner_o(
     obj: 'Object'
 ) -> 'IJ':
     """ index of lower right corner """
-    return tuple(map(max, zip(*toindices_o(obj))))
+    try:
+        return tuple(map(max, zip(*toindices_o(obj))))
+    except Exception:
+        return None
 
 
 def crop(
