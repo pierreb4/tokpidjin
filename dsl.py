@@ -2360,6 +2360,8 @@ def cover(
 ) -> 'Grid':
     """ remove object from grid """
     try:
+        if len(patch) == 0:
+            return frozenset()
         return fill(grid, mostcolor_t(grid), toindices(patch))
     except Exception:
         return None
@@ -2465,7 +2467,7 @@ def delta(
 ) -> 'Indices':
     """ indices in bounding box but not part of patch """
     try:
-        return backdrop(patch) - toindices(patch)
+        return frozenset({}) if len(patch) == 0 else backdrop(patch) - toindices(patch)
     except Exception:
         return None
 
