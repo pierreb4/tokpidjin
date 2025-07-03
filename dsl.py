@@ -1956,14 +1956,20 @@ def palette_t(
     element: 'Tuple'
 ) -> 'IntegerSet':
     """ colors occurring in grid """
-    return frozenset(v for r in element for v in r)
+    try:
+        return frozenset(v for r in element for v in r)
+    except Exception:
+        return None
 
 
 def palette_f(
     element: 'FrozenSet'
 ) -> 'IntegerSet':
     """ colors occurring in object """
-    return frozenset(v for v, _ in element)
+    try:
+        return frozenset(v for v, _ in element)
+    except Exception:
+        return None
 
 
 def normalize_t(
@@ -3247,23 +3253,30 @@ def rot90(
     grid: 'Grid'
 ) -> 'Grid':
     """ quarter clockwise rotation """
-    if isinstance(grid, frozenset):
+    try:
+        return tuple(row for row in zip(*grid[::-1]))
+    except Exception:
         return None
-    return tuple(row for row in zip(*grid[::-1]))
 
 
 def rot180(
     grid: 'Grid'
 ) -> 'Grid':
     """ half rotation """
-    return tuple(tuple(row[::-1]) for row in grid[::-1])
+    try:
+        return tuple(tuple(row[::-1]) for row in grid[::-1])
+    except Exception:
+        return None
 
 
 def rot270(
     grid: 'Grid'
 ) -> 'Grid':
     """ quarter anticlockwise rotation """
-    return tuple(tuple(row[::-1]) for row in zip(*grid[::-1]))[::-1]
+    try:
+        return tuple(tuple(row[::-1]) for row in zip(*grid[::-1]))[::-1]
+    except Exception:
+        return None
 
 
 # def hmirror(
