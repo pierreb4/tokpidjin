@@ -172,10 +172,10 @@ def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
 
 def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
     """Returns pick of a color value from the input-output difference"""
-    ret_tuple = c_iz(S, function)
-    if callable(pick):
+    try:
+        ret_tuple = c_iz(S, function)
         return pick(ret_tuple)
-    else:
+    except Exception:
         return None
 
 
@@ -189,20 +189,26 @@ def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
 
 def c_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
     """Returns pick of a color value from the output-input difference"""
-    ret_tuple = c_zo(S, function)
-    return pick(ret_tuple)
+    try:
+        ret_tuple = c_zo(S, function)
+        return pick(ret_tuple)
+    except Exception:
+        return None
 
 
 # a_ for A_
 def a_mr(S: 'Samples') -> 'A8':
-    return next(
-        (
-            a
-            for a in range(8)
-            if all(ex_o == mir_rot_t(ex_i, a) for ex_i, ex_o in S)
-        ),
-        None,
-    )
+    try:
+        return next(
+            (
+                a
+                for a in range(8)
+                if all(ex_o == mir_rot_t(ex_i, a) for ex_i, ex_o in S)
+            ),
+            None,
+        )
+    except Exception:
+        return None
 
 
 # i_ for integer
