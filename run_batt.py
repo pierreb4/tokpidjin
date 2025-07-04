@@ -87,7 +87,7 @@ def check_batt(total_data, task_i, task_id, start_time, timeout=1):
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
 
     # print(f'------ {task_id} - {task_i} - ', end='')
-    print_l(f'-- {task_id} - {task_i}')
+    print_l(f'--- {task_id} - {task_i}')
 
     score = {}
     for i, sample in enumerate(train_task):

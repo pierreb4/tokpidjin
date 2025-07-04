@@ -208,18 +208,14 @@ def old_run_with_timeout(func, args, timeout=5):
     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         future = executor.submit(func, *args)
         try:
-            result = (False, future.result(timeout=timeout))
+            return (False, future.result(timeout=timeout))
         except concurrent.futures.TimeoutError:
-            # print_l(f'Timeout in {func.__name__}({args})')
-            # print_l(f'Timeout in {func.__name__}')
-            result = (True, None)
-    return result
+            return (True, None)
 
 
 def run_with_timeout(func, args, timeout=5):
     try:
         return (False, func_timeout(timeout, func, args))
-        timed_out = False
     except FunctionTimedOut:
         return (True, None)
 
