@@ -288,7 +288,7 @@ def main(file, seed, count=0, preserve=False):
     # grep 'x9999 = ' solver_md5/*.py
     # TODO Just continue as long as we've seen an x_n var previous round,
     #      as there's still variable O to read
-    for _ in range(9999):
+    for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
         for task_id, (func_name, source) in solvers_copy.items():
