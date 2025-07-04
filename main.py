@@ -219,7 +219,7 @@ def check_solvers_formatting(solvers_module, dsl_module, quiet=False):
 
 
 def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning=1.0, wait=False):
-    """ tests the implemented solvers for correctness """
+    """ checks the implemented solvers for correctness """
     functions = get_functions(solvers_module.__file__)
     solver_functions = [f for f in functions if f.startswith('solve_')]
 
@@ -228,22 +228,11 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             for function in solver_functions
     }
 
-    # Count how many tasks have corresponding solvers
-    task_ids = data["train"].keys()
-
-    # TODO Turn this around to go through task_ids 
-    #      and find the best solver function
-
-    solver_keys = []
+    # solver_keys = []
     solve_func = {}
-    # for f in solver_functions:
-    #     if f.startswith('solve_'):
-    #         f = f[6:]
-
-    for task_id in data['train'].keys():
-
-        # print_l(f'{f = }')
-
+    solve_path = {}
+    task_ids = data["train"].keys()
+    for task_id in task_ids:
         module = None
         files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/*.py')
         for file in files:
@@ -258,15 +247,17 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
         if module is None:
             continue
 
-        if task_id in data['train'].keys():
-            solver_keys.append(task_id)
-            solve_func[task_id] = module['name']
+        # solver_keys.append(task_id)
+        solve_func[task_id] = module['name']
+        solve_path[task_id] = module['path']
 
 
-    solvable_tasks = {k: True for k in task_ids if k in solver_keys}
+    # solvable_tasks = {k: True for k in task_ids if k in solver_keys}
 
     n_correct = 0
-    n = len(solvable_tasks)
+    n_checked = 0
+    # n = len(solvable_tasks)
+    n = len(solve_func)
 
     # Track execution times
     total_execution_time = 0.0
@@ -275,11 +266,13 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
 
     if quiet:
         # Without progress bar in quiet mode
-        solver_iterator = tqdm.tqdm(solvable_tasks.keys(), total=n)
+        # solver_iterator = tqdm.tqdm(solvable_tasks.keys(), total=n)
+        solver_iterator = tqdm.tqdm(solve_func.keys(), total=n)
     else:
         # With progress bar in normal mode
         print(f"Testing {n} tasks for correctness using {os.path.basename(solvers_module.__file__)}...")
-        solver_iterator = solvable_tasks.keys()
+        # solver_iterator = solvable_tasks.keys()
+        solver_iterator = solve_func.keys()
 
     for key in solver_iterator:
         task = data['train'][key] + data['test'][key]
@@ -308,8 +301,10 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
 
             # Check if execution took too long
             if execution_time > timeout_warning:
-                print(f"WARNING: {solve_func[key]} sample {i+1} took {execution_time:.2f}s")
-                slow_solvers.append((key, i+1, execution_time))
+                print(f"WARNING: {solve_func[key]} sample {i} took {execution_time:.2f}s - {timed_out = }")
+                print_l(f'rm {solve_path[key]}')
+                os.remove(solve_path[key])
+                slow_solvers.append((key, i, execution_time))
 
                 # If wait is enabled, pause for user inspection
                 if wait:
@@ -317,13 +312,15 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
 
             if not result_list:
                 success = False
-                continue
+                break
 
-            print_l(f'{n_correct}/{n} - {total_examples}')
             success = any(tid == key for _, _, tid, _ in result_list)
 
         if success:
             n_correct += 1
+        n_checked += 1
+
+        print_l(f'{n_correct}/{n_checked} - {n_correct / n_checked:.2f} - {total_examples}')
 
     # Calculate average execution time
     avg_time = total_execution_time / max(total_examples, 1)
