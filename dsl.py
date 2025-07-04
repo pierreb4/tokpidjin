@@ -29,8 +29,6 @@ def second(container: 'Container') -> 'Any':
 
 def difference_tuple(a: 'Tuple', b: 'Tuple') -> 'Tuple':
     """Set difference"""
-    if a is None or b is None:
-        return None
     return type(a)(e for e in a if e not in b)
 
 
@@ -173,10 +171,7 @@ def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
 def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
     """Returns pick of a color value from the input-output difference"""
     ret_tuple = c_iz(S, function)
-    if callable(pick):
-        return pick(ret_tuple)
-    else:
-        return None
+    return pick(ret_tuple)
 
 
 def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
@@ -479,8 +474,6 @@ def add(
     b: 'Numerical'
 ) -> 'Numerical':
     """ addition """
-    if a is None or b is None:
-        return None
     if isinstance(a, int) and isinstance(b, int):
         return a + b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -495,8 +488,6 @@ def subtract(
     b: 'Numerical'
 ) -> 'Numerical':
     """ subtraction """
-    if a is None or b is None:
-        return None
     if isinstance(a, int) and isinstance(b, int):
         return a - b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -511,8 +502,6 @@ def multiply(
     b: 'Numerical'
 ) -> 'Numerical':
     """ multiplication """
-    if a is None or b is None:
-        return None
     if isinstance(a, int) and isinstance(b, int):
         return a * b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -527,8 +516,6 @@ def divide(
     b: 'Numerical'
 ) -> 'Numerical':
     """ floor division """
-    if a is None or b is None:
-        return None
     if isinstance(a, int) and isinstance(b, int):
         return a // b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -602,8 +589,6 @@ def intersection(
     b: 'FrozenSet'
 ) -> 'FrozenSet':
     """ returns the intersection of two containers """
-    if not isinstance(a, frozenset) or not isinstance(b, frozenset):
-        return None
     return a & b
 
 
@@ -619,8 +604,6 @@ def dedupe(
     tup: 'Tuple'
 ) -> 'Tuple':
     """ remove duplicates """
-    if tup is None:
-        return None
     return tuple(e for i, e in enumerate(tup) if tup.index(e) == i)
 
 
@@ -645,8 +628,6 @@ def greater(
     b: 'Integer'
 ) -> 'Boolean':
     """ greater """
-    if a is None or b is None:
-        return None
     return a > b
 
 
@@ -654,8 +635,6 @@ def size(
     container: 'Container'
 ) -> 'Integer':
     """ cardinality """
-    if container is None:
-        return None
     return len(container)
 
 
@@ -663,30 +642,21 @@ def merge(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    try:
-        return type(containers)(e for c in containers for e in c)
-    except TypeError:
-        return None
+    return type(containers)(e for c in containers for e in c)
 
 
 def merge_f(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    try:
-        return type(containers)(e for c in containers for e in c)
-    except TypeError:
-        return None
+    return type(containers)(e for c in containers for e in c)
 
 
 def merge_t(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    try:
-        return type(containers)(e for c in containers for e in c)
-    except TypeError:
-        return None
+    return type(containers)(e for c in containers for e in c)
 
 
 # See get_rank
