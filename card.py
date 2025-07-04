@@ -207,7 +207,7 @@ class Code:
                     if not preserve:
                         has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
                 elif not preserve:
-                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, i, has_mutation)
+                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
         return self.file_fluff(has_mutation)
 
@@ -234,7 +234,7 @@ class Code:
         return has_mutation
 
 
-    def do_arg_substitutions(self, old_hint, old_call, old_args, i, has_mutation):
+    def do_arg_substitutions(self, old_hint, old_call, old_args, old_arg, i, has_mutation):
         if old_hint in ['C_']:
             old_args[i] = self.substitute_color(old_arg)
         elif old_hint == 'FL':
