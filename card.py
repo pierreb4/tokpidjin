@@ -185,7 +185,7 @@ class Code:
         return f't{t_num + 1}'
 
 
-    def mutate(self):
+    def mutate(self, preserve=False):
         old_call = clean_call(self.t_call[self.t_num])
         self.t_call[self.t_num] = old_call
 
@@ -194,104 +194,109 @@ class Code:
         old_items = get_items(old_call)
         old_func_name = old_items[0].strip()
         old_hints = get_hints(old_func_name)
-        
+
         has_mutation = False
         if old_args := re.findall(r'\b(\w+)\b', old_call):
             # TODO Track t variables to get to hints
             if old_hints is None:
-                call = self.t_call[self.t_num]
-                print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call}]) # {self.task_id} - {has_mutation}', file=self.file)
-                return has_mutation
-
+                return self.file_fluff(has_mutation)
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
                 if old_arg.startswith('t') and old_arg[1:].isdigit():
                     t_n = int(old_arg[1:])
+                    if not preserve:
+                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
+                elif not preserve:
+                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, i, has_mutation)
 
-                    while random.random() < 0.5:
-                        t_offset = t_n - random.randint(1, 9)
-                        if t_offset > 0:
-                            new_call = clean_call(self.t_call[t_offset])
-                            new_items = get_items(new_call)
-                            new_func_name = new_items[0].strip()
-                            new_hints = get_hints(new_func_name)
-                            new_hint = new_hints[0] if new_hints else None
+        return self.file_fluff(has_mutation)
 
-                            if new_hint == old_hint:
-                                has_mutation = True
-                                self.t_call[self.t_num] = re.sub(rf'\bt{t_n}\b', f't{t_offset}', old_call)
-                # Then deal with constants
-                else:
-                    if old_hint in ['C_']:
-                        old_args[i] = self.substitute_color(old_arg)
-                    elif old_hint == 'FL':
-                        old_args[i] = self.substitute_rank(old_arg, FL_NAMES)
-                    elif old_hint == 'F_':
-                        old_args[i] = self.substitute_rank(old_arg, F_NAMES)
-                    elif old_hint == 'L_':
-                        old_args[i] = self.substitute_rank(old_arg, L_NAMES)
-                    elif old_hint == 'R_':
-                        old_args[i] = self.substitute_symbol(old_arg, R_NAMES)
-                    elif old_hint == 'R4':
-                        old_args[i] = self.substitute_symbol(old_arg, R4_NAMES)
-                    elif old_hint == 'R8':
-                        old_args[i] = self.substitute_symbol(old_arg, R8_NAMES)
-                        self.score += 1
-                    elif old_hint == 'A4':
-                        old_args[i] = self.substitute_symbol(old_arg, A4_NAMES)
-                    elif old_hint == 'A8':
-                        # print_l(f'{old_args = } - {old_hints = } - {old_call = }')
-                        old_args[i] = self.substitute_grid_angle(old_arg)
-                    elif old_hint not in [ 'Samples', 'Grid', 'Tuple',
-                            'Object', 'Objects', 'FrozenSet', 'Patch', 
-                            'Callable', 'Container', 'ContainerContainer',
-                            'Integer', 'IntegerSet', 'Numerical', 'Indices', 
-                            'Boolean', 'IJ', 'TupleTuple', 'Any'
-                        ]:
-                        print_l(f'{old_hint = }')
-                    if old_args[i] != old_arg:
-                        has_mutation = True
-                        self.t_call[self.t_num] = re.sub(rf'\b{old_arg}\b', f'{old_args[i]}', old_call)
-                    # print_l(f'{old_hint = }')
-                    # print_l(f'{old_arg = }')
-                    # print_l(f'{old_args[i] = }')
-                    # print_l(f'{self.S = }')
 
+    def file_fluff(self, has_mutation):
         call = self.t_call[self.t_num]
         print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call}]) # {self.task_id} - {has_mutation}', file=self.file)
         return has_mutation
 
 
-def main(file, seed, count=0):
+    def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
+        while random.random() < 0.5:
+            t_offset = t_n - random.randint(1, 9)
+            if t_offset > 0:
+                new_call = clean_call(self.t_call[t_offset])
+                new_items = get_items(new_call)
+                new_func_name = new_items[0].strip()
+                new_hints = get_hints(new_func_name)
+                new_hint = new_hints[0] if new_hints else None
+
+                if new_hint == old_hint:
+                    has_mutation = True
+                    self.t_call[self.t_num] = re.sub(rf'\bt{t_n}\b', f't{t_offset}', old_call)
+        return has_mutation
+
+
+    def do_arg_substitutions(self, old_hint, old_call, old_args, i, has_mutation):
+        if old_hint in ['C_']:
+            old_args[i] = self.substitute_color(old_arg)
+        elif old_hint == 'FL':
+            old_args[i] = self.substitute_rank(old_arg, FL_NAMES)
+        elif old_hint == 'F_':
+            old_args[i] = self.substitute_rank(old_arg, F_NAMES)
+        elif old_hint == 'L_':
+            old_args[i] = self.substitute_rank(old_arg, L_NAMES)
+        elif old_hint == 'R_':
+            old_args[i] = self.substitute_symbol(old_arg, R_NAMES)
+        elif old_hint == 'R4':
+            old_args[i] = self.substitute_symbol(old_arg, R4_NAMES)
+        elif old_hint == 'R8':
+            old_args[i] = self.substitute_symbol(old_arg, R8_NAMES)
+            self.score += 1
+        elif old_hint == 'A4':
+            old_args[i] = self.substitute_symbol(old_arg, A4_NAMES)
+        elif old_hint == 'A8':
+            old_args[i] = self.substitute_grid_angle(old_arg)
+        elif old_hint not in [ 'Samples', 'Grid', 'Tuple',
+                'Object', 'Objects', 'FrozenSet', 'Patch', 
+                'Callable', 'Container', 'ContainerContainer',
+                'Integer', 'IntegerSet', 'Numerical', 'Indices', 
+                'Boolean', 'IJ', 'TupleTuple', 'Any'
+            ]:
+            print_l(f'{old_hint = }')
+        if old_args[i] != old_arg:
+            has_mutation = True
+            self.t_call[self.t_num] = re.sub(rf'\b{old_arg}\b', f'{old_args[i]}', old_call)
+        return has_mutation
+
+
+def main(file, seed, count=0, preserve=False):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
     total_data = train_data
 
-    solvers = get_solvers([solvers_dir, solvers_pre])
+    # Get one of best solvers if not mutating (for performance checks)
+    solvers = get_solvers([solvers_dir, solvers_pre], best_only=preserve)
 
     print_l(f"{len(solvers) = }")
 
-    equals = {task_id: get_equals(source) for task_id, (_, source) in solvers.items()}
-
-    if count > 0: 
+    if count > 0:
         solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
 
+    equals = {task_id: get_equals(source) for task_id, (_, source) in solvers.items()}
     code = Code(file)
     uses = {}
-    for _ in range(999):
+    # Check if we reach this limit with:
+    # grep 'x9999 = ' solver_md5/*.py
+    # TODO Just continue as long as we've seen an x_n var previous round,
+    #      as there's still variable O to read
+    for _ in range(9999):
         # Go through each solver
         solvers_copy = solvers.copy()
         for task_id, (func_name, source) in solvers_copy.items():
-            # print_l(f"-- {task_id} -----")
-
             if task_id not in total_data['train']:
                 continue
 
             train_task = total_data['train'][task_id]
             S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
-            # print_l(f'{len(S) = }')
-            # code = Code(file, task_id, S, t_call, t_number, t_num)
             code.S = S
             code.task_id = task_id
 
@@ -317,7 +322,7 @@ def main(file, seed, count=0):
 
                 # print_l(f'{code.t_num = } - {old_call = }')
 
-                has_mutation = code.mutate()
+                has_mutation = code.mutate(preserve)
                 code.t_number[old_call] = code.t_num
 
             # Was the left side O?
@@ -331,15 +336,6 @@ def main(file, seed, count=0):
                 if old_name in x_call:
                     uses[old_call] += 1
                     equals[task_id][x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
-                    # print_l(f'{x_name} = {x_call} -> t{code.t_number[old_call]} = {equals[task_id][x_name]}')
-                    # if uses[old_call] > 9:
-                    #     print(f't{code.t_number[old_call]} - {old_call = } - {uses[old_call] = }')
-
-    # for call in code.t_number.keys():
-    #     # if uses[call] > 9:
-    #         print(f'{uses[call] = } - {call = } - {code.t_number[call] = }')
-    # print_l(f'{len(code.t_number.keys()) = }')
-
 
     # Write t_call into new file call.py
     with open('call.py', 'w') as call_file:
@@ -350,14 +346,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run batt on specified tasks')
     parser.add_argument('--count', '-c', type=int, default=0,
                         help='Number of tasks to run (default: 0 - all tasks)')
+    parser.add_argument("-p", "--preserve", action="store_true",
+                        help="Preserve, don't mutate the code")
     args = parser.parse_args()
 
-
+    file_name = 'batt.py'
     seed = time.time()
     random.seed(seed)
-
-    # Open file for writing
-    with open('batt.py', 'w') as batt_file:
+    with open(file_name, 'w') as batt_file:
         print(
 f"""# Generated by tokpidjin/card.py
 
@@ -367,5 +363,5 @@ from fluff import *
 def batt(S, I, O):
     env = Env({seed}, S)
     o = []""", file=batt_file)
-        main(batt_file, seed, args.count)
+        main(batt_file, seed, args.count, args.preserve)
         print("    return o", file=batt_file)

@@ -60,13 +60,17 @@ import sys
 import traceback
 import glob
 
+from func_timeout import func_timeout, FunctionTimedOut
+
 import arc_types
 import constants
 import dsl
 import tests
 import solvers_pre
+import batt
+import run_batt
 
-from utils import print_l, load_module
+from utils import *
 
 
 def get_data(train=True):
@@ -282,72 +286,94 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
         num_train = len(data['train'][key])
         
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
-        try:
-            if hasattr(solvers_module, solve_func[key]):
-                solver = getattr(solvers_module, solve_func[key])
-            else:
-                continue
+        # try:
+        #     if hasattr(solvers_module, solve_func[key]):
+        #         solver = getattr(solvers_module, solve_func[key])
+        #     else:
+        #         continue
             
-            solver_execution_time = 0.0
-            success = True
-            
-            for i, ex in enumerate(task):
-                start_time = time.time()
-                result = solver(S, ex['input'])
+        solver_execution_time = 0.0
+        success = True
+        
+        for i, sample in enumerate(task):
+            start_time = time.time()
 
-                # Verify result
-                if result != ex['output']:
-                    success = False
-                    if not quiet:
-                        # print(f'{definitions.get(f"solve_{key}")}')
-                        print(f"\nError: {solve_func[key]} example {i+1} produced incorrect output")
-                        print(f"Expected: {ex['output']}")
-                        print(f"Got:      {result}")
-                    break
-            
-                execution_time = time.time() - start_time
-                
-                # Accumulate statistics
-                total_execution_time += execution_time
-                total_examples += 1
-                solver_execution_time += execution_time
-                
-                # Check if execution took too long
-                if execution_time > timeout_warning:
-                    print(f"\nWARNING: {solve_func[key]} example {i+1} took {execution_time:.2f}s")
-                    slow_solvers.append((key, i+1, execution_time))
-                    
-                    # If wait is enabled, pause for user inspection
-                    if wait:
-                        input("Press Enter to continue...")
-                
-            if success:
-                n_correct += 1
-                
-        except Exception as e:
-            definition = definitions.get(solve_func[key], "Solver not found")
-            if quiet:
-                lines = len(definition.split('\n')) if isinstance(definition, str) else 0
-                
-                # Add source location information to error message
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                frame = traceback.extract_tb(exc_tb)[-1]
-                line_info = f" at line {frame.lineno}" if frame else ""
-                
-                print_l(f"Error in {solve_func[key]}{line_info}: {lines} lines")
+
+            I = sample['input']
+            O = sample['output']
+            # timed_out, result_list = run_with_timeout(batt.batt, [S, I, O], timeout=1)
+            try:
+                result_list = func_timeout(0.01, batt.batt, args=(S, I, O))
+            except FunctionTimedOut:
+                timed_out = True
+                result_list = None
+
+            if result_list is not None:
+                success = False
+                for t, e, tid, m in result_list:
+                    if tid == key:
+                        # print(f'Solves sample {i+1} of task {key} with solver {tid}')
+                        success = True
+                        break
             else:
-                # Include source location in exception message
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                frame = traceback.extract_tb(exc_tb)[-1]
-                filename = frame.filename.split('/')[-1] if frame else "unknown"
-                lineno = frame.lineno if frame else "unknown"
+                success = False
+
+
+            # result = solver(S, sample['input'])
+
+            # # Verify result
+            # if result != sample['output']:
+            #     success = False
+            #     if not quiet:
+            #         # print(f'{definitions.get(f"solve_{key}")}')
+            #         print(f"\nError: {solve_func[key]} example {i+1} produced incorrect output")
+            #         print(f"Expected: {sample['output']}")
+            #         print(f"Got:      {result}")
+            #     break
+        
+            execution_time = time.time() - start_time
+            
+            # Accumulate statistics
+            total_execution_time += execution_time
+            total_examples += 1
+            solver_execution_time += execution_time
+            
+            # Check if execution took too long
+            if execution_time > timeout_warning:
+                print(f"WARNING: {solve_func[key]} sample {i+1} took {execution_time:.2f}s")
+                slow_solvers.append((key, i+1, execution_time))
                 
-                print_l(f'Exception in {filename}:{lineno}: {e}')
-                print_l(f"- traceback: {traceback.format_exc()}")
-                # print_l(f'Error in {solve_func[key]}:\n{definition}')
-                print_l(f'Error in {solve_func[key]}')
+                # If wait is enabled, pause for user inspection
                 if wait:
                     input("Press Enter to continue...")
+            
+        if success:
+            n_correct += 1
+                
+        # except Exception as e:
+        #     definition = definitions.get(solve_func[key], "Solver not found")
+        #     if quiet:
+        #         lines = len(definition.split('\n')) if isinstance(definition, str) else 0
+                
+        #         # Add source location information to error message
+        #         exc_type, exc_obj, exc_tb = sys.exc_info()
+        #         frame = traceback.extract_tb(exc_tb)[-1]
+        #         line_info = f" at line {frame.lineno}" if frame else ""
+                
+        #         print_l(f"Error in {solve_func[key]}{line_info}: {lines} lines")
+        #     else:
+        #         # Include source location in exception message
+        #         exc_type, exc_obj, exc_tb = sys.exc_info()
+        #         frame = traceback.extract_tb(exc_tb)[-1]
+        #         filename = frame.filename.split('/')[-1] if frame else "unknown"
+        #         lineno = frame.lineno if frame else "unknown"
+                
+        #         print_l(f'Exception in {filename}:{lineno}: {e}')
+        #         print_l(f"- traceback: {traceback.format_exc()}")
+        #         # print_l(f'Error in {solve_func[key]}:\n{definition}')
+        #         print_l(f'Error in {solve_func[key]}')
+        #         if wait:
+        #             input("Press Enter to continue...")
     
     # Calculate average execution time
     avg_time = total_execution_time / max(total_examples, 1)
@@ -374,6 +400,8 @@ def main():
                         action="store_true")
     parser.add_argument("-k", "--key", help="Test only a specific task key",
                         type=str)
+    parser.add_argument("--check-dsl", help="Do DSL checks", action="store_true")
+    parser.add_argument("--check-format", help="Do format checks", action="store_true")
     parser.add_argument("-t", "--timeout", help="Warning threshold in seconds (default: 0.2)",
                         type=float, default=0.2)
     parser.add_argument("-w", "--wait", help="Wait for user input when timeout is exceeded",
@@ -439,9 +467,10 @@ def main():
             print(f"Key '{args.key}' not found in training data.")
             return
 
-    # Run tests with quiet option if specified
-    run_dsl_tests(dsl, tests, args.quiet)
-    check_solvers_formatting(solvers_module, dsl, args.quiet)
+    if args.check_dsl:
+        run_dsl_tests(dsl, tests, args.quiet)
+    if args.check_format:
+        check_solvers_formatting(solvers_module, dsl, args.quiet)
     n_correct, avg_time, n_tasks = check_solvers_correctness(total_data, solvers_module, args.quiet, args.timeout, args.wait)
 
     # Final summary

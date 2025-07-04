@@ -454,14 +454,13 @@ def main():
     parser = argparse.ArgumentParser(description="Test ARC solvers")
     parser.add_argument("--solvers", help="Use this instead of solvers_evo", type=str, default='solvers_evo')
     parser.add_argument("-k", "--key", help="Specific task key to test", type=str)
-    parser.add_argument("--do-tests", help="Skip DSL tests", action="store_true")
+    parser.add_argument("--check-dsl", help="Do DSL checks", action="store_true")
+    parser.add_argument("--check-format", help="Do format checks", action="store_true")
+    parser.add_argument("--do-tests", help="Do DSL tests", action="store_true")
     parser.add_argument("-q", "--quiet", help="Show only key errors and line counts", action="store_true")
     parser.add_argument("--patch", help="Attempt to patch functions with NameErrors using specialized variants", action="store_true")
     parser.add_argument("--update", help="Update solvers.py with successful patches", action="store_true")
     args = parser.parse_args()
-
-    if args.do_tests:
-        run_dsl_tests(dsl, tests, args.quiet)
 
     # data = get_data(train=True)
     train_data = get_data(train=True)
@@ -483,7 +482,10 @@ def main():
     else:
         solvers_module = solvers_pre  # Use default module
 
-    check_solvers_formatting(solvers_module, dsl, args.key, args.quiet)
+    if args.check_dsl:
+        run_dsl_tests(dsl, tests, args.quiet)
+    if args.check_format:
+        check_solvers_formatting(solvers_module, dsl, args.key, args.quiet)
     return check_solvers_correctness(total_data, solvers_module, args.key, args.quiet, args.patch, args.update)
 
 if __name__ == "__main__":

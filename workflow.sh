@@ -97,12 +97,13 @@ while date; do
   >solvers_dir.py
   echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py 
   find solver_md5 -type f -name '*.py' -exec cat {} >>solvers_dir.py \; -exec echo >>solvers_dir.py \; -exec echo >>solvers_dir.py \;
+  python card.py -p
   python main.py --solvers solvers_dir
   for izzo in $g; do
     echo -en "$izzo\t"
     grep $izzo solvers_dir.py | wc -l
   done
-  sleep 60
+  sleep 600
 done
 
 # Old lower right term

@@ -158,6 +158,11 @@ class Env:
         try:
             result = func(*args)
         except Exception as e:
+        # except (AttributeError, IndexError, KeyError,
+        #         RuntimeError,
+        #         StopIteration, 
+        #         TypeError, ValueError,
+        #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
             # show_exception("", e)
             # print("traceback: ", traceback.format_exc())

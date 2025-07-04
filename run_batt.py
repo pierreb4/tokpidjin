@@ -77,7 +77,7 @@ def inline_variables(source_code):
     return ast.unparse(tree)
 
 
-def run_batt(total_data, task_num, task_id, start_time, timeout=1):
+def check_batt(total_data, task_i, task_id, start_time, timeout=1):
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
     # total_task = total_data['train'][task_id] + total_data['test'][task_id]
@@ -86,7 +86,8 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
     all_o = set()
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
 
-    print(f'------ {task_id} - {task_num} - ', end='')
+    # print(f'------ {task_id} - {task_i} - ', end='')
+    print(f'------ {task_id} - {task_i} - ')
 
     score = {}
     for i, sample in enumerate(train_task):
@@ -97,8 +98,11 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         t_set = set()
         if o['train'][i] is not None:
             all_o = all_o.union(o['train'][i])
-            for t, e, i, m in o['train'][i]:
+            for t, e, tid, m in o['train'][i]:
                 t_set.add(t)
+
+                if tid == task_id:
+                    print_l(f'Solves train[{i}]: {task_id} - {tid}')
 
             # Add 1 just once for each t value
             for t in t_set:
@@ -114,8 +118,11 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
         t_set = set()
         if o['test'][i] is not None:
             all_o = all_o.union(o['test'][i]) 
-            for t, e, i, m in o['test'][i]:
+            for t, e, tid, m in o['test'][i]:
                 t_set.add(t)
+
+                if tid == task_id:
+                    print_l(f'Solves test[{i}]: {task_id} - {tid}')
 
             # Add 1 just once for each t value
             for t in t_set:
@@ -125,7 +132,12 @@ def run_batt(total_data, task_num, task_id, start_time, timeout=1):
 
     elapsed = timer() - start_time
     len_task = len(train_task) + len(test_task)
-    print(f'{len(all_o)}/{len_task} - {elapsed:.1f}s - {elapsed / (task_num + 1):.1f}spt')
+    print(f'{len(all_o)}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
+    return all_o, score
+
+
+def run_batt(total_data, task_i, task_id, start_time, timeout=1):
+    all_o, score = check_batt(total_data, task_i, task_id, start_time, timeout=1)
 
     # Save solutions
     for solution in all_o:
@@ -272,8 +284,8 @@ def main(do_list, start=0, count=0, timeout=1):
 
     # Run batt for each task in do_list
     start_time = timer()
-    timeout = sum(run_batt(total_data, task_num, task_id, start_time, timeout)
-              for task_num, task_id in enumerate(do_list))
+    timeout = sum(run_batt(total_data, task_i, task_id, start_time, timeout)
+              for task_i, task_id in enumerate(do_list))
     
     print(f'{len(do_list)} tasks - {timeout} timeouts')
 

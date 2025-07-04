@@ -93,7 +93,7 @@ def get_data(train=True, sort_by_size=False, task_id=None):
     }
 
 
-def get_source(task_id, imports=None):    
+def get_source(task_id, imports=None, best_only=False):    
     if imports is None:
         imports = [solvers_evo, solvers_pre]
     for imp in imports:
@@ -104,33 +104,39 @@ def get_source(task_id, imports=None):
         if imp == solvers_dir:
             mod_list = []
             weights = []
+            best_score = 0
+            best_item = None
             # list files in solver_dir/solve_{task_id}/*
             files = glob.glob(f'solver_dir/solve_{task_id}/*/*.py')
             if not files:
                 continue
             for file in files:
-                # print_l(f'Processing file: {file}')
                 sections = file.split('/')
-                # print_l(f'{sections = }')
-                mod_list.append({
+                curr_item = {
                     'path': file,
-                    'score': sections[-2],
-                    'name': f'solve_{sections[-1][:-3]}'})
-                weights.append(int(sections[-2]))
+                    'name': f'solve_{sections[-1][:-3]}'}
 
-            mod_item = random.choices(mod_list, weights=weights, k=1)[0]
+                score = int(sections[-2])
+                if score > best_score:
+                    best_score = score
+                    best_item = curr_item
 
-            # print_l(f'{mod_list = }')
-            # print_l(f'{mod_item = }')
-            # assert False               
+                mod_list.append(curr_item)
+                weights.append(score)
+
+            if not best_only:
+                mod_item = random.choices(mod_list, weights=weights, k=1)[0]
+            else:
+                mod_item = best_item
+
+            if not mod_item:
+                continue
 
             solver_module = load_path(mod_item['path'])
             func_name = mod_item['name']
-
             solver = getattr(solver_module, func_name)
             print_l(f'Found solver: {func_name} in {solver_module.__name__}')
             return func_name, inspect.getsource(solver)
-
 
         else:
             func_name = f'solve_{task_id}'
@@ -141,19 +147,7 @@ def get_source(task_id, imports=None):
     return None, None
 
 
-    # if hasattr(solvers_evo, f'solve_{task_id}'):
-    #     solver = getattr(solvers_evo, f'solve_{task_id}')
-    # elif hasattr(solvers_pre, f'solve_{task_id}'):
-    #     if task_id in BAD_SOLVERS:
-    #         return None
-    #     solver = getattr(solvers_pre, f'solve_{task_id}')
-    # else:
-    #     return None
-
-    # return inspect.getsource(solver)
-
-
-def get_solvers(imports):
+def get_solvers(imports, best_only=False):
     # Get both train and test tasks
     train_data = get_data(train=True)
     eval_data = get_data(train=False)
@@ -167,7 +161,7 @@ def get_solvers(imports):
 
     solvers = {}
     for task_id in task_list:
-        func_name, source = get_source(task_id, imports)
+        func_name, source = get_source(task_id, imports, best_only=best_only)
         if source is not None:
             solvers[task_id] = (func_name, source)
 
