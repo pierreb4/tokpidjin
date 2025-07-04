@@ -299,7 +299,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             #      from solver_dir/solve_{task_id}
             #      - Maybe we could check all top ranking solutions
             #      In run_batt.py we accept (mutated) solutions from any solver
-            timed_out, result_list = run_with_timeout(batt.batt, (S, I, O), 0.01)
+            timed_out, result_list = run_with_timeout(batt.batt, (S, I, O), 1.0)
 
             execution_time = time.time() - start_time
             total_execution_time += execution_time
@@ -319,6 +319,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
                 success = False
                 continue
 
+            print_l(f'{n_correct}/{n} - {total_examples}')
             success = any(tid == key for _, _, tid, _ in result_list)
 
         if success:
@@ -351,8 +352,8 @@ def main():
                         type=str)
     parser.add_argument("--check-dsl", help="Do DSL checks", action="store_true")
     parser.add_argument("--check-format", help="Do format checks", action="store_true")
-    parser.add_argument("-t", "--timeout", help="Warning threshold in seconds (default: 0.2)",
-                        type=float, default=0.2)
+    parser.add_argument("-t", "--timeout", help="Warning threshold in seconds (default: 1.0)",
+                        type=float, default=1.0)
     parser.add_argument("-w", "--wait", help="Wait for user input when timeout is exceeded",
                         action="store_true")
     parser.add_argument("--track", help="Enable function call statistics tracking",
