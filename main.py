@@ -303,7 +303,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             O = sample['output']
             # timed_out, result_list = run_with_timeout(batt.batt, [S, I, O], timeout=1)
             try:
-                result_list = func_timeout(0.01, batt.batt, args=(S, I, O))
+                result_list = func_timeout(0.01, batt.batt, (S, I, O))
             except FunctionTimedOut:
                 timed_out = True
                 result_list = None

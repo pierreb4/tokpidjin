@@ -9,6 +9,8 @@ import random
 import glob
 
 from pathlib import Path
+from func_timeout import func_timeout, FunctionTimedOut
+
 
 import solvers_pre
 import solvers_evo
@@ -202,7 +204,7 @@ def load_module(module_name):
     return module
 
 
-def run_with_timeout(func, args, timeout=5):
+def old_run_with_timeout(func, args, timeout=5):
     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         future = executor.submit(func, *args)
         try:
@@ -212,6 +214,14 @@ def run_with_timeout(func, args, timeout=5):
             # print_l(f'Timeout in {func.__name__}')
             result = (True, None)
     return result
+
+
+def run_with_timeout(func, args, timeout=5):
+    try:
+        return (False, func_timeout(timeout, func, args))
+        timed_out = False
+    except FunctionTimedOut:
+        return (True, None)
 
 
 def print_l(msg, sep=' ', end='\n', flush=False):
