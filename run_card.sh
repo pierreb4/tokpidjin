@@ -10,10 +10,7 @@ while date; do
   python main.py --solvers solvers_dir | tee main.log
 
   python card.py
-  numbers=(0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0)
-  random_value=$(printf "%s\n" "${numbers[@]}" | shuf -n 1)
-  RND_TIMEOUT=$($TIMEOUT * $random_value)
-  echo "$RND_TIMEOUT"
+  RND_TIMEOUT=$(echo "scale=1; $((RANDOM % 10 + 1)) / 10" | bc)
   timeout 900s python run_batt.py -t -to $RND_TIMEOUT -c 1000 | tee batt.log
 
   # bash count_solvers.sh solver_dir
