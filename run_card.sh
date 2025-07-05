@@ -6,10 +6,13 @@ TMPFILE=$(mktemp)
 
 clear
 while date; do 
-  python card.py
-  timeout 900s python run_batt.py -t -to $TIMEOUT -c 1000
+  python card.py -p
+  python main.py --solvers solvers_dir | tee main.log
 
-  bash count_solvers.sh solver_dir
+  python card.py
+  timeout 900s python run_batt.py -t -to $TIMEOUT -c 1000 | tee batt.log
+
+  # bash count_solvers.sh solver_dir
   
   # TODO Maybe work on md5 solvers?
   # Also think about removing old files
