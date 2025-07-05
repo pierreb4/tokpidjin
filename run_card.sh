@@ -10,7 +10,10 @@ while date; do
   python main.py --solvers solvers_dir | tee main.log
 
   python card.py
-  timeout 900s python run_batt.py -t -to $TIMEOUT -c 1000 | tee batt.log
+  numbers=(0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0)
+  random_value=$(printf "%s\n" "${numbers[@]}" | shuf -n 1)
+  echo "$random_value"
+  timeout 900s python run_batt.py -t -to $random_value -c 1000 | tee batt.log
 
   # bash count_solvers.sh solver_dir
   
