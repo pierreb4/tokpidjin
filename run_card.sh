@@ -1,6 +1,6 @@
 #!/opt/homebrew/bin/bash
 
-TIMEOUT=$1
+MAX_TIMEOUT=$1
 BUILD=$2
 TMPFILE=$(mktemp)
 
@@ -10,7 +10,7 @@ while date; do
   python main.py --solvers solvers_dir | tee main.log
 
   python card.py
-  RND_TIMEOUT=$(echo "scale=1; $((RANDOM % 10 + 1)) / 10" | bc)
+  RND_TIMEOUT=$(echo "scale=1; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" | bc)
   timeout 900s python run_batt.py -t -to $RND_TIMEOUT -c 1000 | tee batt.log
 
   # bash count_solvers.sh solver_dir
