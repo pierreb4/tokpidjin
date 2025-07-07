@@ -3,8 +3,10 @@ import random
 import re
 import ast
 import hashlib
+import math
 
 from timeit import default_timer as timer
+from pathlib import Path
 
 from utils import *
 from batt import batt
@@ -78,6 +80,7 @@ def inline_variables(source_code):
 
 
 def check_batt(total_data, task_i, task_id, start_time, timeout=1):
+    task_start = timer()
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
     # total_task = total_data['train'][task_id] + total_data['test'][task_id]
@@ -90,6 +93,7 @@ def check_batt(total_data, task_i, task_id, start_time, timeout=1):
     print_l(f'--- {task_id} - {task_i}')
 
     score = {}
+    t_log = {}
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
@@ -104,12 +108,10 @@ def check_batt(total_data, task_i, task_id, start_time, timeout=1):
                 if tid == task_id:
                     print_l(f'Solves train[{i}]: {task_id} - {tid}')
 
-            # Add 1 just once for each t value
+            # Add 1 to score just once for each t value
             for t in t_set:
-                if t not in score:
-                    score[t] = 0
-                score[t] += 1
-        
+                update_scores(task_start, t, score, t_log)
+                
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
@@ -117,27 +119,32 @@ def check_batt(total_data, task_i, task_id, start_time, timeout=1):
 
         t_set = set()
         if o['test'][i] is not None:
-            all_o = all_o.union(o['test'][i]) 
+            all_o = all_o.union(o['test'][i])
             for t, e, tid, m in o['test'][i]:
                 t_set.add(t)
 
                 if tid == task_id:
                     print_l(f'Solves test[{i}]: {task_id} - {tid}')
 
-            # Add 1 just once for each t value
+            # Add 1 to score just once for each t value
             for t in t_set:
-                if t not in score:
-                    score[t] = 0                    
-                score[t] += 1
+                update_scores(task_start, t, score, t_log)
 
     elapsed = timer() - start_time
     len_task = len(train_task) + len(test_task)
     print_l(f'-- {len(all_o)}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
-    return all_o, score
+    return all_o, score, t_log
+
+
+def update_scores(task_start, t, score, t_log):
+    if t not in score:
+        score[t] = 0
+    score[t] += 1
+    t_log[t] = 11 - int(math.log(timer() - task_start))
 
 
 def run_batt(total_data, task_i, task_id, start_time, timeout=1):
-    all_o, score = check_batt(total_data, task_i, task_id, start_time, timeout=1)
+    all_o, score, t_log = check_batt(total_data, task_i, task_id, start_time, timeout=1)
 
     # Save solutions
     for solution in all_o:
@@ -166,31 +173,35 @@ def run_batt(total_data, task_i, task_id, start_time, timeout=1):
         generic_inlined_source = inline_variables(generic_solver_source)
         md5_hash = hashlib.md5(generic_inlined_source.encode()).hexdigest()
 
-        actual_solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
-        actual_inlined_source = inline_variables(actual_solver_source)
+        # actual_solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
+        # actual_inlined_source = inline_variables(actual_solver_source)
+
+        actual_solver_source = generic_solver_source
+        actual_inlined_source = generic_inlined_source
 
         # Write inlined source to file
         ensure_dir('solver_dir')
         solve_task = f'solver_dir/solve_{task_id}'
         ensure_dir(solve_task)
 
-        ensure_dir('solver_md5')
-        # long_hash = f'{md5_hash}_{score[sol_t]}'
-        solve_name = f'solver_md5/{md5_hash}'
+        ensure_dir('solver_def')
+        solver_def_path = f'solver_def/{md5_hash}.def'
 
-        with open(f'{solve_name}.def', 'w') as f:
+        ensure_dir('solver_md5')
+        solver_md5_path = f'solver_md5/{md5_hash}.py'
+
+        with open(solver_def_path, 'w') as f:
             f.write(actual_inlined_source)
             f.write('\n')
 
         # Expand to .py file
-        process_file(f'{solve_name}.def', f'{solve_name}.py', None, True)
+        process_file(solver_def_path, solver_md5_path, None, True)
 
-        solve_score = f'solver_dir/solve_{task_id}/{score[sol_t]}'
-        ensure_dir(solve_score)
-        solve_link = f'{solve_score}/{md5_hash}'
+        solver_score = f'solver_dir/solve_{task_id}/{score[sol_t]}/{t_log[sol_t]}'
+        ensure_dir(solver_score)
+        solver_link = f'{solver_score}/{md5_hash}.py'
 
-        symlink(f'{solve_name}.def', f'{solve_link}.def')
-        symlink(f'{solve_name}.py', f'{solve_link}.py')
+        symlink(solver_md5_path, solver_link)
 
 
         # TODO Control this with option
@@ -205,17 +216,18 @@ def run_batt(total_data, task_i, task_id, start_time, timeout=1):
     return False
 
 
-def symlink(file_name, link_name):
+def symlink(file_path, link_path):
     """
     Create a symlink for the given file.
     If the symlink already exists, remove it and create a new one.
     """
-    full_name = f'../../../{file_name}'
+    home_folder = Path.home()
+    full_name = f'{home_folder}/dsl/tokpidjin/{file_path}'
     try:
-        os.symlink(full_name, link_name)
+        os.symlink(full_name, link_path)
     except FileExistsError:
-        os.remove(link_name)
-        os.symlink(full_name, link_name)
+        os.remove(link_path)
+        os.symlink(full_name, link_path)
 
 
 def ensure_dir(directory):

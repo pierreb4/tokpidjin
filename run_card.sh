@@ -45,16 +45,46 @@ while date; do
     # python expand_solver.py -q --source solver_dir/ --solvers-file $TMPFILE && \
     # mv -f $TMPFILE solvers_dir.py
 
-    # for f in `ls solver_md5 | grep 'def$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
-    for f in `cd solver_md5; ls *.def | grep -o '^................................'`; do 
-      ls solver_dir/*/*/${f}.def &>/dev/null || \
-      rm solver_md5/${f}.def
+    # for f in `cd solver_def; ls *.def | grep -o '^................................'`; do 
+    #   ls solver_md5/${f}.def &>/dev/null || \
+    #   rm solver_def/${f}.def
+    # done
+
+    # find solver_def -maxdepth 1 -name '*.def' | while read def_file; do
+    #   f=$(basename "$def_file" | grep -o '^................................')
+    #   if [ ! -f "solver_md5/${f}.py" ]; then
+    #     rm "$def_file"
+    #   fi
+    # done
+
+    # Remove .def files in solver_def if corresponding .py file does not exist in solver_md5
+    find solver_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
+      # base=$(basename "$def_file" | grep -o '^................................')
+      base=$(basename "$def_file" .def)
+      py_file="solver_md5/${base}.py"
+      if [ ! -f "$py_file" ]; then
+        rm "$def_file"
+      fi
     done
 
-    # for f in `ls solver_md5 | grep 'py$'`; do ls solver_dir/*/$f &>/dev/null || rm solver_md5/$f; done
-    for f in `cd solver_md5; ls *.py | grep -o '^................................'`; do 
-      ls solver_dir/*/*/${f}.py &>/dev/null || \
-      rm solver_md5/${f}.py
+    # for f in `cd solver_md5; ls *.py | grep -o '^................................'`; do 
+    #   ls solver_dir/*/*/*/${f}.py &>/dev/null || \
+    #   rm solver_md5/${f}.py
+    # done
+
+    # find solver_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' file; do
+    #   base=$(basename "$file" .py)
+    #   if ! find ../solver_dir -type f -path "*/$base.py" | grep -q .; then
+    #     rm "$file"
+    #   fi
+    # done
+
+    # Remove .py files in solver_md5 if corresponding file does not exist in ../solver_dir
+    find solver_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
+      base=$(basename "$py_file" .py)
+      if ! find ../solver_dir -type f -name "${base}.py" | grep -q .; then
+        rm "$py_file"
+      fi
     done
 
     # # From solvers_ref.py to solvers.py

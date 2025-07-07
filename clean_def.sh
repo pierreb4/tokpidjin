@@ -22,9 +22,11 @@ fi
 # Change to your target directory (solver_dir/solve_*)
 cd $SOLVER_DIR || exit 1
 
-# Step 1: Select random files to keep
+# Step 1: Select files to keep
 TMPFILE=$(mktemp)
-ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" >$TMPFILE
+# ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" >$TMPFILE
+
+ls [0-9]*/[0-9]*/[0-9a-f]* | tail -$MAX_NUM_FILES >$TMPFILE
 mapfile -t keep <$TMPFILE
 rm $TMPFILE
 
@@ -34,18 +36,20 @@ if [[ -z "${keep[@]}" ]]; then
     exit 1
 fi
 
-# Step 2: For each .def file, also keep the corresponding .py file
-for file in "${keep[@]}"; do
-    if [[ "$file" == *.def ]]; then
-        base="${file%.def}"
-        if [[ -f "$base.py" ]]; then
-            keep+=("$base.py")
-        fi
-    fi
-done
+# Now it's only .py files in keep list
+
+# # Step 2: For each .def file, also keep the corresponding .py file
+# for file in "${keep[@]}"; do
+#     if [[ "$file" == *.def ]]; then
+#         base="${file%.def}"
+#         if [[ -f "$base.py" ]]; then
+#             keep+=("$base.py")
+#         fi
+#     fi
+# done
 
 # Step 3: Remove all files not in the keep list
-for file in [0-9]*/[0-9a-f]*; do
+for file in [0-9]*/[0-9]*/[0-9a-f]*; do
     skip=0
     for k in "${keep[@]}"; do
         if [[ "$file" == "$k" ]]; then

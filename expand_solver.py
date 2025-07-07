@@ -71,7 +71,9 @@ def parse_function_body(content):
     """
     # Find the function definition line
     # func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
-    func_match = re.search(r'def\s+(solve_[a-f0-9]+(?:_[a-f0-9]+)?)\s*\(([^)]*)\)\s*:', content)
+    # func_match = re.search(r'def\s+(solve_[a-f0-9]+(?:_[a-f0-9]+)?)\s*\(([^)]*)\)\s*:', content)
+
+    func_match = re.search(r'def\s+(solve)\s*\(([^)]*)\)\s*:', content)
 
     if not func_match:
         print_l("Failed to match function definition in content")
@@ -346,26 +348,29 @@ def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
             _, func_params, steps = func_parsed
             
             # Get function name from def_file
-            # print_l(f'{def_file = }')
-            def_stem_split = Path(def_file).stem.split('_')
-            # print_l(f'{def_stem_split = }')
-            func_name = f'solve_{def_stem_split[0]}'
+            # def_stem_split = Path(def_file).stem.split('_')
+            # func_name = f'solve_{def_stem_split[0]}'
+
+            func_name = 'solve'
 
             # Create the original function with _one suffix
-            original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")
+            # original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")
             
             # Generate expanded function with the original function name
             expanded_func = generate_expanded_function(func_name, func_params, steps)
             
             # Create the output with renamed original + expanded function
-            output = original_renamed + "\n\n" + expanded_func + "\n"
-            
+            # output = original_renamed + "\n\n" + expanded_func + "\n"
+
+            output = expanded_func + "\n"
+
+
             with open(py_file, 'w') as out_f:
                 out_f.write(output)
             
             if not quiet:
                 print_l(f"Successfully generated {py_file} with expanded version")
-                print_l(f"Original function renamed to {func_name}_one")
+                # print_l(f"Original function renamed to {func_name}_one")
                 print_l(f"Expanded function uses name {func_name}")
             
             # Update solvers_*.py if specified

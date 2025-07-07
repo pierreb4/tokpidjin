@@ -114,7 +114,6 @@ def replace_functions(input_file='solvers_ref.py', output_file='solvers.py', qui
         'leftmost':  ('col_row', 'R2'),
         'rightmost': ('col_row', 'R3'), 
 
-
         # Multi-argument transformations (new pattern)
         ('objects', '*', 'F', 'F', 'F'): ('o_g', '$1', 'R0'),
         ('objects', '*', 'F', 'F', 'T'): ('o_g', '$1', 'R1'),
