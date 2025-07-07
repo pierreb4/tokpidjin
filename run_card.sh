@@ -10,10 +10,8 @@ while date; do
   python card.py
   RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" | bc)
   timeout 900s python run_batt.py -t -to $RND_TIMEOUT -c 1000 | tee batt.log
-
-  # bash count_solvers.sh solver_dir
   
-  # If we got the option, build solvers_*.py
+  # Build solvers_*.py if requested
   if [ -n "$BUILD" ]; then
 
     # TODO Reactivate when we start replacements again
