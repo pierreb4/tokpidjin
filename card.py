@@ -115,6 +115,28 @@ class Code:
         t_call = self.t_call
         t_num = self.t_num
 
+        # Replace c_izzo_n with unrolled function calls
+        # def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
+        #     x1 = apply(first, S)
+        #     x2 = apply(second, S)
+        #     x3 = dedupe(mapply_t(function, x1))
+        #     x4 = dedupe(mapply_t(function, x2))
+        #     return difference_tuple(x3, x4)
+
+        # def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
+        #     """Returns pick of a color value from the input-output difference"""
+        #     ret_tuple = c_iz(S, function)
+        #     return pick(ret_tuple)
+
+        # x1 = 'apply, first, S'
+        # x2 = 'apply, second, S'
+        # x20  'mapply function, x1'
+        # x3 = 'dedupe, x20'
+        # x30  'mapply, function, x2'
+        # x4 = 'dedupe, x30'
+        # return 'difference_tuple, x3, x4'
+
+
         t_call[t_num + 0] = 'identity, S'
         t_call[t_num + 1] = 'identity, p_g'
         t_call[t_num + 2] = f'rbind, get_nth_t, {f_n}'
