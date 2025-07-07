@@ -2,7 +2,7 @@
 
   echo -n Total solvers:
   TMPFILE=$(mktemp)
-  find $SOLVER_DIR -type l -name '*.def' >$TMPFILE
+  find $SOLVER_DIR -type l -name '*.py' >$TMPFILE
   cat $TMPFILE | wc -l
   # echo -n Known solvers:
   # while IFS= read -r f; do
