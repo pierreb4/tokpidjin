@@ -82,8 +82,10 @@ while date; do
     # Remove .py files in solver_md5 if corresponding file does not exist in ../solver_dir
     find solver_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
       base=$(basename "$py_file" .py)
-      if ! find ../solver_dir -type f -name "${base}.py" | grep -q .; then
-        rm "$py_file"
+      if ! find solver_dir -type l -name "${base}.py" | grep -q .; then
+        echo rm "$py_file"
+        else
+        echo "Keeping $py_file"
       fi
     done
 
