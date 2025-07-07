@@ -63,7 +63,7 @@ while date; do
       base=$(basename "$def_file" .def)
       py_file="solver_md5/${base}.py"
       if [ ! -f "$py_file" ]; then
-        rm "$def_file"
+        echo rm "$def_file"
       fi
     done
 
@@ -83,7 +83,7 @@ while date; do
     find solver_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
       base=$(basename "$py_file" .py)
       if ! find solver_dir -type l -name "${base}.py" | grep -q .; then
-        rm "$py_file"
+        echo rm "$py_file"
       fi
     done
 
