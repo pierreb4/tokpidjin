@@ -58,6 +58,6 @@ for file in [0-9]*/[0-9]*/[0-9a-f]*; do
         fi
     done
     if [[ $skip -eq 0 ]]; then
-        echo rm -- "$file"
+        rm -- "$file"
     fi
 done
