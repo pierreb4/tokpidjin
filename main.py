@@ -306,10 +306,10 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             # Check if execution took too long
             if execution_time > timeout_warning:
                 print(f"WARNING: {solve_func[key]} sample {i} took {execution_time:.2f}s - {timed_out = }")
-                print_l(f'rm {solve_path[key]}')
+                # print_l(f'rm {solve_path[key]}')
 
-                if os.path.exists(solve_path[key]):
-                    os.remove(solve_path[key])
+                # if os.path.exists(solve_path[key]):
+                #     os.remove(solve_path[key])
 
                 slow_solvers.append((key, i, execution_time))
 
