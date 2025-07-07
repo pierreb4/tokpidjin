@@ -43,7 +43,6 @@ while date; do
 
     # Remove .def files in solver_def if corresponding .py file does not exist in solver_md5
     find solver_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
-      # base=$(basename "$def_file" | grep -o '^................................')
       base=$(basename "$def_file" .def)
       py_file="solver_md5/${base}.py"
       if [ ! -f "$py_file" ]; then
