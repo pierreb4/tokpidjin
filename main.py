@@ -236,15 +236,17 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
     task_ids = data["train"].keys()
     for task_id in task_ids:
         module = None
-        files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/*.py')
+        files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-z]*.py')
         for file in files:
             sections = file.split('/')
-            score = int(sections[-2])
+            score = int(sections[2])
             if module is None or score > module['score']:
+                t_log = int(sections[3])
                 module = {
                     'path': file,
                     'score': score,
-                    'name': f'solve_{sections[-1][:-3]}'}
+                    't_log': t_log,
+                    'name': sections[-1][:-3]}
 
         if module is None:
             continue
