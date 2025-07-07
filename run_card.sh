@@ -83,9 +83,7 @@ while date; do
     find solver_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
       base=$(basename "$py_file" .py)
       if ! find solver_dir -type l -name "${base}.py" | grep -q .; then
-        echo rm "$py_file"
-        else
-        echo "Keeping $py_file"
+        rm "$py_file"
       fi
     done
 
