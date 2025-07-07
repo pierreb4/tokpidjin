@@ -99,9 +99,10 @@ def get_source(task_id, imports=None, best_only=False):
     if imports is None:
         imports = [solvers_evo, solvers_pre]
     for imp in imports:
-        if imp == solvers_pre and task_id in BAD_SOLVERS:
-            # Skip bad solvers from solvers_pre
-            continue
+        # Let's try to use them anyway
+        # if imp == solvers_pre and task_id in BAD_SOLVERS:
+        #     # Skip bad solvers from solvers_pre
+        #     continue
 
         if imp == solvers_dir:
             mod_list = []
