@@ -150,9 +150,6 @@ def run_batt(total_data, task_i, task_id, start_time, timeout=1):
     for solution in all_o:
         sol_t, sol_e, sol_i, sol_m = solution
 
-        # if not solution[3]:
-        #     continue
-
         # Track calls then reverse sequence to rebuild solver
         done = track_solution(sol_t, None)
 
@@ -168,16 +165,10 @@ def run_batt(total_data, task_i, task_id, start_time, timeout=1):
             solver_body += ')\n'
         solver_body += f'    return t{sol_t}\n'
 
-        # Get md5_hash of generic source code
-        generic_solver_source = f'def solve(S, I):\n{solver_body}'
-        generic_inlined_source = inline_variables(generic_solver_source)
-        md5_hash = hashlib.md5(generic_inlined_source.encode()).hexdigest()
-
-        # actual_solver_source = f'def solve_{md5_hash}(S, I):\n{solver_body}'
-        # actual_inlined_source = inline_variables(actual_solver_source)
-
-        actual_solver_source = generic_solver_source
-        actual_inlined_source = generic_inlined_source
+        # Get md5_hash of inlined source code
+        solver_source = f'def solve(S, I):\n{solver_body}'
+        inlined_source = inline_variables(solver_source)
+        md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
         # Write inlined source to file
         ensure_dir('solver_dir')
@@ -191,7 +182,7 @@ def run_batt(total_data, task_i, task_id, start_time, timeout=1):
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
         with open(solver_def_path, 'w') as f:
-            f.write(actual_inlined_source)
+            f.write(inlined_source)
             f.write('\n')
 
         # Expand to .py file

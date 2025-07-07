@@ -230,7 +230,6 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             for function in solver_functions
     }
 
-    # solver_keys = []
     solve_func = {}
     solve_path = {}
     task_ids = data["train"].keys()
@@ -251,16 +250,12 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
         if module is None:
             continue
 
-        # solver_keys.append(task_id)
         solve_func[task_id] = module['name']
         solve_path[task_id] = module['path']
 
 
-    # solvable_tasks = {k: True for k in task_ids if k in solver_keys}
-
     n_correct = 0
     n_checked = 0
-    # n = len(solvable_tasks)
     n = len(solve_func)
 
     # Track execution times
@@ -270,12 +265,10 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
 
     if quiet:
         # Without progress bar in quiet mode
-        # solver_iterator = tqdm.tqdm(solvable_tasks.keys(), total=n)
         solver_iterator = tqdm.tqdm(solve_func.keys(), total=n)
     else:
         # With progress bar in normal mode
         print(f"Testing {n} tasks for correctness using {os.path.basename(solvers_module.__file__)}...")
-        # solver_iterator = solvable_tasks.keys()
         solver_iterator = solve_func.keys()
 
     for key in solver_iterator:

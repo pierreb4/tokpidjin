@@ -36,19 +36,7 @@ if [[ -z "${keep[@]}" ]]; then
     exit 1
 fi
 
-# Now it's only .py files in keep list
-
-# # Step 2: For each .def file, also keep the corresponding .py file
-# for file in "${keep[@]}"; do
-#     if [[ "$file" == *.def ]]; then
-#         base="${file%.def}"
-#         if [[ -f "$base.py" ]]; then
-#             keep+=("$base.py")
-#         fi
-#     fi
-# done
-
-# Step 3: Remove all files not in the keep list
+# Step 2: Remove all files not in the keep list
 for file in [0-9]*/[0-9]*/[0-9a-f]*; do
     skip=0
     for k in "${keep[@]}"; do
