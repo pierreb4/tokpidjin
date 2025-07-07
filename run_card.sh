@@ -1,5 +1,3 @@
-#!/opt/homebrew/bin/bash
-
 MAX_TIMEOUT=$1
 BUILD=$2
 TMPFILE=$(mktemp)
@@ -15,11 +13,7 @@ while date; do
 
   # bash count_solvers.sh solver_dir
   
-  # TODO Maybe work on md5 solvers?
-  # Also think about removing old files
-  # Can hardlinks solve both things?
-
-  # If we got a third option, build solvers_*.py
+  # If we got the option, build solvers_*.py
   if [ -n "$BUILD" ]; then
 
     # TODO Reactivate when we start replacements again
