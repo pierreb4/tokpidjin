@@ -10,7 +10,8 @@ while date; do
   python main.py -t $MAX_TIMEOUT --solvers solvers_dir | tee main.log
 
   python card.py
-  RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" | bc)
+  # RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" | bc)
+  RND_TIMEOUT=1.0
   timeout 900s python run_batt.py -t -to $RND_TIMEOUT -c 1000 | tee batt.log
 
   # bash count_solvers.sh solver_dir
