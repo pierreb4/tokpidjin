@@ -134,9 +134,15 @@ class Env:
                         elif hints[-1] in ['Cell', 'Grid', 'IJ', 'Samples', 'Tuple',
                                 'TupleTuple']:
                             return ()
-                        print(f'{func.__name__} -> {hints[-1]}', file=f)
+                        else:
+                            print(f'{func.__name__} -> {hints[-1]}', file=f)
                         if func.__name__ == 'apply':
-                            print(f' -> {type(t[2]).__name__}', file=f)
+                            if type(t[2]).__name__ == 'frozenset':
+                                return frozenset()
+                            elif type(t[2]).__name__ == 'tuple':
+                                return ()
+                            else:
+                                print(f' -> {type(t[2]).__name__}', file=f)
             result = None
 
         return result
