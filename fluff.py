@@ -126,7 +126,8 @@ class Env:
                 with open(self.log_path, 'a') as f:
                     log_exception(f'{t_num = }', e, file=f)
                     print("traceback: ", traceback.format_exc(), file=f)
-                    print(f'{get_hints(func.__name__) = }', file=f)
+                    if func is not None:
+                        print(f'{get_hints(func.__name__) = }', file=f)
             result = None
 
         return result
