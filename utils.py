@@ -138,14 +138,14 @@ def get_source(task_id, imports=None, best_only=False):
             solver_module = load_path(mod_item['path'])
             func_name = mod_item['name']
             solver = getattr(solver_module, func_name)
-            print_l(f'Found solver: {func_name} in {solver_module.__name__}')
+            print_l(f'Found dir solver: {func_name} in {solver_module.__name__}')
             return func_name, inspect.getsource(solver)
 
         else:
             func_name = f'solve_{task_id}'
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
-                # print_l(f'Found solver: {func_name} in {imp.__name__}')
+                print_l(f'Found pre solver: {func_name} in {imp.__name__}')
                 return func_name, inspect.getsource(solver)
     return None, None
 
