@@ -128,12 +128,11 @@ class Env:
                 if func is not None and hasattr(func, '__name__'):
                     hints = get_hints(func.__name__)
                     if hints is not None:
-                        if hints[-1] in ['FrozenSet', 'Objects']:
+                        if hints[-1] in ['FrozenSet', 'Indices', 'IndicesSet', 
+                                'IntegerSet', 'Object', 'Objects', 'Patch']:
                             return frozenset()
-                        elif hints[-1] in ['Grid']:
-                            return ((),)
-                        elif hints[-1] in ['Indices']:
-                            return frozenset(())
+                        elif hints[-1] in ['Cell', 'Grid', 'IJ', 'Samples', 'TupleTuple']:
+                            return ()
                         print(f'{func.__name__} -> {hints[-1]}', file=f)
             result = None
 
