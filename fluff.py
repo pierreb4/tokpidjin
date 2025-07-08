@@ -121,7 +121,7 @@ class Env:
         #         TypeError, ValueError,
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
-            if random.random() < 0.01:
+            if random.random() < 0.001:
                 show_exception("", e)
                 print("traceback: ", traceback.format_exc())
             result = None
