@@ -21,14 +21,12 @@ def get_hints(node_name):
 
 
 class Env:
-    def __init__(self, SEED, S, score=0):
+    def __init__(self, SEED, S, log_path=None, score=0):
         self.SEED = SEED
         self.S = S
         self.score = score
         # self.arg_dict = {}
-        self.log_path = 'fluff.log'
-        if os.path.isfile(self.log_path):
-            os.remove(self.log_path)
+        self.log_path = 'fluff.log' if log_path is None else log_path
 
 
     def substitute_color(self, arg, constant_dict=COLORS):

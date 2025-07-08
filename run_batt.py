@@ -79,7 +79,7 @@ def inline_variables(source_code):
     return ast.unparse(tree)
 
 
-def check_batt(total_data, task_i, task_id, start_time, timeout=1):
+def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1):
     task_start = timer()
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
@@ -97,7 +97,8 @@ def check_batt(total_data, task_i, task_id, start_time, timeout=1):
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
-        timed_out, o['train'][i] = run_with_timeout(batt, [S, I, O], timeout=timeout)
+        timed_out, o['train'][i] = run_with_timeout(batt, \
+            [S, I, O, fluff_log_path], timeout=timeout)
 
         t_set = set()
         if o['train'][i] is not None:
@@ -115,7 +116,8 @@ def check_batt(total_data, task_i, task_id, start_time, timeout=1):
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
-        timed_out, o['test'][i] = run_with_timeout(batt, [S, I, O], timeout=timeout)
+        timed_out, o['test'][i] = run_with_timeout(batt, \
+            [S, I, O, fluff_log_path], timeout=timeout)
 
         t_set = set()
         if o['test'][i] is not None:
@@ -143,8 +145,8 @@ def update_scores(task_start, t, score, t_log):
     t_log[t] = 11 - int(math.log(timer() - task_start))
 
 
-def run_batt(total_data, task_i, task_id, start_time, timeout=1):
-    all_o, score, t_log = check_batt(total_data, task_i, task_id, start_time, timeout=1)
+def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1):
+    all_o, score, t_log = check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
 
     # Save solutions
     for solution in all_o:
@@ -287,7 +289,10 @@ def main(do_list, start=0, count=0, timeout=1):
 
     # Run batt for each task in do_list
     start_time = timer()
-    timeout = sum(run_batt(total_data, task_i, task_id, start_time, timeout)
+    fluff_log_path = 'fluff.log'
+    if os.path.isfile(fluff_log_path):
+        os.remove(fluff_log_path)
+    timeout = sum(run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout)
               for task_i, task_id in enumerate(do_list))
     
     print(f'{len(do_list)} tasks - {timeout} timeouts')
