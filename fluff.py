@@ -135,6 +135,8 @@ class Env:
                                 'TupleTuple']:
                             return ()
                         print(f'{func.__name__} -> {hints[-1]}', file=f)
+                        if func.__name__ == 'apply':
+                            print(f' -> {type(t[2]).__name__}', file=f)
             result = None
 
         return result
