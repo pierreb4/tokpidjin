@@ -124,7 +124,7 @@ class Env:
         #         TypeError, ValueError,
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
-            if random.random() < 0.0001:
+            if random.random() < 0.001:
                 with open(self.log_path, 'a') as f:
                     log_exception(f'{t_num = }', e, file=f)
                     print("traceback: ", traceback.format_exc(), file=f)
