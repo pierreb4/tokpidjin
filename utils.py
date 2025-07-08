@@ -137,6 +137,8 @@ def get_source(task_id, imports=None, best_only=False):
 
             # try:
             solver_module = load_path(mod_item['path'])
+            if solver_module is None:
+                continue
             func_name = mod_item['name']
             solver = getattr(solver_module, func_name)
             # except (AttributeError, FileNotFoundError):
@@ -184,6 +186,7 @@ def load_path(file_path):
     if symlink_path.is_symlink() and not symlink_path.exists():
         # Remove the broken symlink
         symlink_path.unlink()
+        return None
         
     module_name = file_path[:-3].replace('/', '.')
     spec = importlib.util.spec_from_file_location(module_name, file_path)
