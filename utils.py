@@ -110,7 +110,7 @@ def get_source(task_id, imports=None, best_only=False):
             best_score = 0
             best_item = None
             # list files in solver_dir/solve_{task_id}/*
-            files = glob.glob(f'solver_dir/solve_{task_id}/*/*.py')
+            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-z]*.py')
             if not files:
                 continue
             for file in files:
