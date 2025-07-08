@@ -1,6 +1,7 @@
 import inspect
 import traceback
 import re
+import random
 
 from utils import *
 from constants import *
@@ -120,8 +121,9 @@ class Env:
         #         TypeError, ValueError,
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
-            # show_exception("", e)
-            # print("traceback: ", traceback.format_exc())
+            if random.random() < 0.01:
+                show_exception("", e)
+                print("traceback: ", traceback.format_exc())
             result = None
 
         return result
