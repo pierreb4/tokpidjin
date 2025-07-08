@@ -110,14 +110,14 @@ def get_source(task_id, imports=None, best_only=False):
             best_score = 0
             best_item = None
             # list files in solver_dir/solve_{task_id}/*
-            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-z]*.py')
+            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
             if not files:
                 continue
             for file in files:
                 sections = file.split('/')
                 curr_item = {
                     'path': file,
-                    'name': f'solve_{sections[-1][:-3]}'}
+                    'name': 'solve'}
 
                 score = int(sections[-2])
                 if score > best_score:
