@@ -27,8 +27,8 @@ class Env:
         self.score = score
         # self.arg_dict = {}
         self.log_path = 'fluff.log'
-        if os.path.isfile(log_path):
-            os.remove(log_path)
+        if os.path.isfile(self.log_path):
+            os.remove(self.log_path)
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
