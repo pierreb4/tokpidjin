@@ -135,12 +135,12 @@ def get_source(task_id, imports=None, best_only=False):
             if not mod_item:
                 continue
 
-            try:
-                solver_module = load_path(mod_item['path'])
-                func_name = mod_item['name']
-                solver = getattr(solver_module, func_name)
-            except (AttributeError, FileNotFoundError):
-                continue
+            # try:
+            solver_module = load_path(mod_item['path'])
+            func_name = mod_item['name']
+            solver = getattr(solver_module, func_name)
+            # except (AttributeError, FileNotFoundError):
+            #     continue
             print_l(f'Found dir solver: {func_name} in {solver_module.__name__}')
             return func_name, inspect.getsource(solver)
 
@@ -180,10 +180,12 @@ def load_path(file_path):
     Args: module_name: Path to the Python file to load
     Returns: Loaded module object
     """
-    module_name = file_path[:-3].replace('/', '.')
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"Module file not found: {file_path}")
+    symlink_path = Path(file_path)
+    if symlink_path.is_symlink() and not symlink_path.exists():
+        # Remove the broken symlink
+        symlink_path.unlink()
         
+    module_name = file_path[:-3].replace('/', '.')
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     module = importlib.util.module_from_spec(spec)
     sys.modules[module_name] = module
