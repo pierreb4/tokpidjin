@@ -127,7 +127,7 @@ class Env:
                     log_exception(f'{t_num = }', e, file=f)
                     print("traceback: ", traceback.format_exc(), file=f)
                     if func is not None and hasattr(func, '__name__'):
-                        print(f'{get_hints(func.__name__) = }', file=f)
+                        print(f'{func.__name__} - {get_hints(func.__name__)}', file=f)
             result = None
 
         return result
