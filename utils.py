@@ -135,11 +135,11 @@ def get_source(task_id, imports=None, best_only=False):
             if not mod_item:
                 continue
 
-            solver_module = load_path(mod_item['path'])
-            func_name = mod_item['name']
             try:
+                solver_module = load_path(mod_item['path'])
+                func_name = mod_item['name']
                 solver = getattr(solver_module, func_name)
-            except AttributeError:
+            except AttributeError, FileNotFoundError:
                 continue
             print_l(f'Found dir solver: {func_name} in {solver_module.__name__}')
             return func_name, inspect.getsource(solver)
