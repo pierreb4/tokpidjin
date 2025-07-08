@@ -122,12 +122,15 @@ class Env:
         #         TypeError, ValueError,
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
-            if random.random() < 1.001:
-                with open(self.log_path, 'a') as f:
-                    log_exception(f'{t_num = }', e, file=f)
-                    print("traceback: ", traceback.format_exc(), file=f)
-                    if func is not None and hasattr(func, '__name__'):
-                        print(f'{func.__name__} - {get_hints(func.__name__)[-1]}', file=f)
+            with open(self.log_path, 'a') as f:
+                log_exception(f'{t_num = }', e, file=f)
+                print("traceback: ", traceback.format_exc(), file=f)
+                if func is not None and hasattr(func, '__name__'):
+                    hints = get_hints(func.__name__)
+                    if hints is not None:
+                        if hints[-1] in ['FrozenSet', 'Objects']:
+                            return frozenset()
+                        print(f'{func.__name__} - {hints[-1]}', file=f)
             result = None
 
         return result
