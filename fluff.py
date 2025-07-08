@@ -131,7 +131,8 @@ class Env:
                         if hints[-1] in ['FrozenSet', 'Indices', 'IndicesSet', 
                                 'IntegerSet', 'Object', 'Objects', 'Patch']:
                             return frozenset()
-                        elif hints[-1] in ['Cell', 'Grid', 'IJ', 'Samples', 'TupleTuple']:
+                        elif hints[-1] in ['Cell', 'Grid', 'IJ', 'Samples', 'Tuple',
+                                'TupleTuple']:
                             return ()
                         print(f'{func.__name__} -> {hints[-1]}', file=f)
             result = None
