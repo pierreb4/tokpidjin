@@ -130,6 +130,9 @@ class Env:
                     if hints is not None:
                         if hints[-1] in ['FrozenSet', 'Objects']:
                             return frozenset()
+                        # Activate and check:
+                        elif hints[-1] in ['Grid']:
+                            return ((),)
                         print(f'{func.__name__} - {hints[-1]}', file=f)
             result = None
 
