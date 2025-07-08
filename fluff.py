@@ -123,7 +123,7 @@ class Env:
             # TODO Display and resolve exceptions
             if random.random() < 0.0001:
                 with open('fluff.log', 'w') as f:
-                    show_exception("", e, file=f)
+                    log_exception("", e, file=f)
                     print("traceback: ", traceback.format_exc(), file=f)
             result = None
 
@@ -137,7 +137,7 @@ class Env:
         return self.SEED
 
 
-def show_exception(msg, e=None, file=None):
+def log_exception(msg, e=None, file=None):
     frame = inspect.currentframe()
     caller_frame = frame.f_back
     file_path = caller_frame.f_code.co_filename
