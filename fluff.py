@@ -26,6 +26,9 @@ class Env:
         self.S = S
         self.score = score
         # self.arg_dict = {}
+        self.log_path = 'fluff.log'
+        if os.path.isfile(log_path):
+            os.remove(log_path)
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
@@ -122,7 +125,7 @@ class Env:
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
             if random.random() < 0.0001:
-                with open('fluff.log', 'a') as f:
+                with open(self.log_path, 'a') as f:
                     log_exception(f'{t_num = }', e, file=f)
                     print("traceback: ", traceback.format_exc(), file=f)
             result = None
