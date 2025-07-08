@@ -122,8 +122,8 @@ class Env:
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
             if random.random() < 0.0001:
-                with open('fluff.log', 'w') as f:
-                    log_exception("", e, file=f)
+                with open('fluff.log', 'a') as f:
+                    log_exception(f'{t_num = }', e, file=f)
                     print("traceback: ", traceback.format_exc(), file=f)
             result = None
 
