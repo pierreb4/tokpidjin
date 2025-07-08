@@ -122,8 +122,9 @@ class Env:
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
             if random.random() < 0.0001:
-                show_exception("", e)
-                print("traceback: ", traceback.format_exc())
+                with open('fluff.log', 'w') as f:
+                    show_exception("", e, file=f)
+                    print("traceback: ", traceback.format_exc(), file=f)
             result = None
 
         return result
@@ -134,4 +135,22 @@ class Env:
 
     def get_seed(self):
         return self.SEED
+
+
+def show_exception(msg, e=None, file=None):
+    frame = inspect.currentframe()
+    caller_frame = frame.f_back
+    file_path = caller_frame.f_code.co_filename
+    file_name = os.path.basename(file_path)
+    function_name = caller_frame.f_code.co_name
+    line_number = caller_frame.f_lineno
+    if file is not None:
+        if e is not None:
+            print(f"!!! EXCEPTION !!! {type(e).__name__}: {e}", file=file)
+        print(f"!!! ========= !!! {file_name}:{line_number} {function_name}: {msg}", file=file)
+    else:
+        if e is not None:
+            print(f"!!! EXCEPTION !!! {type(e).__name__}: {e}")
+        print(f"!!! ========= !!! {file_name}:{line_number} {function_name}: {msg}")
+
 
