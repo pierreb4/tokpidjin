@@ -241,8 +241,9 @@ class Code:
 
 
     def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
-        while random.random() < 0.5:
-            t_offset = t_n - random.randint(1, 9)
+        while random.random() < 0.1:
+            # t_offset = t_n - random.randint(1, 9)
+            t_offset = random.randint(1, t_n)
             if t_offset > 0:
                 new_call = clean_call(self.t_call[t_offset])
                 new_items = get_items(new_call)
