@@ -127,10 +127,10 @@ def get_source(task_id, imports=None, best_only=False):
                 mod_list.append(curr_item)
                 weights.append(score)
 
-            if not best_only:
-                mod_item = random.choices(mod_list, weights=weights, k=1)[0]
-            else:
-                mod_item = best_item
+            # if not best_only:
+            mod_item = random.choices(mod_list, weights=weights, k=1)[0]
+            # else:
+                # mod_item = best_item
 
             if not mod_item:
                 continue
