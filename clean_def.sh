@@ -32,6 +32,7 @@ rm $TMPFILE
 
 if [[ -z "${keep[@]}" ]]; then
     echo "keep is empty"
+    ls -lR "$SOLVER_DIR"
     rmdir "$SOLVER_DIR"
     exit 1
 fi
