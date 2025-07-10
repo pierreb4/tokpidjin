@@ -125,7 +125,7 @@ class Code:
         t_num = self.t_num
         t_call[t_num + 0] = 'apply, first, S'
         t_call[t_num + 1] = 'apply, second, S'
-        t_call[t_num + 2] = f'mapply p_g, t{t_num + 0}'
+        t_call[t_num + 2] = f'mapply, p_g, t{t_num + 0}'
         t_call[t_num + 3] = f'dedupe, t{t_num + 2}'
         t_call[t_num + 4] = f'mapply, p_g, t{t_num + 1}'
         t_call[t_num + 5] = f'dedupe, t{t_num + 4}'
