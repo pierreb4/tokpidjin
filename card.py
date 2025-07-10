@@ -98,11 +98,11 @@ class Code:
         if c in c_iz_l and random.random() < 0.5:
             f_n = f'F{c_iz_l.index(c)}'
             # return self.substitute_color_izzo('c_iz_n', f_n)
-            return self.substitute_color_iz(f_n)
+            return self.substitute_color_izzo(4, 5, f_n)
         elif c in c_zo_l and random.random() < 0.5:
             f_n = f'F{c_zo_l.index(c)}'
             # return self.substitute_color_izzo('c_zo_n', f_n)
-            return self.substitute_color_zo(f_n)
+            return self.substitute_color_izzo(5, 4, f_n)
         elif random.random() < budget_random:
             # Same as usual random replacement
             return random.choice(list(constant_dict.keys()))
@@ -112,24 +112,17 @@ class Code:
         return constant_list[c]
 
 
-    def substitute_color_iz(self, f_n):
-        return self.substitute_color_izzo(3, 5, f_n)
-
-
-    def substitute_color_zo(self, f_n):
-        return self.substitute_color_izzo(5, 3, f_n)
-
-    def substitute_color_izzo(self, arg0, arg1, f_n):
+    def substitute_color_izzo(self, arg_i, arg_o, f_n):
         self.score -= 1
         t_call = self.t_call
         t_num = self.t_num
         t_call[t_num + 0] = 'apply, first, S'
         t_call[t_num + 1] = 'apply, second, S'
         t_call[t_num + 2] = f'mapply, p_g, t{t_num + 0}'
-        t_call[t_num + 3] = f'dedupe, t{t_num + 2}'
-        t_call[t_num + 4] = f'mapply, p_g, t{t_num + 1}'
-        t_call[t_num + 5] = f'dedupe, t{t_num + 4}'
-        t_call[t_num + 6] = f'difference_tuple, t{t_num + arg0}, t{t_num + arg1}'
+        t_call[t_num + 3] = f'mapply, p_g, t{t_num + 1}'
+        t_call[t_num + 4] = f'dedupe, t{t_num + 2}'
+        t_call[t_num + 5] = f'dedupe, t{t_num + 3}'
+        t_call[t_num + 6] = f'difference_tuple, t{t_num + arg_i}, t{t_num + arg_o}'
         t_call[t_num + 7] = f'get_nth_t, t{t_num + 6}, {f_n}'
         self.t_num += 8
         for t in range(8):
