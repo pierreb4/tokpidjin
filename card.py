@@ -109,33 +109,41 @@ class Code:
         constant_list = list(constant_dict.keys())
         return constant_list[c]
 
-    def substitute_color_izzo(self, c_izzo_n, f_n):
+
+    def substitute_color_iz(self, f_n):
+        return self.substitute_color_izzo(3, 5, f_n)
+
+
+    def substitute_color_zo(self, f_n):
+        return self.substitute_color_izzo(5, 3, f_n)
+
+    # TODO Rename this here and in `substitute_color_iz` and `substitute_color_zo`
+    def substitute_color_izzo(self, arg0, arg1, f_n):
+        self.score -= 1
+        t_call = self.t_call
+        t_num = self.t_num
+        t_call[t_num + 0] = 'apply, first, S'
+        t_call[t_num + 1] = 'apply, second, S'
+        t_call[t_num + 2] = f'mapply p_g, t{t_num + 0}'
+        t_call[t_num + 3] = f'dedupe, t{t_num + 2}'
+        t_call[t_num + 4] = f'mapply, p_g, t{t_num + 1}'
+        t_call[t_num + 5] = f'dedupe, t{t_num + 4}'
+        t_call[t_num + 6] = f'difference_tuple, t{t_num + arg0}, t{t_num + arg1}'
+        t_call[t_num + 7] = f'get_nth_t, t{t_num + 6}, {f_n}'
+        self.t_num += 8
+        for t in range(8):
+            print(
+                f'    t{t_num + t} = env.do_fluff({t_num + t}, [{t_call[t_num + t]}]) # {self.task_id} - True',
+                file=self.file,
+            )
+        return f't{t_num + 7}'
+
+
+    def old_substitute_color_izzo(self, c_izzo_n, f_n):
         # Change the score at substitution time
         self.score -= 1
         t_call = self.t_call
         t_num = self.t_num
-
-        # Replace c_izzo_n with unrolled function calls
-        # def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
-        #     x1 = apply(first, S)
-        #     x2 = apply(second, S)
-        #     x3 = dedupe(mapply_t(function, x1))
-        #     x4 = dedupe(mapply_t(function, x2))
-        #     return difference_tuple(x3, x4)
-
-        # def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
-        #     """Returns pick of a color value from the input-output difference"""
-        #     ret_tuple = c_iz(S, function)
-        #     return pick(ret_tuple)
-
-        # x1 = 'apply, first, S'
-        # x2 = 'apply, second, S'
-        # x20  'mapply function, x1'
-        # x3 = 'dedupe, x20'
-        # x30  'mapply, function, x2'
-        # x4 = 'dedupe, x30'
-        # return 'difference_tuple, x3, x4'
-
 
         t_call[t_num + 0] = 'identity, S'
         t_call[t_num + 1] = 'identity, p_g'
@@ -144,11 +152,8 @@ class Code:
         t_call[t_num + 4] = f'{c_izzo_n}, t{t_num + 0}, t{t_num + 1}, t{t_num + 3}'
         self.t_num += 5
 
-        print(f'    t{t_num + 0} = env.do_fluff({t_num + 0}, [{t_call[t_num + 0]}]) # {self.task_id} - True', file=self.file)
-        print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}]) # {self.task_id} - True', file=self.file)
-        print(f'    t{t_num + 2} = env.do_fluff({t_num + 2}, [{t_call[t_num + 2]}]) # {self.task_id} - True', file=self.file)
-        print(f'    t{t_num + 3} = env.do_fluff({t_num + 3}, [{t_call[t_num + 3]}]) # {self.task_id} - True', file=self.file)
-        print(f'    t{t_num + 4} = env.do_fluff({t_num + 4}, [{t_call[t_num + 4]}]) # {self.task_id} - True', file=self.file)
+        for t in range(5):
+            print(f'    t{t_num + t} = env.do_fluff({t_num + t}, [{t_call[t_num + t]}]) # {self.task_id} - True', file=self.file)
         return f't{t_num + 4}'
 
 
@@ -242,6 +247,7 @@ class Code:
 
     def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
         while random.random() < 0.1:
+            # TODO Check parameter impact on mutation numbers
             # t_offset = t_n - random.randint(1, 9)
             t_offset = random.randint(1, t_n)
             if t_offset > 0:
