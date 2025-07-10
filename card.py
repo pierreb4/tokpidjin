@@ -97,10 +97,12 @@ class Code:
 
         if c in c_iz_l and random.random() < 0.5:
             f_n = f'F{c_iz_l.index(c)}'
-            return self.substitute_color_izzo('c_iz_n', f_n)
+            # return self.substitute_color_izzo('c_iz_n', f_n)
+            return self.substitute_color_iz(f_n)
         elif c in c_zo_l and random.random() < 0.5:
             f_n = f'F{c_zo_l.index(c)}'
-            return self.substitute_color_izzo('c_zo_n', f_n)
+            # return self.substitute_color_izzo('c_zo_n', f_n)
+            return self.substitute_color_zo(f_n)
         elif random.random() < budget_random:
             # Same as usual random replacement
             return random.choice(list(constant_dict.keys()))
@@ -117,7 +119,6 @@ class Code:
     def substitute_color_zo(self, f_n):
         return self.substitute_color_izzo(5, 3, f_n)
 
-    # TODO Rename this here and in `substitute_color_iz` and `substitute_color_zo`
     def substitute_color_izzo(self, arg0, arg1, f_n):
         self.score -= 1
         t_call = self.t_call
