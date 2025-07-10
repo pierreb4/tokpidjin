@@ -5,9 +5,11 @@ TMPFILE=$(mktemp)
 clear
 while date; do 
   python card.py -p
+  cp -f batt.py batt_main.py
   python main.py -t $MAX_TIMEOUT --solvers solvers_dir | tee main.log
 
   python card.py
+  cp -f batt.py batt_run.py
   RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" | bc)
   timeout 900s python run_batt.py -t -to $RND_TIMEOUT -c 1000 | tee batt.log
   
