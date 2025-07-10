@@ -240,7 +240,7 @@ class Code:
 
 
     def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
-        while random.random() < 0.1:
+        while random.random() < 0.01:
             # TODO Check parameter impact on mutation numbers
             # t_offset = t_n - random.randint(1, 9)
             t_offset = random.randint(1, t_n)
