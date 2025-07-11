@@ -135,7 +135,7 @@ class Env:
                                 'TupleTuple']:
                             return ()
                         else:
-                            print(f'{func.__name__} -> {hints[-1]}', file=f)
+                            print(f'{func.__name__} -> {hints[-1]} - {t_num}', file=f)
                         if func.__name__ == 'apply':
                             if type(t[2]).__name__ == 'frozenset':
                                 return frozenset()
