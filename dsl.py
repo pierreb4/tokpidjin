@@ -1967,7 +1967,8 @@ def cellwise(
         row = ()
         for j in range(w):
             a_value = a[i][j]
-            value = a_value if a_value == b[i][j] else fallback
+            # value = a_value if a_value == b[i][j] else fallback
+            value = a_value if a_value == index(b, (i, j)) else fallback
             row = row + (value,)
         resulting_grid = resulting_grid + (row, )
     return resulting_grid
@@ -2029,9 +2030,7 @@ def index(
     """ color at location """
     i, j = loc
     h, w = len(grid), len(grid[0])
-    if not (0 <= i < h and 0 <= j < w):
-        return None
-    return grid[loc[0]][loc[1]] 
+    return -math.inf if not 0 <= i < h or not 0 <= j < w else grid[loc[0]][loc[1]] 
 
 
 def canvas(
@@ -2039,7 +2038,10 @@ def canvas(
     dimensions: 'IJ'
 ) -> 'Grid':
     """ grid construction """
-    return tuple(tuple(color for j in range(dimensions[1])) for i in range(dimensions[0]))
+    return tuple(
+        tuple(color for _ in range(dimensions[1]))
+        for _ in range(dimensions[0])
+    )
 
 
 def corners(
