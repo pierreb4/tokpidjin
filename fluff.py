@@ -134,7 +134,7 @@ class Env:
 
                 # Show the type all arguments
                 for i, arg in enumerate(t):
-                    print(f' -> {i} - {type(arg) = } - {str(arg)[:40]}', file=f)
+                    print(f' -> {i} - {type(arg) = } - {str(arg)[:60]}', file=f)
 
                 if func is not None and hasattr(func, '__name__'):
                     hints = get_hints(func.__name__)
