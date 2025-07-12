@@ -1557,21 +1557,21 @@ def lowermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    return max(i for i, j in toindices(patch))
+    return max(i for i, j in toindices(patch)) if patch else -math.inf
 
 
 def lowermost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    return max(i for i, j in toindices_i(indices))
+    return max(i for i, j in toindices_i(indices)) if indices else -math.inf
 
 
 def lowermost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    return max(i for i, j in toindices_o(obj))
+    return max(i for i, j in toindices_o(obj)) if obj else -math.inf
 
 
 def uppermost(
@@ -1585,42 +1585,42 @@ def uppermost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    return min(i for i, j in toindices_i(indices))
+    return min(i for i, j in toindices_i(indices)) if indices else math.inf
 
 
 def uppermost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    return min(i for i, j in toindices_o(obj))
+    return min(i for i, j in toindices_o(obj)) if obj else math.inf
 
 
 def leftmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    return min(j for i, j in toindices(patch))
+    return min(j for i, j in toindices(patch)) if patch else math.inf
 
 
 def leftmost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    return min(j for i, j in toindices_i(indices))
+    return min(j for i, j in toindices_i(indices)) if indices else math.inf
 
 
 def leftmost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    return min(j for i, j in toindices_o(obj))
+    return min(j for i, j in toindices_o(obj)) if obj else math.inf
 
 
 def rightmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of rightmost occupied cell """
-    return max(j for i, j in toindices(patch))
+    return max(j for i, j in toindices(patch)) if patch else -math.inf
 
 
 def rightmost_i(
