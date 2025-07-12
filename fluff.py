@@ -128,7 +128,7 @@ class Env:
                 return None
             self.exceptions += 1
 
-            with open(self.log_path, 'a') as f:
+            with open(self.log_path, 'w') as f:
                 log_exception(f'{t_num = }', e, file=f)
                 print("traceback: ", traceback.format_exc(), file=f)
 
