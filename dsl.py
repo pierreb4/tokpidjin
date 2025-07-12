@@ -2903,7 +2903,7 @@ def vmirror_f(
     patch: 'Patch'
 ) -> 'Patch':
     """ mirroring along vertical """
-    if path == frozenset():
+    if patch == frozenset():
         return patch
     d = ulcorner(patch)[1] + lrcorner(patch)[1]
     if len(next(iter(patch))) == 3:
