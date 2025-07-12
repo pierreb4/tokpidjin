@@ -27,6 +27,7 @@ class Env:
         self.score = score
         # self.arg_dict = {}
         self.log_path = 'fluff.log' if log_path is None else log_path
+        self.exceptions = 0
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
@@ -122,9 +123,19 @@ class Env:
         #         TypeError, ValueError,
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
+            # Let's just display the first 10 exceptions
+            if self.exceptions > 9:
+                return None
+            self.exceptions += 1
+
             with open(self.log_path, 'a') as f:
                 log_exception(f'{t_num = }', e, file=f)
                 print("traceback: ", traceback.format_exc(), file=f)
+
+                # Show the type all arguments
+                for i, arg in enumerate(t):
+                    print(f' -> {i} {type(arg) = }', file=f)
+
                 if func is not None and hasattr(func, '__name__'):
                     hints = get_hints(func.__name__)
                     if hints is not None:
@@ -134,15 +145,16 @@ class Env:
                         elif hints[-1] in ['Cell', 'Grid', 'IJ', 'Samples', 'Tuple',
                                 'TupleTuple']:
                             return ()
-                        else:
-                            print(f'{func.__name__} -> {hints[-1]} - {t_num}', file=f)
-                        if func.__name__ == 'apply':
-                            if type(t[2]).__name__ == 'frozenset':
-                                return frozenset()
-                            elif type(t[2]).__name__ == 'tuple':
-                                return ()
-                            else:
-                                print(f' -> {type(t[2]).__name__}', file=f)
+                        # else:
+                        #     print(f'{func.__name__} -> {hints[-1]} - {t_num}', file=f)
+
+                        # if func.__name__ == 'apply':
+                        #     if type(t[2]).__name__ == 'frozenset':
+                        #         return frozenset()
+                        #     elif type(t[2]).__name__ == 'tuple':
+                        #         return ()
+                        #     else:
+                        #         print(f' -> {type(t[2]).__name__}', file=f)
             result = None
 
         return result
