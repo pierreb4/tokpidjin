@@ -124,7 +124,7 @@ class Env:
         #         ZeroDivisionError) as e:
             # TODO Display and resolve exceptions
             # Let's just display the first 10 exceptions
-            if self.exceptions > 9:
+            if self.exceptions > 1:
                 return None
             self.exceptions += 1
 
