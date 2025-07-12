@@ -854,7 +854,16 @@ def astuple(
     b: 'Integer'
 ) -> 'Tuple':
     """ constructs a tuple """
-    return (a, b)
+    return (b[0], b[1], a) if isinstance(b, tuple) else (a, b)
+
+
+def astriple(
+    i: 'I_',
+    j: 'J_',
+    c: 'C_'
+) -> 'Tuple':
+    """ constructs a triple tuple """
+    return (i, j, c)
 
 
 def product(
