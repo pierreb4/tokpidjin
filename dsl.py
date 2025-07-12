@@ -1577,7 +1577,7 @@ def uppermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    return min(i for i, j in toindices(patch))
+    return min(i for i, j in toindices(patch)) if patch else math.inf
 
 
 def uppermost_i(
