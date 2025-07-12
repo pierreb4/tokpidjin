@@ -130,7 +130,7 @@ class Env:
             self.exceptions += 1
 
             with open(self.log_path, 'w') as f:
-                log_exception(f'{t_num = }', e, file=f)
+                log_exception(f'{self.task_id} - {t_num = }', e, file=f)
                 print("traceback: ", traceback.format_exc(), file=f)
 
                 # Show the type all arguments
