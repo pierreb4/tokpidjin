@@ -220,12 +220,25 @@ class Code:
         if old_args := re.findall(r'\b(\w+)\b', old_call):
             # TODO Track t variables to get to hints
             if old_hints is None:
+
+
+                old_hint = None
+                for i, old_arg in enumerate(old_args):
+                    # First deal with t variables
+                    if old_arg.startswith('t') and old_arg[1:].isdigit():
+                        if not preserve:
+                            t_n = int(old_arg[1:])
+                            has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
+                    elif not preserve:
+                        has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
+
+
                 return self.file_fluff(has_mutation)
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
                 if old_arg.startswith('t') and old_arg[1:].isdigit():
-                    t_n = int(old_arg[1:])
                     if not preserve:
+                        t_n = int(old_arg[1:])
                         has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
                 elif not preserve:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
@@ -240,7 +253,7 @@ class Code:
 
 
     def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
-        while random.random() < 0.01:
+        while random.random() < 0.001:
             # TODO Check parameter impact on mutation numbers
             # t_offset = t_n - random.randint(1, 9)
             t_offset = random.randint(1, t_n)
@@ -251,7 +264,7 @@ class Code:
                 new_hints = get_hints(new_func_name)
                 new_hint = new_hints[0] if new_hints else None
 
-                if new_hint == old_hint:
+                if new_hint == old_hint or old_hint is None:
                     has_mutation = True
                     self.t_call[self.t_num] = re.sub(rf'\bt{t_n}\b', f't{t_offset}', old_call)
         return has_mutation
@@ -281,7 +294,8 @@ class Code:
                 'Object', 'Objects', 'FrozenSet', 'Patch', 
                 'Callable', 'Container', 'ContainerContainer',
                 'Integer', 'IntegerSet', 'Numerical', 'Indices', 
-                'Boolean', 'IJ', 'TupleTuple', 'Any'
+                'Boolean', 'IJ', 'TupleTuple', 'Any',
+                # 'NoneType'
             ]:
             print_l(f'{old_hint = }')
         if old_args[i] != old_arg:
