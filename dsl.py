@@ -303,17 +303,17 @@ def get_nth_t(container: 'Tuple', rank: 'FL') -> 'Any':
 def get_nth_f(container: 'FrozenSet', rank: 'FL') -> 'Any':
     """Nth item of container, 0-based"""
     if not hasattr(container, '__iter__'):
-        return None
+        return ()
     if rank < 0:
         # For negative rank, reverse the iterator
         iterator = iter(reversed(tuple(container)))
         for _ in range(-rank-1):
-            next(iterator, None)
+            next(iterator, ())
     else:
         iterator = iter(container)
         for _ in range(rank):
-            next(iterator, None)
-    return next(iterator, None)
+            next(iterator, ())
+    return next(iterator, ())
 
 
 # Original sorting with: key=identity
