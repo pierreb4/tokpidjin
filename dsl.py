@@ -2192,6 +2192,8 @@ def inbox(
     patch: 'Patch'
 ) -> 'Indices':
     """ inbox for patch """
+    if patch in [frozenset(), ()]:
+        return frozenset()
     ai, aj = uppermost(patch) + 1, leftmost(patch) + 1
     bi, bj = lowermost(patch) - 1, rightmost(patch) - 1
     si, sj = min(ai, bi), min(aj, bj)
@@ -2205,6 +2207,8 @@ def outbox(
     patch: 'Patch'
 ) -> 'Indices':
     """ outbox for patch """
+    if patch in [frozenset(), ()]:
+        return frozenset()
     ai, aj = uppermost(patch) - 1, leftmost(patch) - 1
     bi, bj = lowermost(patch) + 1, rightmost(patch) + 1
     si, sj = min(ai, bi), min(aj, bj)
@@ -2218,8 +2222,8 @@ def box(
     patch: 'Patch'
 ) -> 'Indices':
     """ outline of patch """
-    if len(patch) == 0:
-        return patch
+    if patch in [frozenset(), ()]:
+        return frozenset()
     ai, aj = ulcorner(patch)
     bi, bj = lrcorner(patch)
     si, sj = min(ai, bi), min(aj, bj)
@@ -2234,7 +2238,7 @@ def shoot(
     direction: 'IJ'
 ) -> 'Indices':
     """ line from starting point and direction """
-    if start == ():
+    if start == () or direction == ():
         return frozenset()
     return connect(start, (start[0] + 42 * direction[0], start[1] + 42 * direction[1]))
 
