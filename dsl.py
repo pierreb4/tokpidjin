@@ -1506,7 +1506,7 @@ def width_f(
     piece: 'Indices'
 ) -> 'Integer':
     """ width of patch """
-    return 0 if len(piece) == 0 else rightmost_o(piece) - leftmost_o(piece) + 1
+    return 0 if len(piece) == 0 else rightmost(piece) - leftmost(piece) + 1
 
 
 def width_i(
@@ -2617,14 +2617,16 @@ def objects(
         val = grid[loc[0]][loc[1]]
         if val == bg:
             continue
-        obj = {(val, loc)}
+        # obj = {(val, loc)}
+        obj = {(loc[0], loc[1], val)}
         cands = {loc}
         while len(cands) > 0:
             neighborhood = set()
             for cand in cands:
                 v = grid[cand[0]][cand[1]]
                 if (val == v) if univalued else (v != bg):
-                    obj.add((v, cand))
+                    # obj.add((v, cand))
+                    obj.add((cand[0], cand[1], v))
                     occupied.add(cand)
                     neighborhood |= {
                         (i, j) for i, j in diagfun(cand) if 0 <= i < h and 0 <= j < w
