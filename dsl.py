@@ -2541,7 +2541,11 @@ def crop(
     dims: 'IJ'
 ) -> 'Grid':
     """ subgrid specified by start and dimension """
-    return tuple(r[start[1]:start[1]+dims[1]] for r in grid[start[0]:start[0]+dims[0]])
+    h, w = len(grid), len(grid[0])
+    if start[0] >= 0 and start[0] < h and start[1] >= 0 \
+            and start[1] < w and start[0] + dims[0] <= h and start[1] + dims[1] <= w:
+        return tuple(r[start[1]:start[1]+dims[1]] for r in grid[start[0]:start[0]+dims[0]])
+    return ()
 
 
 def recolor_i(
