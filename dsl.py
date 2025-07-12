@@ -1506,7 +1506,7 @@ def width_f(
     piece: 'Indices'
 ) -> 'Integer':
     """ width of patch """
-    return 0 if len(piece) == 0 else rightmost(piece) - leftmost(piece) + 1
+    return 0 if len(piece) == 0 else rightmost_o(piece) - leftmost_o(piece) + 1
 
 
 def width_i(
