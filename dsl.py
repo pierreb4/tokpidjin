@@ -44,7 +44,8 @@ def p_g( grid: 'Grid' ) -> 'IntegerSet':
 
 def p_o( obj: 'Object' ) -> 'IntegerSet':
     """ colors occurring in object """
-    return tuple({v for v, _ in obj})
+    # return tuple({v for v, _ in obj})
+    return tuple({c for _, _, c in obj})
 
 
 def dedupe_pair_tuple(S: 'Samples') -> 'Samples':
@@ -1416,7 +1417,7 @@ def mostcolor_f(
     obj: 'Object'
 ) -> 'Integer':
     """ most common color """
-    values = [v for v, _ in obj]
+    values = [v for _, _, v in obj]
     return max(set(values), key=values.count)
     
 
@@ -1440,7 +1441,7 @@ def leastcolor_f(
     obj: 'Object'
 ) -> 'Integer':
     """ least common color """
-    values = [v for v, _ in obj]
+    values = [v for _, _, v in obj]
     return min(set(values), key=values.count)
 
 
@@ -1555,8 +1556,6 @@ def lowermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    if not hasattr(patch, '__len__') or len(patch) == 0:
-        return None
     return max(i for i, j in toindices(patch))
 
 
@@ -1578,8 +1577,6 @@ def uppermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    if not hasattr(patch, '__len__') or len(patch) == 0:
-        return None
     return min(i for i, j in toindices(patch))
 
 
@@ -1601,8 +1598,6 @@ def leftmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    if not hasattr(patch, '__len__') or len(patch) == 0:
-        return None
     return min(j for i, j in toindices(patch))
 
 
@@ -1624,8 +1619,6 @@ def rightmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of rightmost occupied cell """
-    if not hasattr(patch, '__len__') or len(patch) == 0:
-        return None
     return max(j for i, j in toindices(patch))
 
 
@@ -1647,7 +1640,7 @@ def square_t(
     piece: 'Tuple'
 ) -> 'Boolean':
     """ whether the grid forms a square """
-    return len(piece) == len(piece[0]) if piece else True
+    return len(piece) == len(piece[0]) if piece else False
 
 
 def square_f(
@@ -1677,7 +1670,7 @@ def palette_f(
     element: 'FrozenSet'
 ) -> 'IntegerSet':
     """ colors occurring in object """
-    return frozenset(v for v, _ in element)
+    return frozenset(c for _, _, c in element)
 
 
 def normalize_t(
@@ -1729,9 +1722,31 @@ def hmirror_f(
         return frozenset()
     
     d = ulcorner(piece)[0] + lrcorner(piece)[0]
-    if isinstance(next(iter(piece))[1], tuple):
-        return frozenset((v, (d - i, j)) for v, (i, j) in piece)
+    if len(next(iter(piece))) == 3:
+        return frozenset((d - i, j, c) for i, j, c in piece)
     return frozenset((d - i, j) for i, j in piece)
+
+
+def hmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring patch along horizontal """
+    if len(indices) == 0:
+        return frozenset()
+    
+    d = ulcorner(indices)[0] + lrcorner(indices)[0]
+    return frozenset((d - i, j) for i, j in indices)
+
+
+def hmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring patch along horizontal """
+    if len(obj) == 0:
+        return frozenset()
+    
+    d = ulcorner(obj)[0] + lrcorner(obj)[0]
+    return frozenset((d - i, j, c) for i, j, c in obj)
 
 
 def vmirror_t(
@@ -1749,9 +1764,31 @@ def vmirror_f(
         return frozenset()
     
     d = ulcorner(piece)[1] + lrcorner(piece)[1]
-    if isinstance(next(iter(piece))[1], tuple):
-        return frozenset((v, (i, d - j)) for v, (i, j) in piece)
+    if len(next(iter(piece))) == 3:
+        return frozenset((i, d - j, c) for i, j, c in piece)
     return frozenset((i, d - j) for i, j in piece)
+
+
+def vmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring patch along vertical """
+    if len(indices) == 0:
+        return frozenset()
+    
+    d = ulcorner(indices)[1] + lrcorner(indices)[1]
+    return frozenset((i, d - j) for i, j in indices)
+
+
+def vmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring patch along vertical """
+    if len(obj) == 0:
+        return frozenset()
+    
+    d = ulcorner(obj)[1] + lrcorner(obj)[1]
+    return frozenset((i, d - j, c) for i, j, c in obj)
 
 
 def dmirror_t(
@@ -1769,9 +1806,31 @@ def dmirror_f(
         return frozenset()
     
     a, b = ulcorner(piece)
-    if isinstance(next(iter(piece))[1], tuple):
-        return frozenset((v, (j - b + a, i - a + b)) for v, (i, j) in piece)
+    if len(next(iter(piece))) == 3:
+        return frozenset((j - b + a, i - a + b, c) for i, j, c in piece)
     return frozenset((j - b + a, i - a + b) for i, j in piece)
+
+
+def dmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring patch along diagonal """
+    if len(indices) == 0:
+        return frozenset()
+    
+    a, b = ulcorner(indices)
+    return frozenset((j - b + a, i - a + b) for i, j in indices)
+
+
+def dmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring patch along diagonal """
+    if len(obj) == 0:
+        return frozenset()
+    
+    a, b = ulcorner(obj)
+    return frozenset((j - b + a, i - a + b, c) for i, j, c in obj)
 
 
 def cmirror_t(
@@ -1813,9 +1872,9 @@ def upscale_f(
     di, dj = (-di_inv, -dj_inv)
     normed_obj = shift(element, (di, dj))
     o = set()
-    for value, (i, j) in normed_obj:
+    for i, j, c in normed_obj:
         for io, jo in itertools.product(range(factor), range(factor)):
-            o.add((value, (i * factor + io, j * factor + jo)))
+            o.add((i * factor + io, j * factor + jo, c))
     return shift(frozenset(o), (di_inv, dj_inv))
 
 
@@ -2072,10 +2131,8 @@ def backdrop(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices in bounding box of patch """
-    if not hasattr(patch, '__len__'):
-        return frozenset({})
-    if len(patch) == 0:
-        return frozenset({})
+    if not hasattr(patch, '__len__') or len(patch) == 0:
+        return frozenset()
     indices = toindices(patch)
     si, sj = ulcorner(indices)
     ei, ej = lrcorner(patch)
@@ -2086,8 +2143,8 @@ def delta(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices in bounding box but not part of patch """
-    if len(patch) == 0:
-        return frozenset({})
+    if not hasattr(patch, '__len__') or len(patch) == 0:
+        return frozenset()
     return backdrop(patch) - toindices(patch)
 
 
@@ -2174,11 +2231,10 @@ def occurrences(
     h2, w2 = h - oh + 1, w - ow + 1
     for i in range(h2):
         for j in range(w2):
-            occurs = True
-            for v, (a, b) in shift(normed, (i, j)):
-                if not (0 <= a < h and 0 <= b < w and grid[a][b] == v):
-                    occurs = False
-                    break
+            occurs = all(
+                (0 <= a < h and 0 <= b < w and grid[a][b] == v)
+                for a, b, v in shift(normed, (i, j))
+            )
             if occurs:
                 occs.add((i, j))
     return frozenset(occs)
@@ -2213,7 +2269,7 @@ def hperiod(
     w = width_f(normalized)
     for p in range(1, w):
         offsetted = shift(normalized, (0, -p))
-        pruned = frozenset({(c, (i, j)) for c, (i, j) in offsetted if j >= 0})
+        pruned = frozenset({(i, j, c) for i, j, c in offsetted if j >= 0})
         if pruned.issubset(normalized):
             return p
     return w
@@ -2227,7 +2283,7 @@ def vperiod(
     h = height_f(normalized)
     for p in range(1, h):
         offsetted = shift(normalized, (-p, 0))
-        pruned = frozenset({(c, (i, j)) for c, (i, j) in offsetted if i >= 0})
+        pruned = frozenset({(i, j, c) for i, j, c in offsetted if i >= 0})
         if pruned.issubset(normalized):
             return p
     return h
@@ -2237,14 +2293,12 @@ def toindices(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices of object cells """
-    if not hasattr(patch, '__len__'):
-        return frozenset()
-    if len(patch) == 0:
+    if not hasattr(patch, '__len__') or len(patch) == 0:
         return frozenset()
     if not hasattr(next(iter(patch)), '__len__'):
         return frozenset()
-    if isinstance(next(iter(patch))[1], tuple):
-        return frozenset(index for value, index in patch)
+    if len(next(iter(patch))) == 3:
+        return frozenset((i, j) for i, j, c in patch)
     return patch
 
 
@@ -2259,9 +2313,9 @@ def toindices_o(
     obj: 'Object'
 ) -> 'Indices':
     """ indices of object cells """
-    if len(obj) == 0:
+    if not hasattr(obj, '__len__') or len(obj) == 0:
         return frozenset()
-    return frozenset(index for value, index in obj)
+    return frozenset((i, j) for i, j, c in obj)
 
 
 # def shape(
@@ -2331,7 +2385,7 @@ def colorcount_f(
     """ number of cells with color """
     if not isinstance(obj, frozenset):
         return None
-    return sum(v == color for v, _ in obj)
+    return sum(c == color for _, _, c in obj)
 
 
 def colorfilter(
@@ -2339,7 +2393,7 @@ def colorfilter(
     color: 'C_'
 ) -> 'Objects':
     """ filter objects by color """
-    return frozenset(obj for obj in objs if next(iter(obj))[0] == color)
+    return frozenset(obj for obj in objs if next(iter(obj))[2] == color)
 
 
 def sizefilter(
@@ -2361,10 +2415,10 @@ def f_ofcolor(
     grid: 'Grid',
     color: 'C_'
 ) -> 'Indices':
-    """ indices of all grid cells with value """
+    """ indices of all grid cells with color """
     if isinstance(grid[0], int):
         return frozenset()
-    return frozenset((i, j) for i, r in enumerate(grid) for j, v in enumerate(r) if v == color)
+    return frozenset((i, j) for i, r in enumerate(grid) for j, c in enumerate(r) if c == color)
 
 
 def corner(
@@ -2481,9 +2535,7 @@ def recolor_i(
     indices: 'Indices'
 ) -> 'Object':
     """ recolor indices """
-    if color is None or indices is None:
-        return None
-    return frozenset((color, index) for index in toindices_i(indices))
+    return frozenset((i, j, color) for i, j in toindices_i(indices))
 
 
 def recolor_o(
@@ -2491,9 +2543,7 @@ def recolor_o(
     obj: 'Object'
 ) -> 'Object':
     """ recolor obj """
-    if color is None or obj is None:
-        return None
-    return frozenset((color, index) for index in toindices_o(obj))
+    return frozenset((i, j, color) for i, j in toindices_o(obj))
 
 
 def shift(
@@ -2501,13 +2551,11 @@ def shift(
     directions: 'IJ'
 ) -> 'Patch':
     """ shift patch """
-    if patch is None or directions is None:
-        return None
     if len(patch) == 0:
         return patch
     di, dj = directions
-    if isinstance(next(iter(patch))[1], tuple):
-        return frozenset((value, (i + di, j + dj)) for value, (i, j) in patch)
+    if len(next(iter(patch))) == 3:
+        return frozenset((i + di, j + dj, c) for i, j, c in patch)
     return frozenset((i + di, j + dj) for i, j in patch)
 
 
@@ -2533,8 +2581,6 @@ def dneighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ directly adjacent indices """
-    if loc is None:
-        return None
     return frozenset({(loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]), (loc[0], loc[1] - 1), (loc[0], loc[1] + 1)})
 
 
@@ -2542,8 +2588,6 @@ def ineighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ diagonally adjacent indices """
-    if loc is None:
-        return None
     return frozenset({(loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1)})
 
 
@@ -2551,8 +2595,6 @@ def neighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ adjacent indices """
-    if loc is None:
-        return None
     return dneighbors(loc) | ineighbors(loc)
 
 
@@ -2595,22 +2637,22 @@ def objects(
 def partition(
     grid: 'Grid'
 ) -> 'Objects':
-    """ each cell with the same value part of the same object """
+    """ each cell with the same color of the same object """
     return frozenset(
         frozenset(
-            (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
-        ) for value in palette_t(grid)
+            (i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r) if c == color
+        ) for color in palette_t(grid)
     )
 
 
 def fgpartition(
     grid: 'Grid'
 ) -> 'Objects':
-    """ each cell with the same value part of the same object without background """
+    """ each cell with the same color of the same object without background """
     return frozenset(
         frozenset(
-            (v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r) if v == value
-        ) for value in palette_t(grid) - {mostcolor_t(grid)}
+            (i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r) if c == color
+        ) for color in palette_t(grid) - {mostcolor_t(grid)}
     )
 
 
@@ -2748,22 +2790,20 @@ def toobject(
 ) -> 'Object':
     """ object from patch and grid """
     h, w = len(grid), len(grid[0])
-    return frozenset((grid[i][j], (i, j)) for i, j in toindices(patch) if 0 <= i < h and 0 <= j < w)
+    return frozenset((i, j, grid[i][j]) for i, j in toindices(patch) if 0 <= i < h and 0 <= j < w)
 
 
 def asobject(
     grid: 'Grid'
 ) -> 'Object':
     """ conversion of grid to object """
-    return frozenset((v, (i, j)) for i, r in enumerate(grid) for j, v in enumerate(r))
+    return frozenset((i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r))
 
 
 def rot90(
     grid: 'Grid'
 ) -> 'Grid':
     """ quarter clockwise rotation """
-    if isinstance(grid, frozenset):
-        return None
     return tuple(row for row in zip(*grid[::-1]))
 
 
@@ -2805,9 +2845,25 @@ def hmirror_f(
 ) -> 'Patch':
     """ mirroring along horizontal """
     d = ulcorner(patch)[0] + lrcorner(patch)[0]
-    if isinstance(next(iter(patch))[1], tuple):
-        return frozenset((v, (d - i, j)) for v, (i, j) in patch)
+    if len(next(iter(patch))) == 3:
+        return frozenset((d - i, j, c) for i, j, c in patch)
     return frozenset((d - i, j) for i, j in patch)
+
+
+def hmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring along horizontal """
+    d = ulcorner(indices)[0] + lrcorner(indices)[0]
+    return frozenset((d - i, j) for i, j in indices)
+
+
+def hmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring along horizontal """
+    d = ulcorner(obj)[0] + lrcorner(obj)[0]
+    return frozenset((d - i, j, c) for i, j, c in obj)
 
 
 # def vmirror(
@@ -2834,9 +2890,25 @@ def vmirror_f(
 ) -> 'Patch':
     """ mirroring along vertical """
     d = ulcorner(patch)[1] + lrcorner(patch)[1]
-    if isinstance(next(iter(patch))[1], tuple):
-        return frozenset((v, (i, d - j)) for v, (i, j) in patch)
+    if len(next(iter(patch))) == 3:
+        return frozenset((i, d - j, c) for i, j, c in patch)
     return frozenset((i, d - j) for i, j in patch)
+
+
+def vmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring along vertical """
+    d = ulcorner(indices)[1] + lrcorner(indices)[1]
+    return frozenset((i, d - j) for i, j in indices)
+
+
+def vmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring along vertical """
+    d = ulcorner(obj)[1] + lrcorner(obj)[1]
+    return frozenset((i, d - j, c) for i, j, c in obj)
 
 
 # def dmirror(
@@ -2863,9 +2935,25 @@ def dmirror_f(
 ) -> 'Patch':
     """ mirroring along diagonal """
     a, b = ulcorner(patch)
-    if isinstance(next(iter(patch))[1], tuple):
-        return frozenset((v, (j - b + a, i - a + b)) for v, (i, j) in patch)
+    if len(next(iter(patch))) == 3:
+        return frozenset((j - b + a, i - a + b, c) for i, j, c in patch)
     return frozenset((j - b + a, i - a + b) for i, j in patch)
+
+
+def dmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring along diagonal """
+    a, b = ulcorner(indices)
+    return frozenset((j - b + a, i - a + b) for i, j in indices)
+
+
+def dmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring along diagonal """
+    a, b = ulcorner(obj)
+    return frozenset((j - b + a, i - a + b, c) for i, j, c in obj)
 
 
 # def cmirror(
@@ -2891,6 +2979,20 @@ def cmirror_f(
     return vmirror_f(dmirror_f(vmirror_f(patch)))
 
 
+def cmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring along counterdiagonal """
+    return vmirror_f(dmirror_f(vmirror_f(indices)))
+
+
+def cmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring along counterdiagonal """
+    return vmirror_f(dmirror_f(vmirror_f(obj)))
+
+
 def fill(
     grid: 'Grid',
     color: 'C_',
@@ -2912,9 +3014,9 @@ def paint(
     """ paint object to grid """
     h, w = len(grid), len(grid[0])
     grid_painted = list(list(row) for row in grid)
-    for value, (i, j) in obj:
+    for i, j, c in obj:
         if 0 <= i < h and 0 <= j < w:
-            grid_painted[i][j] = value
+            grid_painted[i][j] = c
     return tuple(tuple(row) for row in grid_painted)
 
 
@@ -2941,9 +3043,9 @@ def underpaint(
     h, w = len(grid), len(grid[0])
     bg = mostcolor_t(grid)
     g = [list(r) for r in grid]
-    for value, (i, j) in obj:
+    for i, j, c in obj:
         if 0 <= i < h and 0 <= j < w and g[i][j] == bg:
-            g[i][j] = value
+            g[i][j] = c
     return tuple(tuple(r) for r in g)
 
 
@@ -3009,7 +3111,7 @@ def upscale_t(
         upscaled_row = ()
         for value in row:
             upscaled_row = upscaled_row + tuple(value for _ in range(factor))
-        g = g + tuple(upscaled_row for num in range(factor))
+        g = g + tuple(upscaled_row for _ in range(factor))
     return g
 
 
@@ -3024,9 +3126,8 @@ def upscale_f(
     di, dj = (-di_inv, -dj_inv)
     normed_obj = shift(obj, (di, dj))
     o = set()
-    for value, (i, j) in normed_obj:
-        for io in range(factor):
-            for jo in range(factor):
-                o.add((value, (i * factor + io, j * factor + jo)))
+    for i, j, c in normed_obj:
+        for io, jo in itertools.product(range(factor), range(factor)):
+            o.add((i * factor + io, j * factor + jo, c))
     return shift(frozenset(o), (di_inv, dj_inv))
 
