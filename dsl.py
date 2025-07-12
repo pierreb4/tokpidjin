@@ -1921,6 +1921,8 @@ def subgrid(
     grid: 'Grid'
 ) -> 'Grid':
     """ smallest subgrid containing object """
+    if patch == frozenset():
+        return ()
     return crop(grid, ulcorner(patch), shape_f(patch))
 
 
