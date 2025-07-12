@@ -2541,6 +2541,8 @@ def crop(
     dims: 'IJ'
 ) -> 'Grid':
     """ subgrid specified by start and dimension """
+    if grid == ():
+        return ()
     h, w = len(grid), len(grid[0])
     if start[0] >= 0 and start[0] < h and start[1] >= 0 \
             and start[1] < w and start[0] + dims[0] <= h and start[1] + dims[1] <= w:
