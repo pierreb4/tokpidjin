@@ -430,7 +430,7 @@ def get_arg_rank_t( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'An
 
 def get_arg_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') -> 'Any':
     ranked = sorted(container, key=compfunc, reverse=True)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else ()
 
 
 def get_val_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
