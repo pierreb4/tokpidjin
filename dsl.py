@@ -2230,7 +2230,7 @@ def shoot(
     direction: 'IJ'
 ) -> 'Indices':
     """ line from starting point and direction """
-    if start is ():
+    if start == ():
         return frozenset()
     return connect(start, (start[0] + 42 * direction[0], start[1] + 42 * direction[1]))
 
