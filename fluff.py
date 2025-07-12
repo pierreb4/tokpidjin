@@ -21,8 +21,9 @@ def get_hints(node_name):
 
 
 class Env:
-    def __init__(self, SEED, S, log_path=None, score=0):
+    def __init__(self, SEED, task_id, S, log_path=None, score=0):
         self.SEED = SEED
+        self.task_id = task_id
         self.S = S
         self.score = score
         # self.arg_dict = {}
