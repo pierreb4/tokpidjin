@@ -814,7 +814,7 @@ def extract(
     condition: 'Callable'
 ) -> 'Any':
     """ first element of container that satisfies condition """
-    return next((e for e in container if condition(e)), None)
+    return next((e for e in container if condition(e)), frozenset())
 
 
 def totuple(
