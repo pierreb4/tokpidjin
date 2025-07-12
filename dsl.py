@@ -490,6 +490,10 @@ def subtract(
     b: 'Numerical'
 ) -> 'Numerical':
     """ subtraction """
+    if a == ():
+        return -b
+    if b == ():
+        return a
     if isinstance(a, int) and isinstance(b, int):
         return a - b
     elif isinstance(a, tuple) and isinstance(b, tuple):
