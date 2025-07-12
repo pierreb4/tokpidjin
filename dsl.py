@@ -2032,6 +2032,8 @@ def index(
     loc: 'IJ'
 ) -> 'Integer':
     """ color at location """
+    if loc == ():
+        return -math.inf
     i, j = loc
     h, w = len(grid), len(grid[0])
     return -math.inf if not 0 <= i < h or not 0 <= j < w else grid[loc[0]][loc[1]] 
