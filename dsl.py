@@ -492,8 +492,10 @@ def subtract(
     """ subtraction """
     if b == ():
         return a
-    if a == ():
+    if a == () and b != ():
         return -b
+    if a == () and b == ():
+        return ()
     if isinstance(a, int) and isinstance(b, int):
         return a - b
     elif isinstance(a, tuple) and isinstance(b, tuple):
