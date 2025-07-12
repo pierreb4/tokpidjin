@@ -98,7 +98,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         I = sample['input']
         O = sample['output']
         timed_out, o['train'][i] = run_with_timeout(batt, \
-            [S, I, O, fluff_log_path], timeout=timeout)
+            [task_id, S, I, O, fluff_log_path], timeout=timeout)
 
         t_set = set()
         if o['train'][i] is not None:
@@ -117,7 +117,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         I = sample['input']
         O = sample['output']
         timed_out, o['test'][i] = run_with_timeout(batt, \
-            [S, I, O, fluff_log_path], timeout=timeout)
+            [task_id, S, I, O, fluff_log_path], timeout=timeout)
 
         t_set = set()
         if o['test'][i] is not None:
