@@ -2250,8 +2250,8 @@ def frontiers(
     h, w = len(grid), len(grid[0])
     row_indices = tuple(i for i, r in enumerate(grid) if len(set(r)) == 1)
     column_indices = tuple(j for j, c in enumerate(dmirror_t(grid)) if len(set(c)) == 1)
-    hfrontiers = frozenset({frozenset({(grid[i][j], (i, j)) for j in range(w)}) for i in row_indices})
-    vfrontiers = frozenset({frozenset({(grid[i][j], (i, j)) for i in range(h)}) for j in column_indices})
+    hfrontiers = frozenset({frozenset({(i, j, grid[i][j]) for j in range(w)}) for i in row_indices})
+    vfrontiers = frozenset({frozenset({(i, j, grid[i][j]) for i in range(h)}) for j in column_indices})
     return hfrontiers | vfrontiers
 
 
