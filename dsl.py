@@ -2613,6 +2613,8 @@ def dneighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ directly adjacent indices """
+    if loc == ():
+        return frozenset()
     return frozenset({(loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]), (loc[0], loc[1] - 1), (loc[0], loc[1] + 1)})
 
 
@@ -2620,6 +2622,8 @@ def ineighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ diagonally adjacent indices """
+    if loc == ():
+        return frozenset()
     return frozenset({(loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1)})
 
 
