@@ -295,7 +295,7 @@ class Code:
                 'Callable', 'Container', 'ContainerContainer',
                 'Integer', 'IntegerSet', 'Numerical', 'Indices', 
                 'Boolean', 'IJ', 'TupleTuple', 'Any',
-                # 'NoneType'
+                'None'
             ]:
             print_l(f'{old_hint = }')
         if old_args[i] != old_arg:
