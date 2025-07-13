@@ -2618,7 +2618,7 @@ def ineighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ diagonally adjacent indices """
-    if loc == ():
+    if loc == () or type(loc) is not tuple:
         return frozenset()
     return frozenset({(loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1)})
 
