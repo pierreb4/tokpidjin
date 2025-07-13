@@ -1434,7 +1434,7 @@ def mostcolor_t(
 ) -> 'Integer':
     """ most common color """
     values = [v for r in grid for v in r]
-    return max(set(values), key=values.count)
+    return max(set(values), key=values.count) if values else math.nan
     
 
 def mostcolor_f(
@@ -1442,7 +1442,7 @@ def mostcolor_f(
 ) -> 'Integer':
     """ most common color """
     values = [v for _, _, v in obj]
-    return max(set(values), key=values.count)
+    return max(set(values), key=values.count) if values else math.nan
     
 
 # def leastcolor(
@@ -1458,7 +1458,7 @@ def leastcolor_t(
 ) -> 'Integer':
     """ least common color """
     values = [v for r in grid for v in r]
-    return min(set(values), key=values.count)
+    return min(set(values), key=values.count) if values else math.nan
 
 
 def leastcolor_f(
@@ -1466,7 +1466,7 @@ def leastcolor_f(
 ) -> 'Integer':
     """ least common color """
     values = [v for _, _, v in obj]
-    return min(set(values), key=values.count)
+    return min(set(values), key=values.count) if values else math.nan
 
 
 # def height(
