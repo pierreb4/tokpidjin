@@ -398,7 +398,7 @@ def mir_rot_f( patch: 'Patch', type: 'A4' ) -> 'Patch':
 def get_color_rank_t( grid: 'Grid', rank: 'FL' ) -> 'C_':
     colors = [v for row in grid for v in row]
     ranked = Counter(colors).most_common()
-    return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else None
+    return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else ()
 
 
 # NOTE rank can go positive or negative
@@ -406,7 +406,7 @@ def get_color_rank_t( grid: 'Grid', rank: 'FL' ) -> 'C_':
 def get_color_rank_f( obj: 'Object', rank: 'FL' ) -> 'C_':
     colors = [c for _, _, c in obj]
     ranked = Counter(colors).most_common()
-    return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else None
+    return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else frozenset()
 
 
 def get_rank( container: 'IntegerSet', rank: 'FL') -> 'Integer':
@@ -418,17 +418,17 @@ def get_rank( container: 'IntegerSet', rank: 'FL') -> 'Integer':
 
 def get_arg_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
     ranked = sorted(container, key=compfunc, reverse=True)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else type(container)()
 
 
 def get_arg_rank_t( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'Any':
     ranked = sorted(container, key=compfunc, reverse=True)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else ()
 
 
 def get_arg_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') -> 'Any':
     ranked = sorted(container, key=compfunc, reverse=True)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else ()
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else frozenset()
 
 
 def get_val_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
@@ -454,19 +454,19 @@ def get_val_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') ->
 
 def get_common_rank( container: 'Container', rank: 'FL') -> 'Any':
     ranked = sorted(set(container), key=container.count)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else type(container)()
 
 
 def get_common_rank_t( container: 'Tuple', rank: 'FL') -> 'Any':
     ranked = sorted(set(container), key=container.count)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else ()
 
 
 def get_common_rank_f( container: 'FrozenSet', rank: 'FL') -> 'Any':
     # Since frozensets have unique elements, convert to list first
     container_list = list(container)
     ranked = sorted(set(container_list), key=container_list.count)
-    return ranked[rank] if -len(ranked) <= rank < len(ranked) else None
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else frozenset()
 
 
 def add(
