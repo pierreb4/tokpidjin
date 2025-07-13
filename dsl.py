@@ -2073,6 +2073,10 @@ def connect(
 ) -> 'Indices':
     """ line between two points """
     # print(f"Connecting {a} to {b}")
+    if a = ():
+        return frozenset()
+    if b = ():
+        return frozenset()
 
     ai, aj = a
     bi, bj = b
@@ -2651,7 +2655,7 @@ def objects(
     """ objects occurring on the grid """
     if grid == ():
         return frozenset()
-        
+
     bg = mostcolor_t(grid) if without_bg else None
     objs = set()
     occupied = set()
