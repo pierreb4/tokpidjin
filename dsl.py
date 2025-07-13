@@ -2595,8 +2595,9 @@ def shift(
     directions: 'IJ'
 ) -> 'Patch':
     """ shift patch """
-    if len(patch) == 0:
+    if len(patch) == 0 or directions == ():
         return patch
+
     di, dj = directions
     if len(next(iter(patch))) == 3:
         return frozenset((i + di, j + dj, c) for i, j, c in patch)
