@@ -282,6 +282,8 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
         solver_execution_time = 0.0
         success = True
 
+        correct_sample = 0
+        remove_solve_path = False
         for i, sample in enumerate(task):
             start_time = time.time()
             I = sample['input']
@@ -302,24 +304,30 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             # Check if execution took too long
             if execution_time > timeout_warning:
                 print(f"WARNING: {solve_func[key]} sample {i} took {execution_time:.2f}s - {timed_out = }")
-
-                print_l(f'rm {solve_path[key]}')
-                if os.path.exists(solve_path[key]):
-                    os.remove(solve_path[key])
-
                 slow_solvers.append((key, i, execution_time))
+                remove_solve_path = True
 
                 # If wait is enabled, pause for user inspection
                 if wait:
                     input("Press Enter to continue...")
 
+                break
+
             if not result_list:
                 success = False
                 break
-
+            
             success = any(tid == key for _, _, tid, _ in result_list)
 
-        if success:
+            if success:
+                correct_sample += 1
+
+        if not correct_sample or remove_solve_path:
+            print_l(f'rm {solve_path[key]}')
+            if os.path.exists(solve_path[key]):
+                os.remove(solve_path[key])
+
+        if correct_sample == len(task):
             n_correct += 1
         n_checked += 1
 
