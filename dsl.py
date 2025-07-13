@@ -2073,9 +2073,9 @@ def connect(
 ) -> 'Indices':
     """ line between two points """
     # print(f"Connecting {a} to {b}")
-    if a = ():
+    if a == ():
         return frozenset()
-    if b = ():
+    if b == ():
         return frozenset()
 
     ai, aj = a
