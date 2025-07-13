@@ -2013,10 +2013,10 @@ def center(
     patch: 'Patch'
 ) -> 'IJ':
     """ center of the patch """
-    if uppermost(patch) is None:
-        return None
-    if leftmost(patch) is None:
-        return None
+    if uppermost(patch) is math.nan:
+        return ()
+    if leftmost(patch) is math.nan:
+        return ()
     return (uppermost(patch) + height_f(patch) // 2, leftmost(patch) + width_f(patch) // 2)
 
 
