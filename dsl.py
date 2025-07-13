@@ -2827,13 +2827,23 @@ def toobject(
     return frozenset((i, j, grid[i][j]) for i, j in toindices(patch) if 0 <= i < h and 0 <= j < w)
 
 
+def is_no_grid(x):
+    if not isinstance(x, tuple):  # Not a tuple at all
+        return True
+    for inner in x:
+        if not isinstance(inner, tuple):  # Inner element is not a tuple
+            return True
+        if not all(isinstance(i, int) for i in inner):  # Inner tuple contains non-int
+            return True
+    return False
+    
+    
 def asobject(
     grid: 'Grid'
 ) -> 'Object':
     """ conversion of grid to object """
-    if type(grid) is not tuple:
+    if is_no_grid(grid):
         return frozenset()
-    print(grid)
     return frozenset((i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r))
 
 
