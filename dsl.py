@@ -2835,6 +2835,7 @@ def asobject(
     """ conversion of grid to object """
     if type(grid) is not tuple:
         return frozenset()
+    print(grid)
     return frozenset((i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r))
 
 
