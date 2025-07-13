@@ -491,9 +491,9 @@ def subtract(
 ) -> 'Numerical':
     """ subtraction """
     if b == ():
-        return a
+        b = 0
     if a == ():
-        return -b
+        a = 0
     if isinstance(a, int) and isinstance(b, int):
         return a - b
     elif isinstance(a, tuple) and isinstance(b, tuple):
