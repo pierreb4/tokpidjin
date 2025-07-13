@@ -1580,70 +1580,70 @@ def lowermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    return max(i for i, j in toindices(patch)) if patch else -math.inf
+    return max(i for i, j in toindices(patch)) if patch else math.nan
 
 
 def lowermost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    return max(i for i, j in toindices_i(indices)) if indices else -math.inf
+    return max(i for i, j in toindices_i(indices)) if indices else math.nan
 
 
 def lowermost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    return max(i for i, j in toindices_o(obj)) if obj else -math.inf
+    return max(i for i, j in toindices_o(obj)) if obj else math.nan
 
 
 def uppermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    return min(i for i, j in toindices(patch)) if patch else math.inf
+    return min(i for i, j in toindices(patch)) if patch else math.nan
 
 
 def uppermost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    return min(i for i, j in toindices_i(indices)) if indices else math.inf
+    return min(i for i, j in toindices_i(indices)) if indices else math.nan
 
 
 def uppermost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    return min(i for i, j in toindices_o(obj)) if obj else math.inf
+    return min(i for i, j in toindices_o(obj)) if obj else math.nan
 
 
 def leftmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    return min(j for i, j in toindices(patch)) if patch else math.inf
+    return min(j for i, j in toindices(patch)) if patch else math.nan
 
 
 def leftmost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    return min(j for i, j in toindices_i(indices)) if indices else math.inf
+    return min(j for i, j in toindices_i(indices)) if indices else math.nan
 
 
 def leftmost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    return min(j for i, j in toindices_o(obj)) if obj else math.inf
+    return min(j for i, j in toindices_o(obj)) if obj else math.nan
 
 
 def rightmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of rightmost occupied cell """
-    return max(j for i, j in toindices(patch)) if patch else -math.inf
+    return max(j for i, j in toindices(patch)) if patch else math.nan
 
 
 def rightmost_i(
