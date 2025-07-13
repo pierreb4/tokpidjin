@@ -474,6 +474,10 @@ def add(
     b: 'Numerical'
 ) -> 'Numerical':
     """ addition """
+    if b == ():
+        b = 0
+    if a == ():
+        a = 0
     if isinstance(a, int) and isinstance(b, int):
         return a + b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -506,6 +510,10 @@ def multiply(
     b: 'Numerical'
 ) -> 'Numerical':
     """ multiplication """
+    if b == ():
+        b = 1
+    if a == ():
+        a = 1
     if isinstance(a, int) and isinstance(b, int):
         return a * b
     elif isinstance(a, tuple) and isinstance(b, tuple):
@@ -520,6 +528,10 @@ def divide(
     b: 'Numerical'
 ) -> 'Numerical':
     """ floor division """
+    if b == ():
+        b = 1
+    if a == ():
+        a = 1
     if isinstance(a, int) and isinstance(b, int):
         return a // b
     elif isinstance(a, tuple) and isinstance(b, tuple):
