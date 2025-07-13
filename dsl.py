@@ -406,7 +406,7 @@ def get_color_rank_t( grid: 'Grid', rank: 'FL' ) -> 'C_':
 # NOTE rank can go positive or negative
 # rank=0: most common, rank=-1: least common
 def get_color_rank_f( obj: 'Object', rank: 'FL' ) -> 'C_':
-    colors = [v for v, _ in obj]
+    colors = [c for _, _, c in obj]
     ranked = Counter(colors).most_common()
     return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else None
 
@@ -2842,7 +2842,7 @@ def rot90(
     grid: 'Grid'
 ) -> 'Grid':
     """ quarter clockwise rotation """
-    return tuple(row for row in zip(*grid[::-1]))
+    return tuple(zip(*grid[::-1]))
 
 
 def rot180(
