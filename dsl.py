@@ -2817,7 +2817,7 @@ def color(
 ) -> 'Integer':
     """ color of object """
     first_element = next(iter(obj))
-    return first_element[0] if isinstance(first_element, tuple) else first_element
+    return first_element[2] if isinstance(first_element, tuple) else -math.inf
 
 
 def toobject(
