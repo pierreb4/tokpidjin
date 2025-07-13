@@ -232,6 +232,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
 
     solve_func = {}
     solve_path = {}
+    solve_score = {}
     task_ids = data["train"].keys()
     for task_id in task_ids:
         module = None
@@ -252,6 +253,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
 
         solve_func[task_id] = module['name']
         solve_path[task_id] = module['path']
+        solve_score[task_id] = module['score']
 
 
     n_correct = 0
@@ -322,7 +324,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             if success:
                 correct_sample += 1
 
-        if not correct_sample or remove_solve_path:
+        if correct_sample < solve_score[key] or remove_solve_path:
             print_l(f'rm {solve_path[key]}')
             if os.path.exists(solve_path[key]):
                 os.remove(solve_path[key])
