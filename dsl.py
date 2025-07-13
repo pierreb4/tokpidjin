@@ -1291,12 +1291,12 @@ def other_t(
     value: 'Any'
 ) -> 'Any':
     """ other value in the tuple """
-    # Only proceed if the value is actually in the container
-    if value not in container:
-        return None
+    # # Only proceed if the value is actually in the container
+    # if value not in container:
+    #     return None
     
     filtered = tuple(e for e in container if e != value)
-    return filtered[0] if filtered else None
+    return filtered[0] if filtered else ()
 
 
 def other_f(
@@ -1304,12 +1304,12 @@ def other_f(
     value: 'Any'
 ) -> 'Any':
     """ other value in the frozenset """
-    # Only proceed if the value is actually in the container
-    if value not in container:
-        return None
+    # # Only proceed if the value is actually in the container
+    # if value not in container:
+    #     return None
     
     filtered = remove_f(value, container)
-    return next(iter(filtered)) if filtered else None
+    return next(iter(filtered)) if filtered else frozenset()
 
 
 def apply(
