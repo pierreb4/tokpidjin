@@ -291,13 +291,11 @@ def f_zo_n(S: Samples, function: 'Callable', pick: 'Callable') -> 'Object':
 
 def get_nth_t(container: 'Tuple', rank: 'FL') -> 'Any':
     """Nth item of container, 0-based"""
-    if not hasattr(container, '__len__'):
-        return None
-    if rank < -len(container):
-        return None
-    if rank >= len(container):
-        return None 
-    return container[rank] if container else None
+    if type(container) is not tuple:
+        return math.nan
+    if not -len(container) <= rank < len(container):
+        return math.nan
+    return container[rank] if container else math.nan
 
 
 def get_nth_f(container: 'FrozenSet', rank: 'FL') -> 'Any':
