@@ -2649,6 +2649,9 @@ def objects(
     without_bg: 'Boolean'
 ) -> 'Objects':
     """ objects occurring on the grid """
+    if grid == ():
+        return frozenset()
+        
     bg = mostcolor_t(grid) if without_bg else None
     objs = set()
     occupied = set()
