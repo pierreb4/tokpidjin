@@ -61,6 +61,7 @@ import time
 import sys
 import traceback
 import glob
+import math
 
 from func_timeout import func_timeout, FunctionTimedOut
 
@@ -69,10 +70,10 @@ import constants
 import dsl
 import tests
 import solvers_pre
-import batt
 import run_batt
 
 from utils import *
+from batt import batt
 
 
 def get_data(train=True):
@@ -220,7 +221,7 @@ def check_solvers_formatting(solvers_module, dsl_module, quiet=False):
     print(f'{n_correct} out of {n} solvers in {os.path.basename(module_file)} formatted correctly.')
 
 
-def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning=1.0, wait=False):
+def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, timeout_warning=1.0, wait=False):
     """ checks the implemented solvers for correctness """
     functions = get_functions(solvers_module.__file__)
     solver_functions = [f for f in functions if f.startswith('solve_')]
@@ -233,27 +234,34 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
     solve_func = {}
     solve_path = {}
     solve_score = {}
-    task_ids = data["train"].keys()
-    for task_id in task_ids:
-        module = None
-        files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
-        for file in files:
-            sections = file.split('/')
-            score = int(sections[2])
-            if module is None or score > module['score']:
-                t_log = int(sections[3])
-                module = {
-                    'path': file,
-                    'score': score,
-                    't_log': t_log,
-                    'name': sections[-1][:-3]}
 
-        if module is None:
-            continue
+    if task_id:
+        task_ids = [task_id]
+        solve_func[task_id] = f'solve_{task_id}'
+        solve_path[task_id] = None
+        solve_score[task_id] = -math.inf
+    else:
+        task_ids = data["train"].keys()
+        for task_id in task_ids:
+            module = None
+            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
+            for file in files:
+                sections = file.split('/')
+                score = int(sections[2])
+                if module is None or score > module['score']:
+                    t_log = int(sections[3])
+                    module = {
+                        'path': file,
+                        'score': score,
+                        't_log': t_log,
+                        'name': sections[-1][:-3]}
 
-        solve_func[task_id] = module['name']
-        solve_path[task_id] = module['path']
-        solve_score[task_id] = module['score']
+            if module is None:
+                continue
+
+            solve_func[task_id] = module['name']
+            solve_path[task_id] = module['path']
+            solve_score[task_id] = module['score']
 
 
     n_correct = 0
@@ -296,7 +304,7 @@ def check_solvers_correctness(data, solvers_module, quiet=False, timeout_warning
             #      from solver_dir/solve_{task_id}
             #      - Maybe we could check all top ranking solutions
             #      In run_batt.py we accept (mutated) solutions from any solver
-            timed_out, result_list = run_with_timeout(batt.batt, (key, S, I, O, fluff_log_path), timeout_warning)
+            timed_out, result_list = run_with_timeout(batt, (key, S, I, O, fluff_log_path), timeout_warning)
 
             execution_time = time.time() - start_time
             total_execution_time += execution_time
@@ -358,8 +366,8 @@ def main():
     parser = argparse.ArgumentParser(description="Test ARC solvers")
     parser.add_argument("-q", "--quiet", help="Suppress verbose output and progress bars",
                         action="store_true")
-    parser.add_argument("-k", "--key", help="Test only a specific task key",
-                        type=str)
+    parser.add_argument("--solvers", help="Use this instead of solvers_pre", type=str, default='solvers_pre')
+    parser.add_argument("-i", "--task_id", help="Specific task_id to test", type=str)
     parser.add_argument("--check-dsl", help="Do DSL checks", action="store_true")
     parser.add_argument("--check-format", help="Do format checks", action="store_true")
     parser.add_argument("-t", "--timeout", help="Warning threshold in seconds (default: 1.0)",
@@ -374,8 +382,6 @@ def main():
                         type=int, default=10)
     parser.add_argument("--stats-output", help="File to save statistics output (default: module_stats.json)",
                         type=str, default="module_stats.json")
-    parser.add_argument("--solvers", help="Name of alternative solvers module (default: solvers_pre)",
-                        type=str, default=None)
     args = parser.parse_args()
 
     # Load the specified solver module or use default
@@ -416,22 +422,22 @@ def main():
     eval_data = get_data(train=False)
     total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
 
-    # Filter data if a specific key was provided
-    if args.key:
-        if args.key in total_data['train']:
+    # Filter data if a specific task_id was provided
+    if args.task_id:
+        if args.task_id in total_data['train']:
             total_data = {
-                'train': {args.key: total_data['train'][args.key]},
-                'test': {args.key: total_data['test'][args.key]}
+                'train': {args.task_id: total_data['train'][args.task_id]},
+                'test': {args.task_id: total_data['test'][args.task_id]}
             }
         else:
-            print(f"Key '{args.key}' not found in training data.")
+            print(f"Task '{args.task_id}' not found in training data.")
             return
 
     if args.check_dsl:
         run_dsl_tests(dsl, tests, args.quiet)
     if args.check_format:
         check_solvers_formatting(solvers_module, dsl, args.quiet)
-    n_correct, avg_time, n_tasks = check_solvers_correctness(total_data, solvers_module, args.quiet, args.timeout, args.wait)
+    n_correct, avg_time, n_tasks = check_solvers_correctness(total_data, solvers_module, args.task_id, args.quiet, args.timeout, args.wait)
 
     # Final summary
     print(f"Summary: {n_correct}/{n_tasks} tasks solved correctly with average execution time {avg_time:.4f}s")

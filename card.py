@@ -304,7 +304,7 @@ class Code:
         return has_mutation
 
 
-def main(file, seed, count=0, preserve=False):
+def main(file, seed, count=0, task_id=None, preserve=False):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
@@ -315,7 +315,9 @@ def main(file, seed, count=0, preserve=False):
 
     print_l(f"{len(solvers) = }")
 
-    if count > 0:
+    if task_id:
+        solvers = {k: solvers[k] for k in [task_id]}
+    elif count > 0:
         solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
 
     equals = {task_id: get_equals(source) for task_id, (_, source) in solvers.items()}
@@ -381,6 +383,7 @@ def main(file, seed, count=0, preserve=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run batt on specified tasks')
+    parser.add_argument("-i", "--task_id", help="Specific task_id to test", type=str)
     parser.add_argument('--count', '-c', type=int, default=0,
                         help='Number of tasks to run (default: 0 - all tasks)')
     parser.add_argument("-p", "--preserve", action="store_true",
@@ -400,5 +403,5 @@ from fluff import *
 def batt(task_id, S, I, O, log_path):
     env = Env({seed}, task_id, S, log_path)
     o = []""", file=batt_file)
-        main(batt_file, seed, args.count, args.preserve)
+        main(batt_file, seed, args.count, args.task_id, args.preserve)
         print("    return o", file=batt_file)

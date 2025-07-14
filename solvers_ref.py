@@ -5064,7 +5064,7 @@ def solve_98cf29f8(S, I):
     x7 = rbind(greater, THREE)
     x8 = rbind(toobject, I)
     x9 = rbind(colorcount_f, x6)
-    x10 = chain(x8, ineighbors, last)
+    x10 = chain(x8, ineighbors, identity)
     x11 = chain(x7, x9, x10)
     x12 = sfilter_f(x5, x11)
     x13 = outbox(x12)

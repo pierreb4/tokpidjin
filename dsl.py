@@ -300,8 +300,8 @@ def get_nth_t(container: 'Tuple', rank: 'FL') -> 'Any':
 
 def get_nth_f(container: 'FrozenSet', rank: 'FL') -> 'Any':
     """Nth item of container, 0-based"""
-    if not hasattr(container, '__iter__'):
-        return frozenset()
+    # if not hasattr(container, '__iter__'):
+    #     return frozenset()
     if rank < 0:
         # For negative rank, reverse the iterator
         iterator = iter(reversed(tuple(container)))
@@ -868,7 +868,9 @@ def astuple(
     b: 'Integer'
 ) -> 'Tuple':
     """ constructs a tuple """
-    return (b[0], b[1], a) if isinstance(b, tuple) else (a, b)
+    # XXX a and b aren't just integers :/
+    # return (b[0], b[1], a) if isinstance(b, tuple) else (a, b)
+    return (a, b)
 
 
 def astriple(
@@ -929,6 +931,13 @@ def chain(
 ) -> 'Callable':
     """ function composition with three functions """
     return lambda x: h(g(f(x)))
+    # Print intermediate results
+    # return lambda x: (
+    #     print(f"f({x}) = {f(x)}"),
+    #     print(f"g({f(x)}) = {g(f(x))}"),
+    #     print(f"h({g(f(x))}) = {h(g(f(x)))}"),
+    #     h(g(f(x)))
+    # )[-1]  # Return the last value, which is h(g(f(x)))
 
 
 def matcher(
@@ -1183,6 +1192,7 @@ def sfilter(
     condition: 'Callable'
 ) -> 'Container':
     """ keep elements in container that satisfy condition """
+    print_l(f"sfilter: {container=}, {condition=}")
     return type(container)(e for e in container if condition(e))
 
 
@@ -2167,8 +2177,7 @@ def backdrop(
     """ indices in bounding box of patch """
     if not hasattr(patch, '__len__') or len(patch) == 0:
         return frozenset()
-    indices = toindices(patch)
-    si, sj = ulcorner(indices)
+    si, sj = ulcorner(patch)
     ei, ej = lrcorner(patch)
     return frozenset((i, j) for i in range(si, ei + 1) for j in range(sj, ej + 1))
 
@@ -2338,7 +2347,7 @@ def toindices(
     if not hasattr(next(iter(patch)), '__len__'):
         return frozenset()
     if len(next(iter(patch))) == 3:
-        return frozenset((i, j) for i, j, c in patch)
+        return frozenset((i, j) for i, j, _ in patch)
     return patch
 
 
@@ -3072,7 +3081,7 @@ def fill(
 ) -> 'Grid':
     """ fill color at indices """
     h, w = len(grid), len(grid[0])
-    grid_filled = list(list(row) for row in grid)
+    grid_filled = [list(row) for row in grid]
     for i, j in toindices(patch):
         if 0 <= i < h and 0 <= j < w:
             grid_filled[i][j] = color
@@ -3085,7 +3094,7 @@ def paint(
 ) -> 'Grid':
     """ paint object to grid """
     h, w = len(grid), len(grid[0])
-    grid_painted = list(list(row) for row in grid)
+    grid_painted = [list(row) for row in grid]
     for i, j, c in obj:
         if 0 <= i < h and 0 <= j < w:
             grid_painted[i][j] = c

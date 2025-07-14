@@ -32,7 +32,7 @@ import tests
 import solvers_pre
 
 from grid import *
-from utils import print_l, load_module
+from utils import *
 
 
 def get_data(train=True):
@@ -157,27 +157,31 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             for function in get_functions(solvers_module.__file__)
     }
 
-    # Filter data and definitions for specific key if provided
+    # Filter data and definitions for specific task_id if provided
     md5_hash = None
     solve_func = {} 
     if specific_id:
-        # if key includes 'solve_', strip it
+        # if task_id includes 'solve_', strip it
         if specific_id.startswith('solve_'):
             specific_id = specific_id[6:]
 
-        # if key includes md5_hash, strip it
+        # if task_id includes md5_hash, strip it
         if len(specific_id) == 41:
             md5_hash = specific_id[9:]
             task_id = specific_id[:8]
+        else:
+            task_id = specific_id
 
         if task_id in data['train']:
             task_ids = [task_id]
-            solve_func[task_id] = f'solve_{task_id}_{md5_hash}'
+            solve_func[task_id] = f'solve_{task_id}'
         else:
-            print(f"Key '{task_id}' not found in training data.")
+            print(f"Task_id '{task_id}' not found in training data.")
             return
     else:
         task_ids = data['train'].keys()
+        for task_id in task_ids:
+            solve_func[task_id] = f'solve_{task_id}'
 
     n_correct = 0
     n = len(task_ids)
@@ -190,15 +194,15 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
 
     correct_train = 0
     correct_test = 0
-    for key in iter_keys:
-        task = data['train'][key] + data['test'][key]
-        num_train = len(data['train'][key])
-        num_test = len(data['test'][key])
+    for task_id in iter_keys:
+        task = data['train'][task_id] + data['test'][task_id]
+        num_train = len(data['train'][task_id])
+        num_test = len(data['test'][task_id])
 
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
-            if hasattr(solvers_module, solve_func[key]):
-                solver = getattr(solvers_module, solve_func[key])
+            if task_id in solve_func and hasattr(solvers_module, solve_func[task_id]):
+                solver = getattr(solvers_module, solve_func[task_id])
             else:
                 continue
 
@@ -230,19 +234,19 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                 if match:
                     missing_func = match[1]
                     # Try to patch with specialized variants (suffix _t, _f, etc.)
-                    patched = patch_missing_function(solvers_module, missing_func, key, ex['input'], quiet, update)
+                    patched = patch_missing_function(solvers_module, missing_func, task_id, ex['input'], quiet, update)
                     if patched:
                         n_correct += 1
                         continue
 
             # If we reach here, either patching wasn't requested, or it failed
-            definition = definitions.get(solve_func[key], "Solver not found")
+            definition = definitions.get(solve_func[task_id], "Solver not found")
             lines = len(definition.split('\n')) if isinstance(definition, str) else 0
             if quiet:
-                print(f"Error in {key}: {lines} lines")
+                print(f"Error in {task_id}: {lines} lines")
             else:
-                print(f'Error in {key}:\n{definition}')
-            if specific_id:  # Show detailed error for specific key
+                print(f'Error in {task_id}:\n{definition}')
+            if specific_id:  # Show detailed error for specific task_id
                 print(f"NameError: {str(e)}")
                 try:
                     # Try to show output anyway for debugging
@@ -255,10 +259,10 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                         [ex['input'], ex['output']],
                         titles=['Input', 'Expected Output'])
         except Exception as e:
-            definition = definitions.get(solve_func[key], "Solver not found")
+            definition = definitions.get(solve_func[task_id], "Solver not found")
             lines = len(definition.split('\n')) if isinstance(definition, str) else 0
             if quiet:
-                print_l(f"Error in {key}: {lines} lines")
+                print_l(f"Error in {task_id}: {lines} lines")
             else:
                 # Include source location in exception message
                 exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -267,8 +271,12 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                 lineno = frame.lineno if frame else "unknown"
 
                 print_l(f'Exception in {filename}:{lineno}: {e}')
-                print_l(f'Error in {key}:\n{definition}')
-            if specific_id:  # Show detailed error for specific key
+                print_l(f'Error in {task_id}:\n{definition}')
+
+                show_exception(f'{task_id = }', e)
+                print("traceback: ", traceback.format_exc())
+
+            if specific_id:  # Show detailed error for specific task_id
                 print_l(f"Error: {type(e).__name__}: {str(e)}")
                 try:
                     # Try to show output anyway for debugging
@@ -284,14 +292,14 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
     return n_correct == n
 
 
-def patch_missing_function(solvers_module, missing_func, key, test_input, quiet=False, update_file=False):
+def patch_missing_function(solvers_module, missing_func, task_id, test_input, quiet=False, update_file=False):
     """
     Try to patch a missing function with specialized variants.
     
     Args:
         solvers_module: The solvers module
         missing_func: The name of the function that's missing
-        key: The solver key
+        task_id: The solver task_id
         test_input: Input data to test the patched function with
         quiet: Whether to suppress verbose output
         update_file: Whether to update the solvers.py file with successful patches
@@ -304,7 +312,7 @@ def patch_missing_function(solvers_module, missing_func, key, test_input, quiet=
     import dsl
     import re
     
-    solver_name = f'solve_{key}'
+    solver_name = f'solve_{task_id}'
     solver_func = getattr(solvers_module, solver_name)
     original_code = inspect.getsource(solver_func)
     
@@ -453,11 +461,11 @@ def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Test ARC solvers")
     parser.add_argument("--solvers", help="Use this instead of solvers_pre", type=str, default='solvers_pre')
-    parser.add_argument("-k", "--key", help="Specific task key to test", type=str)
+    parser.add_argument("-i", "--task_id", help="Specific task_id to test", type=str)
     parser.add_argument("--check-dsl", help="Do DSL checks", action="store_true")
     parser.add_argument("--check-format", help="Do format checks", action="store_true")
     parser.add_argument("--do-tests", help="Do DSL tests", action="store_true")
-    parser.add_argument("-q", "--quiet", help="Show only key errors and line counts", action="store_true")
+    parser.add_argument("-q", "--quiet", help="Show only task_id errors and line counts", action="store_true")
     parser.add_argument("--patch", help="Attempt to patch functions with NameErrors using specialized variants", action="store_true")
     parser.add_argument("--update", help="Update solvers.py with successful patches", action="store_true")
     args = parser.parse_args()
@@ -465,9 +473,10 @@ def main():
     # data = get_data(train=True)
     train_data = get_data(train=True)
     eval_data = get_data(train=False)
-    total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
+    # total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
+    total_data = train_data
     
-    task_id = args.key
+    task_id = args.task_id
 
     print_l(f'{args.solvers = }')
 
@@ -485,8 +494,8 @@ def main():
     if args.check_dsl:
         run_dsl_tests(dsl, tests, args.quiet)
     if args.check_format:
-        check_solvers_formatting(solvers_module, dsl, args.key, args.quiet)
-    return check_solvers_correctness(total_data, solvers_module, args.key, args.quiet, args.patch, args.update)
+        check_solvers_formatting(solvers_module, dsl, args.task_id, args.quiet)
+    return check_solvers_correctness(total_data, solvers_module, args.task_id, args.quiet, args.patch, args.update)
 
 if __name__ == "__main__":
     if success := main():
