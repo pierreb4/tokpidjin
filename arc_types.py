@@ -31,8 +31,11 @@ Numerical = Union[Integer, IJ]
 IntegerSet = FrozenSet[Integer]
 Grid = Tuple[Tuple[Integer]]
 Samples = Tuple[Grid, Grid]
+
 # Cell = Tuple[Integer, IntegerTuple]
-Cell = Tuple[C_, IJ]
+# Cell = Tuple[C_, IJ]
+Cell = Tuple(I_, J_, C_)
+
 Object = FrozenSet[Cell]
 Objects = FrozenSet[Object]
 Indices = FrozenSet[IJ]
