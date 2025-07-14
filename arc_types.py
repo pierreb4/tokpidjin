@@ -34,7 +34,7 @@ Samples = Tuple[Grid, Grid]
 
 # Cell = Tuple[Integer, IntegerTuple]
 # Cell = Tuple[C_, IJ]
-Cell = Tuple(I_, J_, C_)
+Cell = Tuple[I_, J_, C_]
 
 Object = FrozenSet[Cell]
 Objects = FrozenSet[Object]
