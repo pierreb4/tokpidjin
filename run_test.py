@@ -452,7 +452,7 @@ def update_solver_in_file(solver_name, patched_code):
 def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Test ARC solvers")
-    parser.add_argument("--solvers", help="Use this instead of solvers_evo", type=str, default='solvers_evo')
+    parser.add_argument("--solvers", help="Use this instead of solvers_pre", type=str, default='solvers_pre')
     parser.add_argument("-k", "--key", help="Specific task key to test", type=str)
     parser.add_argument("--check-dsl", help="Do DSL checks", action="store_true")
     parser.add_argument("--check-format", help="Do format checks", action="store_true")
