@@ -882,12 +882,22 @@ def astuple(
     return (a, b)
 
 
+def ascell(
+    ij: 'IJ',
+    c: 'C_'
+) -> 'Tuple':
+    """ constructs a cell tuple """
+    logger.info(f'ascell: {ij = }, {c = }')
+    return (ij[0], ij[1], c)
+
+
 def astriple(
     i: 'I_',
     j: 'J_',
     c: 'C_'
 ) -> 'Tuple':
     """ constructs a triple tuple """
+    logger.info(f'astriple: {i = }, {j = }, {c = }')
     return (i, j, c)
 
 
@@ -1058,6 +1068,7 @@ def fork(
     b: 'Callable'
 ) -> 'Callable':
     """ creates a wrapper function """
+    logger.info(f'fork: {outer = }, {a = }, {b = }')
     return lambda x: outer(a(x), b(x))
 
 

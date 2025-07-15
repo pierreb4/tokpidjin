@@ -3211,7 +3211,7 @@ def solve_e26a3af2(S, I):
 
 def solve_6cf79266(S, I):
     x1 = f_ofcolor(I, ZERO)
-    x2 = astriple(ZERO, ZERO, ZERO)
+    x2 = ascell(ORIGIN, ZERO)
     x3 = initset(x2)
     x4 = upscale_f(x3, THREE)
     x5 = toindices(x4)
@@ -5206,8 +5206,8 @@ def solve_9aec4887(S, I):
     x11 = lbind(rbind, manhattan)
     x12 = rbind(compose, initset)
     x13 = chain(x12, x11, initset)
-    x14 = chain(first, x9, x13)
-    x15 = fork(astuple, x14, identity)
+    x14 = chain(last, x9, x13)
+    x15 = fork(ascell, identity, x14)
     x16 = apply(x15, x7)
     x17 = paint(x4, x16)
     x18 = fork(connect, ulcorner, lrcorner)
