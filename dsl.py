@@ -1192,7 +1192,7 @@ def sfilter(
     condition: 'Callable'
 ) -> 'Container':
     """ keep elements in container that satisfy condition """
-    print_l(f"sfilter: {container=}, {condition=}")
+    # print_l(f"sfilter: {container=}, {condition=}")
     return type(container)(e for e in container if condition(e))
 
 
