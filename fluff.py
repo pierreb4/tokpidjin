@@ -117,8 +117,8 @@ class Env:
 
         try:
             result = func(*args)
-            print(f'{t_num = } - {func.__name__} - {args}')
-            print(f'{result = }')
+            # print(f'{t_num = } - {func.__name__} - {args}')
+            # print(f'{result = }')
         except Exception as e:
         # except (AttributeError, IndexError, KeyError,
         #         RuntimeError,
