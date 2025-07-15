@@ -924,7 +924,7 @@ def celltuple(
     b: 'Tuple'
 ) -> 'TupleTuple':
     """ constructs a cell tuple from two tuples """
-    logger.info(f'cell: {a = }, {b = }')
+    logger.info(f'celltuple: {a = }, {b = }')
     return tuple((x, y, z) for (x, y), z in zip(a, b))
 
 def branch(
@@ -1932,6 +1932,7 @@ def upscale_f(
     factor: 'Integer'
 ) -> 'FrozenSet':
     """ upscale object """
+    logger.info(f'upscale_f: {element = }, {factor = }')
     if len(element) == 0:
         return frozenset()
     di_inv, dj_inv = ulcorner(element)
@@ -3239,7 +3240,7 @@ def upscale_f(
     factor: 'Integer'
 ) -> 'Object':
     """ upscale object """
-    logger.info(f'upscale: {obj = }, {factor = }')
+    logger.info(f'upscale_f: {obj = }, {factor = }')
     if len(obj) == 0:
         return frozenset()
     di_inv, dj_inv = ulcorner(obj)

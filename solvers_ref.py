@@ -4418,7 +4418,7 @@ def solve_4522001f(S, I):
     x6 = contained(TWO_BY_ZERO, x3)
     x7 = astuple(NINE, NINE)
     x8 = canvas(ZERO, x7)
-    x9 = astuple(THREE, ORIGIN)
+    x9 = ascell(ORIGIN, THREE)
     x10 = initset(x9)
     x11 = upscale_f(x10, TWO)
     x12 = upscale_f(x11, TWO)
