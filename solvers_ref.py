@@ -3211,7 +3211,7 @@ def solve_e26a3af2(S, I):
 
 def solve_6cf79266(S, I):
     x1 = f_ofcolor(I, ZERO)
-    x2 = astuple(ZERO, ORIGIN)
+    x2 = astriple(ZERO, ZERO, ZERO)
     x3 = initset(x2)
     x4 = upscale_f(x3, THREE)
     x5 = toindices(x4)

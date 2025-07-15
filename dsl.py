@@ -752,6 +752,7 @@ def initset(
     value: 'Any'
 ) -> 'FrozenSet':
     """ initialize container """
+    logger.info(f'initset: {value = }')
     return frozenset({value})
 
 
@@ -875,6 +876,7 @@ def astuple(
     b: 'Integer'
 ) -> 'Tuple':
     """ constructs a tuple """
+    logger.info(f'astuple: {a = }, {b = }')
     # XXX a and b aren't just integers :/
     # return (b[0], b[1], a) if isinstance(b, tuple) else (a, b)
     return (a, b)
@@ -3213,6 +3215,7 @@ def upscale_f(
     factor: 'Integer'
 ) -> 'Object':
     """ upscale object """
+    logger.info(f'upscale: {obj = }, {factor = }')
     if len(obj) == 0:
         return frozenset()
     di_inv, dj_inv = ulcorner(obj)
