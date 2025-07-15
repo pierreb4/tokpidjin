@@ -843,6 +843,7 @@ def totuple(
     container: 'FrozenSet'
 ) -> 'Tuple':
     """ conversion to tuple """
+    logger.info(f'totuple: {container = }')
     return tuple(container)
 
 
@@ -914,8 +915,17 @@ def pair(
     b: 'Tuple'
 ) -> 'TupleTuple':
     """ zipping of two tuples """
+    logger.info(f'pair: {a = }, {b = }')
     return tuple(zip(a, b))
 
+
+def celltuple(
+    a: 'Tuple',
+    b: 'Tuple'
+) -> 'TupleTuple':
+    """ constructs a cell tuple from two tuples """
+    logger.info(f'cell: {a = }, {b = }')
+    return tuple((x, y, z) for (x, y), z in zip(a, b))
 
 def branch(
     condition: 'Boolean',
@@ -1358,6 +1368,7 @@ def apply(
     container: 'Container'
 ) -> 'Container':
     """ apply function to each item in container """
+    logger.info(f'apply: {function = }, {container = }')
     return type(container)(function(e) for e in container)
 
 
@@ -2105,6 +2116,7 @@ def connect(
     b: 'IJ'
 ) -> 'Indices':
     """ line between two points """
+    logger.info(f'connect: {a = }, {b = }')
     # print(f"Connecting {a} to {b}")
     if a == ():
         return frozenset()
@@ -2870,6 +2882,7 @@ def color(
     obj: 'Object'
 ) -> 'Integer':
     """ color of object """
+    logger.info(f'color: {obj = }')
     first_element = next(iter(obj), (0, 0, -math.inf))
     return first_element[2] if isinstance(first_element, tuple) else -math.inf
 

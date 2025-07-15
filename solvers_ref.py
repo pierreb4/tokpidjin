@@ -3446,7 +3446,7 @@ def solve_780d0b14(S, I):
     x6 = totuple(x5)
     x7 = apply(color, x6)
     x8 = apply(center, x6)
-    x9 = pair(x7, x8)
+    x9 = celltuple(x8, x7)
     x10 = fill(I, ZERO, x1)
     x11 = paint(x10, x9)
     x12 = rbind(greater, ONE)
