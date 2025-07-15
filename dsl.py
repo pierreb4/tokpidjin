@@ -1,17 +1,21 @@
 import itertools
 import random
 import math
+import logging
 
 from collections import Counter
 
 from arc_types import *
 from utils import *
 
+# Activate logging
+logger = logging.getLogger(__name__)
 
 def identity(
     x: 'Any'
 ) -> 'Any':
     """ identity function """
+    logger.info(f'identity: {x = }')
     return x
 
 
@@ -300,6 +304,7 @@ def get_nth_t(container: 'Tuple', rank: 'FL') -> 'Any':
 
 def get_nth_f(container: 'FrozenSet', rank: 'FL') -> 'Any':
     """Nth item of container, 0-based"""
+    logger.info(f'get_nth_f: {container = }, {rank = }')
     # if not hasattr(container, '__iter__'):
     #     return frozenset()
     if rank < 0:
@@ -334,6 +339,7 @@ def get_nth_by_key_f( container: 'FrozenSet', rank: 'F_', key = identity ) -> 'A
 
 
 def o_g( grid: 'Grid', type: 'R8' ) -> 'Objects':
+    logger.info(f'o_g: {grid = }, {type = }')
     if type == 0:
         return objects(grid, False, False, False)
     elif type == 1:
@@ -545,6 +551,7 @@ def invert(
     n: 'Numerical'
 ) -> 'Numerical':
     """ inversion with respect to addition """
+    logger.info(f'invert: {n = }')
     return -n if isinstance(n, int) else (-n[0], -n[1])
 
 
@@ -945,6 +952,7 @@ def matcher(
     target: 'Any'
 ) -> 'Callable':
     """ construction of equality function """
+    logger.info(f'matcher: {function = }, {target = }')
     return lambda x: function(x) == target
 
 
@@ -1192,7 +1200,7 @@ def sfilter(
     condition: 'Callable'
 ) -> 'Container':
     """ keep elements in container that satisfy condition """
-    # print_l(f"sfilter: {container=}, {condition=}")
+    logger.info(f'sfilter: {container = }, {condition = }')
     return type(container)(e for e in container if condition(e))
 
 
@@ -2023,6 +2031,7 @@ def center(
     patch: 'Patch'
 ) -> 'IJ':
     """ center of the patch """
+    logger.info(f'center: {patch = }')
     if uppermost(patch) is math.nan:
         return ()
     if leftmost(patch) is math.nan:
@@ -2064,6 +2073,7 @@ def canvas(
     dimensions: 'IJ'
 ) -> 'Grid':
     """ grid construction """
+    logger.info(f'canvas: {color = }, {dimensions = }')
     return tuple(
         tuple(color for _ in range(dimensions[1]))
         for _ in range(dimensions[0])
@@ -2604,6 +2614,7 @@ def shift(
     directions: 'IJ'
 ) -> 'Patch':
     """ shift patch """
+    logger.info(f'shift: {patch = }, {directions = }')
     if not patch:
         return frozenset()
     
@@ -3093,6 +3104,7 @@ def paint(
     obj: 'Object'
 ) -> 'Grid':
     """ paint object to grid """
+    logger.info(f'paint: {grid = }, {obj = }')
     h, w = len(grid), len(grid[0])
     grid_painted = [list(row) for row in grid]
     for i, j, c in obj:

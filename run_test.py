@@ -24,6 +24,7 @@ import argparse
 import re
 import sys
 import traceback
+import logging
 
 import arc_types
 import constants
@@ -469,6 +470,9 @@ def main():
     parser.add_argument("--patch", help="Attempt to patch functions with NameErrors using specialized variants", action="store_true")
     parser.add_argument("--update", help="Update solvers.py with successful patches", action="store_true")
     args = parser.parse_args()
+
+    logging.basicConfig(filename='run_test.log', level=logging.INFO,
+                        format='%(levelname)s:%(name)s:%(message)s')
 
     # data = get_data(train=True)
     train_data = get_data(train=True)

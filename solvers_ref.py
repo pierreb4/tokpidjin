@@ -1829,7 +1829,7 @@ def solve_bda2d7a6(S, I):
 
 def solve_137eaa0f(S, I):
     x1 = objects(I, F, T, T)
-    x2 = matcher(first, FIVE)
+    x2 = matcher(last, FIVE)
     x3 = rbind(sfilter, x2)
     x4 = chain(invert, center, x3)
     x5 = fork(shift, identity, x4)
