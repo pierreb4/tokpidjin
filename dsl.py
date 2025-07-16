@@ -892,6 +892,14 @@ def ascell(
     return (ij[0], ij[1], c)
 
 
+def toij(
+    c: 'Cell'
+) -> 'IJ':
+    """ converts a cell to ij coordinates """
+    logger.info(f'toij: {c = }')
+    return (c[0], c[1])
+    
+
 def astriple(
     i: 'I_',
     j: 'J_',
@@ -950,6 +958,7 @@ def compose(
     inner: 'Callable'
 ) -> 'Callable':
     """ function composition """
+    logger.info(f'compose: {outer = }, {inner = }')
     return lambda x: outer(inner(x))
 
 
@@ -2378,6 +2387,7 @@ def toindices(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices of object cells """
+    logger.info(f'toindices: {patch = }')
     if not hasattr(patch, '__len__') or len(patch) == 0:
         return frozenset()
     if not hasattr(next(iter(patch)), '__len__'):
@@ -2391,6 +2401,7 @@ def toindices_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ indices of object cells """
+    logger.info(f'toindices_i: {indices = }')
     return indices
 
 
@@ -2398,6 +2409,7 @@ def toindices_o(
     obj: 'Object'
 ) -> 'Indices':
     """ indices of object cells """
+    logger.info(f'toindices_o: {obj = }')
     if not hasattr(obj, '__len__') or len(obj) == 0:
         return frozenset()
     return frozenset((i, j) for i, j, c in obj)
