@@ -5233,8 +5233,8 @@ def solve_49d1d64f(S, I):
     x11 = rbind(compose, initset)
     x12 = chain(x11, x10, initset)
     x13 = lbind(argmin, x5)
-    x14 = chain(first, x13, x12)
-    x15 = fork(astuple, x14, identity)
+    x14 = chain(last, x13, x12)
+    x15 = fork(ascell, identity, x14)
     x16 = apply(x15, x9)
     O = paint(x6, x16)
     return O
