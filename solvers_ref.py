@@ -4772,7 +4772,7 @@ def solve_952a094c(S, I):
     x7 = lbind(argmax, x2)
     x8 = chain(x7, x6, initset)
     x9 = compose(color, x8)
-    x10 = fork(astuple, x9, identity)
+    x10 = fork(ascell, identity, x9)
     x11 = apply(x10, x5)
     x12 = merge_f(x2)
     x13 = cover(I, x12)
