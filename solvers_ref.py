@@ -6038,7 +6038,7 @@ def solve_264363fd(S, I):
     x13 = branch(x6, UP, RIGHT)
     x14 = add(x13, x11)
     x15 = index(I, x14)
-    x16 = astuple(x12, ORIGIN)
+    x16 = ascell(ORIGIN, x12)
     x17 = initset(x16)
     x18 = cover(I, x2)
     x19 = mostcolor_t(x18)
