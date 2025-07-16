@@ -846,8 +846,8 @@ def solve_496994bd(S, I):
 
 def solve_1f876c06(S, I):
     x1 = fgpartition(I)
-    x2 = compose(last, first)
-    x3 = power(last, TWO)
+    x2 = compose(toij, first)
+    x3 = compose(toij, last)
     x4 = fork(connect, x2, x3)
     x5 = fork(recolor_i, color, x4)
     x6 = mapply(x5, x1)
