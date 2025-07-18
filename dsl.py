@@ -43,7 +43,7 @@ def difference_tuple(a: 'Tuple', b: 'Tuple') -> 'Tuple':
 def p_f( element: 'FrozenSet' ) -> 'IntegerSet':
     """ colors occurring in object """
     logger.info(f'p_f: {element = }')
-    return frozenset(v for v, _ in element)
+    return frozenset(c for _, _, c in element)
 
 
 def p_g( grid: 'Grid' ) -> 'IntegerSet':
