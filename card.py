@@ -312,6 +312,7 @@ def main(file, seed, count=0, task_id=None, preserve=False):
 
     # Get one of best solvers if not mutating (for performance checks)
     solvers = get_solvers([solvers_dir, solvers_pre], best_only=preserve)
+    task_list = list(solvers.keys())
 
     print_l(f"{len(solvers) = }")
 
@@ -319,6 +320,19 @@ def main(file, seed, count=0, task_id=None, preserve=False):
         solvers = {k: solvers[k] for k in [task_id]}
     elif count > 0:
         solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
+
+    task_sizes = []
+    for task_id in task_list:
+        size = 0
+        for S in total_data['train'][task_id] + total_data['test'][task_id]:
+            for ex in S.values():
+                size += sum(len(inner) for inner in ex)
+        task_sizes.append(size)
+
+    # Sort solvers by task size
+    weighted_tasks = list(zip(task_list, task_sizes))
+    weighted_tasks.sort(key=lambda x: x[1], reverse=True)
+    solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
 
     equals = {task_id: get_equals(source) for task_id, (_, source) in solvers.items()}
     code = Code(file)
@@ -366,6 +380,7 @@ def main(file, seed, count=0, task_id=None, preserve=False):
 
             # Was the left side O?
             if old_name == 'O':
+                # TODO Fix/remove num_sol, as func_name doesn't include it
                 num_sol = func_name.split('_')[-1] if len(func_name.split('_')) == 4 else '0'
                 print(f"    if t{code.t_number[old_call]} == O:", file=file)
                 print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '{num_sol}'))", file=file)

@@ -117,6 +117,19 @@ class Env:
 
         try:
             result = func(*args)
+
+            # # Gather score here, depending on function
+            # if func in score_funcs:
+            #     result, score = func(*args)
+            #     self.score += score
+            # else:
+            #     result = func(*args)
+
+            # Will get returned so:
+            # if t32 == O:
+            #     o.append((32, False, 'ed36ccf7', '0', self.score))
+
+
             # print(f'{t_num = } - {func.__name__} - {args}')
             # print(f'{result = }')
         except Exception as e:
