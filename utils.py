@@ -10,10 +10,26 @@ import glob
 
 from pathlib import Path
 from func_timeout import func_timeout, FunctionTimedOut
+from collections import namedtuple
+
+# namedtuple: A factory function from the collections module that creates tuple subclasses with named fields.
+# It enables access to elements by attribute (dot notation) as well as by index, improving code readability.
+# Syntax: from collections import namedtuple
+#          Point = namedtuple('Point', ['x', 'y'])
+#          p = Point(1, 2); print(p.x, p[1])
+# 
+# Main operations:
+# - _replace(**kwargs): Return a new instance with specified fields replaced.
+# - _asdict(): Return a dict mapping field names to their values.
+# - index(value): Return the index of the first occurrence of the value.
+# - _fields: Tuple of field names.
+# - _make(iterable): Create a new instance from an iterable.
 
 
 import solvers_pre
 import solvers_evo
+
+Solver = namedtuple('Solver', ['name', 'path', 'source', 'score'])
 
 Path('solvers_lnk.py').touch()
 import solvers_lnk
@@ -104,7 +120,7 @@ def get_source(task_id, imports=None, best_only=False):
             continue
 
         if imp == solvers_dir:
-            mod_list = []
+            solver_list = []
             weights = []
             best_score = 0
             best_item = None
@@ -114,42 +130,53 @@ def get_source(task_id, imports=None, best_only=False):
                 continue
             for file in files:
                 sections = file.split('/')
-                curr_item = {
-                    'path': file,
-                    'name': 'solve'}
-
                 score = int(sections[-2])
+#               Point = namedtuple('Point', ['x', 'y'])
+#               p = Point(1, 2); print(p.x, p[1])
+#               Solver = namedtuple('Solver', ['name', 'path', 'score', 'source'])
+
+                curr_solver = Solver('solve', file, None, score)
+                # curr_item = {
+                #     'path': file,
+                #     'name': 'solve'}
+
                 if score > best_score:
                     best_score = score
-                    best_item = curr_item
+                    # best_item = curr_item
+                    best_solver = curr_solver
 
-                mod_list.append(curr_item)
+                # solver_list.append(curr_item)
+                solver_list.append(curr_solver)
                 weights.append(score)
 
             if not best_only:
-                mod_item = random.choices(mod_list, weights=weights, k=1)[0]
+                select_solver = random.choices(solver_list, weights=weights, k=1)[0]
             else:
-                mod_item = best_item
+                # select_solver = best_item
+                select_solver = best_solver
 
-            if not mod_item:
+            if not select_solver:
                 continue
 
-            solver_module = load_path(mod_item['path'])
+            solver_module = load_path(select_solver.path)
             if solver_module is None:
                 continue
 
-            func_name = mod_item['name']
+            func_name = select_solver.name
             solver = getattr(solver_module, func_name)
             print_l(f'Found dir solver: {func_name} in {solver_module.__name__}')
-            return func_name, inspect.getsource(solver)
+            select_solver.source = inspect.getsource(solver)
+            # return func_name, inspect.getsource(solver)
+            return select_solver
 
         else:
             func_name = f'solve_{task_id}'
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
                 print_l(f'Found pre solver: {func_name} in {imp.__name__}')
-                return func_name, inspect.getsource(solver)
-    return None, None
+                # return func_name, inspect.getsource(solver)     
+                return Solver(func_name, imp, inspect.getsource(solver), None)
+    return Solver(None, None, None, None)
 
 
 def get_solvers(imports, best_only=False):
@@ -166,9 +193,10 @@ def get_solvers(imports, best_only=False):
 
     solvers = {}
     for task_id in task_list:
-        func_name, source = get_source(task_id, imports, best_only=best_only)
-        if source is not None:
-            solvers[task_id] = (func_name, source)
+        solver = get_source(task_id, imports, best_only=best_only)
+        if solver.source is not None:
+            # solvers[task_id] = (func_name, source)
+            solvers[task_id] = solver
 
     return solvers
 

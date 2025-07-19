@@ -334,7 +334,7 @@ def main(file, seed, count=0, task_id=None, preserve=False):
     weighted_tasks.sort(key=lambda x: x[1], reverse=True)
     solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
 
-    equals = {task_id: get_equals(source) for task_id, (_, source) in solvers.items()}
+    equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
     code = Code(file)
     uses = {}
     # Check if we reach this limit with:
@@ -344,7 +344,11 @@ def main(file, seed, count=0, task_id=None, preserve=False):
     for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
-        for task_id, (func_name, source) in solvers_copy.items():
+        # for task_id, (func_name, source) in solvers_copy.items():
+        for task_id, solver in solvers_copy.items():
+            func_name = solver.name
+            source = solver.source
+
             if task_id not in total_data['train']:
                 continue
 
