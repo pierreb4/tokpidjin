@@ -131,28 +131,18 @@ def get_source(task_id, imports=None, best_only=False):
             for file in files:
                 sections = file.split('/')
                 score = int(sections[-2])
-#               Point = namedtuple('Point', ['x', 'y'])
-#               p = Point(1, 2); print(p.x, p[1])
-#               Solver = namedtuple('Solver', ['name', 'path', 'score', 'source'])
-
                 curr_solver = Solver('solve', file, None, score)
-                # curr_item = {
-                #     'path': file,
-                #     'name': 'solve'}
 
-                if score > best_score:
-                    best_score = score
-                    # best_item = curr_item
+                if curr_solver.score > best_score:
+                    best_score = curr_solver.score
                     best_solver = curr_solver
 
-                # solver_list.append(curr_item)
                 solver_list.append(curr_solver)
-                weights.append(score)
+                weights.append(curr_solver.score)
 
             if not best_only:
                 select_solver = random.choices(solver_list, weights=weights, k=1)[0]
             else:
-                # select_solver = best_item
                 select_solver = best_solver
 
             if not select_solver:
@@ -166,7 +156,6 @@ def get_source(task_id, imports=None, best_only=False):
             solver = getattr(solver_module, func_name)
             print_l(f'Found dir solver: {func_name} in {solver_module.__name__}')
             select_solver.source = inspect.getsource(solver)
-            # return func_name, inspect.getsource(solver)
             return select_solver
 
         else:
@@ -174,7 +163,6 @@ def get_source(task_id, imports=None, best_only=False):
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
                 print_l(f'Found pre solver: {func_name} in {imp.__name__}')
-                # return func_name, inspect.getsource(solver)     
                 return Solver(func_name, imp, inspect.getsource(solver), None)
     return Solver(None, None, None, None)
 
@@ -195,7 +183,6 @@ def get_solvers(imports, best_only=False):
     for task_id in task_list:
         solver = get_source(task_id, imports, best_only=best_only)
         if solver.source is not None:
-            # solvers[task_id] = (func_name, source)
             solvers[task_id] = solver
 
     return solvers
