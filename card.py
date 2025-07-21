@@ -334,6 +334,10 @@ def main(file, seed, count=0, task_id=None, preserve=False):
         weighted_tasks.sort(key=lambda x: x[1], reverse=True)
         solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
 
+
+    start_score()
+
+
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
     code = Code(file)
     uses = {}
