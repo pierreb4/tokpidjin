@@ -321,18 +321,18 @@ def main(file, seed, count=0, task_id=None, preserve=False):
     elif count > 0:
         solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
 
-    task_sizes = []
-    for task_id in task_list:
-        size = 0
-        for S in total_data['train'][task_id] + total_data['test'][task_id]:
-            for ex in S.values():
-                size += sum(len(inner) for inner in ex)
-        task_sizes.append(size)
+        task_sizes = []
+        for task_id in task_list:
+            size = 0
+            for S in total_data['train'][task_id] + total_data['test'][task_id]:
+                for ex in S.values():
+                    size += sum(len(inner) for inner in ex)
+            task_sizes.append(size)
 
-    # Sort solvers by task size
-    weighted_tasks = list(zip(task_list, task_sizes))
-    weighted_tasks.sort(key=lambda x: x[1], reverse=True)
-    solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
+        # Sort solvers by task size
+        weighted_tasks = list(zip(task_list, task_sizes))
+        weighted_tasks.sort(key=lambda x: x[1], reverse=True)
+        solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
 
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
     code = Code(file)

@@ -119,9 +119,10 @@ class Env:
             result = func(*args)
 
             # # Gather score here, depending on function
+            # Score = namedtuple('Score', ['iz', 'zo']) 
             # if func in score_funcs:
-            #     result, score = func(*args)
-            #     self.score += score
+            #     score = func(*args)
+            #     self.score += score.iz + score.zo
             # else:
             #     result = func(*args)
 
