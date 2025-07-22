@@ -98,8 +98,9 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
+        flags = Flags(True, False)
         timed_out, run_result = run_with_timeout(batt, \
-            [task_id, S, I, O, fluff_log_path], timeout=timeout)
+            [task_id, S, I, O, flags, fluff_log_path], timeout=timeout)
         o['train'][i], s['train'][i] = run_result
 
         t_set = set()
@@ -118,8 +119,9 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
+        flags = Flags(False, False)
         timed_out, run_result = run_with_timeout(batt, \
-            [task_id, S, I, O, fluff_log_path], timeout=timeout)
+            [task_id, S, I, O, flags, fluff_log_path], timeout=timeout)
         o['test'][i], s['test'][i] = run_result
 
         t_set = set()
