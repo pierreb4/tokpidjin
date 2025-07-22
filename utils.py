@@ -36,6 +36,13 @@ import solvers_lnk
 Path('solvers_dir.py').touch()
 import solvers_dir
 
+# Flags for training and evaluation modes
+# train: true for train task
+#        false for test task
+# eval: false if we have correct result
+#       true if we don't
+Flags = namedtuple('Flags', ['train', 'eval'])
+
 
 BAD_SOLVERS = {
     '27a28665', # Broken in solvers_ref.py
@@ -162,7 +169,7 @@ def get_source(task_id, imports=None, best_only=False):
             func_name = f'solve_{task_id}'
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
-                print_l(f'Found pre solver: {func_name} in {imp.__name__}')
+                # print_l(f'Found pre solver: {func_name} in {imp.__name__}')
                 return Solver(func_name, imp, inspect.getsource(solver), None)
     return Solver(None, None, None, None)
 
@@ -196,7 +203,7 @@ def load_path(file_path):
     """
     symlink_path = Path(file_path)
     if symlink_path.is_symlink() and not symlink_path.exists():
-        # Remove the broken symlink
+        # Just remove the broken symlink
         symlink_path.unlink()
         return None
         
@@ -229,16 +236,16 @@ def old_run_with_timeout(func, args, timeout=5):
     with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         future = executor.submit(func, *args)
         try:
-            return (False, future.result(timeout=timeout))
+            return False, future.result(timeout=timeout)
         except concurrent.futures.TimeoutError:
-            return (True, None)
+            return True, None
 
 
 def run_with_timeout(func, args, timeout=5):
     try:
-        return (False, func_timeout(timeout, func, args))
+        return False, func_timeout(timeout, func, args)
     except FunctionTimedOut:
-        return (True, None)
+        return True, None
 
 
 def print_l(msg, sep=' ', end='\n', flush=False):

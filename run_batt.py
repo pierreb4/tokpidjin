@@ -86,6 +86,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     # total_task = total_data['train'][task_id] + total_data['test'][task_id]
 
     o = {'train': {}, 'test': {}}
+    s = {'train': {}, 'test': {}}
     all_o = set()
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
 
@@ -97,11 +98,12 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
-        timed_out, o['train'][i] = run_with_timeout(batt, \
+        timed_out, run_result = run_with_timeout(batt, \
             [task_id, S, I, O, fluff_log_path], timeout=timeout)
+        o['train'][i], s['train'][i] = run_result
 
         t_set = set()
-        if o['train'][i] is not None:
+        if run_result is not None:
             all_o = all_o.union(o['train'][i])
             for t, e, tid, m in o['train'][i]:
                 t_set.add(t)
@@ -116,8 +118,9 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
-        timed_out, o['test'][i] = run_with_timeout(batt, \
+        timed_out, run_result = run_with_timeout(batt, \
             [task_id, S, I, O, fluff_log_path], timeout=timeout)
+        o['test'][i], s['test'][i] = run_result
 
         t_set = set()
         if o['test'][i] is not None:

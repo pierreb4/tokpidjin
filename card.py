@@ -6,23 +6,9 @@ import inspect
 
 from pprint import pprint
 
-# import dsl
-
 from utils import *
 from constants import *
 from dsl import *
-
-
-def get_equals(solver):
-    # Catalog assignments in solvers
-    equals = {}
-    for line in solver.split('\n'):
-        if ' = ' in line:
-            parts = line.split(' = ')
-            var_name = parts[0].strip()
-            value = parts[1].strip()
-            equals[var_name] = value
-    return equals
 
 
 # Borrowed from regin.py maybe can go to utils.py?
@@ -304,7 +290,93 @@ class Code:
         return has_mutation
 
 
+def get_equals(source):
+    # Catalog assignments in source
+    equals = {}
+    for line in source.split('\n'):
+        if ' = ' in line:
+            parts = line.split(' = ')
+            var_name = parts[0].strip()
+            value = parts[1].strip()
+            equals[var_name] = value
+    return equals
+
+
+class Scorers:
+    def __init__(self, file, O='O'):
+        self.file = file
+        scorers = load_module('scorers')
+        # Print the list of functions in scorers.py
+        print('Functions in scorers.py:')
+        self.equals = {}
+        for name, func in inspect.getmembers(scorers, inspect.isfunction):
+            if name.startswith('differ_'):
+                print(f'Adding {name}')
+            elif name == 'pickers':
+                print(f'Adding {name}')
+            elif name == 'summer':
+                print(f'Adding {name}')
+            else:
+                continue
+
+            source = inspect.getsource(func)
+            self.equals[name] = get_equals(source)
+
+            for var_name, value in self.equals[name].items():
+                self.equals[name][var_name] = re.sub(r'\bO\b', O, value)
+                print(f'{name}: {var_name} = {value}')
+
+
+    def add_line(self, code, uses):
+        for name in self.equals.keys():
+            equals_name = self.equals[name].copy()
+            print_l(f'Adding {name} to code')
+            for var_name, value in self.equals[name].items():
+                add_solver_line(equals_name, code, uses, preserve=True)
+
+        # TODO Figure how to get the score out
+        #      The score is the last variable going into the file above
+        print(f"    s.append((t{code.t_num}))", file=code.file)
+
+
+def add_solver_line(equals, code, uses, task_id=None, preserve=False):
+    # Take next assignment - x_n = call(...)
+    old_name, old_call = next(iter(equals.items()))
+    uses[old_call] = 0
+
+    # Remove entry from equals
+    del equals[old_name]
+
+    # Check that right side is new
+    has_mutation = False
+    if old_call not in code.t_number.keys():
+        # Then add it to t_call/t_number
+        code.t_num += 1
+        code.t_call[code.t_num] = old_call
+        has_mutation = code.mutate(preserve)
+        code.t_number[old_call] = code.t_num
+
+    # Was the left side O?
+    if old_name == 'O':
+        scorers = Scorers(code.file, O=f't{code.t_number[old_call]}')
+        scorers.add_line(code, uses)
+
+        # TODO Fix/remove num_sol, as func_name doesn't include it
+        func_name = 'solver_path'
+        num_sol = func_name.split('_')[-1] if len(func_name.split('_')) == 4 else 'math.nan'
+
+        print(f"    if t{code.t_number[old_call]} == O:", file=code.file)
+        print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '{num_sol}'))", file=code.file)
+
+    # Replace x_n with t_name[x_call] in rest of solver
+    for x_name, x_call in equals.items():
+        if old_name in x_call:
+            uses[old_call] += 1
+            equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+
+
 def main(file, seed, count=0, task_id=None, preserve=False):
+    scorers = Scorers(file, O='O')
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
@@ -334,23 +406,21 @@ def main(file, seed, count=0, task_id=None, preserve=False):
         weighted_tasks.sort(key=lambda x: x[1], reverse=True)
         solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
 
-
-    start_score()
-
-
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
     code = Code(file)
     uses = {}
+    scorers.add_line(code, uses)
     # Check if we reach this limit with:
     # grep 'x9999 = ' solver_md5/*.py
-    # TODO Just continue as long as we've seen an x_n var previous round,
-    #      as there's still variable O to read
+    # TODO Continue as long as previous round was x_n variable,
+    #      as this insures that there's still variable O to read
     for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
         # for task_id, (func_name, source) in solvers_copy.items():
         for task_id, solver in solvers_copy.items():
             func_name = solver.name
+            solver_path = solver.path
             source = solver.source
 
             if task_id not in total_data['train']:
@@ -361,45 +431,16 @@ def main(file, seed, count=0, task_id=None, preserve=False):
             code.S = S
             code.task_id = task_id
 
-            # Is it empty?
+            # Check if equals is empty
             if not equals[task_id]:
                 # Then remove it from solver list
                 del solvers[task_id]
                 continue
 
-            # Else take next assignment - x_n = call(...)
-            old_name, old_call = next(iter(equals[task_id].items()))
-            uses[old_call] = 0
-
-            # Remove entry from equals
-            del equals[task_id][old_name]
-
-            # Else is the right side new?
-            has_mutation = False
-            if old_call not in code.t_number.keys():
-                # Then add it to t_call/t_number
-                code.t_num += 1
-                code.t_call[code.t_num] = old_call
-
-                # print_l(f'{code.t_num = } - {old_call = }')
-
-                has_mutation = code.mutate(preserve)
-                code.t_number[old_call] = code.t_num
-
-            # Was the left side O?
-            if old_name == 'O':
-                # TODO Fix/remove num_sol, as func_name doesn't include it
-                num_sol = func_name.split('_')[-1] if len(func_name.split('_')) == 4 else '0'
-                print(f"    if t{code.t_number[old_call]} == O:", file=file)
-                print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '{num_sol}'))", file=file)
-
-            # Replace x_n with t_name[x_call] in rest of solver
-            for x_name, x_call in equals[task_id].items():
-                if old_name in x_call:
-                    uses[old_call] += 1
-                    equals[task_id][x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+            add_solver_line(equals[task_id], code, uses, task_id=task_id, preserve=preserve)
 
     # Write t_call into new file call.py
+    # Used in run_batt.py (from call import t_call)
     with open('call.py', 'w') as call_file:
         print(f't_call = {code.t_call}', file=call_file)
 
@@ -424,7 +465,8 @@ from fluff import *
 
 
 def batt(task_id, S, I, O, log_path):
-    env = Env({seed}, task_id, S, log_path)
-    o = []""", file=batt_file)
+    s = []
+    o = []
+    env = Env({seed}, task_id, S, log_path)""", file=batt_file)
         main(batt_file, seed, args.count, args.task_id, args.preserve)
-        print("    return o", file=batt_file)
+        print("    return s, o", file=batt_file)
