@@ -327,7 +327,7 @@ class Scorers:
                 print(f'{name}: {var_name} = {value}')
 
 
-    def add_line(self, code, uses):
+    def add_line(self, code, uses, task_id=None):
         for name in self.equals.keys():
             equals_name = self.equals[name].copy()
             print_l(f'Adding {name} to code')
@@ -336,7 +336,10 @@ class Scorers:
 
         # TODO Figure how to get the score out
         #      The score is the last variable going into the file above
-        print(f"    s.append((t{code.t_num}))", file=code.file)
+        if task_id is not None:
+            task_id = f"'{task_id}'"
+
+        print(f"    s.append((t{code.t_num}, {task_id}))", file=code.file)
 
 
 def add_solver_line(equals, code, uses, task_id=None, preserve=False):
@@ -358,15 +361,15 @@ def add_solver_line(equals, code, uses, task_id=None, preserve=False):
 
     # Was the left side O?
     if old_name == 'O':
-        scorers = Scorers(code.file, O=f't{code.t_number[old_call]}')
-        scorers.add_line(code, uses)
-
         # TODO Fix/remove num_sol, as func_name doesn't include it
         func_name = 'solver_path'
         num_sol = func_name.split('_')[-1] if len(func_name.split('_')) == 4 else 'math.nan'
 
         print(f"    if t{code.t_number[old_call]} == O:", file=code.file)
         print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '{num_sol}'))", file=code.file)
+
+        scorers = Scorers(code.file, O=f't{code.t_number[old_call]}')
+        scorers.add_line(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -409,7 +412,7 @@ def main(file, seed, count=0, task_id=None, preserve=False):
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
     code = Code(file)
     uses = {}
-    scorers.add_line(code, uses)
+    scorers.add_line(code, uses, task_id=task_id)
     # Check if we reach this limit with:
     # grep 'x9999 = ' solver_md5/*.py
     # TODO Continue as long as previous round was x_n variable,
@@ -469,4 +472,4 @@ def batt(task_id, S, I, O, flags, log_path):
     o = []
     env = Env({seed}, task_id, S, log_path)""", file=batt_file)
         main(batt_file, seed, args.count, args.task_id, args.preserve)
-        print("    return s, o", file=batt_file)
+        print("    return o, s", file=batt_file)

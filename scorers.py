@@ -14,7 +14,7 @@ from utils import *
 def differ_p_g_iz(
     I: 'Grid', 
     O: 'Grid', 
-    flags=Flags(True, False): 'Flags'
+    flags: 'Flags' = Flags(True, False)
 ) -> 'Integer':
     x1 = p_g(I)
     x2 = p_g(O)
@@ -42,7 +42,7 @@ def differ_p_g_iz(
 def differ_p_g_zo(
     I: 'Grid', 
     O: 'Grid', 
-    flags=Flags(True, False): 'Flags'
+    flags: 'Flags' = Flags(True, False)
 ) -> 'Integer':
     x1 = p_g(I)
     x2 = p_g(O)
@@ -91,12 +91,11 @@ def differ_p_g_zo(
 def summer(
     I: 'Grid', 
     O: 'Grid', 
-    flags=Flags(True, False): 'Flags'
+    flags: 'Flags' = Flags(True, False)
 ) -> 'Integer':
     x1 = differ_p_g_iz(I, O, flags)
     x2 = differ_p_g_zo(I, O, flags)
     # More to come here
     x3 = add(x1, x2)
-    x4 = score(x3)
-    return x4
+    return x3
 

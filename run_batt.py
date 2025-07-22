@@ -305,14 +305,14 @@ def main(do_list, start=0, count=0, timeout=1):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run batt on specified tasks')
-    parser.add_argument('--tasks', '-t', nargs='*', default=None,
+    parser.add_argument('-i', '--task_ids', nargs='*', default=None,
                         help='List of task IDs to run (default: random task)')
-    parser.add_argument('--start', '-s', type=int, default=0,
+    parser.add_argument('-s', '--start', type=int, default=0,
                         help='Start from this task number (default: 0)')
-    parser.add_argument('--count', '-c', type=int, default=0,
+    parser.add_argument('-c', '--count', type=int, default=0,
                         help='Number of tasks to run (default: 0 - all tasks)')
-    parser.add_argument('--timeout', '-to', type=float, default=1,
+    parser.add_argument('-to', '--timeout', type=float, default=1,
                         help='Timeout for each task in seconds (default: 1)')
     args = parser.parse_args()
 
-    main(do_list=args.tasks, start=args.start, count=args.count, timeout=args.timeout)
+    main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout)
