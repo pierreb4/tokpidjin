@@ -1,4 +1,6 @@
 from utils import *
+from constants import *
+from dsl import *
 
 # NOTE Variable I in differ refers to dynamic grid,
 # from run, initially I, but then a t_n variable,
@@ -22,7 +24,8 @@ def differ_p_g_iz(
     x4 = dedupe(x2)
     x5 = difference_tuple(x3, x4)
     x6 = get_nth_t(x5, F0)
-    x7 = size(x5)    
+    x7 = size(x5)
+    print(f'{x7 = }')
     return x7
 
 
@@ -51,6 +54,7 @@ def differ_p_g_zo(
     x5 = difference_tuple(x4, x3)
     x6 = get_nth_t(x5, F0)
     x7 = size(x5)
+    print(f'{x7 = }')
     return x7
 
 
