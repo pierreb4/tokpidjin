@@ -13,20 +13,18 @@ from dsl import *
 # outputs from test tasks (maybe train=True flag?)
 
 # Flags = namedtuple('Flags', ['train', 'eval'])
+#          flags: 'Flags' = Flags(True, False)
 def differ_p_g_iz(
     I: 'Grid', 
     O: 'Grid', 
-    flags: 'Flags' = Flags(True, False)
+    flags: 'Flags'
 ) -> 'Integer':
     x1 = p_g(I)
     x2 = p_g(O)
-    x3 = dedupe(x1)
-    x4 = dedupe(x2)
-    x5 = difference_tuple(x3, x4)
-    x6 = get_nth_t(x5, F0)
-    x7 = size(x5)
-    print(f'{x7 = }')
-    return x7
+    x3 = difference_tuple(x1, x2)
+    x4 = get_nth_t(x3, F0)
+    x5 = size(x3)
+    return x5
 
 
 # def differ_p_g_iz(I, O, train=True):
@@ -42,20 +40,18 @@ def differ_p_g_iz(
 
 
 # Flags = namedtuple('Flags', ['train', 'eval'])
+#          flags: 'Flags' = Flags(True, False)
 def differ_p_g_zo(
     I: 'Grid', 
     O: 'Grid', 
-    flags: 'Flags' = Flags(True, False)
+    flags: 'Flags'
 ) -> 'Integer':
     x1 = p_g(I)
     x2 = p_g(O)
-    x3 = dedupe(x1)
-    x4 = dedupe(x2)
-    x5 = difference_tuple(x4, x3)
-    x6 = get_nth_t(x5, F0)
-    x7 = size(x5)
-    print(f'{x7 = }')
-    return x7
+    x3 = difference_tuple(x2, x1)
+    x4 = get_nth_t(x3, F0)
+    x5 = size(x3)
+    return x5
 
 
 # def differ_p_g_zo(I, O, train=True):
@@ -92,10 +88,11 @@ def differ_p_g_zo(
 # XXX Probably train and eval flags
 
 # Flags = namedtuple('Flags', ['train', 'eval'])
+#          flags: 'Flags' = Flags(True, False)
 def summer(
     I: 'Grid', 
-    O: 'Grid', 
-    flags: 'Flags' = Flags(True, False)
+    O: 'Grid',
+    flags: 'Flags'
 ) -> 'Integer':
     x1 = differ_p_g_iz(I, O, flags)
     x2 = differ_p_g_zo(I, O, flags)

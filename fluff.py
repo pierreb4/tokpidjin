@@ -27,86 +27,8 @@ class Env:
         self.task_id = task_id
         self.S = S
         self.score = score
-        # self.arg_dict = {}
         self.log_path = 'fluff.log' if log_path is None else log_path
         self.exceptions = 0
-
-
-    def substitute_color(self, arg, constant_dict=COLORS):
-        budget_random = 0.01
-
-        # Get number corresponding to color constant
-        # NOTE Maybe some x_n variables carry constants and could be replaced?
-        if arg in constant_dict.keys():
-            c = constant_dict[arg]
-        elif arg in CONSTANTS.keys() and CONSTANTS[arg] in constant_dict.values():
-            c = CONSTANTS[arg]
-        else:
-            # Probably 'Any' and not a color constant
-            return arg
-
-        S = self.S
-        c_iz = dsl.c_iz(S, p_g)
-        c_zo = dsl.c_zo(S, p_g)
-
-        if c in c_iz and random.random() < 0.5:
-            # Change the score at substitution time
-            self.score -= 1
-            return f'c_iz_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_iz.index(c)})))'
-        elif c in c_zo and random.random() < 0.5:
-            # Change the score at substitution time
-            self.score -= 1
-            return f'c_zo_n(identity(S), identity(p_g), identity(rbind(get_nth_t, F{c_zo.index(c)})))'
-        elif random.random() < budget_random:
-            # Same as usual random replacement
-            return random.choice(list(constant_dict.keys()))
-
-        # Get name corresponding to number
-        constant_list = list(constant_dict.keys())
-        return constant_list[c]
-
-
-    def substitute_rank(self, arg, constant_dict):
-        budget_random = 0.01
-
-        # Only substitute constants 
-        if arg not in constant_dict.keys():
-            return arg
-        
-        if random.random() < budget_random:
-            return replace_random(arg, list(constant_dict.keys()))
-
-        return arg
-
-
-    def substitute_symbol(self, arg, constant_dict):
-        budget_random = 0.01
-
-        # Substitute constants or calls
-        if random.random() < budget_random:
-            return random.choice(list(constant_dict.keys()))
-
-        return arg
-
-
-    def substitute_grid_angle(self, arg, constant_dict=R8_NAMES):
-        budget_random = 0.01
-
-        # Only substitute constants 
-        if arg not in constant_dict.keys():
-            return arg
-
-        c = constant_dict[arg]
-        S = self.S
-        if c == dsl.a_mr(S) and random.random() < 0.5:
-            # Change the score at substitution time
-            self.score -= 1
-            return 'identity(a_mr(S))'        
-        elif random.random() < budget_random:
-            # Same as usual random replacement
-            return random.choice(list(constant_dict.keys()))
-        
-        return arg
 
 
     def do_fluff(self, t_num, t):
@@ -135,13 +57,8 @@ class Env:
             # print(f'{t_num = } - {func.__name__} - {args}')
             # print(f'{result = }')
         except Exception as e:
-        # except (AttributeError, IndexError, KeyError,
-        #         RuntimeError,
-        #         StopIteration, 
-        #         TypeError, ValueError,
-        #         ZeroDivisionError) as e:
-            # TODO Display and resolve exceptions
-            # Let's just display the first 10 exceptions
+            # TODO Log and resolve exceptions
+            #      Log the first few exceptions to fluff.log
             if self.exceptions > 1:
                 return None
             self.exceptions += 1

@@ -206,8 +206,6 @@ class Code:
         if old_args := re.findall(r'\b(\w+)\b', old_call):
             # TODO Track t variables to get to hints
             if old_hints is None:
-
-
                 old_hint = None
                 for i, old_arg in enumerate(old_args):
                     # First deal with t variables
@@ -218,8 +216,7 @@ class Code:
                     elif not preserve:
                         has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
-
-                return self.file_fluff(has_mutation)
+                return self.file_fluff(has_mutation), False
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
                 if old_arg.startswith('t') and old_arg[1:].isdigit():
@@ -229,12 +226,14 @@ class Code:
                 elif not preserve:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
-        return self.file_fluff(has_mutation)
+        get_s = old_hints[0] == 'Grid' if old_hints else False
+        return self.file_fluff(has_mutation), get_s
 
 
     def file_fluff(self, has_mutation):
         call = self.t_call[self.t_num]
         print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call}]) # {self.task_id} - {has_mutation}', file=self.file)
+        # print("    print(f'{t" + str(self.t_num) + " = }')", file=self.file)
         return has_mutation
 
 
@@ -303,7 +302,7 @@ def get_equals(source):
 
 
 class Scorers:
-    def __init__(self, file, O='O'):
+    def __init__(self, file, I='I'):
         self.file = file
         scorers = load_module('scorers')
         # Print the list of functions in scorers.py
@@ -323,7 +322,7 @@ class Scorers:
             self.equals[name] = get_equals(source)
 
             for var_name, value in self.equals[name].items():
-                self.equals[name][var_name] = re.sub(r'\bO\b', O, value)
+                self.equals[name][var_name] = re.sub(r'\bI\b', I, value)
                 print(f'{name}: {var_name} = {value}')
 
 
@@ -334,8 +333,9 @@ class Scorers:
             for var_name, value in self.equals[name].items():
                 add_solver_line(equals_name, code, uses, preserve=True)
 
-        # TODO Figure how to get the score out
-        #      The score is the last variable going into the file above
+            # TODO Append partial scores to s for later processing
+
+        # NOTE The score is the last variable that we add here
         if task_id is not None:
             task_id = f"'{task_id}'"
 
@@ -352,11 +352,12 @@ def add_solver_line(equals, code, uses, task_id=None, preserve=False):
 
     # Check that right side is new
     has_mutation = False
+    get_s = False
     if old_call not in code.t_number.keys():
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
-        has_mutation = code.mutate(preserve)
+        has_mutation, get_s = code.mutate(preserve)
         code.t_number[old_call] = code.t_num
 
     # Was the left side O?
@@ -366,9 +367,11 @@ def add_solver_line(equals, code, uses, task_id=None, preserve=False):
         num_sol = func_name.split('_')[-1] if len(func_name.split('_')) == 4 else 'math.nan'
 
         print(f"    if t{code.t_number[old_call]} == O:", file=code.file)
-        print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '{num_sol}'))", file=code.file)
+        print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', {num_sol}))", file=code.file)
+        get_s = True
 
-        scorers = Scorers(code.file, O=f't{code.t_number[old_call]}')
+    if get_s:
+        scorers = Scorers(code.file, I=f't{code.t_number[old_call]}')
         scorers.add_line(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
@@ -379,7 +382,7 @@ def add_solver_line(equals, code, uses, task_id=None, preserve=False):
 
 
 def main(file, seed, count=0, task_id=None, preserve=False):
-    scorers = Scorers(file, O='O')
+    scorers = Scorers(file, I='I')
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}

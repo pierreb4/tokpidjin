@@ -112,7 +112,10 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 if tid == task_id:
                     print_l(f'Solves train[{i}]: {task_id} - {tid}')
 
+            print_l(f"{i = } - {s['train'][i] = }")
+
             # Add 1 to score just once for each t value
+            # NOTE This score works at DSL call level
             for t in t_set:
                 update_scores(task_start, t, score, t_log)
                 
@@ -133,7 +136,10 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 if tid == task_id:
                     print_l(f'Solves test[{i}]: {task_id} - {tid}')
 
+            print_l(f"{i = } - {s['test'][i] = }")
+
             # Add 1 to score just once for each t value
+            # NOTE This score works at DSL call level
             for t in t_set:
                 update_scores(task_start, t, score, t_log)
 
