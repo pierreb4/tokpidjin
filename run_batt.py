@@ -218,9 +218,9 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         expand_file(solver_def_path, solver_md5_path, None, True)
 
         # Get s_score for this task, or 0
-        s_score = s_score.get(task_id, 0)
+        task_s_score = s_score.get(task_id, 0)
 
-        solver_score = f'solver_dir/solve_{task_id}/{o_score[sol_t]}/{s_score}/{t_log[sol_t]}'
+        solver_score = f'solver_dir/solve_{task_id}/{o_score[sol_t]}/{task_s_score}/{t_log[sol_t]}'
         print_l(f'Save {solver_score}/{md5_hash}.py')
 
         ensure_dir(solver_score)
