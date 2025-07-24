@@ -101,10 +101,10 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         flags = Flags(True, False)
         timed_out, run_result = run_with_timeout(batt, \
             [task_id, S, I, O, flags, fluff_log_path], timeout=timeout)
-        o['train'][i], s['train'][i] = run_result
 
         t_set = set()
         if run_result is not None:
+            o['train'][i], s['train'][i] = run_result
             all_o = all_o.union(o['train'][i])
             for t, e, tid, m in o['train'][i]:
                 t_set.add(t)
@@ -132,10 +132,10 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         flags = Flags(False, False)
         timed_out, run_result = run_with_timeout(batt, \
             [task_id, S, I, O, flags, fluff_log_path], timeout=timeout)
-        o['test'][i], s['test'][i] = run_result
 
         t_set = set()
-        if o['test'][i] is not None:
+        if run_result is not None:
+            o['test'][i], s['test'][i] = run_result
             all_o = all_o.union(o['test'][i])
             for t, e, tid, m in o['test'][i]:
                 t_set.add(t)
