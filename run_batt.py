@@ -176,6 +176,8 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
             task_i, task_id, start_time, fluff_log_path, timeout=1)
 
     # Save solutions
+    # NOTE all_o contains solutions to 'train' and 'test' tasks
+    #      Maybe don't save twice the same things
     for solution in all_o:
         sol_t, sol_e, sol_i, sol_m = solution
 
