@@ -11,7 +11,7 @@ from pathlib import Path
 from utils import *
 from batt import batt
 from call import t_call
-from expand_solver import process_file
+from expand_solver import expand_file
 
 
 class VariableInliner(ast.NodeTransformer):
@@ -90,7 +90,6 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     all_o = set()
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
 
-    # print(f'------ {task_id} - {task_i} - ', end='')
     print_l(f'--- {task_id} - {task_i}')
 
     score = {}
@@ -110,7 +109,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 t_set.add(t)
 
                 if tid == task_id:
-                    print_l(f'Solves train[{i}]: {task_id} - {tid}')
+                    print_l(f'Solves {task_id} - train[{i}]')
 
             print_l(f"{i = } - {s['train'][i] = }")
 
@@ -134,7 +133,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 t_set.add(t)
 
                 if tid == task_id:
-                    print_l(f'Solves test[{i}]: {task_id} - {tid}')
+                    print_l(f'Solves {task_id} - test[{i}]')
 
             print_l(f"{i = } - {s['test'][i] = }")
 
@@ -199,7 +198,7 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
             f.write('\n')
 
         # Expand to .py file
-        process_file(solver_def_path, solver_md5_path, None, True)
+        expand_file(solver_def_path, solver_md5_path, None, True)
 
         solver_score = f'solver_dir/solve_{task_id}/{score[sol_t]}/{t_log[sol_t]}'
         ensure_dir(solver_score)

@@ -27,18 +27,6 @@ def differ_p_g_iz(
     return x5
 
 
-# def differ_p_g_iz(I, O, train=True):
-#     x1 = identity(p_g)
-#     x2 = apply(first, S)
-#     x3 = apply(second, S)
-#     x4 = mapply(x1, x2)
-#     x5 = mapply(x1, x3)
-#     x6 = dedupe(x4)
-#     x7 = dedupe(x5)
-#     x8 = difference_tuple(x4, x5)
-#     return x8
-
-
 # Flags = namedtuple('Flags', ['train', 'eval'])
 #          flags: 'Flags' = Flags(True, False)
 def differ_p_g_zo(
@@ -52,18 +40,6 @@ def differ_p_g_zo(
     x4 = get_nth_t(x3, F0)
     x5 = size(x3)
     return x5
-
-
-# def differ_p_g_zo(I, O, train=True):
-#     x1 = identity(p_g)
-#     x2 = apply(first, S)
-#     x3 = apply(second, S)
-#     x4 = mapply(x1, x2)
-#     x5 = mapply(x1, x3)
-#     x6 = dedupe(x4)
-#     x7 = dedupe(x5)
-#     x8 = difference_tuple(x5, x4)
-#     return x8
 
 
 # TODO Write more like these

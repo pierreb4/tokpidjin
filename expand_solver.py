@@ -326,7 +326,7 @@ def generate_expanded_function(func_name, func_params, steps):
     
     return "\n".join(lines)
 
-def process_file(def_file, py_file, update_solvers_file=None, quiet=False):
+def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
     """
     Process the .def file and generate the .py file with expanded version.
     Renames the original function with _one suffix and gives the original name to the expanded version.
@@ -443,8 +443,8 @@ def process_directory(source_dir, update_solvers_file=None, quiet=False):
 
         processed += 1
         
-        # Pass the quiet parameter to process_file
-        if process_file(def_file, py_file, update_solvers_file, quiet):
+        # Pass the quiet parameter to expand_file
+        if expand_file(def_file, py_file, update_solvers_file, quiet):
             succeeded += 1
     
     return processed, succeeded
@@ -524,7 +524,7 @@ if __name__ == "__main__":
             print_l(f"Error: Definition file {args.def_file} not found")
             sys.exit(1)
         
-        if process_file(args.def_file, args.py_file, args.solvers_file, args.quiet):
+        if expand_file(args.def_file, args.py_file, args.solvers_file, args.quiet):
             if not args.quiet:
                 print_l("Success!")
         else:
