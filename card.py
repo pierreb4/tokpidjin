@@ -339,7 +339,7 @@ class Scorers:
         if task_id is not None:
             task_id = f"'{task_id}'"
 
-        print(f"    s.append((t{code.t_num}, {task_id}))", file=code.file)
+        print(f"    s.append(({task_id}, t{code.t_num}))", file=code.file)
 
 
 def add_solver_line(equals, code, uses, task_id=None, preserve=False):
