@@ -306,15 +306,18 @@ class Scorers:
         self.file = file
         scorers = load_module('scorers')
         # Print the list of functions in scorers.py
-        print('Functions in scorers.py:')
+        # print('Functions in scorers.py:')
         self.equals = {}
         for name, func in inspect.getmembers(scorers, inspect.isfunction):
             if name.startswith('differ_'):
-                print(f'Adding {name}')
+                # print(f'Adding {name}')
+                pass
             elif name == 'pickers':
-                print(f'Adding {name}')
+                # print(f'Adding {name}')
+                pass
             elif name == 'summer':
-                print(f'Adding {name}')
+                # print(f'Adding {name}')
+                pass
             else:
                 continue
 
@@ -329,7 +332,7 @@ class Scorers:
     def add_line(self, code, uses, task_id=None):
         for name in self.equals.keys():
             equals_name = self.equals[name].copy()
-            print_l(f'Adding {name} to code')
+            # print_l(f'Adding {name} to code')
             for var_name, value in self.equals[name].items():
                 add_solver_line(equals_name, code, uses, preserve=True)
 
