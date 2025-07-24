@@ -244,7 +244,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
         task_ids = data["train"].keys()
         for task_id in task_ids:
             module = None
-            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
+            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
             for file in files:
                 sections = file.split('/')
                 score = int(sections[2])
@@ -298,13 +298,15 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             start_time = time.time()
             I = sample['input']
             O = sample['output']
+            flags = Flags(True, False)
 
             # NOTE This looks like the test in run_batt.py but:
             #      Here we check for a single top ranking non-mutated solution 
             #      from solver_dir/solve_{task_id}
             #      - Maybe we could check all top ranking solutions
             #      In run_batt.py we accept (mutated) solutions from any solver
-            timed_out, result_list = run_with_timeout(batt, (key, S, I, O, fluff_log_path), timeout_warning)
+            timed_out, result_list = run_with_timeout(batt, 
+                    (key, S, I, O, flags, fluff_log_path), timeout_warning)
 
             execution_time = time.time() - start_time
             total_execution_time += execution_time

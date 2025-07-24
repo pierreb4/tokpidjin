@@ -99,8 +99,8 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         I = sample['input']
         O = sample['output']
         flags = Flags(True, False)
-        timed_out, run_result = run_with_timeout(batt, \
-            [task_id, S, I, O, flags, fluff_log_path], timeout=timeout)
+        timed_out, run_result = run_with_timeout(batt,
+            [task_id, S, I, O, flags, fluff_log_path], timeout)
 
         t_set = set()
         if run_result is not None:
