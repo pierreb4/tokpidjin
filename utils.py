@@ -29,7 +29,7 @@ from collections import namedtuple
 import solvers_pre
 import solvers_evo
 
-Solver = namedtuple('Solver', ['name', 'path', 'source', 'score'])
+Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 's_score', 't_score'])
 
 Path('solvers_lnk.py').touch()
 import solvers_lnk
@@ -129,23 +129,36 @@ def get_source(task_id, imports=None, best_only=False):
         if imp == solvers_dir:
             solver_list = []
             weights = []
-            best_score = 0
+            best_o_score = 0
             best_item = None
             # list files in solver_dir/solve_{task_id}/*
-            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
+            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
             if not files:
                 continue
             for file in files:
                 sections = file.split('/')
-                score = int(sections[-2])
-                curr_solver = Solver('solve', file, None, score)
+                o_score = int(sections[2])
+                s_score = int(sections[3])
+                t_score = int(sections[4])
 
-                if curr_solver.score > best_score:
-                    best_score = curr_solver.score
+                print_l(f'Processing {file = } - {sections = }')
+                # assert False
+
+                curr_solver = Solver('solve', file, None, o_score, s_score, t_score)
+
+                # TODO Try prioritising s_score over o_score
+                if curr_solver.o_score > best_o_score:
+                    best_o_score = curr_solver.o_score
+                    best_s_score = curr_solver.s_score
                     best_solver = curr_solver
+                elif curr_solver.o_score == best_o_score:
+                    if curr_solver.s_score > best_solver.s_score:
+                        best_s_score = curr_solver.s_score
+                        best_solver = curr_solver
 
                 solver_list.append(curr_solver)
-                weights.append(curr_solver.score)
+                # TODO Try prioritising s_score over o_score
+                weights.append(curr_solver.o_score)
 
             if not best_only:
                 select_solver = random.choices(solver_list, weights=weights, k=1)[0]
@@ -161,8 +174,13 @@ def get_source(task_id, imports=None, best_only=False):
 
             func_name = select_solver.name
             solver = getattr(solver_module, func_name)
-            print_l(f'Found dir solver: {func_name} in {solver_module.__name__}')
-            select_solver.source = inspect.getsource(solver)
+            print_l(f'Found: {func_name} in {solver_module.__name__}')
+
+
+            # select_solver.source = inspect.getsource(solver)
+            select_solver = select_solver._replace(source=inspect.getsource(solver))
+
+
             return select_solver
 
         else:
@@ -170,8 +188,10 @@ def get_source(task_id, imports=None, best_only=False):
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
                 # print_l(f'Found pre solver: {func_name} in {imp.__name__}')
-                return Solver(func_name, imp, inspect.getsource(solver), None)
-    return Solver(None, None, None, None)
+                return Solver(func_name, imp, inspect.getsource(solver), 
+                        None, None, None)
+    return Solver(None, None, None, 
+            None, None, None)
 
 
 def get_solvers(imports, best_only=False):
