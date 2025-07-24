@@ -112,7 +112,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 if tid == task_id:
                     print_l(f'Solves {task_id} - train[{i}]')
 
-            print_l(f"s[train][{i}] - {s['train'][i]}")
+            # print_l(f"s[train][{i}] - {s['train'][i]}")
 
             if s_tuples := [t for t in s['train'][i] if t[0] == task_id]:
                 max_val = max(t[1] for t in s_tuples)
@@ -143,7 +143,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 if tid == task_id:
                     print_l(f'Solves {task_id} - test[{i}]')
 
-            print_l(f"s[test][{i}] - {s['test'][i]}")
+            # print_l(f"s[test][{i}] - {s['test'][i]}")
 
             if s_tuples := [t for t in s['test'][i] if t[0] == task_id]:
                 max_val = max(t[1] for t in s_tuples)
@@ -160,7 +160,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     elapsed = timer() - start_time
     len_task = len(train_task) + len(test_task)
     # print_l(f'-- {len(all_o)}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
-    print_l(f'-- {o_score[t]}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
+    # print_l(f'-- {o_score[t]}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
     return all_o, s_score, o_score, t_log
 
 
