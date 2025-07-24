@@ -141,7 +141,7 @@ def get_source(task_id, imports=None, best_only=False):
                 s_score = int(sections[3])
                 t_score = int(sections[4])
 
-                print_l(f'Processing {file = } - {sections = }')
+                # print_l(f'Processing {file = } - {sections = }')
                 # assert False
 
                 curr_solver = Solver('solve', file, None, o_score, s_score, t_score)

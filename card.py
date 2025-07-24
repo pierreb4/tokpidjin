@@ -326,7 +326,7 @@ class Scorers:
 
             for var_name, value in self.equals[name].items():
                 self.equals[name][var_name] = re.sub(r'\bI\b', I, value)
-                print(f'{name}: {var_name} = {value}')
+                # print(f'{name}: {var_name} = {value}')
 
 
     def add_line(self, code, uses, task_id=None):
