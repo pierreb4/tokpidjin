@@ -117,9 +117,9 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
             if s_tuples := [t for t in s['train'][i] if t[0] == task_id]:
                 max_val = max(t[1] for t in s_tuples)
                 min_val = min(t[1] for t in s_tuples)
-                if tid not in s_score:
-                    s_score[tid] = 0
-                s_score[tid] += max_val - min_val
+                if task_id not in s_score:
+                    s_score[task_id] = 0
+                s_score[task_id] += max_val - min_val
 
             # Add 1 to o_score just once for each t value
             # NOTE o_score is the number of tasks solved by t
@@ -148,9 +148,9 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
             if s_tuples := [t for t in s['test'][i] if t[0] == task_id]:
                 max_val = max(t[1] for t in s_tuples)
                 min_val = min(t[1] for t in s_tuples)
-                if tid not in s_score:
-                    s_score[tid] = 0
-                s_score[tid] += max_val - min_val
+                if task_id not in s_score:
+                    s_score[task_id] = 0
+                s_score[task_id] += max_val - min_val
 
             # Add 1 to o_score just once for each t value
             # NOTE o_Score is the number of tasks solved by t
