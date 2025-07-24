@@ -330,7 +330,6 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 break
             
             success = any(tid == task_id for _, _, tid, _ in run_result[0])
-
             if success:
                 correct_sample += 1
 

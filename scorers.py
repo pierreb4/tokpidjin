@@ -5,8 +5,7 @@ from dsl import *
 # NOTE Variable I in differ refers to dynamic grid,
 # from run, initially I, but then a t_n variable,
 # typically one compared to O
-# TODO Consider moving differ (and future friends)
-# to their own file
+
 # XXX Simplify to diff single (running) input
 # and single (static) output. Think about
 # how to make sure to not take into account
@@ -65,14 +64,14 @@ def differ_p_g_zo(
 
 # Flags = namedtuple('Flags', ['train', 'eval'])
 #          flags: 'Flags' = Flags(True, False)
-def summer(
-    I: 'Grid', 
-    O: 'Grid',
-    flags: 'Flags'
-) -> 'Integer':
-    x1 = differ_p_g_iz(I, O, flags)
-    x2 = differ_p_g_zo(I, O, flags)
-    # More to come here
-    x3 = add(x1, x2)
-    return x3
+# def summer(
+#     I: 'Grid', 
+#     O: 'Grid',
+#     flags: 'Flags'
+# ) -> 'Integer':
+#     x1 = differ_p_g_iz(I, O, flags)
+#     x2 = differ_p_g_zo(I, O, flags)
+#     # More to come here
+#     x3 = add(x1, x2)
+#     return x3
 

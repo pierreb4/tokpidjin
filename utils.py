@@ -187,7 +187,7 @@ def get_source(task_id, imports=None, best_only=False):
             func_name = f'solve_{task_id}'
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
-                # print_l(f'Found pre solver: {func_name} in {imp.__name__}')
+                # print_l(f'Found solver: {func_name} in {imp.__name__}')
                 return Solver(func_name, imp, inspect.getsource(solver), 
                         None, None, None)
     return Solver(None, None, None, 

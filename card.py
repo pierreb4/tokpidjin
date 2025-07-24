@@ -312,9 +312,6 @@ class Scorers:
             if name.startswith('differ_'):
                 # print(f'Adding {name}')
                 pass
-            elif name == 'pickers':
-                # print(f'Adding {name}')
-                pass
             elif name == 'summer':
                 # print(f'Adding {name}')
                 pass
@@ -330,6 +327,9 @@ class Scorers:
 
 
     def add_line(self, code, uses, task_id=None):
+        # if task_id is not None:
+        #     task_id = f"'{task_id}'"
+
         for name in self.equals.keys():
             equals_name = self.equals[name].copy()
             # print_l(f'Adding {name} to code')
@@ -337,12 +337,10 @@ class Scorers:
                 add_solver_line(equals_name, code, uses, preserve=True)
 
             # TODO Append partial scores to s for later processing
+            print(f"    s.append(('{task_id}', '{name}', t{code.t_num} if type(t{code.t_num}) is int else math.nan))", file=code.file)
 
         # NOTE The score is the last variable that we add here
-        if task_id is not None:
-            task_id = f"'{task_id}'"
-
-        print(f"    s.append(({task_id}, t{code.t_num} if type(t{code.t_num}) is int else math.nan))", file=code.file)
+        # print(f"    s.append(({task_id}, t{code.t_num} if type(t{code.t_num}) is int else math.nan))", file=code.file)
 
 
 def add_solver_line(equals, code, uses, task_id=None, preserve=False):
