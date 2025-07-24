@@ -335,7 +335,7 @@ if __name__ == "__main__":
                         help='Start from this task number (default: 0)')
     parser.add_argument('-c', '--count', type=int, default=0,
                         help='Number of tasks to run (default: 0 - all tasks)')
-    parser.add_argument('-to', '--timeout', type=float, default=1,
+    parser.add_argument('-t', '--timeout', type=float, default=1,
                         help='Timeout for each task in seconds (default: 1)')
     args = parser.parse_args()
 

@@ -11,7 +11,7 @@ while date; do
   python card.py
   cp -f batt.py batt_run.py
   RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" | bc)
-  timeout 900s python run_batt.py -t -to $RND_TIMEOUT -c 1000 | tee batt.log
+  timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 | tee batt.log
   
   # Build solvers_*.py if requested
   if [ -n "$BUILD" ]; then
