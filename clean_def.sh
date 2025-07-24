@@ -26,7 +26,7 @@ cd $SOLVER_DIR || exit 1
 TMPFILE=$(mktemp)
 # ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" >$TMPFILE
 
-ls [0-9]*/[0-9]*/[0-9a-f]* | tail -$MAX_NUM_FILES >$TMPFILE
+ls [0-9]*/[0-9]*/[0-9]*/[0-9a-f]* | tail -$MAX_NUM_FILES >$TMPFILE
 mapfile -t keep <$TMPFILE
 rm $TMPFILE
 
@@ -38,7 +38,7 @@ if [[ -z "${keep[@]}" ]]; then
 fi
 
 # Step 2: Remove all files not in the keep list
-for file in [0-9]*/[0-9]*/[0-9a-f]*; do
+for file in [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*; do
     skip=0
     for k in "${keep[@]}"; do
         if [[ "$file" == "$k" ]]; then
