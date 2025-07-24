@@ -327,9 +327,6 @@ class Scorers:
 
 
     def add_line(self, code, uses, task_id=None):
-        # if task_id is not None:
-        #     task_id = f"'{task_id}'"
-
         for name in self.equals.keys():
             equals_name = self.equals[name].copy()
             # print_l(f'Adding {name} to code')
