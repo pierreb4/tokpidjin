@@ -157,7 +157,7 @@ def get_source(task_id, imports=None, best_only=False):
                         best_solver = curr_solver
 
                 solver_list.append(curr_solver)
-                # TODO Try prioritising s_score over o_score
+                # TODO Combine s_score and o_score
                 weights.append(curr_solver.o_score)
 
             if not best_only:
