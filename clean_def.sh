@@ -37,6 +37,8 @@ if [[ -z "${keep[@]}" ]]; then
     exit 1
 fi
 
+rm -v [0-9]*/nan/[0-9]*/[0-9a-f]*
+
 # Step 2: Remove all files not in the keep list
 for file in [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*; do
     skip=0
