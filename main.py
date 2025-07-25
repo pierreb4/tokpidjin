@@ -356,7 +356,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
         print(f'Found {len(slow_solvers)} samples exceeding the {timeout_warning}s threshold.')
         if not quiet and len(slow_solvers) <= 5:  # Show details only if not in quiet mode and not too many slow solvers
             print("Slowest samples:")
-            for task_id, sample_i, time_taken in sorted(slow_solvers, task_id=lambda x: x[2], reverse=True)[:5]:
+            for task_id, sample_i, time_taken in sorted(slow_solvers, key=lambda x: x[2], reverse=True)[:5]:
                 print(f"  - solve_{task_id} sample {sample_i}: {time_taken:.2f}s")
 
     return n_correct, avg_time, n
