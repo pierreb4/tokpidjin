@@ -35,7 +35,7 @@ def second(container: 'Container') -> 'Any':
 
 
 def difference_tuple(a: 'Tuple', b: 'Tuple') -> 'Tuple':
-    """Set difference"""
+    """Tuple difference"""
     logger.info(f'difference_tuple: {a = }, {b = }')
     return type(a)(e for e in a if e not in b)
 

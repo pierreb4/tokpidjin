@@ -18,12 +18,13 @@ def differ_p_g_iz(
     O: 'Grid', 
     flags: 'Flags'
 ) -> 'Integer':
-    x1 = p_g(I)
-    x2 = p_g(O)
-    x3 = difference_tuple(x1, x2)
-    x4 = get_nth_t(x3, F0)
-    x5 = size(x3)
-    return x5
+    x1 = identity(p_g)
+    x2 = x1(I)
+    x3 = x1(O)
+    x4 = difference_tuple(x2, x3)
+    x5 = get_nth_t(x4, F0)
+    x6 = size(x4)
+    return x6
 
 
 # Flags = namedtuple('Flags', ['train', 'eval'])
@@ -33,12 +34,47 @@ def differ_p_g_zo(
     O: 'Grid', 
     flags: 'Flags'
 ) -> 'Integer':
-    x1 = p_g(I)
-    x2 = p_g(O)
-    x3 = difference_tuple(x2, x1)
-    x4 = get_nth_t(x3, F0)
-    x5 = size(x3)
-    return x5
+    x1 = identity(p_g)
+    x2 = x1(I)
+    x3 = x1(O)
+    x4 = difference_tuple(x3, x2)
+    x5 = get_nth_t(x4, F0)
+    x6 = size(x4)
+    return x6
+
+
+def differ_o_g_size_iz(
+    I: 'Grid', 
+    O: 'Grid', 
+    flags: 'Flags'
+) -> 'Integer':
+    x1 = rbind(o_g, R5)
+    x2 = x1(I)
+    x3 = x1(O)
+    x4 = rbind(sizefilter, ONE)
+    x5 = x4(x2)
+    x6 = x4(x3)
+    x7 = difference(x5, x6)
+    x8 = get_nth_f(x7, F0)
+    x9 = size(x7)
+    return x9
+
+
+def differ_o_g_size_zo(
+    I: 'Grid', 
+    O: 'Grid', 
+    flags: 'Flags'
+) -> 'Integer':
+    x1 = rbind(o_g, R5)
+    x2 = x1(I)
+    x3 = x1(O)
+    x4 = rbind(sizefilter, ONE)
+    x5 = x4(x2)
+    x6 = x4(x3)
+    x7 = difference(x6, x5)
+    x8 = get_nth_f(x7, F0)
+    x9 = size(x7)
+    return x9
 
 
 # TODO Write more like these
