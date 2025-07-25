@@ -157,7 +157,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
             #         s_score[task_id] = 0
             #     s_score[task_id] += max_val - min_val
 
-            s_tuples = [t for t in s['train'][i] if t[0] == task_id]
+            s_tuples = [t for t in s['test'][i] if t[0] == task_id]
             names = [t[1] for t in s_tuples]
 
             if s_tuples and names:
