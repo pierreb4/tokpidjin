@@ -334,7 +334,8 @@ class Scorers:
                 add_solver_line(equals_name, code, uses, preserve=True)
 
             # TODO Append partial scores to s for later processing
-            print(f"    s.append(('{task_id}', '{name}', t{code.t_num} if type(t{code.t_num}) is int else math.nan))", file=code.file)
+            print(f"    if type(t{code.t_num}) is int:", file=code.file)
+            print(f"        s.append(('{task_id}', '{name}', t{code.t_num}))", file=code.file)
 
         # NOTE The score is the last variable that we add here
         # print(f"    s.append(({task_id}, t{code.t_num} if type(t{code.t_num}) is int else math.nan))", file=code.file)
