@@ -349,15 +349,15 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
     # Print summary with execution time statistics
     print(f'{n_correct} out of {n} tasks solved correctly using {os.path.basename(solvers_module.__file__)}.')
-    print(f'Average execution time: {avg_time:.4f}s per example')
+    print(f'Average execution time: {avg_time:.4f}s per sample')
 
     # Print top slow solvers if any
     if slow_solvers:
-        print(f'Found {len(slow_solvers)} examples exceeding the {timeout_warning}s threshold.')
+        print(f'Found {len(slow_solvers)} samples exceeding the {timeout_warning}s threshold.')
         if not quiet and len(slow_solvers) <= 5:  # Show details only if not in quiet mode and not too many slow solvers
-            print("Slowest examples:")
-            for task_id, example, time_taken in sorted(slow_solvers, task_id=lambda x: x[2], reverse=True)[:5]:
-                print(f"  - solve_{task_id} example {example}: {time_taken:.2f}s")
+            print("Slowest samples:")
+            for task_id, sample_i, time_taken in sorted(slow_solvers, task_id=lambda x: x[2], reverse=True)[:5]:
+                print(f"  - solve_{task_id} sample {sample_i}: {time_taken:.2f}s")
 
     return n_correct, avg_time, n
 
