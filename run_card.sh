@@ -1,8 +1,45 @@
-MAX_TIMEOUT=$1
-BUILD=$2
-ONERUN=$3
-TMPFILE=$(mktemp)
+#!/bin/bash
 
+usage() {
+  echo "Usage: $0 [-i] [-o] [-b] [-t MAX_TIMEOUT]"
+  echo "  -i: Initial run (removes old solvers)"
+  echo "  -o: One run only (stops after one iteration)"
+  echo "  -b: Build solvers_*.py"
+  echo "  -t: Maximum timeout for each run (default is 1.0 seconds)"
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+INITIAL=
+ONERUN=
+BUILD=
+MAX_TIMEOUT=
+
+while getopts "iobt:" opt; do
+  case $opt in
+    i) INITIAL=true ;;
+    o) ONERUN=true ;;
+    b) BUILD=true ;;
+    t) MAX_TIMEOUT="$OPTARG" ;;
+    *) echo "Invalid option: -$OPTARG" >&2; usage; exit 1 ;;
+  esac
+done
+shift $((OPTIND -1))
+
+if [ -n "$INITIAL" ]; then
+  echo "Initial run - removing old solvers"
+  rm -r solver_dir/* solver_md5/* solver_def/*
+  CARD_OPTION="-p" 
+fi
+
+if [ -z "$MAX_TIMEOUT" ]; then
+  MAX_TIMEOUT=1.0
+fi
+
+TMPFILE=$(mktemp)
 STOP=0
 clear
 while date && [ $STOP -eq 0 ]; do
@@ -16,7 +53,8 @@ while date && [ $STOP -eq 0 ]; do
   unbuffer python main.py -t $MAX_TIMEOUT --solvers solvers_dir \
       | tee main.log
 
-  python card.py
+  python card.py $CARD_OPTION
+  unset CARD_OPTION
   cp -f batt.py batt_run.py
   RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" \
       | bc)
