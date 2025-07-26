@@ -32,7 +32,7 @@ shift $((OPTIND -1))
 if [ -n "$INITIAL" ]; then
   echo "Initial run - removing old solvers"
   rm -r solver_dir/* solver_md5/* solver_def/*
-  CARD_OPTION="-p" 
+  CARD_OPTION="-fs" 
 fi
 
 if [ -z "$MAX_TIMEOUT" ]; then
@@ -48,7 +48,7 @@ while date && [ $STOP -eq 0 ]; do
     STOP=1
   fi
 
-  python card.py -p
+  python card.py -fs
   cp -f batt.py batt_main.py
   unbuffer python main.py -t $MAX_TIMEOUT --solvers solvers_dir \
       | tee main.log

@@ -6,7 +6,7 @@ import random
 from utils import *
 from constants import *
 from dsl import *
-from scorers import *
+from differs import *
 
 
 # Borrowed from regin.py maybe can go to utils.py?
