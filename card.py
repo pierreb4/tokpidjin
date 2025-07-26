@@ -226,8 +226,8 @@ class Code:
                 elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
-        get_scorer = old_hints[0] == 'Grid' if old_hints else False
-        return self.file_fluff(has_mutation), get_scorer
+        get_differ = old_hints[0] == 'Grid' if old_hints else False
+        return self.file_fluff(has_mutation), get_differ
 
 
     def file_fluff(self, has_mutation):
@@ -301,12 +301,12 @@ def get_equals(source):
     return equals
 
 
-class Scorers:
+class Differs:
     def __init__(self, file, I='I'):
         self.file = file
         self.equals = {}
-        scorers_module = load_module('scorers')
-        for name, func in inspect.getmembers(scorers_module, inspect.isfunction):
+        differs_module = load_module('differs')
+        for name, func in inspect.getmembers(differs_module, inspect.isfunction):
             if not name.startswith('differ_'):
                 continue
 
@@ -321,13 +321,13 @@ class Scorers:
         for name in self.equals.keys():
             equals_name = self.equals[name].copy()
             for var_name, value in self.equals[name].items():
-                add_scorer_line(equals_name, code, uses, freeze_scorer=True)
+                add_differ_line(equals_name, code, uses, freeze_differ=True)
 
             print(f"    if type(t{code.t_num}) is int:", file=code.file)
             print(f"        s.append(('{task_id}', '{name}', t{code.t_num}))", file=code.file)
 
 
-def add_scorer_line(equals, code, uses, task_id=None, freeze_scorer=False):
+def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
     # Take next assignment - x_n = call(...)
     old_name, old_call = next(iter(equals.items()))
     uses[old_call] = 0
@@ -340,19 +340,15 @@ def add_scorer_line(equals, code, uses, task_id=None, freeze_scorer=False):
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
-        has_mutation, get_scorer = code.mutate(freeze_scorer)
+        has_mutation, get_differ = code.mutate(freeze_differ)
         code.t_number[old_call] = code.t_num
     else:
         has_mutation = False
-        get_scorer = False
+        get_differ = False
 
-    # Was the left side O?
-    if old_name == 'O':
-        get_scorer = append_to_o(code, old_call, has_mutation, task_id)
-
-    if get_scorer:
-        scorers = Scorers(code.file, I=f't{code.t_number[old_call]}')
-        scorers.add_line(code, uses, task_id=task_id)
+    if get_differ:
+        differs = Differs(code.file, I=f't{code.t_number[old_call]}')
+        differs.add_line(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -362,13 +358,8 @@ def add_scorer_line(equals, code, uses, task_id=None, freeze_scorer=False):
 
 
 def append_to_o(code, old_call, has_mutation, task_id):
-    # TODO Fix/remove num_sol, as func_name doesn't include it
-    func_name = 'solver_path'
-    split_fn = func_name.split('_')
-    num_sol = split_fn[-1] if len(split_fn) == 4 else 'math.nan'
-
     print(f"    if t{code.t_number[old_call]} == O:", file=code.file)
-    print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', {num_sol}))", file=code.file)
+    print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}'))", file=code.file)
     return True
 
 
@@ -385,19 +376,19 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
-        has_mutation, get_scorer = code.mutate(freeze_solver)
+        has_mutation, get_differ = code.mutate(freeze_solver)
         code.t_number[old_call] = code.t_num
     else:
         has_mutation = False
-        get_scorer = False
+        get_differ = False
 
     # Was the left side O?
     if old_name == 'O':
-        get_scorer = append_to_o(code, old_call, has_mutation, task_id)
+        get_differ = append_to_o(code, old_call, has_mutation, task_id)
 
-    if get_scorer:
-        scorers = Scorers(code.file, I=f't{code.t_number[old_call]}')
-        scorers.add_line(code, uses, task_id=task_id)
+    if get_differ:
+        differs = Differs(code.file, I=f't{code.t_number[old_call]}')
+        differs.add_line(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -407,7 +398,6 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
 
 
 def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=False):
-    scorers = Scorers(file, I='I')
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
@@ -440,7 +430,8 @@ def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=F
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
     code = Code(file)
     uses = {}
-    scorers.add_line(code, uses, task_id=task_id)
+    differs = Differs(file, I='I')
+    differs.add_line(code, uses, task_id=task_id)
     # Check if we reach this limit with:
     # grep 'x9999 = ' solver_md5/*.py
     # TODO Continue as long as previous round was x_n variable,
