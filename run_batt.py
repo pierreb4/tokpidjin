@@ -90,7 +90,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     all_o = set()
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
 
-    print_l(f'--- {task_id} - {task_i}')
+    print_l(f'-- {task_id} - {task_i} --')
 
     s_score = {}
     o_score = {}
