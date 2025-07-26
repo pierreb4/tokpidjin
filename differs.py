@@ -2,14 +2,13 @@ from utils import *
 from constants import *
 from dsl import *
 
-# NOTE Variable I in differ refers to dynamic grid,
-# from run, initially I, but then a t_n variable,
-# typically one compared to O
+# NOTE Variable I in differ refers to dynamic grid
+# in run, initially I, but then any grid in t_n
 
-# XXX Simplify to diff single (running) input
-# and single (static) output. Think about
-# how to make sure to not take into account
-# outputs from test tasks (maybe train=True flag?)
+# TODO Differentiate between train and eval,
+# maybe with train and eval flags, but what level?
+# This here might be too low
+# XXX Keeping them as placeholders/reminders
 
 # Flags = namedtuple('Flags', ['train', 'eval'])
 #          flags: 'Flags' = Flags(True, False)
@@ -27,8 +26,6 @@ def differ_p_g_iz(
     return x6
 
 
-# Flags = namedtuple('Flags', ['train', 'eval'])
-#          flags: 'Flags' = Flags(True, False)
 def differ_p_g_zo(
     I: 'Grid', 
     O: 'Grid', 
@@ -91,23 +88,7 @@ def differ_o_g_size_zo(
 #     x2 = get_nth_t(x1, F0)
 #     x3 = differ_p_g_zo(I, O, flags)
 #     x4 = get_nth_t(x3, F0)
+# XXX Put picker bits in card.py
+#     together with substitute funcs
 
-
-# TODO Think about how to use flag further,
-# interaction between train flag, test with 
-# correct result and test without
-# XXX Probably train and eval flags
-
-# Flags = namedtuple('Flags', ['train', 'eval'])
-#          flags: 'Flags' = Flags(True, False)
-# def summer(
-#     I: 'Grid', 
-#     O: 'Grid',
-#     flags: 'Flags'
-# ) -> 'Integer':
-#     x1 = differ_p_g_iz(I, O, flags)
-#     x2 = differ_p_g_zo(I, O, flags)
-#     # More to come here
-#     x3 = add(x1, x2)
-#     return x3
 

@@ -192,7 +192,7 @@ class Code:
         return f't{t_num + 1}'
 
 
-    def mutate(self, preserve=False):
+    def mutate(self, freeze=False):
         old_call = clean_call(self.t_call[self.t_num])
         self.t_call[self.t_num] = old_call
 
@@ -210,24 +210,24 @@ class Code:
                 for i, old_arg in enumerate(old_args):
                     # First deal with t variables
                     if old_arg.startswith('t') and old_arg[1:].isdigit():
-                        if not preserve:
+                        if not freeze:
                             t_n = int(old_arg[1:])
                             has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
-                    elif not preserve:
+                    elif not freeze:
                         has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
                 return self.file_fluff(has_mutation), False
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
                 if old_arg.startswith('t') and old_arg[1:].isdigit():
-                    if not preserve:
+                    if not freeze:
                         t_n = int(old_arg[1:])
                         has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
-                elif not preserve:
+                elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
-        get_s = old_hints[0] == 'Grid' if old_hints else False
-        return self.file_fluff(has_mutation), get_s
+        get_scorer = old_hints[0] == 'Grid' if old_hints else False
+        return self.file_fluff(has_mutation), get_scorer
 
 
     def file_fluff(self, has_mutation):
@@ -304,18 +304,10 @@ def get_equals(source):
 class Scorers:
     def __init__(self, file, I='I'):
         self.file = file
-        scorers = load_module('scorers')
-        # Print the list of functions in scorers.py
-        # print('Functions in scorers.py:')
         self.equals = {}
-        for name, func in inspect.getmembers(scorers, inspect.isfunction):
-            if name.startswith('differ_'):
-                # print(f'Adding {name}')
-                pass
-            elif name == 'summer':
-                # print(f'Adding {name}')
-                pass
-            else:
+        scorers_module = load_module('scorers')
+        for name, func in inspect.getmembers(scorers_module, inspect.isfunction):
+            if not name.startswith('differ_'):
                 continue
 
             source = inspect.getsource(func)
@@ -323,25 +315,19 @@ class Scorers:
 
             for var_name, value in self.equals[name].items():
                 self.equals[name][var_name] = re.sub(r'\bI\b', I, value)
-                # print(f'{name}: {var_name} = {value}')
 
 
     def add_line(self, code, uses, task_id=None):
         for name in self.equals.keys():
             equals_name = self.equals[name].copy()
-            # print_l(f'Adding {name} to code')
             for var_name, value in self.equals[name].items():
-                add_solver_line(equals_name, code, uses, preserve=True)
+                add_scorer_line(equals_name, code, uses, freeze_scorer=True)
 
-            # TODO Append partial scores to s for later processing
             print(f"    if type(t{code.t_num}) is int:", file=code.file)
             print(f"        s.append(('{task_id}', '{name}', t{code.t_num}))", file=code.file)
 
-        # NOTE The score is the last variable that we add here
-        # print(f"    s.append(({task_id}, t{code.t_num} if type(t{code.t_num}) is int else math.nan))", file=code.file)
 
-
-def add_solver_line(equals, code, uses, task_id=None, preserve=False):
+def add_scorer_line(equals, code, uses, task_id=None, freeze_scorer=False):
     # Take next assignment - x_n = call(...)
     old_name, old_call = next(iter(equals.items()))
     uses[old_call] = 0
@@ -350,26 +336,21 @@ def add_solver_line(equals, code, uses, task_id=None, preserve=False):
     del equals[old_name]
 
     # Check that right side is new
-    has_mutation = False
-    get_s = False
-    if old_call not in code.t_number.keys():
+    if old_call not in code.t_number:
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
-        has_mutation, get_s = code.mutate(preserve)
+        has_mutation, get_scorer = code.mutate(freeze_scorer)
         code.t_number[old_call] = code.t_num
+    else:
+        has_mutation = False
+        get_scorer = False
 
     # Was the left side O?
     if old_name == 'O':
-        # TODO Fix/remove num_sol, as func_name doesn't include it
-        func_name = 'solver_path'
-        num_sol = func_name.split('_')[-1] if len(func_name.split('_')) == 4 else 'math.nan'
+        get_scorer = append_to_o(code, old_call, has_mutation, task_id)
 
-        print(f"    if t{code.t_number[old_call]} == O:", file=code.file)
-        print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', {num_sol}))", file=code.file)
-        get_s = True
-
-    if get_s:
+    if get_scorer:
         scorers = Scorers(code.file, I=f't{code.t_number[old_call]}')
         scorers.add_line(code, uses, task_id=task_id)
 
@@ -380,7 +361,52 @@ def add_solver_line(equals, code, uses, task_id=None, preserve=False):
             equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
 
 
-def main(file, seed, count=0, task_id=None, preserve=False):
+def append_to_o(code, old_call, has_mutation, task_id):
+    # TODO Fix/remove num_sol, as func_name doesn't include it
+    func_name = 'solver_path'
+    split_fn = func_name.split('_')
+    num_sol = split_fn[-1] if len(split_fn) == 4 else 'math.nan'
+
+    print(f"    if t{code.t_number[old_call]} == O:", file=code.file)
+    print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', {num_sol}))", file=code.file)
+    return True
+
+
+def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
+    # Take next assignment - x_n = call(...)
+    old_name, old_call = next(iter(equals.items()))
+    uses[old_call] = 0
+
+    # Remove entry from equals
+    del equals[old_name]
+
+    # Check that right side is new
+    if old_call not in code.t_number:
+        # Then add it to t_call/t_number
+        code.t_num += 1
+        code.t_call[code.t_num] = old_call
+        has_mutation, get_scorer = code.mutate(freeze_solver)
+        code.t_number[old_call] = code.t_num
+    else:
+        has_mutation = False
+        get_scorer = False
+
+    # Was the left side O?
+    if old_name == 'O':
+        get_scorer = append_to_o(code, old_call, has_mutation, task_id)
+
+    if get_scorer:
+        scorers = Scorers(code.file, I=f't{code.t_number[old_call]}')
+        scorers.add_line(code, uses, task_id=task_id)
+
+    # Replace x_n with t_name[x_call] in rest of solver
+    for x_name, x_call in equals.items():
+        if old_name in x_call:
+            uses[old_call] += 1
+            equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+
+
+def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=False):
     scorers = Scorers(file, I='I')
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
@@ -388,7 +414,7 @@ def main(file, seed, count=0, task_id=None, preserve=False):
     total_data = train_data
 
     # Get one of best solvers if not mutating (for performance checks)
-    solvers = get_solvers([solvers_dir, solvers_pre], best_only=preserve)
+    solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solver)
     task_list = list(solvers.keys())
 
     print_l(f"{len(solvers) = }")
@@ -442,7 +468,7 @@ def main(file, seed, count=0, task_id=None, preserve=False):
                 del solvers[task_id]
                 continue
 
-            add_solver_line(equals[task_id], code, uses, task_id=task_id, preserve=preserve)
+            add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solver=freeze_solver)
 
     # Write t_call into new file call.py
     # Used in run_batt.py (from call import t_call)
@@ -455,8 +481,10 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--task_id", help="Specific task_id to test", type=str)
     parser.add_argument('--count', '-c', type=int, default=0,
                         help='Number of tasks to run (default: 0 - all tasks)')
-    parser.add_argument("-p", "--preserve", action="store_true",
-                        help="Preserve, don't mutate the code")
+    parser.add_argument("-fs", "--freeze_solver", action="store_true",
+                        help="Freeze solvers, don't mutate them")
+    parser.add_argument("-fd", "--freeze_differ", action="store_true",
+                        help="Freeze differs, don't mutate them")
     args = parser.parse_args()
 
     file_name = 'batt.py'
@@ -473,5 +501,5 @@ def batt(task_id, S, I, O, flags, log_path):
     s = []
     o = []
     env = Env({seed}, task_id, S, log_path)""", file=batt_file)
-        main(batt_file, seed, args.count, args.task_id, args.preserve)
+        main(batt_file, seed, args.count, args.task_id, args.freeze_solver, args.freeze_differ)
         print("    return o, s", file=batt_file)
