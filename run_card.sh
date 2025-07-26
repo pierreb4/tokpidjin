@@ -1,17 +1,27 @@
 MAX_TIMEOUT=$1
 BUILD=$2
+ONERUN=$3
 TMPFILE=$(mktemp)
 
+STOP=0
 clear
-while date; do 
+while date && [ $STOP -eq 0 ]; do
+  if [ -n "$ONERUN" ]; then
+    echo "-- One run only --"
+    STOP=1
+  fi
+
   python card.py -p
   cp -f batt.py batt_main.py
-  python main.py -t $MAX_TIMEOUT --solvers solvers_dir | tee main.log
+  unbuffer python main.py -t $MAX_TIMEOUT --solvers solvers_dir \
+      | tee main.log
 
   python card.py
   cp -f batt.py batt_run.py
-  RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" | bc)
-  timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 | tee batt.log
+  RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" \
+      | bc)
+  unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 \
+      | tee batt.log
   
   # Build solvers_*.py if requested
   if [ -n "$BUILD" ]; then

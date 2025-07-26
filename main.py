@@ -221,15 +221,15 @@ def check_solvers_formatting(solvers_module, dsl_module, quiet=False):
     print(f'{n_correct} out of {n} solvers in {os.path.basename(module_file)} formatted correctly.')
 
 
-def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, timeout_warning=1.0, wait=False):
+def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, timeout=1.0, wait=False):
     """ checks the implemented solvers for correctness """
-    functions = get_functions(solvers_module.__file__)
-    solver_functions = [f for f in functions if f.startswith('solve_')]
+    # functions = get_functions(solvers_module.__file__)
+    # solver_functions = [f for f in functions if f.startswith('solve_')]
 
-    definitions = {
-        function: inspect.getsource(getattr(solvers_module, function)) \
-            for function in solver_functions
-    }
+    # definitions = {
+    #     function: inspect.getsource(getattr(solvers_module, function)) \
+    #         for function in solver_functions
+    # }
 
     solve_func = {}
     solve_path = {}
@@ -306,7 +306,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             #      - Maybe we could check all top ranking solutions
             #      In run_batt.py we accept (mutated) solutions from any solver
             timed_out, run_result = run_with_timeout(batt, 
-                    (task_id, S, I, O, flags, fluff_log_path), timeout_warning)
+                    (task_id, S, I, O, flags, fluff_log_path), timeout)
 
             execution_time = time.time() - start_time
             total_execution_time += execution_time
@@ -314,10 +314,9 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             solver_execution_time += execution_time
 
             # Check if execution took too long
-            if execution_time > timeout_warning:
-                print(f"WARNING: {solve_func[task_id]} sample {i} took {execution_time:.2f}s - {timed_out = }")
+            if execution_time > timeout:
+                print(f"WARNING: {solve_func[task_id]} sample {i} took {execution_time:.2f}s")
                 slow_solvers.append((task_id, i, execution_time))
-                remove_solve_path = True
 
                 # If wait is enabled, pause for user inspection
                 if wait:
@@ -333,8 +332,8 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             if success:
                 correct_sample += 1
 
-        if correct_sample < solve_score[task_id] or remove_solve_path:
-            print_l(f'# {correct_sample = } - {solve_score[task_id] = }')
+        if correct_sample < solve_score[task_id] or timed_out:
+            print_l(f'# {correct_sample = } - {solve_score[task_id] = } - {timed_out = }')
             print_l(f'# rm {solve_path[task_id]}')
             # if os.path.exists(solve_path[task_id]):
             #     os.remove(solve_path[task_id])
@@ -354,7 +353,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
     # Print top slow solvers if any
     if slow_solvers:
-        print(f'Found {len(slow_solvers)} samples exceeding the {timeout_warning}s threshold.')
+        print(f'Found {len(slow_solvers)} samples exceeding the {timeout}s threshold.')
         if not quiet and len(slow_solvers) <= 5:  # Show details only if not in quiet mode and not too many slow solvers
             print("Slowest samples:")
             for task_id, sample_i, time_taken in sorted(slow_solvers, key=lambda x: x[2], reverse=True)[:5]:
