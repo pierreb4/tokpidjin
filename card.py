@@ -359,7 +359,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
 
 def append_to_o(code, old_call, has_mutation, task_id):
     print(f"    if t{code.t_number[old_call]} == O:", file=code.file)
-    print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}'))", file=code.file)
+    print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '-1'))", file=code.file)
     return True
 
 
