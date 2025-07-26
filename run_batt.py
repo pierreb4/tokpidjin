@@ -178,7 +178,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     len_task = len(train_task) + len(test_task)
     # print_l(f'-- {len(all_o)}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
     # print_l(f'-- {o_score[t]}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
-    return all_o, s_score, o_score, t_log
+    return all_o, o_score, s_score, t_log
 
 
 def update_scores(task_start, t, o_score, t_log):
@@ -189,14 +189,16 @@ def update_scores(task_start, t, o_score, t_log):
 
 
 def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1):
-    all_o, s_score, o_score, t_log = check_batt(total_data, 
+    all_o, o_score, s_score, t_log = check_batt(total_data, 
             task_i, task_id, start_time, fluff_log_path, timeout=1)
 
     # Save solutions
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
     for solution in all_o:
-        sol_t, sol_e, sol_i, sol_m = solution
+        sol_t, sol_e, sol_tid, sol_m = solution
+
+        task_id = sol_tid
 
         # Track calls then reverse sequence to rebuild solver
         done = track_solution(sol_t, None)
@@ -240,7 +242,7 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         task_s_score = s_score.get(task_id, 0)
 
         solver_score = f'solver_dir/solve_{task_id}/{o_score[sol_t]}/{task_s_score}/{t_log[sol_t]}'
-        print_l(f'Save {solver_score}/{md5_hash}.py')
+        print_l(f'Save {sol_tid} - {solver_score}/{md5_hash}.py')
 
         ensure_dir(solver_score)
         solver_link = f'{solver_score}/{md5_hash}.py'
