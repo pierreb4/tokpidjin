@@ -237,7 +237,8 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
     if task_id:
         task_ids = [task_id]
-        solve_func[task_id] = f'solve_{task_id}'
+        # solve_func[task_id] = f'solve_{task_id}'
+        solve_func[task_id] = f'solve'
         solve_path[task_id] = None
         solve_score[task_id] = -math.inf
     else:
@@ -322,13 +323,14 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 if wait:
                     input("Press Enter to continue...")
 
-                break
+                # break
 
             if run_result is None:
                 success = False
-                break
-            
-            success = any(tid == task_id for _, _, tid, _ in run_result[0])
+                # break
+            else:
+                success = any(tid == task_id for _, _, tid, _ in run_result[0])
+
             if success:
                 correct_sample += 1
 
