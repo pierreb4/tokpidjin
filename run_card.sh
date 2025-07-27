@@ -23,7 +23,7 @@ while getopts "iobt:" opt; do
     i) INITIAL=true ;;
     o) ONERUN=true ;;
     b) BUILD=true ;;
-    t) MAX_TIMEOUT="$OPTARG" ;;
+    t) TIMEOUT="$OPTARG" ;;
     *) echo "Invalid option: -$OPTARG" >&2; usage; exit 1 ;;
   esac
 done
@@ -35,8 +35,8 @@ if [ -n "$INITIAL" ]; then
   CARD_OPTION="-fs" 
 fi
 
-if [ -z "$MAX_TIMEOUT" ]; then
-  MAX_TIMEOUT=1.0
+if [ -z "$TIMEOUT" ]; then
+  TIMEOUT=1.0
 fi
 
 TMPFILE=$(mktemp)
@@ -48,19 +48,19 @@ while date && [ $STOP -eq 0 ]; do
     STOP=1
   fi
 
-  python card.py -fs
-  cp -f batt.py batt_main.py
-  unbuffer python main.py -t $MAX_TIMEOUT --solvers solvers_dir \
-      | tee main.log
-
   python card.py $CARD_OPTION
   unset CARD_OPTION
   cp -f batt.py batt_run.py
-  RND_TIMEOUT=$(echo "scale=2; $MAX_TIMEOUT * $((RANDOM % 10 + 1)) / 10" \
+  RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 10" \
       | bc)
   unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 \
       | tee batt.log
   
+  python card.py -fs
+  cp -f batt.py batt_main.py
+  unbuffer python main.py -t 10.0 --solvers solvers_dir \
+      | tee main.log
+
   # Build solvers_*.py if requested
   if [ -n "$BUILD" ]; then
 
