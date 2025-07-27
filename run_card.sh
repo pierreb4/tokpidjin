@@ -58,7 +58,7 @@ while date && [ $STOP -eq 0 ]; do
   
   python card.py -fs
   cp -f batt.py batt_main.py
-  unbuffer python main.py -t 10.0 --solvers solvers_dir \
+  unbuffer python main.py -t 2.0 --solvers solvers_dir \
       | tee main.log
 
   # Build solvers_*.py if requested
