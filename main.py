@@ -332,6 +332,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 success = any(tid == task_id for _, _, tid, _ in run_result[0])
 
             if success:
+                print_l(f'-- Solves {task_id} - sample {i}')
                 correct_sample += 1
 
         if correct_sample < solve_score[task_id]:
