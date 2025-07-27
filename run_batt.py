@@ -113,7 +113,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 # The solver came from tid
                 # if tid == task_id:
                 #     print_l(f'Solves {task_id} - train[{i}]')
-                print_l(f'-- {tid} solves {task_id} - train[{i}]')
+                print_l(f'-- s_{tid} solves {task_id} - train[{i}]')
 
             # print_l(f"s[train][{i}] - {s['train'][i]}")
 
@@ -154,7 +154,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 # The solver came from tid 
                 # if tid == task_id:
                 #     print_l(f'Solves {task_id} - test[{i}]')
-                print_l(f'-- {tid} solves {task_id} - test[{i}]')
+                print_l(f'-- s_{tid} solves {task_id} - test[{i}]')
 
             # print_l(f"s[test][{i}] - {s['test'][i]}")
 
