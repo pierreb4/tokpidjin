@@ -163,7 +163,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 s_score[task_id] += max_val - min_val
 
             # Add 1 to o_score just once for each t value
-            # NOTE o_Score is the number of tasks solved by tid solver
+            # NOTE o_score is the number of tasks solved by tid solver
             for tid in t_set:
                 update_scores(task_start, tid, o_score, t_log)
 
@@ -178,6 +178,9 @@ def update_scores(task_start, tid, o_score, t_log):
     if tid not in o_score:
         o_score[tid] = 0
     o_score[tid] += 1
+
+    # XXX t_log is the run time of all batt
+    #     We need to get the run time per task
     t_log[tid] = 11 - int(math.log(timer() - task_start))
 
 
@@ -214,7 +217,7 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
         # Substitute task_id into the inlined source
-        inlined_source = inlined_source.replace('task_id', task_id)
+        # inlined_source = inlined_source.replace('task_id', task_id)
 
         # Write inlined source to file
         ensure_dir('solver_dir')
