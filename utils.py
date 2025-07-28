@@ -206,8 +206,8 @@ def get_solvers(imports, best_only=False):
     task_list = list(total_data['train'].keys())
 
     # Exclude known bad solvers
-    bad_solvers = BAD_SOLVERS
-    task_list = [task_id for task_id in task_list if task_id not in bad_solvers]
+    # bad_solvers = BAD_SOLVERS
+    # task_list = [task_id for task_id in task_list if task_id not in bad_solvers]
 
     solvers = {}
     for task_id in task_list:
