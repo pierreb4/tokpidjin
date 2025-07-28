@@ -200,9 +200,10 @@ def get_source(task_id, imports=None, best_only=False):
 def get_solvers(imports, best_only=False):
     # Get both train and test tasks
     train_data = get_data(train=True)
-    eval_data = get_data(train=False)
+    # eval_data = get_data(train=False)
 
-    total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
+    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
+    total_data = {k: {**train_data[k]} for k in ['train', 'test']}
     task_list = list(total_data['train'].keys())
 
     # Exclude known bad solvers
