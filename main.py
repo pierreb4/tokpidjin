@@ -62,6 +62,7 @@ import sys
 import traceback
 import glob
 import math
+import importlib
 
 from func_timeout import func_timeout, FunctionTimedOut
 
@@ -73,7 +74,7 @@ import solvers_pre
 import run_batt
 
 from utils import *
-from batt import batt
+# from batt import batt
 
 
 def get_data(train=True):
@@ -392,7 +393,12 @@ def main():
                         type=int, default=10)
     parser.add_argument("--stats-output", help="File to save statistics output (default: module_stats.json)",
                         type=str, default="module_stats.json")
+    parser.add_argument('-b', '--batt_import', type=str, default='batt',
+                        help='Module to import for batt (default: batt)')
     args = parser.parse_args()
+
+    batt_module = importlib.import_module(args.batt_import)
+    batt = batt_module.batt if hasattr(batt_module, 'batt') else batt
 
     # Load the specified solver module or use default
     if args.solvers:

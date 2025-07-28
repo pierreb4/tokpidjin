@@ -4,12 +4,12 @@ import re
 import ast
 import hashlib
 import math
+import importlib
 
 from timeit import default_timer as timer
 from pathlib import Path
 
 from utils import *
-from batt import batt
 from call import t_call
 from expand_solver import expand_file
 
@@ -359,6 +359,11 @@ if __name__ == "__main__":
                         help='Number of tasks to run (default: 0 - all tasks)')
     parser.add_argument('-t', '--timeout', type=float, default=1,
                         help='Timeout for each task in seconds (default: 1)')
+    parser.add_argument('-b', '--batt_import', type=str, default='batt',
+                        help='Module to import for batt (default: batt)')
     args = parser.parse_args()
+
+    batt_module = importlib.import_module(args.batt_import)
+    batt = batt_module.batt if hasattr(batt_module, 'batt') else batt
 
     main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout)

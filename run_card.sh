@@ -40,6 +40,8 @@ if [ -z "$TIMEOUT" ]; then
 fi
 
 TMPFILE=$(mktemp)
+filename=$(mktemp)
+BATT_FILE="batt_tmp_${filename##*.}"
 STOP=0
 clear
 while date && [ $STOP -eq 0 ]; do
@@ -48,9 +50,9 @@ while date && [ $STOP -eq 0 ]; do
     STOP=1
   fi
 
-  python card.py $CARD_OPTION
+  python card.py $CARD_OPTION -f ${BATT_FILE}.py
   unset CARD_OPTION
-  cp -f batt.py batt_run.py
+  cp -f ${BATT_FILE}.py ${BATT_FILE}_run.py
 
   # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
   # RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 20" \
@@ -58,12 +60,14 @@ while date && [ $STOP -eq 0 ]; do
   # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 \
   #     | tee batt.log
   unbuffer timeout 900s python run_batt.py -i -t $TIMEOUT -c 1000 \
-      | tee batt.log
+      -b ${BATT_FILE} | tee ${BATT_FILE}_run.log
   
-  python card.py -fs
-  cp -f batt.py batt_main.py
+  python card.py -fs -f ${BATT_FILE}.py
+  cp -f batt.py ${BATT_FILE}_main.py
   unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
-      | tee main.log
+      -b ${BATT_FILE} | tee ${BATT_FILE}_main.log
+
+  rm ${BATT_FILE}_*
 
   # Build solvers_*.py if requested
   if [ -n "$BUILD" ]; then
