@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [-i] [-o] [-b] [-t MAX_TIMEOUT]"
+  echo "Usage: $0 [-i] [-o] [-b] [-t TIMEOUT]"
   echo "  -i: Initial run (removes old solvers)"
   echo "  -o: One run only (stops after one iteration)"
   echo "  -b: Build solvers_*.py"
@@ -16,7 +16,7 @@ fi
 INITIAL=
 ONERUN=
 BUILD=
-MAX_TIMEOUT=
+TIMEOUT=
 
 while getopts "iobt:" opt; do
   case $opt in
@@ -39,6 +39,7 @@ if [ -z "$TIMEOUT" ]; then
   TIMEOUT=1.0
 fi
 
+MAIN_TIMEOUT=$(echo "scale=2; $TIMEOUT * 2" | bc)
 TMPFILE=$(mktemp)
 STOP=0
 clear
@@ -58,7 +59,7 @@ while date && [ $STOP -eq 0 ]; do
   
   python card.py -fs
   cp -f batt.py batt_main.py
-  unbuffer python main.py -t 2.0 --solvers solvers_dir \
+  unbuffer python main.py -t $MAIN_TIMEOUT --solvers solvers_dir \
       | tee main.log
 
   # Build solvers_*.py if requested
