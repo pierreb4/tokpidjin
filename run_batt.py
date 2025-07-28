@@ -212,12 +212,9 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         solver_body += f'    return t{sol_t}\n'
 
         # Get md5_hash of inlined source code
-        solver_source = f'def solve_task_id(S, I):\n{solver_body}'
+        solver_source = f'def solve(S, I):\n{solver_body}'
         inlined_source = inline_variables(solver_source)
         md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-
-        # Substitute task_id into the inlined source
-        # inlined_source = inlined_source.replace('task_id', task_id)
 
         # Write inlined source to file
         ensure_dir('solver_dir')
