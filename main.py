@@ -238,7 +238,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
     if task_id:
         task_ids = [task_id]
         # solve_func[task_id] = f'solve_{task_id}'
-        solve_func[task_id] = f'solve'
+        solve_func[task_id] = 'solve'
         solve_path[task_id] = None
         solve_score[task_id] = -math.inf
     else:
@@ -316,7 +316,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
             # Check if execution took too long
             if execution_time > timeout:
-                print(f"WARNING: {task_id} - {solve_func[task_id]} sample {i} took {execution_time:.2f}s")
+                print(f"TIMEOUT: {task_id} - {solve_func[task_id]} sample {i} took {execution_time:.2f}s")
                 slow_solvers.append((task_id, i, execution_time))
 
                 # If wait is enabled, pause for user inspection

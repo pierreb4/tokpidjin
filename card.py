@@ -436,13 +436,13 @@ def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=F
     # grep 'x9999 = ' solver_md5/*.py
     # TODO Continue as long as previous round was x_n variable,
     #      as this insures that there's still variable O to read
-    for _ in range(1999):
+    for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
         # for task_id, (func_name, source) in solvers_copy.items():
         for task_id, solver in solvers_copy.items():
             func_name = solver.name
-            solver_path = solver.path
+            # solver_path = solver.path
             source = solver.source
 
             if task_id not in total_data['train']:

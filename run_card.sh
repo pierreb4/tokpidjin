@@ -39,7 +39,6 @@ if [ -z "$TIMEOUT" ]; then
   TIMEOUT=1.0
 fi
 
-MAIN_TIMEOUT=$(echo "scale=2; $TIMEOUT * 2" | bc)
 TMPFILE=$(mktemp)
 STOP=0
 clear
@@ -52,14 +51,16 @@ while date && [ $STOP -eq 0 ]; do
   python card.py $CARD_OPTION
   unset CARD_OPTION
   cp -f batt.py batt_run.py
-  RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 10" \
+
+  # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
+  RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 20" \
       | bc)
   unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 \
       | tee batt.log
   
   python card.py -fs
   cp -f batt.py batt_main.py
-  unbuffer python main.py -t $MAIN_TIMEOUT --solvers solvers_dir \
+  unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
       | tee main.log
 
   # Build solvers_*.py if requested

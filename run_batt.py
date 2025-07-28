@@ -107,13 +107,10 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
             o['train'][i], s['train'][i] = run_result
             all_o = all_o.union(o['train'][i])
             for t, e, tid, m in o['train'][i]:
-                # t_set.add(t)
                 t_set.add(tid)
 
-                # The solver came from tid
-                # if tid == task_id:
-                #     print_l(f'Solves {task_id} - train[{i}]')
-                print_l(f'-- s_{tid} solves {task_id} - train[{i}]')
+                # The solver comes from tid
+                print_l(f'-- {tid} solver solves {task_id} - train[{i}]')
 
             # print_l(f"s[train][{i}] - {s['train'][i]}")
 
@@ -130,9 +127,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 s_score[task_id] += max_val - min_val
 
             # Add 1 to o_score just once for each t value
-            # NOTE o_score is the number of tasks solved by t
-            # for t in t_set:
-            #     update_scores(task_start, t, o_score, t_log)
+            # NOTE o_score is the number of tasks solved by tid solver
             for tid in t_set:
                 update_scores(task_start, tid, o_score, t_log)
 
@@ -148,12 +143,9 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
             o['test'][i], s['test'][i] = run_result
             all_o = all_o.union(o['test'][i])
             for t, e, tid, m in o['test'][i]:
-                # t_set.add(t)
                 t_set.add(tid)
 
-                # The solver came from tid 
-                # if tid == task_id:
-                #     print_l(f'Solves {task_id} - test[{i}]')
+                # The solver comes from tid
                 print_l(f'-- s_{tid} solves {task_id} - test[{i}]')
 
             # print_l(f"s[test][{i}] - {s['test'][i]}")
@@ -171,9 +163,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 s_score[task_id] += max_val - min_val
 
             # Add 1 to o_score just once for each t value
-            # NOTE o_Score is the number of tasks solved by t
-            # for t in t_set:
-            #     update_scores(task_start, t, o_score, t_log)
+            # NOTE o_Score is the number of tasks solved by tid solver
             for tid in t_set:
                 update_scores(task_start, tid, o_score, t_log)
 
@@ -184,11 +174,11 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
     return all_o, o_score, s_score, t_log
 
 
-def update_scores(task_start, t, o_score, t_log):
-    if t not in o_score:
-        o_score[t] = 0
-    o_score[t] += 1
-    t_log[t] = 11 - int(math.log(timer() - task_start))
+def update_scores(task_start, tid, o_score, t_log):
+    if tid not in o_score:
+        o_score[tid] = 0
+    o_score[tid] += 1
+    t_log[tid] = 11 - int(math.log(timer() - task_start))
 
 
 def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1):
@@ -247,7 +237,7 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
 
         # solver_score = f'solver_dir/solve_{task_id}/{o_score[sol_t]}/{task_s_score}/{t_log[sol_t]}'
         solver_score = f'solver_dir/solve_{sol_tid}/{task_o_score}/{task_s_score}/{t_log[sol_tid]}'
-        print_l(f'Save {solver_score}/{md5_hash}.py')
+        print_l(f'-> {solver_score}/{md5_hash}.py')
 
         ensure_dir(solver_score)
         solver_link = f'{solver_score}/{md5_hash}.py'

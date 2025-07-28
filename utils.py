@@ -190,8 +190,11 @@ def get_source(task_id, imports=None, best_only=False):
                 # print_l(f'Found solver: {func_name} in {imp.__name__}')
                 return Solver(func_name, imp, inspect.getsource(solver), 
                         None, None, None)
-    return Solver(None, None, None, 
-            None, None, None)
+#    return Solver(None, None, None, 
+#            None, None, None)
+
+    solve_identity = 'def solve(S, I):\n    O = identity(I)\n    return O\n'
+    return Solver('solve', None, solve_identity, 0, 0, 999)
 
 
 def get_solvers(imports, best_only=False):
