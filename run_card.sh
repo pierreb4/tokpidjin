@@ -53,9 +53,11 @@ while date && [ $STOP -eq 0 ]; do
   cp -f batt.py batt_run.py
 
   # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
-  RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 20" \
-      | bc)
-  unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 \
+  # RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 20" \
+  #     | bc)
+  # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 \
+  #     | tee batt.log
+  unbuffer timeout 900s python run_batt.py -i -t $TIMEOUT -c 1000 \
       | tee batt.log
   
   python card.py -fs
