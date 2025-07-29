@@ -3102,6 +3102,8 @@ def manhattan(
 ) -> 'Integer':
     """ closest manhattan distance between two patches """
     logger.info(f'manhattan: {a = }, {b = }')
+    if len(a) == 0 or len(b) == 0:
+        return math.inf
     return min(abs(ai - bi) + abs(aj - bj) for ai, aj in toindices(a) for bi, bj in toindices(b))
 
 
