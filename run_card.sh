@@ -62,7 +62,7 @@ while date && [ $STOP -eq 0 ]; do
   #     | bc)
   # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 \
   #     | tee batt.log
-  unbuffer timeout 900s python run_batt.py -i -t $TIMEOUT -c 1000 \
+  unbuffer timeout 900s python run_batt.py -i -t $TIMEOUT -c 0 \
       -b ${TMPBATT} | tee ${TMPBATT}_run.log
   
   python card.py -fs -f ${TMPBATT}.py
