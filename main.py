@@ -372,7 +372,9 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
     return n_correct, avg_time, n
 
 
-def main():
+if __name__ == '__main__':
+    # main()
+
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Test ARC solvers")
     parser.add_argument("-q", "--quiet", help="Suppress verbose output and progress bars",
@@ -475,7 +477,3 @@ def main():
             patch_module.disable_tracking()
         except Exception as e:
             print(f"Error exporting statistics: {e}")
-
-
-if __name__ == '__main__':
-    main()
