@@ -228,11 +228,14 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         ensure_dir('solver_md5')
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
+        check_start = timer()
         timed_out = check_solver_speed(total_data, solver_source, task_id, timeout)
-        save_file = not timed_out
-        if timed_out:
-            print_l(f'Solver for {task_id} timed out')
-            continue
+        t_log = 11 - int(math.log(timer() - check_start))
+
+        # save_file = not timed_out
+        # if timed_out:
+        #     print_l(f'Solver for {task_id} timed out')
+        #     continue
 
         with open(solver_def_path, 'w') as f:
             f.write(inlined_source)
@@ -246,7 +249,7 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         task_s_score = s_score.get(task_id, 0)
 
         # solver_score = f'solver_dir/solve_{task_id}/{o_score[sol_t]}/{task_s_score}/{t_log[sol_t]}'
-        solver_score = f'solver_dir/solve_{sol_tid}/{task_o_score}/{task_s_score}/{t_log[sol_tid]}'
+        solver_score = f'solver_dir/solve_{sol_tid}/{task_o_score}/{task_s_score}/{t_log}'
 
         # print_l(f'-> {solver_score}/{md5_hash}.py')
 
