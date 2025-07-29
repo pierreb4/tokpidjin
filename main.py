@@ -373,8 +373,6 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
 
 if __name__ == '__main__':
-    # main()
-
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Test ARC solvers")
     parser.add_argument("-q", "--quiet", help="Suppress verbose output and progress bars",
@@ -409,7 +407,7 @@ if __name__ == '__main__':
             print(f"Using custom solver module: {args.solvers}")
         except Exception as e:
             print(f"Error loading solver module {args.solvers}: {e}")
-            # return
+            sys.exit(1)
     else:
         solvers_module = solvers_pre  # Use default module
 
@@ -449,7 +447,7 @@ if __name__ == '__main__':
             }
         else:
             print(f"Task '{args.task_id}' not found in training data.")
-            # return
+            sys.exit(1)
 
     if args.check_dsl:
         run_dsl_tests(dsl, tests, args.quiet)
