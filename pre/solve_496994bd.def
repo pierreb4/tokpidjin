@@ -1,2 +1,0 @@
-def solve_496994bd(S, I):
-    return vconcat(crop(I, ORIGIN, astuple(halve(height_t(I)), width_t(I))), mir_rot_t(crop(I, ORIGIN, astuple(halve(height_t(I)), width_t(I))), R0))

@@ -1,2 +1,0 @@
-def solve_73251a56(S, I):
-    return fill(replace(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, I, mir_rot_t(I, R1))), ZERO, get_color_rank_t(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, I, mir_rot_t(I, R1))), F0)), index(replace(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, I, mir_rot_t(I, R1))), ZERO, get_color_rank_t(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, I, mir_rot_t(I, R1))), F0)), ORIGIN), shoot(ORIGIN, UNITY))

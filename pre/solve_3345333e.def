@@ -1,2 +1,0 @@
-def solve_3345333e(S, I):
-    return fill(cover(I, f_ofcolor(I, get_color_rank_t(I, L1))), get_color_rank_t(cover(I, f_ofcolor(I, get_color_rank_t(I, L1))), L1), get_arg_rank_f(apply(lbind(shift, mir_rot_f(f_ofcolor(cover(I, f_ofcolor(I, get_color_rank_t(I, L1))), get_color_rank_t(cover(I, f_ofcolor(I, get_color_rank_t(I, L1))), L1)), R2)), mapply(neighbors, neighbors(ORIGIN))), compose(size, rbind(intersection, f_ofcolor(cover(I, f_ofcolor(I, get_color_rank_t(I, L1))), get_color_rank_t(cover(I, f_ofcolor(I, get_color_rank_t(I, L1))), L1)))), F0))

@@ -1,2 +1,0 @@
-def solve_8403a5d5(S, I):
-    return fill(fill(fill(I, color(get_nth_f(o_g(I, R5), F0)), sfilter(asindices(I), compose(rbind(contained, interval(col_row(get_nth_f(o_g(I, R5), F0), R2), TEN, TWO)), rbind(get_nth_f, L1)))), FIVE, apply(tojvec, interval(increment(col_row(get_nth_f(o_g(I, R5), F0), R2)), TEN, FOUR))), FIVE, apply(lbind(astuple, NINE), interval(add(col_row(get_nth_f(o_g(I, R5), F0), R2), THREE), TEN, FOUR)))

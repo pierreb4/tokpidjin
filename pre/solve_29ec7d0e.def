@@ -1,2 +1,0 @@
-def solve_29ec7d0e(S, I):
-    return paint(I, mapply(lbind(shift, merge(difference(partition(I), colorfilter(partition(I), ZERO)))), apply(lbind(multiply, astuple(vperiod(asobject(crop(I, tojvec(decrement(height_t(I))), astuple(height_t(I), ONE)))), hperiod(asobject(crop(I, toivec(decrement(width_t(I))), astuple(ONE, width_t(I))))))), mapply(neighbors, neighbors(ORIGIN)))))

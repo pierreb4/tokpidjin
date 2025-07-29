@@ -1,2 +1,0 @@
-def solve_d90796e8(S, I):
-    return fill(cover(I, mfilter_f(sizefilter(o_g(I, R1), TWO), compose(lbind(contained, TWO), palette_f))), EIGHT, sfilter_f(mfilter_f(sizefilter(o_g(I, R1), TWO), compose(lbind(contained, TWO), palette_f)), matcher(rbind(get_nth_f, F0), THREE)))

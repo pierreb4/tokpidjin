@@ -1,2 +1,0 @@
-def solve_c1d99e64(S, I):
-    return fill(I, TWO, merge_f(frontiers(I)))

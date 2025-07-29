@@ -1,2 +1,0 @@
-def solve_846bdb03(S, I):
-    return paint(subgrid(merge_f(remove_f(extract(o_g(I, R1), matcher(rbind(colorcount_f, FOUR), ZERO)), o_g(I, R1))), I), shift(normalize(branch(equality(index(subgrid(merge_f(remove_f(extract(o_g(I, R1), matcher(rbind(colorcount_f, FOUR), ZERO)), o_g(I, R1))), I), DOWN), other_f(palette_t(lefthalf(subgrid(extract(o_g(I, R1), matcher(rbind(colorcount_f, FOUR), ZERO)), I))), ZERO)), identity, rbind(mir_rot_f, R2))(extract(o_g(I, R1), matcher(rbind(colorcount_f, FOUR), ZERO)))), UNITY))

@@ -1,2 +1,0 @@
-def solve_0a938d79(S, I):
-    return branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(paint(branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(I), mapply(fork(recolor_i, color, chain(lbind(mapply, compose(vfrontier, tojvec)), rbind(rbind(interval, chain(double, decrement, width_f)(merge(fgpartition(branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(I))))), width_t(branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(I))), rbind(col_row, R2))), fgpartition(branch(portrait_t(I), rbind(mir_rot_t, R1), identity)(I)))))

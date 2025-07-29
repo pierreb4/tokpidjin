@@ -1,2 +1,0 @@
-def solve_b2862040(S, I):
-    return fill(I, EIGHT, mfilter_f(colorfilter(o_g(I, R4), ONE), rbind(adjacent, mfilter_f(colorfilter(o_g(I, R4), NINE), compose(flip, rbind(bordering, I))))))

@@ -1,2 +1,0 @@
-def solve_ef135b50(S, I):
-    return paint(I, shift(asobject(trim(fill(I, NINE, intersection(mapply(fork(connect, rbind(get_nth_f, F0), rbind(get_nth_f, L1)), sfilter_f(product(f_ofcolor(I, TWO), f_ofcolor(I, TWO)), fork(equality, power(rbind(get_nth_f, F0), TWO), compose(rbind(get_nth_f, F0), rbind(get_nth_f, L1))))), f_ofcolor(I, ZERO))))), UNITY))

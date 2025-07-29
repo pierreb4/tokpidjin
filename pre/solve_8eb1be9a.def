@@ -1,2 +1,0 @@
-def solve_8eb1be9a(S, I):
-    return paint(I, mapply(lbind(shift, get_nth_f(o_g(I, R7), F0)), apply(toivec, apply(rbind(multiply, height_f(get_nth_f(o_g(I, R7), F0))), interval(NEG_TWO, FOUR, ONE)))))

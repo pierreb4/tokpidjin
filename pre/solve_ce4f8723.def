@@ -1,2 +1,0 @@
-def solve_ce4f8723(S, I):
-    return fill(canvas(THREE, astuple(FOUR, FOUR)), ZERO, intersection(f_ofcolor(tophalf(I), ZERO), f_ofcolor(bottomhalf(I), ZERO)))

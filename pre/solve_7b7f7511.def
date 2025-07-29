@@ -1,2 +1,0 @@
-def solve_7b7f7511(S, I):
-    return branch(portrait_t(I), tophalf, lefthalf)(I)

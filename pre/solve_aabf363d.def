@@ -1,2 +1,0 @@
-def solve_aabf363d(S, I):
-    return replace(replace(I, get_color_rank_t(I, L1), ZERO), get_color_rank_t(replace(I, get_color_rank_t(I, L1), ZERO), L1), get_color_rank_t(I, L1))

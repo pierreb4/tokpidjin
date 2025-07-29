@@ -1,2 +1,0 @@
-def solve_d2abd087(S, I):
-    return fill(fill(I, TWO, mfilter_f(o_g(I, R5), matcher(size, SIX))), ONE, mfilter_f(o_g(I, R5), compose(flip, matcher(size, SIX))))

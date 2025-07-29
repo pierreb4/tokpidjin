@@ -1,2 +1,0 @@
-def solve_dc433765(S, I):
-    return move(I, recolor_i(THREE, f_ofcolor(I, THREE)), sign(subtract(get_nth_f(f_ofcolor(I, FOUR), F0), get_nth_f(f_ofcolor(I, THREE), F0))))

@@ -1,2 +1,0 @@
-def solve_a79310a0(S, I):
-    return replace(move(I, get_nth_f(o_g(I, R5), F0), DOWN), EIGHT, TWO)

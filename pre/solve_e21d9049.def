@@ -1,2 +1,0 @@
-def solve_e21d9049(S, I):
-    return cover(paint(I, mapply(lbind(shift, merge(o_g(I, R5))), apply(lbind(multiply, shape_f(merge(o_g(I, R5)))), power(lbind(mapply, neighbors), TWO)(neighbors(ORIGIN))))), difference(asindices(I), sfilter_f(asindices(I), compose(fork(either, lbind(hmatching, f_ofcolor(I, get_color_rank_t(I, L1))), lbind(vmatching, f_ofcolor(I, get_color_rank_t(I, L1)))), initset))))

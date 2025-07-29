@@ -1,2 +1,0 @@
-def solve_5582e5ca(S, I):
-    return canvas(get_color_rank_t(I, F0), THREE_BY_THREE)

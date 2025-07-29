@@ -1,2 +1,0 @@
-def solve_6150a2bd(S, I):
-    return mir_rot_t(I, R5)

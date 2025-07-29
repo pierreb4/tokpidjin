@@ -1,2 +1,0 @@
-def solve_9f236235(S, I):
-    return downscale(mir_rot_t(compress(I), R2), get_val_rank_f(o_g(I, R4), width_f, L1))

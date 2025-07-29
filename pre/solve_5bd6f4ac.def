@@ -1,2 +1,0 @@
-def solve_5bd6f4ac(S, I):
-    return crop(I, tojvec(SIX), THREE_BY_THREE)

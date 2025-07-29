@@ -1,2 +1,0 @@
-def solve_a1570a43(S, I):
-    return move(I, recolor_i(TWO, f_ofcolor(I, TWO)), increment(subtract(corner(f_ofcolor(I, THREE), R0), corner(f_ofcolor(I, TWO), R0))))

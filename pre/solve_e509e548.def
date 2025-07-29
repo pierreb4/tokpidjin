@@ -1,2 +1,0 @@
-def solve_e509e548(S, I):
-    return fill(fill(replace(I, THREE, SIX), TWO, mfilter_f(o_g(I, R5), compose(lbind(contained, THREE), chain(palette_t, trim, rbind(subgrid, I))))), ONE, mfilter_f(o_g(I, R5), fork(equality, size, compose(decrement, fork(add, height_f, width_f)))))
