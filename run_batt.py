@@ -12,6 +12,7 @@ from pathlib import Path
 from utils import *
 from call import t_call
 from expand_solver import expand_file
+from run_test import check_solver_speed
 
 
 class VariableInliner(ast.NodeTransformer):
@@ -110,7 +111,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 t_set.add(tid)
 
                 # The solver comes from tid
-                print_l(f'-- {tid} solver solves {task_id} - train[{i}]')
+                # print_l(f'-- s_{tid} solver solves {task_id} - train[{i}]')
 
             # print_l(f"s[train][{i}] - {s['train'][i]}")
 
@@ -146,7 +147,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 t_set.add(tid)
 
                 # The solver comes from tid
-                print_l(f'-- s_{tid} solves {task_id} - test[{i}]')
+                # print_l(f'-- s_{tid} solves {task_id} - test[{i}]')
 
             # print_l(f"s[test][{i}] - {s['test'][i]}")
 
@@ -227,6 +228,12 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         ensure_dir('solver_md5')
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
+        timed_out = check_solver_speed(total_data, solver_source, task_id, timeout)
+        save_file = not timed_out
+        if timed_out:
+            print_l(f'Solver for {task_id} timed out')
+            continue
+
         with open(solver_def_path, 'w') as f:
             f.write(inlined_source)
             f.write('\n')
@@ -240,7 +247,8 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
 
         # solver_score = f'solver_dir/solve_{task_id}/{o_score[sol_t]}/{task_s_score}/{t_log[sol_t]}'
         solver_score = f'solver_dir/solve_{sol_tid}/{task_o_score}/{task_s_score}/{t_log[sol_tid]}'
-        print_l(f'-> {solver_score}/{md5_hash}.py')
+
+        # print_l(f'-> {solver_score}/{md5_hash}.py')
 
         ensure_dir(solver_score)
         solver_link = f'{solver_score}/{md5_hash}.py'

@@ -286,6 +286,8 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
     fluff_log_path = 'fluff.log'
     if os.path.isfile(fluff_log_path):
         os.remove(fluff_log_path)
+    
+    remove_solve_path = False
     for task_id in solver_iterator:
         task = data['train'][task_id] + data['test'][task_id]
         num_train = len(data['train'][task_id])
@@ -295,7 +297,6 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
         success = True
 
         correct_sample = 0
-        remove_solve_path = False
         for i, sample in enumerate(task):
             start_time = time.time()
             I = sample['input']
@@ -317,7 +318,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
             # Check if execution took too long
             if execution_time > timeout:
-                print(f"TIMEOUT: {task_id} - {solve_func[task_id]} sample {i} took {execution_time:.2f}s")
+                print_l(f"TIMEOUT: {task_id} - {solve_func[task_id]} sample {i} took {execution_time:.2f}s")
                 slow_solvers.append((task_id, i, execution_time))
 
                 # If wait is enabled, pause for user inspection
@@ -393,8 +394,8 @@ if __name__ == '__main__':
                         type=int, default=10)
     parser.add_argument("--stats-output", help="File to save statistics output (default: module_stats.json)",
                         type=str, default="module_stats.json")
-    parser.add_argument('-b', '--batt_import', type=str, default='batt',
-                        help='Module to import for batt (default: batt)')
+    parser.add_argument('-b', '--batt_import', type=str, default='tmp_batt_onerun',
+                        help='Module to import for batt (default: tmp_batt_onerun)')
     args = parser.parse_args()
 
     batt_module = importlib.import_module(args.batt_import)
