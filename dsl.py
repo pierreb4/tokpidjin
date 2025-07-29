@@ -1405,7 +1405,7 @@ def first_t(
 ) -> 'Any':
     """ first item of tuple """
     logger.info(f'first_t: {container = }')
-    return container[0] if container else None
+    return container[0] if container else ()
 
 
 def first_f(
@@ -1413,7 +1413,7 @@ def first_f(
 ) -> 'Any':
     """ first item of frozenset """
     logger.info(f'first_f: {container = }')
-    return next(iter(container), None) if container else None
+    return next(iter(container), None) if container else frozenset()
 
 
 def last(
@@ -1421,7 +1421,7 @@ def last(
 ) -> 'Any':
     """ last item of container """
     logger.info(f'last: {container = }')
-    return max(enumerate(container))[1] if container else None
+    return max(enumerate(container))[1] if container else ()
 
 
 def last_t(
@@ -1429,7 +1429,7 @@ def last_t(
 ) -> 'Any':
     """ last item of tuple """
     logger.info(f'last_t: {container = }')
-    return container[-1] if container else None
+    return container[-1] if container else ()
 
 
 def last_f(
@@ -1437,7 +1437,7 @@ def last_f(
 ) -> 'Any':
     """ last item of frozenset - not truly ordered, so returns an arbitrary element """
     logger.info(f'last_f: {container = }')
-    return max(enumerate(container))[1] if container else None
+    return max(enumerate(container))[1] if container else frozenset()
 
 
 def remove(
