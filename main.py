@@ -409,7 +409,7 @@ if __name__ == '__main__':
             print(f"Using custom solver module: {args.solvers}")
         except Exception as e:
             print(f"Error loading solver module {args.solvers}: {e}")
-            return
+            # return
     else:
         solvers_module = solvers_pre  # Use default module
 
@@ -449,7 +449,7 @@ if __name__ == '__main__':
             }
         else:
             print(f"Task '{args.task_id}' not found in training data.")
-            return
+            # return
 
     if args.check_dsl:
         run_dsl_tests(dsl, tests, args.quiet)
