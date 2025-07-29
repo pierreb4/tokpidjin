@@ -341,7 +341,10 @@ def main(do_list, start=0, count=0, timeout=1):
     # NOTE We could have a task list just for unsolved tasks
     full_list = list(total_data['train'].keys())
 
-    task_list = full_list[start:start + count] if count > 0 else full_list[start:]
+    if start == 0 and count < 0:
+        task_list = random.sample(full_list, -count)
+    else:
+        task_list = full_list[start:start + count] if count > 0 else full_list[start:]
 
     if do_list is None:
         do_list = pick_rnd_task(task_list, total_data)

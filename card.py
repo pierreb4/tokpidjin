@@ -412,7 +412,10 @@ def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=F
     if task_id:
         solvers = {k: solvers[k] for k in [task_id]}
     elif count > 0:
-        solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
+        # solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
+        # Pick random solvers
+        solvers = {k: solvers[k] for k in random.sample(list(solvers.keys()), count)}
+        task_list = list(solvers.keys())    
 
         task_sizes = []
         for task_id in task_list:

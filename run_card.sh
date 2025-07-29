@@ -53,7 +53,7 @@ while date && [ $STOP -eq 0 ]; do
   # Remove old temporary files
   find . -maxdepth 1 -name 'tmp_batt_*' -mmin 60 -exec rm {} \;
 
-  python card.py $CARD_OPTION -f ${TMPBATT}.py
+  python card.py $CARD_OPTION -c 20 -f ${TMPBATT}.py
   unset CARD_OPTION
   cp -f ${TMPBATT}.py ${TMPBATT}_run.py
 
@@ -65,8 +65,8 @@ while date && [ $STOP -eq 0 ]; do
   unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c 0 \
       -b ${TMPBATT} | tee ${TMPBATT}_run.log
   
-  python card.py -fs -f ${TMPBATT}.py
-  cp -f batt.py ${TMPBATT}_main.py
+  # python card.py -fs -f ${TMPBATT}.py
+  cp -f ${TMPBATT}.py ${TMPBATT}_main.py
   unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
       -b ${TMPBATT} | tee ${TMPBATT}_main.log
 
