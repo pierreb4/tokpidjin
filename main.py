@@ -318,7 +318,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
             # Check if execution took too long
             if execution_time > timeout:
-                print_l(f"TIMEOUT: {task_id} - {solve_func[task_id]} sample {i} took {execution_time:.2f}s")
+                # print_l(f"TIMEOUT: {task_id} - {solve_func[task_id]} sample {i} took {execution_time:.2f}s")
                 slow_solvers.append((task_id, i, execution_time))
 
                 # If wait is enabled, pause for user inspection
@@ -334,12 +334,12 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 success = any(tid == task_id for _, _, tid, _ in run_result[0])
 
             if success:
-                print_l(f'-- Solves {task_id} - sample {i}')
+                # print_l(f'-- Solves {task_id} - sample {i}')
                 correct_sample += 1
 
-        if correct_sample < solve_score[task_id]:
-            print_l(f'# -- {task_id} - {correct_sample = } - {solve_score[task_id] = }')
-            print_l(f'# rm {solve_path[task_id]}')
+        # if correct_sample < solve_score[task_id]:
+        #     print_l(f'# -- {task_id} - {correct_sample = } - {solve_score[task_id] = }')
+        #     print_l(f'# rm {solve_path[task_id]}')
             # if os.path.exists(solve_path[task_id]):
             #     os.remove(solve_path[task_id])
 
