@@ -1,0 +1,2 @@
+def solve_50cb2852(S, I):
+    return fill(I, EIGHT, mapply(compose(backdrop, inbox), o_g(I, R5)))

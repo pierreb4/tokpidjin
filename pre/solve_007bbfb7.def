@@ -1,0 +1,2 @@
+def solve_007bbfb7(S, I):
+    return cellwise(vupscale(hupscale(I, THREE), THREE), vconcat(vconcat(hconcat(hconcat(I, I), I), hconcat(hconcat(I, I), I)), hconcat(hconcat(I, I), I)), ZERO)

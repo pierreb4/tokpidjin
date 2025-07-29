@@ -1,0 +1,2 @@
+def solve_dc1df850(S, I):
+    return fill(I, ONE, mapply(outbox, colorfilter(o_g(I, R5), TWO)))

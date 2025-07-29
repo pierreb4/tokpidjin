@@ -1,0 +1,2 @@
+def solve_1f85a75f(S, I):
+    return subgrid(get_arg_rank_f(o_g(I, R7), size, F0), I)

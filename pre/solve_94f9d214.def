@@ -1,0 +1,2 @@
+def solve_94f9d214(S, I):
+    return fill(canvas(ZERO, astuple(FOUR, FOUR)), TWO, intersection(f_ofcolor(tophalf(I), ZERO), f_ofcolor(bottomhalf(I), ZERO)))

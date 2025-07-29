@@ -1,0 +1,2 @@
+def solve_dc0a314f(S, I):
+    return subgrid(f_ofcolor(I, THREE), apply(lbind(apply, rbind(get_rank, F0)), papply(pair, apply(lbind(apply, rbind(get_rank, F0)), papply(pair, replace(I, THREE, ZERO), mir_rot_t(replace(I, THREE, ZERO), R1))), mir_rot_t(apply(lbind(apply, rbind(get_rank, F0)), papply(pair, replace(I, THREE, ZERO), mir_rot_t(replace(I, THREE, ZERO), R1))), R3))))

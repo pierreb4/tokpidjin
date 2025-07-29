@@ -1,0 +1,2 @@
+def solve_c8f0f002(S, I):
+    return replace(I, SEVEN, FIVE)

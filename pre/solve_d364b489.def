@@ -1,0 +1,2 @@
+def solve_d364b489(S, I):
+    return fill(fill(fill(fill(I, EIGHT, shift(f_ofcolor(I, ONE), DOWN)), TWO, shift(f_ofcolor(I, ONE), UP)), SIX, shift(f_ofcolor(I, ONE), RIGHT)), SEVEN, shift(f_ofcolor(I, ONE), LEFT))

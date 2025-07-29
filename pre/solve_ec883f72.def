@@ -1,0 +1,2 @@
+def solve_ec883f72(S, I):
+    return underfill(I, other_f(remove(ZERO, palette_t(I)), color(get_arg_rank_f(o_g(I, R7), fork(multiply, height_f, width_f), F0))), combine(combine(shoot(corner(get_arg_rank_f(o_g(I, R7), fork(multiply, height_f, width_f), F0), R3), UNITY), shoot(corner(get_arg_rank_f(o_g(I, R7), fork(multiply, height_f, width_f), F0), R2), DOWN_LEFT)), combine(shoot(corner(get_arg_rank_f(o_g(I, R7), fork(multiply, height_f, width_f), F0), R1), UP_RIGHT), shoot(corner(get_arg_rank_f(o_g(I, R7), fork(multiply, height_f, width_f), F0), R0), NEG_UNITY))))

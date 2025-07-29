@@ -1,0 +1,2 @@
+def solve_7c008303(S, I):
+    return fill(upscale_t(compress(replace(replace(I, THREE, ZERO), EIGHT, ZERO)), THREE), ZERO, f_ofcolor(subgrid(f_ofcolor(I, THREE), I), ZERO))

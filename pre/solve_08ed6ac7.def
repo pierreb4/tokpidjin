@@ -1,0 +1,2 @@
+def solve_08ed6ac7(S, I):
+    return paint(I, mpapply(recolor_o, interval(size_t(totuple(o_g(I, R5))), ZERO, NEG_ONE), order(o_g(I, R5), height_f)))

@@ -1,0 +1,2 @@
+def solve_d511f180(S, I):
+    return switch(I, FIVE, EIGHT)

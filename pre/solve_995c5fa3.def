@@ -1,0 +1,2 @@
+def solve_995c5fa3(S, I):
+    return hupscale(merge_t(apply(compose(rbind(canvas, UNITY), fork(add, fork(add, compose(double, matcher(compose(size, rbind(f_ofcolor, ZERO)), ZERO)), chain(power(double, TWO), double, matcher(compose(rbind(corner, R0), rbind(f_ofcolor, ZERO)), UNITY))), fork(add, compose(rbind(multiply, THREE), matcher(compose(rbind(corner, R0), rbind(f_ofcolor, ZERO)), DOWN)), compose(power(double, TWO), matcher(compose(rbind(corner, R0), rbind(f_ofcolor, ZERO)), astuple(TWO, ONE)))))), hsplit(I, THREE))), THREE)

@@ -1,0 +1,2 @@
+def solve_1bfc4729(S, I):
+    return vconcat(fill(tophalf(I), get_color_rank_t(tophalf(I), L1), combine(hfrontier(TWO_BY_ZERO), box(asindices(I)))), replace(mir_rot_t(fill(tophalf(I), get_color_rank_t(tophalf(I), L1), combine(hfrontier(TWO_BY_ZERO), box(asindices(I)))), R0), get_color_rank_t(tophalf(I), L1), get_color_rank_t(bottomhalf(I), L1)))

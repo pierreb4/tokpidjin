@@ -1,0 +1,32 @@
+def solve_0dfd9992_one(S, I):
+    return paint(I, mapply(lbind(shift, merge(difference(partition(I), colorfilter(partition(I), ZERO)))), apply(lbind(multiply, astuple(vperiod(asobject(crop(I, tojvec(decrement(height_t(I))), astuple(height_t(I), ONE)))), hperiod(asobject(crop(I, toivec(decrement(width_t(I))), astuple(ONE, width_t(I))))))), mapply(neighbors, neighbors(ORIGIN)))))
+
+
+def solve_0dfd9992(S, I):
+    x1 = partition(I)
+    x2 = colorfilter(x1, ZERO)
+    x3 = difference(x1, x2)
+    x4 = merge(x3)
+    x5 = lbind(shift, x4)
+    x6 = height_t(I)
+    x7 = decrement(x6)
+    x8 = tojvec(x7)
+    x9 = astuple(x6, ONE)
+    x10 = crop(I, x8, x9)
+    x11 = asobject(x10)
+    x12 = vperiod(x11)
+    x13 = width_t(I)
+    x14 = decrement(x13)
+    x15 = toivec(x14)
+    x16 = astuple(ONE, x13)
+    x17 = crop(I, x15, x16)
+    x18 = asobject(x17)
+    x19 = hperiod(x18)
+    x20 = astuple(x12, x19)
+    x21 = lbind(multiply, x20)
+    x22 = neighbors(ORIGIN)
+    x23 = mapply(neighbors, x22)
+    x24 = apply(x21, x23)
+    x25 = mapply(x5, x24)
+    O = paint(I, x25)
+    return O

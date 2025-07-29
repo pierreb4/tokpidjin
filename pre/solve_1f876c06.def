@@ -1,0 +1,2 @@
+def solve_1f876c06(S, I):
+    return paint(I, mapply(fork(recolor_i, color, fork(connect, compose(rbind(get_nth_f, L1), rbind(get_nth_f, F0)), power(rbind(get_nth_f, L1), TWO))), fgpartition(I)))

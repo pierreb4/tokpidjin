@@ -1,0 +1,2 @@
+def solve_36fdfd69(S, I):
+    return downscale(paint(fill(upscale_t(I, TWO), FOUR, mapply(delta, apply(merge, sfilter_f(product(colorfilter(o_g(upscale_t(I, TWO), R7), TWO), colorfilter(o_g(upscale_t(I, TWO), R7), TWO)), compose(lbind(greater, FIVE), fork(manhattan, rbind(get_nth_f, F0), rbind(get_nth_f, L1))))))), merge(colorfilter(o_g(upscale_t(I, TWO), R7), TWO))), TWO)

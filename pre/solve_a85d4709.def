@@ -1,0 +1,2 @@
+def solve_a85d4709(S, I):
+    return fill(fill(fill(I, TWO, chain(lbind(mapply, hfrontier), lbind(sfilter, f_ofcolor(I, FIVE)), lbind(matcher, rbind(get_nth_f, L1)))(ZERO)), THREE, chain(lbind(mapply, hfrontier), lbind(sfilter, f_ofcolor(I, FIVE)), lbind(matcher, rbind(get_nth_f, L1)))(TWO)), FOUR, chain(lbind(mapply, hfrontier), lbind(sfilter, f_ofcolor(I, FIVE)), lbind(matcher, rbind(get_nth_f, L1)))(ONE))

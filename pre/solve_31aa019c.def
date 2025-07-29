@@ -1,0 +1,2 @@
+def solve_31aa019c(S, I):
+    return fill(fill(canvas(ZERO, astuple(TEN, TEN)), get_color_rank_t(I, L1), initset(get_nth_f(f_ofcolor(I, get_color_rank_t(I, L1)), F0))), TWO, neighbors(get_nth_f(f_ofcolor(I, get_color_rank_t(I, L1)), F0)))

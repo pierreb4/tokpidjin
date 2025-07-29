@@ -1,0 +1,2 @@
+def solve_44f52bb0(S, I):
+    return canvas(branch(equality(mir_rot_t(I, R2), I), ONE, SEVEN), UNITY)

@@ -1,0 +1,2 @@
+def solve_3c9b0459(S, I):
+    return mir_rot_t(I, R5)

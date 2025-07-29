@@ -1,0 +1,2 @@
+def solve_2dc579da(S, I):
+    return get_arg_rank_t(mapply(rbind(hsplit, TWO), vsplit(I, TWO)), numcolors_t, F0)

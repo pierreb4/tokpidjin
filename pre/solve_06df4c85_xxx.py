@@ -1,0 +1,30 @@
+def solve_06df4c85_one(S, I):
+    return fill(paint(I, mfilter_f(apply(fork(recolor_i, color, fork(connect, compose(rbind(get_nth_f, L1), rbind(get_nth_f, F0)), power(rbind(get_nth_f, L1), TWO))), sfilter_f(product(merge_f(remove_f(get_arg_rank_f(partition(I), size, F0), difference(partition(I), colorfilter(partition(I), ZERO)))), merge_f(remove_f(get_arg_rank_f(partition(I), size, F0), difference(partition(I), colorfilter(partition(I), ZERO))))), fork(equality, power(rbind(get_nth_f, F0), TWO), compose(rbind(get_nth_f, F0), rbind(get_nth_f, L1))))), fork(either, vline_o, hline_o))), get_color_rank_t(I, F0), f_ofcolor(I, get_color_rank_t(I, F0)))
+
+
+def solve_06df4c85(S, I):
+    x1 = rbind(get_nth_f, L1)
+    x2 = rbind(get_nth_f, F0)
+    x3 = compose(x1, x2)
+    x4 = power(x1, TWO)
+    x5 = fork(connect, x3, x4)
+    x6 = fork(recolor_i, color, x5)
+    x7 = partition(I)
+    x8 = get_arg_rank_f(x7, size, F0)
+    x9 = colorfilter(x7, ZERO)
+    x10 = difference(x7, x9)
+    x11 = remove_f(x8, x10)
+    x12 = merge_f(x11)
+    x13 = product(x12, x12)
+    x14 = power(x2, TWO)
+    x15 = compose(x2, x1)
+    x16 = fork(equality, x14, x15)
+    x17 = sfilter_f(x13, x16)
+    x18 = apply(x6, x17)
+    x19 = fork(either, vline_o, hline_o)
+    x20 = mfilter_f(x18, x19)
+    x21 = paint(I, x20)
+    x22 = get_color_rank_t(I, F0)
+    x23 = f_ofcolor(I, x22)
+    O = fill(x21, x22, x23)
+    return O

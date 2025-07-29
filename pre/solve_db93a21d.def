@@ -1,0 +1,2 @@
+def solve_db93a21d(S, I):
+    return fill(fill(fill(underfill(I, ONE, mapply(rbind(shoot, DOWN), f_ofcolor(I, NINE))), THREE, mapply(outbox, colorfilter(o_g(I, R7), NINE))), THREE, mapply(power(outbox, TWO), sfilter_f(colorfilter(o_g(I, R7), NINE), compose(rbind(greater, ONE), compose(halve, width_f))))), THREE, mapply(power(outbox, THREE), sfilter_f(colorfilter(o_g(I, R7), NINE), matcher(compose(halve, width_f), THREE))))

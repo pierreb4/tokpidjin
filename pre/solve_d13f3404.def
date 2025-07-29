@@ -1,0 +1,2 @@
+def solve_d13f3404(S, I):
+    return paint(canvas(ZERO, astuple(SIX, SIX)), mapply(fork(recolor_i, color, compose(rbind(shoot, UNITY), center)), o_g(I, R5)))

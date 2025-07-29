@@ -1,0 +1,2 @@
+def solve_3bd67248(S, I):
+    return fill(fill(I, TWO, shoot(astuple(decrement(decrement(height_t(I))), ONE), UP_RIGHT)), FOUR, shoot(astuple(decrement(height_t(I)), ONE), RIGHT))

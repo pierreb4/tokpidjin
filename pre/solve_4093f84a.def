@@ -1,0 +1,2 @@
+def solve_4093f84a(S, I):
+    return branch(portrait_f(f_ofcolor(I, FIVE)), identity, rbind(mir_rot_t, R1))(hconcat(apply(rbind(order, identity), lefthalf(branch(portrait_f(f_ofcolor(I, FIVE)), identity, rbind(mir_rot_t, R1))(replace(I, get_color_rank_t(I, L1), FIVE)))), apply(rbind(order, invert), righthalf(branch(portrait_f(f_ofcolor(I, FIVE)), identity, rbind(mir_rot_t, R1))(replace(I, get_color_rank_t(I, L1), FIVE))))))

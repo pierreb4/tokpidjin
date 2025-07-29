@@ -1,0 +1,2 @@
+def solve_b230c067(S, I):
+    return fill(replace(I, EIGHT, ONE), TWO, extract(o_g(I, R7), matcher(normalize, get_common_rank_t(apply(normalize, totuple(o_g(I, R7))), L1))))

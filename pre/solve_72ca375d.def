@@ -1,0 +1,2 @@
+def solve_72ca375d(S, I):
+    return get_nth_t(extract(pair(apply(rbind(subgrid, I), totuple(o_g(I, R7))), papply(equality, apply(rbind(subgrid, I), totuple(o_g(I, R7))), apply(rbind(mir_rot_t, R2), apply(rbind(subgrid, I), totuple(o_g(I, R7)))))), rbind(get_nth_f, L1)), F0)

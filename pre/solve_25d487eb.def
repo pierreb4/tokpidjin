@@ -1,0 +1,2 @@
+def solve_25d487eb(S, I):
+    return underfill(I, get_color_rank_t(I, L1), shoot(center(f_ofcolor(I, get_color_rank_t(I, L1))), subtract(center(merge_f(o_g(I, R5))), center(f_ofcolor(I, get_color_rank_t(I, L1))))))

@@ -1,0 +1,2 @@
+def solve_a65b410d(S, I):
+    return underfill(underfill(underfill(underfill(I, THREE, shoot(corner(f_ofcolor(I, TWO), R1), UP_RIGHT)), ONE, shoot(corner(f_ofcolor(I, TWO), R1), DOWN_LEFT)), ONE, mapply(rbind(shoot, LEFT), shoot(corner(f_ofcolor(I, TWO), R1), DOWN_LEFT))), THREE, mapply(rbind(shoot, LEFT), shoot(corner(f_ofcolor(I, TWO), R1), UP_RIGHT)))

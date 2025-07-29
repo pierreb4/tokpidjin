@@ -53,7 +53,7 @@ while date && [ $STOP -eq 0 ]; do
   # Remove old temporary files
   find . -maxdepth 1 -name 'tmp_batt_*' -mmin 60 -exec rm {} \;
 
-  python card.py $CARD_OPTION -c 20 -f ${TMPBATT}.py
+  python card.py $CARD_OPTION -c 100 -f ${TMPBATT}.py
   unset CARD_OPTION
   cp -f ${TMPBATT}.py ${TMPBATT}_run.py
 

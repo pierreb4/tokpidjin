@@ -1,0 +1,2 @@
+def solve_2c608aff(S, I):
+    return underfill(I, get_color_rank_t(I, L1), mfilter_f(prapply(connect, toindices(get_arg_rank_f(o_g(I, R5), size, F0)), f_ofcolor(I, get_color_rank_t(I, L1))), fork(either, vline_i, hline_i)))

@@ -1,0 +1,33 @@
+def solve_484b58aa_one(S, I):
+    return paint(I, mapply(lbind(shift, merge(difference(partition(I), colorfilter(partition(I), ZERO)))), apply(lbind(multiply, astuple(vperiod(asobject(crop(I, tojvec(power(decrement, TWO)(height_t(I))), astuple(height_t(I), TWO)))), hperiod(asobject(crop(I, toivec(power(decrement, TWO)(width_t(I))), astuple(TWO, width_t(I))))))), mapply(neighbors, neighbors(ORIGIN)))))
+
+
+def solve_484b58aa(S, I):
+    x1 = partition(I)
+    x2 = colorfilter(x1, ZERO)
+    x3 = difference(x1, x2)
+    x4 = merge(x3)
+    x5 = lbind(shift, x4)
+    x6 = power(decrement, TWO)
+    x7 = height_t(I)
+    x8 = x6(x7)
+    x9 = tojvec(x8)
+    x10 = astuple(x7, TWO)
+    x11 = crop(I, x9, x10)
+    x12 = asobject(x11)
+    x13 = vperiod(x12)
+    x14 = width_t(I)
+    x15 = x6(x14)
+    x16 = toivec(x15)
+    x17 = astuple(TWO, x14)
+    x18 = crop(I, x16, x17)
+    x19 = asobject(x18)
+    x20 = hperiod(x19)
+    x21 = astuple(x13, x20)
+    x22 = lbind(multiply, x21)
+    x23 = neighbors(ORIGIN)
+    x24 = mapply(neighbors, x23)
+    x25 = apply(x22, x24)
+    x26 = mapply(x5, x25)
+    O = paint(I, x26)
+    return O

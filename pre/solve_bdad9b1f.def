@@ -1,0 +1,2 @@
+def solve_bdad9b1f(S, I):
+    return fill(fill(fill(I, TWO, hfrontier(center(f_ofcolor(I, TWO)))), EIGHT, vfrontier(center(f_ofcolor(I, EIGHT)))), FOUR, intersection(hfrontier(center(f_ofcolor(I, TWO))), vfrontier(center(f_ofcolor(I, EIGHT)))))

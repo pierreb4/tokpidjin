@@ -1,0 +1,2 @@
+def solve_6e82a1ae(S, I):
+    return fill(fill(fill(I, THREE, compose(merge, lbind(sizefilter, o_g(I, R5)))(TWO)), TWO, compose(merge, lbind(sizefilter, o_g(I, R5)))(THREE)), ONE, compose(merge, lbind(sizefilter, o_g(I, R5)))(FOUR))

@@ -1,0 +1,2 @@
+def solve_a61f2674(S, I):
+    return paint(replace(I, FIVE, ZERO), combine_f(recolor_o(ONE, get_arg_rank_f(o_g(I, R5), size, F0)), recolor_o(TWO, get_arg_rank_f(o_g(I, R5), size, L1))))

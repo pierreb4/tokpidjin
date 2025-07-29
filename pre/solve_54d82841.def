@@ -1,0 +1,2 @@
+def solve_54d82841(S, I):
+    return fill(I, FOUR, apply(lbind(astuple, decrement(height_t(I))), apply(compose(rbind(get_nth_f, L1), center), o_g(I, R5))))

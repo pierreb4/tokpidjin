@@ -1,0 +1,2 @@
+def solve_0520fde7(S, I):
+    return replace(cellwise(lefthalf(mir_rot_t(I, R2)), mir_rot_t(righthalf(mir_rot_t(I, R2)), R2), ZERO), ONE, TWO)

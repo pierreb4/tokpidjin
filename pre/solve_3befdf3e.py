@@ -1,0 +1,33 @@
+def solve_3befdf3e_one(S, I):
+    return fill(underfill(switch(I, get_color_rank_t(I, L1), other_f(remove(ZERO, palette_t(I)), get_color_rank_t(I, L1))), other_f(remove(ZERO, palette_t(I)), get_color_rank_t(I, L1)), mapply(compose(backdrop, compose(rbind(get_nth_f, F0), fork(rapply, chain(initset, rbind(get_nth_f, F0), lbind(rapply, initset(compose(lbind(power, outbox), compose(width_f, inbox))))), identity))), o_g(I, R1))), ZERO, mapply(fork(intersection, compose(backdrop, compose(rbind(get_nth_f, F0), fork(rapply, chain(initset, rbind(get_nth_f, F0), lbind(rapply, initset(compose(lbind(power, outbox), compose(width_f, inbox))))), identity))), fork(mapply, compose(lbind(lbind(chain, backdrop), inbox), compose(lbind(power, outbox), compose(width_f, inbox))), chain(lbind(apply, initset), corners, compose(backdrop, compose(rbind(get_nth_f, F0), fork(rapply, chain(initset, rbind(get_nth_f, F0), lbind(rapply, initset(compose(lbind(power, outbox), compose(width_f, inbox))))), identity)))))), o_g(I, R1)))
+
+
+def solve_3befdf3e(S, I):
+    x1 = get_color_rank_t(I, L1)
+    x2 = palette_t(I)
+    x3 = remove(ZERO, x2)
+    x4 = other_f(x3, x1)
+    x5 = switch(I, x1, x4)
+    x6 = rbind(get_nth_f, F0)
+    x7 = lbind(power, outbox)
+    x8 = compose(width_f, inbox)
+    x9 = compose(x7, x8)
+    x10 = initset(x9)
+    x11 = lbind(rapply, x10)
+    x12 = chain(initset, x6, x11)
+    x13 = fork(rapply, x12, identity)
+    x14 = compose(x6, x13)
+    x15 = compose(backdrop, x14)
+    x16 = o_g(I, R1)
+    x17 = mapply(x15, x16)
+    x18 = underfill(x5, x4, x17)
+    x19 = lbind(chain, backdrop)
+    x20 = lbind(x19, inbox)
+    x21 = compose(x20, x9)
+    x22 = lbind(apply, initset)
+    x23 = chain(x22, corners, x15)
+    x24 = fork(mapply, x21, x23)
+    x25 = fork(intersection, x15, x24)
+    x26 = mapply(x25, x16)
+    O = fill(x18, ZERO, x26)
+    return O

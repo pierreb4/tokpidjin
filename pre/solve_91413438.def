@@ -1,0 +1,2 @@
+def solve_91413438(S, I):
+    return merge_t(hsplit(paint(hconcat(I, canvas(ZERO, astuple(THREE, subtract(multiply(multiply(colorcount_t(I, ZERO), THREE), colorcount_t(I, ZERO)), THREE)))), mapply(compose(lbind(shift, get_nth_f(o_g(hconcat(I, canvas(ZERO, astuple(THREE, subtract(multiply(multiply(colorcount_t(I, ZERO), THREE), colorcount_t(I, ZERO)), THREE)))), R7), F0)), tojvec), apply(rbind(multiply, THREE), interval(ZERO, subtract(NINE, colorcount_t(I, ZERO)), ONE)))), colorcount_t(I, ZERO)))

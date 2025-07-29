@@ -1,0 +1,2 @@
+def solve_90f3ed37(S, I):
+    return underfill(I, ONE, mapply(fork(rbind(get_arg_rank, F0), chain(rbind(apply, apply(tojvec, interval(TWO, NEG_ONE, NEG_ONE))), lbind(lbind, shift), compose(lbind(shift, normalize(get_nth_t(order(o_g(I, R7), rbind(col_row, R1)), F0))), rbind(corner, R0))), compose(lbind(compose, size), lbind(lbind, intersection))), remove_f(get_nth_t(order(o_g(I, R7), rbind(col_row, R1)), F0), order(o_g(I, R7), rbind(col_row, R1)))))

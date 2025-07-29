@@ -1,0 +1,2 @@
+def solve_beb8660c(S, I):
+    return mir_rot_t(paint(canvas(ZERO, shape_t(I)), mpapply(shift, apply(normalize, order(o_g(I, R5), compose(invert, size))), apply(toivec, interval(ZERO, size(apply(normalize, order(o_g(I, R5), compose(invert, size)))), ONE)))), R5)

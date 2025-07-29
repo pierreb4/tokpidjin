@@ -1,0 +1,2 @@
+def solve_ff805c23(S, I):
+    return branch(contained(ONE, palette_t(subgrid(f_ofcolor(I, ONE), mir_rot_t(I, R0)))), subgrid(f_ofcolor(I, ONE), mir_rot_t(I, R2)), subgrid(f_ofcolor(I, ONE), mir_rot_t(I, R0)))

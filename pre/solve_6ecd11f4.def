@@ -1,0 +1,2 @@
+def solve_6ecd11f4(S, I):
+    return fill(subgrid(get_arg_rank_f(o_g(I, R3), size, L1), I), ZERO, f_ofcolor(downscale(subgrid(get_arg_rank_f(o_g(I, R3), size, F0), I), divide(width_t(subgrid(get_arg_rank_f(o_g(I, R3), size, F0), I)), width_t(subgrid(get_arg_rank_f(o_g(I, R3), size, L1), I)))), ZERO))

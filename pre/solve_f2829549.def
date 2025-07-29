@@ -1,0 +1,2 @@
+def solve_f2829549(S, I):
+    return fill(canvas(ZERO, shape_t(lefthalf(I))), THREE, intersection(f_ofcolor(lefthalf(I), ZERO), f_ofcolor(righthalf(I), ZERO)))
