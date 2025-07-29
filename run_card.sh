@@ -40,19 +40,22 @@ if [ -z "$TIMEOUT" ]; then
 fi
 
 TMPFILE=$(mktemp)
-filename=$(mktemp)
-BATT_FILE="batt_tmp_${filename##*.}"
+TMPBATT="tmp_batt_${TMPFILE##*.}"
 STOP=0
 clear
 while date && [ $STOP -eq 0 ]; do
   if [ -n "$ONERUN" ]; then
     echo "-- One run only --"
+    TMPBATT="tmp_batt_onerun"
     STOP=1
   fi
 
-  python card.py $CARD_OPTION -f ${BATT_FILE}.py
+  # Remove old temporary files
+  find . -maxdepth 1 -name 'tmp_batt_*' -mtime +1h -exec rm {} \;
+
+  python card.py $CARD_OPTION -f ${TMPBATT}.py
   unset CARD_OPTION
-  cp -f ${BATT_FILE}.py ${BATT_FILE}_run.py
+  cp -f ${TMPBATT}.py ${TMPBATT}_run.py
 
   # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
   # RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 20" \
@@ -60,14 +63,12 @@ while date && [ $STOP -eq 0 ]; do
   # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1000 \
   #     | tee batt.log
   unbuffer timeout 900s python run_batt.py -i -t $TIMEOUT -c 1000 \
-      -b ${BATT_FILE} | tee ${BATT_FILE}_run.log
+      -b ${TMPBATT} | tee ${TMPBATT}_run.log
   
-  python card.py -fs -f ${BATT_FILE}.py
-  cp -f batt.py ${BATT_FILE}_main.py
+  python card.py -fs -f ${TMPBATT}.py
+  cp -f batt.py ${TMPBATT}_main.py
   unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
-      -b ${BATT_FILE} | tee ${BATT_FILE}_main.log
-
-  rm ${BATT_FILE}_*
+      -b ${TMPBATT} | tee ${TMPBATT}_main.log
 
   # Build solvers_*.py if requested
   if [ -n "$BUILD" ]; then
