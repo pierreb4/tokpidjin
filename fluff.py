@@ -35,8 +35,8 @@ class Env:
         if t is None:
             return None
 
-        if any(t) is None:
-            return None
+        # if any(t) is None:
+        #     return None
 
         func = t[0]
         args = t[1:]
