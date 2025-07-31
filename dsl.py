@@ -2459,11 +2459,12 @@ def gravitate(
         j = 1 if sj < dj else -1
     gi, gj = i, j
     c = 0
-    while not adjacent(source, destination) and c < 42:
+    current_source = source  # Work with a copy to avoid modifying the parameter
+    while not adjacent(current_source, destination) and c < 42:
         c += 1
         gi += i
         gj += j
-        source = shift(source, (i, j))
+        current_source = shift(current_source, (i, j))
     return (gi - i, gj - j)
 
 
