@@ -434,7 +434,6 @@ if __name__ == '__main__':
             args.track = False
 
     # Load data
-    # data = get_data(train=True)
     train_data = get_data(train=True)
     eval_data = get_data(train=False)
     total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
