@@ -124,6 +124,7 @@ def get_source(task_id, imports=None, best_only=False):
 
     solve_identity = 'def solve(S, I):\n    O = identity(I)\n    return O\n'
     best_solver = Solver('solve', None, solve_identity, 0, 0, 999)
+
     for imp in imports:
         if imp == solvers_pre and task_id in BAD_SOLVERS:
             # Skip bad solvers from solvers_pre
@@ -169,6 +170,9 @@ def get_source(task_id, imports=None, best_only=False):
                 select_solver = best_solver
 
             if not select_solver:
+                continue
+
+            if select_solver.path is None:
                 continue
 
             solver_module = load_path(select_solver.path)
