@@ -121,6 +121,9 @@ def get_data(train=True, sort_by_size=False, task_id=None):
 def get_source(task_id, imports=None, best_only=False):    
     if imports is None:
         imports = [solvers_evo, solvers_pre]
+
+    solve_identity = 'def solve(S, I):\n    O = identity(I)\n    return O\n'
+    best_solver = Solver('solve', None, solve_identity, 0, 0, 999)
     for imp in imports:
         if imp == solvers_pre and task_id in BAD_SOLVERS:
             # Skip bad solvers from solvers_pre
