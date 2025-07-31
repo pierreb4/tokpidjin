@@ -1,10 +1,11 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [-i] [-o] [-b] [-t TIMEOUT]"
+  echo "Usage: $0 [-b] [-c COUNT] [-i] [-o] [-t TIMEOUT]"
+  echo "  -b: Build solvers_*.py"
+  echo "  -c: Count of tasks to run (default is all tasks)"
   echo "  -i: Initial run (removes old solvers)"
   echo "  -o: One run only (stops after one iteration)"
-  echo "  -b: Build solvers_*.py"
   echo "  -t: Maximum timeout for each run (default is 1.0 seconds)"
 }
 
@@ -13,16 +14,18 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
   exit 0
 fi
 
+BUILD=
+COUNT=
 INITIAL=
 ONERUN=
-BUILD=
 TIMEOUT=
 
-while getopts "iobt:" opt; do
+while getopts "bc:iot:" opt; do
   case $opt in
+    b) BUILD=true ;;
+    c) COUNT="$OPTARG" ;;
     i) INITIAL=true ;;
     o) ONERUN=true ;;
-    b) BUILD=true ;;
     t) TIMEOUT="$OPTARG" ;;
     *) echo "Invalid option: -$OPTARG" >&2; usage; exit 1 ;;
   esac
@@ -33,6 +36,10 @@ if [ -n "$INITIAL" ]; then
   echo "Initial run - removing old solvers"
   rm -r solver_dir/* solver_md5/* solver_def/*
   CARD_OPTION="-fs" 
+fi
+
+if [ -z "$COUNT" ]; then
+  COUNT=0
 fi
 
 if [ -z "$TIMEOUT" ]; then
@@ -62,13 +69,13 @@ while date && [ $STOP -eq 0 ]; do
   #     | bc)
   # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1200 \
   #     | tee batt.log
-  unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c 0 \
-      -b ${TMPBATT} | tee ${TMPBATT}_run.log
+  unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
+      -b $TMPBATT | tee ${TMPBATT}_run.log
   
   # python card.py -fs -f ${TMPBATT}.py
   cp -f ${TMPBATT}.py ${TMPBATT}_main.py
   unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
-      -b ${TMPBATT} | tee ${TMPBATT}_main.log
+      -b $TMPBATT | tee ${TMPBATT}_main.log
 
   # Build solvers_*.py if requested
   if [ -n "$BUILD" ]; then
