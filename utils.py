@@ -163,7 +163,7 @@ def get_source(task_id, imports=None, best_only=False):
                 # TODO Combine s_score and o_score
                 weights.append(curr_solver.o_score)
 
-            if not best_only:
+            if not best_only and sum(weights) > 0:
                 select_solver = random.choices(solver_list, weights=weights, k=1)[0]
             else:
                 select_solver = best_solver
