@@ -57,6 +57,10 @@ while date && [ $STOP -eq 0 ]; do
     STOP=1
   fi
 
+  # So that tail can get started immediately
+  touch ${TMPBATT}_run.log
+  touch ${TMPBATT}_main.log
+
   # Remove old temporary files
   find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
 
