@@ -76,7 +76,7 @@ while date && [ $STOP -eq 0 ]; do
   unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
       -b $TMPBATT | tee ${TMPBATT}_run.log
   
-  # python card.py -fs -f ${TMPBATT}.py
+  python card.py -fs -f ${TMPBATT}.py
   cp -f ${TMPBATT}.py ${TMPBATT}_main.py
   unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
       -b $TMPBATT | tee ${TMPBATT}_main.log

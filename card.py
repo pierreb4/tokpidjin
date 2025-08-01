@@ -346,9 +346,9 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
         has_mutation = False
         get_differ = False
 
-    if get_differ:
-        differs = Differs(code.file, I=f't{code.t_number[old_call]}')
-        differs.add_line(code, uses, task_id=task_id)
+    # if get_differ:
+    #     differs = Differs(code.file, I=f't{code.t_number[old_call]}')
+    #     differs.add_line(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -386,9 +386,9 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
     if old_name == 'O':
         get_differ = append_to_o(code, old_call, has_mutation, task_id)
 
-    if get_differ:
-        differs = Differs(code.file, I=f't{code.t_number[old_call]}')
-        differs.add_line(code, uses, task_id=task_id)
+    # if get_differ:
+    #     differs = Differs(code.file, I=f't{code.t_number[old_call]}')
+    #     differs.add_line(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -433,8 +433,8 @@ def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=F
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
     code = Code(file)
     uses = {}
-    differs = Differs(file, I='I')
-    differs.add_line(code, uses, task_id=task_id)
+    # differs = Differs(file, I='I')
+    # differs.add_line(code, uses, task_id=task_id)
     # Check if we reach this limit with:
     # grep 'x999 = ' solver_md5/*.py
     # TODO Continue as long as previous round was x_n variable,
