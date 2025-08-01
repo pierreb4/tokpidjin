@@ -65,7 +65,7 @@ class Code:
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
-        budget_random = 0.1
+        budget_random = 0.01
 
         # Get number corresponding to color constant
         # NOTE Maybe some x_n variables carry constants and could be replaced?
@@ -141,7 +141,7 @@ class Code:
         if arg not in constant_dict.keys():
             return arg
 
-        budget_random = 0.1
+        budget_random = 0.01
 
         return (
             replace_random(arg, list(constant_dict.keys()))
@@ -151,7 +151,7 @@ class Code:
 
 
     def substitute_symbol(self, arg, constant_dict):
-        budget_random = 0.1
+        budget_random = 0.01
 
         # Substitute constants or calls
         if random.random() < budget_random:
@@ -161,7 +161,7 @@ class Code:
 
 
     def substitute_grid_angle(self, arg, constant_dict=R8_NAMES):
-        budget_random = 0.1
+        budget_random = 0.01
 
         # Only substitute constants 
         if arg not in constant_dict.keys():
