@@ -436,7 +436,7 @@ def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=F
     differs = Differs(file, I='I')
     differs.add_line(code, uses, task_id=task_id)
     # Check if we reach this limit with:
-    # grep 'x9999 = ' solver_md5/*.py
+    # grep 'x999 = ' solver_md5/*.py
     # TODO Continue as long as previous round was x_n variable,
     #      as this insures that there's still variable O to read
     for _ in range(999):

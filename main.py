@@ -325,12 +325,11 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 if wait:
                     input("Press Enter to continue...")
 
-                # break
-
             if run_result is None:
                 success = False
-                # break
             else:
+                # Success is when the solver labelled task_id (tid in the 
+                # result) is producing the output expected for task_id 
                 success = any(tid == task_id for _, _, tid, _ in run_result[0])
 
             if success:
@@ -344,8 +343,8 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             #     os.remove(solve_path[task_id])
 
         if timed_out:
-            print_l(f'# -- {timed_out = }')
-            print_l(f'# rm {solve_path[task_id]}')
+            # print_l(f'# -- {timed_out = }')
+            print_l(f'TO: {solve_path[task_id]}')
 #            if os.path.exists(solve_path[task_id]):
 #                os.remove(solve_path[task_id])
 
