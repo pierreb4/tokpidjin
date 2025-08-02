@@ -144,7 +144,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
 
         if timed_out:
             print_l(f'-- {task_id} - test[{i}] timed out')
-            
+
         t_set = set()
         if run_result is not None:
             o['test'][i], s['test'][i] = run_result
