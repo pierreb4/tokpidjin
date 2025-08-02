@@ -324,7 +324,7 @@ class Differs:
                 add_differ_line(equals_name, code, uses, freeze_differ=True)
 
             print(f"    if type(t{code.t_num}) is int:", file=code.file)
-            print(f"        s.append(('{task_id}', '{name}', t{code.t_num}))", file=code.file)
+            print(f"        s.append((task_id, '{name}', t{code.t_num}))", file=code.file)
 
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
