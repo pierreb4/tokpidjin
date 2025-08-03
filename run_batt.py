@@ -118,17 +118,22 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
 
             # print_l(f"s[train][{i}] - {s['train'][i]}")
 
-            s_tuples = [t for t in s['train'][i] if t[0] == task_id]
-            names = [t[1] for t in s_tuples]
+            # s_tuples = [t for t in s['train'][i] if t[0] == task_id]
+                s_tuples = [t for t in s['train'][i] if t[0] in [tid, 'None']]
+                names = [t[1] for t in s_tuples]
 
-            if s_tuples and names:
-                for name in set(names):
-                    max_val = max(t[2] for t in s_tuples if t[1] == name)
-                    min_val = min(t[2] for t in s_tuples if t[1] == name)
+                if s_tuples and names:
+                    for name in set(names):
+                        max_val = max(t[2] for t in s_tuples if t[1] == name)
+                        min_val = min(t[2] for t in s_tuples if t[1] == name)
 
-                if task_id not in s_score:
-                    s_score[task_id] = 0
-                s_score[task_id] += max_val - min_val
+                # if task_id not in s_score:
+                #     s_score[task_id] = 0
+                # s_score[task_id] += max_val - min_val
+
+                if tid not in s_score:
+                    s_score[tid] = 0
+                s_score[tid] += max_val - min_val
 
             # Add 1 to o_score just once for each t value
             # NOTE o_score is the number of tasks solved by tid solver
@@ -157,17 +162,22 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
 
             # print_l(f"s[test][{i}] - {s['test'][i]}")
 
-            s_tuples = [t for t in s['test'][i] if t[0] == task_id]
-            names = [t[1] for t in s_tuples]
+            # s_tuples = [t for t in s['test'][i] if t[0] == task_id]
+                s_tuples = [t for t in s['test'][i] if t[0] in [tid, 'None']]
+                names = [t[1] for t in s_tuples]
 
-            if s_tuples and names:
-                for name in set(names):
-                    max_val = max(t[2] for t in s_tuples if t[1] == name)
-                    min_val = min(t[2] for t in s_tuples if t[1] == name)
+                if s_tuples and names:
+                    for name in set(names):
+                        max_val = max(t[2] for t in s_tuples if t[1] == name)
+                        min_val = min(t[2] for t in s_tuples if t[1] == name)
                     
-                if task_id not in s_score:
-                    s_score[task_id] = 0
-                s_score[task_id] += max_val - min_val
+                # if task_id not in s_score:
+                #     s_score[task_id] = 0
+                # s_score[task_id] += max_val - min_val
+
+                if tid not in s_score:
+                    s_score[tid] = 0
+                s_score[tid] += max_val - min_val
 
             # Add 1 to o_score just once for each t value
             # NOTE o_score is the number of tasks solved by tid solver
@@ -255,9 +265,12 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         # task_s_score = s_score.get(task_id, 0)
         # solver_score = f'solver_dir/solve_{sol_tid}/{task_o_score}/{task_s_score}/{t_log}'
 
-        # Trying something
-        task_o_score = o_score.get(task_id, 0)
-        task_s_score = s_score.get(task_id, 0)
+        # NOTE sol_tid is where the solver comes from
+        # and task_id is what it solves
+        # task_o_score = o_score.get(task_id, 0)
+        # task_s_score = s_score.get(task_id, 0)
+        task_o_score = o_score.get(sol_tid, 0)
+        task_s_score = s_score.get(sol_tid, 0)
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{task_s_score}/{t_log}'
 
         # print_l(f'-> {solver_score}/{md5_hash}.py')
