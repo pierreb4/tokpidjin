@@ -397,6 +397,7 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
         if old_name in x_call:
             uses[old_call] += 1
             equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+            # equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}.v', x_call)
 
 
 def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=False):
