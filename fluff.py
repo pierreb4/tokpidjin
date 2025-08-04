@@ -31,18 +31,15 @@ class Env:
         self.exceptions = 0
 
 
-    def do_fluff(self, t_num, t):
-        if t is None:
-            return None
-
-        # if any(t) is None:
-        #     return None
+    def do_fluff(self, t_num, t, isok=True):
+        if t is None or isok == False:
+            return OKT(False, None)
 
         func = t[0]
         args = t[1:]
 
         try:
-            result = func(*args)
+            result = OKT(True, func(*args))
 
             # # Gather score here, depending on function
             # Score = namedtuple('Score', ['iz', 'zo']) 
@@ -63,7 +60,7 @@ class Env:
             # TODO Log and resolve exceptions
             #      Log the first few exceptions to fluff.log
             if self.exceptions > 1:
-                return None
+                return OKT(False, None)
             self.exceptions += 1
 
             with open(self.log_path, 'w') as f:
@@ -79,10 +76,10 @@ class Env:
                     if hints is not None:
                         if hints[-1] in ['FrozenSet', 'Indices', 'IndicesSet', 
                                 'IntegerSet', 'Object', 'Objects', 'Patch']:
-                            return frozenset()
+                            return OKT(True, frozenset())
                         elif hints[-1] in ['Cell', 'Grid', 'IJ', 'Samples', 'Tuple',
                                 'TupleTuple']:
-                            return ()
+                            return OKT(True, ())
                         # else:
                         #     print(f'{func.__name__} -> {hints[-1]} - {t_num}', file=f)
 
@@ -93,7 +90,7 @@ class Env:
                         #         return ()
                         #     else:
                         #         print(f' -> {type(t[2]).__name__}', file=f)
-            result = None
+            result = OKT(False, None)
 
         return result
 

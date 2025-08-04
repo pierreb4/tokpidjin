@@ -293,6 +293,7 @@ def generate_expanded_function(func_name, func_params, steps):
         for old_var, new_var in var_mapping.items():
             # Replace only whole variable names (not substrings)
             new_line = re.sub(r'\b' + re.escape(old_var) + r'\b', new_var, new_line)
+            # new_line = re.sub(rf'(?<![\w.])' + re.escape(old_var) + rf'(?<![\w.])', new_var, new_line)
             # Return the variable if arg matches
             new_test = f"if x == {next_var_num - 1}:"
             new_retx = f"    return {new_var}" 
@@ -312,6 +313,7 @@ def generate_expanded_function(func_name, func_params, steps):
         new_line = code_line
         for old_var, new_var in var_mapping.items():
             new_line = re.sub(r'\b' + re.escape(old_var) + r'\b', new_var, new_line)
+            # new_line = re.sub(rf'(?<![\w.])' + re.escape(old_var) + rf'(?<![\w.])', new_var, new_line)
         
         # Replace the final variable name with 'O'
         if var_name in var_mapping:

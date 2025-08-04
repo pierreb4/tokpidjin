@@ -47,7 +47,8 @@ def replace_random(value, input_list):
 
 
 class Code:
-    def __init__(self, file, task_id=None, S=None, t_call=None, t_number=None, t_num=0, score=0):
+    def __init__(self, file, task_id=None, S=None, t_call=None, t_isok=None, 
+            t_number=None, t_num=0, score=0):
         self.file = file
         self.task_id = task_id
         self.S = S
@@ -55,6 +56,10 @@ class Code:
         if t_call is None:
             t_call = {}
         self.t_call = t_call
+
+        if t_isok is None:
+            t_isok = {}
+        self.t_isok = t_isok
 
         if t_number is None:
             t_number = {}
@@ -101,19 +106,29 @@ class Code:
     def substitute_color_izzo(self, arg_i, arg_o, f_n):
         self.score -= 1
         t_call = self.t_call
+        t_isok = self.t_isok
         t_num = self.t_num
+
         t_call[t_num + 0] = 'apply, first, S'
+        t_isok[t_num + 0] = 'True'
         t_call[t_num + 1] = 'apply, second, S'
-        t_call[t_num + 2] = f'mapply, p_g, t{t_num + 0}'
-        t_call[t_num + 3] = f'mapply, p_g, t{t_num + 1}'
-        t_call[t_num + 4] = f'dedupe, t{t_num + 2}'
-        t_call[t_num + 5] = f'dedupe, t{t_num + 3}'
-        t_call[t_num + 6] = f'difference_tuple, t{t_num + arg_i}, t{t_num + arg_o}'
-        t_call[t_num + 7] = f'get_nth_t, t{t_num + 6}, {f_n}'
+        t_isok[t_num + 1] = 'True'
+        t_call[t_num + 2] = f'mapply, p_g, t{t_num + 0}.t'
+        t_isok[t_num + 2] = f't{t_num + 0}.ok'
+        t_call[t_num + 3] = f'mapply, p_g, t{t_num + 1}.t'
+        t_isok[t_num + 3] = f't{t_num + 1}.ok'
+        t_call[t_num + 4] = f'dedupe, t{t_num + 2}.t'
+        t_isok[t_num + 4] = f't{t_num + 2}.ok'
+        t_call[t_num + 5] = f'dedupe, t{t_num + 3}.t'
+        t_isok[t_num + 5] = f't{t_num + 3}.ok'
+        t_call[t_num + 6] = f'difference_tuple, t{t_num + arg_i}.t, t{t_num + arg_o}.t'
+        t_isok[t_num + 6] = f't{t_num + arg_i}.ok and t{t_num + arg_o}.ok'
+        t_call[t_num + 7] = f'get_nth_t, t{t_num + 6}.t, {f_n}'
+        t_isok[t_num + 7] = f't{t_num + 6}.ok'
         self.t_num += 8
         for t in range(8):
             print(
-                f'    t{t_num + t} = env.do_fluff({t_num + t}, [{t_call[t_num + t]}]) # {self.task_id} - True',
+                f'    t{t_num + t} = env.do_fluff({t_num + t}, [{t_call[t_num + t]}], {t_isok[t_num + t]}) # {self.task_id} - True',
                 file=self.file,
             )
         return f't{t_num + 7}'
@@ -181,14 +196,17 @@ class Code:
         # Change the score at substitution time
         self.score -= 1
         t_call = self.t_call
+        t_isok = self.t_isok
         t_num = self.t_num
 
         t_call[t_num + 0] = 'identity, S'
-        t_call[t_num + 1] = f'a_mr, t{t_num + 0}'
+        t_isok[t_num + 0] = 'True'
+        t_call[t_num + 1] = f'a_mr, t{t_num + 0}.t'
+        t_isok[t_num + 1] = f't{t_num + 0}.ok'
         self.t_num += 2
 
-        print(f'    t{t_num + 0} = env.do_fluff({t_num + 0}, [{t_call[t_num + 0]}]) # {self.task_id} - True', file=self.file)
-        print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}]) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 0} = env.do_fluff({t_num + 0}, [{t_call[t_num + 0]}], {t_isok[t_num + 0]}) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 1} = env.do_fluff({t_num + 1}, [{t_call[t_num + 1]}], {t_isok[t_num + 1]}) # {self.task_id} - True', file=self.file)
         return f't{t_num + 1}'
 
 
@@ -203,13 +221,19 @@ class Code:
         old_hints = get_hints(old_func_name)
 
         has_mutation = False
+        # if old_args := re.findall(rf'(?<![\w.])([\w.]+)(?<![\w.])', old_call):
         if old_args := re.findall(r'\b(\w+)\b', old_call):
             # TODO Track t variables to get to hints
             if old_hints is None:
                 old_hint = None
                 for i, old_arg in enumerate(old_args):
                     # First deal with t variables
-                    if old_arg.startswith('t') and old_arg[1:].isdigit():
+                    # if old_arg.startswith('t') and old_arg[1:].isdigit():
+                    if re.match(r't\d+', old_arg):
+                        if self.t_num not in self.t_isok:
+                            self.t_isok[self.t_num] = f'{old_arg}.ok'
+                        else:
+                            self.t_isok[self.t_num] += f' and {old_arg}.ok'
                         if not freeze:
                             t_n = int(old_arg[1:])
                             has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
@@ -219,7 +243,12 @@ class Code:
                 return self.file_fluff(has_mutation), False
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
-                if old_arg.startswith('t') and old_arg[1:].isdigit():
+                # if old_arg.startswith('t') and old_arg[1:].isdigit():
+                if re.match(r't\d+', old_arg):
+                    if self.t_num not in self.t_isok:
+                        self.t_isok[self.t_num] =  f'{old_arg}.ok'
+                    else:
+                        self.t_isok[self.t_num] += f' and {old_arg}.ok'
                     if not freeze:
                         t_n = int(old_arg[1:])
                         has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
@@ -231,9 +260,16 @@ class Code:
 
 
     def file_fluff(self, has_mutation):
-        call = self.t_call[self.t_num]
-        print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call}]) # {self.task_id} - {has_mutation}', file=self.file)
-        # print("    print(f'{t" + str(self.t_num) + " = }')", file=self.file)
+        t_call = self.t_call[self.t_num]
+        call_list = [c.strip() for c in t_call.split(',')]
+        call = [f'{c}.t' if re.match(r't\d+', c) else c for c in call_list]
+        call_string = ', '.join(call)
+
+        if self.t_num not in self.t_isok:
+            self.t_isok[self.t_num] = 'True'
+        isok = self.t_isok[self.t_num]
+        # print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call}]) # {self.task_id} - {has_mutation}', file=self.file)
+        print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call_string}], {isok}) # {self.task_id} - {has_mutation}', file=self.file)
         return has_mutation
 
 
@@ -251,7 +287,9 @@ class Code:
 
                 if new_hint == old_hint or old_hint is None:
                     has_mutation = True
-                    self.t_call[self.t_num] = re.sub(rf'\bt{t_n}\b', f't{t_offset}', old_call)
+                    # self.t_call[self.t_num] = re.sub(rf'\bt{t_n}\b', f't{t_offset}', old_call)
+                    pattern = rf'(?<![\w.])t{t_n}(?![\w.])'
+                    self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
         return has_mutation
 
 
@@ -285,7 +323,11 @@ class Code:
             print_l(f'{old_hint = }')
         if old_args[i] != old_arg:
             has_mutation = True
-            self.t_call[self.t_num] = re.sub(rf'\b{old_arg}\b', f'{old_args[i]}', old_call)
+
+            # self.t_call[self.t_num] = re.sub(rf'\b{old_arg}\b', f'{old_args[i]}', old_call)
+            pattern = rf'(?<![\w.]){old_arg}(?![\w.])'
+            self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call)
+
         return has_mutation
 
 
@@ -315,6 +357,8 @@ class Differs:
 
             for var_name, value in self.equals[name].items():
                 self.equals[name][var_name] = re.sub(r'\bI\b', I, value)
+                # sub = f'{I}.t' if re.match(r't\d+', I) else I
+                # self.equals[name][var_name] = re.sub(r'\bI\b', sub, value)
 
 
     def add_line(self, code, uses, task_id=None):
@@ -323,8 +367,8 @@ class Differs:
             for var_name, value in self.equals[name].items():
                 add_differ_line(equals_name, code, uses, freeze_differ=True)
 
-            print(f"    if type(t{code.t_num}) is int:", file=code.file)
-            print(f"        s.append(('{task_id}', '{name}', t{code.t_num}))", file=code.file)
+            print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
+            print(f"        s.append(('{task_id}', '{name}', t{code.t_num}.t))", file=code.file)
 
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
@@ -358,7 +402,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
 
 
 def append_to_o(code, old_call, has_mutation, task_id):
-    print(f"    if t{code.t_number[old_call]} == O:", file=code.file)
+    print(f"    if t{code.t_number[old_call]}.t == O:", file=code.file)
     print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '-1'))", file=code.file)
     return True
 
@@ -397,7 +441,6 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
         if old_name in x_call:
             uses[old_call] += 1
             equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
-            # equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}.v', x_call)
 
 
 def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=False):

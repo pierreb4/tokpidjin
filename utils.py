@@ -43,6 +43,7 @@ import solvers_dir
 #       true if we don't
 Flags = namedtuple('Flags', ['train', 'eval'])
 
+OKT = namedtuple('OKT', ['ok', 't'])
 
 BAD_SOLVERS = {
     '27a28665', # Broken in solvers_ref.py
