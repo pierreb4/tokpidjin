@@ -221,14 +221,12 @@ class Code:
         old_hints = get_hints(old_func_name)
 
         has_mutation = False
-        # if old_args := re.findall(rf'(?<![\w.])([\w.]+)(?<![\w.])', old_call):
         if old_args := re.findall(r'\b(\w+)\b', old_call):
             # TODO Track t variables to get to hints
             if old_hints is None:
                 old_hint = None
                 for i, old_arg in enumerate(old_args):
                     # First deal with t variables
-                    # if old_arg.startswith('t') and old_arg[1:].isdigit():
                     if re.match(r't\d+', old_arg):
                         if self.t_num not in self.t_isok:
                             self.t_isok[self.t_num] = f'{old_arg}.ok'
@@ -243,7 +241,6 @@ class Code:
                 return self.file_fluff(has_mutation), False
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
-                # if old_arg.startswith('t') and old_arg[1:].isdigit():
                 if re.match(r't\d+', old_arg):
                     if self.t_num not in self.t_isok:
                         self.t_isok[self.t_num] =  f'{old_arg}.ok'
@@ -288,7 +285,8 @@ class Code:
                 if new_hint == old_hint or old_hint is None:
                     has_mutation = True
                     # self.t_call[self.t_num] = re.sub(rf'\bt{t_n}\b', f't{t_offset}', old_call)
-                    pattern = rf'(?<![\w.])t{t_n}(?![\w.])'
+                    # pattern = rf'(?<![\w.])t{t_n}(?![\w.])'
+                    pattern = rf'\bt{t_n}\b'
                     self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
         return has_mutation
 
@@ -325,7 +323,8 @@ class Code:
             has_mutation = True
 
             # self.t_call[self.t_num] = re.sub(rf'\b{old_arg}\b', f'{old_args[i]}', old_call)
-            pattern = rf'(?<![\w.]){old_arg}(?![\w.])'
+            # pattern = rf'(?<![\w.]){old_arg}(?![\w.])'
+            pattern = rf'\b{old_arg}\b'
             self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call)
 
         return has_mutation
@@ -357,8 +356,6 @@ class Differs:
 
             for var_name, value in self.equals[name].items():
                 self.equals[name][var_name] = re.sub(r'\bI\b', I, value)
-                # sub = f'{I}.t' if re.match(r't\d+', I) else I
-                # self.equals[name][var_name] = re.sub(r'\bI\b', sub, value)
 
 
     def add_line(self, code, uses, task_id=None):
@@ -402,8 +399,9 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
 
 
 def append_to_o(code, old_call, has_mutation, task_id):
-    print(f"    if t{code.t_number[old_call]}.t == O:", file=code.file)
-    print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '-1'))", file=code.file)
+    # print(f"    if t{code.t_number[old_call]}.t == O:", file=code.file)
+    # print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '-1'))", file=code.file)
+    print(f"    o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', t{code.t_number[old_call]}.ok and t{code.t_number[old_call]}.t == O))", file=code.file)
     return True
 
 
