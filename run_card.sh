@@ -81,23 +81,14 @@ while date && [ $STOP -eq 0 ]; do
   unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
       -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
   
-  # python card.py -fs -f ${TMPBATT}.py
-  # cp -f ${TMPBATT}.py ${TMPBATT}_main.py
-  # unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
-  #     -b $TMPBATT | tee ${TMPBATT}_main.log
-
-  python card.py -fs -f ${TMPBATT}_main.py
-  # cp -f ${TMPBATT}.py ${TMPBATT}_main.py
-  unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
-      -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
-
-  (date +'%F %T'; grep "Found\|Summary" ${TMPBATT}_main.log) | tee -a main.log
-
-  # Build solvers_*.py if requested
+  # Note: clean-up is down here too
   if [ -n "$BUILD" ]; then
+    python card.py -fs -f ${TMPBATT}_main.py
+    # cp -f ${TMPBATT}.py ${TMPBATT}_main.py
+    unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
+        -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
 
-    # TODO Reactivate when we start replacements again
-    #      Make more efficient
+    (date +'%F %T'; grep "Found\|Summary" ${TMPBATT}_main.log) | tee -a main.log
 
     >solvers_dir.py
     echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py 
