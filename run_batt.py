@@ -10,7 +10,6 @@ from timeit import default_timer as timer
 from pathlib import Path
 
 from utils import *
-from call import t_call
 from expand_solver import expand_file
 from run_test import check_solver_speed
 
@@ -414,5 +413,8 @@ if __name__ == "__main__":
 
     batt_module = importlib.import_module(args.batt_import)
     batt = batt_module.batt if hasattr(batt_module, 'batt') else batt
+
+    call_module = importlib.import_module(f'{args.batt_import}_call')
+    t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
 
     main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout)

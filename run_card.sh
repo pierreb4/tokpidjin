@@ -68,7 +68,6 @@ while date && [ $STOP -eq 0 ]; do
   # python card.py $CARD_OPTION -f ${TMPBATT}.py
   python card.py $CARD_OPTION -f ${TMPBATT}_run.py
   unset CARD_OPTION
-  # cp -f ${TMPBATT}.py ${TMPBATT}_run.py
 
   # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
   # RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 20" \
@@ -76,15 +75,12 @@ while date && [ $STOP -eq 0 ]; do
   # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1200 \
   #     | tee batt.log
 
-  # unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
-  #     -b $TMPBATT | tee ${TMPBATT}_run.log
   unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
       -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
   
   # Note: clean-up is down here too
   if [ -n "$BUILD" ]; then
     python card.py -fs -f ${TMPBATT}_main.py
-    # cp -f ${TMPBATT}.py ${TMPBATT}_main.py
     unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
         -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
 
