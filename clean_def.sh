@@ -19,6 +19,9 @@ if [ ! -d $SOLVER_DIR ]; then
     exit 1
 fi
 
+# Remove empty sub-directories
+find $SOLVER_DIR -type d -empty -delete
+
 # Change to your target directory (solver_dir/solve_*)
 cd $SOLVER_DIR || exit 1
 
