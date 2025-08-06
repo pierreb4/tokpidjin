@@ -264,12 +264,14 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         #     print_l(f'Solver for {task_id} timed out')
         #     continue
 
-        with open(solver_def_path, 'w') as f:
-            f.write(inlined_source)
-            f.write('\n')
+        if not Path(solver_md5_path).exists():
+            with open(solver_def_path, 'w') as f:
+                f.write(inlined_source)
+                f.write('\n')
 
         # Expand to .py file
-        expand_file(solver_def_path, solver_md5_path, None, True)
+        if not Path(solver_def_path).exists():
+            expand_file(solver_def_path, solver_md5_path, None, True)
 
         # Get s_score for this task, or 0
         # task_o_score = o_score.get(sol_solver_id, 0)
