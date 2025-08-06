@@ -108,7 +108,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         if run_result is not None:
             o['train'][i], s['train'][i] = run_result
             all_o = all_o.union(o['train'][i])
-            for t, evo, solver_id, match in o['train'][i]:
+            for t_n, evo, solver_id, match in o['train'][i]:
                 update_scores(o_score, solver_id, match)
                 # t_set.add(solver_id)
 
@@ -118,20 +118,18 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 # print_l(f"s[train][{i}] - {s['train'][i]}")
 
                 # s_tuples = [t for t in s['train'][i] if t[0] == task_id]
-                s_tuples = [t for t in s['train'][i] if t[0] in [solver_id, 'None']]
-                names = [t[1] for t in s_tuples]
+                s_tuples = [s_t for s_t in s['train'][i] if s_t[0] in [solver_id, 'None']]
+                names = [s_t[1] for s_t in s_tuples]
 
                 if s_tuples and names:
                     if solver_id not in s_score:
                         s_score[solver_id] = 0
 
                     for name in set(names):
-                        # max_val = max(t[2] for t in s_tuples if t[1] == name)
-                        # min_val = min(t[2] for t in s_tuples if t[1] == name)
-                        t = s['train'][i]
-                        none_val = t[2] if t[1] == name and t[0] == 'None' else 0
-                        last_val = t[2] if t[1] == name and t[0] == solver_id else 0
-                        diff_val = max(0, last_val - none_val)
+                        s_t = s['train'][i]
+                        none_val = s_t[2] if s_t[1] == name and s_t[0] == 'None' else 0
+                        last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
+                        diff_val = max(0, none_val - last_val)
                         s_score[solver_id] += diff_val
 
             # Add 1 to o_score just once for each t value
@@ -153,7 +151,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         if run_result is not None:
             o['test'][i], s['test'][i] = run_result
             all_o = all_o.union(o['test'][i])
-            for t, evo, solver_id, match in o['test'][i]:
+            for t_n, evo, solver_id, match in o['test'][i]:
                 update_scores(o_score, solver_id, match)
                 # t_set.add(solver_id)
 
@@ -163,20 +161,18 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                 # print_l(f"s[test][{i}] - {s['test'][i]}")
 
                 # s_tuples = [t for t in s['test'][i] if t[0] == task_id]
-                s_tuples = [t for t in s['test'][i] if t[0] in [solver_id, 'None']]
-                names = [t[1] for t in s_tuples]
+                s_tuples = [s_t for s_t in s['test'][i] if s_t[0] in [solver_id, 'None']]
+                names = [s_t[1] for s_t in s_tuples]
 
                 if s_tuples and names:
                     if solver_id not in s_score:
                         s_score[solver_id] = 0
 
                     for name in set(names):
-                        # max_val = max(t[2] for t in s_tuples if t[1] == name)
-                        # min_val = min(t[2] for t in s_tuples if t[1] == name)
-                        t = s['test'][i]
-                        none_val = t[2] if t[1] == name and t[0] == 'None' else 0
-                        last_val = t[2] if t[1] == name and t[0] == solver_id else 0
-                        diff_val = max(0, last_val - none_val)
+                        s_t = s['test'][i]
+                        none_val = s_t[2] if s_t[1] == name and s_t[0] == 'None' else 0
+                        last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
+                        diff_val = max(0, none_val - last_val)
                         s_score[solver_id] += diff_val
 
                 # if s_tuples and names:
