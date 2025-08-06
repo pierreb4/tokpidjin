@@ -77,7 +77,6 @@ def parse_function_body(content):
 
     if not func_match:
         print_l("Failed to match function definition in content")
-        print_l(f'{content = }')
         return None
 
     func_name = func_match[1]
