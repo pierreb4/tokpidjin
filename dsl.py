@@ -2450,6 +2450,10 @@ def gravitate(
 ) -> 'IJ':
     """ direction to move source until adjacent to destination """
     logger.info(f'gravitate: {source = }, {destination = }')
+
+    if not destination:
+        return source
+
     si, sj = center(source)
     di, dj = center(destination)
     i, j = 0, 0
