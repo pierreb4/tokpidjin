@@ -110,7 +110,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
             all_o = all_o.union(o['train'][i])
             for t_n, evo, solver_id, match in o['train'][i]:
                 update_scores(o_score, solver_id, match)
-                
+
                 if names := [
                     s_t[1] for s_t in s['train'][i] if s_t[0] == 'None'
                 ]:
@@ -118,11 +118,11 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                         s_score[solver_id] = 0
 
                     for name in set(names):
-                        s_t = s['train'][i]
-                        none_val = s_t[2] if s_t[1] == name and s_t[0] == 'None' else 0
-                        last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
-                        diff_val = max(0, none_val - last_val)
-                        s_score[solver_id] += diff_val
+                        for s_t in s['train'][i]:
+                            none_val = s_t[2] if s_t[1] == name and s_t[0] == 'None' else 0
+                            last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
+                            diff_val = max(0, none_val - last_val)
+                            s_score[solver_id] += diff_val
 
                     # Add 1 to o_score just once for each t value
                     # NOTE o_score is the number of tasks solved by solver_id solver
@@ -153,11 +153,11 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                         s_score[solver_id] = 0
 
                     for name in set(names):
-                        s_t = s['test'][i]
-                        none_val = s_t[2] if s_t[1] == name and s_t[0] == 'None' else 0
-                        last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
-                        diff_val = max(0, none_val - last_val)
-                        s_score[solver_id] += diff_val
+                        for s_t in s['test'][i]:
+                            none_val = s_t[2] if s_t[1] == name and s_t[0] == 'None' else 0
+                            last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
+                            diff_val = max(0, none_val - last_val)
+                            s_score[solver_id] += diff_val
 
                             # if s_tuples and names:
                             #     for name in set(names):
