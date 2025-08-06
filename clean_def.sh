@@ -19,6 +19,11 @@ if [ ! -d $SOLVER_DIR ]; then
     exit 1
 fi
 
+# Remove old *.pyc files
+find $SOLVER_DIR -type f -name "*.pyc" ! -exec sh -c '
+  py="${1%__pycache__/*}$(basename "${1%%.cpython-*}" .pyc).py"
+  [ -e "$py" ]' _ {} \; -delete
+
 # Remove empty sub-directories
 find $SOLVER_DIR -type d -empty -delete
 
