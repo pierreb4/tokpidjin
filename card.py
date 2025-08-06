@@ -53,17 +53,9 @@ class Code:
         self.task_id = task_id
         self.S = S
 
-        if t_call is None:
-            t_call = {}
-        self.t_call = t_call
-
-        if t_isok is None:
-            t_isok = {}
-        self.t_isok = t_isok
-
-        if t_number is None:
-            t_number = {}
-        self.t_number = t_number
+        self.t_call = t_call if t_call is not None else {}
+        self.t_isok = t_isok if t_isok is not None else {}
+        self.t_number = t_number if t_number is not None else {}
 
         self.t_num = t_num
         self.score = score
@@ -88,11 +80,9 @@ class Code:
 
         if c in c_iz_l and random.random() < 0.5:
             f_n = f'F{c_iz_l.index(c)}'
-            # return self.substitute_color_izzo('c_iz_n', f_n)
             return self.substitute_color_izzo(4, 5, f_n)
         elif c in c_zo_l and random.random() < 0.5:
             f_n = f'F{c_zo_l.index(c)}'
-            # return self.substitute_color_izzo('c_zo_n', f_n)
             return self.substitute_color_izzo(5, 4, f_n)
         elif random.random() < budget_random:
             # Same as usual random replacement
@@ -265,7 +255,6 @@ class Code:
         if self.t_num not in self.t_isok:
             self.t_isok[self.t_num] = 'True'
         isok = self.t_isok[self.t_num]
-        # print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call}]) # {self.task_id} - {has_mutation}', file=self.file)
         print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call_string}], {isok}) # {self.task_id} - {has_mutation}', file=self.file)
         return has_mutation
 
@@ -273,7 +262,6 @@ class Code:
     def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
         while random.random() < 0.01:
             # TODO Check parameter impact on mutation numbers
-            # t_offset = t_n - random.randint(1, 9)
             t_offset = random.randint(1, t_n)
             if t_offset > 0:
                 new_call = clean_call(self.t_call[t_offset])
@@ -284,8 +272,6 @@ class Code:
 
                 if new_hint == old_hint or old_hint is None:
                     has_mutation = True
-                    # self.t_call[self.t_num] = re.sub(rf'\bt{t_n}\b', f't{t_offset}', old_call)
-                    # pattern = rf'(?<![\w.])t{t_n}(?![\w.])'
                     pattern = rf'\bt{t_n}\b'
                     self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
         return has_mutation
@@ -321,12 +307,8 @@ class Code:
             print_l(f'{old_hint = }')
         if old_args[i] != old_arg:
             has_mutation = True
-
-            # self.t_call[self.t_num] = re.sub(rf'\b{old_arg}\b', f'{old_args[i]}', old_call)
-            # pattern = rf'(?<![\w.]){old_arg}(?![\w.])'
             pattern = rf'\b{old_arg}\b'
             self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call)
-
         return has_mutation
 
 
@@ -399,8 +381,6 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
 
 
 def append_to_o(code, old_call, has_mutation, task_id):
-    # print(f"    if t{code.t_number[old_call]}.t == O:", file=code.file)
-    # print(f"        o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', '-1'))", file=code.file)
     print(f"    o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', t{code.t_number[old_call]}.ok and t{code.t_number[old_call]}.t == O))", file=code.file)
     return True
 
@@ -456,7 +436,6 @@ def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=F
     if task_id:
         solvers = {k: solvers[k] for k in [task_id]}
     elif count > 0:
-        # solvers = {k: solvers[k] for k in list(solvers.keys())[:count]}
         # Pick random solvers
         solvers = {k: solvers[k] for k in random.sample(list(solvers.keys()), count)}
         task_list = list(solvers.keys())    
@@ -486,7 +465,6 @@ def main(file, seed, count=0, task_id=None, freeze_solver=False, freeze_differ=F
     for _ in range(999):
         # Go through each solver
         solvers_copy = solvers.copy()
-        # for task_id, (func_name, source) in solvers_copy.items():
         for task_id, solver in solvers_copy.items():
             func_name = solver.name
             # solver_path = solver.path
