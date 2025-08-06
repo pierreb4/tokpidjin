@@ -2419,7 +2419,11 @@ def hfrontier(
 ) -> 'Indices':
     """ horizontal frontier """
     logger.info(f'hfrontier: {location = }')
-    return frozenset((location[0], j) for j in range(30)) if location else frozenset()
+
+    if location == ():
+        return frozenset()
+
+    return frozenset((location[0], j) for j in range(30))
 
 
 def backdrop(
