@@ -91,7 +91,7 @@ while date && [ $STOP -eq 0 ]; do
   unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
       -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
 
-  grep "Found\|Summary" ${TMPBATT}_main.log | tee -a main.log
+  (date +'%F %T'; grep "Found\|Summary" ${TMPBATT}_main.log) | tee -a main.log
 
   # Build solvers_*.py if requested
   if [ -n "$BUILD" ]; then
@@ -147,7 +147,5 @@ while date && [ $STOP -eq 0 ]; do
     # echo -e "from dsl import *\nfrom constants import *\n\n" >>$SOLVER_PRE
     # find solver_pre -type f -name 'solve_????????.py' -exec cat {} >>$SOLVER_PRE \; -exec echo >>$SOLVER_PRE \; -exec echo >>$SOLVER_PRE \;
 
-
   fi
-
 done
