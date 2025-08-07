@@ -30,6 +30,7 @@ import solvers_pre
 import solvers_evo
 
 Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 's_score', 't_score'])
+Differ = namedtuple('Differ', ['name', 'path', 'source', 'd_score'])
 
 Path('solvers_lnk.py').touch()
 import solvers_lnk
@@ -119,7 +120,7 @@ def get_data(train=True, sort_by_size=False, task_id=None):
     }
 
 
-def get_source(task_id, imports=None, best_only=False):    
+def get_solver_source(task_id, imports=None, best_only=False):    
     if imports is None:
         imports = [solvers_evo, solvers_pre]
 
@@ -136,7 +137,6 @@ def get_source(task_id, imports=None, best_only=False):
             weights = []
             best_o_score = 0
             best_item = None
-            # list files in solver_dir/solve_{task_id}/*
             files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
             if not files:
                 continue
@@ -146,12 +146,8 @@ def get_source(task_id, imports=None, best_only=False):
                 s_score = int(sections[3])
                 t_score = int(sections[4])
 
-                # print_l(f'Processing {file = } - {sections = }')
-                # assert False
-
                 curr_solver = Solver('solve', file, None, o_score, s_score, t_score)
 
-                # TODO Try prioritising s_score over o_score
                 if curr_solver.o_score > best_o_score:
                     best_o_score = curr_solver.o_score
                     best_s_score = curr_solver.s_score
@@ -162,7 +158,6 @@ def get_source(task_id, imports=None, best_only=False):
                         best_solver = curr_solver
 
                 solver_list.append(curr_solver)
-                # TODO Combine s_score and o_score
                 weights.append(curr_solver.o_score)
 
             if not best_only and sum(weights) > 0:
@@ -183,12 +178,7 @@ def get_source(task_id, imports=None, best_only=False):
             func_name = select_solver.name
             solver = getattr(solver_module, func_name)
             print_l(f'Found: {func_name} in {solver_module.__name__}')
-
-
-            # select_solver.source = inspect.getsource(solver)
             select_solver = select_solver._replace(source=inspect.getsource(solver))
-
-
             return select_solver
 
         else:
@@ -196,13 +186,24 @@ def get_source(task_id, imports=None, best_only=False):
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
                 # print_l(f'Found solver: {func_name} in {imp.__name__}')
-                return Solver(func_name, imp, inspect.getsource(solver), 
+                return Solver(func_name, imp.__name__, inspect.getsource(solver), 
                         None, None, None)
-#    return Solver(None, None, None, 
-#            None, None, None)
 
     solve_identity = 'def solve(S, I):\n    O = identity(I)\n    return O\n'
     return Solver('solve', None, solve_identity, 0, 0, 999)
+
+
+def get_differs(import_names, best_only=False):
+    differs = {}
+    for imp_name in import_names:
+        differ_module = importlib.import_module(imp_name)
+        for name in dir(differ_module):
+            if name.startswith('differ_'):
+                differ = getattr(differ_module, name)
+                if callable(differ):
+                    differs[name] = Differ(name, imp_name, inspect.getsource(differ), None)
+            
+    return differs
 
 
 def get_solvers(imports, best_only=False):
@@ -220,7 +221,7 @@ def get_solvers(imports, best_only=False):
 
     solvers = {}
     for task_id in task_list:
-        solver = get_source(task_id, imports, best_only=best_only)
+        solver = get_solver_source(task_id, imports, best_only=best_only)
         if solver.source is not None:
             solvers[task_id] = solver
 

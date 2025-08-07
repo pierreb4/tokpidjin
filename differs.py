@@ -12,11 +12,7 @@ from dsl import *
 
 # Flags = namedtuple('Flags', ['train', 'eval'])
 #          flags: 'Flags' = Flags(True, False)
-def differ_p_g_iz(
-    I: 'Grid', 
-    O: 'Grid', 
-    flags: 'Flags'
-) -> 'Integer':
+def differ_p_g_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     x1 = identity(p_g)
     x2 = x1(I)
     x3 = x1(O)
@@ -26,11 +22,7 @@ def differ_p_g_iz(
     return x6
 
 
-def differ_p_g_zo(
-    I: 'Grid', 
-    O: 'Grid', 
-    flags: 'Flags'
-) -> 'Integer':
+def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     x1 = identity(p_g)
     x2 = x1(I)
     x3 = x1(O)
@@ -40,11 +32,7 @@ def differ_p_g_zo(
     return x6
 
 
-def differ_o_g_size_iz(
-    I: 'Grid', 
-    O: 'Grid', 
-    flags: 'Flags'
-) -> 'Integer':
+def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     x1 = rbind(o_g, R5)
     x2 = x1(I)
     x3 = x1(O)
@@ -57,11 +45,7 @@ def differ_o_g_size_iz(
     return x9
 
 
-def differ_o_g_size_zo(
-    I: 'Grid', 
-    O: 'Grid', 
-    flags: 'Flags'
-) -> 'Integer':
+def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     x1 = rbind(o_g, R5)
     x2 = x1(I)
     x3 = x1(O)
@@ -90,5 +74,4 @@ def differ_o_g_size_zo(
 #     x4 = get_nth_t(x3, F0)
 # XXX Put picker bits in card.py
 #     together with substitute funcs
-
 

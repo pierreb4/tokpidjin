@@ -124,17 +124,12 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                             diff_val = max(0, none_val - last_val)
                             s_score[solver_id] += diff_val
 
-                    # Add 1 to o_score just once for each t value
-                    # NOTE o_score is the number of tasks solved by solver_id solver
-                    # for solver_id in t_set:
-                    #     update_scores(task_start, solver_id, o_score, t_log)
-
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
         flags = Flags(False, False)
         timed_out, run_result = run_with_timeout(batt, \
-            [task_id, S, I, O, flags, fluff_log_path], timeout=timeout)
+            [task_id, S, I, O, flags, fluff_log_path], timeout)
 
         if timed_out:
             print_l(f'-- {task_id} - test[{i}] timed out')
@@ -159,25 +154,8 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                             diff_val = max(0, none_val - last_val)
                             s_score[solver_id] += diff_val
 
-                            # if s_tuples and names:
-                            #     for name in set(names):
-                            #         max_val = max(t[2] for t in s_tuples if t[1] == name)
-                            #         min_val = min(t[2] for t in s_tuples if t[1] == name)
-
-                            # if solver_id not in s_score:
-                            #     s_score[solver_id] = 0
-                            # s_score[solver_id] += max_val - min_val
-
-                    # Add 1 to o_score just once for each t value
-                    # NOTE o_score is the number of tasks solved by solver_id solver
-                    # for solver_id in t_set:
-                    #     update_scores(task_start, solver_id, o_score, t_log)
-
     elapsed = timer() - start_time
     len_task = len(train_task) + len(test_task)
-    # print_l(f'-- {len(all_o)}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
-    # print_l(f'-- {o_score[t]}/{len_task} - {elapsed:.1f}s - {elapsed / (task_i + 1):.1f}spt')
-    # return all_o, o_score, s_score, t_log
     return all_o, o_score, s_score
 
 
@@ -185,16 +163,6 @@ def update_scores(o_score, solver_id, match):
     if solver_id not in o_score:
         o_score[solver_id] = 0
     o_score[solver_id] += match
-
-
-def old_update_scores(task_start, solver_id, o_score, t_log):
-    if solver_id not in o_score:
-        o_score[solver_id] = 0
-    o_score[solver_id] += 1
-
-    # XXX t_log is the run time of all batt
-    #     We need to get the run time per task
-    t_log[solver_id] = 11 - int(math.log(timer() - task_start))
 
 
 def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1):

@@ -242,8 +242,7 @@ class Code:
                 elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
-        get_differ = old_hints[0] == 'Grid' if old_hints else False
-        return self.file_fluff(has_mutation), get_differ
+        return self.file_fluff(has_mutation)
 
 
     def file_fluff(self, has_mutation):
@@ -328,13 +327,11 @@ class Differs:
     def __init__(self, file, I='I'):
         self.file = file
         self.equals = {}
-        differs_module = load_module('differs')
-        for name, func in inspect.getmembers(differs_module, inspect.isfunction):
-            if not name.startswith('differ_'):
-                continue
 
-            source = inspect.getsource(func)
-            self.equals[name] = get_equals(source)
+        differs = get_differs(['differs'], best_only=True)
+        for name, differ in differs.items():
+            # print_l(f'Found differ: {name}\n{differ.source}')
+            self.equals[name] = get_equals(differ.source)
 
             for var_name, value in self.equals[name].items():
                 self.equals[name][var_name] = re.sub(r'\bI\b', I, value)
@@ -363,15 +360,10 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
-        has_mutation, get_differ = code.mutate(freeze_differs)
+        has_mutation = code.mutate(freeze_differs)
         code.t_number[old_call] = code.t_num
     else:
         has_mutation = False
-        get_differ = False
-
-    # if get_differ:
-    #     differs = Differs(code.file, I=f't{code.t_number[old_call]}')
-    #     differs.add_line(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -380,9 +372,10 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
             equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
 
 
-def append_to_o(code, old_call, has_mutation, task_id):
-    print(f"    o.append(({code.t_number[old_call]}, {has_mutation}, '{task_id}', t{code.t_number[old_call]}.ok and t{code.t_number[old_call]}.t == O))", file=code.file)
-    return True
+def append_to_o(code, last_call, has_mutation, task_id):
+    last_t = code.t_number[last_call]
+    check_t = f't{last_t}.ok and t{last_t}.t == O'
+    print(f"    o.append(({last_t}, {has_mutation}, '{task_id}', {check_t}))", file=code.file)
 
 
 def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
@@ -398,21 +391,16 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
-        has_mutation, get_differ = code.mutate(freeze_solvers)
+        has_mutation = code.mutate(freeze_solvers)
         code.t_number[old_call] = code.t_num
     else:
         has_mutation = False
-        get_differ = False
 
     # Was the left side O?
     if old_name == 'O':
-        get_differ = append_to_o(code, old_call, has_mutation, task_id)
+        append_to_o(code, old_call, has_mutation, task_id)
         differs = Differs(code.file, I=f't{code.t_number[old_call]}')
         differs.add_line(code, uses, task_id=task_id)
-
-    # if get_differ:
-    #     differs = Differs(code.file, I=f't{code.t_number[old_call]}')
-    #     differs.add_line(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -427,10 +415,9 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
     total_data = train_data
 
-    # Get one of best solvers if not mutating (for performance checks)
+    # Get one of best solvers if not mutating (while running main.py for instance)
     solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
-    task_list = list(solvers.keys())
-
+    # task_list = list(solvers.keys())
     print_l(f"{len(solvers) = }")
 
     if task_id:
@@ -454,8 +441,6 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
         solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
 
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
-
-
     seed = time.time()
     random.seed(seed)
     with open(batt_file_name, 'w') as batt_file:
@@ -469,7 +454,6 @@ def batt(task_id, S, I, O, flags, log_path):
     s = []
     o = []
     env = Env({seed}, task_id, S, log_path)""", file=batt_file)
-
 
         code = Code(batt_file)
         uses = {}
@@ -503,9 +487,7 @@ def batt(task_id, S, I, O, flags, log_path):
 
                 add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
 
-
         print("    return o, s", file=batt_file)
-
 
     # Write t_call into new file call.py
     # Used in run_batt.py (from call import t_call)
@@ -529,19 +511,3 @@ if __name__ == "__main__":
 
     main(args.count, args.task_id, args.freeze_solvers, args.freeze_differs, args.file_name)
 
-
-#     seed = time.time()
-#     random.seed(seed)
-#     with open(args.file_name, 'w') as batt_file:
-#         print(
-# f"""# Generated by tokpidjin/card.py
-
-# from fluff import *
-
-
-# def batt(task_id, S, I, O, flags, log_path):
-#     s = []
-#     o = []
-#     env = Env({seed}, task_id, S, log_path)""", file=batt_file)
-#         main(batt_file, seed, args.count, args.task_id, args.freeze_solvers, args.freeze_differs)
-#         print("    return o, s", file=batt_file)
