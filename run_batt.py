@@ -94,6 +94,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
 
     s_score = {}
     o_score = {}
+    d_score = {}
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
@@ -123,6 +124,11 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                             last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
                             diff_val = max(0, none_val - last_val)
                             s_score[solver_id] += diff_val
+                            if name not in d_score:
+                                d_score[name] = {}
+                            if solver_id not in d_score[name]:
+                                d_score[name][solver_id] = 0
+                            d_score[name][solver_id] += diff_val
 
     for i, sample in enumerate(test_task):
         I = sample['input']
@@ -153,6 +159,11 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                             last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
                             diff_val = max(0, none_val - last_val)
                             s_score[solver_id] += diff_val
+                            if name not in d_score:
+                                d_score[name] = {}
+                            if solver_id not in d_score[name]:
+                                d_score[name][solver_id] = 0
+                            d_score[name][solver_id] += diff_val
 
     elapsed = timer() - start_time
     len_task = len(train_task) + len(test_task)
@@ -215,11 +226,6 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         timed_out = check_solver_speed(total_data, solver_source, task_id, timeout)
         t_log = 11 - int(math.log(timer() - check_start))
 
-        # save_file = not timed_out
-        # if timed_out:
-        #     print_l(f'Solver for {task_id} timed out')
-        #     continue
-
         if not Path(solver_def_path).exists():
             with open(solver_def_path, 'w') as f:
                 f.write(inlined_source)
@@ -229,20 +235,9 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         if not Path(solver_md5_path).exists():
             expand_file(solver_def_path, solver_md5_path, None, True)
 
-        # Get s_score for this task, or 0
-        # task_o_score = o_score.get(sol_solver_id, 0)
-        # task_s_score = s_score.get(task_id, 0)
-        # solver_score = f'solver_dir/solve_{sol_solver_id}/{task_o_score}/{task_s_score}/{t_log}'
-
-        # NOTE sol_solver_id is where the solver comes from
-        # and task_id is what it solves
-        # task_o_score = o_score.get(task_id, 0)
-        # task_s_score = s_score.get(task_id, 0)
         task_o_score = o_score.get(sol_solver_id, 0)
         task_s_score = s_score.get(sol_solver_id, 0)
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{task_s_score}/{t_log}'
-
-        # print_l(f'-> {solver_score}/{md5_hash}.py')
 
         ensure_dir(solver_score)
         solver_link = f'{solver_score}/{md5_hash}.py'
@@ -256,7 +251,6 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         # python_cmd = f'python run_test.py --solvers solvers_dir -k {task_id}_{md5_hash}'
         # os.system(python_exp)
         # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
-
 
     # No timeout
     return False
