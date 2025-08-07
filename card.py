@@ -344,13 +344,13 @@ class Differs:
         for name in self.equals.keys():
             equals_name = self.equals[name].copy()
             for var_name, value in self.equals[name].items():
-                add_differ_line(equals_name, code, uses, freeze_differ=True)
+                add_differ_line(equals_name, code, uses, freeze_differs=True)
 
             print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
             print(f"        s.append(('{task_id}', '{name}', t{code.t_num}.t))", file=code.file)
 
 
-def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
+def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
     # Take next assignment - x_n = call(...)
     old_name, old_call = next(iter(equals.items()))
     uses[old_call] = 0
@@ -363,7 +363,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differ=False):
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
-        has_mutation, get_differ = code.mutate(freeze_differ)
+        has_mutation, get_differ = code.mutate(freeze_differs)
         code.t_number[old_call] = code.t_num
     else:
         has_mutation = False
@@ -385,7 +385,7 @@ def append_to_o(code, old_call, has_mutation, task_id):
     return True
 
 
-def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
+def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
     # Take next assignment - x_n = call(...)
     old_name, old_call = next(iter(equals.items()))
     uses[old_call] = 0
@@ -398,7 +398,7 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
-        has_mutation, get_differ = code.mutate(freeze_solver)
+        has_mutation, get_differ = code.mutate(freeze_solvers)
         code.t_number[old_call] = code.t_num
     else:
         has_mutation = False
@@ -421,14 +421,14 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solver=False):
             equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
 
 
-def main(count=0, task_id=None, freeze_solver=False, freeze_differ=False, batt_file_name='batt.py'):
+def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt_file_name='batt.py'):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
     total_data = train_data
 
     # Get one of best solvers if not mutating (for performance checks)
-    solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solver)
+    solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
     task_list = list(solvers.keys())
 
     print_l(f"{len(solvers) = }")
@@ -501,7 +501,7 @@ def batt(task_id, S, I, O, flags, log_path):
                     del solvers[task_id]
                     continue
 
-                add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solver=freeze_solver)
+                add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
 
 
         print("    return o, s", file=batt_file)
@@ -519,15 +519,15 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--task_id", help="Specific task_id to test", type=str)
     parser.add_argument('-c', '--count', type=int, default=0,
                         help='Number of tasks to run (default: 0 - all tasks)')
-    parser.add_argument("-fs", "--freeze_solver", action="store_true",
+    parser.add_argument("-fs", "--freeze_solvers", action="store_true",
                         help="Freeze solvers, don't mutate them")
-    parser.add_argument("-fd", "--freeze_differ", action="store_true",
+    parser.add_argument("-fd", "--freeze_differs", action="store_true",
                         help="Freeze differs, don't mutate them")
     parser.add_argument("-f", "--file_name", type=str, default='batt.py',
                         help="File name to write the batt code to (default: batt.py)")
     args = parser.parse_args()
 
-    main(args.count, args.task_id, args.freeze_solver, args.freeze_differ, args.file_name)
+    main(args.count, args.task_id, args.freeze_solvers, args.freeze_differs, args.file_name)
 
 
 #     seed = time.time()
@@ -543,5 +543,5 @@ if __name__ == "__main__":
 #     s = []
 #     o = []
 #     env = Env({seed}, task_id, S, log_path)""", file=batt_file)
-#         main(batt_file, seed, args.count, args.task_id, args.freeze_solver, args.freeze_differ)
+#         main(batt_file, seed, args.count, args.task_id, args.freeze_solvers, args.freeze_differs)
 #         print("    return o, s", file=batt_file)
