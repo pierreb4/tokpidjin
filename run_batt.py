@@ -301,13 +301,20 @@ def main(do_list, start=0, count=0, timeout=1):
         os.remove(fluff_log_path)
 
     d_score = {}
-    timeout, d_score = sum(run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout)
-              for task_i, task_id in enumerate(do_list))
+    d_score_sum = {}
+    to_sum = 0
+    for task_i, task_id in enumerate(do_list):
+        to, d_score = run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout)
+        if to:
+            to_sum += 1
+        for name, value in d_score.items():
+            if name not in d_score_sum:
+                d_score_sum[name] = {'last_t': value['last_t'], 'score': 0}
+            d_score_sum[name]['score'] += value['score']
     
-    for name, score in d_score.items():
-        print_l(f'{name} - {score}')
+    print_l(f'{d_score_sum}')
 
-    print(f'{len(do_list)} tasks - {timeout} timeouts')
+    print(f'{len(do_list)} tasks - {to_sum} timeouts')
 
 
 if __name__ == "__main__":
