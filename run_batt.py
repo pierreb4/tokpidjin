@@ -196,7 +196,6 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         # Build solution body
         solver_body = ''
         for t_num in sorted(done):
-            # t = t_call[t_num].split(',')
             t_split = [item.strip() for item in t_call[t_num].split(',')]
             t = [s[:-2] if s.endswith('.t') else s for s in t_split]
 
