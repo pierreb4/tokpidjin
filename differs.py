@@ -12,7 +12,8 @@ from dsl import *
 
 # Flags = namedtuple('Flags', ['train', 'eval'])
 #          flags: 'Flags' = Flags(True, False)
-def differ_p_g_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+# def differ_p_g_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+def differ_207afa9ac2f8547d9e6bd57058d4206c(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     x1 = identity(p_g)
     x2 = x1(I)
     x3 = x1(O)
@@ -22,7 +23,8 @@ def differ_p_g_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     return x6
 
 
-def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+# def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+def differ_9b8e636bf6f8a4e30a0d6aa8ae396d68(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     x1 = identity(p_g)
     x2 = x1(I)
     x3 = x1(O)
@@ -32,7 +34,8 @@ def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     return x6
 
 
-def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+# def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+def differ_089d541a66d5d39cab837ff24efc0ba6(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     x1 = rbind(o_g, R5)
     x2 = x1(I)
     x3 = x1(O)
@@ -45,7 +48,8 @@ def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     return x9
 
 
-def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+# def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+def differ_26e5f26b09a980364a8d2d36c5bfb723(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
     x1 = rbind(o_g, R5)
     x2 = x1(I)
     x3 = x1(O)

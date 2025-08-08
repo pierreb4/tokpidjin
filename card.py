@@ -376,37 +376,46 @@ class Differs:
 
 
     def sub_I(self, I='I'):
-        self.equals = {}
+        self.run_equals = {}
         # for differ_name in self.differs.keys():
         for differ_name in self.init_equals.keys():
-            self.equals[differ_name] = {}
+            self.run_equals[differ_name] = {}
             for x_name, x_call in self.init_equals[differ_name].items():
-                self.equals[differ_name][x_name] = re.sub(r'\bI\b', I, x_call)
+                self.run_equals[differ_name][x_name] = re.sub(r'\bI\b', I, x_call)
 
 
     def add_lines(self, code, uses, task_id=None):
-        equals = self.equals.copy()
-        for differ_name in equals.keys():
-            equals_name = self.equals[differ_name].copy()
-            for x_name, x_call in self.equals[differ_name].items():
+        # run_equals = self.run_equals.copy()
+        for differ_name in self.run_equals.keys():
+
+            # if task_id is None or task_id in ['c8cbb738', '94414823']:
+            #     print_l(f'{task_id = } - {differ_name = } - {self.run_equals[differ_name]}')
+
+            equals_name = self.run_equals[differ_name].copy()
+            for x_name, x_call in self.run_equals[differ_name].items():
                 freeze_differs = self.freeze_differs if task_id is None else True
                 add_differ_line(equals_name, code, uses, task_id, freeze_differs)
 
             if task_id is None:
                 done = track_solution(code.t_call, code.t_num, None)
-                print_l(f'{differ_name} - {done = }')
+
+                # print_l(f'{differ_name} - {done = }')
 
                 differ_body = build_differ_body(code.t_call, code.t_num, done)
                 differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
 
                 differ_source = f'def differ(I, O):\n{differ_body}'
                 inlined_source = inline_variables(differ_source)
+
+                # print_l(f'{differ_name}\n{inlined_source = }')
+
                 md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
                 differ_name = f'differ_{md5_hash}'
                 differ_source = f'def {differ_name}(I, O):\n{differ_body}'
 
-                print(differ_source)
+                # print_l(f'{differ_name}\n{inlined_source = }')
+
                 self.init_equals[differ_name] = get_equals(differ_source)
 
             print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
@@ -469,9 +478,9 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
     # Was the left side O?
     if old_name == 'O':
         append_to_o(code, old_call, has_mutation, task_id)
-        # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
-        differs.sub_I(I=f't{code.t_number[old_call]}')
-        differs.add_lines(code, uses, task_id=task_id)
+        # # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
+        # differs.sub_I(I=f't{code.t_number[old_call]}')
+        # differs.add_lines(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -558,6 +567,10 @@ def batt(task_id, S, I, O, flags, log_path):
                     continue
 
                 add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
+                # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
+                differs.sub_I(I=f't{code.t_num}')
+                differs.add_lines(code, uses, task_id=task_id)
+
 
         print("    return o, s", file=batt_file)
 
