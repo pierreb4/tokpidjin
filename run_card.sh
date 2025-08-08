@@ -36,7 +36,7 @@ if [ -n "$INITIAL" ]; then
   echo "Initial run - removing old solvers"
   rm -r solver_dir/* solver_md5/* solver_def/*
   rm main.log
-  CARD_OPTION="-fs" 
+  CARD_OPTION="-fs -fd" 
 fi
 
 if [ -z "$COUNT" ]; then
@@ -80,7 +80,7 @@ while date && [ $STOP -eq 0 ]; do
   
   # Note: clean-up is down here too
   if [ -n "$BUILD" ]; then
-    python card.py -fs -f ${TMPBATT}_main.py
+    python card.py -fs -fd -f ${TMPBATT}_main.py
     unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
         -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
 

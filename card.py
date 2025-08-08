@@ -228,7 +228,8 @@ class Code:
                     elif not freeze:
                         has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
-                return self.file_fluff(has_mutation), False
+                return self.file_fluff(has_mutation)
+
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
                 if re.match(r't\d+', old_arg):
@@ -324,24 +325,23 @@ def get_equals(source):
 
 
 class Differs:
-    def __init__(self, file, I='I'):
-        self.file = file
+    def __init__(self, freeze_differs=False, I='I'):
+        self.freeze_differs = freeze_differs
         self.equals = {}
 
         differs = get_differs(['differs'], best_only=True)
         for name, differ in differs.items():
-            # print_l(f'Found differ: {name}\n{differ.source}')
             self.equals[name] = get_equals(differ.source)
 
             for var_name, value in self.equals[name].items():
                 self.equals[name][var_name] = re.sub(r'\bI\b', I, value)
 
 
-    def add_line(self, code, uses, task_id=None):
+    def add_lines(self, code, uses, task_id=None):
         for name in self.equals.keys():
             equals_name = self.equals[name].copy()
             for var_name, value in self.equals[name].items():
-                add_differ_line(equals_name, code, uses, freeze_differs=True)
+                add_differ_line(equals_name, code, uses, task_id, self.freeze_differs)
 
             print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
             print(f"        s.append(('{task_id}', '{name}', t{code.t_num}.t))", file=code.file)
@@ -364,6 +364,10 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         code.t_number[old_call] = code.t_num
     else:
         has_mutation = False
+
+    if has_mutation and not freeze_differs and task_id is None:
+        print_l(f'{old_name = } - {old_call = }')
+        print_l(f'{code.t_call[code.t_num] = }')
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -399,8 +403,8 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
     # Was the left side O?
     if old_name == 'O':
         append_to_o(code, old_call, has_mutation, task_id)
-        differs = Differs(code.file, I=f't{code.t_number[old_call]}')
-        differs.add_line(code, uses, task_id=task_id)
+        differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
+        differs.add_lines(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
@@ -457,8 +461,8 @@ def batt(task_id, S, I, O, flags, log_path):
 
         code = Code(batt_file)
         uses = {}
-        differs = Differs(batt_file, I='I')
-        differs.add_line(code, uses, task_id=task_id)
+        differs = Differs(freeze_differs=freeze_differs, I='I')
+        differs.add_lines(code, uses, task_id=task_id)
         # Check if we reach this limit with:
         # grep 'x999 = ' solver_md5/*.py
         # TODO Continue as long as previous round was x_n variable,
