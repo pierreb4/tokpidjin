@@ -124,6 +124,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                             last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
                             diff_val = max(0, none_val - last_val)
                             s_score[solver_id] += diff_val
+                            
                             if name not in d_score:
                                 d_score[name] = {}
                             if solver_id not in d_score[name]:
@@ -159,6 +160,7 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
                             last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
                             diff_val = max(0, none_val - last_val)
                             s_score[solver_id] += diff_val
+
                             if name not in d_score:
                                 d_score[name] = {}
                             if solver_id not in d_score[name]:
