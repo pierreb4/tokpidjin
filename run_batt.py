@@ -286,8 +286,6 @@ def track_solution(t_num, done):
 
     call = t_call[t_num]
 
-    # print_l(call)
-
     if t_list := re.findall(r't(\d+)', call):
         for t_str in t_list:
             t_num = int(t_str)
