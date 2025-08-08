@@ -3,6 +3,7 @@ import re
 import random
 import time
 import inspect
+import hashlib
 
 from pprint import pprint
 
@@ -324,27 +325,93 @@ def get_equals(source):
     return equals
 
 
+def track_solution(t_call, t_num, done):
+    if done is None:
+        done = set()
+
+    if t_num not in done:
+        done.add(t_num)
+
+    call = t_call[t_num]
+
+    if t_list := re.findall(r't(\d+)', call):
+        for t_str in t_list:
+            t_num = int(t_str)
+            if t_num not in done:
+                done.add(t_num)
+                track_solution(t_call, t_num, done)
+
+    return done
+
+
+def build_differ_body(t_call, ret_t, done):
+    differ_body = ''
+    for t_num in sorted(done):
+        t_split = [item.strip() for item in t_call[t_num].split(',')]
+        t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+
+        func = t[0]
+        args = t[1:]
+        differ_body += f'    t{t_num} = '
+        differ_body += f'{func}('
+        differ_body += ', '.join(args)
+        differ_body += ')\n'
+    differ_body += f'    return t{ret_t}\n'
+
+    return differ_body
+
+
 class Differs:
-    def __init__(self, freeze_differs=False, I='I'):
+    # def __init__(self, freeze_differs=False, I='I'):
+    def __init__(self, freeze_differs=False):
         self.freeze_differs = freeze_differs
+        self.init_equals = {}
+        self.differs = get_differs(['differs'], best_only=True)
+
+        for differ_name, differ in self.differs.items():
+            self.init_equals[differ_name] = get_equals(differ.source)
+
+            # for x_name, x_call in self.equals[differ_name].items():
+            #     self.equals[differ_name][x_name] = re.sub(r'\bI\b', I, x_call)
+
+
+    def sub_I(self, I='I'):
         self.equals = {}
-
-        differs = get_differs(['differs'], best_only=True)
-        for name, differ in differs.items():
-            self.equals[name] = get_equals(differ.source)
-
-            for var_name, value in self.equals[name].items():
-                self.equals[name][var_name] = re.sub(r'\bI\b', I, value)
+        # for differ_name in self.differs.keys():
+        for differ_name in self.init_equals.keys():
+            self.equals[differ_name] = {}
+            for x_name, x_call in self.init_equals[differ_name].items():
+                self.equals[differ_name][x_name] = re.sub(r'\bI\b', I, x_call)
 
 
     def add_lines(self, code, uses, task_id=None):
-        for name in self.equals.keys():
-            equals_name = self.equals[name].copy()
-            for var_name, value in self.equals[name].items():
-                add_differ_line(equals_name, code, uses, task_id, self.freeze_differs)
+        equals = self.equals.copy()
+        for differ_name in equals.keys():
+            equals_name = self.equals[differ_name].copy()
+            print_l(f'{differ_name} - {self.equals[differ_name] = }')
+            for x_name, x_call in self.equals[differ_name].items():
+                freeze_differs = self.freeze_differs if task_id is None else True
+                add_differ_line(equals_name, code, uses, task_id, freeze_differs)
+
+            if task_id is None:
+                done = track_solution(code.t_call, code.t_num, None)
+                print_l(f'{differ_name} - {done = }')
+
+                differ_body = build_differ_body(code.t_call, code.t_num, done)
+                differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
+
+                differ_source = f'def differ(I, O):\n{differ_body}'
+                inlined_source = inline_variables(differ_source)
+                md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
+
+                differ_name = f'differ_{md5_hash}'
+                differ_source = f'def {differ_name}(I, O):\n{differ_body}'
+
+                print(differ_source)
+                self.init_equals[differ_name] = get_equals(differ_source)
 
             print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
-            print(f"        s.append(('{task_id}', '{name}', t{code.t_num}.t))", file=code.file)
+            print(f"        s.append(('{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
 
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
@@ -403,7 +470,8 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
     # Was the left side O?
     if old_name == 'O':
         append_to_o(code, old_call, has_mutation, task_id)
-        differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
+        # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
+        differs.sub_I(I=f't{code.t_number[old_call]}')
         differs.add_lines(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
@@ -461,7 +529,8 @@ def batt(task_id, S, I, O, flags, log_path):
 
         code = Code(batt_file)
         uses = {}
-        differs = Differs(freeze_differs=freeze_differs, I='I')
+        # differs = Differs(freeze_differs=freeze_differs, I='I')
+        differs.sub_I(I='I')
         differs.add_lines(code, uses, task_id=task_id)
         # Check if we reach this limit with:
         # grep 'x999 = ' solver_md5/*.py
@@ -512,6 +581,8 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--file_name", type=str, default='batt.py',
                         help="File name to write the batt code to (default: batt.py)")
     args = parser.parse_args()
+
+    differs = Differs(freeze_differs=args.freeze_differs)
 
     main(args.count, args.task_id, args.freeze_solvers, args.freeze_differs, args.file_name)
 

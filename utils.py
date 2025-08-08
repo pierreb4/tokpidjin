@@ -74,6 +74,74 @@ BAD_SOLVERS = {
     # 'e26a3af2', # Seems to hang
 } 
 
+
+class VariableInliner(ast.NodeTransformer):
+    def __init__(self):
+        self.assignments = {}
+        self.safe_to_inline = set()  # Track which variables are safe to inline
+        self.processing = set()      # Track variables being processed to avoid recursion loops
+
+
+    def visit_Assign(self, node):
+        # Only handle simple assignments to variable names
+        if len(node.targets) != 1 or not isinstance(node.targets[0], ast.Name):
+            # For other kinds of assignments (tuple unpacking, etc.), visit children
+            return self.generic_visit(node)
+        
+        var_name = node.targets[0].id
+
+        # Store the original value before processing
+        original_value = ast.unparse(node.value)
+
+        # First, recursively visit all child nodes to inline variables and substitute constants
+        node.value = self.visit(node.value)
+            
+        # Store the expression for later substitution
+        self.assignments[var_name] = node.value
+        self.safe_to_inline.add(var_name)
+
+        # Remove assignments from the output
+        return None
+
+
+    def visit_Name(self, node):
+        # Replace variable reference with its assigned value, if available and safe
+        if isinstance(node.ctx, ast.Load) and node.id in self.safe_to_inline:
+            # Avoid infinite recursion
+            if node.id in self.processing:
+                return node
+                
+            # Track that we're processing this variable
+            self.processing.add(node.id)
+
+            # Get a deep copy of the expression to substitute
+            expr = ast.parse(ast.unparse(self.assignments[node.id])).body[0].value
+            
+            # Recursively process the expression to inline any variables inside it
+            result = self.visit(expr)
+            
+            # Done processing this variable
+            self.processing.remove(node.id)
+            return result
+            
+        return node
+
+
+def inline_variables(source_code):
+    tree = ast.parse(source_code)
+    inliner = VariableInliner()
+    
+    # Process tree and collect assignments
+    tree = inliner.visit(tree)
+
+    # Convert back to source code
+    ast.fix_missing_locations(tree)
+
+    return ast.unparse(tree)
+
+
+
+
 def get_data(train=True, sort_by_size=False, task_id=None):
     """
     Load ARC task data with options for sorting and filtering.
@@ -177,7 +245,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
 
             func_name = select_solver.name
             solver = getattr(solver_module, func_name)
-            print_l(f'Found: {func_name} in {solver_module.__name__}')
+            # print_l(f'Found: {func_name} in {solver_module.__name__}')
             select_solver = select_solver._replace(source=inspect.getsource(solver))
             return select_solver
 
