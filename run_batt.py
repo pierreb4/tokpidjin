@@ -14,7 +14,7 @@ from expand_solver import expand_file
 from run_test import check_solver_speed
 
 
-def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1):
+def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1):
     task_start = timer()
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
@@ -29,7 +29,6 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
 
     s_score = {}
     o_score = {}
-    d_score = {}
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
@@ -43,28 +42,53 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         t_set = set()
         if run_result is not None:
             o['train'][i], s['train'][i] = run_result
+
+            print_l(f"{task_id} - train[{i}] - {len(o['train'][i])} - {len(s['train'][i])}")
+
             all_o = all_o.union(o['train'][i])
-            for t_n, evo, solver_id, match in o['train'][i]:
-                update_scores(o_score, solver_id, match)
+            for t_n, evo, o_solver_id, match in o['train'][i]:
+                update_scores(o_score, o_solver_id, match)
 
-                if names := [
-                    s_t[1] for s_t in s['train'][i] if s_t[0] == 'None'
-                ]:
-                    if solver_id not in s_score:
-                        s_score[solver_id] = 0
+                for last_t, s_solver_id, d_name, score in s['train'][i]:
+                    if s_solver_id == 'None':
+                        d_score[d_name] = {'last_t': last_t, 'score': 0}
 
-                    for name in set(names):
-                        for s_t in s['train'][i]:
-                            none_val = s_t[2] if s_t[1] == name and s_t[0] == 'None' else 0
-                            last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
-                            diff_val = max(0, none_val - last_val)
-                            s_score[solver_id] += diff_val
+                if o_solver_id not in s_score:
+                    s_score[o_solver_id] = 0
+
+                for name in d_score.keys():
+                    for last_t, s_solver_id, d_name, score in s['train'][i]:
+                        none_val = score if name == d_name and s_solver_id == 'None' else 0
+                        last_val = score if name == d_name and s_solver_id == o_solver_id else 0
+                        diff_val = max(0, none_val - last_val)
+                        s_score[o_solver_id] += diff_val
+
+                        if name == d_name and none_val > 0 and ((last_val == 0 and match) or (last_val != 0 and not match)):
+                            d_score[name]['score'] += 1
+
+                # if names := [
+                #     s_t[2] for s_t in s['train'][i] if s_t[1] == 'None'
+                # ]:
+                #     if solver_id not in s_score:
+                #         s_score[solver_id] = 0
+
+                #     for name in set(names):
+                #         for s_t in s['train'][i]:
+                #             none_val = s_t[3] if s_t[2] == name and s_t[1] == 'None' else 0
+                #             last_val = s_t[3] if s_t[2] == name and s_t[1] == solver_id else 0
+                #             diff_val = max(0, none_val - last_val)
+                #             s_score[solver_id] += diff_val
                             
-                            if name not in d_score:
-                                d_score[name] = {}
-                            if solver_id not in d_score[name]:
-                                d_score[name][solver_id] = 0
-                            d_score[name][solver_id] += diff_val
+                #             if name not in d_score:
+                #                 d_score[name] = 0
+                #             # if solver_id not in d_score[name]:
+                #             #     d_score[name][solver_id] = 0
+                #             # d_score[name][solver_id] += diff_val
+
+                #             # If none_val is positive, we add 1 if 
+                #             # (last_val == 0 when match == True) or (last_val != 0 when match == False)
+                #             if none_val > 0 and ((last_val == 0 and match) or (last_val != 0 and not match)):
+                #                 d_score[name] += 1
 
     for i, sample in enumerate(test_task):
         I = sample['input']
@@ -79,32 +103,34 @@ def check_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=
         t_set = set()
         if run_result is not None:
             o['test'][i], s['test'][i] = run_result
+
+            print_l(f"{task_id} - test[{i}] - {len(o['test'][i])} - {len(s['test'][i])}")
+
             all_o = all_o.union(o['test'][i])
-            for t_n, evo, solver_id, match in o['test'][i]:
-                update_scores(o_score, solver_id, match)
+            for t_n, evo, o_solver_id, match in o['test'][i]:
+                update_scores(o_score, o_solver_id, match)
 
-                if names := [
-                    s_t[1] for s_t in s['test'][i] if s_t[0] == 'None'
-                ]:
-                    if solver_id not in s_score:
-                        s_score[solver_id] = 0
+                for last_t, s_solver_id, d_name, score in s['test'][i]:
+                    if s_solver_id == 'None':
+                        d_score[d_name] = {'last_t': last_t, 'score': 0}
 
-                    for name in set(names):
-                        for s_t in s['test'][i]:
-                            none_val = s_t[2] if s_t[1] == name and s_t[0] == 'None' else 0
-                            last_val = s_t[2] if s_t[1] == name and s_t[0] == solver_id else 0
-                            diff_val = max(0, none_val - last_val)
-                            s_score[solver_id] += diff_val
+                if o_solver_id not in s_score:
+                    s_score[o_solver_id] = 0
 
-                            if name not in d_score:
-                                d_score[name] = {}
-                            if solver_id not in d_score[name]:
-                                d_score[name][solver_id] = 0
-                            d_score[name][solver_id] += diff_val
+                for name in d_score.keys():
+                    for last_t, s_solver_id, name, score in s['test'][i]:
+                        none_val = score if name == d_name and s_solver_id == 'None' else 0
+                        last_val = score if name == d_name and s_solver_id == o_solver_id else 0
+                        diff_val = max(0, none_val - last_val)
+                        s_score[o_solver_id] += diff_val
+
+                        if name == d_name and none_val > 0 and ((last_val == 0 and match) or (last_val != 0 and not match)):
+                            d_score[name]['score'] += 1
+
 
     elapsed = timer() - start_time
     len_task = len(train_task) + len(test_task)
-    return all_o, o_score, s_score
+    return all_o, o_score, s_score, d_score
 
 
 def update_scores(o_score, solver_id, match):
@@ -113,13 +139,10 @@ def update_scores(o_score, solver_id, match):
     o_score[solver_id] += match
 
 
-def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1):
-    # all_o, o_score, s_score, t_log = check_batt(total_data, 
-    #         task_i, task_id, start_time, fluff_log_path, timeout=1)
-    all_o, o_score, s_score = check_batt(total_data, 
-            task_i, task_id, start_time, fluff_log_path, timeout=1)
+def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1):
+    all_o, o_score, s_score, d_score = check_batt(total_data, 
+            task_i, task_id, d_score, start_time, fluff_log_path, timeout=1)
 
-    # Save solutions
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
     for solution in all_o:
@@ -189,7 +212,7 @@ def run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout=1)
         # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
 
     # No timeout
-    return False
+    return False, d_score
 
 
 def symlink(file_path, link_path):
@@ -276,9 +299,14 @@ def main(do_list, start=0, count=0, timeout=1):
     fluff_log_path = 'fluff.log'
     if os.path.isfile(fluff_log_path):
         os.remove(fluff_log_path)
-    timeout = sum(run_batt(total_data, task_i, task_id, start_time, fluff_log_path, timeout)
+
+    d_score = {}
+    timeout, d_score = sum(run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout)
               for task_i, task_id in enumerate(do_list))
     
+    for name, score in d_score.items():
+        print_l(f'{name} - {score}')
+
     print(f'{len(do_list)} tasks - {timeout} timeouts')
 
 

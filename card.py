@@ -419,7 +419,7 @@ class Differs:
                 self.init_equals[differ_name] = get_equals(differ_source)
 
             print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
-            print(f"        s.append(('{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
+            print(f"        s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
 
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
@@ -451,8 +451,9 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
             equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
 
 
-def append_to_o(code, last_call, has_mutation, task_id):
-    last_t = code.t_number[last_call]
+# def append_to_o(code, last_call, has_mutation, task_id):
+    # last_t = code.t_number[last_call]
+def append_to_o(code, last_t, has_mutation, task_id):
     check_t = f't{last_t}.ok and t{last_t}.t == O'
     print(f"    o.append(({last_t}, {has_mutation}, '{task_id}', {check_t}))", file=code.file)
 
@@ -477,7 +478,7 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
 
     # Was the left side O?
     if old_name == 'O':
-        append_to_o(code, old_call, has_mutation, task_id)
+        append_to_o(code, code.t_num, has_mutation, task_id)
         # # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
         # differs.sub_I(I=f't{code.t_number[old_call]}')
         # differs.add_lines(code, uses, task_id=task_id)
@@ -486,7 +487,9 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
     for x_name, x_call in equals.items():
         if old_name in x_call:
             uses[old_call] += 1
-            equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+            equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_num}', x_call)
+
+    return old_name == 'O'
 
 
 def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt_file_name='batt.py'):
@@ -566,10 +569,11 @@ def batt(task_id, S, I, O, flags, log_path):
                     del solvers[task_id]
                     continue
 
-                add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
-                # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
-                differs.sub_I(I=f't{code.t_num}')
-                differs.add_lines(code, uses, task_id=task_id)
+                get_O = add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
+                if get_O:
+                    # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
+                    differs.sub_I(I=f't{code.t_num}')
+                    differs.add_lines(code, uses, task_id=task_id)
 
 
         print("    return o, s", file=batt_file)
