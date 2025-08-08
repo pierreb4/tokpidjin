@@ -388,7 +388,6 @@ class Differs:
         equals = self.equals.copy()
         for differ_name in equals.keys():
             equals_name = self.equals[differ_name].copy()
-            print_l(f'{differ_name} - {self.equals[differ_name] = }')
             for x_name, x_call in self.equals[differ_name].items():
                 freeze_differs = self.freeze_differs if task_id is None else True
                 add_differ_line(equals_name, code, uses, task_id, freeze_differs)
