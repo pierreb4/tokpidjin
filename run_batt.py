@@ -43,7 +43,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         if run_result is not None:
             o['train'][i], s['train'][i] = run_result
 
-            print_l(f"{task_id} - train[{i}] - {len(o['train'][i])} - {len(s['train'][i])}")
+            print_l(f"train[{i}] - {task_id} - {len(o['train'][i])} - {len(s['train'][i])}")
 
             all_o = all_o.union(o['train'][i])
             for t_n, evo, o_solver_id, match in o['train'][i]:
@@ -104,7 +104,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         if run_result is not None:
             o['test'][i], s['test'][i] = run_result
 
-            print_l(f"{task_id} - test[{i}] - {len(o['test'][i])} - {len(s['test'][i])}")
+            print_l(f"test[{i}] - {task_id} - {len(o['test'][i])} - {len(s['test'][i])}")
 
             all_o = all_o.union(o['test'][i])
             for t_n, evo, o_solver_id, match in o['test'][i]:
