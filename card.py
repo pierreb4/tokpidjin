@@ -547,7 +547,7 @@ def batt(task_id, S, I, O, flags, log_path):
         # grep 'x999 = ' solver_md5/*.py
         # TODO Continue as long as previous round was x_n variable,
         #      as this insures that there's still variable O to read
-        for _ in range(9999):
+        for _ in range(999):
             # Go through each solver
             solvers_copy = solvers.copy()
             for task_id, solver in solvers_copy.items():
