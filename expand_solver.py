@@ -54,8 +54,15 @@ import inspect
 import traceback
 
 from pathlib import Path
+from timeit import default_timer as timer
 
 from utils import *
+
+# Lightweight module-level profiler wiring
+_prof = None
+def set_profiler(prof):
+    global _prof
+    _prof = prof
 
 
 def parse_function_body(content):
@@ -92,8 +99,17 @@ def parse_function_body(content):
 
     # Parse the expression using AST
     try:
+        t0 = timer()
         tree = ast.parse(return_expr)
+        parse_dt = timer() - t0
+
+        t1 = timer()
         steps, _ = expand_expression(tree.body[0].value)
+        expand_dt = timer() - t1
+
+        if _prof is not None:
+            _prof['expand_solver.parse_function_body.parse'] += parse_dt
+            _prof['expand_solver.parse_function_body.expand'] += expand_dt
         return func_name, func_params, steps
     except SyntaxError as e:
         print_l(f"Error parsing expression: {return_expr}")
@@ -254,6 +270,7 @@ def generate_expanded_function(func_name, func_params, steps):
     # lines = [f"def {func_name}({func_params}):"]
     # Adding arg x for introspection
     # lines = [f"def {func_name}(S, I, x=0):"]
+    t0 = timer()
     lines = [f"def {func_name}(S, I):"]
     
     # Filter out empty steps and ensure unique lines
@@ -326,7 +343,10 @@ def generate_expanded_function(func_name, func_params, steps):
     # Add the return statement with 'O'
     lines.append("    return O")
     
-    return "\n".join(lines)
+    code = "\n".join(lines)
+    if _prof is not None:
+        _prof['expand_solver.generate_expanded_function'] += timer() - t0
+    return code
 
 def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
     """
@@ -343,9 +363,11 @@ def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
         bool: True if processing was successful, False otherwise
     """
     try:
+        t_io0 = timer()
         with open(def_file, 'r') as f:
             content = f.read()
-        
+        io_read_dt = timer() - t_io0
+
         if func_parsed := parse_function_body(content):
             _, func_params, steps = func_parsed
             
@@ -359,7 +381,9 @@ def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
             # original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")
             
             # Generate expanded function with the original function name
+            t_gen0 = timer()
             expanded_func = generate_expanded_function(func_name, func_params, steps)
+            gen_dt = timer() - t_gen0
             
             # Create the output with renamed original + expanded function
             # output = original_renamed + "\n\n" + expanded_func + "\n"
@@ -367,8 +391,10 @@ def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
             output = expanded_func + "\n"
 
 
+            t_io1 = timer()
             with open(py_file, 'w') as out_f:
                 out_f.write(output)
+            io_write_dt = timer() - t_io1
             
             if not quiet:
                 print_l(f"Successfully generated {py_file} with expanded version")
@@ -377,7 +403,16 @@ def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
             
             # Update solvers_*.py if specified
             if update_solvers_file:
+                t_upd0 = timer()
                 update_solvers(update_solvers_file, def_file, func_name, expanded_func, quiet)
+                upd_dt = timer() - t_upd0
+            else:
+                upd_dt = 0.0
+            if _prof is not None:
+                _prof['expand_solver.expand_file.read'] += io_read_dt
+                _prof['expand_solver.expand_file.generate'] += gen_dt
+                _prof['expand_solver.expand_file.write'] += io_write_dt
+                _prof['expand_solver.expand_file.update_solvers'] += upd_dt
                 
             return True
         else:

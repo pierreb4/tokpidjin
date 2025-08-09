@@ -5,16 +5,21 @@ import ast
 import hashlib
 import math
 import importlib
+import os
 
 from timeit import default_timer as timer
 from pathlib import Path
+from collections import defaultdict
+from contextlib import contextmanager
 
 from utils import *
+import utils as utils_module
 from expand_solver import expand_file
+import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
 
-def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1):
+def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
     task_start = timer()
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
@@ -33,8 +38,12 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         I = sample['input']
         O = sample['output']
         flags = Flags(True, False)
+        if prof is not None:
+            prof_start = timer()
         timed_out, run_result = run_with_timeout(batt,
             [task_id, S, I, O, flags, fluff_log_path], timeout)
+        if prof is not None:
+            prof['batt.train.run_with_timeout'] += timer() - prof_start
 
         if timed_out:
             print_l(f'-- {task_id} - train[{i}] timed out')
@@ -47,6 +56,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
             all_o = all_o.union(o['train'][i])
             for t_n, evo, o_solver_id, match in o['train'][i]:
+
+
+                if not evo:
+                    continue
+
                 update_scores(o_score, o_solver_id, match)
 
                 for last_t, s_solver_id, d_name, score in s['train'][i]:
@@ -56,6 +70,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if o_solver_id not in s_score:
                     s_score[o_solver_id] = 0
 
+                if prof is not None:
+                    loop_start = timer()
                 for name in d_score.keys():
                     for last_t, s_solver_id, d_name, score in s['train'][i]:
                         none_val = score if name == d_name and s_solver_id == 'None' else 0
@@ -65,37 +81,19 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                         if name == d_name and none_val > 0 and ((last_val == 0 and match) or (last_val != 0 and not match)):
                             d_score[name]['score'] += 1
-
-                # if names := [
-                #     s_t[2] for s_t in s['train'][i] if s_t[1] == 'None'
-                # ]:
-                #     if solver_id not in s_score:
-                #         s_score[solver_id] = 0
-
-                #     for name in set(names):
-                #         for s_t in s['train'][i]:
-                #             none_val = s_t[3] if s_t[2] == name and s_t[1] == 'None' else 0
-                #             last_val = s_t[3] if s_t[2] == name and s_t[1] == solver_id else 0
-                #             diff_val = max(0, none_val - last_val)
-                #             s_score[solver_id] += diff_val
-                            
-                #             if name not in d_score:
-                #                 d_score[name] = 0
-                #             # if solver_id not in d_score[name]:
-                #             #     d_score[name][solver_id] = 0
-                #             # d_score[name][solver_id] += diff_val
-
-                #             # If none_val is positive, we add 1 if 
-                #             # (last_val == 0 when match == True) or (last_val != 0 when match == False)
-                #             if none_val > 0 and ((last_val == 0 and match) or (last_val != 0 and not match)):
-                #                 d_score[name] += 1
+                if prof is not None:
+                    prof['batt.train.scoring'] += timer() - loop_start
 
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
         flags = Flags(False, False)
-        timed_out, run_result = run_with_timeout(batt, \
+        if prof is not None:
+            prof_start = timer()
+        timed_out, run_result = run_with_timeout(batt,
             [task_id, S, I, O, flags, fluff_log_path], timeout)
+        if prof is not None:
+            prof['batt.test.run_with_timeout'] += timer() - prof_start
 
         if timed_out:
             print_l(f'-- {task_id} - test[{i}] timed out')
@@ -108,6 +106,12 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
             all_o = all_o.union(o['test'][i])
             for t_n, evo, o_solver_id, match in o['test'][i]:
+
+
+                if not evo:
+                    continue
+
+
                 update_scores(o_score, o_solver_id, match)
 
                 for last_t, s_solver_id, d_name, score in s['test'][i]:
@@ -117,6 +121,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if o_solver_id not in s_score:
                     s_score[o_solver_id] = 0
 
+                if prof is not None:
+                    loop_start = timer()
                 for name in d_score.keys():
                     for last_t, s_solver_id, name, score in s['test'][i]:
                         none_val = score if name == d_name and s_solver_id == 'None' else 0
@@ -126,6 +132,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                         if name == d_name and none_val > 0 and ((last_val == 0 and match) or (last_val != 0 and not match)):
                             d_score[name]['score'] += 1
+                if prof is not None:
+                    prof['batt.test.scoring'] += timer() - loop_start
 
 
     elapsed = timer() - start_time
@@ -139,9 +147,13 @@ def update_scores(o_score, solver_id, match):
     o_score[solver_id] += match
 
 
-def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1):
-    all_o, o_score, s_score, d_score = check_batt(total_data, 
-            task_i, task_id, d_score, start_time, fluff_log_path, timeout=1)
+def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
+    if prof is not None:
+        prof_call_start = timer()
+    all_o, o_score, s_score, d_score = check_batt(total_data,
+            task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=prof)
+    if prof is not None:
+        prof['run_batt.check_batt'] += timer() - prof_call_start
 
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
@@ -149,7 +161,11 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         sol_t, sol_e, sol_solver_id, sol_m = solution
 
         # Track calls then reverse sequence to rebuild solver
+        if prof is not None:
+            t0 = timer()
         done = track_solution(sol_t, None)
+        if prof is not None:
+            prof['run_batt.track_solution'] += timer() - t0
 
         # Build solution body
         solver_body = ''
@@ -167,7 +183,11 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
         # Get md5_hash of inlined source code
         solver_source = f'def solve(S, I):\n{solver_body}'
+        if prof is not None:
+            t0 = timer()
         inlined_source = inline_variables(solver_source)
+        if prof is not None:
+            prof['run_batt.inline_variables'] += timer() - t0
         md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
         # Write inlined source to file
@@ -182,7 +202,11 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
         check_start = timer()
+        if prof is not None:
+            t0 = timer()
         timed_out = check_solver_speed(total_data, solver_source, task_id, timeout)
+        if prof is not None:
+            prof['run_batt.check_solver_speed'] += timer() - t0
         t_log = 11 - int(math.log(timer() - check_start))
 
         if not Path(solver_def_path).exists():
@@ -192,16 +216,28 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
         # Expand to .py file
         if not Path(solver_md5_path).exists():
+            if prof is not None:
+                t0 = timer()
             expand_file(solver_def_path, solver_md5_path, None, True)
+            if prof is not None:
+                prof['run_batt.expand_file'] += timer() - t0
 
         task_o_score = o_score.get(sol_solver_id, 0)
         task_s_score = s_score.get(sol_solver_id, 0)
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{task_s_score}/{t_log}'
 
+        if prof is not None:
+            t0 = timer()
         ensure_dir(solver_score)
+        if prof is not None:
+            prof['run_batt.ensure_dir'] += timer() - t0
         solver_link = f'{solver_score}/{md5_hash}.py'
 
+        if prof is not None:
+            t0 = timer()
         symlink(solver_md5_path, solver_link)
+        if prof is not None:
+            prof['run_batt.symlink'] += timer() - t0
 
 
         # TODO Control this with option
@@ -274,7 +310,7 @@ def pick_rnd_task(task_list, total_data):
     return [task_id]
 
 
-def main(do_list, start=0, count=0, timeout=1):
+def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
@@ -303,8 +339,18 @@ def main(do_list, start=0, count=0, timeout=1):
     d_score = {}
     d_score_sum = {}
     to_sum = 0
+    prof = defaultdict(float) if enable_timing else None
+    if prof is not None:
+        # Register profiler with modules that support it
+        if hasattr(utils_module, 'set_profiler'):
+            utils_module.set_profiler(prof)
+        if hasattr(expand_solver_module, 'set_profiler'):
+            expand_solver_module.set_profiler(prof)
     for task_i, task_id in enumerate(do_list):
-        to, d_score = run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout)
+        loop_start = timer() if prof is not None else None
+        to, d_score = run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout, prof=prof)
+        if prof is not None:
+            prof['main.run_batt'] += timer() - loop_start
         if to:
             to_sum += 1
         for name, value in d_score.items():
@@ -315,6 +361,12 @@ def main(do_list, start=0, count=0, timeout=1):
     print_l(f'{d_score_sum}')
 
     print(f'{len(do_list)} tasks - {to_sum} timeouts')
+
+    # Print lightweight timing report
+    if prof is not None:
+        print("\nTiming summary (seconds):")
+        for k, v in sorted(prof.items(), key=lambda kv: kv[1], reverse=True):
+            print(f"  {k:32s} {v:8.3f}")
 
 
 if __name__ == "__main__":
@@ -329,6 +381,9 @@ if __name__ == "__main__":
                         help='Timeout for each task in seconds (default: 1)')
     parser.add_argument('-b', '--batt_import', type=str, default='batt',
                         help='Module to import for batt (default: batt)')
+    parser.add_argument('--timing', action='store_true', help='Print lightweight timing breakdown')
+    parser.add_argument('--cprofile', action='store_true', help='Run with cProfile and print top stats')
+    parser.add_argument('--cprofile-top', type=int, default=30, help='Number of top functions to show in cProfile')
     args = parser.parse_args()
 
     batt_module = importlib.import_module(args.batt_import)
@@ -337,4 +392,21 @@ if __name__ == "__main__":
     call_module = importlib.import_module(f'{args.batt_import}_call')
     t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
 
-    main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout)
+    if args.cprofile:
+        import cProfile, pstats, io
+        pr = cProfile.Profile()
+        pr.enable()
+        main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing)
+        pr.disable()
+        s = io.StringIO()
+        ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
+        ps.print_stats(args.cprofile_top)
+        print('\n[cProfile cumulative top]')
+        print(s.getvalue())
+        s = io.StringIO()
+        ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+        ps.print_stats(args.cprofile_top)
+        print('\n[cProfile tottime top]')
+        print(s.getvalue())
+    else:
+        main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing)

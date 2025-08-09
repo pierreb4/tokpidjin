@@ -11,6 +11,7 @@ import glob
 from pathlib import Path
 from func_timeout import func_timeout, FunctionTimedOut
 from collections import namedtuple
+from timeit import default_timer as timer
 
 # namedtuple: A factory function from the collections module that creates tuple subclasses with named fields.
 # It enables access to elements by attribute (dot notation) as well as by index, improving code readability.
@@ -128,16 +129,39 @@ class VariableInliner(ast.NodeTransformer):
 
 
 def inline_variables(source_code):
+    start_total = timer()
+    parse_t0 = timer()
     tree = ast.parse(source_code)
+    parse_dt = timer() - parse_t0
+
+    visit_t0 = timer()
     inliner = VariableInliner()
-    
     # Process tree and collect assignments
     tree = inliner.visit(tree)
+    visit_dt = timer() - visit_t0
 
+    fix_t0 = timer()
     # Convert back to source code
     ast.fix_missing_locations(tree)
+    unparse_source = ast.unparse(tree)
+    fix_dt = timer() - fix_t0
 
-    return ast.unparse(tree)
+    total_dt = timer() - start_total
+    # Record timings if profiler is set
+    if _prof is not None:
+        _prof['utils.inline_variables.parse'] += parse_dt
+        _prof['utils.inline_variables.visit'] += visit_dt
+        _prof['utils.inline_variables.unparse'] += fix_dt
+        _prof['utils.inline_variables.total'] += total_dt
+
+    return unparse_source
+
+# Lightweight module-level profiler wiring
+_prof = None
+def set_profiler(prof):
+    """Register a defaultdict(float) profiler to accumulate timings."""
+    global _prof
+    _prof = prof
 
 
 
