@@ -64,7 +64,7 @@ while date && [ $STOP -eq 0 ]; do
 
   # Remove old temporary files
   find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
-
+  
   # python card.py $CARD_OPTION -f ${TMPBATT}.py
   python card.py $CARD_OPTION -f ${TMPBATT}_run.py
   unset CARD_OPTION
@@ -86,6 +86,7 @@ while date && [ $STOP -eq 0 ]; do
 
     (date +'%F %T'; grep "Found\|Summary" ${TMPBATT}_main.log) | tee -a main.log
 
+    find solver_md5 -type f -size +10k -delete
     >solvers_dir.py
     echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py 
     find solver_md5 -type f -name '*.py' -exec cat {} >>solvers_dir.py \; -exec echo >>solvers_dir.py \; -exec echo >>solvers_dir.py \;
