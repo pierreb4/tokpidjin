@@ -190,6 +190,9 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
             prof['run_batt.inline_variables'] += timer() - t0
         md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
+        # Put task_id in function name to amke solvers_dir.py usable
+        solver_source = re.sub(r'def solve\((.*)\):', f'def solve_{task_id}(\g<1>):', solver_source)
+
         # Write inlined source to file
         ensure_dir('solver_dir')
         solve_task = f'solver_dir/solve_{task_id}'
