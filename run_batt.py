@@ -192,6 +192,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
         # Put task_id in function name to amke solvers_dir.py usable
         solver_source = re.sub(r'def solve\((.*)\):', f'def solve_{task_id}(\g<1>):', solver_source)
+        inlined_source = inline_variables(solver_source)
 
         # Write inlined source to file
         ensure_dir('solver_dir')
