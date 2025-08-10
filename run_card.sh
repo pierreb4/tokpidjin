@@ -36,7 +36,7 @@ if [ -n "$INITIAL" ]; then
   echo "Initial run - removing old solvers"
   rm -r solver_dir/* solver_md5/* solver_def/*
   rm main.log
-  CARD_OPTION="-fs -fd" 
+  CARD_OPTION="-fs -fd"
 fi
 
 if [ -z "$COUNT" ]; then
@@ -65,8 +65,7 @@ while date && [ $STOP -eq 0 ]; do
   # Remove old temporary files
   find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
   
-  # python card.py $CARD_OPTION -f ${TMPBATT}.py
-  python card.py $CARD_OPTION -f ${TMPBATT}_run.py
+  python card.py $CARD_OPTION -c 100 -f ${TMPBATT}_run.py
   unset CARD_OPTION
 
   # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
