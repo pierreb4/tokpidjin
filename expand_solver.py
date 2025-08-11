@@ -91,7 +91,8 @@ def parse_function_body(content):
 
     func_name = func_match[1]
 
-    print_l(f"Function name: {func_name}")
+    # print_l(f"Function name: {func_name}")
+    print('.', end='')
 
     func_params = func_match[2]
 
