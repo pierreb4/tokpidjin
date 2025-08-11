@@ -201,6 +201,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             return
 
         solver_source = get_solver_source(task_id, imports=None, best_only=True)
+        print_l(f'{solver_source = }')
         print_l(f'Testing {task_id} - {solver_source.path if solver_source else "No solver found"}')
         module_name = solver_source.path[:-3].replace('/', '.')
 
