@@ -263,7 +263,7 @@ class Code:
     def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
         while random.random() < 0.01:
             # TODO Check parameter impact on mutation numbers            
-            # t_offset = random.randint(1, t_n)
+            t_offset = random.randint(1, t_n)
             # if t_offset > 0:
             if t_offset > self.last_differ_t_num:
                 new_call = clean_call(self.t_call[t_offset])
