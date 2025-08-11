@@ -393,8 +393,8 @@ if __name__ == '__main__':
                         type=int, default=10)
     parser.add_argument("--stats-output", help="File to save statistics output (default: module_stats.json)",
                         type=str, default="module_stats.json")
-    parser.add_argument('-b', '--batt_import', type=str, default='tmp_batt_onerun',
-                        help='Module to import for batt (default: tmp_batt_onerun)')
+    parser.add_argument('-b', '--batt_import', type=str, default='tmp_batt_onerun_main',
+                        help='Module to import for batt (default: tmp_batt_onerun_main)')
     args = parser.parse_args()
 
     batt_module = importlib.import_module(args.batt_import)
