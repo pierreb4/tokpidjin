@@ -95,9 +95,14 @@ while date && [ $STOP -eq 0 ]; do
     TMP_SOLVER_NAME=$(mktemp)
     for d in solver_dir/solve_*; do
       ls -v $d/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]* | tail -1 >$TMP_SOLVER_NAME
-      cat $TMP_SOLVER_NAME >>solvers_dir.py
+      mapfile -t TO_SOLVER <$TMP_SOLVER_NAME
+      if [[ -z "${TO_SOLVER[@]}" ]]; then
+        echo "No files found in $d"
+        continue
+      fi
+      cat $TO_SOLVER >>solvers_dir.py
     done
-    
+
     rm $TMP_SOLVER_NAME
 
     # This should be a one-time thing after a change in replace_*.py
