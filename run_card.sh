@@ -94,12 +94,8 @@ while date && [ $STOP -eq 0 ]; do
 
     TMP_SOLVER_NAME=$(mktemp)
     for d in solver_dir/solve_*; do
-      ls -v $d/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]* | tail -1 >$TMP_SOLVER_NAME
-      mapfile -t TO_SOLVER <$TMP_SOLVER_NAME
-      if [[ -z "${TO_SOLVER[@]}" ]]; then
-        echo "No files found in $d"
-        continue
-      fi
+      ls -v ${d}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]* | tail -1 >$TMP_SOLVER_NAME
+      TO_SOLVER=`cat $TMP_SOLVER_NAME`
       cat $TO_SOLVER >>solvers_dir.py
     done
 
