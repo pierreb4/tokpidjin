@@ -141,11 +141,11 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
             n_correct += 1
         except Exception:
             if quiet:
-                print(f"Error in {key}: {len(lines)} lines")
+                print_l(f"Error in {key}: {len(lines)} lines")
             else:
-                print(f'Error in {key}:\n{definition}')
+                print_l(f'Error in {key}:\n{definition}')
 
-    print(f'{n_correct} out of {n} solvers formatted correctly.')
+    print_l(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
 def check_solver_speed(data, solver, task_id, timeout=1):
