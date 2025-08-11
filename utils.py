@@ -238,7 +238,8 @@ def get_solver_source(task_id, imports=None, best_only=False):
                 s_score = int(sections[3])
                 t_score = int(sections[4])
 
-                curr_solver = Solver('solve', file, None, o_score, s_score, t_score)
+                # curr_solver = Solver('solve', file, None, o_score, s_score, t_score)
+                curr_solver = Solver(f'solve_{task_id}', file, None, o_score, s_score, t_score)
 
                 if curr_solver.o_score > best_o_score:
                     best_o_score = curr_solver.o_score
