@@ -331,7 +331,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             else:
                 # Success is when the solver labelled task_id (tid in the 
                 # result) is producing the output expected for task_id 
-                success = any(tid == task_id for _, _, tid, _ in run_result[0])
+                success = any(tid == task_id and match for _, _, tid, match in run_result[0])
 
             if success:
                 # print_l(f'-- Solves {task_id} - sample {i}')
