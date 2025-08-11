@@ -375,13 +375,14 @@ def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
         io_read_dt = timer() - t_io0
 
         if func_parsed := parse_function_body(content):
-            _, func_params, steps = func_parsed
+            # _, func_params, steps = func_parsed
+            func_name, func_params, steps = func_parsed
             
             # Get function name from def_file
             # def_stem_split = Path(def_file).stem.split('_')
             # func_name = f'solve_{def_stem_split[0]}'
 
-            func_name = 'solve'
+            # func_name = 'solve'
 
             # Create the original function with _one suffix
             # original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")
