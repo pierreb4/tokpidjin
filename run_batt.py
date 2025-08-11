@@ -124,7 +124,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if prof is not None:
                     loop_start = timer()
                 for name in d_score.keys():
-                    for last_t, s_solver_id, name, score in s['test'][i]:
+                    for last_t, s_solver_id, d_name, score in s['test'][i]:
                         none_val = score if name == d_name and s_solver_id == 'None' else 0
                         last_val = score if name == d_name and s_solver_id == o_solver_id else 0
                         diff_val = max(0, none_val - last_val)
