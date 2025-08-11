@@ -89,8 +89,13 @@ while date && [ $STOP -eq 0 ]; do
     (date +'%F %T'; grep "Found\|Summary" ${TMPBATT}_main.log) | tee -a main.log
 
     >solvers_dir.py
-    echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py 
-    find solver_md5 -type f -name '*.py' -exec cat {} >>solvers_dir.py \; -exec echo >>solvers_dir.py \; -exec echo >>solvers_dir.py \;
+    echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py
+    # find solver_md5 -type f -name '*.py' -exec cat {} >>solvers_dir.py \; -exec echo >>solvers_dir.py \; -exec echo >>solvers_dir.py \;
+
+    TMP_SOLVER_NAME=$(mktemp)
+    for d in solver_dir/solve_*; do
+      ls -v $d/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]* | tail -1 >$TMP_SOLVER_NAME
+      cat $TMP_SOLVER_NAME >>solvers_dir.py
 
     # This should be a one-time thing after a change in replace_*.py
 
