@@ -16,11 +16,13 @@ Usage:
 Example:
   python run_test.py -k 00d62c1b -q      # Test task 00d62c1b with minimal output
 """
+
 import os
 import json
 import inspect
 import tqdm
 import argparse
+import contextlib
 import re
 import sys
 import traceback
@@ -153,7 +155,7 @@ def check_solver_speed(data, solver, task_id, timeout=1):
     task = data['train'][task_id] + data['test'][task_id]
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
 
-    try:
+    with contextlib.suppress(Exception):
         for i, ex in enumerate(task):
             # assert solver(S, ex['input']) == ex['output']
             timed_out, result = run_with_timeout(solver, [S, ex['input']], timeout)
@@ -162,9 +164,6 @@ def check_solver_speed(data, solver, task_id, timeout=1):
                 return True
             # if result != ex['output']:
             #     print_l(f'Solver for {task_id} failed sample {i} (or timed out)')
-    except Exception as e:
-        pass
-
     return False
 
 
