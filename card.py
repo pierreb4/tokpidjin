@@ -262,8 +262,9 @@ class Code:
 
     def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
         while random.random() < 0.01:
-            # TODO Check parameter impact on mutation numbers
-            t_offset = random.randint(1, t_n)
+            # TODO Check parameter impact on mutation numbers            
+            # t_offset = random.randint(1, t_n)
+            t_offset = random.randint(code.last_differ_t_num + 1, t_n)
             if t_offset > 0:
                 new_call = clean_call(self.t_call[t_offset])
                 new_items = get_items(new_call)
@@ -420,6 +421,7 @@ class Differs:
 
             print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
             print(f"        s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
+        code.last_differ_t_num = code.t_num
 
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
