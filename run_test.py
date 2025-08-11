@@ -199,6 +199,13 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
         else:
             print(f"Task_id '{task_id}' not found in training data.")
             return
+
+        if not solver_source := get_solver_source(task_id, imports=[solvers_dir], best_only=True)
+            print(f"No solver found for task_id '{task_id}'.")
+            return
+
+        solver_module = importlib.import_module(solver_source.'path')
+        solver = solver_module.solver if hasattr(solver_module, 'solver') else None
     else:
         task_ids = data['train'].keys()
         for task_id in task_ids:
@@ -222,7 +229,9 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
 
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
-            if task_id in solve_func and hasattr(solvers_module, solve_func[task_id]):
+            if solver is not None:
+                pass
+            elif task_id in solve_func and hasattr(solvers_module, solve_func[task_id]):
                 solver = getattr(solvers_module, solve_func[task_id])
             else:
                 continue

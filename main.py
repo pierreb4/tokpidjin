@@ -264,7 +264,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             solve_func[task_id] = module['name']
             solve_path[task_id] = module['path']
             solve_score[task_id] = module['score']
-            
+
             # print_l(f'Found solver for {task_id}: {module["name"]} - {module["path"]} - {module["score"]}')
 
 
@@ -354,7 +354,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             n_correct += 1
         n_checked += 1
 
-        print_l(f'{n_correct}/{n_checked} - {n_correct / n_checked:.2f} - {total_examples}')
+        print_l(f'{task_id} - {n_correct}/{n_checked} - {n_correct / n_checked:.2f} - {total_examples}')
 
     # Calculate average execution time
     avg_time = total_execution_time / max(total_examples, 1)
