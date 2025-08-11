@@ -200,7 +200,8 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             print(f"Task_id '{task_id}' not found in training data.")
             return
 
-        if not solver_source := get_solver_source(task_id, imports=[solvers_dir], best_only=True)
+        solver_source := get_solver_source(task_id, imports=[solvers_dir], best_only=True)
+        if not solver_source:
             print(f"No solver found for task_id '{task_id}'.")
             return
 
