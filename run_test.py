@@ -201,7 +201,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             return
 
         solver_source = get_solver_source(task_id, imports=[solvers_dir], best_only=True)
-        if not solver_source:
+        if solver_source is None:
             print(f"No solver found for task_id '{task_id}'.")
             return
 
