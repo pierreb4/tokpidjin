@@ -264,11 +264,11 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             definition = definitions.get(solve_func[task_id], "Solver not found")
             lines = len(definition.split('\n')) if isinstance(definition, str) else 0
             if quiet:
-                print(f"Error in {task_id}: {lines} lines")
+                print_l(f"Error in {task_id}: {lines} lines")
             else:
-                print(f'Error in {task_id}:\n{definition}')
+                print_l(f'Error in {task_id}:\n{definition}')
             if specific_id:  # Show detailed error for specific task_id
-                print(f"NameError: {str(e)}")
+                print_l(f"NameError: {str(e)}")
                 try:
                     # Try to show output anyway for debugging
                     output = solver(ex['input'])
