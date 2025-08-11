@@ -58,8 +58,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
             for t_n, evo, o_solver_id, match in o['train'][i]:
 
 
-                # if not evo:
-                #     continue
+                if not evo:
+                    continue
 
                 update_scores(o_score, o_solver_id, match)
 
@@ -108,8 +108,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
             for t_n, evo, o_solver_id, match in o['test'][i]:
 
 
-                # if not evo:
-                #     continue
+                if not evo:
+                    continue
 
 
                 update_scores(o_score, o_solver_id, match)
