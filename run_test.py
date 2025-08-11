@@ -514,7 +514,8 @@ def main():
     if args.task_id is not None:
         task_id = args.task_id
         solvers_module = None
-    elif args.solvers is not None:
+
+    if args.solvers is not None:
         try:
             solvers_module = load_module(args.solvers)
             print(f"Using custom solver module: {args.solvers}")

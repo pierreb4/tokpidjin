@@ -393,10 +393,8 @@ def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
             expanded_func = generate_expanded_function(func_name, func_params, steps)
             gen_dt = timer() - t_gen0
             
-            # Create the output with renamed original + expanded function
-            # output = original_renamed + "\n\n" + expanded_func + "\n"
-
-            output = expanded_func + "\n"
+            header = "from dsl import *\nfrom constants import *\n\n"
+            output = header + expanded_func + "\n"
 
 
             t_io1 = timer()
