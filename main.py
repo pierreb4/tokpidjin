@@ -264,7 +264,8 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             solve_func[task_id] = module['name']
             solve_path[task_id] = module['path']
             solve_score[task_id] = module['score']
-            print_l(f'Found solver for {task_id}: {module["name"]} - {module["path"]} - {module["score"]}')
+            
+            # print_l(f'Found solver for {task_id}: {module["name"]} - {module["path"]} - {module["score"]}')
 
 
     n_correct = 0
