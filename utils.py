@@ -214,7 +214,8 @@ def get_data(train=True, sort_by_size=False, task_id=None):
 
 def get_solver_source(task_id, imports=None, best_only=False):    
     if imports is None:
-        imports = [solvers_evo, solvers_pre]
+        # imports = [solvers_evo, solvers_pre]
+        imports = [solvers_dir]
 
     solve_identity = 'def solve(S, I, O=None):\n    O = identity(I)\n    return O\n'
     best_solver = Solver('solve', None, solve_identity, 0, 0, 999)
