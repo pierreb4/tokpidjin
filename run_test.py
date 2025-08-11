@@ -201,10 +201,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             return
 
         solver_source = get_solver_source(task_id, imports=None, best_only=True)
-        print_l(f'{solver_source = }')
-        print_l(f'Testing {task_id} - {solver_source.path if solver_source else "No solver found"}')
         module_name = solver_source.path[:-3].replace('/', '.')
-
         solver_module = importlib.import_module(module_name)
         solver = solver_module.solve
 
@@ -232,8 +229,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
             if solver is not None:
-                print_l(f'Testing {task_id} - {solver.__name__} - {len(task)} examples')
-                # pass
+                pass
             elif task_id in solve_func and hasattr(solvers_module, solve_func[task_id]):
                 solver = getattr(solvers_module, solve_func[task_id])
             else:

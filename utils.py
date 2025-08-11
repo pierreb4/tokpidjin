@@ -217,8 +217,9 @@ def get_solver_source(task_id, imports=None, best_only=False):
         # imports = [solvers_evo, solvers_pre]
         imports = [solvers_dir]
 
-    solve_identity = 'def solve(S, I, O=None):\n    O = identity(I)\n    return O\n'
-    best_solver = Solver('solve', None, solve_identity, 0, 0, 999)
+    solve_header = 'from dsl import *\nfrom constants import *\n\n'
+    solve_identity = f'{solve_header}def solve(S, I):\n    O = identity(I)\n    return O\n'
+    best_solver = Solver('solve', 'solve_identity.py', solve_identity, 0, 0, 999)
 
     for imp in imports:
         if imp == solvers_pre and task_id in BAD_SOLVERS:
@@ -272,7 +273,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
             func_name = select_solver.name
             solver = getattr(solver_module, func_name)
             # print_l(f'Found: {func_name} in {solver_module.__name__}')
-            select_solver = select_solver._replace(source=inspect.getsource(solver))
+            select_solver = select_solver._replace(source=f'{solve_header}{inspect.getsource(solver)}')
             return select_solver
 
         else:
@@ -280,7 +281,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
                 # print_l(f'Found solver: {func_name} in {imp.__name__}')
-                return Solver(func_name, imp.__name__, inspect.getsource(solver), 
+                return Solver(func_name, imp.__name__, f'{solve_header}{inspect.getsource(solver)}', 
                         None, None, None)
 
     return Solver('solve', None, solve_identity, 0, 0, 999)
