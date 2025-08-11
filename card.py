@@ -264,7 +264,7 @@ class Code:
         while random.random() < 0.01:
             # TODO Check parameter impact on mutation numbers            
             # t_offset = random.randint(1, t_n)
-            t_offset = random.randint(code.last_differ_t_num + 1, t_n)
+            t_offset = random.randint(self.last_differ_t_num + 1, t_n)
             if t_offset > 0:
                 new_call = clean_call(self.t_call[t_offset])
                 new_items = get_items(new_call)
