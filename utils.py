@@ -216,7 +216,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
     if imports is None:
         imports = [solvers_evo, solvers_pre]
 
-    solve_identity = 'def solve(S, I):\n    O = identity(I)\n    return O\n'
+    solve_identity = 'def solve(S, I, O=None):\n    O = identity(I)\n    return O\n'
     best_solver = Solver('solve', None, solve_identity, 0, 0, 999)
 
     for imp in imports:
@@ -282,7 +282,6 @@ def get_solver_source(task_id, imports=None, best_only=False):
                 return Solver(func_name, imp.__name__, inspect.getsource(solver), 
                         None, None, None)
 
-    solve_identity = 'def solve(S, I):\n    O = identity(I)\n    return O\n'
     return Solver('solve', None, solve_identity, 0, 0, 999)
 
 
