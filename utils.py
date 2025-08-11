@@ -229,17 +229,17 @@ def get_solver_source(task_id, imports=None, best_only=False):
             weights = []
             best_o_score = 0
             best_item = None
-            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
-            if not files:
+            file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
+            if not file_paths:
                 continue
-            for file in files:
-                sections = file.split('/')
+            for file_path in file_paths:
+                sections = file_path.split('/')
                 o_score = int(sections[2])
                 s_score = int(sections[3])
                 t_score = int(sections[4])
 
-                curr_solver = Solver('solve', file, None, o_score, s_score, t_score)
-                # curr_solver = Solver(f'solve_{task_id}', file, None, o_score, s_score, t_score)
+                curr_solver = Solver('solve', file_path, None, o_score, s_score, t_score)
+                # curr_solver = Solver(f'solve_{task_id}', file_path, None, o_score, s_score, t_score)
 
                 if curr_solver.o_score > best_o_score:
                     best_o_score = curr_solver.o_score

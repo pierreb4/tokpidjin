@@ -173,10 +173,10 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
     # functions = get_functions(solvers_module.__file__)
     # solver_functions = [f for f in functions if f.startswith('solve_')]
 
-    definitions = {
-        function: inspect.getsource(getattr(solvers_module, function)) \
-            for function in get_functions(solvers_module.__file__)
-    }
+    # definitions = {
+    #     function: inspect.getsource(getattr(solvers_module, function)) \
+    #         for function in get_functions(solvers_module.__file__)
+    # }
 
     # Filter data and definitions for specific task_id if provided
     md5_hash = None
@@ -201,12 +201,12 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             return
 
         solver_source = get_solver_source(task_id, imports=[solvers_dir], best_only=True)
-        if solver_source is None:
-            print(f"No solver found for task_id '{task_id}'.")
-            return
+        print_l(f'Testing {task_id} - {solver_source.path if solver_source else "No solver found"}')
+        module_name = solver_source.path[:-3].replace('/', '.')
 
-        solver_module = importlib.import_module(solver_source.path)
-        solver = solver_module.solver if hasattr(solver_module, 'solver') else None
+        solver_module = importlib.import_module(module_name)
+        solver = solver_module.solve
+
     else:
         task_ids = data['train'].keys()
         for task_id in task_ids:
@@ -231,7 +231,8 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
             if solver is not None:
-                pass
+                print_l(f'Testing {task_id} - {solver.__name__} - {len(task)} examples')
+                # pass
             elif task_id in solve_func and hasattr(solvers_module, solve_func[task_id]):
                 solver = getattr(solvers_module, solve_func[task_id])
             else:
@@ -248,7 +249,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                     correct = 0
                     ok = 'KO'
 
-                if specific_id:
+                if specific_id is not None:
                     side_by_side( 
                         [ex['input'], ex['output'], solver(S, ex['input'])], 
                         titles=[f'{k_type} Input', f'{k_type} Output', f'{ok} Output'])
@@ -271,12 +272,12 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                         continue
 
             # If we reach here, either patching wasn't requested, or it failed
-            definition = definitions.get(solve_func[task_id], "Solver not found")
-            lines = len(definition.split('\n')) if isinstance(definition, str) else 0
-            if quiet:
-                print_l(f"Error in {task_id}: {lines} lines")
-            else:
-                print_l(f'Error in {task_id}:\n{definition}')
+            # definition = definitions.get(solve_func[task_id], "Solver not found")
+            # lines = len(definition.split('\n')) if isinstance(definition, str) else 0
+            # if quiet:
+            #     print_l(f"Error in {task_id}: {lines} lines")
+            # else:
+            #     print_l(f'Error in {task_id}:\n{definition}')
             if specific_id:  # Show detailed error for specific task_id
                 print_l(f"NameError: {str(e)}")
                 try:
@@ -290,22 +291,22 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                         [ex['input'], ex['output']],
                         titles=['Input', 'Expected Output'])
         except Exception as e:
-            definition = definitions.get(solve_func[task_id], "Solver not found")
-            lines = len(definition.split('\n')) if isinstance(definition, str) else 0
-            if quiet:
-                print_l(f"Error in {task_id}: {lines} lines")
-            else:
-                # Include source location in exception message
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                frame = traceback.extract_tb(exc_tb)[-1]
-                filename = frame.filename.split('/')[-1] if frame else "unknown"
-                lineno = frame.lineno if frame else "unknown"
+            # definition = definitions.get(solve_func[task_id], "Solver not found")
+            # lines = len(definition.split('\n')) if isinstance(definition, str) else 0
+            # if quiet:
+            #     print_l(f"Error in {task_id}: {lines} lines")
+            # else:
+            #     # Include source location in exception message
+            #     exc_type, exc_obj, exc_tb = sys.exc_info()
+            #     frame = traceback.extract_tb(exc_tb)[-1]
+            #     filename = frame.filename.split('/')[-1] if frame else "unknown"
+            #     lineno = frame.lineno if frame else "unknown"
 
-                print_l(f'Exception in {filename}:{lineno}: {e}')
-                print_l(f'Error in {task_id}:\n{definition}')
+            #     print_l(f'Exception in {filename}:{lineno}: {e}')
+            #     print_l(f'Error in {task_id}:\n{definition}')
 
-                show_exception(f'{task_id = }', e)
-                print("traceback: ", traceback.format_exc())
+            #     show_exception(f'{task_id = }', e)
+            #     print("traceback: ", traceback.format_exc())
 
             if specific_id:  # Show detailed error for specific task_id
                 print_l(f"Error: {type(e).__name__}: {str(e)}")
@@ -491,8 +492,8 @@ def update_solver_in_file(solver_name, patched_code):
 def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Test ARC solvers")
-    parser.add_argument("--solvers", help="Use this instead of solvers_pre", type=str, default='solvers_pre')
-    parser.add_argument("-i", "--task_id", help="Specific task_id to test", type=str)
+    parser.add_argument("--solvers", help="Use these solvers", type=str, default=None)
+    parser.add_argument("-i", "--task_id", help="Specific task_id to test", type=str, default=None)
     parser.add_argument("--check-dsl", help="Do DSL checks", action="store_true")
     parser.add_argument("--check-format", help="Do format checks", action="store_true")
     parser.add_argument("--do-tests", help="Do DSL tests", action="store_true")
@@ -510,20 +511,18 @@ def main():
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
     total_data = train_data
     
-    task_id = args.task_id
-
-    print_l(f'{args.solvers = }')
-
-    # Load the specified solver module or use default
-    if args.solvers:
+    if args.task_id is not None:
+        task_id = args.task_id
+        solvers_module = None
+    elif args.solvers is not None:
         try:
             solvers_module = load_module(args.solvers)
             print(f"Using custom solver module: {args.solvers}")
         except Exception as e:
             print(f"Error loading solver module {args.solvers}: {e}")
             return
-    else:
-        solvers_module = solvers_pre  # Use default module
+    # else:
+    #     solvers_module = solvers_pre
 
     if args.check_dsl:
         run_dsl_tests(dsl, tests, args.quiet)
