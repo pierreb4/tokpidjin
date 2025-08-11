@@ -205,7 +205,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             print(f"No solver found for task_id '{task_id}'.")
             return
 
-        solver_module = importlib.import_module(solver_source.'path')
+        solver_module = importlib.import_module(solver_source.path)
         solver = solver_module.solver if hasattr(solver_module, 'solver') else None
     else:
         task_ids = data['train'].keys()
