@@ -264,8 +264,8 @@ class Code:
         while random.random() < 0.01:
             # TODO Check parameter impact on mutation numbers            
             t_offset = random.randint(1, t_n)
-            # if t_offset > 0:
-            if t_offset > self.last_differ_t_num:
+            if t_offset > 0:
+            # if t_offset > self.last_differ_t_num:
                 new_call = clean_call(self.t_call[t_offset])
                 new_items = get_items(new_call)
                 new_func_name = new_items[0].strip()
@@ -405,7 +405,7 @@ class Differs:
                 differ_body = build_differ_body(code.t_call, code.t_num, done)
                 differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
 
-                differ_source = f'def differ(I, O):\n{differ_body}'
+                differ_source = f'def differ(S, I):\n{differ_body}'
                 inlined_source = inline_variables(differ_source)
 
                 # print_l(f'{differ_name}\n{inlined_source = }')
@@ -413,7 +413,7 @@ class Differs:
                 md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
                 differ_name = f'differ_{md5_hash}'
-                differ_source = f'def {differ_name}(I, O):\n{differ_body}'
+                differ_source = f'def {differ_name}(S, I):\n{differ_body}'
 
                 # print_l(f'{differ_name}\n{inlined_source = }')
 
