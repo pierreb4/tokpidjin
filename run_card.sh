@@ -34,7 +34,8 @@ shift $((OPTIND -1))
 
 if [ -n "$INITIAL" ]; then
   echo "Initial run - removing old solvers"
-  rm -r solver_dir/* solver_md5/* solver_def/*
+  rm -rf solver_dir solver_md5 solver_def
+  mkdir solver_dir solver_md5 solver_def
   rm main.log
   CARD_OPTION="-fs -fd"
 fi
