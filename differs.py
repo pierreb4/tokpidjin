@@ -13,7 +13,7 @@ from dsl import *
 # Flags = namedtuple('Flags', ['train', 'eval'])
 #          flags: 'Flags' = Flags(True, False)
 # def differ_p_g_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-def differ_bbc15d336597192dde650f9e3f085226(S, I, O, C):
+def differ_d68f7d67209b7ebc1626741d07f3c672(S, I, O, C):
     x1 = identity(p_g)
     x2 = x1(I)
     x3 = x1(C)
@@ -24,7 +24,7 @@ def differ_bbc15d336597192dde650f9e3f085226(S, I, O, C):
 
 
 # # def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-def differ_568d52c6cf0a6bccdc922a9135400e2e(S, I, O, C):
+def differ_96d6a79e4f2dae9b65afc44e70627668(S, I, O, C):
     x1 = identity(p_g)
     x2 = x1(C)
     x3 = x1(O)
@@ -35,7 +35,7 @@ def differ_568d52c6cf0a6bccdc922a9135400e2e(S, I, O, C):
 
 
 # # def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-def differ_9751ce7bdaa32ef88a53b2cdeec700bc(S, I, O, C):
+def differ_735ade11c9d9435c6bd12383067a6da5(S, I, O, C):
     x1 = rbind(o_g, R5)
     x2 = x1(I)
     x3 = x1(C)
@@ -49,7 +49,7 @@ def differ_9751ce7bdaa32ef88a53b2cdeec700bc(S, I, O, C):
 
 
 # # def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-def differ_2a894c405620262bbf1a4a928e74f302(S, I, O, C):
+def differ_aaf868a79606608601ef8d607b0821d7(S, I, O, C):
     x1 = rbind(o_g, R5)
     x2 = x1(C)
     x3 = x1(O)
@@ -69,64 +69,64 @@ def differ_2a894c405620262bbf1a4a928e74f302(S, I, O, C):
 
 # Q: What's the second part of S when testing? None, or?
 
-# def differ_p_g_iz(S, I):
-def differ_d77f143df3eb9933c7395936b029b48e(S, I):
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    x3 = mapply(p_g, x1)
-    x4 = mapply(p_g, x2)
-    x5 = dedupe(x3)
-    x6 = dedupe(x4)
-    x7 = difference_tuple(x5, x6)
-    x8 = get_nth_t(x7, F0)
-    x9 = size(x7)
-    return x9
+# # def differ_p_g_iz(S, I):
+# def differ_f366ef2cf7351287ef4e29e31c1780db(S, I, O, C):
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     x3 = mapply(p_g, x1)
+#     x4 = mapply(p_g, x2)
+#     x5 = dedupe(x3)
+#     x6 = dedupe(x4)
+#     x7 = difference_tuple(x5, x6)
+#     x8 = get_nth_t(x7, F0)
+#     x9 = size(x7)
+#     return x9
 
 
-# def differ_p_g_zo(S, I):
-def differ_e5a497998c2ee27e2075f6c719d63297(S, I):
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    x3 = mapply(p_g, x1)
-    x4 = mapply(p_g, x2)
-    x5 = dedupe(x3)
-    x6 = dedupe(x4)
-    x7 = difference_tuple(x6, x5)
-    x8 = get_nth_t(x7, F0)
-    x9 = size(x7)
-    return x9
+# # def differ_p_g_zo(S, I):
+# def differ_e7e3e8fe360e20358ceec191d88bec9a(S, I, O, C):
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     x3 = mapply(p_g, x1)
+#     x4 = mapply(p_g, x2)
+#     x5 = dedupe(x3)
+#     x6 = dedupe(x4)
+#     x7 = difference_tuple(x6, x5)
+#     x8 = get_nth_t(x7, F0)
+#     x9 = size(x7)
+#     return x9
 
 
-# def differ_o_g_size_iz(S, I):
-def differ_813b3ee28f8ced59e41d06fc4eb58700(S, I):
-    x1 = rbind(o_g, R5)
-    x2 = apply(first, S)
-    x3 = apply(second, S)
-    x4 = mapply(x1, x2)
-    x5 = mapply(x1, x3)
-    x6 = rbind(sizefilter, ONE)
-    x7 = mapply(x6, x4)
-    x8 = mapply(x6, x5)
-    x9 = difference(x7, x8)
-    x10 = get_nth_f(x9, F0)
-    x11 = size(x9)
-    return x11
+# # def differ_o_g_size_iz(S, I):
+# def differ_1ac2eb07e0009a87d18aad4cb9617969(S, I, O, C):
+#     x1 = rbind(o_g, R5)
+#     x2 = apply(first, S)
+#     x3 = apply(second, S)
+#     x4 = mapply(x1, x2)
+#     x5 = mapply(x1, x3)
+#     x6 = rbind(sizefilter, ONE)
+#     x7 = mapply(x6, x4)
+#     x8 = mapply(x6, x5)
+#     x9 = difference(x7, x8)
+#     x10 = get_nth_f(x9, F0)
+#     x11 = size(x9)
+#     return x11
 
 
-# def differ_o_g_size_zo(S, I):
-def differ_78619a027297b52eff7fdf1c30494b5d(S, I):
-    x1 = rbind(o_g, R5)
-    x2 = apply(first, S)
-    x3 = apply(second, S)
-    x4 = mapply(x1, x2)
-    x5 = mapply(x1, x3)
-    x6 = rbind(sizefilter, ONE)
-    x7 = mapply(x6, x4)
-    x8 = mapply(x6, x5)
-    x9 = difference(x8, x7)
-    x10 = get_nth_f(x9, F0)
-    x11 = size(x9)
-    return x11
+# # def differ_o_g_size_zo(S, I):
+# def differ_f3c86990604a1a7c3c8f136127039035(S, I, O, C):
+#     x1 = rbind(o_g, R5)
+#     x2 = apply(first, S)
+#     x3 = apply(second, S)
+#     x4 = mapply(x1, x2)
+#     x5 = mapply(x1, x3)
+#     x6 = rbind(sizefilter, ONE)
+#     x7 = mapply(x6, x4)
+#     x8 = mapply(x6, x5)
+#     x9 = difference(x8, x7)
+#     x10 = get_nth_f(x9, F0)
+#     x11 = size(x9)
+#     return x11
 
 
 # TODO Write more like these

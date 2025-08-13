@@ -39,17 +39,17 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         O = sample['output']
         if prof is not None:
             prof_start = timer()
-        timed_out, run_result = run_with_timeout(batt,
+        solve_timed_out, solve_result = run_with_timeout(batt,
             [task_id, S, I, None, None, fluff_log_path], timeout)
         if prof is not None:
             prof['batt.train.run_with_timeout'] += timer() - prof_start
 
-        if timed_out:
+        if solve_timed_out:
             print_l(f'-- {task_id} - train[{i}] timed out')
 
         t_set = set()
-        if run_result is not None:
-            o['train'][i], s['train'][i] = run_result
+        if solve_result is not None:
+            o['train'][i], s['train'][i] = solve_result
 
             print_l(f"train[{i}] - {task_id} - {len(o['train'][i])} - {len(s['train'][i])}")
 
@@ -95,17 +95,17 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         O = sample['output']
         if prof is not None:
             prof_start = timer()
-        timed_out, run_result = run_with_timeout(batt,
+        solve_timed_out, solve_result = run_with_timeout(batt,
             [task_id, S, I, None, None, fluff_log_path], timeout)
         if prof is not None:
             prof['batt.test.run_with_timeout'] += timer() - prof_start
 
-        if timed_out:
+        if solve_timed_out:
             print_l(f'-- {task_id} - test[{i}] timed out')
 
         t_set = set()
-        if run_result is not None:
-            o['test'][i], s['test'][i] = run_result
+        if solve_result is not None:
+            o['test'][i], s['test'][i] = solve_result
 
             print_l(f"test[{i}] - {task_id} - {len(o['test'][i])} - {len(s['test'][i])}")
 
