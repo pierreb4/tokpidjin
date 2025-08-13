@@ -332,6 +332,8 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 # Success is when the solver labelled task_id (tid in the 
                 # result) is producing the output expected for task_id
                 o, s = solve_result
+
+                # NOTE Let's make this more like the score calculation in run_batt.py
                 success = any(tid == task_id and okt.ok and okt.t == O for _, _, tid, okt in o)
 
             if success:

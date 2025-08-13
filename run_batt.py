@@ -55,6 +55,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
             all_o = all_o.union(o['train'][i])
             for t_n, evo, o_solver_id, okt in o['train'][i]:
+                # NOTE Not sure about this, as we want to score initial solvers
+                # Maybe also check task_i?
                 # if not evo:
                 #     continue
 
@@ -152,10 +154,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
     return all_o, o_score, s_score, d_score
 
 
-def update_scores(o_score, solver_id, okt):
+def update_scores(o_score, solver_id, match):
     if solver_id not in o_score:
         o_score[solver_id] = 0
-    o_score[solver_id] += okt
+    o_score[solver_id] += match
 
 
 def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
