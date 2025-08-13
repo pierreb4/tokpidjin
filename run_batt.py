@@ -40,7 +40,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         if prof is not None:
             prof_start = timer()
         timed_out, run_result = run_with_timeout(batt,
-            [task_id, S, I, fluff_log_path], timeout)
+            [task_id, S, I, None, None, fluff_log_path], timeout)
         if prof is not None:
             prof['batt.train.run_with_timeout'] += timer() - prof_start
 
@@ -65,8 +65,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 C = okt.t
                 update_scores(o_score, o_solver_id, C == O)
 
-                # diff_timed_out, diff_result = run_with_timeout(diff,
-                #     [task_id, S, I, O, C, fluff_log_path], timeout)
+                diff_timed_out, diff_result = run_with_timeout(batt,
+                    [task_id, S, I, O, C, fluff_log_path], timeout)
 
 
                 for last_t, s_solver_id, d_name, score in s['train'][i]:
@@ -96,7 +96,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         if prof is not None:
             prof_start = timer()
         timed_out, run_result = run_with_timeout(batt,
-            [task_id, S, I, fluff_log_path], timeout)
+            [task_id, S, I, None, None, fluff_log_path], timeout)
         if prof is not None:
             prof['batt.test.run_with_timeout'] += timer() - prof_start
 
@@ -121,8 +121,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 C = okt.t
                 update_scores(o_score, o_solver_id, C == O)
 
-                # diff_timed_out, diff_result = run_with_timeout(diff,
-                #     [task_id, S, I, O, C, fluff_log_path], timeout)
+                diff_timed_out, diff_result = run_with_timeout(batt,
+                    [task_id, S, I, O, C, fluff_log_path], timeout)
 
 
                 for last_t, s_solver_id, d_name, score in s['test'][i]:

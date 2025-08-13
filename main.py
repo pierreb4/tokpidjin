@@ -309,8 +309,8 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             #      from solver_dir/solve_{task_id}
             #      - Maybe we could check all top ranking solutions
             #      In run_batt.py we accept (mutated) solutions from any solver
-            timed_out, run_result = run_with_timeout(batt,
-                    (task_id, S, I, fluff_log_path), timeout)
+            solve_timed_out, solve_result = run_with_timeout(batt,
+                    (task_id, S, I, None, None, fluff_log_path), timeout)
 
             execution_time = time.time() - start_time
             total_execution_time += execution_time
@@ -326,12 +326,12 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 if wait:
                     input("Press Enter to continue...")
 
-            if run_result is None:
+            if solve_result is None:
                 success = False
             else:
                 # Success is when the solver labelled task_id (tid in the 
                 # result) is producing the output expected for task_id
-                o, s = run_result
+                o, s = solve_result
                 success = any(tid == task_id and okt.ok and okt.t == O for _, _, tid, okt in o)
 
             if success:
@@ -344,7 +344,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             # if os.path.exists(solve_path[task_id]):
             #     os.remove(solve_path[task_id])
 
-        if timed_out:
+        if solve_timed_out:
             # print_l(f'# -- {timed_out = }')
             print_l(f'TO: {solve_path[task_id]}')
 #            if os.path.exists(solve_path[task_id]):

@@ -13,53 +13,53 @@ from dsl import *
 # Flags = namedtuple('Flags', ['train', 'eval'])
 #          flags: 'Flags' = Flags(True, False)
 # def differ_p_g_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-# def differ_207afa9ac2f8547d9e6bd57058d4206c(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-#     x1 = identity(p_g)
-#     x2 = x1(I)
-#     x3 = x1(O)
-#     x4 = difference_tuple(x2, x3)
-#     x5 = get_nth_t(x4, F0)
-#     x6 = size(x4)
-#     return x6
+def differ_bbc15d336597192dde650f9e3f085226(S, I, O, C):
+    x1 = identity(p_g)
+    x2 = x1(I)
+    x3 = x1(C)
+    x4 = difference_tuple(x2, x3)
+    x5 = get_nth_t(x4, F0)
+    x6 = size(x4)
+    return x6
 
 
 # # def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-# def differ_9b8e636bf6f8a4e30a0d6aa8ae396d68(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-#     x1 = identity(p_g)
-#     x2 = x1(I)
-#     x3 = x1(O)
-#     x4 = difference_tuple(x3, x2)
-#     x5 = get_nth_t(x4, F0)
-#     x6 = size(x4)
-#     return x6
+def differ_568d52c6cf0a6bccdc922a9135400e2e(S, I, O, C):
+    x1 = identity(p_g)
+    x2 = x1(C)
+    x3 = x1(O)
+    x4 = difference_tuple(x3, x2)
+    x5 = get_nth_t(x4, F0)
+    x6 = size(x4)
+    return x6
 
 
 # # def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-# def differ_089d541a66d5d39cab837ff24efc0ba6(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-#     x1 = rbind(o_g, R5)
-#     x2 = x1(I)
-#     x3 = x1(O)
-#     x4 = rbind(sizefilter, ONE)
-#     x5 = x4(x2)
-#     x6 = x4(x3)
-#     x7 = difference(x5, x6)
-#     x8 = get_nth_f(x7, F0)
-#     x9 = size(x7)
-#     return x9
+def differ_9751ce7bdaa32ef88a53b2cdeec700bc(S, I, O, C):
+    x1 = rbind(o_g, R5)
+    x2 = x1(I)
+    x3 = x1(C)
+    x4 = rbind(sizefilter, ONE)
+    x5 = x4(x2)
+    x6 = x4(x3)
+    x7 = difference(x5, x6)
+    x8 = get_nth_f(x7, F0)
+    x9 = size(x7)
+    return x9
 
 
 # # def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-# def differ_26e5f26b09a980364a8d2d36c5bfb723(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-#     x1 = rbind(o_g, R5)
-#     x2 = x1(I)
-#     x3 = x1(O)
-#     x4 = rbind(sizefilter, ONE)
-#     x5 = x4(x2)
-#     x6 = x4(x3)
-#     x7 = difference(x6, x5)
-#     x8 = get_nth_f(x7, F0)
-#     x9 = size(x7)
-#     return x9
+def differ_2a894c405620262bbf1a4a928e74f302(S, I, O, C):
+    x1 = rbind(o_g, R5)
+    x2 = x1(C)
+    x3 = x1(O)
+    x4 = rbind(sizefilter, ONE)
+    x5 = x4(x2)
+    x6 = x4(x3)
+    x7 = difference(x6, x5)
+    x8 = get_nth_f(x7, F0)
+    x9 = size(x7)
+    return x9
 
 
 # S needs to be the list of training I/O pairs
