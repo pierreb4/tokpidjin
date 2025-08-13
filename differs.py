@@ -62,7 +62,15 @@ from dsl import *
 #     return x9
 
 
-def differ_p_g_iz(S, I):
+# S needs to be the list of training I/O pairs
+# Then we test by setting S to test pair(s)
+# So batt can take just S, not I/O as arg
+# Enable mutate for training, not for testing
+
+# Q: What's the second part of S when testing? None, or?
+
+# def differ_p_g_iz(S, I):
+def differ_d77f143df3eb9933c7395936b029b48e(S, I):
     x1 = apply(first, S)
     x2 = apply(second, S)
     x3 = mapply(p_g, x1)
@@ -75,7 +83,8 @@ def differ_p_g_iz(S, I):
     return x9
 
 
-def differ_p_g_zo(S, I):
+# def differ_p_g_zo(S, I):
+def differ_e5a497998c2ee27e2075f6c719d63297(S, I):
     x1 = apply(first, S)
     x2 = apply(second, S)
     x3 = mapply(p_g, x1)
@@ -88,7 +97,8 @@ def differ_p_g_zo(S, I):
     return x9
 
 
-def differ_o_g_size_iz(S, I):
+# def differ_o_g_size_iz(S, I):
+def differ_813b3ee28f8ced59e41d06fc4eb58700(S, I):
     x1 = rbind(o_g, R5)
     x2 = apply(first, S)
     x3 = apply(second, S)
@@ -103,7 +113,8 @@ def differ_o_g_size_iz(S, I):
     return x11
 
 
-def differ_o_g_size_zo(S, I):
+# def differ_o_g_size_zo(S, I):
+def differ_78619a027297b52eff7fdf1c30494b5d(S, I):
     x1 = rbind(o_g, R5)
     x2 = apply(first, S)
     x3 = apply(second, S)

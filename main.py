@@ -303,7 +303,6 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             start_time = time.time()
             I = sample['input']
             O = sample['output']
-            flags = Flags(True, False)
 
             # NOTE This looks like the test in run_batt.py but:
             #      Here we check for a single top ranking non-mutated solution 
@@ -311,7 +310,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             #      - Maybe we could check all top ranking solutions
             #      In run_batt.py we accept (mutated) solutions from any solver
             timed_out, run_result = run_with_timeout(batt,
-                    (task_id, S, I, O, flags, fluff_log_path), timeout)
+                    (task_id, S, I, fluff_log_path), timeout)
 
             execution_time = time.time() - start_time
             total_execution_time += execution_time
@@ -331,8 +330,9 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 success = False
             else:
                 # Success is when the solver labelled task_id (tid in the 
-                # result) is producing the output expected for task_id 
-                success = any(tid == task_id and match for _, _, tid, match in run_result[0])
+                # result) is producing the output expected for task_id
+                o, s = run_result
+                success = any(tid == task_id and okt.ok and okt.t == O for _, _, tid, okt in o)
 
             if success:
                 # print_l(f'-- Solves {task_id} - sample {i}')
