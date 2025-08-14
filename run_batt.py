@@ -232,7 +232,9 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
                 f.write('\n')
 
         # Expand to .py file
+        do_print = False
         if not Path(solver_md5_path).exists():
+            do_print = True
             if prof is not None:
                 t0 = timer()
             expand_file(solver_def_path, solver_md5_path, None, True)
@@ -264,7 +266,8 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         # os.system(python_exp)
         # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
 
-    print()
+    if do_print:
+        print()
 
     # No timeout
     return False, d_score
