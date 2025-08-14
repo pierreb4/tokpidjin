@@ -291,14 +291,14 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
     
     remove_solve_path = False
     for task_id in solver_iterator:
-        task = data['train'][task_id] + data['test'][task_id]
-        num_train = len(data['train'][task_id])
+        train_task = data['train'][task_id]
+        test_task = data['test'][task_id]
+        task = train_task + test_task
 
-        S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
+        S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
         solver_execution_time = 0.0
-        success = True
 
-        score = {}
+        o_score = {}
         correct_sample = 0
         for i, sample in enumerate(task):
             start_time = time.time()
@@ -327,21 +327,11 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 if wait:
                     input("Press Enter to continue...")
 
-            if solve_result is None:
-                success = False
-            else:
-                # Success is when the solver labelled task_id (tid in the 
-                # result) is producing the output expected for task_id
-                o, s = solve_result
+            if solve_result is not None:
+                o, _ = solve_result
 
-                # NOTE Let's make this more like the score calculation in run_batt.py
-                # success = any(tid == task_id and okt.ok and okt.t == O for _, _, tid, okt in o)
                 for _, _, tid, okt in o:
-                    update_scores(score, tid, okt.ok and okt.t == O)
-
-            # if success:
-            #     # print_l(f'-- Solves {task_id} - sample {i}')
-            #     correct_sample += 1
+                    update_scores(o_score, tid, okt.ok and okt.t == O)
 
         # if correct_sample < solve_score[task_id]:
         #     print_l(f'# -- {task_id} - {correct_sample = } - {solve_score[task_id] = }')
@@ -355,10 +345,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 #            if os.path.exists(solve_path[task_id]):
 #                os.remove(solve_path[task_id])
 
-        # if correct_sample == len(task):
-        #     n_correct += 1
-
-        if task_id in score and score[task_id] == len(task):
+        if task_id in o_score and o_score[task_id] == len(task):
             n_correct += 1
         n_checked += 1
 
@@ -382,10 +369,10 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
     return n_correct, avg_time, n
 
 
-def update_scores(score, solver_id, match):
-    if solver_id not in score:
-        score[solver_id] = 0
-    score[solver_id] += match
+def update_scores(o_score, solver_id, match):
+    if solver_id not in o_score:
+        o_score[solver_id] = 0
+    o_score[solver_id] += match
 
 
 if __name__ == '__main__':
