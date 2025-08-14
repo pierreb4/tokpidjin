@@ -265,7 +265,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
             # print_l(f'Found solver for {task_id}: {module["name"]} - {module["path"]} - {module["score"]}')
 
-            solver = get_solver(task_id, solvers_module, best_only=True)
+            solver = get_solver_source(task_id, [solvers_dir], best_only=True)
             solve_func[task_id] = solver.name
             solve_path[task_id] = solver.path
 
