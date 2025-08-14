@@ -264,6 +264,8 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         # os.system(python_exp)
         # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
 
+    print()
+
     # No timeout
     return False, d_score
 
