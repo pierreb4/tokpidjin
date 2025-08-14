@@ -237,35 +237,37 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 
     if task_id:
         task_ids = [task_id]
-        # solve_func[task_id] = f'solve_{task_id}'
         solve_func[task_id] = 'solve'
         solve_path[task_id] = None
         solve_score[task_id] = -math.inf
     else:
         task_ids = data["train"].keys()
         for task_id in task_ids:
-            module = None
-            files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
-            for file in files:
-                sections = file.split('/')
-                score = int(sections[2])
-                if module is None or score > module['score']:
-                    t_log = int(sections[3])
-                    module = {
-                        'path': file,
-                        'score': score,
-                        't_log': t_log,
-                        'name': sections[-1][:-3]}
+            # module = None
+            # files = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
+            # for file in files:
+            #     sections = file.split('/')
+            #     score = int(sections[2])
+            #     if module is None or score > module['score']:
+            #         t_log = int(sections[3])
+            #         module = {
+            #             'path': file,
+            #             'score': score,
+            #             't_log': t_log,
+            #             'name': sections[-1][:-3]}
 
-            if module is None:
-                continue
+            # if module is None:
+            #     continue
 
-            solve_func[task_id] = module['name']
-            solve_path[task_id] = module['path']
-            solve_score[task_id] = module['score']
+            # solve_func[task_id] = module['name']
+            # solve_path[task_id] = module['path']
+            # solve_score[task_id] = module['score']
 
             # print_l(f'Found solver for {task_id}: {module["name"]} - {module["path"]} - {module["score"]}')
 
+            solver = get_solver(task_id, solvers_module, best_only=True)
+            solve_func[task_id] = solver.name
+            solve_path[task_id] = solver.path
 
     n_correct = 0
     n_checked = 0
