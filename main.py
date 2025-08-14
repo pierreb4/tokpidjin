@@ -435,10 +435,10 @@ if __name__ == '__main__':
             print("Warning: Could not import tracking modules. Function tracking will be disabled.")
             args.track = False
 
-    # Load data
     train_data = get_data(train=True)
-    eval_data = get_data(train=False)
-    total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
+    # eval_data = get_data(train=False)
+    # total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
+    total_data = train_data
 
     # Filter data if a specific task_id was provided
     if args.task_id:
