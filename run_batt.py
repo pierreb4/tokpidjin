@@ -131,7 +131,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                     if s_solver_id == 'None':   
                         s_score[o_solver_id] += score > 0
                     if s_solver_id == o_solver_id:
-                        s_score[o_solver_id] -= score == 0
+                        s_score[o_solver_id] += score == 0
 
                 s_score[o_solver_id] = max(0, s_score[o_solver_id])
 
