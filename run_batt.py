@@ -171,6 +171,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
+    do_print = False
     for solution in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = solution
 
@@ -233,7 +234,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
                 f.write('\n')
 
         # Expand to .py file
-        do_print = False
         if not Path(solver_md5_path).exists():
             do_print = True
             if prof is not None:
