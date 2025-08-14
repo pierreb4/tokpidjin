@@ -40,7 +40,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         if prof is not None:
             prof_start = timer()
         solve_timed_out, solve_result = run_with_timeout(batt,
-            [task_id, S, I, None, None, fluff_log_path], timeout)
+            [task_id, S, I, O, None, fluff_log_path], timeout)
         if prof is not None:
             prof['batt.train.run_with_timeout'] += timer() - prof_start
 
@@ -67,30 +67,31 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 C = okt.t
                 update_scores(o_score, o_solver_id, C == O)
 
-                diff_timed_out, diff_result = run_with_timeout(batt,
-                    [task_id, S, I, O, C, fluff_log_path], timeout)
-
-
-                for last_t, s_solver_id, d_name, score in s['train'][i]:
-                    if s_solver_id == 'None':
-                        d_score[d_name] = {'last_t': last_t, 'score': 0}
-
                 if o_solver_id not in s_score:
                     s_score[o_solver_id] = 0
 
-                if prof is not None:
-                    loop_start = timer()
-                for name in d_score.keys():
-                    for last_t, s_solver_id, d_name, score in s['train'][i]:
-                        none_val = score if name == d_name and s_solver_id == 'None' else 0
-                        last_val = score if name == d_name and s_solver_id == o_solver_id else 0
-                        diff_val = max(0, none_val - last_val)
-                        s_score[o_solver_id] += diff_val
+                for last_t, s_solver_id, d_name, score in s['train'][i]:
+                    if s_solver_id == 'None':                       
+                        s_score[o_solver_id] += score
+                    if s_solver_id == o_solver_id:
+                        s_score[o_solver_id] -= score
 
-                        if name == d_name and none_val > 0 and ((last_val == 0 and C == O) or (last_val != 0 and C != O)):
-                            d_score[name]['score'] += 1
-                if prof is not None:
-                    prof['batt.train.scoring'] += timer() - loop_start
+                s_score[o_solver_id] = max(0, s_score[o_solver_id])
+
+        # diff_timed_out, diff_result = run_with_timeout(batt,
+        #     [task_id, S, I, O, C, fluff_log_path], timeout)
+
+        # for last_t, s_solver_id, d_name, score in s['train'][i]:
+        #     if s_solver_id == 'None':
+        #         d_score[d_name] = {'last_t': last_t, 'score': 0}
+
+        # for name in d_score.keys():
+        #     for last_t, s_solver_id, d_name, score in s['train'][i]:
+        #         none_val = score if name == d_name and s_solver_id == 'None' else 0
+        #         last_val = score if name == d_name and s_solver_id == o_solver_id else 0
+
+        #         if name == d_name and none_val > 0 and ((last_val == 0 and C == O) or (last_val != 0 and C != O)):
+        #             d_score[name]['score'] += 1
 
     for i, sample in enumerate(test_task):
         I = sample['input']
@@ -123,31 +124,31 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 C = okt.t
                 update_scores(o_score, o_solver_id, C == O)
 
-                diff_timed_out, diff_result = run_with_timeout(batt,
-                    [task_id, S, I, O, C, fluff_log_path], timeout)
-
-
-                for last_t, s_solver_id, d_name, score in s['test'][i]:
-                    if s_solver_id == 'None':
-                        d_score[d_name] = {'last_t': last_t, 'score': 0}
-
                 if o_solver_id not in s_score:
                     s_score[o_solver_id] = 0
 
-                if prof is not None:
-                    loop_start = timer()
-                for name in d_score.keys():
-                    for last_t, s_solver_id, d_name, score in s['test'][i]:
-                        none_val = score if name == d_name and s_solver_id == 'None' else 0
-                        last_val = score if name == d_name and s_solver_id == o_solver_id else 0
-                        diff_val = max(0, none_val - last_val)
-                        s_score[o_solver_id] += diff_val
+                for last_t, s_solver_id, d_name, score in s['test'][i]:
+                    if s_solver_id == 'None':                       
+                        s_score[o_solver_id] += score
+                    if s_solver_id == o_solver_id:
+                        s_score[o_solver_id] -= score
 
-                        if name == d_name and none_val > 0 and ((last_val == 0 and C == O) or (last_val != 0 and C != O)):
-                            d_score[name]['score'] += 1
-                if prof is not None:
-                    prof['batt.test.scoring'] += timer() - loop_start
+                s_score[o_solver_id] = max(0, s_score[o_solver_id])
 
+        # diff_timed_out, diff_result = run_with_timeout(batt,
+        #     [task_id, S, I, O, C, fluff_log_path], timeout)
+
+        # for last_t, s_solver_id, d_name, score in s['test'][i]:
+        #     if s_solver_id == 'None':
+        #         d_score[d_name] = {'last_t': last_t, 'score': 0}
+
+        # for name in d_score.keys():
+        #     for last_t, s_solver_id, d_name, score in s['test'][i]:
+        #         none_val = score if name == d_name and s_solver_id == 'None' else 0
+        #         last_val = score if name == d_name and s_solver_id == o_solver_id else 0
+
+        #         if name == d_name and none_val > 0 and ((last_val == 0 and C == O) or (last_val != 0 and C != O)):
+        #             d_score[name]['score'] += 1
 
     elapsed = timer() - start_time
     len_task = len(train_task) + len(test_task)
