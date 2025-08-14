@@ -74,7 +74,6 @@ import solvers_pre
 import run_batt
 
 from utils import *
-# from batt import batt
 
 
 def get_data(train=True):
@@ -401,7 +400,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     batt_module = importlib.import_module(args.batt_import)
-    batt = batt_module.batt if hasattr(batt_module, 'batt') else batt
+    # batt = batt_module.batt if hasattr(batt_module, 'batt') else batt
+    batt = batt_module.batt
 
     # Load the specified solver module or use default
     if args.solvers:
