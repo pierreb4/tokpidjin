@@ -30,8 +30,6 @@ class Env:
         self.log_path = 'fluff.log' if log_path is None else log_path
         self.exceptions = 0
 
-        print_l(f'{SEED = }')
-
     def do_fluff(self, t_num, t, isok=True):
         if t is None or isok == False:
             return OKT(False, None)
