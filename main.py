@@ -298,6 +298,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
         solver_execution_time = 0.0
         success = True
 
+        score = {}
         correct_sample = 0
         for i, sample in enumerate(task):
             start_time = time.time()
@@ -334,11 +335,13 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 o, s = solve_result
 
                 # NOTE Let's make this more like the score calculation in run_batt.py
-                success = any(tid == task_id and okt.ok and okt.t == O for _, _, tid, okt in o)
+                # success = any(tid == task_id and okt.ok and okt.t == O for _, _, tid, okt in o)
+                for _, _, tid, okt in o:
+                    update_scores(score, tid, okt.ok and okt.t == O)
 
-            if success:
-                # print_l(f'-- Solves {task_id} - sample {i}')
-                correct_sample += 1
+            # if success:
+            #     # print_l(f'-- Solves {task_id} - sample {i}')
+            #     correct_sample += 1
 
         # if correct_sample < solve_score[task_id]:
         #     print_l(f'# -- {task_id} - {correct_sample = } - {solve_score[task_id] = }')
@@ -352,7 +355,10 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 #            if os.path.exists(solve_path[task_id]):
 #                os.remove(solve_path[task_id])
 
-        if correct_sample == len(task):
+        # if correct_sample == len(task):
+        #     n_correct += 1
+
+        if score[task_id] == len(task):
             n_correct += 1
         n_checked += 1
 
@@ -374,6 +380,12 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
                 print(f"  - solve_{task_id} sample {sample_i}: {time_taken:.2f}s")
 
     return n_correct, avg_time, n
+
+
+def update_scores(score, solver_id, match):
+    if solver_id not in score:
+        score[solver_id] = 0
+    score[solver_id] += match
 
 
 if __name__ == '__main__':
