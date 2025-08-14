@@ -358,7 +358,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
         # if correct_sample == len(task):
         #     n_correct += 1
 
-        if score[task_id] == len(task):
+        if task_id in score and score[task_id] == len(task):
             n_correct += 1
         n_checked += 1
 
