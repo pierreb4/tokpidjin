@@ -24,14 +24,14 @@ def differ_d68f7d67209b7ebc1626741d07f3c672(S, I, O, C):
 
 
 # # def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-def differ_96d6a79e4f2dae9b65afc44e70627668(S, I, O, C):
-    x1 = identity(p_g)
-    x2 = x1(I)
-    x3 = x1(O)
-    x4 = difference_tuple(x3, x2)
-    x5 = get_nth_t(x4, F0)
-    x6 = size(x4)
-    return x6
+# def differ_96d6a79e4f2dae9b65afc44e70627668(S, I, O, C):
+#     x1 = identity(p_g)
+#     x2 = x1(I)
+#     x3 = x1(O)
+#     x4 = difference_tuple(x3, x2)
+#     x5 = get_nth_t(x4, F0)
+#     x6 = size(x4)
+#     return x6
 
 
 # # def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':

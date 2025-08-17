@@ -373,7 +373,7 @@ class Differs:
             self.init_equals[differ_name] = get_equals(differ.source)
 
 
-    def sub_I(self, C='I'):
+    def sub_I(self, I='I'):
 
         # print_l(f'Substituting C with {C}')
 
@@ -381,7 +381,7 @@ class Differs:
         for differ_name in self.init_equals.keys():
             self.run_equals[differ_name] = {}
             for x_name, x_call in self.init_equals[differ_name].items():
-                self.run_equals[differ_name][x_name] = re.sub(r'\bC\b', C, x_call)
+                self.run_equals[differ_name][x_name] = re.sub(r'\bI\b', I, x_call)
 
                 # print_l(f'{differ_name} - {x_name} = {self.run_equals[differ_name][x_name]}')
 
@@ -548,7 +548,7 @@ def batt(task_id, S, I, O, C, log_path):
         code = Code(batt_file)
         uses = {}
         # differs = Differs(freeze_differs=freeze_differs, I='I')
-        differs.sub_I(C='I')
+        differs.sub_I(I='I')
         differs.add_lines(code, uses, task_id=None)
         # Check if we reach this limit with:
         # grep 'x999 = ' solver_md5/*.py
@@ -579,7 +579,8 @@ def batt(task_id, S, I, O, C, log_path):
                 get_O = add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
                 if get_O:
                     # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
-                    differs.sub_I(C=f't{code.t_num}')
+                    # differs.sub_I(I=f't{code.t_num}')
+                    differs.sub_I(I=f'I')
                     differs.add_lines(code, uses, task_id=task_id)
 
 
