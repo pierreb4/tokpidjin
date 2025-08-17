@@ -40,7 +40,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         if prof is not None:
             prof_start = timer()
         solve_timed_out, solve_result = run_with_timeout(batt,
-            [task_id, S, I, O, None, fluff_log_path], timeout)
+            [task_id, S, I, None, None, fluff_log_path], timeout)
         if prof is not None:
             prof['batt.train.run_with_timeout'] += timer() - prof_start
 
@@ -49,9 +49,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
         t_set = set()
         if solve_result is not None:
-            o['train'][i], s['train'][i] = solve_result
+            o['train'][i], _ = solve_result
 
-            print_l(f"train[{i}] - {task_id} - {len(o['train'][i])} - {len(s['train'][i])}")
+            # print_l(f"train[{i}] - {task_id} - {len(o['train'][i])} - {len(s['train'][i])}")
+            print_l(f"train[{i}] - {task_id} - {len(o['train'][i])}")
 
             all_o = all_o.union(o['train'][i])
             for t_n, evo, o_solver_id, okt in o['train'][i]:
@@ -70,16 +71,19 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if o_solver_id not in s_score:
                     s_score[o_solver_id] = 0
 
-                for last_t, s_solver_id, d_name, score in s['train'][i]:
-                    if s_solver_id == 'None':   
-                        s_score[o_solver_id] += score > 0
-                    if s_solver_id == o_solver_id:
-                        s_score[o_solver_id] += score == 0
+                diff_timed_out, diff_result = run_with_timeout(batt,
+                    [task_id, S, I, C, None, fluff_log_path], timeout)
 
-                s_score[o_solver_id] = max(0, s_score[o_solver_id])
+                if diff_result is not None:
+                    _, s['train'][i] = diff_result
 
-            # diff_timed_out, diff_result = run_with_timeout(batt,
-            #     [task_id, S, I, O, C, fluff_log_path], timeout)
+                    for last_t, s_solver_id, d_name, score in s['train'][i]:
+                        if s_solver_id == 'None':   
+                            s_score[o_solver_id] += score > 0
+                        if s_solver_id == o_solver_id:
+                            s_score[o_solver_id] += score == 0
+
+                    s_score[o_solver_id] = max(0, s_score[o_solver_id])
 
             # for last_t, s_solver_id, d_name, score in s['train'][i]:
             #     if s_solver_id == 'None':
@@ -108,9 +112,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
         t_set = set()
         if solve_result is not None:
-            o['test'][i], s['test'][i] = solve_result
+            o['test'][i], _ = solve_result
 
-            print_l(f"test[{i}] - {task_id} - {len(o['test'][i])} - {len(s['test'][i])}")
+            # print_l(f"test[{i}] - {task_id} - {len(o['test'][i])} - {len(s['test'][i])}")
+            print_l(f"test[{i}] - {task_id} - {len(o['test'][i])}")
 
             all_o = all_o.union(o['test'][i])
             for t_n, evo, o_solver_id, okt in o['test'][i]:
@@ -127,16 +132,19 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if o_solver_id not in s_score:
                     s_score[o_solver_id] = 0
 
-                for last_t, s_solver_id, d_name, score in s['test'][i]:
-                    if s_solver_id == 'None':   
-                        s_score[o_solver_id] += score > 0
-                    if s_solver_id == o_solver_id:
-                        s_score[o_solver_id] += score == 0
+                diff_timed_out, diff_result = run_with_timeout(batt,
+                    [task_id, S, I, C, None, fluff_log_path], timeout)
 
-                s_score[o_solver_id] = max(0, s_score[o_solver_id])
+                if diff_result is not None:
+                    _, s['test'][i] = diff_result
 
-            # diff_timed_out, diff_result = run_with_timeout(batt,
-            #     [task_id, S, I, O, C, fluff_log_path], timeout)
+                    for last_t, s_solver_id, d_name, score in s['test'][i]:
+                        if s_solver_id == 'None':   
+                            s_score[o_solver_id] += score > 0
+                        if s_solver_id == o_solver_id:
+                            s_score[o_solver_id] += score == 0
+
+                    s_score[o_solver_id] = max(0, s_score[o_solver_id])
 
             # for last_t, s_solver_id, d_name, score in s['test'][i]:
             #     if s_solver_id == 'None':
