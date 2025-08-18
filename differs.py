@@ -35,17 +35,17 @@ def differ_d68f7d67209b7ebc1626741d07f3c672(S, I, O, C):
 
 
 # # def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-# def differ_735ade11c9d9435c6bd12383067a6da5(S, I, O, C):
-#     x1 = rbind(o_g, R5)
-#     x2 = x1(I)
-#     x3 = x1(O)
-#     x4 = rbind(sizefilter, ONE)
-#     x5 = x4(x2)
-#     x6 = x4(x3)
-#     x7 = difference(x5, x6)
-#     x8 = get_nth_f(x7, F0)
-#     x9 = size(x7)
-#     return x9
+def differ_735ade11c9d9435c6bd12383067a6da5(S, I, O, C):
+    x1 = rbind(o_g, R5)
+    x2 = x1(I)
+    x3 = x1(O)
+    x4 = rbind(sizefilter, ONE)
+    x5 = x4(x2)
+    x6 = x4(x3)
+    x7 = difference(x5, x6)
+    x8 = get_nth_f(x7, F0)
+    x9 = size(x7)
+    return x9
 
 
 # # def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
