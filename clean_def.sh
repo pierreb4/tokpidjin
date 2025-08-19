@@ -34,7 +34,7 @@ cd $SOLVER_DIR || exit 1
 TMPFILE=$(mktemp)
 # ls [0-9]*/[0-9a-f]* | shuf -n "$MAX_NUM_FILES" >$TMPFILE
 
-ls -v [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py | tail -$MAX_NUM_FILES >$TMPFILE
+ls -vd [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py | tail -$MAX_NUM_FILES >$TMPFILE
 mapfile -t keep <$TMPFILE
 rm $TMPFILE
 
