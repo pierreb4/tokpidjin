@@ -182,15 +182,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
             s_score[o_solver_id] = 0
 
         for name in d_score[o_solver_id].keys():
-            if d_score[o_solver_id][name]['score'] < len_task:
-                d_score[o_solver_id][name]['score'] = 2 * len_task - d_score[o_solver_id][name]['score']
-            s_score[o_solver_id] += d_score[o_solver_id][name]['score']
+            # if d_score[o_solver_id][name]['score'] < len_task:
+            #     d_score[o_solver_id][name]['score'] = 2 * len_task - d_score[o_solver_id][name]['score']
+            s_score[o_solver_id] += d_score[o_solver_id][name]['score'] >= 2 * len(train_task)
 
 
 
-    for solver_id, score in s_score.items():
-        if score < len_task:
-            s_score[solver_id] = 2 * len_task - score
+    # for solver_id, score in s_score.items():
+    #     if score < len_task:
+    #         s_score[solver_id] = 2 * len_task - score
 
     elapsed = timer() - start_time
     return all_o, o_score, s_score, d_score
