@@ -46,7 +46,7 @@ if [[ -z "${keep[@]}" ]]; then
 fi
 
 # Step 2: Remove all files not in the keep list
-for file in [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py; do
+for file in `ls [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py`; do
     skip=0
     for k in "${keep[@]}"; do
         if [[ "$file" == "$k" ]]; then
@@ -55,6 +55,7 @@ for file in [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py; do
         fi
     done
     if [[ $skip -eq 0 ]]; then
+        echo rm -- "$file"
         rm -- "$file"
     fi
 done
