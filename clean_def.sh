@@ -55,7 +55,9 @@ for file in `ls [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py`; do
         fi
     done
     if [[ $skip -eq 0 ]]; then
-        echo rm -- "$file"
+        if [[ ${file:0:1} != "0" ]]; then
+            echo rm -- "$file"
+        fi  
         rm -- "$file"
     fi
 done
