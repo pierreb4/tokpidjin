@@ -23,29 +23,29 @@ def differ_d68f7d67209b7ebc1626741d07f3c672(S, I, O, C):
     return x6
 
 
-# # def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-# def differ_96d6a79e4f2dae9b65afc44e70627668(S, I, O, C):
-#     x1 = identity(p_g)
-#     x2 = x1(I)
-#     x3 = x1(O)
-#     x4 = difference_tuple(x3, x2)
-#     x5 = get_nth_t(x4, F0)
-#     x6 = size(x4)
-#     return x6
-
-
-# def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
-def differ_735ade11c9d9435c6bd12383067a6da5(S, I, O, C):
-    x1 = rbind(o_g, R5)
+# def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+def differ_96d6a79e4f2dae9b65afc44e70627668(S, I, O, C):
+    x1 = identity(p_g)
     x2 = x1(I)
     x3 = x1(O)
-    x4 = rbind(sizefilter, ONE)
-    x5 = x4(x2)
-    x6 = x4(x3)
-    x7 = difference(x5, x6)
-    x8 = get_nth_f(x7, F0)
-    x9 = size(x7)
-    return x9
+    x4 = difference_tuple(x3, x2)
+    x5 = get_nth_t(x4, F0)
+    x6 = size(x4)
+    return x6
+
+
+# # def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
+# def differ_735ade11c9d9435c6bd12383067a6da5(S, I, O, C):
+#     x1 = rbind(o_g, R5)
+#     x2 = x1(I)
+#     x3 = x1(O)
+#     x4 = rbind(sizefilter, ONE)
+#     x5 = x4(x2)
+#     x6 = x4(x3)
+#     x7 = difference(x5, x6)
+#     x8 = get_nth_f(x7, F0)
+#     x9 = size(x7)
+#     return x9
 
 
 # # def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
