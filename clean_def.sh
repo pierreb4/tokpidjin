@@ -57,8 +57,8 @@ for file in `ls [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py`; do
     if [[ $skip -eq 0 ]]; then
         if [[ ${file:0:1} != "0" ]]; then
             find solver_dir -name "$file"
-            echo rm -- "$file"
         fi  
+        echo rm -- "$file"
         rm -- "$file"
     fi
 done
