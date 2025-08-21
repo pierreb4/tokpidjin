@@ -346,11 +346,14 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
 #            if os.path.exists(solve_path[task_id]):
 #                os.remove(solve_path[task_id])
 
+        do_print = False
         if task_id in o_score and o_score[task_id] == len(task):
+            do_print = True
             n_correct += 1
         n_checked += 1
 
-        print_l(f'{task_id} - {n_correct}/{n_checked} - {n_correct / n_checked:.2f} - {total_examples}')
+        if do_print:
+            print_l(f'{task_id} - {n_correct}/{n_checked} - {n_correct / n_checked:.2f} - {total_examples}')
 
     # Calculate average execution time
     avg_time = total_execution_time / max(total_examples, 1)
