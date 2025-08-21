@@ -135,7 +135,7 @@ while date && [ $STOP -eq 0 ]; do
     find solver_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
       base=$(basename "$py_file" .py)
       if ! find solver_dir -type l -name "${base}.py" | grep -q .; then
-        find solver_dir -name "${base}.py"
+        find solver_dir -name "${base}.py" || echo "No link for ${base}.py"
         echo rm "$py_file"
         rm "$py_file"
       fi
