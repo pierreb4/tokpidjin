@@ -91,6 +91,17 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
 
 
+    # NOTE This might need a bit of fine-tuning,
+    # maybe move it to the end of the 'train' section
+    for o_solver_id in d_score.keys():
+        if o_solver_id not in s_score:
+            s_score[o_solver_id] = 0
+
+        for name in d_score[o_solver_id].keys():
+            s_score[o_solver_id] += d_score[o_solver_id][name]['score'] >= 2 * len(train_task)
+
+
+
     for i, sample in enumerate(test_task):
         I = sample['input']
         O = sample['output']
@@ -148,20 +159,6 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
     len_task = len(train_task) + len(test_task)
 
-    for o_solver_id in d_score.keys():
-        if o_solver_id not in s_score:
-            s_score[o_solver_id] = 0
-
-        # NOTE This might need a bit of fine-tuning,
-        # maybe move it to the end of the 'train' section
-        for name in d_score[o_solver_id].keys():
-            s_score[o_solver_id] += d_score[o_solver_id][name]['score'] >= 2 * len(train_task)
-
-
-
-    # for solver_id, score in s_score.items():
-    #     if score < len_task:
-    #         s_score[solver_id] = 2 * len_task - score
 
     elapsed = timer() - start_time
     return all_o, o_score, s_score, d_score
