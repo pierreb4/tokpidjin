@@ -77,14 +77,6 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if diff_result is not None:
                     _, s['train'][i] = diff_result
 
-                    # for last_t, s_solver_id, d_name, score in s['train'][i]:
-                    #     if s_solver_id == 'None':   
-                    #         s_score[o_solver_id] += score > 0
-                    #     if s_solver_id == o_solver_id:
-                    #         s_score[o_solver_id] += score == 0
-
-                    # s_score[o_solver_id] = max(0, s_score[o_solver_id])
-
 
 
                     for last_t, s_solver_id, d_name, score in s['train'][i]:
@@ -140,14 +132,6 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if diff_result is not None:
                     _, s['test'][i] = diff_result
 
-                    # for last_t, s_solver_id, d_name, score in s['test'][i]:
-                    #     if s_solver_id == 'None':   
-                    #         s_score[o_solver_id] += score > 0
-                    #     if s_solver_id == o_solver_id:
-                    #         s_score[o_solver_id] += score == 0
-
-                    # s_score[o_solver_id] = max(0, s_score[o_solver_id])
-
 
 
                     for last_t, s_solver_id, d_name, score in s['test'][i]:
@@ -162,28 +146,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
 
 
-                    # for last_t, s_solver_id, d_name, score in s['test'][i]:
-                    #     if s_solver_id == 'None':
-                    #         d_score[d_name] = {'last_t': last_t, 'score': 0}
-
-                    # for name in d_score.keys():
-                    #     for last_t, s_solver_id, d_name, score in s['test'][i]:
-                    #         none_val = score if name == d_name and s_solver_id == 'None' else 0
-                    #         last_val = score if name == d_name and s_solver_id == o_solver_id else 0
-
-                    #         if name == d_name and none_val > 0 
-                    #                 and ((last_val == 0 and C == O) or (last_val != 0 and C != O)):
-                    #             d_score[name]['score'] += 1
-
     len_task = len(train_task) + len(test_task)
 
     for o_solver_id in d_score.keys():
         if o_solver_id not in s_score:
             s_score[o_solver_id] = 0
 
+        # NOTE This might need a bit of fine-tuning,
+        # maybe move it to the end of the 'train' section
         for name in d_score[o_solver_id].keys():
-            # if d_score[o_solver_id][name]['score'] < len_task:
-            #     d_score[o_solver_id][name]['score'] = 2 * len_task - d_score[o_solver_id][name]['score']
             s_score[o_solver_id] += d_score[o_solver_id][name]['score'] >= 2 * len(train_task)
 
 
