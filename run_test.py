@@ -225,14 +225,29 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
         num_train = len(data['train'][task_id])
         num_test = len(data['test'][task_id])
 
+
+        solver_source = get_solver_source(task_id, imports=None, best_only=True)
+
+        if solver_source.path is None:
+            # print_l(f"No solver found for {task_id}, skipping...")
+            continue
+
+        module_name = solver_source.path[:-3].replace('/', '.')
+        solver_module = importlib.import_module(module_name)
+        solver = solver_module.solve
+
+        print(f"Loaded solver for {task_id} from {solver_source.path}")
+
+
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
-            if solver is not None:
-                pass
-            elif task_id in solve_func and hasattr(solvers_module, solve_func[task_id]):
-                solver = getattr(solvers_module, solve_func[task_id])
-            else:
-                continue
+            # if solver is not None:
+            #     pass
+            # elif task_id in solve_func and hasattr(solvers_module, solve_func[task_id]):
+            #     solver = getattr(solvers_module, solve_func[task_id])
+            # if task_id in solve_func: 
+            # else:
+            #     continue
 
             correct = 1
             for i, ex in enumerate(task):
