@@ -19,6 +19,52 @@ import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
 
+class D_Score:    
+    def __init__(self):
+        self.score = {}
+
+    def update(self, o_solver_id, s_item):
+        # NOTE: Add whether it's iz or zo differ
+        # or just pick the best score?
+        last_t, s_solver_id, d_name, score = s_item
+
+        if o_solver_id not in self.score:
+            self.score[o_solver_id] = {}
+        if d_name not in self.score[o_solver_id]:
+            self.score[o_solver_id][d_name] = {
+                'iz': {'last_t': last_t, 'score': 0},
+                'zo': {'last_t': last_t, 'score': 0}    
+            }
+        
+        # Score for iz differ
+        if s_solver_id == 'None':
+            self.score[o_solver_id][d_name]['iz']['score'] += score > 0
+        if s_solver_id == o_solver_id:
+            self.score[o_solver_id][d_name]['iz']['score'] += score == 0
+
+        # Score for zo differ
+        if s_solver_id == 'None':
+            self.score[o_solver_id][d_name]['zo']['score'] += score == 0
+        if s_solver_id == o_solver_id:
+            self.score[o_solver_id][d_name]['zo']['score'] += score > 0
+
+
+    def sum_scores(self):
+        d_score_sum = {}
+        for solver_id, value in self.score.items():
+            if name not in d_score_sum:
+                d_score_sum[name] = {
+                    'iz': {'last_t': value['iz']['last_t'], 'score': 0},
+                    'zo': {'last_t': value['zo']['last_t'], 'score': 0}
+                }
+
+            d_score_sum[name]['iz']['score'] += value['iz']['score']
+            d_score_sum[name]['zo']['score'] += value['zo']['score']
+        return d_score_sum
+
+
+
+
 def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
     task_start = timer()
     train_task = total_data['train'][task_id]
@@ -77,29 +123,19 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if diff_result is not None:
                     _, s['train'][i] = diff_result
 
+                    for s_item in s['train'][i]:
+                        d_score.update(o_solver_id, s_item)
 
 
-                    for last_t, s_solver_id, d_name, score in s['train'][i]:
-                        if o_solver_id not in d_score:
-                            d_score[o_solver_id] = {}
-                        if d_name not in d_score[o_solver_id]:
-                            d_score[o_solver_id][d_name] = {'last_t': last_t, 'score': 0}
-                        if s_solver_id == 'None': # and iz
-                            d_score[o_solver_id][d_name]['score'] += score > 0
-                        if s_solver_id == o_solver_id:
-                            d_score[o_solver_id][d_name]['score'] += score == 0
-
-
-
-    # NOTE This might need a bit of fine-tuning,
-    # maybe move it to the end of the 'train' section
-    for o_solver_id in d_score.keys():
+    # NOTE This might need to be moved around,
+    # depending on whether it's 'train' or 'eval' run
+    for o_solver_id in d_score.score.keys():
         if o_solver_id not in s_score:
             s_score[o_solver_id] = 0
 
-        for name in d_score[o_solver_id].keys():
-            s_score[o_solver_id] += d_score[o_solver_id][name]['score'] >= 2 * len(train_task)
-
+        for name in d_score.score[o_solver_id].keys():
+            s_score[o_solver_id] += d_score.score[o_solver_id][name]['iz']['score'] >= 2 * len(train_task)
+            s_score[o_solver_id] += d_score.score[o_solver_id][name]['zo']['score'] >= 2 * len(train_task)
 
 
     for i, sample in enumerate(test_task):
@@ -143,25 +179,13 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 if diff_result is not None:
                     _, s['test'][i] = diff_result
 
-
-
-                    for last_t, s_solver_id, d_name, score in s['test'][i]:
-                        if o_solver_id not in d_score:
-                            d_score[o_solver_id] = {}
-                        if d_name not in d_score[o_solver_id]:
-                            d_score[o_solver_id][d_name] = {'last_t': last_t, 'score': 0}
-                        if s_solver_id == 'None': # and iz
-                            d_score[o_solver_id][d_name]['score'] += score > 0
-                        if s_solver_id == o_solver_id:
-                            d_score[o_solver_id][d_name]['score'] += score == 0
-
+                    for s_item in s['test'][i]:
+                        d_score.update(o_solver_id, s_item)
 
 
     len_task = len(train_task) + len(test_task)
-
-
     elapsed = timer() - start_time
-    return all_o, o_score, s_score, d_score
+    return all_o, o_score, s_score
 
 
 def update_scores(o_score, solver_id, match):
@@ -173,7 +197,7 @@ def update_scores(o_score, solver_id, match):
 def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
     if prof is not None:
         prof_call_start = timer()
-    all_o, o_score, s_score, d_score = check_batt(total_data,
+    all_o, o_score, s_score = check_batt(total_data,
             task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=prof)
     if prof is not None:
         prof['run_batt.check_batt'] += timer() - prof_call_start
@@ -368,7 +392,7 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
     if os.path.isfile(fluff_log_path):
         os.remove(fluff_log_path)
 
-    d_score = {}
+    d_score = D_Score()
     d_score_sum = {}
     to_sum = 0
     prof = defaultdict(float) if enable_timing else None
@@ -380,15 +404,13 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
             expand_solver_module.set_profiler(prof)
     for task_i, task_id in enumerate(do_list):
         loop_start = timer() if prof is not None else None
-        to, d_score = run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout, prof=prof)
+        to = run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout, prof=prof)
         if prof is not None:
             prof['main.run_batt'] += timer() - loop_start
         if to:
             to_sum += 1
-        # for name, value in d_score.items():
-        #     if name not in d_score_sum:
-        #         d_score_sum[name] = {'last_t': value['last_t'], 'score': 0}
-        #     d_score_sum[name]['score'] += value['score']
+        
+        # d_score_sum = d_score.sum_scores()
     
     print_l(f'{d_score_sum}')
 
