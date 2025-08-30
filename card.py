@@ -369,6 +369,7 @@ class Differs:
         self.init_equals = {}
 
         differ_list = ['differs']
+        # differ_list = []
         differ_list += [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
         self.differs = get_differs(differ_list, best_only=True)
 
@@ -413,6 +414,8 @@ class Differs:
                 # self.init_equals[differ_name] = get_equals(differ_source)
 
                 # print_l(f'{differ_name}\n{inlined_source = }')
+
+                print_l(f'{differ_source = }')
 
                 inlined_source = inline_variables(differ_source)
                 md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()

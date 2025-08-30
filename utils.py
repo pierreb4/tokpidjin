@@ -290,13 +290,20 @@ def get_solver_source(task_id, imports=None, best_only=False):
 def get_differs(import_names, best_only=False):
     differs = {}
     for imp_name in import_names:
-        differ_module = importlib.import_module(imp_name)
-        for name in dir(differ_module):
-            if name.startswith('differ'):
-                differ = getattr(differ_module, name)
-                if callable(differ):
+        if imp_name == 'differs':
+            differ_module = importlib.import_module(imp_name)
+            for name in dir(differ_module):
+                if name.startswith('differ_'):
+                    differ = getattr(differ_module, name)
                     differs[name] = Differ(name, imp_name, inspect.getsource(differ), None)
-            
+        else:
+            new_imp_name = f'differ_md5.{imp_name}'
+            differ_module = importlib.import_module(new_imp_name)
+            differ = getattr(differ_module, 'differ')
+            name = f'differ_{imp_name}'
+            differs[name] = Differ(name, imp_name, inspect.getsource(differ), None)
+
+
     return differs
 
 
