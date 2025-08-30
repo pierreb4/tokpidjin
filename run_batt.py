@@ -357,7 +357,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
     # TODO Build and save the relevant differs
     for name, last_t in d_score.last_t.items():
-        print_l(f"{name} - {last_t}")
+        # print_l(f"{name} - {last_t}")
         done = track_solution(last_t, None)
 
         # Build differ body
@@ -373,7 +373,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
             differ_body += ', '.join(args)
             differ_body += ')\n'
         differ_body += f'    return t{last_t}\n'
-        print(f'{differ_body}')
+        # print(f'{differ_body}')
 
         differ_source = f'def differ(S, I, O):\n{differ_body}'
         inlined_source = inline_variables(differ_source)

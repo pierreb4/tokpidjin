@@ -413,10 +413,6 @@ class Differs:
                 differ_source = f'def differ(S, I, O):\n{differ_body}'
                 # self.init_equals[differ_name] = get_equals(differ_source)
 
-                # print_l(f'{differ_name}\n{inlined_source = }')
-
-                print_l(f'{differ_source = }')
-
                 inlined_source = inline_variables(differ_source)
                 md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
