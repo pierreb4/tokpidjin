@@ -367,7 +367,10 @@ class Differs:
     def __init__(self, freeze_differs=False):
         self.freeze_differs = freeze_differs
         self.init_equals = {}
-        self.differs = get_differs(['differs'], best_only=True)
+
+        differ_list = ['differs']
+        differ_list += [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
+        self.differs = get_differs(differ_list, best_only=True)
 
         for differ_name, differ in self.differs.items():
             self.init_equals[differ_name] = get_equals(differ.source)
@@ -406,7 +409,7 @@ class Differs:
                 differ_body = build_differ_body(code.t_call, code.t_num, done)
                 differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
 
-                differ_source = f'def differ(S, I, O, C):\n{differ_body}'
+                differ_source = f'def differ(S, I, O):\n{differ_body}'
                 # self.init_equals[differ_name] = get_equals(differ_source)
 
                 # print_l(f'{differ_name}\n{inlined_source = }')
@@ -421,8 +424,9 @@ class Differs:
                 # print_l(f'{differ_name}\n{inlined_source = }')
 
 
-            print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
-            print(f"        s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
+            # print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
+            # print(f"        s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
+            print(f"    s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}))", file=code.file)
 
         code.last_differ_t_num = code.t_num
 

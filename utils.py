@@ -292,7 +292,7 @@ def get_differs(import_names, best_only=False):
     for imp_name in import_names:
         differ_module = importlib.import_module(imp_name)
         for name in dir(differ_module):
-            if name.startswith('differ_'):
+            if name.startswith('differ'):
                 differ = getattr(differ_module, name)
                 if callable(differ):
                     differs[name] = Differ(name, imp_name, inspect.getsource(differ), None)

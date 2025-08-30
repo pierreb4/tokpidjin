@@ -19,50 +19,86 @@ import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
 
-class D_Score:    
+class O_Score:    
     def __init__(self):
         self.score = {}
 
-    def update(self, o_solver_id, s_item):
+    def update(self, solver_id, match):
+        if solver_id not in self.score:
+            self.score[solver_id] = 0
+        self.score[solver_id] += match
+
+    def get(self, solver_id):
+        return self.score.get(solver_id, 0)
+
+
+class S_Score:    
+    def __init__(self):
+        self.score = {}
+
+    def update(self, solver_id, match):
+        if solver_id not in self.score:
+            self.score[solver_id] = 0
+        self.score[solver_id] += match
+
+    def get(self, solver_id):
+        return self.score.get(solver_id, 0)
+
+
+class D_Score:    
+    def __init__(self):
+        self.score = {}
+        self.last_t = {}
+
+    def update(self, solver_id, s_item):
         # NOTE: Add whether it's iz or zo differ
         # or just pick the best score?
         last_t, s_solver_id, d_name, score = s_item
 
-        if o_solver_id not in self.score:
-            self.score[o_solver_id] = {}
-        if d_name not in self.score[o_solver_id]:
-            self.score[o_solver_id][d_name] = {
-                'iz': {'last_t': last_t, 'score': 0},
-                'zo': {'last_t': last_t, 'score': 0}    
+        # Keep track of last_t per differ
+        if s_solver_id == 'None':
+            self.last_t[d_name] = last_t
+
+        if solver_id not in self.score:
+            self.score[solver_id] = {}
+        if d_name not in self.score[solver_id]:
+            self.score[solver_id][d_name] = {
+                'last_t': self.last_t[d_name],
+                'iz_score': 0,
+                'zo_score': 0    
             }
         
+        if not score.ok or type(score.t) != int:
+            return
+
         # Score for iz differ
         if s_solver_id == 'None':
-            self.score[o_solver_id][d_name]['iz']['score'] += score > 0
-        if s_solver_id == o_solver_id:
-            self.score[o_solver_id][d_name]['iz']['score'] += score == 0
+            self.score[solver_id][d_name]['iz_score'] += score.t > 0
+        if s_solver_id == solver_id:
+            self.score[solver_id][d_name]['iz_score'] += score.t == 0
 
         # Score for zo differ
         if s_solver_id == 'None':
-            self.score[o_solver_id][d_name]['zo']['score'] += score == 0
-        if s_solver_id == o_solver_id:
-            self.score[o_solver_id][d_name]['zo']['score'] += score > 0
-
+            self.score[solver_id][d_name]['zo_score'] += score.t == 0
+        if s_solver_id == solver_id:
+            self.score[solver_id][d_name]['zo_score'] += score.t > 0
 
     def sum_scores(self):
         d_score_sum = {}
         for solver_id, value in self.score.items():
-            if name not in d_score_sum:
-                d_score_sum[name] = {
-                    'iz': {'last_t': value['iz']['last_t'], 'score': 0},
-                    'zo': {'last_t': value['zo']['last_t'], 'score': 0}
-                }
+            for name in value.keys():
+                if name not in d_score_sum:
+                    d_score_sum[name] = {
+                        'last_t': value[name]['last_t'],
+                        'iz_score': 0,
+                        'zo_score': 0    
+                    }
 
-            d_score_sum[name]['iz']['score'] += value['iz']['score']
-            d_score_sum[name]['zo']['score'] += value['zo']['score']
+                d_score_sum[name]['iz_score'] += value[name]['iz_score']
+                d_score_sum[name]['zo_score'] += value[name]['zo_score']
+
+        print_l(f'{len(self.score)} solvers contributed to score')
         return d_score_sum
-
-
 
 
 def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
@@ -78,8 +114,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
     print_l(f'-- {task_id} - {task_i} --')
 
-    s_score = {}
-    o_score = {}
+    o_score = O_Score()
+    s_score = S_Score()
+    # s_score = {}
+    # o_score = {}
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
@@ -112,10 +150,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # C is the candidate output
                 C = okt.t
-                update_scores(o_score, o_solver_id, C == O)
+                # update_scores(o_score, o_solver_id, C == O)
+                o_score.update(o_solver_id, C == O)
 
-                if o_solver_id not in s_score:
-                    s_score[o_solver_id] = 0
+                # if o_solver_id not in s_score:
+                #     s_score[o_solver_id] = 0
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     [task_id, S, I, C, None, fluff_log_path], timeout)
@@ -130,12 +169,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
     # NOTE This might need to be moved around,
     # depending on whether it's 'train' or 'eval' run
     for o_solver_id in d_score.score.keys():
-        if o_solver_id not in s_score:
-            s_score[o_solver_id] = 0
+        # if o_solver_id not in s_score:
+        #     s_score[o_solver_id] = 0
 
         for name in d_score.score[o_solver_id].keys():
-            s_score[o_solver_id] += d_score.score[o_solver_id][name]['iz']['score'] >= 2 * len(train_task)
-            s_score[o_solver_id] += d_score.score[o_solver_id][name]['zo']['score'] >= 2 * len(train_task)
+            # s_score[o_solver_id] += d_score.score[o_solver_id][name]['iz_score'] >= 2 * len(train_task)
+            # s_score[o_solver_id] += d_score.score[o_solver_id][name]['zo_score'] >= 2 * len(train_task)
+            ref_len = 2 * len(train_task)
+            s_score.update(o_solver_id, d_score.score[o_solver_id][name]['iz_score'] >= ref_len)
+            s_score.update(o_solver_id, d_score.score[o_solver_id][name]['zo_score'] >= ref_len)
 
 
     for i, sample in enumerate(test_task):
@@ -168,10 +210,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # C is the candidate output
                 C = okt.t
-                update_scores(o_score, o_solver_id, C == O)
+                # update_scores(o_score, o_solver_id, C == O)
+                o_score.update(o_solver_id, C == O)
 
-                if o_solver_id not in s_score:
-                    s_score[o_solver_id] = 0
+                # if o_solver_id not in s_score:
+                #     s_score[o_solver_id] = 0
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     [task_id, S, I, C, None, fluff_log_path], timeout)
@@ -188,10 +231,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
     return all_o, o_score, s_score
 
 
-def update_scores(o_score, solver_id, match):
-    if solver_id not in o_score:
-        o_score[solver_id] = 0
-    o_score[solver_id] += match
+# def update_scores(o_score, solver_id, match):
+#     if solver_id not in o_score:
+#         o_score[solver_id] = 0
+#     o_score[solver_id] += match
 
 
 def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
@@ -253,6 +296,9 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         ensure_dir('solver_md5')
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
+        # Where differs corresponding to this solver will go
+        differ_path = f'differ_dir/{md5_hash}'
+
         check_start = timer()
         if prof is not None:
             t0 = timer()
@@ -275,8 +321,8 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
             if prof is not None:
                 prof['run_batt.expand_file'] += timer() - t0
 
-        task_o_score = o_score.get(sol_solver_id, 0)
-        task_s_score = s_score.get(sol_solver_id, 0)
+        task_o_score = o_score.get(sol_solver_id)
+        task_s_score = s_score.get(sol_solver_id)
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{task_s_score}/{t_log}'
 
         if prof is not None:
@@ -292,6 +338,12 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         if prof is not None:
             prof['run_batt.symlink'] += timer() - t0
 
+        # TODO Build and save the relevant differs
+        # if sol_solver_id in d_score.score:
+        #     for name in d_score.score[sol_solver_id].keys():
+        #         print_l(f"{sol_solver_id} - {name} - {d_score.score[sol_solver_id][name]['last_t']}")
+        # else:
+        #     print_l(f"{sol_solver_id} - No differ score")
 
         # TODO Control this with option
         # # Check things
@@ -302,6 +354,57 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
     if do_print:
         print()
+
+    # TODO Build and save the relevant differs
+    for name, last_t in d_score.last_t.items():
+        print_l(f"{name} - {last_t}")
+        done = track_solution(last_t, None)
+
+        # Build differ body
+        differ_body = ''
+        for t_num in sorted(done):
+            t_split = [item.strip() for item in t_call[t_num].split(',')]
+            t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+
+            func = t[0]
+            args = t[1:]
+            differ_body += f'    t{t_num} = '
+            differ_body += f'{func}('
+            differ_body += ', '.join(args)
+            differ_body += ')\n'
+        differ_body += f'    return t{last_t}\n'
+        print(f'{differ_body}')
+
+        differ_source = f'def differ(S, I, O):\n{differ_body}'
+        inlined_source = inline_variables(differ_source)
+        md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
+
+        # print_l(f'{md5_hash = }')
+
+        ensure_dir('differ_dir')
+        # differ_task = f'differ_dir/differ_{task_id}'
+        # ensure_dir(differ_task)
+        ensure_dir(differ_path)
+
+        ensure_dir('differ_def')
+        differ_def_path = f'differ_def/{md5_hash}.def'
+
+        ensure_dir('differ_md5')
+        differ_md5_path = f'differ_md5/{md5_hash}.py'
+
+        if not Path(differ_def_path).exists():
+            with open(differ_def_path, 'w') as f:
+                f.write(inlined_source)
+                f.write('\n')
+
+        # Expand to .py file
+        if not Path(differ_md5_path).exists():
+            do_print = True
+            expand_file(differ_def_path, differ_md5_path, None, True)
+
+        differ_link = f'{differ_path}/{md5_hash}.py'
+        ensure_dir(differ_path)
+        symlink(differ_md5_path, differ_link)
 
     # No timeout
     return False, d_score
@@ -410,9 +513,8 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
         if to:
             to_sum += 1
         
-        # d_score_sum = d_score.sum_scores()
-    
-    print_l(f'{d_score_sum}')
+    # d_score_sum = d_score.sum_scores()
+    # print_l(f'{d_score_sum}')
 
     print(f'{len(do_list)} tasks - {to_sum} timeouts')
 

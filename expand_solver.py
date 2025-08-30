@@ -80,7 +80,7 @@ def parse_function_body(content):
     # func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
     # func_match = re.search(r'def\s+(solve_[a-f0-9]+(?:_[a-f0-9]+)?)\s*\(([^)]*)\)\s*:', content)
 
-    func_match = re.search(r'def\s+(solve)\s*\(([^)]*)\)\s*:', content)
+    func_match = re.search(r'def\s+(solve|differ)\s*\(([^)]*)\)\s*:', content)
 
     if not func_match:
         func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
