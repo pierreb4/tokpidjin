@@ -11,6 +11,10 @@ from utils import *
 from constants import *
 from dsl import *
 
+import dsl
+DSL_FUNCTIONS = inspect.getmembers(dsl, inspect.isfunction)
+DSL_FUNCNAMES = [name for name, func in DSL_FUNCTIONS]
+
 
 # Borrowed from regin.py maybe can go to utils.py?
 def get_hints(node_name):
@@ -268,7 +272,13 @@ class Code:
             # if t_offset > self.last_differ_t_num:
                 new_call = clean_call(self.t_call[t_offset])
                 new_items = get_items(new_call)
-                new_func_name = new_items[0].strip()
+
+                if random.randint(0, 1) == 0:
+                    new_func_name = new_items[0].strip()
+                else:
+                    # Pick a random function name from dsl.py
+                    new_func_name = random.choice(DSL_FUNCNAMES)
+
                 new_hints = get_hints(new_func_name)
                 new_hint = new_hints[0] if new_hints else None
 
