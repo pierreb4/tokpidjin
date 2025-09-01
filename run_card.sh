@@ -150,7 +150,8 @@ while date && [ $STOP -eq 0 ]; do
     done
 
     # Remove differ_dir folders if corresponding .py file does not exist in solver_md5
-    find differ_dir -maxdepth 1 -type d -print0 | while IFS= read -r -d '' base; do
+    find differ_dir -maxdepth 1 -type d ! -path differ_dir -print0 | while IFS= read -r -d '' dir_name; do
+      base=$(basename "$dir_name")
       py_file="solver_md5/${base}.py"
       if [ ! -f "$py_file" ]; then
         echo rm -r "$base"
