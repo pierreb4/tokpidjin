@@ -43,13 +43,13 @@ while true; do
     if ! diff -q "$PREV_OUTPUT" "$CURR_OUTPUT" > /dev/null; then
         echo -n "[$(date '+%Y-%m-%d %H:%M:%S')] "
         if $QUIET; then
-            echo "Changed lines:"
+            # echo "Changed lines:"
             diff --unchanged-line-format='' --old-line-format='' --new-line-format='%L' "$PREV_OUTPUT" "$CURR_OUTPUT"
         else
             echo "Change detected:"
             diff --unified=0 "$PREV_OUTPUT" "$CURR_OUTPUT"
+            echo
         fi
-        echo
     fi
 
     # Update stored output
