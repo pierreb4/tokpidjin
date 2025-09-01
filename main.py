@@ -312,7 +312,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             #      - Maybe we could check all top ranking solutions
             #      In run_batt.py we accept (mutated) solutions from any solver
             solve_timed_out, solve_result = run_with_timeout(batt,
-                    (task_id, S, I, None, None, fluff_log_path), timeout)
+                    (task_id, S, I, None, fluff_log_path), timeout)
 
             execution_time = time.time() - start_time
             total_execution_time += execution_time
