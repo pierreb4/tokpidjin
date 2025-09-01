@@ -154,7 +154,7 @@ while date && [ $STOP -eq 0 ]; do
       py_file="solver_md5/${base}.py"
       if [ ! -f "$py_file" ]; then
         echo rm -r "$base"
-        # rm -r "$base"
+        rm -r "$base"
       fi
     done
 
