@@ -3,19 +3,22 @@
 # Default values
 INTERVAL=300
 CMD="python run_test.py -q"
+QUIET=false
 
 usage() {
-    echo "Usage: $0 -i <interval_seconds> -c <command>"
+    echo "Usage: $0 -i <interval_seconds> -c <command> [-q]"
     echo "  -i    Interval in seconds between checks (default: 300)"
     echo "  -c    Command to monitor (required)"
+    echo "  -q    Quiet output, only print changed lines"
     exit 1
 }
 
 # Parse options
-while getopts ":i:c:" opt; do
+while getopts ":i:c:q" opt; do
   case $opt in
     i) INTERVAL="$OPTARG" ;;
     c) CMD="$OPTARG" ;;
+    q) QUIET=true ;;
     *) usage ;;
   esac
 done
@@ -38,8 +41,14 @@ while true; do
 
     # Compare with previous output
     if ! diff -q "$PREV_OUTPUT" "$CURR_OUTPUT" > /dev/null; then
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] Change detected:"
-        diff --unified=0 "$PREV_OUTPUT" "$CURR_OUTPUT"
+        echo -n "[$(date '+%Y-%m-%d %H:%M:%S')] "
+        if $QUIET; then
+            echo "Changed lines:"
+            diff --unchanged-line-format='' --old-line-format='' --new-line-format='%L' "$PREV_OUTPUT" "$CURR_OUTPUT"
+        else
+            echo "Change detected:"
+            diff --unified=0 "$PREV_OUTPUT" "$CURR_OUTPUT"
+        fi
         echo
     fi
 
@@ -49,4 +58,3 @@ while true; do
     # Sleep for chosen interval
     sleep "$INTERVAL"
 done
-
