@@ -276,7 +276,8 @@ class Code:
                 if random.randint(0, 1) == 0:
                     new_func_name = new_items[0].strip()
                 else:
-                    # Pick a random function name from dsl.py
+                    # XXX Pick a random function name from dsl.py
+                    #     If promising, make more structural
                     new_func_name = random.choice(DSL_FUNCNAMES)
 
                 new_hints = get_hints(new_func_name)
