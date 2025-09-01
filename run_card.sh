@@ -139,13 +139,22 @@ while date && [ $STOP -eq 0 ]; do
         echo rm "$py_file"
         rm "$py_file"
 
-      # Now remove corresponding folder in differ_dir
-        differ_dir="differ_dir/${base}"
-        if [ -d "$differ_dir" ]; then
-          echo rm -r "$differ_dir"
-          rm -r "$differ_dir"
-        fi
+        # # Now remove corresponding folder in differ_dir
+        # differ_dir="differ_dir/${base}"
+        # if [ -d "$differ_dir" ]; then
+        #   echo rm -r "$differ_dir"
+        #   rm -r "$differ_dir"
+        # fi
 
+      fi
+    done
+
+    # Remove differ_dir folders if corresponding .py file does not exist in solver_md5
+    find differ_dir -maxdepth 1 -type d -print0 | while IFS= read -r -d '' base; do
+      py_file="solver_md5/${base}.py"
+      if [ ! -f "$py_file" ]; then
+        echo rm -r "$base"
+        # rm -r "$base"
       fi
     done
 
