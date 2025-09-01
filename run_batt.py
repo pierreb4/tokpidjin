@@ -247,6 +247,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
+    differ_path = None
     do_print = False
     for solution in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = solution
@@ -355,6 +356,10 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
     if do_print:
         print()
 
+    # No solutions found
+    if differ_path is None:
+        return False, d_score
+
     # TODO Build and save the relevant differs
     for name, last_t in d_score.last_t.items():
         # print_l(f"{name} - {last_t}")
@@ -384,7 +389,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         ensure_dir('differ_dir')
         # differ_task = f'differ_dir/differ_{task_id}'
         # ensure_dir(differ_task)
-        ensure_dir(differ_path)
 
         ensure_dir('differ_def')
         differ_def_path = f'differ_def/{md5_hash}.def'
