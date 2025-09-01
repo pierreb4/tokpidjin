@@ -46,7 +46,8 @@ if [[ -z "${keep[@]}" ]]; then
 fi
 
 # Step 2: Remove all files not in the keep list
-for file in `ls -vd [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py | tail -$MAX_NUM_FILES`; do
+# for file in `ls -vd [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py | tail -$MAX_NUM_FILES`; do
+for file in `ls -vd [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py`; do
     skip=0
     for k in "${keep[@]}"; do
         if [[ "$file" == "$k" ]]; then
@@ -56,7 +57,8 @@ for file in `ls -vd [0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py | tail -$MAX_NUM_FILES`; d
     done
     if [[ $skip -eq 0 ]]; then
         if [[ ${file:0:1} != "0" ]]; then
-            find solver_dir -name "$file"
+            # find solver_dir -name "$file"
+            find . -name "$file"
         fi  
         echo rm -- "$file"
         rm -- "$file"
