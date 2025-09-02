@@ -226,7 +226,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             continue
 
         module_name = solver_source.path[:-3].replace('/', '.')
-        print_l(f'{module_name = }')
+        # print_l(f'{module_name = }')
         solver_module = importlib.import_module(module_name)
         solver = solver_module.solve
         # print(f"Loaded solver for {task_id} from {solver_source.path}")
