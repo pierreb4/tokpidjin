@@ -56,31 +56,33 @@ TMPBATT="tmp_batt_${TMPFILE##*.}"
 STOP=0
 clear
 while date && [ $STOP -eq 0 ]; do
-  if [ -n "$ONERUN" ]; then
-    echo "-- One run only --"
+  if [ "$COUNT" -ne 0 ]; then
+    if [ -n "$ONERUN" ]; then
+      echo "-- One run only --"
+      unset CARD_OPTION
+      TMPBATT="tmp_batt_onerun"
+      STOP=1
+    fi
+
+    # So that tail can get started immediately
+    touch ${TMPBATT}_run.log
+    touch ${TMPBATT}_main.log
+
+    # Remove old temporary files
+    find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
+
+    python card.py $CARD_OPTION -c 99 -f ${TMPBATT}_run.py
     unset CARD_OPTION
-    TMPBATT="tmp_batt_onerun"
-    STOP=1
+
+    # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
+    # RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 20" \
+    #     | bc)
+    # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1200 \
+    #     | tee batt.log
+
+    unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
+        -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
   fi
-
-  # So that tail can get started immediately
-  touch ${TMPBATT}_run.log
-  touch ${TMPBATT}_main.log
-
-  # Remove old temporary files
-  find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
-
-  python card.py $CARD_OPTION -c 99 -f ${TMPBATT}_run.py
-  unset CARD_OPTION
-
-  # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
-  # RND_TIMEOUT=$(echo "scale=2; $TIMEOUT * $((RANDOM % 10 + 1)) / 20" \
-  #     | bc)
-  # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1200 \
-  #     | tee batt.log
-
-  unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
-      -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
 
   # Remove results that are too large (for now)
   find solver_md5 -type f -size +10k -delete
