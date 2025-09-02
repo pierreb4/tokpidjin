@@ -380,7 +380,7 @@ class Differs:
         self.init_equals = {}
 
         all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
-        add_list = random.sample(all_list, min(10, len(all_list)))
+        add_list = random.sample(all_list, min(100, len(all_list)))
         differ_list = ['differs'] + add_list
         self.differs = get_differs(differ_list, best_only=True)
 
