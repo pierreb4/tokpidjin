@@ -221,10 +221,10 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
         num_test = len(data['test'][task_id])
 
         solver_source = get_solver_source(task_id, imports=None, best_only=True)
-        # if solver_source.path is None:
-        #     print_l(f"No solver found for {task_id} in {solver_source} , skipping...")
-        if solver_source.source is None:
-            print_l(f"No solver source found for {task_id} in {solver_source} , skipping...")
+        if solver_source.path is None:
+            print_l(f"No solver found for {task_id} in {solver_source} , skipping...")
+        # if solver_source.source is None:
+        #     print_l(f"No solver source found for {task_id} in {solver_source} , skipping...")
             continue
 
         module_name = solver_source.path[:-3].replace('/', '.')
