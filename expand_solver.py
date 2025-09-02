@@ -278,7 +278,7 @@ def generate_expanded_function(func_name, func_params, steps):
     # Adding arg x for introspection
     # lines = [f"def {func_name}(S, I, x=0):"]
     t0 = timer()
-    lines = [f"def {func_name}(S, I):"]
+    lines = [f"def {func_name}(S, I, C):"]
     
     # Filter out empty steps and ensure unique lines
     unique_steps = []

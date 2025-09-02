@@ -222,10 +222,11 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
 
         solver_source = get_solver_source(task_id, imports=None, best_only=True)
         if solver_source.path is None:
-            # print_l(f"No solver found for {task_id}, skipping...")
+            print_l(f"No solver found for {task_id} in {solver_source} , skipping...")
             continue
 
         module_name = solver_source.path[:-3].replace('/', '.')
+        print_l(f'{module_name = }')
         solver_module = importlib.import_module(module_name)
         solver = solver_module.solve
         # print(f"Loaded solver for {task_id} from {solver_source.path}")
@@ -238,14 +239,14 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
 
                 ok = 'OK'
                 if quiet:
-                    assert solver(S, ex['input']) == ex['output']
-                elif solver(S, ex['input']) != ex['output']:
+                    assert solver(S, ex['input'], None) == ex['output']
+                elif solver(S, ex['input'], None) != ex['output']:
                     correct = 0
                     ok = 'KO'
 
                 if specific_id is not None:
                     side_by_side( 
-                        [ex['input'], ex['output'], solver(S, ex['input'])], 
+                        [ex['input'], ex['output'], solver(S, ex['input'], None)], 
                         titles=[f'{k_type} Input', f'{k_type} Output', f'{ok} Output'])
 
             n_correct += correct
@@ -276,7 +277,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                 print_l(f"NameError: {str(e)}")
                 try:
                     # Try to show output anyway for debugging
-                    output = solver(ex['input'])
+                    output = solver(S, ex['input'], None)
                     side_by_side(
                         [ex['input'], ex['output'], output],
                         titles=['Input', 'Expected Output', 'Solver Output'])
@@ -307,7 +308,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                 try:
                     # Try to show output anyway for debugging
                     side_by_side( 
-                        [ex['input'], ex['output'], solver(ex['input'])], 
+                        [ex['input'], ex['output'], solver(S, ex['input'], None)], 
                         titles=['Input', 'Expected Output', 'Solver Output'])
                 except Exception as e:
                     side_by_side(

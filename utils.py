@@ -218,7 +218,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
         imports = [solvers_dir]
 
     solve_header = 'from dsl import *\nfrom constants import *\n\n'
-    solve_identity = f'{solve_header}def solve(S, I):\n    O = identity(I)\n    return O\n'
+    solve_identity = f'{solve_header}def solve(S, I, C):\n    O = identity(I)\n    return O\n'
     best_solver = Solver('solve', 'solve_identity.py', solve_identity, 0, 0, 999)
 
     for imp in imports:

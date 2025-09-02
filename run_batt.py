@@ -274,7 +274,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         solver_body += f'    return t{sol_t}\n'
 
         # Get md5_hash of inlined source code
-        solver_source = f'def solve(S, I, O=None):\n{solver_body}'
+        solver_source = f'def solve(S, I, C):\n{solver_body}'
         if prof is not None:
             t0 = timer()
         inlined_source = inline_variables(solver_source)
@@ -380,7 +380,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         differ_body += f'    return t{last_t}\n'
         # print(f'{differ_body}')
 
-        differ_source = f'def differ(S, I, O):\n{differ_body}'
+        differ_source = f'def differ(S, I, C):\n{differ_body}'
         inlined_source = inline_variables(differ_source)
         md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 

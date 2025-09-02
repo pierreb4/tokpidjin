@@ -36,6 +36,8 @@ if [ -n "$INITIAL" ]; then
   echo "Initial run - removing old solvers"
   rm -rf solver_dir solver_md5 solver_def
   mkdir solver_dir solver_md5 solver_def
+  rm -rf differ_dir differ_md5 differ_def
+  mkdir differ_dir differ_md5 differ_def
   rm main.log
   CARD_OPTION="-fs -fd"
   # Gets unset for ONERUN

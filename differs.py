@@ -14,10 +14,10 @@ from dsl import *
 #          flags: 'Flags' = Flags(True, False)
 # def differ_p_g_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
 # def differ_d68f7d67209b7ebc1626741d07f3c672(S, I, O, C):
-def differ_ecb9aaa50dd4f35d219157967ecb2356(S, I, O):
+def differ_fc9e44c913711da609a9e25126b4b296(S, I, C):
     x1 = identity(p_g)
     x2 = x1(I)
-    x3 = x1(O)
+    x3 = x1(C)
     x4 = difference_tuple(x2, x3)
     x5 = get_nth_t(x4, F0)
     x6 = size(x4)
@@ -26,10 +26,10 @@ def differ_ecb9aaa50dd4f35d219157967ecb2356(S, I, O):
 
 # def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
 # def differ_96d6a79e4f2dae9b65afc44e70627668(S, I, O, C):
-def differ_8f35e33e63ba1af2b9f5f6e8a37334d1(S, I, O):
+def differ_c59e6ae069a9205b311cf67a15473d64(S, I, C):
     x1 = identity(p_g)
     x2 = x1(I)
-    x3 = x1(O)
+    x3 = x1(C)
     x4 = difference_tuple(x3, x2)
     x5 = get_nth_t(x4, F0)
     x6 = size(x4)
@@ -38,10 +38,10 @@ def differ_8f35e33e63ba1af2b9f5f6e8a37334d1(S, I, O):
 
 # def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
 # def differ_735ade11c9d9435c6bd12383067a6da5(S, I, O, C):
-def differ_3edea95c3b8ee94622eabbefa9b8b06e(S, I, O):
+def differ_d50e4f6db9fab7b53f413af7de3a35da(S, I, C):
     x1 = rbind(o_g, R5)
     x2 = x1(I)
-    x3 = x1(O)
+    x3 = x1(C)
     x4 = rbind(sizefilter, ONE)
     x5 = x4(x2)
     x6 = x4(x3)
@@ -53,10 +53,10 @@ def differ_3edea95c3b8ee94622eabbefa9b8b06e(S, I, O):
 
 # def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
 # def differ_aaf868a79606608601ef8d607b0821d7(S, I, O, C):
-def differ_f72a36ba6e6f750c91a9cf4870228a64(S, I, O):
+def differ_f4a4346405e974b919a4b5a52f28e40c(S, I, C):
     x1 = rbind(o_g, R5)
     x2 = x1(I)
-    x3 = x1(O)
+    x3 = x1(C)
     x4 = rbind(sizefilter, ONE)
     x5 = x4(x2)
     x6 = x4(x3)

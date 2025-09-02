@@ -2,243 +2,243 @@ from dsl import *
 from constants import *
 
 
-def solve_67a3c6ac(S, I):
+def solve_67a3c6ac(S, I, C):
     O = vmirror_t(I)
     return O
 
 
-def solve_68b16354(S, I):
+def solve_68b16354(S, I, C):
     O = hmirror_t(I)
     return O
 
 
-def solve_74dd1130(S, I):
+def solve_74dd1130(S, I, C):
     O = dmirror_t(I)
     return O
 
 
-def solve_3c9b0459(S, I):
+def solve_3c9b0459(S, I, C):
     O = rot180(I)
     return O
 
 
-def solve_6150a2bd(S, I):
+def solve_6150a2bd(S, I, C):
     O = rot180(I)
     return O
 
 
-def solve_9172f3a0(S, I):
+def solve_9172f3a0(S, I, C):
     O = upscale_t(I, THREE)
     return O
 
 
-def solve_9dfd6313(S, I):
+def solve_9dfd6313(S, I, C):
     O = dmirror_t(I)
     return O
 
 
-def solve_a416b8f3(S, I):
+def solve_a416b8f3(S, I, C):
     O = hconcat(I, I)
     return O
 
 
-def solve_b1948b0a(S, I):
+def solve_b1948b0a(S, I, C):
     O = replace(I, SIX, TWO)
     return O
 
 
-def solve_c59eb873(S, I):
+def solve_c59eb873(S, I, C):
     O = upscale_t(I, TWO)
     return O
 
 
-def solve_c8f0f002(S, I):
+def solve_c8f0f002(S, I, C):
     O = replace(I, SEVEN, FIVE)
     return O
 
 
-def solve_d10ecb37(S, I):
+def solve_d10ecb37(S, I, C):
     O = crop(I, ORIGIN, TWO_BY_TWO)
     return O
 
 
-def solve_d511f180(S, I):
+def solve_d511f180(S, I, C):
     O = switch(I, FIVE, EIGHT)
     return O
 
 
-def solve_ed36ccf7(S, I):
+def solve_ed36ccf7(S, I, C):
     O = rot270(I)
     return O
 
 
-def solve_4c4377d9(S, I):
+def solve_4c4377d9(S, I, C):
     x1 = hmirror_t(I)
     O = vconcat(x1, I)
     return O
 
 
-def solve_6d0aefbc(S, I):
+def solve_6d0aefbc(S, I, C):
     x1 = vmirror_t(I)
     O = hconcat(I, x1)
     return O
 
 
-def solve_6fa7a44f(S, I):
+def solve_6fa7a44f(S, I, C):
     x1 = hmirror_t(I)
     O = vconcat(I, x1)
     return O
 
 
-def solve_5614dbcf(S, I):
+def solve_5614dbcf(S, I, C):
     x1 = replace(I, FIVE, ZERO)
     O = downscale(x1, THREE)
     return O
 
 
-def solve_5bd6f4ac(S, I):
+def solve_5bd6f4ac(S, I, C):
     x1 = tojvec(SIX)
     O = crop(I, x1, THREE_BY_THREE)
     return O
 
 
-def solve_5582e5ca(S, I):
+def solve_5582e5ca(S, I, C):
     x1 = mostcolor_t(I)
     O = canvas(x1, THREE_BY_THREE)
     return O
 
 
-def solve_8be77c9e(S, I):
+def solve_8be77c9e(S, I, C):
     x1 = hmirror_t(I)
     O = vconcat(I, x1)
     return O
 
 
-def solve_c9e6f938(S, I):
+def solve_c9e6f938(S, I, C):
     x1 = vmirror_t(I)
     O = hconcat(I, x1)
     return O
 
 
-def solve_2dee498d(S, I):
+def solve_2dee498d(S, I, C):
     x1 = hsplit(I, THREE)
     O = first_t(x1)
     return O
 
 
-def solve_1cf80156(S, I):
+def solve_1cf80156(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = first_f(x1)
     O = subgrid(x2, I)
     return O
 
 
-def solve_32597951(S, I):
+def solve_32597951(S, I, C):
     x1 = f_ofcolor(I, EIGHT)
     x2 = delta(x1)
     O = fill(I, THREE, x2)
     return O
 
 
-def solve_25ff71a9(S, I):
+def solve_25ff71a9(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = first_f(x1)
     O = move(I, x2, DOWN)
     return O
 
 
-def solve_0b148d64(S, I):
+def solve_0b148d64(S, I, C):
     x1 = partition(I)
     x2 = argmin_f(x1, size)
     O = subgrid(x2, I)
     return O
 
 
-def solve_1f85a75f(S, I):
+def solve_1f85a75f(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = argmax_f(x1, size)
     O = subgrid(x2, I)
     return O
 
 
-def solve_23b5c85d(S, I):
+def solve_23b5c85d(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = argmin_f(x1, size)
     O = subgrid(x2, I)
     return O
 
 
-def solve_9ecd008a(S, I):
+def solve_9ecd008a(S, I, C):
     x1 = vmirror_t(I)
     x2 = f_ofcolor(I, ZERO)
     O = subgrid(x2, x1)
     return O
 
 
-def solve_ac0a08a4(S, I):
+def solve_ac0a08a4(S, I, C):
     x1 = colorcount_t(I, ZERO)
     x2 = subtract(NINE, x1)
     O = upscale_t(I, x2)
     return O
 
 
-def solve_be94b721(S, I):
+def solve_be94b721(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = argmax_f(x1, size)
     O = subgrid(x2, I)
     return O
 
 
-def solve_c909285e(S, I):
+def solve_c909285e(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     O = subgrid(x2, I)
     return O
 
 
-def solve_f25ffba3(S, I):
+def solve_f25ffba3(S, I, C):
     x1 = bottomhalf(I)
     x2 = hmirror_t(x1)
     O = vconcat(x2, x1)
     return O
 
 
-def solve_c1d99e64(S, I):
+def solve_c1d99e64(S, I, C):
     x1 = frontiers(I)
     x2 = merge_f(x1)
     O = fill(I, TWO, x2)
     return O
 
 
-def solve_b91ae062(S, I):
+def solve_b91ae062(S, I, C):
     x1 = numcolors_t(I)
     x2 = decrement(x1)
     O = upscale_t(I, x2)
     return O
 
 
-def solve_3aa6fb7a(S, I):
+def solve_3aa6fb7a(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = mapply(corners, x1)
     O = underfill(I, ONE, x2)
     return O
 
 
-def solve_7b7f7511(S, I):
+def solve_7b7f7511(S, I, C):
     x1 = portrait_t(I)
     x2 = branch(x1, tophalf, lefthalf)
     O = x2(I)
     return O
 
 
-def solve_4258a5f9(S, I):
+def solve_4258a5f9(S, I, C):
     x1 = f_ofcolor(I, FIVE)
     x2 = mapply(neighbors, x1)
     O = fill(I, ONE, x2)
     return O
 
 
-def solve_2dc579da(S, I):
+def solve_2dc579da(S, I, C):
     x1 = vsplit(I, TWO)
     x2 = rbind(hsplit, TWO)
     x3 = mapply(x2, x1)
@@ -246,7 +246,7 @@ def solve_2dc579da(S, I):
     return O
 
 
-def solve_28bf18c6(S, I):
+def solve_28bf18c6(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = first_f(x1)
     x3 = subgrid(x2, I)
@@ -254,7 +254,7 @@ def solve_28bf18c6(S, I):
     return O
 
 
-def solve_3af2c5a8(S, I):
+def solve_3af2c5a8(S, I, C):
     x1 = vmirror_t(I)
     x2 = hconcat(I, x1)
     x3 = hmirror_t(x2)
@@ -262,7 +262,7 @@ def solve_3af2c5a8(S, I):
     return O
 
 
-def solve_44f52bb0(S, I):
+def solve_44f52bb0(S, I, C):
     x1 = vmirror_t(I)
     x2 = equality(x1, I)
     x3 = branch(x2, ONE, SEVEN)
@@ -270,7 +270,7 @@ def solve_44f52bb0(S, I):
     return O
 
 
-def solve_62c24649(S, I):
+def solve_62c24649(S, I, C):
     x1 = vmirror_t(I)
     x2 = hconcat(I, x1)
     x3 = hmirror_t(x2)
@@ -278,7 +278,7 @@ def solve_62c24649(S, I):
     return O
 
 
-def solve_67e8384a(S, I):
+def solve_67e8384a(S, I, C):
     x1 = vmirror_t(I)
     x2 = hconcat(I, x1)
     x3 = hmirror_t(x2)
@@ -286,7 +286,7 @@ def solve_67e8384a(S, I):
     return O
 
 
-def solve_7468f01a(S, I):
+def solve_7468f01a(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = first_f(x1)
     x3 = subgrid(x2, I)
@@ -294,7 +294,7 @@ def solve_7468f01a(S, I):
     return O
 
 
-def solve_662c240a(S, I):
+def solve_662c240a(S, I, C):
     x1 = vsplit(I, THREE)
     x2 = fork(equality, dmirror_t, identity)
     x3 = compose(flip, x2)
@@ -302,7 +302,7 @@ def solve_662c240a(S, I):
     return O
 
 
-def solve_42a50994(S, I):
+def solve_42a50994(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = sizefilter(x1, ONE)
     x3 = merge_f(x2)
@@ -310,7 +310,7 @@ def solve_42a50994(S, I):
     return O
 
 
-def solve_56ff96f3(S, I):
+def solve_56ff96f3(S, I, C):
     x1 = fgpartition(I)
     x2 = fork(recolor_i, color, backdrop)
     x3 = mapply(x2, x1)
@@ -318,7 +318,7 @@ def solve_56ff96f3(S, I):
     return O
 
 
-def solve_50cb2852(S, I):
+def solve_50cb2852(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = compose(backdrop, inbox)
     x3 = mapply(x2, x1)
@@ -326,7 +326,7 @@ def solve_50cb2852(S, I):
     return O
 
 
-def solve_4347f46a(S, I):
+def solve_4347f46a(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = fork(difference, toindices, box)
     x3 = mapply(x2, x1)
@@ -334,7 +334,7 @@ def solve_4347f46a(S, I):
     return O
 
 
-def solve_46f33fce(S, I):
+def solve_46f33fce(S, I, C):
     x1 = rot180(I)
     x2 = downscale(x1, TWO)
     x3 = rot180(x2)
@@ -342,7 +342,7 @@ def solve_46f33fce(S, I):
     return O
 
 
-def solve_a740d043(S, I):
+def solve_a740d043(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = merge_f(x1)
     x3 = subgrid(x2, I)
@@ -350,7 +350,7 @@ def solve_a740d043(S, I):
     return O
 
 
-def solve_a79310a0(S, I):
+def solve_a79310a0(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = first_f(x1)
     x3 = move(I, x2, DOWN)
@@ -358,7 +358,7 @@ def solve_a79310a0(S, I):
     return O
 
 
-def solve_aabf363d(S, I):
+def solve_aabf363d(S, I, C):
     x1 = leastcolor_t(I)
     x2 = replace(I, x1, ZERO)
     x3 = leastcolor_t(x2)
@@ -366,7 +366,7 @@ def solve_aabf363d(S, I):
     return O
 
 
-def solve_ae4f1146(S, I):
+def solve_ae4f1146(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = rbind(colorcount_f, ONE)
     x3 = argmax_f(x1, x2)
@@ -374,7 +374,7 @@ def solve_ae4f1146(S, I):
     return O
 
 
-def solve_b27ca6d3(S, I):
+def solve_b27ca6d3(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, TWO)
     x3 = mapply(outbox, x2)
@@ -382,7 +382,7 @@ def solve_b27ca6d3(S, I):
     return O
 
 
-def solve_ce22a75a(S, I):
+def solve_ce22a75a(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = apply(outbox, x1)
     x3 = mapply(backdrop, x2)
@@ -390,7 +390,7 @@ def solve_ce22a75a(S, I):
     return O
 
 
-def solve_dc1df850(S, I):
+def solve_dc1df850(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = colorfilter(x1, TWO)
     x3 = mapply(outbox, x2)
@@ -398,7 +398,7 @@ def solve_dc1df850(S, I):
     return O
 
 
-def solve_f25fbde4(S, I):
+def solve_f25fbde4(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = first_f(x1)
     x3 = subgrid(x2, I)
@@ -406,7 +406,7 @@ def solve_f25fbde4(S, I):
     return O
 
 
-def solve_44d8ac46(S, I):
+def solve_44d8ac46(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = apply(delta, x1)
     x3 = mfilter_f(x2, square_f)
@@ -414,7 +414,7 @@ def solve_44d8ac46(S, I):
     return O
 
 
-def solve_1e0a9b12(S, I):
+def solve_1e0a9b12(S, I, C):
     x1 = rot270(I)
     x2 = rbind(order, identity)
     x3 = apply(x2, x1)
@@ -422,7 +422,7 @@ def solve_1e0a9b12(S, I):
     return O
 
 
-def solve_0d3d703e(S, I):
+def solve_0d3d703e(S, I, C):
     x1 = switch(I, THREE, FOUR)
     x2 = switch(x1, EIGHT, NINE)
     x3 = switch(x2, TWO, SIX)
@@ -430,7 +430,7 @@ def solve_0d3d703e(S, I):
     return O
 
 
-def solve_3618c87e(S, I):
+def solve_3618c87e(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = merge_f(x2)
@@ -438,7 +438,7 @@ def solve_3618c87e(S, I):
     return O
 
 
-def solve_1c786137(S, I):
+def solve_1c786137(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = argmax_f(x1, height_f)
     x3 = subgrid(x2, I)
@@ -446,7 +446,7 @@ def solve_1c786137(S, I):
     return O
 
 
-def solve_8efcae92(S, I):
+def solve_8efcae92(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ONE)
     x3 = compose(size, delta)
@@ -455,7 +455,7 @@ def solve_8efcae92(S, I):
     return O
 
 
-def solve_445eab21(S, I):
+def solve_445eab21(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = fork(multiply, height_f, width_f)
     x3 = argmax_f(x1, x2)
@@ -464,7 +464,7 @@ def solve_445eab21(S, I):
     return O
 
 
-def solve_6f8cd79b(S, I):
+def solve_6f8cd79b(S, I, C):
     x1 = asindices(I)
     x2 = apply(initset, x1)
     x3 = rbind(bordering, I)
@@ -473,7 +473,7 @@ def solve_6f8cd79b(S, I):
     return O
 
 
-def solve_2013d3e2(S, I):
+def solve_2013d3e2(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = first_f(x1)
     x3 = subgrid(x2, I)
@@ -482,7 +482,7 @@ def solve_2013d3e2(S, I):
     return O
 
 
-def solve_41e4d17e(S, I):
+def solve_41e4d17e(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = fork(combine, vfrontier, hfrontier)
     x3 = compose(x2, center)
@@ -491,7 +491,7 @@ def solve_41e4d17e(S, I):
     return O
 
 
-def solve_9565186b(S, I):
+def solve_9565186b(S, I, C):
     x1 = shape_t(I)
     x2 = objects(I, T, F, F)
     x3 = argmax_f(x2, size)
@@ -500,7 +500,7 @@ def solve_9565186b(S, I):
     return O
 
 
-def solve_aedd82e4(S, I):
+def solve_aedd82e4(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, TWO)
     x3 = sizefilter(x2, ONE)
@@ -509,7 +509,7 @@ def solve_aedd82e4(S, I):
     return O
 
 
-def solve_bb43febb(S, I):
+def solve_bb43febb(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, FIVE)
     x3 = compose(backdrop, inbox)
@@ -518,7 +518,7 @@ def solve_bb43febb(S, I):
     return O
 
 
-def solve_e98196ab(S, I):
+def solve_e98196ab(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = objects(x1, T, F, T)
@@ -527,7 +527,7 @@ def solve_e98196ab(S, I):
     return O
 
 
-def solve_f76d97a5(S, I):
+def solve_f76d97a5(S, I, C):
     x1 = palette_t(I)
     x2 = first_f(x1)
     x3 = last_f(x1)
@@ -536,7 +536,7 @@ def solve_f76d97a5(S, I):
     return O
 
 
-def solve_ce9e57f2(S, I):
+def solve_ce9e57f2(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = fork(connect, ulcorner, centerofmass)
     x3 = mapply(x2, x1)
@@ -545,7 +545,7 @@ def solve_ce9e57f2(S, I):
     return O
 
 
-def solve_22eb0ac0(S, I):
+def solve_22eb0ac0(S, I, C):
     x1 = fgpartition(I)
     x2 = fork(recolor_i, color, backdrop)
     x3 = apply(x2, x1)
@@ -554,7 +554,7 @@ def solve_22eb0ac0(S, I):
     return O
 
 
-def solve_9f236235(S, I):
+def solve_9f236235(S, I, C):
     x1 = compress(I)
     x2 = objects(I, T, F, F)
     x3 = vmirror_t(x1)
@@ -563,7 +563,7 @@ def solve_9f236235(S, I):
     return O
 
 
-def solve_a699fb00(S, I):
+def solve_a699fb00(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = shift(x1, RIGHT)
     x3 = shift(x1, LEFT)
@@ -572,7 +572,7 @@ def solve_a699fb00(S, I):
     return O
 
 
-def solve_46442a0e(S, I):
+def solve_46442a0e(S, I, C):
     x1 = rot90(I)
     x2 = rot180(I)
     x3 = rot270(I)
@@ -582,7 +582,7 @@ def solve_46442a0e(S, I):
     return O
 
 
-def solve_7fe24cdd(S, I):
+def solve_7fe24cdd(S, I, C):
     x1 = rot90(I)
     x2 = rot180(I)
     x3 = rot270(I)
@@ -592,7 +592,7 @@ def solve_7fe24cdd(S, I):
     return O
 
 
-def solve_0ca9ddb6(S, I):
+def solve_0ca9ddb6(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = f_ofcolor(I, TWO)
     x3 = mapply(dneighbors, x1)
@@ -602,7 +602,7 @@ def solve_0ca9ddb6(S, I):
     return O
 
 
-def solve_543a7ed5(S, I):
+def solve_543a7ed5(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = colorfilter(x1, SIX)
     x3 = mapply(outbox, x2)
@@ -612,7 +612,7 @@ def solve_543a7ed5(S, I):
     return O
 
 
-def solve_0520fde7(S, I):
+def solve_0520fde7(S, I, C):
     x1 = vmirror_t(I)
     x2 = lefthalf(x1)
     x3 = righthalf(x1)
@@ -622,7 +622,7 @@ def solve_0520fde7(S, I):
     return O
 
 
-def solve_dae9d2b5(S, I):
+def solve_dae9d2b5(S, I, C):
     x1 = lefthalf(I)
     x2 = righthalf(I)
     x3 = f_ofcolor(x1, FOUR)
@@ -632,7 +632,7 @@ def solve_dae9d2b5(S, I):
     return O
 
 
-def solve_8d5021e8(S, I):
+def solve_8d5021e8(S, I, C):
     x1 = vmirror_t(I)
     x2 = hconcat(x1, I)
     x3 = hmirror_t(x2)
@@ -642,7 +642,7 @@ def solve_8d5021e8(S, I):
     return O
 
 
-def solve_928ad970(S, I):
+def solve_928ad970(S, I, C):
     x1 = f_ofcolor(I, FIVE)
     x2 = subgrid(x1, I)
     x3 = trim(x2)
@@ -652,7 +652,7 @@ def solve_928ad970(S, I):
     return O
 
 
-def solve_b60334d2(S, I):
+def solve_b60334d2(S, I, C):
     x1 = f_ofcolor(I, FIVE)
     x2 = replace(I, FIVE, ZERO)
     x3 = mapply(dneighbors, x1)
@@ -662,7 +662,7 @@ def solve_b60334d2(S, I):
     return O
 
 
-def solve_b94a9452(S, I):
+def solve_b94a9452(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = first_f(x1)
     x3 = subgrid(x2, I)
@@ -672,7 +672,7 @@ def solve_b94a9452(S, I):
     return O
 
 
-def solve_d037b0a7(S, I):
+def solve_d037b0a7(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = rbind(shoot, DOWN)
     x3 = compose(x2, center)
@@ -682,7 +682,7 @@ def solve_d037b0a7(S, I):
     return O
 
 
-def solve_d0f5fe59(S, I):
+def solve_d0f5fe59(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = size_f(x1)
     x3 = astuple(x2, x2)
@@ -692,7 +692,7 @@ def solve_d0f5fe59(S, I):
     return O
 
 
-def solve_e3497940(S, I):
+def solve_e3497940(S, I, C):
     x1 = lefthalf(I)
     x2 = righthalf(I)
     x3 = vmirror_t(x2)
@@ -702,7 +702,7 @@ def solve_e3497940(S, I):
     return O
 
 
-def solve_e9afcf9a(S, I):
+def solve_e9afcf9a(S, I, C):
     x1 = astuple(TWO, ONE)
     x2 = crop(I, ORIGIN, x1)
     x3 = hmirror_t(x2)
@@ -712,7 +712,7 @@ def solve_e9afcf9a(S, I):
     return O
 
 
-def solve_48d8fb45(S, I):
+def solve_48d8fb45(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = matcher(size, ONE)
     x3 = extract(x1, x2)
@@ -722,7 +722,7 @@ def solve_48d8fb45(S, I):
     return O
 
 
-def solve_d406998b(S, I):
+def solve_d406998b(S, I, C):
     x1 = vmirror_t(I)
     x2 = f_ofcolor(x1, FIVE)
     x3 = compose(even, last)
@@ -732,7 +732,7 @@ def solve_d406998b(S, I):
     return O
 
 
-def solve_5117e062(S, I):
+def solve_5117e062(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = matcher(numcolors_f, TWO)
     x3 = extract(x1, x2)
@@ -742,7 +742,7 @@ def solve_5117e062(S, I):
     return O
 
 
-def solve_3906de3d(S, I):
+def solve_3906de3d(S, I, C):
     x1 = rot270(I)
     x2 = rbind(order, identity)
     x3 = switch(x1, ONE, TWO)
@@ -752,7 +752,7 @@ def solve_3906de3d(S, I):
     return O
 
 
-def solve_00d62c1b(S, I):
+def solve_00d62c1b(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = rbind(bordering, I)
@@ -762,7 +762,7 @@ def solve_00d62c1b(S, I):
     return O
 
 
-def solve_7b6016b9(S, I):
+def solve_7b6016b9(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = rbind(bordering, I)
     x3 = compose(flip, x2)
@@ -772,7 +772,7 @@ def solve_7b6016b9(S, I):
     return O
 
 
-def solve_67385a82(S, I):
+def solve_67385a82(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, THREE)
     x3 = sizefilter(x2, ONE)
@@ -782,7 +782,7 @@ def solve_67385a82(S, I):
     return O
 
 
-def solve_a5313dff(S, I):
+def solve_a5313dff(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = rbind(bordering, I)
@@ -792,7 +792,7 @@ def solve_a5313dff(S, I):
     return O
 
 
-def solve_ea32f347(S, I):
+def solve_ea32f347(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = replace(I, FIVE, FOUR)
     x3 = argmin_f(x1, size)
@@ -802,7 +802,7 @@ def solve_ea32f347(S, I):
     return O
 
 
-def solve_d631b094(S, I):
+def solve_d631b094(S, I, C):
     x1 = palette_t(I)
     x2 = other_f(x1, ZERO)
     x3 = f_ofcolor(I, x2)
@@ -812,7 +812,7 @@ def solve_d631b094(S, I):
     return O
 
 
-def solve_10fcaaa3(S, I):
+def solve_10fcaaa3(S, I, C):
     x1 = leastcolor_t(I)
     x2 = hconcat(I, I)
     x3 = vconcat(x2, x2)
@@ -822,7 +822,7 @@ def solve_10fcaaa3(S, I):
     return O
 
 
-def solve_007bbfb7(S, I):
+def solve_007bbfb7(S, I, C):
     x1 = hupscale(I, THREE)
     x2 = vupscale(x1, THREE)
     x3 = hconcat(I, I)
@@ -833,7 +833,7 @@ def solve_007bbfb7(S, I):
     return O
 
 
-def solve_496994bd(S, I):
+def solve_496994bd(S, I, C):
     x1 = width_t(I)
     x2 = height_t(I)
     x3 = halve(x2)
@@ -844,7 +844,7 @@ def solve_496994bd(S, I):
     return O
 
 
-def solve_1f876c06(S, I):
+def solve_1f876c06(S, I, C):
     x1 = fgpartition(I)
     x2 = compose(toij, first)
     x3 = compose(toij, last)
@@ -855,7 +855,7 @@ def solve_1f876c06(S, I):
     return O
 
 
-def solve_05f2a901(S, I):
+def solve_05f2a901(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = colorfilter(x1, TWO)
     x3 = first_f(x2)
@@ -866,7 +866,7 @@ def solve_05f2a901(S, I):
     return O
 
 
-def solve_39a8645d(S, I):
+def solve_39a8645d(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = totuple(x1)
     x3 = apply(color, x2)
@@ -877,7 +877,7 @@ def solve_39a8645d(S, I):
     return O
 
 
-def solve_1b2d62fb(S, I):
+def solve_1b2d62fb(S, I, C):
     x1 = lefthalf(I)
     x2 = righthalf(I)
     x3 = f_ofcolor(x1, ZERO)
@@ -888,7 +888,7 @@ def solve_1b2d62fb(S, I):
     return O
 
 
-def solve_90c28cc7(S, I):
+def solve_90c28cc7(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = first_f(x1)
     x3 = subgrid(x2, I)
@@ -899,7 +899,7 @@ def solve_90c28cc7(S, I):
     return O
 
 
-def solve_b6afb2da(S, I):
+def solve_b6afb2da(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = replace(I, FIVE, TWO)
     x3 = colorfilter(x1, FIVE)
@@ -910,7 +910,7 @@ def solve_b6afb2da(S, I):
     return O
 
 
-def solve_b9b7f026(S, I):
+def solve_b9b7f026(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = argmin_f(x1, size)
     x3 = rbind(adjacent, x2)
@@ -921,7 +921,7 @@ def solve_b9b7f026(S, I):
     return O
 
 
-def solve_ba97ae07(S, I):
+def solve_ba97ae07(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = totuple(x1)
     x3 = apply(color, x2)
@@ -932,7 +932,7 @@ def solve_ba97ae07(S, I):
     return O
 
 
-def solve_c9f8e694(S, I):
+def solve_c9f8e694(S, I, C):
     x1 = height_t(I)
     x2 = width_t(I)
     x3 = f_ofcolor(I, ZERO)
@@ -943,7 +943,7 @@ def solve_c9f8e694(S, I):
     return O
 
 
-def solve_d23f8c26(S, I):
+def solve_d23f8c26(S, I, C):
     x1 = asindices(I)
     x2 = width_t(I)
     x3 = halve(x2)
@@ -954,7 +954,7 @@ def solve_d23f8c26(S, I):
     return O
 
 
-def solve_d5d6de2d(S, I):
+def solve_d5d6de2d(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sfilter_f(x1, square_f)
     x3 = difference(x1, x2)
@@ -965,7 +965,7 @@ def solve_d5d6de2d(S, I):
     return O
 
 
-def solve_dbc1a6ce(S, I):
+def solve_dbc1a6ce(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = product(x1, x1)
     x3 = fork(connect, first, last)
@@ -976,7 +976,7 @@ def solve_dbc1a6ce(S, I):
     return O
 
 
-def solve_ded97339(S, I):
+def solve_ded97339(S, I, C):
     x1 = f_ofcolor(I, EIGHT)
     x2 = product(x1, x1)
     x3 = fork(connect, first, last)
@@ -987,7 +987,7 @@ def solve_ded97339(S, I):
     return O
 
 
-def solve_ea786f4a(S, I):
+def solve_ea786f4a(S, I, C):
     x1 = width_t(I)
     x2 = shoot(ORIGIN, UNITY)
     x3 = decrement(x1)
@@ -998,7 +998,7 @@ def solve_ea786f4a(S, I):
     return O
 
 
-def solve_08ed6ac7(S, I):
+def solve_08ed6ac7(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = totuple(x1)
     x3 = order(x1, height_f)
@@ -1009,7 +1009,7 @@ def solve_08ed6ac7(S, I):
     return O
 
 
-def solve_40853293(S, I):
+def solve_40853293(S, I, C):
     x1 = partition(I)
     x2 = fork(recolor_i, color, backdrop)
     x3 = apply(x2, x1)
@@ -1020,7 +1020,7 @@ def solve_40853293(S, I):
     return O
 
 
-def solve_5521c0d9(S, I):
+def solve_5521c0d9(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = merge_f(x1)
     x3 = cover(I, x2)
@@ -1031,7 +1031,7 @@ def solve_5521c0d9(S, I):
     return O
 
 
-def solve_f8ff0b80(S, I):
+def solve_f8ff0b80(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = order(x1, size)
     x3 = apply(color, x2)
@@ -1042,7 +1042,7 @@ def solve_f8ff0b80(S, I):
     return O
 
 
-def solve_85c4e7cd(S, I):
+def solve_85c4e7cd(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = compose(invert, size)
     x3 = order(x1, size)
@@ -1053,7 +1053,7 @@ def solve_85c4e7cd(S, I):
     return O
 
 
-def solve_d2abd087(S, I):
+def solve_d2abd087(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = matcher(size, SIX)
     x3 = compose(flip, x2)
@@ -1064,7 +1064,7 @@ def solve_d2abd087(S, I):
     return O
 
 
-def solve_017c7c7b(S, I):
+def solve_017c7c7b(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = equality(x1, x2)
@@ -1075,7 +1075,7 @@ def solve_017c7c7b(S, I):
     return O
 
 
-def solve_363442ee(S, I):
+def solve_363442ee(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = crop(I, ORIGIN, THREE_BY_THREE)
     x3 = asobject(x2)
@@ -1086,7 +1086,7 @@ def solve_363442ee(S, I):
     return O
 
 
-def solve_5168d44c(S, I):
+def solve_5168d44c(S, I, C):
     x1 = f_ofcolor(I, THREE)
     x2 = height_f(x1)
     x3 = equality(x2, ONE)
@@ -1097,7 +1097,7 @@ def solve_5168d44c(S, I):
     return O
 
 
-def solve_e9614598(S, I):
+def solve_e9614598(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = fork(add, first, last)
     x3 = x2(x1)
@@ -1108,7 +1108,7 @@ def solve_e9614598(S, I):
     return O
 
 
-def solve_d9fac9be(S, I):
+def solve_d9fac9be(S, I, C):
     x1 = palette_t(I)
     x2 = objects(I, T, F, T)
     x3 = argmax_f(x2, size)
@@ -1119,7 +1119,7 @@ def solve_d9fac9be(S, I):
     return O
 
 
-def solve_e50d258f(S, I):
+def solve_e50d258f(S, I, C):
     x1 = width_t(I)
     x2 = astuple(NINE, x1)
     x3 = canvas(ZERO, x2)
@@ -1131,7 +1131,7 @@ def solve_e50d258f(S, I):
     return O
 
 
-def solve_810b9b61(S, I):
+def solve_810b9b61(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = apply(toindices, x1)
     x3 = fork(either, vline_i, hline_i)
@@ -1143,7 +1143,7 @@ def solve_810b9b61(S, I):
     return O
 
 
-def solve_54d82841(S, I):
+def solve_54d82841(S, I, C):
     x1 = height_t(I)
     x2 = objects(I, T, F, T)
     x3 = compose(last, center)
@@ -1155,14 +1155,14 @@ def solve_54d82841(S, I):
     return O
 
 
-def solve_60b61512(S, I):
+def solve_60b61512(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = mapply(delta, x1)
     O = fill(I, SEVEN, x2)
     return O
 
 
-def solve_25d8a9c8(S, I):
+def solve_25d8a9c8(S, I, C):
     x1 = asindices(I)
     x2 = objects(I, T, F, F)
     x3 = sizefilter(x2, THREE)
@@ -1174,7 +1174,7 @@ def solve_25d8a9c8(S, I):
     return O
 
 
-def solve_239be575(S, I):
+def solve_239be575(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = lbind(contained, TWO)
     x3 = compose(x2, palette_f)
@@ -1186,7 +1186,7 @@ def solve_239be575(S, I):
     return O
 
 
-def solve_67a423a3(S, I):
+def solve_67a423a3(S, I, C):
     x1 = leastcolor_t(I)
     x2 = objects(I, T, F, T)
     x3 = colorfilter(x2, x1)
@@ -1198,7 +1198,7 @@ def solve_67a423a3(S, I):
     return O
 
 
-def solve_5c0a986e(S, I):
+def solve_5c0a986e(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = f_ofcolor(I, ONE)
     x3 = lrcorner(x1)
@@ -1210,7 +1210,7 @@ def solve_5c0a986e(S, I):
     return O
 
 
-def solve_6430c8c4(S, I):
+def solve_6430c8c4(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = astuple(FOUR, FOUR)
@@ -1222,7 +1222,7 @@ def solve_6430c8c4(S, I):
     return O
 
 
-def solve_94f9d214(S, I):
+def solve_94f9d214(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = f_ofcolor(x1, ZERO)
@@ -1234,7 +1234,7 @@ def solve_94f9d214(S, I):
     return O
 
 
-def solve_a1570a43(S, I):
+def solve_a1570a43(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = f_ofcolor(I, THREE)
     x3 = recolor_i(TWO, x1)
@@ -1246,7 +1246,7 @@ def solve_a1570a43(S, I):
     return O
 
 
-def solve_ce4f8723(S, I):
+def solve_ce4f8723(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = f_ofcolor(x1, ZERO)
@@ -1258,7 +1258,7 @@ def solve_ce4f8723(S, I):
     return O
 
 
-def solve_d13f3404(S, I):
+def solve_d13f3404(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = rbind(shoot, UNITY)
     x3 = compose(x2, center)
@@ -1270,7 +1270,7 @@ def solve_d13f3404(S, I):
     return O
 
 
-def solve_dc433765(S, I):
+def solve_dc433765(S, I, C):
     x1 = f_ofcolor(I, THREE)
     x2 = f_ofcolor(I, FOUR)
     x3 = first_f(x1)
@@ -1282,7 +1282,7 @@ def solve_dc433765(S, I):
     return O
 
 
-def solve_f2829549(S, I):
+def solve_f2829549(S, I, C):
     x1 = lefthalf(I)
     x2 = righthalf(I)
     x3 = f_ofcolor(x1, ZERO)
@@ -1294,7 +1294,7 @@ def solve_f2829549(S, I):
     return O
 
 
-def solve_fafffa47(S, I):
+def solve_fafffa47(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = shape_t(x2)
@@ -1306,7 +1306,7 @@ def solve_fafffa47(S, I):
     return O
 
 
-def solve_fcb5c309(S, I):
+def solve_fcb5c309(S, I, C):
     x1 = leastcolor_t(I)
     x2 = objects(I, T, F, T)
     x3 = colorfilter(x2, x1)
@@ -1318,7 +1318,7 @@ def solve_fcb5c309(S, I):
     return O
 
 
-def solve_ff805c23(S, I):
+def solve_ff805c23(S, I, C):
     x1 = hmirror_t(I)
     x2 = vmirror_t(I)
     x3 = f_ofcolor(I, ONE)
@@ -1330,7 +1330,7 @@ def solve_ff805c23(S, I):
     return O
 
 
-def solve_e76a88a6(S, I):
+def solve_e76a88a6(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = argmax_f(x1, numcolors_f)
     x3 = normalize(x2)
@@ -1342,7 +1342,7 @@ def solve_e76a88a6(S, I):
     return O
 
 
-def solve_7c008303(S, I):
+def solve_7c008303(S, I, C):
     x1 = f_ofcolor(I, THREE)
     x2 = subgrid(x1, I)
     x3 = f_ofcolor(x2, ZERO)
@@ -1354,7 +1354,7 @@ def solve_7c008303(S, I):
     return O
 
 
-def solve_7f4411dc(S, I):
+def solve_7f4411dc(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = rbind(difference, x2)
@@ -1366,7 +1366,7 @@ def solve_7f4411dc(S, I):
     return O
 
 
-def solve_b230c067(S, I):
+def solve_b230c067(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = totuple(x1)
     x3 = apply(normalize, x2)
@@ -1378,7 +1378,7 @@ def solve_b230c067(S, I):
     return O
 
 
-def solve_e8593010(S, I):
+def solve_e8593010(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = sizefilter(x1, TWO)
@@ -1390,7 +1390,7 @@ def solve_e8593010(S, I):
     return O
 
 
-def solve_6d75e8bb(S, I):
+def solve_6d75e8bb(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = first_f(x1)
     x3 = ulcorner(x2)
@@ -1402,7 +1402,7 @@ def solve_6d75e8bb(S, I):
     return O
 
 
-def solve_3f7978a0(S, I):
+def solve_3f7978a0(S, I, C):
     x1 = fgpartition(I)
     x2 = matcher(color, FIVE)
     x3 = extract(x1, x2)
@@ -1414,7 +1414,7 @@ def solve_3f7978a0(S, I):
     return O
 
 
-def solve_1190e5a7(S, I):
+def solve_1190e5a7(S, I, C):
     x1 = mostcolor_t(I)
     x2 = frontiers(I)
     x3 = sfilter_f(x2, vline_o)
@@ -1426,7 +1426,7 @@ def solve_1190e5a7(S, I):
     return O
 
 
-def solve_6e02f1e3(S, I):
+def solve_6e02f1e3(S, I, C):
     x1 = numcolors_t(I)
     x2 = canvas(ZERO, THREE_BY_THREE)
     x3 = equality(x1, THREE)
@@ -1438,7 +1438,7 @@ def solve_6e02f1e3(S, I):
     return O
 
 
-def solve_a61f2674(S, I):
+def solve_a61f2674(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = argmax_f(x1, size)
     x3 = argmin_f(x1, size)
@@ -1450,7 +1450,7 @@ def solve_a61f2674(S, I):
     return O
 
 
-def solve_fcc82909(S, I):
+def solve_fcc82909(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = rbind(add, DOWN)
     x3 = compose(x2, llcorner)
@@ -1463,7 +1463,7 @@ def solve_fcc82909(S, I):
     return O
 
 
-def solve_72ca375d(S, I):
+def solve_72ca375d(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = totuple(x1)
     x3 = rbind(subgrid, I)
@@ -1476,7 +1476,7 @@ def solve_72ca375d(S, I):
     return O
 
 
-def solve_253bf280(S, I):
+def solve_253bf280(S, I, C):
     x1 = f_ofcolor(I, EIGHT)
     x2 = prapply(connect, x1, x1)
     x3 = rbind(greater, ONE)
@@ -1489,7 +1489,7 @@ def solve_253bf280(S, I):
     return O
 
 
-def solve_694f12f3(S, I):
+def solve_694f12f3(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, FOUR)
     x3 = compose(backdrop, inbox)
@@ -1502,7 +1502,7 @@ def solve_694f12f3(S, I):
     return O
 
 
-def solve_1f642eb9(S, I):
+def solve_1f642eb9(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = difference(x1, x2)
@@ -1515,7 +1515,7 @@ def solve_1f642eb9(S, I):
     return O
 
 
-def solve_31aa019c(S, I):
+def solve_31aa019c(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = first_f(x2)
@@ -1528,7 +1528,7 @@ def solve_31aa019c(S, I):
     return O
 
 
-def solve_27a28665(S, I):
+def solve_27a28665(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = valmax_f(x1, size)
     x3 = equality(x2, ONE)
@@ -1541,7 +1541,7 @@ def solve_27a28665(S, I):
     return O
 
 
-def solve_7ddcd7ec(S, I):
+def solve_7ddcd7ec(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = difference(x1, x2)
@@ -1554,7 +1554,7 @@ def solve_7ddcd7ec(S, I):
     return O
 
 
-def solve_3bd67248(S, I):
+def solve_3bd67248(S, I, C):
     x1 = height_t(I)
     x2 = decrement(x1)
     x3 = decrement(x2)
@@ -1567,7 +1567,7 @@ def solve_3bd67248(S, I):
     return O
 
 
-def solve_73251a56(S, I):
+def solve_73251a56(S, I, C):
     x1 = dmirror_t(I)
     x2 = papply(pair, I, x1)
     x3 = lbind(apply, maximum)
@@ -1580,7 +1580,7 @@ def solve_73251a56(S, I):
     return O
 
 
-def solve_25d487eb(S, I):
+def solve_25d487eb(S, I, C):
     x1 = leastcolor_t(I)
     x2 = objects(I, T, F, T)
     x3 = f_ofcolor(I, x1)
@@ -1593,7 +1593,7 @@ def solve_25d487eb(S, I):
     return O
 
 
-def solve_8f2ea7aa(S, I):
+def solve_8f2ea7aa(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = merge_f(x1)
     x3 = subgrid(x2, I)
@@ -1606,7 +1606,7 @@ def solve_8f2ea7aa(S, I):
     return O
 
 
-def solve_b8825c91(S, I):
+def solve_b8825c91(S, I, C):
     x1 = replace(I, FOUR, ZERO)
     x2 = dmirror_t(x1)
     x3 = papply(pair, x1, x2)
@@ -1619,7 +1619,7 @@ def solve_b8825c91(S, I):
     return O
 
 
-def solve_cce03e0d(S, I):
+def solve_cce03e0d(S, I, C):
     x1 = upscale_t(I, THREE)
     x2 = hconcat(I, I)
     x3 = hconcat(x2, I)
@@ -1632,7 +1632,7 @@ def solve_cce03e0d(S, I):
     return O
 
 
-def solve_d364b489(S, I):
+def solve_d364b489(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = shift(x1, DOWN)
     x3 = fill(I, EIGHT, x2)
@@ -1645,7 +1645,7 @@ def solve_d364b489(S, I):
     return O
 
 
-def solve_a5f85a15(S, I):
+def solve_a5f85a15(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = interval(ONE, NINE, ONE)
     x3 = apply(double, x2)
@@ -1658,7 +1658,7 @@ def solve_a5f85a15(S, I):
     return O
 
 
-def solve_3ac3eb23(S, I):
+def solve_3ac3eb23(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = chain(ineighbors, last, first)
     x3 = fork(recolor_i, color, x2)
@@ -1671,7 +1671,7 @@ def solve_3ac3eb23(S, I):
     return O
 
 
-def solve_444801d8(S, I):
+def solve_444801d8(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = colorfilter(x1, ONE)
     x3 = rbind(toobject, I)
@@ -1684,7 +1684,7 @@ def solve_444801d8(S, I):
     return O
 
 
-def solve_22168020(S, I):
+def solve_22168020(S, I, C):
     x1 = palette_t(I)
     x2 = remove(ZERO, x1)
     x3 = lbind(f_ofcolor, I)
@@ -1697,7 +1697,7 @@ def solve_22168020(S, I):
     return O
 
 
-def solve_6e82a1ae(S, I):
+def solve_6e82a1ae(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = lbind(sizefilter, x1)
     x3 = compose(merge, x2)
@@ -1710,7 +1710,7 @@ def solve_6e82a1ae(S, I):
     return O
 
 
-def solve_b2862040(S, I):
+def solve_b2862040(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, NINE)
     x3 = colorfilter(x1, ONE)
@@ -1723,7 +1723,7 @@ def solve_b2862040(S, I):
     return O
 
 
-def solve_868de0fa(S, I):
+def solve_868de0fa(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = sfilter_f(x1, square_f)
     x3 = compose(even, height_f)
@@ -1736,7 +1736,7 @@ def solve_868de0fa(S, I):
     return O
 
 
-def solve_681b3aeb(S, I):
+def solve_681b3aeb(S, I, C):
     x1 = rot270(I)
     x2 = objects(x1, T, F, T)
     x3 = argmax_f(x2, size)
@@ -1749,7 +1749,7 @@ def solve_681b3aeb(S, I):
     return O
 
 
-def solve_8e5a5113(S, I):
+def solve_8e5a5113(S, I, C):
     x1 = crop(I, ORIGIN, THREE_BY_THREE)
     x2 = rot90(x1)
     x3 = rot180(x1)
@@ -1762,7 +1762,7 @@ def solve_8e5a5113(S, I):
     return O
 
 
-def solve_025d127b(S, I):
+def solve_025d127b(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = apply(color, x1)
     x3 = merge_f(x1)
@@ -1775,7 +1775,7 @@ def solve_025d127b(S, I):
     return O
 
 
-def solve_2281f1f4(S, I):
+def solve_2281f1f4(S, I, C):
     x1 = f_ofcolor(I, FIVE)
     x2 = product(x1, x1)
     x3 = power(first, TWO)
@@ -1788,7 +1788,7 @@ def solve_2281f1f4(S, I):
     return O
 
 
-def solve_cf98881b(S, I):
+def solve_cf98881b(S, I, C):
     x1 = hsplit(I, THREE)
     x2 = first_t(x1)
     x3 = remove_t(x2, x1)
@@ -1801,7 +1801,7 @@ def solve_cf98881b(S, I):
     return O
 
 
-def solve_d4f3cd78(S, I):
+def solve_d4f3cd78(S, I, C):
     x1 = f_ofcolor(I, FIVE)
     x2 = delta(x1)
     x3 = fill(I, EIGHT, x2)
@@ -1814,7 +1814,7 @@ def solve_d4f3cd78(S, I):
     return O
 
 
-def solve_bda2d7a6(S, I):
+def solve_bda2d7a6(S, I, C):
     x1 = partition(I)
     x2 = order(x1, size)
     x3 = apply(color, x2)
@@ -1827,7 +1827,7 @@ def solve_bda2d7a6(S, I):
     return O
 
 
-def solve_137eaa0f(S, I):
+def solve_137eaa0f(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = matcher(last, FIVE)
     x3 = rbind(sfilter, x2)
@@ -1840,7 +1840,7 @@ def solve_137eaa0f(S, I):
     return O
 
 
-def solve_6455b5f5(S, I):
+def solve_6455b5f5(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = argmax_f(x1, size)
@@ -1853,7 +1853,7 @@ def solve_6455b5f5(S, I):
     return O
 
 
-def solve_b8cdaf2b(S, I):
+def solve_b8cdaf2b(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = shift(x2, UP)
@@ -1866,7 +1866,7 @@ def solve_b8cdaf2b(S, I):
     return O
 
 
-def solve_bd4472b8(S, I):
+def solve_bd4472b8(S, I, C):
     x1 = width_t(I)
     x2 = astuple(TWO, x1)
     x3 = crop(I, ORIGIN, x2)
@@ -1879,7 +1879,7 @@ def solve_bd4472b8(S, I):
     return O
 
 
-def solve_4be741c5(S, I):
+def solve_4be741c5(S, I, C):
     x1 = portrait_t(I)
     x2 = branch(x1, dmirror_t, identity)
     x3 = branch(x1, height_t, width_t)
@@ -1892,7 +1892,7 @@ def solve_4be741c5(S, I):
     return O
 
 
-def solve_bbc9ae5d(S, I):
+def solve_bbc9ae5d(S, I, C):
     x1 = width_t(I)
     x2 = palette_t(I)
     x3 = halve(x1)
@@ -1905,7 +1905,7 @@ def solve_bbc9ae5d(S, I):
     return O
 
 
-def solve_d90796e8(S, I):
+def solve_d90796e8(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = sizefilter(x1, TWO)
     x3 = lbind(contained, TWO)
@@ -1918,7 +1918,7 @@ def solve_d90796e8(S, I):
     return O
 
 
-def solve_2c608aff(S, I):
+def solve_2c608aff(S, I, C):
     x1 = leastcolor_t(I)
     x2 = objects(I, T, F, T)
     x3 = argmax_f(x2, size)
@@ -1931,7 +1931,7 @@ def solve_2c608aff(S, I):
     return O
 
 
-def solve_f8b3ba0a(S, I):
+def solve_f8b3ba0a(S, I, C):
     x1 = compress(I)
     x2 = astuple(THREE, ONE)
     x3 = palette_t(x1)
@@ -1945,7 +1945,7 @@ def solve_f8b3ba0a(S, I):
     return O
 
 
-def solve_80af3007(S, I):
+def solve_80af3007(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = first_f(x1)
     x3 = subgrid(x2, I)
@@ -1959,7 +1959,7 @@ def solve_80af3007(S, I):
     return O
 
 
-def solve_83302e8f(S, I):
+def solve_83302e8f(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = sfilter_f(x2, square_f)
@@ -1973,7 +1973,7 @@ def solve_83302e8f(S, I):
     return O
 
 
-def solve_1fad071e(S, I):
+def solve_1fad071e(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = colorfilter(x1, ONE)
     x3 = sizefilter(x2, FOUR)
@@ -1987,7 +1987,7 @@ def solve_1fad071e(S, I):
     return O
 
 
-def solve_11852cab(S, I):
+def solve_11852cab(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = merge_f(x1)
     x3 = hmirror_f(x2)
@@ -2001,7 +2001,7 @@ def solve_11852cab(S, I):
     return O
 
 
-def solve_3428a4f5(S, I):
+def solve_3428a4f5(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = astuple(SIX, FIVE)
@@ -2015,7 +2015,7 @@ def solve_3428a4f5(S, I):
     return O
 
 
-def solve_178fcbfb(S, I):
+def solve_178fcbfb(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = f_ofcolor(I, TWO)
     x3 = mapply(vfrontier, x2)
@@ -2029,7 +2029,7 @@ def solve_178fcbfb(S, I):
     return O
 
 
-def solve_3de23699(S, I):
+def solve_3de23699(S, I, C):
     x1 = fgpartition(I)
     x2 = sizefilter(x1, FOUR)
     x3 = first_f(x2)
@@ -2043,7 +2043,7 @@ def solve_3de23699(S, I):
     return O
 
 
-def solve_54d9e175(S, I):
+def solve_54d9e175(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = compose(neighbors, center)
@@ -2057,7 +2057,7 @@ def solve_54d9e175(S, I):
     return O
 
 
-def solve_5ad4f10b(S, I):
+def solve_5ad4f10b(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = argmax_f(x1, size)
     x3 = color(x2)
@@ -2071,7 +2071,7 @@ def solve_5ad4f10b(S, I):
     return O
 
 
-def solve_623ea044(S, I):
+def solve_623ea044(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = first_f(x1)
     x3 = center(x2)
@@ -2085,7 +2085,7 @@ def solve_623ea044(S, I):
     return O
 
 
-def solve_6b9890af(S, I):
+def solve_6b9890af(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = f_ofcolor(I, TWO)
     x3 = argmin_f(x1, size)
@@ -2099,7 +2099,7 @@ def solve_6b9890af(S, I):
     return O
 
 
-def solve_794b24be(S, I):
+def solve_794b24be(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = size_f(x1)
     x3 = decrement(x2)
@@ -2113,7 +2113,7 @@ def solve_794b24be(S, I):
     return O
 
 
-def solve_88a10436(S, I):
+def solve_88a10436(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = colorfilter(x1, FIVE)
     x3 = first_f(x2)
@@ -2127,7 +2127,7 @@ def solve_88a10436(S, I):
     return O
 
 
-def solve_88a62173(S, I):
+def solve_88a62173(S, I, C):
     x1 = lefthalf(I)
     x2 = righthalf(I)
     x3 = tophalf(x1)
@@ -2141,7 +2141,7 @@ def solve_88a62173(S, I):
     return O
 
 
-def solve_890034e9(S, I):
+def solve_890034e9(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = inbox(x2)
@@ -2155,7 +2155,7 @@ def solve_890034e9(S, I):
     return O
 
 
-def solve_99b1bc43(S, I):
+def solve_99b1bc43(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = f_ofcolor(x1, ZERO)
@@ -2169,7 +2169,7 @@ def solve_99b1bc43(S, I):
     return O
 
 
-def solve_a9f96cdd(S, I):
+def solve_a9f96cdd(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = replace(I, TWO, ZERO)
     x3 = shift(x1, NEG_UNITY)
@@ -2183,7 +2183,7 @@ def solve_a9f96cdd(S, I):
     return O
 
 
-def solve_af902bf9(S, I):
+def solve_af902bf9(S, I, C):
     x1 = f_ofcolor(I, FOUR)
     x2 = prapply(connect, x1, x1)
     x3 = fork(either, vline_i, hline_i)
@@ -2197,7 +2197,7 @@ def solve_af902bf9(S, I):
     return O
 
 
-def solve_b548a754(S, I):
+def solve_b548a754(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = replace(I, EIGHT, ZERO)
     x3 = leastcolor_t(x2)
@@ -2211,7 +2211,7 @@ def solve_b548a754(S, I):
     return O
 
 
-def solve_bdad9b1f(S, I):
+def solve_bdad9b1f(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = f_ofcolor(I, EIGHT)
     x3 = center(x1)
@@ -2225,7 +2225,7 @@ def solve_bdad9b1f(S, I):
     return O
 
 
-def solve_c3e719e8(S, I):
+def solve_c3e719e8(S, I, C):
     x1 = mostcolor_t(I)
     x2 = hconcat(I, I)
     x3 = upscale_t(I, THREE)
@@ -2239,7 +2239,7 @@ def solve_c3e719e8(S, I):
     return O
 
 
-def solve_de1cd16c(S, I):
+def solve_de1cd16c(S, I, C):
     x1 = leastcolor_t(I)
     x2 = objects(I, T, F, F)
     x3 = sizefilter(x2, ONE)
@@ -2253,7 +2253,7 @@ def solve_de1cd16c(S, I):
     return O
 
 
-def solve_d8c310e9(S, I):
+def solve_d8c310e9(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = first_f(x1)
     x3 = hperiod(x2)
@@ -2267,7 +2267,7 @@ def solve_d8c310e9(S, I):
     return O
 
 
-def solve_a3325580(S, I):
+def solve_a3325580(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = valmax_f(x1, size)
     x3 = sizefilter(x1, x2)
@@ -2281,7 +2281,7 @@ def solve_a3325580(S, I):
     return O
 
 
-def solve_8eb1be9a(S, I):
+def solve_8eb1be9a(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = first_f(x1)
     x3 = interval(NEG_TWO, FOUR, ONE)
@@ -2295,7 +2295,7 @@ def solve_8eb1be9a(S, I):
     return O
 
 
-def solve_321b1fc6(S, I):
+def solve_321b1fc6(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = colorfilter(x1, EIGHT)
     x3 = difference(x1, x2)
@@ -2309,7 +2309,7 @@ def solve_321b1fc6(S, I):
     return O
 
 
-def solve_1caeab9d(S, I):
+def solve_1caeab9d(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = f_ofcolor(I, ONE)
     x3 = lowermost(x2)
@@ -2323,7 +2323,7 @@ def solve_1caeab9d(S, I):
     return O
 
 
-def solve_77fdfe62(S, I):
+def solve_77fdfe62(S, I, C):
     x1 = f_ofcolor(I, EIGHT)
     x2 = subgrid(x1, I)
     x3 = replace(I, EIGHT, ZERO)
@@ -2337,7 +2337,7 @@ def solve_77fdfe62(S, I):
     return O
 
 
-def solve_c0f76784(S, I):
+def solve_c0f76784(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = sfilter_f(x2, square_f)
@@ -2351,7 +2351,7 @@ def solve_c0f76784(S, I):
     return O
 
 
-def solve_1b60fb0c(S, I):
+def solve_1b60fb0c(S, I, C):
     x1 = rot90(I)
     x2 = f_ofcolor(I, ONE)
     x3 = f_ofcolor(x1, ONE)
@@ -2366,7 +2366,7 @@ def solve_1b60fb0c(S, I):
     return O
 
 
-def solve_ddf7fa4f(S, I):
+def solve_ddf7fa4f(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = colorfilter(x1, FIVE)
@@ -2380,7 +2380,7 @@ def solve_ddf7fa4f(S, I):
     return O
 
 
-def solve_47c1f68c(S, I):
+def solve_47c1f68c(S, I, C):
     x1 = leastcolor_t(I)
     x2 = vmirror_t(I)
     x3 = objects(I, T, T, T)
@@ -2394,7 +2394,7 @@ def solve_47c1f68c(S, I):
     return O
 
 
-def solve_6c434453(S, I):
+def solve_6c434453(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, EIGHT)
     x3 = dneighbors(UNITY)
@@ -2408,7 +2408,7 @@ def solve_6c434453(S, I):
     return O
 
 
-def solve_23581191(S, I):
+def solve_23581191(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = fork(combine, vfrontier, hfrontier)
     x3 = compose(x2, center)
@@ -2422,7 +2422,7 @@ def solve_23581191(S, I):
     return O
 
 
-def solve_c8cbb738(S, I):
+def solve_c8cbb738(S, I, C):
     x1 = mostcolor_t(I)
     x2 = fgpartition(I)
     x3 = valmax_f(x2, shape_f)
@@ -2436,7 +2436,7 @@ def solve_c8cbb738(S, I):
     return O
 
 
-def solve_3eda0437(S, I):
+def solve_3eda0437(S, I, C):
     x1 = interval(TWO, TEN, ONE)
     x2 = prapply(astuple, x1, x1)
     x3 = lbind(canvas, ZERO)
@@ -2450,7 +2450,7 @@ def solve_3eda0437(S, I):
     return O
 
 
-def solve_dc0a314f(S, I):
+def solve_dc0a314f(S, I, C):
     x1 = f_ofcolor(I, THREE)
     x2 = replace(I, THREE, ZERO)
     x3 = dmirror_t(x2)
@@ -2464,7 +2464,7 @@ def solve_dc0a314f(S, I):
     return O
 
 
-def solve_d4469b4b(S, I):
+def solve_d4469b4b(S, I, C):
     x1 = palette_t(I)
     x2 = other_f(x1, ZERO)
     x3 = equality(x2, ONE)
@@ -2478,7 +2478,7 @@ def solve_d4469b4b(S, I):
     return O
 
 
-def solve_6ecd11f4(S, I):
+def solve_6ecd11f4(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = argmax_f(x1, size)
     x3 = argmin_f(x1, size)
@@ -2493,7 +2493,7 @@ def solve_6ecd11f4(S, I):
     return O
 
 
-def solve_760b3cac(S, I):
+def solve_760b3cac(S, I, C):
     x1 = f_ofcolor(I, FOUR)
     x2 = f_ofcolor(I, EIGHT)
     x3 = ulcorner(x1)
@@ -2508,7 +2508,7 @@ def solve_760b3cac(S, I):
     return O
 
 
-def solve_c444b776(S, I):
+def solve_c444b776(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = argmin_f(x2, size)
@@ -2522,7 +2522,7 @@ def solve_c444b776(S, I):
     return O
 
 
-def solve_d4a91cb9(S, I):
+def solve_d4a91cb9(S, I, C):
     x1 = f_ofcolor(I, EIGHT)
     x2 = f_ofcolor(I, TWO)
     x3 = first(x1)
@@ -2537,7 +2537,7 @@ def solve_d4a91cb9(S, I):
     return O
 
 
-def solve_eb281b96(S, I):
+def solve_eb281b96(S, I, C):
     x1 = height_t(I)
     x2 = width_t(I)
     x3 = decrement(x1)
@@ -2552,7 +2552,7 @@ def solve_eb281b96(S, I):
     return O
 
 
-def solve_ff28f65a(S, I):
+def solve_ff28f65a(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = size_f(x1)
     x3 = double(x2)
@@ -2566,7 +2566,7 @@ def solve_ff28f65a(S, I):
     return O
 
 
-def solve_7e0986d6(S, I):
+def solve_7e0986d6(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = replace(I, x1, ZERO)
@@ -2580,7 +2580,7 @@ def solve_7e0986d6(S, I):
     return O
 
 
-def solve_09629e4f(S, I):
+def solve_09629e4f(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = argmin(x1, numcolors_f)
     x3 = normalize(x2)
@@ -2591,7 +2591,7 @@ def solve_09629e4f(S, I):
     return O
 
 
-def solve_a85d4709(S, I):
+def solve_a85d4709(S, I, C):
     x1 = f_ofcolor(I, FIVE)
     x2 = lbind(matcher, last)
     x3 = lbind(sfilter, x1)
@@ -2606,7 +2606,7 @@ def solve_a85d4709(S, I):
     return O
 
 
-def solve_feca6190(S, I):
+def solve_feca6190(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = size_f(x1)
     x3 = multiply(x2, FIVE)
@@ -2621,7 +2621,7 @@ def solve_feca6190(S, I):
     return O
 
 
-def solve_a68b268e(S, I):
+def solve_a68b268e(S, I, C):
     x1 = tophalf(I)
     x2 = bottomhalf(I)
     x3 = lefthalf(x1)
@@ -2637,7 +2637,7 @@ def solve_a68b268e(S, I):
     return O
 
 
-def solve_beb8660c(S, I):
+def solve_beb8660c(S, I, C):
     x1 = shape_t(I)
     x2 = objects(I, T, F, T)
     x3 = compose(invert, size)
@@ -2653,7 +2653,7 @@ def solve_beb8660c(S, I):
     return O
 
 
-def solve_913fb3ed(S, I):
+def solve_913fb3ed(S, I, C):
     x1 = f_ofcolor(I, THREE)
     x2 = f_ofcolor(I, EIGHT)
     x3 = f_ofcolor(I, TWO)
@@ -2666,7 +2666,7 @@ def solve_913fb3ed(S, I):
     return O
 
 
-def solve_0962bcdd(S, I):
+def solve_0962bcdd(S, I, C):
     x1 = leastcolor_t(I)
     x2 = replace(I, ZERO, x1)
     x3 = leastcolor_t(x2)
@@ -2682,7 +2682,7 @@ def solve_0962bcdd(S, I):
     return O
 
 
-def solve_3631a71a(S, I):
+def solve_3631a71a(S, I, C):
     x1 = shape_t(I)
     x2 = replace(I, NINE, ZERO)
     x3 = lbind(apply, maximum)
@@ -2699,7 +2699,7 @@ def solve_3631a71a(S, I):
     return O
 
 
-def solve_05269061(S, I):
+def solve_05269061(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = neighbors(ORIGIN)
     x3 = mapply(neighbors, x2)
@@ -2716,7 +2716,7 @@ def solve_05269061(S, I):
     return O
 
 
-def solve_95990924(S, I):
+def solve_95990924(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = apply(outbox, x1)
     x3 = apply(ulcorner, x2)
@@ -2730,7 +2730,7 @@ def solve_95990924(S, I):
     return O
 
 
-def solve_e509e548(S, I):
+def solve_e509e548(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = rbind(subgrid, I)
     x3 = chain(palette_t, trim, x2)
@@ -2747,7 +2747,7 @@ def solve_e509e548(S, I):
     return O
 
 
-def solve_d43fd935(S, I):
+def solve_d43fd935(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = f_ofcolor(I, THREE)
     x3 = sizefilter(x1, ONE)
@@ -2764,7 +2764,7 @@ def solve_d43fd935(S, I):
     return O
 
 
-def solve_db3e9e38(S, I):
+def solve_db3e9e38(S, I, C):
     x1 = f_ofcolor(I, SEVEN)
     x2 = lrcorner(x1)
     x3 = shoot(x2, UP_RIGHT)
@@ -2781,7 +2781,7 @@ def solve_db3e9e38(S, I):
     return O
 
 
-def solve_e73095fd(S, I):
+def solve_e73095fd(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = fork(equality, toindices, backdrop)
@@ -2798,7 +2798,7 @@ def solve_e73095fd(S, I):
     return O
 
 
-def solve_1bfc4729(S, I):
+def solve_1bfc4729(S, I, C):
     x1 = asindices(I)
     x2 = tophalf(I)
     x3 = bottomhalf(I)
@@ -2814,7 +2814,7 @@ def solve_1bfc4729(S, I):
     return O
 
 
-def solve_93b581b8(S, I):
+def solve_93b581b8(S, I, C):
     x1 = fgpartition(I)
     x2 = chain(cmirror_f, dmirror_f, merge)
     x3 = x2(x1)
@@ -2830,7 +2830,7 @@ def solve_93b581b8(S, I):
     return O
 
 
-def solve_9edfc990(S, I):
+def solve_9edfc990(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = f_ofcolor(I, ONE)
@@ -2841,7 +2841,7 @@ def solve_9edfc990(S, I):
     return O
 
 
-def solve_a65b410d(S, I):
+def solve_a65b410d(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = urcorner(x1)
     x3 = shoot(x2, UP_RIGHT)
@@ -2856,7 +2856,7 @@ def solve_a65b410d(S, I):
     return O
 
 
-def solve_7447852a(S, I):
+def solve_7447852a(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = compose(last, center)
@@ -2873,7 +2873,7 @@ def solve_7447852a(S, I):
     return O
 
 
-def solve_97999447(S, I):
+def solve_97999447(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = apply(toindices, x1)
     x3 = rbind(shoot, RIGHT)
@@ -2891,7 +2891,7 @@ def solve_97999447(S, I):
     return O
 
 
-def solve_91714a58(S, I):
+def solve_91714a58(S, I, C):
     x1 = shape_t(I)
     x2 = asindices(I)
     x3 = objects(I, T, F, T)
@@ -2909,7 +2909,7 @@ def solve_91714a58(S, I):
     return O
 
 
-def solve_a61ba2ce(S, I):
+def solve_a61ba2ce(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = lbind(index, I)
     x3 = matcher(x2, ZERO)
@@ -2927,7 +2927,7 @@ def solve_a61ba2ce(S, I):
     return O
 
 
-def solve_8e1813be(S, I):
+def solve_8e1813be(S, I, C):
     x1 = replace(I, FIVE, ZERO)
     x2 = objects(x1, T, T, T)
     x3 = first_f(x2)
@@ -2945,7 +2945,7 @@ def solve_8e1813be(S, I):
     return O
 
 
-def solve_bc1d5164(S, I):
+def solve_bc1d5164(S, I, C):
     x1 = leastcolor_t(I)
     x2 = crop(I, ORIGIN, THREE_BY_THREE)
     x3 = crop(I, TWO_BY_ZERO, THREE_BY_THREE)
@@ -2963,7 +2963,7 @@ def solve_bc1d5164(S, I):
     return O
 
 
-def solve_ce602527(S, I):
+def solve_ce602527(S, I, C):
     x1 = vmirror_t(I)
     x2 = fgpartition(x1)
     x3 = order(x2, size)
@@ -2981,7 +2981,7 @@ def solve_ce602527(S, I):
     return O
 
 
-def solve_5c2c9af4(S, I):
+def solve_5c2c9af4(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = center(x2)
@@ -3000,7 +3000,7 @@ def solve_5c2c9af4(S, I):
     return O
 
 
-def solve_75b8110e(S, I):
+def solve_75b8110e(S, I, C):
     x1 = lefthalf(I)
     x2 = righthalf(I)
     x3 = tophalf(x1)
@@ -3019,7 +3019,7 @@ def solve_75b8110e(S, I):
     return O
 
 
-def solve_941d9a10(S, I):
+def solve_941d9a10(S, I, C):
     x1 = shape_t(I)
     x2 = objects(I, T, F, F)
     x3 = colorfilter(x2, ZERO)
@@ -3038,7 +3038,7 @@ def solve_941d9a10(S, I):
     return O
 
 
-def solve_c3f564a4(S, I):
+def solve_c3f564a4(S, I, C):
     x1 = asindices(I)
     x2 = dmirror_t(I)
     x3 = invert(NINE)
@@ -3057,7 +3057,7 @@ def solve_c3f564a4(S, I):
     return O
 
 
-def solve_1a07d186(S, I):
+def solve_1a07d186(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = difference(x1, x2)
@@ -3076,7 +3076,7 @@ def solve_1a07d186(S, I):
     return O
 
 
-def solve_d687bc17(S, I):
+def solve_d687bc17(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = difference(x1, x2)
@@ -3095,7 +3095,7 @@ def solve_d687bc17(S, I):
     return O
 
 
-def solve_9af7a82c(S, I):
+def solve_9af7a82c(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = order(x1, size)
     x3 = valmax_f(x1, size)
@@ -3114,7 +3114,7 @@ def solve_9af7a82c(S, I):
     return O
 
 
-def solve_6e19193c(S, I):
+def solve_6e19193c(S, I, C):
     x1 = leastcolor_t(I)
     x2 = objects(I, T, F, T)
     x3 = rbind(toobject, I)
@@ -3133,7 +3133,7 @@ def solve_6e19193c(S, I):
     return O
 
 
-def solve_ef135b50(S, I):
+def solve_ef135b50(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = f_ofcolor(I, ZERO)
     x3 = product(x1, x1)
@@ -3152,7 +3152,7 @@ def solve_ef135b50(S, I):
     return O
 
 
-def solve_cbded52d(S, I):
+def solve_cbded52d(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = product(x2, x2)
@@ -3171,7 +3171,7 @@ def solve_cbded52d(S, I):
     return O
 
 
-def solve_8a004b2b(S, I):
+def solve_8a004b2b(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = f_ofcolor(I, FOUR)
     x3 = subgrid(x2, I)
@@ -3190,7 +3190,7 @@ def solve_8a004b2b(S, I):
     return O
 
 
-def solve_e26a3af2(S, I):
+def solve_e26a3af2(S, I, C):
     x1 = rot90(I)
     x2 = apply(mostcommon, I)
     x3 = apply(mostcommon, x1)
@@ -3209,7 +3209,7 @@ def solve_e26a3af2(S, I):
     return O
 
 
-def solve_6cf79266(S, I):
+def solve_6cf79266(S, I, C):
     x1 = f_ofcolor(I, ZERO)
     x2 = ascell(ORIGIN, ZERO)
     x3 = initset(x2)
@@ -3228,7 +3228,7 @@ def solve_6cf79266(S, I):
     return O
 
 
-def solve_a87f7484(S, I):
+def solve_a87f7484(S, I, C):
     x1 = numcolors_t(I)
     x3 = portrait_t(I)
     x4 = branch(x3, dmirror_t, identity)
@@ -3244,7 +3244,7 @@ def solve_a87f7484(S, I):
     return O
 
 
-def solve_4093f84a(S, I):
+def solve_4093f84a(S, I, C):
     x1 = leastcolor_t(I)
     x2 = replace(I, x1, FIVE)
     x3 = f_ofcolor(I, FIVE)
@@ -3262,7 +3262,7 @@ def solve_4093f84a(S, I):
     return O
 
 
-def solve_ba26e723(S, I):
+def solve_ba26e723(S, I, C):
     x1 = rbind(divide, THREE)
     x2 = rbind(multiply, THREE)
     x3 = compose(x2, x1)
@@ -3274,7 +3274,7 @@ def solve_ba26e723(S, I):
     return O
 
 
-def solve_4612dd53(S, I):
+def solve_4612dd53(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = box(x1)
     x3 = fill(I, TWO, x2)
@@ -3294,7 +3294,7 @@ def solve_4612dd53(S, I):
     return O
 
 
-def solve_29c11459(S, I):
+def solve_29c11459(S, I, C):
     x1 = lefthalf(I)
     x2 = righthalf(I)
     x3 = objects(x2, T, F, T)
@@ -3314,7 +3314,7 @@ def solve_29c11459(S, I):
     return O
 
 
-def solve_963e52fc(S, I):
+def solve_963e52fc(S, I, C):
     x1 = width_t(I)
     x2 = asobject(I)
     x3 = hperiod(x2)
@@ -3334,7 +3334,7 @@ def solve_963e52fc(S, I):
     return O
 
 
-def solve_ae3edfdc(S, I):
+def solve_ae3edfdc(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = replace(I, THREE, ZERO)
     x3 = replace(x2, SEVEN, ZERO)
@@ -3354,7 +3354,7 @@ def solve_ae3edfdc(S, I):
     return O
 
 
-def solve_1f0c79e5(S, I):
+def solve_1f0c79e5(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = replace(I, TWO, ZERO)
     x3 = leastcolor_t(x2)
@@ -3374,7 +3374,7 @@ def solve_1f0c79e5(S, I):
     return O
 
 
-def solve_56dc2b01(S, I):
+def solve_56dc2b01(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = colorfilter(x1, THREE)
     x3 = first(x2)
@@ -3395,7 +3395,7 @@ def solve_56dc2b01(S, I):
     return O
 
 
-def solve_e48d4e1a(S, I):
+def solve_e48d4e1a(S, I, C):
     x1 = shape_t(I)
     x2 = f_ofcolor(I, FIVE)
     x3 = fill(I, ZERO, x2)
@@ -3416,7 +3416,7 @@ def solve_e48d4e1a(S, I):
     return O
 
 
-def solve_6773b310(S, I):
+def solve_6773b310(S, I, C):
     x1 = compress(I)
     x2 = neighbors(ORIGIN)
     x3 = insert(ORIGIN, x2)
@@ -3437,7 +3437,7 @@ def solve_6773b310(S, I):
     return O
 
 
-def solve_780d0b14(S, I):
+def solve_780d0b14(S, I, C):
     x1 = asindices(I)
     x2 = objects(I, T, T, T)
     x3 = rbind(greater, TWO)
@@ -3459,7 +3459,7 @@ def solve_780d0b14(S, I):
     return O
 
 
-def solve_2204b7a8(S, I):
+def solve_2204b7a8(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = lbind(sfilter, x1)
     x3 = compose(size, x2)
@@ -3481,7 +3481,7 @@ def solve_2204b7a8(S, I):
     return O
 
 
-def solve_d9f24cd1(S, I):
+def solve_d9f24cd1(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = f_ofcolor(I, FIVE)
     x3 = prapply(connect, x1, x2)
@@ -3503,7 +3503,7 @@ def solve_d9f24cd1(S, I):
     return O
 
 
-def solve_b782dc8a(S, I):
+def solve_b782dc8a(S, I, C):
     x1 = leastcolor_t(I)
     x2 = objects(I, T, F, F)
     x3 = f_ofcolor(I, x1)
@@ -3525,7 +3525,7 @@ def solve_b782dc8a(S, I):
     return O
 
 
-def solve_673ef223(S, I):
+def solve_673ef223(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = f_ofcolor(I, EIGHT)
     x3 = replace(I, EIGHT, FOUR)
@@ -3547,7 +3547,7 @@ def solve_673ef223(S, I):
     return O
 
 
-def solve_f5b8619d(S, I):
+def solve_f5b8619d(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = mapply(vfrontier, x2)
@@ -3557,7 +3557,7 @@ def solve_f5b8619d(S, I):
     return O
 
 
-def solve_f8c80d96(S, I):
+def solve_f8c80d96(S, I, C):
     x1 = leastcolor_t(I)
     x2 = objects(I, T, F, F)
     x3 = colorfilter(x2, x1)
@@ -3579,7 +3579,7 @@ def solve_f8c80d96(S, I):
     return O
 
 
-def solve_ecdecbb3(S, I):
+def solve_ecdecbb3(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = colorfilter(x1, TWO)
     x3 = colorfilter(x1, EIGHT)
@@ -3601,7 +3601,7 @@ def solve_ecdecbb3(S, I):
     return O
 
 
-def solve_e5062a87(S, I):
+def solve_e5062a87(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = recolor_i(ZERO, x1)
     x3 = normalize(x2)
@@ -3623,7 +3623,7 @@ def solve_e5062a87(S, I):
     return O
 
 
-def solve_a8d7556c(S, I):
+def solve_a8d7556c(S, I, C):
     x1 = initset(ORIGIN)
     x2 = recolor_i(ZERO, x1)
     x3 = upscale_f(x2, TWO)
@@ -3645,7 +3645,7 @@ def solve_a8d7556c(S, I):
     return O
 
 
-def solve_4938f0c2(S, I):
+def solve_4938f0c2(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = f_ofcolor(I, TWO)
     x3 = vmirror_f(x2)
@@ -3667,7 +3667,7 @@ def solve_4938f0c2(S, I):
     return O
 
 
-def solve_834ec97d(S, I):
+def solve_834ec97d(S, I, C):
     x1 = asindices(I)
     x2 = objects(I, T, F, T)
     x3 = first(x2)
@@ -3689,7 +3689,7 @@ def solve_834ec97d(S, I):
     return O
 
 
-def solve_846bdb03(S, I):
+def solve_846bdb03(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = rbind(colorcount_f, FOUR)
     x3 = matcher(x2, ZERO)
@@ -3711,7 +3711,7 @@ def solve_846bdb03(S, I):
     return O
 
 
-def solve_90f3ed37(S, I):
+def solve_90f3ed37(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = order(x1, uppermost)
     x3 = first_t(x2)
@@ -3733,7 +3733,7 @@ def solve_90f3ed37(S, I):
     return O
 
 
-def solve_8403a5d5(S, I):
+def solve_8403a5d5(S, I, C):
     x1 = asindices(I)
     x2 = objects(I, T, F, T)
     x3 = first_f(x2)
@@ -3756,7 +3756,7 @@ def solve_8403a5d5(S, I):
     return O
 
 
-def solve_91413438(S, I):
+def solve_91413438(S, I, C):
     x1 = colorcount_t(I, ZERO)
     x2 = subtract(NINE, x1)
     x3 = multiply(x1, THREE)
@@ -3779,7 +3779,7 @@ def solve_91413438(S, I):
     return O
 
 
-def solve_539a4f51(S, I):
+def solve_539a4f51(S, I, C):
     x1 = shape_t(I)
     x2 = index(I, ORIGIN)
     x3 = colorcount_t(I, ZERO)
@@ -3802,7 +3802,7 @@ def solve_539a4f51(S, I):
     return O
 
 
-def solve_5daaa586(S, I):
+def solve_5daaa586(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = rbind(bordering, I)
@@ -3825,7 +3825,7 @@ def solve_5daaa586(S, I):
     return O
 
 
-def solve_3bdb4ada(S, I):
+def solve_3bdb4ada(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = totuple(x1)
     x3 = compose(increment, ulcorner)
@@ -3848,7 +3848,7 @@ def solve_3bdb4ada(S, I):
     return O
 
 
-def solve_ec883f72(S, I):
+def solve_ec883f72(S, I, C):
     x1 = palette_t(I)
     x2 = objects(I, T, T, T)
     x3 = fork(multiply, height_f, width_f)
@@ -3871,7 +3871,7 @@ def solve_ec883f72(S, I):
     return O
 
 
-def solve_2bee17df(S, I):
+def solve_2bee17df(S, I, C):
     x1 = height_t(I)
     x2 = rot90(I)
     x3 = subtract(x1, TWO)
@@ -3895,7 +3895,7 @@ def solve_2bee17df(S, I):
     return O
 
 
-def solve_e8dc4411(S, I):
+def solve_e8dc4411(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, ZERO)
     x3 = f_ofcolor(I, x1)
@@ -3919,7 +3919,7 @@ def solve_e8dc4411(S, I):
     return O
 
 
-def solve_e40b9e2f(S, I):
+def solve_e40b9e2f(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = neighbors(ORIGIN)
     x3 = mapply(neighbors, x2)
@@ -3943,7 +3943,7 @@ def solve_e40b9e2f(S, I):
     return O
 
 
-def solve_29623171(S, I):
+def solve_29623171(S, I, C):
     x1 = leastcolor_t(I)
     x2 = interval(ZERO, NINE, FOUR)
     x3 = product(x2, x2)
@@ -3967,7 +3967,7 @@ def solve_29623171(S, I):
     return O
 
 
-def solve_a2fd1cf0(S, I):
+def solve_a2fd1cf0(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = f_ofcolor(I, THREE)
     x3 = uppermost(x1)
@@ -3991,7 +3991,7 @@ def solve_a2fd1cf0(S, I):
     return O
 
 
-def solve_b0c4d837(S, I):
+def solve_b0c4d837(S, I, C):
     x1 = f_ofcolor(I, FIVE)
     x2 = f_ofcolor(I, EIGHT)
     x3 = height_f(x1)
@@ -4015,7 +4015,7 @@ def solve_b0c4d837(S, I):
     return O
 
 
-def solve_8731374e(S, I):
+def solve_8731374e(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = argmax_f(x1, size)
     x3 = subgrid(x2, I)
@@ -4039,7 +4039,7 @@ def solve_8731374e(S, I):
     return O
 
 
-def solve_272f95fa(S, I):
+def solve_272f95fa(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = apply(toindices, x2)
@@ -4063,7 +4063,7 @@ def solve_272f95fa(S, I):
     return O
 
 
-def solve_db93a21d(S, I):
+def solve_db93a21d(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = f_ofcolor(I, NINE)
     x3 = colorfilter(x1, NINE)
@@ -4087,7 +4087,7 @@ def solve_db93a21d(S, I):
     return O
 
 
-def solve_53b68214(S, I):
+def solve_53b68214(S, I, C):
     x1 = width_t(I)
     x2 = objects(I, T, T, T)
     x3 = first_f(x2)
@@ -4111,7 +4111,7 @@ def solve_53b68214(S, I):
     return O
 
 
-def solve_d6ad076f(S, I):
+def solve_d6ad076f(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = argmin_f(x1, size)
     x3 = argmax_f(x1, size)
@@ -4135,7 +4135,7 @@ def solve_d6ad076f(S, I):
     return O
 
 
-def solve_6cdd2623(S, I):
+def solve_6cdd2623(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = prapply(connect, x2, x2)
@@ -4152,7 +4152,7 @@ def solve_6cdd2623(S, I):
     return O
 
 
-def solve_a3df8b1e(S, I):
+def solve_a3df8b1e(S, I, C):
     x1 = shape_t(I)
     x2 = f_ofcolor(I, ONE)
     x3 = first(x2)
@@ -4177,7 +4177,7 @@ def solve_a3df8b1e(S, I):
     return O
 
 
-def solve_8d510a79(S, I):
+def solve_8d510a79(S, I, C):
     x1 = f_ofcolor(I, ONE)
     x2 = f_ofcolor(I, TWO)
     x3 = f_ofcolor(I, FIVE)
@@ -4199,7 +4199,7 @@ def solve_8d510a79(S, I):
     return O
 
 
-def solve_cdecee7f(S, I):
+def solve_cdecee7f(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = astuple(ONE, THREE)
     x3 = size_f(x1)
@@ -4224,7 +4224,7 @@ def solve_cdecee7f(S, I):
     return O
 
 
-def solve_3345333e(S, I):
+def solve_3345333e(S, I, C):
     x1 = leastcolor_t(I)
     x2 = f_ofcolor(I, x1)
     x3 = cover(I, x2)
@@ -4242,7 +4242,7 @@ def solve_3345333e(S, I):
     return O
 
 
-def solve_b190f7f5(S, I):
+def solve_b190f7f5(S, I, C):
     x1 = portrait_t(I)
     x2 = branch(x1, vsplit, hsplit)
     x3 = x2(I, TWO)
@@ -4259,7 +4259,7 @@ def solve_b190f7f5(S, I):
     return O
 
 
-def solve_caa06a1f(S, I):
+def solve_caa06a1f(S, I, C):
     x1 = asobject(I)
     x2 = shape_t(I)
     x3 = decrement(x2)
@@ -4285,7 +4285,7 @@ def solve_caa06a1f(S, I):
     return O
 
 
-def solve_e21d9049(S, I):
+def solve_e21d9049(S, I, C):
     x1 = asindices(I)
     x2 = leastcolor_t(I)
     x3 = objects(I, T, F, T)
@@ -4311,7 +4311,7 @@ def solve_e21d9049(S, I):
     return O
 
 
-def solve_d89b689b(S, I):
+def solve_d89b689b(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = f_ofcolor(I, EIGHT)
     x3 = sizefilter(x1, ONE)
@@ -4327,7 +4327,7 @@ def solve_d89b689b(S, I):
     return O
 
 
-def solve_746b3537(S, I):
+def solve_746b3537(S, I, C):
     x1 = chain(size, dedupe, first)
     x2 = x1(I)
     x3 = equality(x2, ONE)
@@ -4341,7 +4341,7 @@ def solve_746b3537(S, I):
     return O
 
 
-def solve_63613498(S, I):
+def solve_63613498(S, I, C):
     x1 = crop(I, ORIGIN, THREE_BY_THREE)
     x2 = f_ofcolor(x1, ZERO)
     x3 = asindices(x1)
@@ -4357,7 +4357,7 @@ def solve_63613498(S, I):
     return O
 
 
-def solve_06df4c85(S, I):
+def solve_06df4c85(S, I, C):
     x1 = partition(I)
     x2 = mostcolor_t(I)
     x3 = f_ofcolor(I, x2)
@@ -4383,7 +4383,7 @@ def solve_06df4c85(S, I):
     return O
 
 
-def solve_f9012d9b(S, I):
+def solve_f9012d9b(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = f_ofcolor(I, ZERO)
     x3 = lbind(contained, ZERO)
@@ -4409,7 +4409,7 @@ def solve_f9012d9b(S, I):
     return O
 
 
-def solve_4522001f(S, I):
+def solve_4522001f(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = first_f(x1)
     x3 = toindices(x2)
@@ -4435,7 +4435,7 @@ def solve_4522001f(S, I):
     return O
 
 
-def solve_a48eeaf7(S, I):
+def solve_a48eeaf7(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = outbox(x1)
     x3 = apply(initset, x2)
@@ -4450,7 +4450,7 @@ def solve_a48eeaf7(S, I):
     return O
 
 
-def solve_eb5a1d5d(S, I):
+def solve_eb5a1d5d(S, I, C):
     x1 = compose(dmirror_t, dedupe)
     x2 = x1(I)
     x3 = x1(x2)
@@ -4463,7 +4463,7 @@ def solve_eb5a1d5d(S, I):
     return O
 
 
-def solve_e179c5f4(S, I):
+def solve_e179c5f4(S, I, C):
     x1 = height_t(I)
     x2 = f_ofcolor(I, ONE)
     x3 = first(x2)
@@ -4490,7 +4490,7 @@ def solve_e179c5f4(S, I):
     return O
 
 
-def solve_228f6490(S, I):
+def solve_228f6490(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = colorfilter(x1, ZERO)
     x3 = rbind(bordering, I)
@@ -4517,7 +4517,7 @@ def solve_228f6490(S, I):
     return O
 
 
-def solve_995c5fa3(S, I):
+def solve_995c5fa3(S, I, C):
     x1 = hsplit(I, THREE)
     x2 = astuple(TWO, ONE)
     x3 = rbind(f_ofcolor, ZERO)
@@ -4544,7 +4544,7 @@ def solve_995c5fa3(S, I):
     return O
 
 
-def solve_d06dbe63(S, I):
+def solve_d06dbe63(S, I, C):
     x1 = f_ofcolor(I, EIGHT)
     x2 = center(x1)
     x3 = connect(ORIGIN, DOWN)
@@ -4571,7 +4571,7 @@ def solve_d06dbe63(S, I):
     return O
 
 
-def solve_36fdfd69(S, I):
+def solve_36fdfd69(S, I, C):
     x1 = upscale_t(I, TWO)
     x2 = objects(x1, T, T, T)
     x3 = colorfilter(x2, TWO)
@@ -4589,7 +4589,7 @@ def solve_36fdfd69(S, I):
     return O
 
 
-def solve_0a938d79(S, I):
+def solve_0a938d79(S, I, C):
     x1 = portrait_t(I)
     x2 = branch(x1, dmirror_t, identity)
     x3 = x2(I)
@@ -4610,7 +4610,7 @@ def solve_0a938d79(S, I):
     return O
 
 
-def solve_045e512c(S, I):
+def solve_045e512c(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = argmax_f(x1, size)
     x3 = remove_f(x2, x1)
@@ -4629,7 +4629,7 @@ def solve_045e512c(S, I):
     return O
 
 
-def solve_82819916(S, I):
+def solve_82819916(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = argmax_f(x1, size)
     x3 = remove_f(x2, x1)
@@ -4655,7 +4655,7 @@ def solve_82819916(S, I):
     return O
 
 
-def solve_99fa7670(S, I):
+def solve_99fa7670(S, I, C):
     x1 = shape_t(I)
     x2 = objects(I, T, F, T)
     x3 = rbind(shoot, RIGHT)
@@ -4683,7 +4683,7 @@ def solve_99fa7670(S, I):
     return O
 
 
-def solve_72322fa7(S, I):
+def solve_72322fa7(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = matcher(numcolors_f, ONE)
     x3 = sfilter_f(x1, x2)
@@ -4711,7 +4711,7 @@ def solve_72322fa7(S, I):
     return O
 
 
-def solve_855e0971(S, I):
+def solve_855e0971(S, I, C):
     x2 = frontiers(I)
     x3 = sfilter_f(x2, hline_o)
     x4 = size_f(x3)
@@ -4734,7 +4734,7 @@ def solve_855e0971(S, I):
     return O
 
 
-def solve_a78176bb(S, I):
+def solve_a78176bb(S, I, C):
     x1 = palette_t(I)
     x2 = objects(I, T, F, T)
     x3 = remove(ZERO, x1)
@@ -4762,7 +4762,7 @@ def solve_a78176bb(S, I):
     return O
 
 
-def solve_952a094c(S, I):
+def solve_952a094c(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = sizefilter(x1, ONE)
     x3 = argmax_f(x1, size)
@@ -4780,7 +4780,7 @@ def solve_952a094c(S, I):
     return O
 
 
-def solve_6d58a25d(S, I):
+def solve_6d58a25d(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = argmax_f(x1, size)
     x3 = remove_f(x2, x1)
@@ -4802,7 +4802,7 @@ def solve_6d58a25d(S, I):
     return O
 
 
-def solve_6aa20dc0(S, I):
+def solve_6aa20dc0(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = argmax_f(x1, numcolors_f)
     x3 = normalize(x2)
@@ -4831,7 +4831,7 @@ def solve_6aa20dc0(S, I):
     return O
 
 
-def solve_e6721834(S, I):
+def solve_e6721834(S, I, C):
     x1 = portrait_t(I)
     x2 = branch(x1, vsplit, hsplit)
     x3 = x2(I, TWO)
@@ -4860,7 +4860,7 @@ def solve_e6721834(S, I):
     return O
 
 
-def solve_447fd412(S, I):
+def solve_447fd412(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = argmax_f(x1, numcolors_f)
     x3 = normalize(x2)
@@ -4889,7 +4889,7 @@ def solve_447fd412(S, I):
     return O
 
 
-def solve_2bcee788(S, I):
+def solve_2bcee788(S, I, C):
     x1 = mostcolor_t(I)
     x2 = objects(I, T, F, T)
     x3 = replace(I, x1, THREE)
@@ -4919,7 +4919,7 @@ def solve_2bcee788(S, I):
     return O
 
 
-def solve_776ffc46(S, I):
+def solve_776ffc46(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = colorfilter(x1, FIVE)
     x3 = fork(equality, toindices, box)
@@ -4940,7 +4940,7 @@ def solve_776ffc46(S, I):
     return O
 
 
-def solve_f35d900a(S, I):
+def solve_f35d900a(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = palette_t(I)
     x3 = remove(ZERO, x2)
@@ -4964,7 +4964,7 @@ def solve_f35d900a(S, I):
     return O
 
 
-def solve_0dfd9992(S, I):
+def solve_0dfd9992(S, I, C):
     x1 = height_t(I)
     x2 = width_t(I)
     x3 = partition(I)
@@ -4994,7 +4994,7 @@ def solve_0dfd9992(S, I):
     return O
 
 
-def solve_29ec7d0e(S, I):
+def solve_29ec7d0e(S, I, C):
     x1 = height_t(I)
     x2 = width_t(I)
     x3 = partition(I)
@@ -5024,7 +5024,7 @@ def solve_29ec7d0e(S, I):
     return O
 
 
-def solve_36d67576(S, I):
+def solve_36d67576(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = argmax_f(x1, numcolors_f)
     x3 = astuple(TWO, FOUR)
@@ -5054,7 +5054,7 @@ def solve_36d67576(S, I):
     return O
 
 
-def solve_98cf29f8(S, I):
+def solve_98cf29f8(S, I, C):
     x1 = fgpartition(I)
     x2 = fork(multiply, height_f, width_f)
     x3 = fork(equality, size, x2)
@@ -5076,7 +5076,7 @@ def solve_98cf29f8(S, I):
     return O
 
 
-def solve_469497ad(S, I):
+def solve_469497ad(S, I, C):
     x1 = numcolors_t(I)
     x2 = decrement(x1)
     x3 = upscale_t(I, x2)
@@ -5098,7 +5098,7 @@ def solve_469497ad(S, I):
     return O
 
 
-def solve_39e1d7f9(S, I):
+def solve_39e1d7f9(S, I, C):
     x1 = fgpartition(I)
     x2 = objects(I, T, F, T)
     x3 = order(x1, height_f)
@@ -5132,7 +5132,7 @@ def solve_39e1d7f9(S, I):
     return O
 
 
-def solve_484b58aa(S, I):
+def solve_484b58aa(S, I, C):
     x1 = height_t(I)
     x2 = width_t(I)
     x3 = partition(I)
@@ -5163,7 +5163,7 @@ def solve_484b58aa(S, I):
     return O
 
 
-def solve_3befdf3e(S, I):
+def solve_3befdf3e(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = leastcolor_t(I)
     x3 = palette_t(I)
@@ -5193,7 +5193,7 @@ def solve_3befdf3e(S, I):
     return O
 
 
-def solve_9aec4887(S, I):
+def solve_9aec4887(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = argmin_f(x1, numcolors_f)
     x3 = other_f(x1, x2)
@@ -5219,7 +5219,7 @@ def solve_9aec4887(S, I):
     return O
 
 
-def solve_49d1d64f(S, I):
+def solve_49d1d64f(S, I, C):
     x1 = shape_t(I)
     x2 = add(x1, TWO)
     x3 = canvas(ZERO, x2)
@@ -5240,7 +5240,7 @@ def solve_49d1d64f(S, I):
     return O
 
 
-def solve_57aa92db(S, I):
+def solve_57aa92db(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = objects(I, T, F, T)
     x3 = lbind(lbind, colorcount_f)
@@ -5273,7 +5273,7 @@ def solve_57aa92db(S, I):
     return O
 
 
-def solve_aba27056(S, I):
+def solve_aba27056(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = mapply(toindices, x1)
     x3 = box(x2)
@@ -5307,7 +5307,7 @@ def solve_aba27056(S, I):
     return O
 
 
-def solve_f1cefba8(S, I):
+def solve_f1cefba8(S, I, C):
     x1 = palette_t(I)
     x2 = objects(I, F, F, T)
     x3 = f_ofcolor(I, ZERO)
@@ -5341,7 +5341,7 @@ def solve_f1cefba8(S, I):
     return O
 
 
-def solve_1e32b0e9(S, I):
+def solve_1e32b0e9(S, I, C):
     x1 = height_t(I)
     x2 = mostcolor_t(I)
     x3 = asobject(I)
@@ -5376,7 +5376,7 @@ def solve_1e32b0e9(S, I):
     return O
 
 
-def solve_28e73c20(S, I):
+def solve_28e73c20(S, I, C):
     x1 = width_t(I)
     x2 = astuple(ONE, TWO)
     x3 = astuple(TWO, TWO)
@@ -5411,7 +5411,7 @@ def solve_28e73c20(S, I):
     return O
 
 
-def solve_4c5c2cf0(S, I):
+def solve_4c5c2cf0(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = objects(I, F, T, T)
     x3 = first_f(x2)
@@ -5449,7 +5449,7 @@ def solve_4c5c2cf0(S, I):
     return O
 
 
-def solve_508bd3b6(S, I):
+def solve_508bd3b6(S, I, C):
     x1 = width_t(I)
     x2 = objects(I, T, T, T)
     x3 = argmin_f(x2, size)
@@ -5485,7 +5485,7 @@ def solve_508bd3b6(S, I):
     return O
 
 
-def solve_6d0160f0(S, I):
+def solve_6d0160f0(S, I, C):
     x1 = f_ofcolor(I, FOUR)
     x2 = first(x1)
     x3 = first(x2)
@@ -5521,7 +5521,7 @@ def solve_6d0160f0(S, I):
     return O
 
 
-def solve_f8a8fe49(S, I):
+def solve_f8a8fe49(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = replace(I, FIVE, ZERO)
     x3 = colorfilter(x1, TWO)
@@ -5557,7 +5557,7 @@ def solve_f8a8fe49(S, I):
     return O
 
 
-def solve_d07ae81c(S, I):
+def solve_d07ae81c(S, I, C):
     x1 = objects(I, T, F, F)
     x2 = sizefilter(x1, ONE)
     x3 = apply(color, x2)
@@ -5593,7 +5593,7 @@ def solve_d07ae81c(S, I):
     return O
 
 
-def solve_6a1e5592(S, I):
+def solve_6a1e5592(S, I, C):
     x1 = width_t(I)
     x2 = objects(I, T, F, T)
     x3 = astuple(FIVE, x1)
@@ -5630,7 +5630,7 @@ def solve_6a1e5592(S, I):
     return O
 
 
-def solve_0e206a2e(S, I):
+def solve_0e206a2e(S, I, C):
     x1 = palette_t(I)
     x2 = objects(I, F, F, T)
     x3 = rbind(greater, ONE)
@@ -5669,7 +5669,7 @@ def solve_0e206a2e(S, I):
     return O
 
 
-def solve_d22278a0(S, I):
+def solve_d22278a0(S, I, C):
     x1 = asindices(I)
     x2 = objects(I, T, F, T)
     x3 = fork(multiply, sign, identity)
@@ -5708,7 +5708,7 @@ def solve_d22278a0(S, I):
     return O
 
 
-def solve_4290ef0e(S, I):
+def solve_4290ef0e(S, I, C):
     x1 = mostcolor_t(I)
     x2 = fgpartition(I)
     x3 = objects(I, T, F, T)
@@ -5757,7 +5757,7 @@ def solve_4290ef0e(S, I):
     return O
 
 
-def solve_50846271(S, I):
+def solve_50846271(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = prapply(connect, x1, x1)
     x3 = lbind(greater, SIX)
@@ -5800,7 +5800,7 @@ def solve_50846271(S, I):
     return O
 
 
-def solve_b527c5c6(S, I):
+def solve_b527c5c6(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = matcher(first, TWO)
     x3 = rbind(sfilter, x2)
@@ -5844,7 +5844,7 @@ def solve_b527c5c6(S, I):
     return O
 
 
-def solve_150deff5(S, I):
+def solve_150deff5(S, I, C):
     x1 = canvas(FIVE, TWO_BY_TWO)
     x2 = asobject(x1)
     x3 = occurrences(I, x2)
@@ -5888,7 +5888,7 @@ def solve_150deff5(S, I):
     return O
 
 
-def solve_b7249182(S, I):
+def solve_b7249182(S, I, C):
     x1 = objects(I, T, F, T)
     x2 = merge_f(x1)
     x3 = portrait_f(x2)
@@ -5932,7 +5932,7 @@ def solve_b7249182(S, I):
     return O
 
 
-def solve_9d9215db(S, I):
+def solve_9d9215db(S, I, C):
     x1 = rot90(I)
     x2 = rot180(I)
     x3 = rot270(I)
@@ -5977,7 +5977,7 @@ def solve_9d9215db(S, I):
     return O
 
 
-def solve_6855a6e4(S, I):
+def solve_6855a6e4(S, I, C):
     x1 = fgpartition(I)
     x2 = rot90(I)
     x3 = colorfilter(x1, TWO)
@@ -6022,7 +6022,7 @@ def solve_6855a6e4(S, I):
     return O
 
 
-def solve_264363fd(S, I):
+def solve_264363fd(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = argmin_f(x1, size)
     x3 = normalize(x2)
@@ -6070,7 +6070,7 @@ def solve_264363fd(S, I):
     return O
 
 
-def solve_7df24a62(S, I):
+def solve_7df24a62(S, I, C):
     x1 = height_t(I)
     x2 = width_t(I)
     x3 = f_ofcolor(I, ONE)
@@ -6119,7 +6119,7 @@ def solve_7df24a62(S, I):
     return O
 
 
-def solve_f15e1fac(S, I):
+def solve_f15e1fac(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = portrait_f(x1)
     x3 = branch(x2, identity, dmirror_t)
@@ -6168,7 +6168,7 @@ def solve_f15e1fac(S, I):
     return O
 
 
-def solve_234bbc79(S, I):
+def solve_234bbc79(S, I, C):
     x1 = objects(I, F, F, T)
     x2 = rbind(other, FIVE)
     x3 = compose(x2, palette_f)
@@ -6215,7 +6215,7 @@ def solve_234bbc79(S, I):
     return O
 
 
-def solve_22233c11(S, I):
+def solve_22233c11(S, I, C):
     x1 = objects(I, T, T, T)
     x2 = rbind(upscale_f, TWO)
     x3 = chain(invert, halve, shape_f)
@@ -6231,7 +6231,7 @@ def solve_22233c11(S, I):
     return O
 
 
-def solve_2dd70a9a(S, I):
+def solve_2dd70a9a(S, I, C):
     x1 = f_ofcolor(I, TWO)
     x2 = f_ofcolor(I, THREE)
     x3 = vline_i(x1)
@@ -6282,7 +6282,7 @@ def solve_2dd70a9a(S, I):
     return O
 
 
-def solve_a64e4611(S, I):
+def solve_a64e4611(S, I, C):
     x1 = asindices(I)
     x2 = fork(product, identity, identity)
     x3 = lbind(canvas, ZERO)
@@ -6334,7 +6334,7 @@ def solve_a64e4611(S, I):
     return O
 
 
-def solve_7837ac64(S, I):
+def solve_7837ac64(S, I, C):
     x1 = fgpartition(I)
     x2 = argmax_f(x1, size)
     x3 = remove_f(x2, x1)
@@ -6376,7 +6376,7 @@ def solve_7837ac64(S, I):
     return O
 
 
-def solve_a8c38be5(S, I):
+def solve_a8c38be5(S, I, C):
     x1 = replace(I, FIVE, ZERO)
     x2 = objects(x1, T, F, T)
     x3 = apply(normalize, x2)
@@ -6408,7 +6408,7 @@ def solve_a8c38be5(S, I):
     return O
 
 
-def solve_b775ac94(S, I):
+def solve_b775ac94(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = lbind(rbind, equality)
     x3 = rbind(compose, first)
@@ -6469,7 +6469,7 @@ def solve_b775ac94(S, I):
     return O
 
 
-def solve_97a05b5b(S, I):
+def solve_97a05b5b(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = argmax_f(x1, size)
     x3 = subgrid(x2, I)
@@ -6533,7 +6533,7 @@ def solve_97a05b5b(S, I):
     return O
 
 
-def solve_3e980e27(S, I):
+def solve_3e980e27(S, I, C):
     x1 = objects(I, F, T, T)
     x2 = astuple(TEN, TEN)
     x3 = invert(x2)
