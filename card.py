@@ -275,18 +275,31 @@ class Code:
 
                 if random.randint(0, 1) == 0:
                     new_func_name = new_items[0].strip()
+
+                    new_hints = get_hints(new_func_name)
+                    new_hint = new_hints[0] if new_hints else None
+
+                    if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
+                        has_mutation = True
+                        pattern = rf'\bt{t_n}\b'
+                        self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+
                 else:
                     # XXX Pick a random function name from dsl.py
                     #     If promising, make more structural
                     new_func_name = random.choice(DSL_FUNCNAMES)
+                    print_l(f'Random function name {new_func_name} for t{t_offset} in {old_call}')
 
-                new_hints = get_hints(new_func_name)
-                new_hint = new_hints[0] if new_hints else None
+                    new_hints = get_hints(new_func_name)
+                    new_hint = new_hints[0] if new_hints else None
+                    print_l(f'{old_hint = } - {new_hints = }')
 
-                if new_hint == old_hint or old_hint is None:
-                    has_mutation = True
-                    pattern = rf'\bt{t_n}\b'
-                    self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+                    if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
+                        has_mutation = True
+                        pattern = rf'\bt{t_n}\b'
+                        self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+                        print_l(f'- Mutated {old_call} to {self.t_call[self.t_num]}')
+
         return has_mutation
 
 
