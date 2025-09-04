@@ -156,6 +156,9 @@ while date && [ $STOP -eq 0 ]; do
       fi
     done
 
+    # Remove empty sub-folders in differ_dir
+    find differ_dir -type d -empty -delete
+
     # Remove .def files in differ_def if corresponding .py file does not exist in differ_md5
     find differ_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
       base=$(basename "$def_file" .def)
