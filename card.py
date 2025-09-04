@@ -331,6 +331,13 @@ class Code:
                 None
             ]:
             print_l(f'{old_hint = }')
+        elif self.t_num > 1 and random.random() < 0.1:
+            # Replace with a t variable
+            t_n = self.t_num - 1
+            t_offset = random.randint(1, t_n)
+            old_args[i] = f't{t_offset}'
+            print_l(f'- Replacing {old_arg} with {old_args[i]} in {old_call}')
+
         if old_args[i] != old_arg:
             has_mutation = True
             pattern = rf'\b{old_arg}\b'
