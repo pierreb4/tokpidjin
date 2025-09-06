@@ -116,7 +116,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
     o_score = O_Score()
     s_score = {}
-    d_score = D_Score()
+    # d_score = D_Score()
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
@@ -483,8 +483,7 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
     if os.path.isfile(fluff_log_path):
         os.remove(fluff_log_path)
 
-    d_score = D_Score()
-    d_score_sum = {}
+    # d_score_sum = {}
     to_sum = 0
     prof = defaultdict(float) if enable_timing else None
     if prof is not None:
@@ -494,6 +493,7 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
         if hasattr(expand_solver_module, 'set_profiler'):
             expand_solver_module.set_profiler(prof)
     for task_i, task_id in enumerate(do_list):
+        d_score = D_Score()
         loop_start = timer() if prof is not None else None
         timed_out = run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout, prof=prof)
         if prof is not None:
