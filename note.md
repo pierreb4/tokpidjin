@@ -93,3 +93,31 @@
 | `git revert <commit-hash>`                                     |
 |  or  N/A (safe for shared branches)                            |
 |----------------------------------------------------------------|
+
+
+solver_dir/solver_{task_id}/{task_o_score}/{t_log} -> solver_md5
+differ_dir/solver_{task_id}/{task_s_score}/{t_log} -> differ_md5
+
+
+Scoring:
+
+task_o_score: number of tasks solved by solver
+task_s_score: per task, number of tasks differ sees improving
+
+- task_1 -> task_o_score_1 + time_1 -> solver_md5_1.py
+- task_1 -> task_s_score_1 + time_1 -> solver_md5_1 -> differ_md5_1.py
+- task_1 -> task_s_score_2 + time_1 -> solver_md5_1 -> differ_md5_2.py
+- task_1 -> task_s_score_3 + time_1 -> solver_md5_1 -> differ_md5_3.py
+- ...
+
+- task_1 -> task_o_score_2 + time_2 -> solver_md5_2.py
+- differ_4
+- differ_5
+- differ_6
+- ...
+
+- task_1 -> task_o_score_3 + time_3 -> solver_md5_3.py
+- differ_1
+- differ_4
+- differ_7
+- ...

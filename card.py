@@ -615,9 +615,9 @@ def batt(task_id, S, I, C, log_path):
 
                 get_O = add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
                 if get_O:
-                    # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
-                    # differs.sub_I(I=f't{code.t_num}')
-                    differs.sub_I(I=f'I')
+                    # XXX Big oops here, don't sub with I ?! :/
+                    # differs.sub_I(I=f'I')
+                    differs.sub_I(I=f't{code.t_num}')
                     differs.add_lines(code, uses, task_id=task_id)
 
 
