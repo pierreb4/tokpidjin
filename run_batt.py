@@ -380,7 +380,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
         for score_type in ['iz', 'zo']:
             task_s_score = s_score[name][score_type].get(sol_solver_id)
-            differ_score = f'differ_dir/solve_{task_id}/{task_s_score}/{t_log}'
+            differ_score = f'differ_dir/solve_{task_id}/{score_type}/{task_s_score}/{t_log}'
             differ_link = f'{differ_score}/{solver_md5}/{md5_hash}.py'
             ensure_dir(f'{differ_score}/{solver_md5}')
             symlink(differ_md5_path, differ_link)
