@@ -148,16 +148,16 @@ while date && [ $STOP -eq 0 ]; do
     # Remove empty sub-folders from solver_dir
     find solver_dir -type d -empty -delete
 
-    # Remove differ_dir folders if corresponding .py file does not exist in solver_md5
-    find differ_dir -maxdepth 1 -type d ! -path differ_dir -print0 | while IFS= read -r -d '' dir_name; do
-      base=$(basename "$dir_name")
-      solve_file="solver_md5/${base}.py"
-      differ_dir="differ_dir/${base}"
-      if [ ! -f "$solve_file" ]; then
-        echo rm -r "$differ_dir"
-        rm -r "$differ_dir"
-      fi
-    done
+    # # Remove differ_dir folders if corresponding .py file does not exist in solver_md5
+    # find differ_dir -maxdepth 1 -type d ! -path differ_dir -print0 | while IFS= read -r -d '' dir_name; do
+    #   base=$(basename "$dir_name")
+    #   solve_file="solver_md5/${base}.py"
+    #   differ_dir="differ_dir/${base}"
+    #   if [ ! -f "$solve_file" ]; then
+    #     echo rm -r "$differ_dir"
+    #     rm -r "$differ_dir"
+    #   fi
+    # done
 
     # Remove .def files in differ_def if corresponding .py file does not exist in differ_md5
     find differ_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
