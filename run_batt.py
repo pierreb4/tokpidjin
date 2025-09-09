@@ -217,6 +217,8 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
     if prof is not None:
         prof['run_batt.check_batt'] += timer() - prof_call_start
 
+    print_l(f'-- {task_id} - {task_i} done - {len(all_o)} solutions found')
+
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
     differ_path = None
