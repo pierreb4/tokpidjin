@@ -80,7 +80,9 @@ while date && [ $STOP -eq 0 ]; do
     # unbuffer timeout 900s python run_batt.py -i -t $RND_TIMEOUT -c 1200 \
     #     | tee batt.log
 
-    unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
+    # unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
+    #     -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
+    unbuffer timeout 120s python run_batt.py -i -t $TIMEOUT -c $COUNT \
         -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
   fi
 
