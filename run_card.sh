@@ -83,8 +83,8 @@ while date && [ $STOP -eq 0 ]; do
     # unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
     #     -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
 
-    # Limit memory to 4GB
-    mem_limit=$((4 * 1024 * 1024))
+    # Limit memory to 2GB
+    mem_limit=$((2 * 1024 * 1024))
     ulimit -v $mem_limit
     unbuffer timeout 300s python run_batt.py -i -t $TIMEOUT -c $COUNT \
         -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
