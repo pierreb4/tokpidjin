@@ -231,7 +231,8 @@ def get_solver_source(task_id, imports=None, best_only=False):
             weights = []
             best_o_score = -1
             best_item = None
-            file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
+            # file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9]*/[0-9a-f]*.py')
+            file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
             if not file_paths:
                 continue
             for file_path in file_paths:
