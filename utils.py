@@ -30,8 +30,10 @@ from timeit import default_timer as timer
 import solvers_pre
 import solvers_evo
 
-Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 's_score', 't_score'])
-Differ = namedtuple('Differ', ['name', 'path', 'source', 'd_score'])
+# Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 's_score', 't_score'])
+# Differ = namedtuple('Differ', ['name', 'path', 'source', 'd_score'])
+Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 't_score'])
+Differ = namedtuple('Differ', ['name', 'path', 'source', 'score_type', 's_score', 't_score'])
 
 Path('solvers_lnk.py').touch()
 import solvers_lnk
@@ -219,7 +221,8 @@ def get_solver_source(task_id, imports=None, best_only=False):
 
     solve_header = 'from dsl import *\nfrom constants import *\n\n'
     solve_identity = f'{solve_header}def solve(S, I, C):\n    O = identity(I)\n    return O\n'
-    best_solver = Solver('solve', 'solve_identity.py', solve_identity, 0, 0, 999)
+    # best_solver = Solver('solve', 'solve_identity.py', solve_identity, 0, 0, 999)
+    best_solver = Solver('solve', 'solve_identity.py', solve_identity, 0, 999)
 
     for imp in imports:
         if imp == solvers_pre and task_id in BAD_SOLVERS:
@@ -238,20 +241,21 @@ def get_solver_source(task_id, imports=None, best_only=False):
             for file_path in file_paths:
                 sections = file_path.split('/')
                 o_score = int(sections[2])
-                s_score = int(sections[3])
-                t_score = int(sections[4])
+                # s_score = int(sections[3])
+                # t_score = int(sections[4])
+                t_score = int(sections[3])
 
-                curr_solver = Solver('solve', file_path, None, o_score, s_score, t_score)
-                # curr_solver = Solver(f'solve_{task_id}', file_path, None, o_score, s_score, t_score)
+                # curr_solver = Solver('solve', file_path, None, o_score, s_score, t_score)
+                curr_solver = Solver('solve', file_path, None, o_score, t_score)
 
                 if curr_solver.o_score > best_o_score:
                     best_o_score = curr_solver.o_score
-                    best_s_score = curr_solver.s_score
-                    best_solver = curr_solver
-                elif curr_solver.o_score == best_o_score:
-                    if curr_solver.s_score > best_solver.s_score:
-                        best_s_score = curr_solver.s_score
-                        best_solver = curr_solver
+                #     best_s_score = curr_solver.s_score
+                #     best_solver = curr_solver
+                # elif curr_solver.o_score == best_o_score:
+                #     if curr_solver.s_score > best_solver.s_score:
+                #         best_s_score = curr_solver.s_score
+                #         best_solver = curr_solver
 
                 solver_list.append(curr_solver)
                 weights.append(curr_solver.o_score)
@@ -282,10 +286,13 @@ def get_solver_source(task_id, imports=None, best_only=False):
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
                 # print_l(f'Found solver: {func_name} in {imp.__name__}')
+                # return Solver(func_name, imp.__name__, f'{solve_header}{inspect.getsource(solver)}', 
+                #         None, None, None)
                 return Solver(func_name, imp.__name__, f'{solve_header}{inspect.getsource(solver)}', 
-                        None, None, None)
+                        None, None)
 
-    return Solver('solve', None, solve_identity, 0, 0, 999)
+    # return Solver('solve', None, solve_identity, 0, 0, 999)
+    return Solver('solve', None, solve_identity, 0, 999)
 
 
 def get_differs(import_names, best_only=False):
@@ -296,13 +303,13 @@ def get_differs(import_names, best_only=False):
             for name in dir(differ_module):
                 if name.startswith('differ_'):
                     differ = getattr(differ_module, name)
-                    differs[name] = Differ(name, imp_name, inspect.getsource(differ), None)
+                    differs[name] = Differ(name, imp_name, inspect.getsource(differ), None, 0, 999)
         else:
             new_imp_name = f'differ_md5.{imp_name}'
             differ_module = importlib.import_module(new_imp_name)
             differ = getattr(differ_module, 'differ')
             name = f'differ_{imp_name}'
-            differs[name] = Differ(name, imp_name, inspect.getsource(differ), None)
+            differs[name] = Differ(name, imp_name, inspect.getsource(differ), None, 0, 999)
 
 
     return differs
