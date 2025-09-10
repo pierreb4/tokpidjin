@@ -331,7 +331,7 @@ class Code:
                 None
             ]:
             print_l(f'{old_hint = }')
-        elif self.t_num > 1 and random.random() < 0.01:
+        elif self.t_num > 1 and random.random() < 0.1:
             if old_hint == 'Callable':
                 old_args[i] = random.choice(DSL_FUNCNAMES)
             else:
