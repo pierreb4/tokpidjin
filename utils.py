@@ -251,7 +251,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
                 if curr_solver.o_score > best_o_score:
                     best_o_score = curr_solver.o_score
                 #     best_s_score = curr_solver.s_score
-                #     best_solver = curr_solver
+                    best_solver = curr_solver
                 # elif curr_solver.o_score == best_o_score:
                 #     if curr_solver.s_score > best_solver.s_score:
                 #         best_s_score = curr_solver.s_score
