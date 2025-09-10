@@ -286,22 +286,22 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                         [ex['input'], ex['output']],
                         titles=['Input', 'Expected Output'])
         except Exception as e:
-            # definition = definitions.get(solve_func[task_id], "Solver not found")
-            # lines = len(definition.split('\n')) if isinstance(definition, str) else 0
-            # if quiet:
-            #     print_l(f"Error in {task_id}: {lines} lines")
-            # else:
-            #     # Include source location in exception message
-            #     exc_type, exc_obj, exc_tb = sys.exc_info()
-            #     frame = traceback.extract_tb(exc_tb)[-1]
-            #     filename = frame.filename.split('/')[-1] if frame else "unknown"
-            #     lineno = frame.lineno if frame else "unknown"
+            definition = definitions.get(solve_func[task_id], "Solver not found")
+            lines = len(definition.split('\n')) if isinstance(definition, str) else 0
+            if quiet:
+                print_l(f"Error in {task_id}: {lines} lines")
+            else:
+                # Include source location in exception message
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                frame = traceback.extract_tb(exc_tb)[-1]
+                filename = frame.filename.split('/')[-1] if frame else "unknown"
+                lineno = frame.lineno if frame else "unknown"
 
-            #     print_l(f'Exception in {filename}:{lineno}: {e}')
-            #     print_l(f'Error in {task_id}:\n{definition}')
+                print_l(f'Exception in {filename}:{lineno}: {e}')
+                print_l(f'Error in {task_id}:\n{definition}')
 
-            #     show_exception(f'{task_id = }', e)
-            #     print("traceback: ", traceback.format_exc())
+                show_exception(f'{task_id = }', e)
+                print("traceback: ", traceback.format_exc())
 
             if specific_id:  # Show detailed error for specific task_id
                 print_l(f"Error: {type(e).__name__}: {str(e)}")
