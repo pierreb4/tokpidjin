@@ -405,6 +405,8 @@ class Differs:
         all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
         add_list = random.sample(all_list, min(20, len(all_list)))
         differ_list = ['differs'] + add_list
+
+        # TODO Maybe adjust get_differs to get the best differs 
         self.differs = get_differs(differ_list, best_only=True)
 
         for differ_name, differ in self.differs.items():
