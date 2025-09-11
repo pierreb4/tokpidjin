@@ -221,7 +221,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
-    differ_path = None
+    solver_md5 = None
     do_print = False
     for solution in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = solution
