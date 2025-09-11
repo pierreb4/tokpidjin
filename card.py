@@ -398,11 +398,18 @@ def build_differ_body(t_call, ret_t, done):
 
 class Differs:
     # def __init__(self, freeze_differs=False, I='I'):
-    def __init__(self, freeze_differs=False):
+    def __init__(self, task_ids, freeze_differs=False):
         self.freeze_differs = freeze_differs
         self.init_equals = {}
 
-        all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
+        # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
+        all_list = []
+        for task_id in task_ids:
+            differ_dir = f'differ_dir/solve_{task_id}/[iz]*/[0-9]*/[0-9]*/[0-9a-f]*/[0-9a-f]*.py'
+            file_paths = glob.glob(differ_dir)
+            all_list += [f[:-3] for f in file_paths if f.endswith('.py')]
+
+        # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
         add_list = random.sample(all_list, min(20, len(all_list)))
         differ_list = ['differs'] + add_list
 
@@ -569,6 +576,9 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
         weighted_tasks.sort(key=lambda x: x[1], reverse=True)
         solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
 
+    task_ids = list(solvers.keys())
+    differs = Differs(task_ids, freeze_differs=args.freeze_differs)
+
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
     seed = time.time()
     random.seed(seed)
@@ -645,7 +655,8 @@ if __name__ == "__main__":
                         help="File name to write the batt code to (default: batt.py)")
     args = parser.parse_args()
 
-    differs = Differs(freeze_differs=args.freeze_differs)
+    # differs = Differs(freeze_differs=args.freeze_differs)
+    differs = None
 
     main(args.count, args.task_id, args.freeze_solvers, args.freeze_differs, args.file_name)
 
