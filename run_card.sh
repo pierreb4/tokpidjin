@@ -134,9 +134,8 @@ while date && [ $STOP -eq 0 ]; do
     # done
 
     # for f in solver_dir/solve_*; do bash clean_solver.sh $f; done
-    find solver_dir -maxdepth 1 -type f -name 'solve_*' \
+    find solver_dir -maxdepth 1 -type d -name 'solve_*' \
         -exec bash clean_solve.sh {} \;
-
 
     # Remove .def files in solver_def if corresponding .py file does not exist in solver_md5
     find solver_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
@@ -173,7 +172,7 @@ while date && [ $STOP -eq 0 ]; do
     # done
 
     # Note maxdepth 2, because of iz and zo sub-folders
-    find differ_dir -maxdepth 2 -type f -name 'solve_*' \
+    find differ_dir -maxdepth 2 -type d -name 'solve_*' \
         -exec bash clean_solve.sh {} \;
 
     # Remove .def files in differ_def if corresponding .py file does not exist in differ_md5
