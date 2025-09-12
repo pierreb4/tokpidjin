@@ -405,7 +405,8 @@ class Differs:
         # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
         all_list = []
         for task_id in task_ids:
-            differ_dir = f'differ_dir/solve_{task_id}/[iz]*/[0-9]*/[0-9]*/[0-9a-f]*/[0-9a-f]*.py'
+            # differ_dir = f'differ_dir/solve_{task_id}/[iz]*/[0-9]*/[0-9]*/[0-9a-f]*/[0-9a-f]*.py'
+            differ_dir = f'differ_dir/[iz]*/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py'
             file_paths = glob.glob(differ_dir)
             all_list += [f[:-3] for f in file_paths if f.endswith('.py')]
 

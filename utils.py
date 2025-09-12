@@ -294,11 +294,12 @@ def get_differs(import_names, best_only=False):
             # differs[name] = Differ(name, imp_name, inspect.getsource(differ), None, 0, 999)
 
             sections = imp_name.split('/')
-            score_type = sections[2]
+            score_type = sections[1]  # 'iz' or 'zo'
             s_score = int(sections[3])
             t_score = int(sections[4])
-            solver_md5 = sections[5]
-            differ_md5 = sections[6]
+            # solver_md5 = sections[5]
+            # differ_md5 = sections[6]
+            differ_md5 = sections[5]
 
             differ_module = importlib.import_module(f'differ_md5.{differ_md5}')
             differ = getattr(differ_module, 'differ')

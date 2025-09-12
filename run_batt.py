@@ -221,7 +221,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
-    solver_md5 = None
+    # solver_md5 = None
     do_print = False
     for solution in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = solution
@@ -272,7 +272,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
         # Where differs corresponding to this solver will go
-        solver_md5 = f'{md5_hash}'
+        # solver_md5 = f'{md5_hash}'
 
         check_start = timer()
         if prof is not None:
@@ -331,8 +331,8 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         print()
 
     # No solutions found
-    if solver_md5 is None:
-        return False, d_score
+    # if solver_md5 is None:
+    #     return False, d_score
 
     # TODO Build and save the relevant differs
     for name, last_t in d_score.last_t.items():
@@ -382,9 +382,12 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
         for score_type in ['iz', 'zo']:
             task_s_score = s_score[name][score_type].get(sol_solver_id)
-            differ_score = f'differ_dir/solve_{task_id}/{score_type}/{task_s_score}/{t_log}'
-            differ_link = f'{differ_score}/{solver_md5}/{md5_hash}.py'
-            ensure_dir(f'{differ_score}/{solver_md5}')
+            # differ_score = f'differ_dir/solve_{task_id}/{score_type}/{task_s_score}/{t_log}'
+            # differ_link = f'{differ_score}/{solver_md5}/{md5_hash}.py'
+            # ensure_dir(f'{differ_score}/{solver_md5}')
+            differ_score = f'differ_dir/{score_type}/solve_{task_id}/{task_s_score}/{t_log}'
+            ensure_dir(differ_score)
+            differ_link = f'{differ_score}/{md5_hash}.py'
             symlink(differ_md5_path, differ_link)
 
     # No timeout
