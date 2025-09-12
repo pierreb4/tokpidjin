@@ -403,10 +403,10 @@ class Differs:
         self.init_equals = {}
 
         all_list = { 'iz': [], 'zo': [] }
-        file_list = []
-        weights = []
         differ_list = ['differs']
         for score_type in ['iz', 'zo']:
+            file_list = []
+            weights = []
             for task_id in task_ids:
                 differ_dir = f'differ_dir/{score_type}/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py'
                 file_paths = glob.glob(differ_dir)
@@ -421,10 +421,12 @@ class Differs:
                     weights.append(s_score)
 
                 if sum(weights) > 0:
-                    select_differ = random.choices(file_list, weights=weights, k=1)[0]
+                    select_differ = random.choices(file_list, weights=weights, k=1)
+                else:
+                    select_differ = []
 
                 # all_list += [f[:-3] for f in file_paths if f.endswith('.py')]
-                all_list[score_type] += [f[:-3] for f in file_list if f.endswith('.py')]
+                all_list[score_type] += [f[:-3] for f in select_differ if f.endswith('.py')]
 
             # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
             add_list = random.sample(all_list[score_type], min(20, len(all_list[score_type])))
