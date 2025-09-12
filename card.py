@@ -402,17 +402,33 @@ class Differs:
         self.freeze_differs = freeze_differs
         self.init_equals = {}
 
-        # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
-        all_list = []
-        for task_id in task_ids:
-            # differ_dir = f'differ_dir/solve_{task_id}/[iz]*/[0-9]*/[0-9]*/[0-9a-f]*/[0-9a-f]*.py'
-            differ_dir = f'differ_dir/[iz]*/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py'
-            file_paths = glob.glob(differ_dir)
-            all_list += [f[:-3] for f in file_paths if f.endswith('.py')]
+        all_list = { 'iz': [], 'zo': [] }
+        file_list = []
+        weights = []
+        differ_list = ['differs']
+        for score_type in ['iz', 'zo']:
+            for task_id in task_ids:
+                differ_dir = f'differ_dir/{score_type}/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py'
+                file_paths = glob.glob(differ_dir)
+                if not file_paths:
+                    continue
+                for file_path in file_paths:
+                    sections = file_path.split('/')
+                    s_score = int(sections[3])
+                    # t_score = int(sections[4])
 
-        # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
-        add_list = random.sample(all_list, min(20, len(all_list)))
-        differ_list = ['differs'] + add_list
+                    file_list.append(file_path)
+                    weights.append(s_score)
+
+                if sum(weights) > 0:
+                    select_differ = random.choices(file_list, weights=weights, k=1)[0]
+
+                # all_list += [f[:-3] for f in file_paths if f.endswith('.py')]
+                all_list[score_type] += [f[:-3] for f in file_list if f.endswith('.py')]
+
+            # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
+            add_list = random.sample(all_list[score_type], min(20, len(all_list[score_type])))
+            differ_list += add_list
 
         # TODO Maybe adjust get_differs to get the best differs 
         self.differs = get_differs(differ_list, best_only=True)
