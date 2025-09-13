@@ -29,13 +29,15 @@ import traceback
 import logging
 
 import arc_types
-import constants
-import dsl
+# import constants
+# import dsl
 import tests
 import solvers_pre
 
 from grid import *
 from utils import *
+from dsl import *
+from constants import *
 
 
 def get_data(train=True):
@@ -73,7 +75,7 @@ def run_dsl_tests(dsl_module, test_module, quiet=False):
     """ test DSL primitives """
     dsl_functions = get_functions(dsl_module.__file__)
     test_functions = get_functions(test_module.__file__)
-    expected = set([f'test_{f}' for f in dsl_functions])
+    expected = {f'test_{f}' for f in dsl_functions}
     assert set(test_functions) == expected
     for fun in test_functions:
         getattr(test_module, fun)()
@@ -179,7 +181,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
 
     # Filter data and definitions for specific task_id if provided
     md5_hash = None
-    solve_func = {} 
+    solve_func = {}
     if specific_id:
         # if task_id includes 'solve_', strip it
         if specific_id.startswith('solve_'):
@@ -216,20 +218,38 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
     correct_train = 0
     correct_test = 0
     for task_id in iter_keys:
+        if not quiet:
+            print_l(f'Testing solver for task_id: {task_id}')
+
         task = data['train'][task_id] + data['test'][task_id]
         num_train = len(data['train'][task_id])
         num_test = len(data['test'][task_id])
 
-        solver_source = get_solver_source(task_id, imports=None, best_only=True)
+        # imports = None if quiet else [solvers_pre, solvers_dir]
+        imports = [solvers_dir, solvers_pre]
+        solver_source = get_solver_source(task_id, imports=imports, best_only=True)
+
         if solver_source.path is None:
-            # print_l(f"No solver path found for {task_id}, skipping...")
+            if not quiet:
+                print_l(f"No solver path found for {task_id}, skipping...")
+                # print_l(f'{solver_source = }')
             continue
 
-        module_name = solver_source.path[:-3].replace('/', '.')
-        # print_l(f'{module_name = }')
-        solver_module = importlib.import_module(module_name)
-        solver = solver_module.solve
-        # print(f"Loaded solver for {task_id} from {solver_source.path}")
+        # if not quiet:
+        #     print_l(f'{solver_source = }')
+
+        if solver_source.path.endswith('.py'):
+            module_name = solver_source.path[:-3].replace('/', '.')
+            # print_l(f'{module_name = }')
+            solver_module = importlib.import_module(module_name)
+            solver = solver_module.solve
+            # print(f"Loaded solver for {task_id} from {solver_source.path}")
+        else:
+            solver_module = importlib.import_module('solvers_pre')
+            solver = getattr(solver_module, solver_source.name)
+            # Ensure solver has access to DSL functions by updating its globals
+            solver.__globals__.update(globals())
+            # print_l(f'{solver.__name__ = }')
 
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
@@ -257,8 +277,9 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                 error_msg = str(e)
                 # Extract the undefined name from the error message
                 import re
-                match = re.search(r"name '([^']+)' is not defined", error_msg)
-                if match:
+                if match := re.search(
+                    r"name '([^']+)' is not defined", error_msg
+                ):
                     missing_func = match[1]
                     # Try to patch with specialized variants (suffix _t, _f, etc.)
                     patched = patch_missing_function(solvers_module, missing_func, task_id, ex['input'], quiet, update)
@@ -275,6 +296,9 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             #     print_l(f'Error in {task_id}:\n{definition}')
             if specific_id:  # Show detailed error for specific task_id
                 print_l(f"NameError: {str(e)}")
+                print_l(f"Solver globals has fgpartition: {'fgpartition' in solver.__globals__}")
+                print_l(f"Current globals has fgpartition: {'fgpartition' in globals()}")
+                print_l(f"Solver module: {solver.__module__}")
                 try:
                     # Try to show output anyway for debugging
                     output = solver(S, ex['input'], None)
@@ -338,87 +362,86 @@ def patch_missing_function(solvers_module, missing_func, task_id, test_input, qu
     import types
     import dsl
     import re
-    
+
     solver_name = f'solve_{task_id}'
     solver_func = getattr(solvers_module, solver_name)
     original_code = inspect.getsource(solver_func)
-    
+
     # Find potential specialized variants (_t, _f, _i, _o, etc.)
     variants = []
-    for name in dir(dsl):
-        # Check if this is a variant of the missing function
-        if name.startswith(f"{missing_func}_") and callable(getattr(dsl, name)):
-            variants.append(name)
-    
+    variants.extend(
+        name
+        for name in dir(dsl)
+        if name.startswith(f"{missing_func}_") and callable(getattr(dsl, name))
+    )
+
     if not variants:
         if not quiet:
             print(f"No variants found for '{missing_func}' in dsl.py")
         return False
-    
+
     if not quiet:
         print(f"Found {len(variants)} potential variants for '{missing_func}': {variants}")
-    
+
     # Try each variant
     for variant in variants:
         if not quiet:
             print(f"Trying {variant}...")
-        
+
         # Create a patched version of the solver - handle both direct calls and references
         patched_code = original_code
-        
+
         # Replace direct function calls: recolor(...)
         patched_code = patched_code.replace(f"{missing_func}(", f"{variant}(")
-        
+
         # Replace function references in nested contexts like fork(recolor, ...)
         # Make sure we only replace whole words and not parts of other words
         pattern = r'\b' + re.escape(missing_func) + r'\b'
         patched_code = re.sub(pattern, variant, patched_code)
-        
+
         try:
-            # Create a namespace for the function
-            namespace = {}
-            
-            # Add all dsl functions to the namespace
-            for attr_name in dir(dsl):
-                if not attr_name.startswith('_'):  # Skip internal attributes
-                    namespace[attr_name] = getattr(dsl, attr_name)
-            
+            namespace = {
+                attr_name: getattr(dsl, attr_name)
+                for attr_name in dir(dsl)
+                if not attr_name.startswith('_')
+            }
+
             # Add constants to the namespace
             import constants
             for const_name in dir(constants):
                 if const_name.isupper():
                     namespace[const_name] = getattr(constants, const_name)
-            
+
             # Execute the patched code
             exec(patched_code, namespace)
             patched_solver = namespace[solver_name]
-            
+
             # Test the patched solver on the input
             output = patched_solver(test_input)
-            
+
             # Update the solver in the solvers module with the patched version
             setattr(solvers_module, solver_name, patched_solver)
-            
+
             if not quiet:
                 print(f"Successfully patched solver using {variant}!")
                 print(f"Modified code:\n{patched_code}")
-            
+
             # Update the solvers.py file if requested
             if update_file:
                 update_solver_in_file(solver_name, patched_code)
                 if not quiet:
-                    print(f"Updated solvers.py with patched implementation")
-            
+                    print("Updated solvers.py with patched implementation")
+
             return True
         except Exception as e:
             if not quiet:
                 print(f"Failed with {variant}: {type(e).__name__}: {str(e)}")
                 print(f"Error details: {str(e)}")
-    
+
     # If we get here, none of the variants worked
     if not quiet:
         print("All variants failed. Restoring original function.")
-    
+
     return False
 
 
