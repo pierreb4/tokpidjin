@@ -313,13 +313,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         if prof is not None:
             prof['run_batt.symlink'] += timer() - t0
 
-        # TODO Build and save the relevant differs
-        # if sol_solver_id in d_score.score:
-        #     for name in d_score.score[sol_solver_id].keys():
-        #         print_l(f"{sol_solver_id} - {name} - {d_score.score[sol_solver_id][name]['last_t']}")
-        # else:
-        #     print_l(f"{sol_solver_id} - No differ score")
-
         # TODO Control this with option
         # # Check things
         # python_exp = 'python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py'
@@ -334,7 +327,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
     # if solver_md5 is None:
     #     return False, d_score
 
-    # TODO Build and save the relevant differs
     for name, last_t in d_score.last_t.items():
         print_l(f"{name} - {last_t}")
         done = track_solution(last_t, None)

@@ -571,7 +571,8 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     total_data = train_data
 
     # Get one of best solvers if not mutating (while running main.py for instance)
-    solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
+    # solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
+    solvers = get_solvers([solvers_pre, solvers_dir], best_only=freeze_solvers)
     # task_list = list(solvers.keys())
     print_l(f"{len(solvers) = }")
 
