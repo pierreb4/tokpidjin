@@ -83,8 +83,8 @@ while date && [ $STOP -eq 0 ]; do
     # unbuffer timeout 3600s python run_batt.py -i -t $TIMEOUT -c $COUNT \
     #     -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
 
-    # Limit memory to 2GB
-    mem_limit=$((2 * 1024 * 1024))
+    # Limit memory to 1GB
+    mem_limit=$((1 * 1024 * 1024))
     ulimit -v $mem_limit
     unbuffer timeout 300s python run_batt.py -i -t $TIMEOUT -c $COUNT \
         -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
@@ -97,8 +97,8 @@ while date && [ $STOP -eq 0 ]; do
   if [ -n "$BUILD" ]; then
     python card.py -fs -fd -f ${TMPBATT}_main.py
 
-    # Limit memory to 2GB
-    mem_limit=$((2 * 1024 * 1024))
+    # Limit memory to 1GB
+    mem_limit=$((1 * 1024 * 1024))
     ulimit -v $mem_limit
     unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
         -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
