@@ -243,13 +243,15 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             # print_l(f'{module_name = }')
             solver_module = importlib.import_module(module_name)
             solver = solver_module.solve
-            # print(f"Loaded solver for {task_id} from {solver_source.path}")
+            if not quiet and specific_id:
+                print_l(f"Solver for {specific_id} from {solver_source.path}")
         else:
             solver_module = importlib.import_module('solvers_pre')
             solver = getattr(solver_module, solver_source.name)
             # Ensure solver has access to DSL functions by updating its globals
             solver.__globals__.update(globals())
-            # print_l(f'{solver.__name__ = }')
+            if not quiet and specific_id:
+                print_l(f"Solver for {specific_id} from {solver.__name__} in {solver.__module__}")
 
         S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
         try:
