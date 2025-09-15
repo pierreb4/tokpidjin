@@ -137,15 +137,15 @@ while date && [ $STOP -eq 0 ]; do
     find solver_dir -maxdepth 1 -type d -name 'solve_*' \
         -exec bash clean_solve.sh {} \;
 
-    # Remove .def files in solver_def if corresponding .py file does not exist in solver_md5
-    find solver_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
-      base=$(basename "$def_file" .def)
-      py_file="solver_md5/${base}.py"
-      if [ ! -f "$py_file" ]; then
-        echo rm "$def_file"
-        rm "$def_file"
-      fi
-    done
+    # # Remove .def files in solver_def if corresponding .py file does not exist in solver_md5
+    # find solver_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
+    #   base=$(basename "$def_file" .def)
+    #   py_file="solver_md5/${base}.py"
+    #   if [ ! -f "$py_file" ]; then
+    #     echo rm "$def_file"
+    #     rm "$def_file"
+    #   fi
+    # done
 
     # Remove .py files in solver_md5 if corresponding file does not exist in ../solver_dir
     find solver_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
@@ -175,15 +175,15 @@ while date && [ $STOP -eq 0 ]; do
     find differ_dir -maxdepth 2 -type d -name 'solve_*' \
         -exec bash clean_solve.sh {} \;
 
-    # Remove .def files in differ_def if corresponding .py file does not exist in differ_md5
-    find differ_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
-      base=$(basename "$def_file" .def)
-      py_file="differ_md5/${base}.py"
-      if [ ! -f "$py_file" ]; then
-        echo rm "$def_file"
-        rm "$def_file"
-      fi
-    done
+    # # Remove .def files in differ_def if corresponding .py file does not exist in differ_md5
+    # find differ_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
+    #   base=$(basename "$def_file" .def)
+    #   py_file="differ_md5/${base}.py"
+    #   if [ ! -f "$py_file" ]; then
+    #     echo rm "$def_file"
+    #     rm "$def_file"
+    #   fi
+    # done
 
     # Remove .py files in differ_md5 if corresponding file does not exist in ../differ_dir
     find differ_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
