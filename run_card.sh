@@ -95,15 +95,15 @@ while date && [ $STOP -eq 0 ]; do
 
   # Note: clean-up is down here too
   if [ -n "$BUILD" ]; then
-    python card.py -fs -fd -f ${TMPBATT}_main.py
+    # python card.py -fs -fd -f ${TMPBATT}_main.py
 
-    # Limit memory to 1GB
-    mem_limit=$((1 * 1024 * 1024))
-    ulimit -v $mem_limit &>/dev/null || echo "Memory limit not supported"
-    unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
-        -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
+    # # Limit memory to 1GB
+    # mem_limit=$((1 * 1024 * 1024))
+    # ulimit -v $mem_limit &>/dev/null || echo "Memory limit not supported"
+    # unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
+    #     -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
 
-    (date +'%F %T'; grep "Found\|Summary" ${TMPBATT}_main.log) | tee -a main.log
+    # (date +'%F %T'; grep "Found\|Summary" ${TMPBATT}_main.log) | tee -a main.log
 
     # >solvers_dir.py
     # echo -e "from dsl import *\nfrom constants import *\n\n" >>solvers_dir.py
