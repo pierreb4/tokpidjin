@@ -272,7 +272,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
             if hasattr(imp, func_name):
                 solver = getattr(imp, func_name)
                 return Solver(func_name, imp.__name__, f'{solve_header}{inspect.getsource(solver)}', 
-                        None, None)
+                        0, 999)
 
     return Solver('solve', None, solve_identity, 0, 999)
 
@@ -366,15 +366,6 @@ def load_module(module_name):
     sys.modules[module_name] = module
     spec.loader.exec_module(module)
     return module
-
-
-def old_run_with_timeout(func, args, timeout=5):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-        future = executor.submit(func, *args)
-        try:
-            return False, future.result(timeout=timeout)
-        except concurrent.futures.TimeoutError:
-            return True, None
 
 
 def run_with_timeout(func, args, timeout=5):

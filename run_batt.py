@@ -83,23 +83,6 @@ class D_Score:
         if s_solver_id == solver_id:
             self.score[solver_id][d_name]['zo'] += size.t > 0
 
-    # def sum_scores(self):
-    #     d_score_sum = {}
-    #     for solver_id, value in self.score.items():
-    #         for name in value.keys():
-    #             if name not in d_score_sum:
-    #                 d_score_sum[name] = {
-    #                     'last_t': value[name]['last_t'],
-    #                     'iz': 0,
-    #                     'zo': 0    
-    #                 }
-
-    #             d_score_sum[name]['iz'] += value[name]['iz']
-    #             d_score_sum[name]['zo'] += value[name]['zo']
-
-    #     print_l(f'{len(self.score)} solvers contributed to score')
-    #     return d_score_sum
-
 
 def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
     task_start = timer()
@@ -116,7 +99,6 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
     o_score = O_Score()
     s_score = {}
-    # d_score = D_Score()
     for i, sample in enumerate(train_task):
         I = sample['input']
         O = sample['output']
@@ -144,6 +126,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # Compare candidate C with expected output O
                 C = okt.t
+                # if C == O:
+                #     print_l(f'  - train[{i}] - {task_id} - solver {o_solver_id} produced {C == O}')
                 o_score.update(o_solver_id, C == O)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
@@ -158,9 +142,6 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
     # NOTE Move this around when we start with 'eval' runs?
     for o_solver_id in d_score.score.keys():
         for name in d_score.score[o_solver_id].keys():
-            # ref_len = 2 * len(train_task)
-            # s_score[name].update(o_solver_id, d_score.score[o_solver_id][name]['iz'] >= ref_len)
-            # s_score[name].update(o_solver_id, d_score.score[o_solver_id][name]['zo'] >= ref_len)
             if name not in s_score:
                 s_score[name] = {'iz': S_Score(), 'zo': S_Score()}
             for score_type in ['iz', 'zo']:
@@ -193,6 +174,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # Compare candidate C with expected output O
                 C = okt.t
+                # if C == O:
+                #     print_l(f'  - test[{i}] - {task_id} - solver {o_solver_id} produced {C == O}')
                 o_score.update(o_solver_id, C == O)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
@@ -221,8 +204,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
     # NOTE all_o contains solutions to 'train' and 'test' tasks
     #      Maybe don't save twice the same things
-    # solver_md5 = None
-    do_print = False
     for solution in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = solution
 
@@ -263,9 +244,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         ensure_dir('solver_md5')
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
-        # Where differs corresponding to this solver will go
-        # solver_md5 = f'{md5_hash}'
-
         check_start = timer()
         timed_out = check_solver_speed(total_data, solver_source, task_id, timeout)
         t_log = 11 - int(math.log(timer() - check_start))
@@ -277,12 +255,10 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
         # Expand to .py file
         if not Path(solver_md5_path).exists():
-            do_print = True
             # expand_file(solver_def_path, solver_md5_path, None, True)
             generate_expanded_content(inlined_source, solver_md5_path)
 
         task_o_score = o_score.get(sol_solver_id)
-        # solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{task_s_score}/{t_log}'
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{t_log}'
 
         ensure_dir(solver_score)
@@ -296,13 +272,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         # python_cmd = f'python run_test.py --solvers solvers_dir -k {task_id}_{md5_hash}'
         # os.system(python_exp)
         # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
-
-    if do_print:
-        print()
-
-    # No solutions found
-    # if solver_md5 is None:
-    #     return False, d_score
 
     for name, last_t in d_score.last_t.items():
         print_l(f"{name} - {last_t}")
@@ -321,17 +290,12 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
             differ_body += ', '.join(args)
             differ_body += ')\n'
         differ_body += f'    return t{last_t}\n'
-        # print(f'{differ_body}')
 
         differ_source = f'def differ(S, I, C):\n{differ_body}'
         inlined_source = inline_variables(differ_source)
         md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
-        # print_l(f'{md5_hash = }')
-
         ensure_dir('differ_dir')
-        # differ_task = f'differ_dir/differ_{task_id}'
-        # ensure_dir(differ_task)
 
         # ensure_dir('differ_def')
         # differ_def_path = f'differ_def/{md5_hash}.def'
@@ -346,7 +310,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
         # Expand to .py file
         if not Path(differ_md5_path).exists():
-            # do_print = True
             # expand_file(differ_def_path, differ_md5_path, None, True)
             generate_expanded_content(inlined_source, differ_md5_path)
 
@@ -449,8 +412,7 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
     if os.path.isfile(fluff_log_path):
         os.remove(fluff_log_path)
 
-    # d_score_sum = {}
-    to_sum = 0
+    timeouts = 0
     prof = defaultdict(float) if enable_timing else None
     if prof is not None:
         # Register profiler with modules that support it
@@ -465,12 +427,9 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
         if prof is not None:
             prof['main.run_batt'] += timer() - loop_start
         if timed_out:
-            to_sum += 1
+            timeouts += 1
         
-    # d_score_sum = d_score.sum_scores()
-    # print_l(f'{d_score_sum}')
-
-    print(f'{len(do_list)} tasks - {to_sum} timeouts')
+    print(f'{len(do_list)} tasks - {timeouts} timeouts')
 
     # Print lightweight timing report
     if prof is not None:

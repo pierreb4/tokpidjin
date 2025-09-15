@@ -573,6 +573,8 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     # Get one of best solvers if not mutating (while running main.py for instance)
     # solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
     solvers = get_solvers([solvers_pre, solvers_dir], best_only=freeze_solvers)
+    # solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
+
     # task_list = list(solvers.keys())
     print_l(f"{len(solvers) = }")
 
@@ -627,6 +629,8 @@ def batt(task_id, S, I, C, log_path):
             # Go through each solver
             solvers_copy = solvers.copy()
             for task_id, solver in solvers_copy.items():
+                # print_l(f'Processing {task_id} - {len(solvers)} solvers left')
+
                 func_name = solver.name
                 # solver_path = solver.path
                 source = solver.source

@@ -90,10 +90,6 @@ def parse_function_body(content):
         return None
 
     func_name = func_match[1]
-
-    # print_l(f"Function name: {func_name}")
-    print('.', end='')
-
     func_params = func_match[2]
 
     # Find the return statement, which might be on a different line
