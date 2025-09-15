@@ -51,6 +51,8 @@ if [ -z "$TIMEOUT" ]; then
   TIMEOUT=1.0
 fi
 
+CHARS=({0..9} {a..f})
+
 TMPFILE=$(mktemp)
 TMPBATT="tmp_batt_${TMPFILE##*.}"
 STOP=0
@@ -147,8 +149,14 @@ while date && [ $STOP -eq 0 ]; do
     #   fi
     # done
 
+    # Remove empty sub-folders from solver_dir
+    find solver_dir -type d -empty -delete
+
+    RANDCHAR="${CHARS[RANDOM % ${#CHARS[@]}]}"
+    NAME="*${RANDCHAR}.py"
+
     # Remove .py files in solver_md5 if corresponding file does not exist in ../solver_dir
-    find solver_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
+    find solver_md5 -maxdepth 1 -name "$NAME" -print0 | while IFS= read -r -d '' py_file; do
       base=$(basename "$py_file" .py)
       if ! find solver_dir -type l -name "${base}.py" | grep -q .; then
         find solver_dir -name "${base}.py" || echo "No link for ${base}.py"
@@ -156,9 +164,6 @@ while date && [ $STOP -eq 0 ]; do
         rm "$py_file"
       fi
     done
-
-    # Remove empty sub-folders from solver_dir
-    find solver_dir -type d -empty -delete
 
     # # Remove differ_dir folders if corresponding .py file does not exist in solver_md5
     # find differ_dir -maxdepth 1 -type d ! -path differ_dir -print0 | while IFS= read -r -d '' dir_name; do
@@ -185,8 +190,14 @@ while date && [ $STOP -eq 0 ]; do
     #   fi
     # done
 
+    # Remove empty sub-folders from differ_dir
+    find differ_dir -type d -empty -delete
+
+    RANDCHAR="${CHARS[RANDOM % ${#CHARS[@]}]}"
+    NAME="*${RANDCHAR}.py"
+
     # Remove .py files in differ_md5 if corresponding file does not exist in ../differ_dir
-    find differ_md5 -maxdepth 1 -name '*.py' -print0 | while IFS= read -r -d '' py_file; do
+    find differ_md5 -maxdepth 1 -name "$NAME" -print0 | while IFS= read -r -d '' py_file; do
       base=$(basename "$py_file" .py)
       if ! find differ_dir -type l -name "${base}.py" | grep -q .; then
         find differ_dir -name "${base}.py" || echo "No link for ${base}.py"
@@ -194,9 +205,6 @@ while date && [ $STOP -eq 0 ]; do
         rm "$py_file"
       fi
     done
-
-    # Remove empty sub-folders from differ_dir
-    find differ_dir -type d -empty -delete
 
     # # From solvers_ref.py to solvers.py
     # python replace_func.py -q
