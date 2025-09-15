@@ -85,7 +85,7 @@ while date && [ $STOP -eq 0 ]; do
 
     # Limit memory to 1GB
     mem_limit=$((1 * 1024 * 1024))
-    ulimit -v $mem_limit
+    ulimit -v $mem_limit &>/dev/null || echo "Memory limit not supported"
     unbuffer timeout 300s python run_batt.py -i -t $TIMEOUT -c $COUNT \
         -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
   fi
@@ -99,7 +99,7 @@ while date && [ $STOP -eq 0 ]; do
 
     # Limit memory to 1GB
     mem_limit=$((1 * 1024 * 1024))
-    ulimit -v $mem_limit
+    ulimit -v $mem_limit &>/dev/null || echo "Memory limit not supported"
     unbuffer python main.py -t $TIMEOUT --solvers solvers_dir \
         -b ${TMPBATT}_main | tee ${TMPBATT}_main.log
 

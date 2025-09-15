@@ -355,6 +355,23 @@ def generate_expanded_function(func_name, func_params, steps):
         _prof['expand_solver.generate_expanded_function'] += timer() - t0
     return code
 
+def generate_expanded_content(content, py_file):
+    if func_parsed := parse_function_body(content):
+        func_name, func_params, steps = func_parsed
+        
+        # Generate expanded function with the original function name
+        expanded_func = generate_expanded_function(func_name, func_params, steps)
+        
+        header = "from dsl import *\nfrom constants import *\n\n"
+        output = header + expanded_func + "\n"
+
+        with open(py_file, 'w') as out_f:
+            out_f.write(output)
+
+        return True
+    else:
+        return False
+
 def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
     """
     Process the .def file and generate the .py file with expanded version.
@@ -370,55 +387,30 @@ def expand_file(def_file, py_file, update_solvers_file=None, quiet=False):
         bool: True if processing was successful, False otherwise
     """
     try:
-        t_io0 = timer()
         with open(def_file, 'r') as f:
             content = f.read()
-        io_read_dt = timer() - t_io0
 
-        if func_parsed := parse_function_body(content):
-            # _, func_params, steps = func_parsed
-            func_name, func_params, steps = func_parsed
+        if generate_expanded_content(content, py_file):
+
+        # if func_parsed := parse_function_body(content):
+        #     func_name, func_params, steps = func_parsed
             
-            # Get function name from def_file
-            # def_stem_split = Path(def_file).stem.split('_')
-            # func_name = f'solve_{def_stem_split[0]}'
-
-            # func_name = 'solve'
-
-            # Create the original function with _one suffix
-            # original_renamed = content.replace(f"def {func_name}", f"def {func_name}_one")
+        #     # Generate expanded function with the original function name
+        #     expanded_func = generate_expanded_function(func_name, func_params, steps)
             
-            # Generate expanded function with the original function name
-            t_gen0 = timer()
-            expanded_func = generate_expanded_function(func_name, func_params, steps)
-            gen_dt = timer() - t_gen0
-            
-            header = "from dsl import *\nfrom constants import *\n\n"
-            output = header + expanded_func + "\n"
+        #     header = "from dsl import *\nfrom constants import *\n\n"
+        #     output = header + expanded_func + "\n"
 
-
-            t_io1 = timer()
-            with open(py_file, 'w') as out_f:
-                out_f.write(output)
-            io_write_dt = timer() - t_io1
+        #     with open(py_file, 'w') as out_f:
+        #         out_f.write(output)
             
             if not quiet:
                 print_l(f"Successfully generated {py_file} with expanded version")
-                # print_l(f"Original function renamed to {func_name}_one")
                 print_l(f"Expanded function uses name {func_name}")
             
             # Update solvers_*.py if specified
             if update_solvers_file:
-                t_upd0 = timer()
                 update_solvers(update_solvers_file, def_file, func_name, expanded_func, quiet)
-                upd_dt = timer() - t_upd0
-            else:
-                upd_dt = 0.0
-            if _prof is not None:
-                _prof['expand_solver.expand_file.read'] += io_read_dt
-                _prof['expand_solver.expand_file.generate'] += gen_dt
-                _prof['expand_solver.expand_file.write'] += io_write_dt
-                _prof['expand_solver.expand_file.update_solvers'] += upd_dt
                 
             return True
         else:

@@ -14,7 +14,7 @@ from contextlib import contextmanager
 
 from utils import *
 import utils as utils_module
-from expand_solver import expand_file
+from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
@@ -227,11 +227,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         sol_t, sol_e, sol_solver_id, sol_m = solution
 
         # Track calls then reverse sequence to rebuild solver
-        if prof is not None:
-            t0 = timer()
         done = track_solution(sol_t, None)
-        if prof is not None:
-            prof['run_batt.track_solution'] += timer() - t0
 
         # Build solution body
         solver_body = ''
@@ -249,11 +245,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
 
         # Get md5_hash of inlined source code
         solver_source = f'def solve(S, I, C):\n{solver_body}'
-        if prof is not None:
-            t0 = timer()
         inlined_source = inline_variables(solver_source)
-        if prof is not None:
-            prof['run_batt.inline_variables'] += timer() - t0
         md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
         # Put task_id in function name to make solvers_dir.py usable
@@ -265,8 +257,8 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         solve_task = f'solver_dir/solve_{task_id}'
         ensure_dir(solve_task)
 
-        ensure_dir('solver_def')
-        solver_def_path = f'solver_def/{md5_hash}.def'
+        # ensure_dir('solver_def')
+        # solver_def_path = f'solver_def/{md5_hash}.def'
 
         ensure_dir('solver_md5')
         solver_md5_path = f'solver_md5/{md5_hash}.py'
@@ -275,43 +267,28 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         # solver_md5 = f'{md5_hash}'
 
         check_start = timer()
-        if prof is not None:
-            t0 = timer()
         timed_out = check_solver_speed(total_data, solver_source, task_id, timeout)
-        if prof is not None:
-            prof['run_batt.check_solver_speed'] += timer() - t0
         t_log = 11 - int(math.log(timer() - check_start))
 
-        if not Path(solver_def_path).exists():
-            with open(solver_def_path, 'w') as f:
-                f.write(inlined_source)
-                f.write('\n')
+        # if not Path(solver_def_path).exists():
+        #     with open(solver_def_path, 'w') as f:
+        #         f.write(inlined_source)
+        #         f.write('\n')
 
         # Expand to .py file
         if not Path(solver_md5_path).exists():
             do_print = True
-            if prof is not None:
-                t0 = timer()
-            expand_file(solver_def_path, solver_md5_path, None, True)
-            if prof is not None:
-                prof['run_batt.expand_file'] += timer() - t0
+            # expand_file(solver_def_path, solver_md5_path, None, True)
+            generate_expanded_content(inlined_source, solver_md5_path)
 
         task_o_score = o_score.get(sol_solver_id)
         # solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{task_s_score}/{t_log}'
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{t_log}'
 
-        if prof is not None:
-            t0 = timer()
         ensure_dir(solver_score)
-        if prof is not None:
-            prof['run_batt.ensure_dir'] += timer() - t0
         solver_link = f'{solver_score}/{md5_hash}.py'
 
-        if prof is not None:
-            t0 = timer()
         symlink(solver_md5_path, solver_link)
-        if prof is not None:
-            prof['run_batt.symlink'] += timer() - t0
 
         # TODO Control this with option
         # # Check things
@@ -356,21 +333,22 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, t
         # differ_task = f'differ_dir/differ_{task_id}'
         # ensure_dir(differ_task)
 
-        ensure_dir('differ_def')
-        differ_def_path = f'differ_def/{md5_hash}.def'
+        # ensure_dir('differ_def')
+        # differ_def_path = f'differ_def/{md5_hash}.def'
 
         ensure_dir('differ_md5')
         differ_md5_path = f'differ_md5/{md5_hash}.py'
 
-        if not Path(differ_def_path).exists():
-            with open(differ_def_path, 'w') as f:
-                f.write(inlined_source)
-                f.write('\n')
+        # if not Path(differ_def_path).exists():
+        #     with open(differ_def_path, 'w') as f:
+        #         f.write(inlined_source)
+        #         f.write('\n')
 
         # Expand to .py file
         if not Path(differ_md5_path).exists():
-            do_print = True
-            expand_file(differ_def_path, differ_md5_path, None, True)
+            # do_print = True
+            # expand_file(differ_def_path, differ_md5_path, None, True)
+            generate_expanded_content(inlined_source, differ_md5_path)
 
         for score_type in ['iz', 'zo']:
             task_s_score = s_score[name][score_type].get(sol_solver_id)
