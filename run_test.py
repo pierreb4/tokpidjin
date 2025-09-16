@@ -207,6 +207,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             solve_func[task_id] = f'solve_{task_id}'
 
     n_correct = 0
+    n_new = 0
     n = len(task_ids)
 
     if not quiet and specific_id is None:
@@ -270,6 +271,9 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                     side_by_side( 
                         [ex['input'], ex['output'], solver(S, ex['input'], None)], 
                         titles=[f'{k_type} Input', f'{k_type} Output', f'{ok} Output'])
+
+            if correct == 1 and not hasattr(solvers_pre, f'solve_{task_id}'):
+                n_new += 1
 
             n_correct += correct
 
@@ -341,7 +345,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
                         [ex['input'], ex['output']],
                         titles=['Input', 'Expected Output'])
 
-    print(f'{n_correct} out of {n} tasks solved correctly.')
+    print(f'{n_correct} out of {n} tasks solved correctly ({n_new} new).')
     return n_correct == n
 
 
