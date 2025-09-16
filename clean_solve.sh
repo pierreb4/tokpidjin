@@ -10,7 +10,7 @@ SOLVER_DIR="$HOME/dsl/tokpidjin/$1"
 MAX_NUM_FILES="$2"
 
 if [ -z "$MAX_NUM_FILES" ]; then
-    MAX_NUM_FILES=20
+    MAX_NUM_FILES=50
 fi
 
 # Check if the provided argument is a valid directory
