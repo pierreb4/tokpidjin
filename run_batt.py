@@ -463,7 +463,7 @@ if __name__ == "__main__":
 
     pre_module = importlib.import_module(f'{args.batt_import}_pre')
     pre_task_ids = pre_module.pre_task_ids if hasattr(pre_module, 'pre_task_ids') else {}
-    print_l(f'{pre_task_ids = }')
+    # print_l(f'{pre_task_ids = }')
 
     # Testing 
     args.task_ids = pre_task_ids
