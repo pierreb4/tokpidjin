@@ -61,7 +61,7 @@ while date && [ $STOP -eq 0 ]; do
   if [ "$COUNT" -ne 0 ]; then
     if [ -n "$ONERUN" ]; then
       echo "-- One run only --"
-      unset CARD_OPTION
+      # unset CARD_OPTION
       TMPBATT="tmp_batt_onerun"
       STOP=1
     fi

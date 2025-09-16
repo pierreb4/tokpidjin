@@ -213,8 +213,8 @@ def get_data(train=True, sort_by_size=False, task_id=None):
 
 
 def get_solver_source(task_id, imports=None, best_only=False):    
-    if imports is None:
-        imports = [solvers_dir]
+    # if imports is None:
+    #     imports = [solvers_dir]
 
     solve_header = 'from dsl import *\nfrom constants import *\n\n'
     solve_identity = f'{solve_header}def solve(S, I, C):\n    O = identity(I)\n    return O\n'
@@ -269,11 +269,14 @@ def get_solver_source(task_id, imports=None, best_only=False):
 
         else:
             func_name = f'solve_{task_id}'
+            print_l(f'Looking for {func_name} in {imp.__name__}', end=' ')
             if hasattr(imp, func_name):
+                print_l(f'Found {func_name} in {imp.__name__}')
                 solver = getattr(imp, func_name)
                 return Solver(func_name, imp.__name__, f'{solve_header}{inspect.getsource(solver)}', 
                         0, 999)
 
+    print_l(f'No solver found for {task_id}, using identity')
     return Solver('solve', None, solve_identity, 0, 999)
 
 

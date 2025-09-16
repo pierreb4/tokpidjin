@@ -429,7 +429,7 @@ class Differs:
                 all_list[score_type] += [f[:-3] for f in select_differ if f.endswith('.py')]
 
             # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
-            add_list = random.sample(all_list[score_type], min(20, len(all_list[score_type])))
+            add_list = random.sample(all_list[score_type], min(32, len(all_list[score_type])))
             differ_list += add_list
 
         # TODO Maybe adjust get_differs to get the best differs 
@@ -572,8 +572,9 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
 
     # Get one of best solvers if not mutating (while running main.py for instance)
     # solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
-    solvers = get_solvers([solvers_pre, solvers_dir], best_only=freeze_solvers)
-    # solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
+    pre_solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
+    dir_solvers = get_solvers([solvers_dir], best_only=freeze_solvers)
+    solvers = {**dir_solvers, **pre_solvers}
 
     # task_list = list(solvers.keys())
     print_l(f"{len(solvers) = }")
@@ -599,6 +600,16 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
         solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
 
     task_ids = list(solvers.keys())
+    pre_task_ids = [k for k in task_ids if k in pre_solvers]
+    dir_task_ids = [k for k in task_ids if k in dir_solvers]
+    print_l(f'{len(pre_task_ids) = } - {len(dir_task_ids) = }')
+
+    # Write pre_task_ids into file based on batt_file_name
+    # Used in run_batt.py (from call import pre_task_ids)
+    pre_file_name = batt_file_name.replace('.py', '_pre.py')
+    with open(pre_file_name, 'w') as pre_file:
+        print(f'{pre_task_ids = }', file=pre_file)
+
     differs = Differs(task_ids, freeze_differs=args.freeze_differs)
 
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
@@ -659,8 +670,8 @@ def batt(task_id, S, I, C, log_path):
 
         print("    return o, s", file=batt_file)
 
-    # Write t_call into new file call.py
-    # Used in run_batt.py (from call import t_call)
+    # Write t_call into file based on batt_file_name
+    # Used in run_batt.py (call_module.t_call)
     call_file_name = batt_file_name.replace('.py', '_call.py')
     with open(call_file_name, 'w') as call_file:
         print(f't_call = {code.t_call}', file=call_file)

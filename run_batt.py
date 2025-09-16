@@ -126,8 +126,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # Compare candidate C with expected output O
                 C = okt.t
-                # if C == O:
-                #     print_l(f'  - train[{i}] - {task_id} - solver {o_solver_id} produced {C == O}')
+                if C == O:
+                    print_l(f'  - train[{i}] - {task_id} - solver {o_solver_id} produced {C == O}')
                 o_score.update(o_solver_id, C == O)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
@@ -174,8 +174,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # Compare candidate C with expected output O
                 C = okt.t
-                # if C == O:
-                #     print_l(f'  - test[{i}] - {task_id} - solver {o_solver_id} produced {C == O}')
+                if C == O:
+                    print_l(f'  - test[{i}] - {task_id} - solver {o_solver_id} produced {C == O}')
                 o_score.update(o_solver_id, C == O)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
@@ -460,6 +460,13 @@ if __name__ == "__main__":
 
     call_module = importlib.import_module(f'{args.batt_import}_call')
     t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
+
+    pre_module = importlib.import_module(f'{args.batt_import}_pre')
+    pre_task_ids = pre_module.pre_task_ids if hasattr(pre_module, 'pre_task_ids') else {}
+    print_l(f'{pre_task_ids = }')
+
+    # Testing 
+    args.task_ids = pre_task_ids
 
     if args.cprofile:
         import cProfile, pstats, io
