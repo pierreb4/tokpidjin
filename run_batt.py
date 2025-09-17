@@ -127,7 +127,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 # Compare candidate C with expected output O
                 C = okt.t
                 if C == O:
-                    print_l(f'- train[{i}] - {task_id} - solver {o_solver_id} produced {C == O}')
+                    print_l(f'- solver {o_solver_id} produced {C == O}')
                 o_score.update(o_solver_id, C == O)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
@@ -175,7 +175,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 # Compare candidate C with expected output O
                 C = okt.t
                 if C == O:
-                    print_l(f'- test[{i}] - {task_id} - solver {o_solver_id} produced {C == O}')
+                    print_l(f'- solver {o_solver_id} produced {C == O}')
                 o_score.update(o_solver_id, C == O)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
