@@ -130,6 +130,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                     print_l(f'- {o_solver_id = } - {match = }')
                 o_score.update(o_solver_id, match)
 
+                # We know the correct output for both training and eval tasks
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     [task_id, S, I, O, fluff_log_path], timeout)
                     # [task_id, S, I, C, fluff_log_path], timeout)
@@ -179,6 +180,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                     print_l(f'- {o_solver_id = } - {match = }')
                 o_score.update(o_solver_id, match)
 
+                # We know the correct output for training tasks, not eval tasks
+                # TODO Try comparing to C when we start dealing with eval tasks
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     [task_id, S, I, O, fluff_log_path], timeout)
                     # [task_id, S, I, C, fluff_log_path], timeout)
