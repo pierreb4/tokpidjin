@@ -126,9 +126,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # Compare candidate C with expected output O
                 C = okt.t
-                if C == O:
-                    print_l(f'- C == O -> {C == O}')
-                o_score.update(o_solver_id, C == O)
+                if match := C == O:
+                    print_l(f'- {match = }')
+                o_score.update(o_solver_id, match)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     [task_id, S, I, C, fluff_log_path], timeout)
@@ -174,9 +174,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # Compare candidate C with expected output O
                 C = okt.t
-                if C == O:
-                    print_l(f'- C == O -> {C == O}')
-                o_score.update(o_solver_id, C == O)
+                if match := C == O:
+                    print_l(f'- {match = }')
+                o_score.update(o_solver_id, match)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     [task_id, S, I, C, fluff_log_path], timeout)
