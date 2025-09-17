@@ -463,12 +463,11 @@ if __name__ == "__main__":
     call_module = importlib.import_module(f'{args.batt_import}_call')
     t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
 
-    pre_module = importlib.import_module(f'{args.batt_import}_pre')
-    pre_task_ids = pre_module.pre_task_ids if hasattr(pre_module, 'pre_task_ids') else {}
+    # Try prioritizing pre_task_ids included by card.py
+    # pre_module = importlib.import_module(f'{args.batt_import}_pre')
+    # pre_task_ids = pre_module.pre_task_ids if hasattr(pre_module, 'pre_task_ids') else {}
     # print_l(f'{pre_task_ids = }')
-
-    # Testing 
-    args.task_ids = pre_task_ids
+    # args.task_ids = pre_task_ids
 
     if args.cprofile:
         import cProfile, pstats, io
