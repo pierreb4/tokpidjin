@@ -182,6 +182,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # We know the correct output for training tasks, not eval tasks
                 # TODO Try comparing to C when we start dealing with eval tasks
+                # XXX Or just do that all the time, to simplify? The performance
+                # hit is only on training tasks, that are pre-processed, right? 
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     # [task_id, S, I, O, fluff_log_path], timeout)
                     [task_id, S, I, C, fluff_log_path], timeout)
@@ -467,10 +469,10 @@ if __name__ == "__main__":
     t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
 
     # Try prioritizing pre_task_ids included by card.py
-    # pre_module = importlib.import_module(f'{args.batt_import}_pre')
-    # pre_task_ids = pre_module.pre_task_ids if hasattr(pre_module, 'pre_task_ids') else {}
-    # print_l(f'{pre_task_ids = }')
-    # args.task_ids = pre_task_ids
+    pre_module = importlib.import_module(f'{args.batt_import}_pre')
+    pre_task_ids = pre_module.pre_task_ids if hasattr(pre_module, 'pre_task_ids') else {}
+    print_l(f'Prioritizing: {pre_task_ids = }')
+    args.task_ids = pre_task_ids
 
     if args.cprofile:
         import cProfile, pstats, io
