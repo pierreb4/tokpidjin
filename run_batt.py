@@ -131,7 +131,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 o_score.update(o_solver_id, match)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
-                    [task_id, S, I, C, fluff_log_path], timeout)
+                    [task_id, S, I, O, fluff_log_path], timeout)
+                    # [task_id, S, I, C, fluff_log_path], timeout)
 
                 if diff_result is not None:
                     _, s['train'][i] = diff_result
@@ -179,7 +180,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 o_score.update(o_solver_id, match)
 
                 diff_timed_out, diff_result = run_with_timeout(batt,
-                    [task_id, S, I, C, fluff_log_path], timeout)
+                    [task_id, S, I, O, fluff_log_path], timeout)
+                    # [task_id, S, I, C, fluff_log_path], timeout)
 
                 if diff_result is not None:
                     _, s['test'][i] = diff_result
