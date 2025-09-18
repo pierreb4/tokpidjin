@@ -575,20 +575,26 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     # solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
     pre_solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
     dir_solvers = get_solvers([solvers_dir], best_only=freeze_solvers)
-    solvers = {**dir_solvers, **pre_solvers}
+    all_solvers = {**dir_solvers, **pre_solvers}
+    all_task_ids = list(all_solvers.keys())    
 
-    # task_list = list(solvers.keys())
-    print_l(f"{len(solvers) = }")
+    print_l(f"{len(all_solvers) = }")
 
     if task_id:
-        solvers = {k: solvers[k] for k in [task_id]}
+        solvers = {k: all_solvers[k] for k in [task_id]}
     elif count > 0:
-        # Pick random solvers
-        solvers = {k: solvers[k] for k in random.sample(list(solvers.keys()), count)}
-        task_list = list(solvers.keys())    
+        # Pick random solvers, half from pre_solvers, half from dir_solvers
+        # TODO Refine to pick half proven solvers and half unproven solvers
+        # We can check that the score in solver_dir matches the number of solved samples 
+        half_count = count // 2
+        rnd_pre_solvers = {k: pre_solvers[k] for k in random.sample(list(pre_solvers.keys()), half_count)}
+        rnd_dir_solvers = {k: dir_solvers[k] for k in random.sample(list(dir_solvers.keys()), half_count)}
+        # XXX Don't apply sourcery suggestion below. It breaks things!
+        rnd_solvers = {**rnd_dir_solvers, **rnd_pre_solvers}
+        rnd_task_ids = list(rnd_solvers.keys())
 
         task_sizes = []
-        for task_id in task_list:
+        for task_id in rnd_task_ids:
             size = 0
             for S in total_data['train'][task_id] + total_data['test'][task_id]:
                 for ex in S.values():
@@ -596,21 +602,26 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
             task_sizes.append(size)
 
         # Sort solvers by task size
-        weighted_tasks = list(zip(task_list, task_sizes))
+        weighted_tasks = list(zip(rnd_task_ids, task_sizes))
         weighted_tasks.sort(key=lambda x: x[1], reverse=True)
-        solvers = {task_id: solvers[task_id] for task_id, _ in weighted_tasks}
+        solvers = {task_id: all_solvers[task_id] for task_id, _ in weighted_tasks}
+    else:
+        solvers = all_solvers
 
     task_ids = list(solvers.keys())
-    pre_task_ids = [k for k in task_ids if k in pre_solvers]
-    dir_task_ids = [k for k in task_ids if k in dir_solvers]
-    print_l(f'{len(pre_task_ids) = } - {len(dir_task_ids) = }')
+    pre_task_ids = [k for k in all_task_ids if k in pre_solvers]
+    dir_task_ids = [k for k in all_task_ids if k in dir_solvers]
+    print_l(f'{len(solvers) = } - {len(pre_solvers) = } - {len(dir_solvers) = }')
+    print_l(f'{len(task_ids) = } - {len(pre_task_ids) = } - {len(dir_task_ids) = }')
 
     # Write pre_task_ids into file based on batt_file_name
     # Used in run_batt.py (from call import pre_task_ids)
+    pre_task_ids = task_ids
     pre_file_name = batt_file_name.replace('.py', '_pre.py')
     with open(pre_file_name, 'w') as pre_file:
         print(f'{pre_task_ids = }', file=pre_file)
 
+    task_ids = list(solvers.keys())
     differs = Differs(task_ids, freeze_differs=args.freeze_differs)
 
     equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}

@@ -232,7 +232,8 @@ def get_solver_source(task_id, imports=None, best_only=False):
             best_item = None
             file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
             if not file_paths:
-                continue
+                # print_l(f'No solver found for {task_id}, using identity')
+                return Solver('solve', None, solve_identity, 0, 999)
             random.shuffle(file_paths)
             for file_path in file_paths:
                 sections = file_path.split('/')
@@ -264,21 +265,22 @@ def get_solver_source(task_id, imports=None, best_only=False):
                 continue
 
             func_name = select_solver.name
+            print_l(f'Found {func_name} in {solver_module.__name__}')
             solver = getattr(solver_module, func_name)
             select_solver = select_solver._replace(source=f'{solve_header}{inspect.getsource(solver)}')
             return select_solver
 
         else:
             func_name = f'solve_{task_id}'
-            print_l(f'Looking for {func_name} in {imp.__name__}', end=' ')
+            # print_l(f'Looking for {func_name} in {imp.__name__}', end=' ')
             if hasattr(imp, func_name):
                 print_l(f'Found {func_name} in {imp.__name__}')
                 solver = getattr(imp, func_name)
                 return Solver(func_name, imp.__name__, f'{solve_header}{inspect.getsource(solver)}', 
                         0, 999)
 
-    print_l(f'No solver found for {task_id}, using identity')
-    return Solver('solve', None, solve_identity, 0, 999)
+    print_l(f'No solver found for {task_id}, using None')
+    return Solver('solve', None, None, 0, 999)
 
 
 def get_differs(import_names, best_only=False):
