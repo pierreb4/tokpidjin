@@ -233,7 +233,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
             file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
             if not file_paths:
                 continue
-            for file_path in file_paths:
+            for file_path in random.shuffle(file_paths):
                 sections = file_path.split('/')
                 o_score = int(sections[2])
                 t_score = int(sections[3])
