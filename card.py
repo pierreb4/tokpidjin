@@ -412,6 +412,7 @@ class Differs:
                 file_paths = glob.glob(differ_dir)
                 if not file_paths:
                     continue
+                random.shuffle(file_paths)
                 for file_path in file_paths:
                     sections = file_path.split('/')
                     s_score = int(sections[3])
