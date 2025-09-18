@@ -265,7 +265,7 @@ def get_solver_source(task_id, imports=None, best_only=False):
                 continue
 
             func_name = select_solver.name
-            print_l(f'Found {func_name} in {solver_module.__name__}')
+            # print_l(f'Found {func_name} in {solver_module.__name__}')
             solver = getattr(solver_module, func_name)
             select_solver = select_solver._replace(source=f'{solve_header}{inspect.getsource(solver)}')
             return select_solver
@@ -274,12 +274,12 @@ def get_solver_source(task_id, imports=None, best_only=False):
             func_name = f'solve_{task_id}'
             # print_l(f'Looking for {func_name} in {imp.__name__}', end=' ')
             if hasattr(imp, func_name):
-                print_l(f'Found {func_name} in {imp.__name__}')
+                # print_l(f'Found {func_name} in {imp.__name__}')
                 solver = getattr(imp, func_name)
                 return Solver(func_name, imp.__name__, f'{solve_header}{inspect.getsource(solver)}', 
                         0, 999)
 
-    print_l(f'No solver found for {task_id}, using None')
+    # print_l(f'No solver found for {task_id}, using None')
     return Solver('solve', None, None, 0, 999)
 
 
