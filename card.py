@@ -215,7 +215,7 @@ class Code:
         old_func_name = old_items[0].strip()
         old_hints = get_hints(old_func_name)
 
-        has_mutation = False
+        has_mutation = Mutation(False, None, None)
         if old_args := re.findall(r'\b(\w+)\b', old_call):
             # TODO Track t variables to get to hints
             if old_hints is None:
@@ -260,7 +260,7 @@ class Code:
         if self.t_num not in self.t_isok:
             self.t_isok[self.t_num] = 'True'
         isok = self.t_isok[self.t_num]
-        print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call_string}], {isok}) # {self.task_id} - {has_mutation}', file=self.file)
+        print(f'    t{self.t_num} = env.do_fluff({self.t_num}, [{call_string}], {isok}) # {self.task_id} - [{has_mutation.old}]', file=self.file)
         return has_mutation
 
 
@@ -280,25 +280,27 @@ class Code:
                     new_hint = new_hints[0] if new_hints else None
 
                     if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
-                        has_mutation = True
+                        # has_mutation = True
                         pattern = rf'\bt{t_n}\b'
                         self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+                        has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
 
                 else:
                     # XXX Pick a random function name from dsl.py
                     #     If promising, make more structural
                     new_func_name = random.choice(DSL_FUNCNAMES)
-                    print_l(f'Random function name {new_func_name} for t{t_offset} in {old_call}')
+                    # print_l(f'Random function name {new_func_name} for t{t_offset} in {old_call}')
 
                     new_hints = get_hints(new_func_name)
                     new_hint = new_hints[0] if new_hints else None
-                    print_l(f'{old_hint = } - {new_hints = }')
+                    # print_l(f'{old_hint = } - {new_hints = }')
 
                     if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
-                        has_mutation = True
+                        # has_mutation = True
                         pattern = rf'\bt{t_n}\b'
                         self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-                        print_l(f'- Mutated {old_call} to {self.t_call[self.t_num]}')
+                        has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
+                        # print_l(f'- Mutated {old_call} to {self.t_call[self.t_num]}')
 
         return has_mutation
 
@@ -339,12 +341,13 @@ class Code:
                 t_n = self.t_num - 1
                 t_offset = random.randint(1, t_n)
                 old_args[i] = f't{t_offset}'
-            print_l(f'- Replacing {old_arg} with {old_args[i]} in {old_call}')
+            # print_l(f'- Replacing {old_arg} with {old_args[i]} in {old_call}')
 
         if old_args[i] != old_arg:
-            has_mutation = True
+            # has_mutation = True
             pattern = rf'\b{old_arg}\b'
             self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call)
+            has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
         return has_mutation
 
 
@@ -509,9 +512,10 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         has_mutation = code.mutate(freeze_differs)
         code.t_number[old_call] = code.t_num
     else:
-        has_mutation = False
+        # has_mutation = False
+        has_mutation = Mutation(False, None, None)
 
-    if has_mutation and not freeze_differs and task_id is None:
+    if has_mutation.present and not freeze_differs and task_id is None:
         print_l(f'{old_name = } - {old_call = }')
         print_l(f'{code.t_call[code.t_num] = }')
 
@@ -527,8 +531,8 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
 def append_to_o(code, last_t, has_mutation, task_id):
     # check_t = f't{last_t}.ok and t{last_t}.t == O'
     # print(f"    o.append(({last_t}, {has_mutation}, '{task_id}', {check_t}))", file=code.file)
-    check_t = f't{last_t}.t if t{last_t}.ok else None'
-    print(f"    o.append(({last_t}, {has_mutation}, '{task_id}', t{last_t}))", file=code.file)
+    # check_t = f't{last_t}.t if t{last_t}.ok else None'
+    print(f"    o.append(({last_t}, {has_mutation.present}, '{task_id}', t{last_t}))", file=code.file)
 
 
 def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
@@ -547,7 +551,8 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
         has_mutation = code.mutate(freeze_solvers)
         code.t_number[old_call] = code.t_num
     else:
-        has_mutation = False
+        # has_mutation = False
+        has_mutation = Mutation(False, None, None)
 
     # Was the left side O?
     if old_name == 'O':
@@ -585,7 +590,7 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     elif count > 0:
         # Pick random solvers, half from pre_solvers, half from dir_solvers
         # TODO Refine to pick half proven solvers and half unproven solvers
-        # We can check that the score in solver_dir matches the number of solved samples 
+        # We can check that the score in solver_dir (solver.o_score) matches the number of samples in S
         half_count = count // 2
         rnd_pre_solvers = {k: pre_solvers[k] for k in random.sample(list(pre_solvers.keys()), half_count)}
         rnd_dir_solvers = {k: dir_solvers[k] for k in random.sample(list(dir_solvers.keys()), half_count)}

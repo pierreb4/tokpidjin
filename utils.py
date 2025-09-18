@@ -33,6 +33,8 @@ import solvers_evo
 Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 't_score'])
 Differ = namedtuple('Differ', ['name', 'path', 'source', 'score_type', 's_score', 't_score'])
 
+Mutation = namedtuple('Mutation', ['present', 'old', 'new'])
+
 Path('solvers_lnk.py').touch()
 import solvers_lnk
 Path('solvers_dir.py').touch()
