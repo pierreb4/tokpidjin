@@ -2,6 +2,7 @@
 
 # Default values
 INTERVAL=300
+CLEANUP="rm run_test.log"
 CMD="python run_test.py -q"
 QUIET=false
 
@@ -36,6 +37,8 @@ trap "rm -f $PREV_OUTPUT $CURR_OUTPUT" EXIT
 touch "$PREV_OUTPUT"
 
 while true; do
+    # Clean up before running
+    eval "$CLEANUP"
     # Run the command and capture output
     eval "$CMD" > "$CURR_OUTPUT" 2>&1
 
