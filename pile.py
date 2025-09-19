@@ -27,10 +27,10 @@ class Env:
         self.task_id = task_id
         self.S = S
         self.score = score
-        self.log_path = 'fluff.log' if log_path is None else log_path
+        self.log_path = 'pile.log' if log_path is None else log_path
         self.exceptions = 0
 
-    def do_fluff(self, t_num, t, isok=True):
+    def do_pile(self, t_num, t, isok=True):
         if t is None or isok == False:
             return OKT(False, None)
 
@@ -57,7 +57,7 @@ class Env:
             # print(f'{result = }')
         except Exception as e:
             # TODO Log and resolve exceptions
-            #      Log the first few exceptions to fluff.log
+            #      Log the first few exceptions to pile.log
             if self.exceptions > 1:
                 return OKT(False, None)
             self.exceptions += 1

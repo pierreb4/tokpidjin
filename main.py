@@ -286,9 +286,9 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
         print(f"Testing {n} tasks for correctness using {os.path.basename(solvers_module.__file__)}...")
         solver_iterator = solve_func.keys()
 
-    fluff_log_path = 'fluff.log'
-    if os.path.isfile(fluff_log_path):
-        os.remove(fluff_log_path)
+    pile_log_path = 'pile.log'
+    if os.path.isfile(pile_log_path):
+        os.remove(pile_log_path)
     
     remove_solve_path = False
     for task_id in solver_iterator:
@@ -312,7 +312,7 @@ def check_solvers_correctness(data, solvers_module, task_id=None, quiet=False, t
             #      - Maybe we could check all top ranking solutions
             #      In run_batt.py we accept (mutated) solutions from any solver
             solve_timed_out, solve_result = run_with_timeout(batt,
-                    (task_id, S, I, None, fluff_log_path), timeout)
+                    (task_id, S, I, None, pile_log_path), timeout)
 
             execution_time = time.time() - start_time
             total_execution_time += execution_time

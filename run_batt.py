@@ -84,7 +84,7 @@ class D_Score:
             self.score[solver_id][d_name]['zo'] += size.t > 0
 
 
-def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
+def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
     task_start = timer()
     train_task = total_data['train'][task_id]
     test_task = total_data['test'][task_id]
@@ -105,7 +105,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         if prof is not None:
             prof_start = timer()
         solve_timed_out, solve_result = run_with_timeout(batt,
-            [task_id, S, I, None, fluff_log_path], timeout)
+            [task_id, S, I, None, pile_log_path], timeout)
         if prof is not None:
             prof['batt.train.run_with_timeout'] += timer() - prof_start
 
@@ -132,8 +132,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
 
                 # We know the correct output for both training and eval tasks
                 diff_timed_out, diff_result = run_with_timeout(batt,
-                    [task_id, S, I, O, fluff_log_path], timeout)
-                    # [task_id, S, I, C, fluff_log_path], timeout)
+                    [task_id, S, I, O, pile_log_path], timeout)
+                    # [task_id, S, I, C, pile_log_path], timeout)
 
                 if diff_result is not None:
                     _, s['train'][i] = diff_result
@@ -155,7 +155,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
         if prof is not None:
             prof_start = timer()
         solve_timed_out, solve_result = run_with_timeout(batt,
-            [task_id, S, I, None, fluff_log_path], timeout)
+            [task_id, S, I, None, pile_log_path], timeout)
         if prof is not None:
             prof['batt.test.run_with_timeout'] += timer() - prof_start
 
@@ -185,8 +185,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
                 # XXX Or just do that all the time, to simplify? The performance
                 # hit is only on training tasks, that are pre-processed, right? 
                 diff_timed_out, diff_result = run_with_timeout(batt,
-                    # [task_id, S, I, O, fluff_log_path], timeout)
-                    [task_id, S, I, C, fluff_log_path], timeout)
+                    # [task_id, S, I, O, pile_log_path], timeout)
+                    [task_id, S, I, C, pile_log_path], timeout)
 
                 if diff_result is not None:
                     _, s['test'][i] = diff_result
@@ -199,11 +199,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path,
     return all_o, o_score, s_score
 
 
-def run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=None):
+def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
     if prof is not None:
         prof_call_start = timer()
     all_o, o_score, s_score = check_batt(total_data,
-            task_i, task_id, d_score, start_time, fluff_log_path, timeout=1, prof=prof)
+            task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=prof)
     if prof is not None:
         prof['run_batt.check_batt'] += timer() - prof_call_start
 
@@ -415,9 +415,9 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
 
     # Run batt for each task in do_list
     start_time = timer()
-    fluff_log_path = 'fluff.log'
-    if os.path.isfile(fluff_log_path):
-        os.remove(fluff_log_path)
+    pile_log_path = 'pile.log'
+    if os.path.isfile(pile_log_path):
+        os.remove(pile_log_path)
 
     timeouts = 0
     prof = defaultdict(float) if enable_timing else None
@@ -430,7 +430,7 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
     for task_i, task_id in enumerate(do_list):
         d_score = D_Score()
         loop_start = timer() if prof is not None else None
-        timed_out = run_batt(total_data, task_i, task_id, d_score, start_time, fluff_log_path, timeout, prof=prof)
+        timed_out = run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof)
         if prof is not None:
             prof['main.run_batt'] += timer() - loop_start
         if timed_out:
