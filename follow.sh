@@ -3,13 +3,14 @@
 # Default values
 INTERVAL=300
 CLEANUP="rm run_test.log"
-CMD="python run_test.py -q"
+DEFAULT="python run_test.py -q"
+CMD="$DEFAULT"
 QUIET=false
 
 usage() {
     echo "Usage: $0 -i <interval_seconds> -c <command> [-q]"
     echo "  -i    Interval in seconds between checks (default: 300)"
-    echo "  -c    Command to monitor (required)"
+    echo "  -c    Command to monitor (default: '$CMD')"
     echo "  -q    Quiet output, only print changed lines"
     exit 1
 }
@@ -37,8 +38,8 @@ trap "rm -f $PREV_OUTPUT $CURR_OUTPUT" EXIT
 touch "$PREV_OUTPUT"
 
 while true; do
-    # Clean up before running
-    eval "$CLEANUP"
+    # Clean up before running if CMD is DEFAULT
+    [[ "$CMD" == "$DEFAULT" ]] && eval "$CLEANUP"
     # Run the command and capture output
     eval "$CMD" > "$CURR_OUTPUT" 2>&1
 
