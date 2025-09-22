@@ -285,65 +285,65 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
         # os.system(python_exp)
         # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
 
-    for name, last_t in d_score.last_t.items():
+        for name, last_t in d_score.last_t.items():
 
-        task_s_score_iz = s_score[name]['iz'].get(sol_solver_id)
-        task_s_score_zo = s_score[name]['zo'].get(sol_solver_id)
-        if task_s_score_iz == 0 and task_s_score_zo == 0:
-            continue
-
-        print_l(f"{name} - {last_t}")
-        done = track_solution(last_t, None)
-
-        # Build differ body
-        differ_body = ''
-        for t_num in sorted(done):
-            t_split = [item.strip() for item in t_call[t_num].split(',')]
-            t = [s[:-2] if s.endswith('.t') else s for s in t_split]
-
-            func = t[0]
-            args = t[1:]
-            differ_body += f'    t{t_num} = '
-            differ_body += f'{func}('
-            differ_body += ', '.join(args)
-            differ_body += ')\n'
-        differ_body += f'    return t{last_t}\n'
-
-        differ_source = f'def differ(S, I, C):\n{differ_body}'
-        inlined_source = inline_variables(differ_source)
-        md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-
-        ensure_dir('differ_dir')
-
-        # ensure_dir('differ_def')
-        # differ_def_path = f'differ_def/{md5_hash}.def'
-
-        ensure_dir('differ_md5')
-        differ_md5_path = f'differ_md5/{md5_hash}.py'
-
-        # if not Path(differ_def_path).exists():
-        #     with open(differ_def_path, 'w') as f:
-        #         f.write(inlined_source)
-        #         f.write('\n')
-
-        # Expand to .py file
-        if not Path(differ_md5_path).exists():
-            # expand_file(differ_def_path, differ_md5_path, None, True)
-            generate_expanded_content(inlined_source, differ_md5_path)
-
-        for score_type in ['iz', 'zo']:
-            task_s_score = s_score[name][score_type].get(sol_solver_id)
-
-            if task_s_score == 0:
+            task_s_score_iz = s_score[name]['iz'].get(sol_solver_id)
+            task_s_score_zo = s_score[name]['zo'].get(sol_solver_id)
+            if task_s_score_iz == 0 and task_s_score_zo == 0:
                 continue
 
-            # differ_score = f'differ_dir/solve_{task_id}/{score_type}/{task_s_score}/{t_log}'
-            # differ_link = f'{differ_score}/{solver_md5}/{md5_hash}.py'
-            # ensure_dir(f'{differ_score}/{solver_md5}')
-            differ_score = f'differ_dir/{score_type}/solve_{task_id}/{task_s_score}/{t_log}'
-            ensure_dir(differ_score)
-            differ_link = f'{differ_score}/{md5_hash}.py'
-            symlink(differ_md5_path, differ_link)
+            # print_l(f"{name} - {last_t}")
+            done = track_solution(last_t, None)
+
+            # Build differ body
+            differ_body = ''
+            for t_num in sorted(done):
+                t_split = [item.strip() for item in t_call[t_num].split(',')]
+                t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+
+                func = t[0]
+                args = t[1:]
+                differ_body += f'    t{t_num} = '
+                differ_body += f'{func}('
+                differ_body += ', '.join(args)
+                differ_body += ')\n'
+            differ_body += f'    return t{last_t}\n'
+
+            differ_source = f'def differ(S, I, C):\n{differ_body}'
+            inlined_source = inline_variables(differ_source)
+            md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
+
+            ensure_dir('differ_dir')
+
+            # ensure_dir('differ_def')
+            # differ_def_path = f'differ_def/{md5_hash}.def'
+
+            ensure_dir('differ_md5')
+            differ_md5_path = f'differ_md5/{md5_hash}.py'
+
+            # if not Path(differ_def_path).exists():
+            #     with open(differ_def_path, 'w') as f:
+            #         f.write(inlined_source)
+            #         f.write('\n')
+
+            # Expand to .py file
+            if not Path(differ_md5_path).exists():
+                # expand_file(differ_def_path, differ_md5_path, None, True)
+                generate_expanded_content(inlined_source, differ_md5_path)
+
+            for score_type in ['iz', 'zo']:
+                task_s_score = s_score[name][score_type].get(sol_solver_id)
+
+                if task_s_score == 0:
+                    continue
+
+                # differ_score = f'differ_dir/solve_{task_id}/{score_type}/{task_s_score}/{t_log}'
+                # differ_link = f'{differ_score}/{solver_md5}/{md5_hash}.py'
+                # ensure_dir(f'{differ_score}/{solver_md5}')
+                differ_score = f'differ_dir/{score_type}/solve_{task_id}/{task_s_score}/{t_log}'
+                ensure_dir(differ_score)
+                differ_link = f'{differ_score}/{md5_hash}.py'
+                symlink(differ_md5_path, differ_link)
 
     # No timeout
     return False, d_score
