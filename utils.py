@@ -28,7 +28,7 @@ from timeit import default_timer as timer
 
 
 import solvers_pre
-import solvers_evo
+# import solvers_evo
 
 Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 't_score'])
 Differ = namedtuple('Differ', ['name', 'path', 'source', 'score_type', 's_score', 't_score'])
