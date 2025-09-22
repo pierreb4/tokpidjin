@@ -414,10 +414,6 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
     total_data = train_data
 
-    # Rename 'train' samples 'demo' to avoid confusion with the 'train' dataset
-    # So we have train/eval datasets and demo/test samples
-    total_data['demo'] = total_data.pop('train')
-
     # NOTE We could have a task list just for unsolved tasks
     full_list = list(total_data['demo'].keys())
 

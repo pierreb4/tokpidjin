@@ -563,7 +563,7 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
 def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt_file_name='batt.py'):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
-    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
+    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
     total_data = train_data
 
     # Get one of best solvers if not mutating (while running main.py for instance)
@@ -594,7 +594,7 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
         task_sizes = []
         for task_id in rnd_task_ids:
             size = 0
-            for S in total_data['train'][task_id] + total_data['test'][task_id]:
+            for S in total_data['demo'][task_id] + total_data['test'][task_id]:
                 for ex in S.values():
                     size += sum(len(inner) for inner in ex)
             task_sizes.append(size)
@@ -656,10 +656,10 @@ def batt(task_id, S, I, C, log_path):
                 # solver_path = solver.path
                 source = solver.source
 
-                if task_id not in total_data['train']:
+                if task_id not in total_data['demo']:
                     continue
 
-                train_task = total_data['train'][task_id]
+                train_task = total_data['demo'][task_id]
                 S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
                 code.S = S
                 code.task_id = task_id

@@ -201,9 +201,11 @@ def get_data(train=True, sort_by_size=False, task_id=None):
                 data[task_key] = json.load(f)
     
     # Convert to tuples for immutability
+    # Rename 'train' samples 'demo' to avoid confusion with the 'train' dataset
+    # So we have train/eval datasets and demo/test samples
     ast = lambda g: tuple(tuple(r) for r in g)
     return {
-        'train': {k: [{
+        'demo': {k: [{
             'input': ast(e['input']),
             'output': ast(e['output']),
         } for e in v['train']] for k, v in data.items()},
@@ -323,9 +325,9 @@ def get_solvers(imports, best_only=False):
     train_data = get_data(train=True)
     # eval_data = get_data(train=False)
 
-    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
-    total_data = {k: {**train_data[k]} for k in ['train', 'test']}
-    task_list = list(total_data['train'].keys())
+    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
+    total_data = {k: {**train_data[k]} for k in ['demo', 'test']}
+    task_list = list(total_data['demo'].keys())
 
     # Exclude known bad solvers
     # bad_solvers = BAD_SOLVERS

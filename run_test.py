@@ -5,7 +5,7 @@ This script tests the Domain Specific Language (DSL) for the Abstraction and Rea
 It provides functionality to:
 - Run tests on the DSL primitives
 - Check the formatting of solvers to ensure they follow DSL conventions
-- Verify the correctness of solvers against training and test examples
+- Verify the correctness of solvers against demo and test samples
 
 Usage:
   python run_test.py                     # Run all tests
@@ -40,23 +40,23 @@ from dsl import *
 from constants import *
 
 
-def get_data(train=True):
-    path = f'../data/{"training" if train else "evaluation"}'
-    data = {}
-    for fn in os.listdir(path):
-        with open(f'{path}/{fn}') as f:
-            data[fn.rstrip('.json')] = json.load(f)
-    ast = lambda g: tuple(tuple(r) for r in g)
-    return {
-        'train': {k: [{
-            'input': ast(e['input']),
-            'output': ast(e['output']),
-        } for e in v['train']] for k, v in data.items()},
-        'test': {k: [{
-            'input': ast(e['input']),
-            'output': ast(e['output']),
-        } for e in v['test']] for k, v in data.items()}
-    }
+# def get_data(train=True):
+#     path = f'../data/{"training" if train else "evaluation"}'
+#     data = {}
+#     for fn in os.listdir(path):
+#         with open(f'{path}/{fn}') as f:
+#             data[fn.rstrip('.json')] = json.load(f)
+#     ast = lambda g: tuple(tuple(r) for r in g)
+#     return {
+#         'train': {k: [{
+#             'input': ast(e['input']),
+#             'output': ast(e['output']),
+#         } for e in v['train']] for k, v in data.items()},
+#         'test': {k: [{
+#             'input': ast(e['input']),
+#             'output': ast(e['output']),
+#         } for e in v['test']] for k, v in data.items()}
+#     }
 
 
 def get_functions(path):
@@ -535,9 +535,9 @@ def main():
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
     total_data = train_data
 
-    # Rename 'train' samples 'demo' to avoid confusion with the 'train' dataset
-    # So we have train/eval datasets and demo/test samples
-    total_data['demo'] = total_data.pop('train')
+    # # Rename 'train' samples 'demo' to avoid confusion with the 'train' dataset
+    # # So we have train/eval datasets and demo/test samples
+    # total_data['demo'] = total_data.pop('train')
     
     if args.task_id is not None:
         task_id = args.task_id
