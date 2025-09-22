@@ -86,20 +86,20 @@ class D_Score:
 
 def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
     task_start = timer()
-    train_task = total_data['train'][task_id]
+    demo_task = total_data['demo'][task_id]
     test_task = total_data['test'][task_id]
-    # total_task = total_data['train'][task_id] + total_data['test'][task_id]
+    # total_task = total_data['demo'][task_id] + total_data['test'][task_id]
 
-    o = {'train': {}, 'test': {}}
-    s = {'train': {}, 'test': {}}
+    o = {'demo': {}, 'test': {}}
+    s = {'demo': {}, 'test': {}}
     all_o = set()
-    S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in train_task)
+    S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in demo_task)
 
     print_l(f'-- {task_id} - {task_i} --')
 
     o_score = O_Score()
     s_score = {}
-    for i, sample in enumerate(train_task):
+    for i, sample in enumerate(demo_task):
         I = sample['input']
         O = sample['output']
         if prof is not None:
@@ -107,20 +107,20 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         solve_timed_out, solve_result = run_with_timeout(batt,
             [task_id, S, I, None, pile_log_path], timeout)
         if prof is not None:
-            prof['batt.train.run_with_timeout'] += timer() - prof_start
+            prof['batt.demo.run_with_timeout'] += timer() - prof_start
 
         if solve_timed_out:
-            print_l(f'-- {task_id} - train[{i}] timed out')
+            print_l(f'-- {task_id} - demo[{i}] timed out')
 
         t_set = set()
         if solve_result is not None:
-            o['train'][i], _ = solve_result
+            o['demo'][i], _ = solve_result
 
-            # print_l(f"train[{i}] - {task_id} - {len(o['train'][i])} - {len(s['train'][i])}")
-            print_l(f"train[{i}] - {task_id} - {len(o['train'][i])}")
+            # print_l(f"demo[{i}] - {task_id} - {len(o['demo'][i])} - {len(s['demo'][i])}")
+            print_l(f"demo[{i}] - {task_id} - {len(o['demo'][i])}")
 
-            all_o = all_o.union(o['train'][i])
-            for t_n, evo, o_solver_id, okt in o['train'][i]:
+            all_o = all_o.union(o['demo'][i])
+            for t_n, evo, o_solver_id, okt in o['demo'][i]:
                 if not okt.ok:
                     continue
 
@@ -130,15 +130,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     print_l(f'- {o_solver_id = } - {match = }')
                 o_score.update(o_solver_id, match)
 
-                # We know the correct output for both training and eval tasks
+                # We know the correct output for both train and eval tasks
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     [task_id, S, I, O, pile_log_path], timeout)
                     # [task_id, S, I, C, pile_log_path], timeout)
 
                 if diff_result is not None:
-                    _, s['train'][i] = diff_result
+                    _, s['demo'][i] = diff_result
 
-                    for s_item in s['train'][i]:
+                    for s_item in s['demo'][i]:
                         d_score.update(o_solver_id, s_item)
 
     # NOTE Move this around when we start with 'eval' runs?
@@ -180,10 +180,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     print_l(f'- {o_solver_id = } - {match = }')
                 o_score.update(o_solver_id, match)
 
-                # We know the correct output for training tasks, not eval tasks
+                # We know the correct output for demo tasks, not eval tasks
                 # TODO Try comparing to C when we start dealing with eval tasks
                 # XXX Or just do that all the time, to simplify? The performance
-                # hit is only on training tasks, that are pre-processed, right? 
+                # hit is only on demoing tasks, that are pre-processed, right? 
                 diff_timed_out, diff_result = run_with_timeout(batt,
                     # [task_id, S, I, O, pile_log_path], timeout)
                     [task_id, S, I, C, pile_log_path], timeout)
@@ -194,7 +194,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     for s_item in s['test'][i]:
                         d_score.update(o_solver_id, s_item)
 
-    len_task = len(train_task) + len(test_task)
+    len_task = len(demo_task) + len(test_task)
     elapsed = timer() - start_time
     return all_o, o_score, s_score
 
@@ -209,7 +209,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
 
     print_l(f'-- {task_id} - {task_i} done - {len(all_o)} solutions found')
 
-    # NOTE all_o contains solutions to 'train' and 'test' tasks
+    # NOTE all_o contains solutions to 'demo' and 'test' tasks
     #      Maybe don't save twice the same things
     t_log = 10
     for solution in all_o:
@@ -391,7 +391,7 @@ def pick_rnd_task(task_list, total_data):
     task_sizes = []
     for task_id in task_list:
         size = 0
-        for S in total_data['train'][task_id] + total_data['test'][task_id]:
+        for S in total_data['demo'][task_id] + total_data['test'][task_id]:
             for ex in S.values():
                 size += sum(len(inner) for inner in ex)
         task_sizes.append(size)
@@ -411,11 +411,15 @@ def pick_rnd_task(task_list, total_data):
 def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
-    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['train', 'test']}
+    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
     total_data = train_data
 
+    # Rename 'train' samples 'demo' to avoid confusion with the 'train' dataset
+    # So we have train/eval datasets and demo/test samples
+    total_data['demo'] = total_data.pop('train')
+
     # NOTE We could have a task list just for unsolved tasks
-    full_list = list(total_data['train'].keys())
+    full_list = list(total_data['demo'].keys())
 
     if start == 0 and count < 0:
         task_list = random.sample(full_list, -count)

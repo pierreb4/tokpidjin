@@ -570,7 +570,8 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     # solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
     pre_solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
     dir_solvers = get_solvers([solvers_dir], best_only=freeze_solvers)
-    all_solvers = {**dir_solvers, **pre_solvers}
+    # all_solvers = {**dir_solvers, **pre_solvers}
+    all_solvers = {**pre_solvers, **dir_solvers}
     all_task_ids = list(all_solvers.keys())    
 
     print_l(f"{len(all_solvers) = }")
@@ -578,15 +579,16 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     if task_id:
         solvers = {k: all_solvers[k] for k in [task_id]}
     elif count > 0:
-        # Pick random solvers, half from pre_solvers, half from dir_solvers
-        # TODO Refine to pick half proven solvers and half unproven solvers
-        # We can check that the score in solver_dir (solver.o_score) matches the number of samples in S
-        rnd_dir_solvers = {k: dir_solvers[k] for k in random.sample(list(dir_solvers.keys()), count // 2)}
-        dir_count = len(rnd_dir_solvers)
-        pre_count = count - dir_count
-        rnd_pre_solvers = {k: pre_solvers[k] for k in random.sample(list(pre_solvers.keys()), pre_count)}
-        # XXX Don't apply sourcery suggestion below. It breaks things!
-        rnd_solvers = {**rnd_dir_solvers, **rnd_pre_solvers}
+        # # Pick random solvers, half from pre_solvers, half from dir_solvers
+        # # TODO Refine to pick half proven solvers and half unproven solvers
+        # # We can check that the score in solver_dir (solver.o_score) matches the number of samples in S
+        # rnd_dir_solvers = {k: dir_solvers[k] for k in random.sample(list(dir_solvers.keys()), count // 2)}
+        # dir_count = len(rnd_dir_solvers)
+        # pre_count = count - dir_count
+        # rnd_pre_solvers = {k: pre_solvers[k] for k in random.sample(list(pre_solvers.keys()), pre_count)}
+        # # XXX Don't apply sourcery suggestion below. It breaks things!
+        # rnd_solvers = {**rnd_dir_solvers, **rnd_pre_solvers}
+        rnd_solvers = {k: all_solvers[k] for k in random.sample(list(all_solvers.keys()), count)}
         rnd_task_ids = list(rnd_solvers.keys())
 
         task_sizes = []

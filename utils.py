@@ -235,7 +235,8 @@ def get_solver_source(task_id, imports=None, best_only=False):
             file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
             if not file_paths:
                 # print_l(f'No solver found for {task_id}, using identity')
-                return Solver('solve', None, solve_identity, 0, 999)
+                return Solver('solve', None, None, 0, 999)
+                # return Solver('solve', None, solve_identity, 0, 999)
             random.shuffle(file_paths)
             for file_path in file_paths:
                 sections = file_path.split('/')

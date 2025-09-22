@@ -154,7 +154,7 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
 
 def check_solver_speed(data, solver, task_id, timeout=1):
     """ checks the speed of the solver """
-    task = data['train'][task_id] + data['test'][task_id]
+    task = data['demo'][task_id] + data['test'][task_id]
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
 
     with contextlib.suppress(Exception):
@@ -194,7 +194,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
         else:
             task_id = specific_id
 
-        if task_id in data['train']:
+        if task_id in data['demo']:
             task_ids = [task_id]
             solve_func[task_id] = f'solve_{task_id}'
         else:
@@ -202,7 +202,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
             return
 
     else:
-        task_ids = data['train'].keys()
+        task_ids = data['demo'].keys()
         for task_id in task_ids:
             solve_func[task_id] = f'solve_{task_id}'
 
@@ -216,14 +216,14 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
     else:
         iter_keys = task_ids
 
-    correct_train = 0
+    correct_demo = 0
     correct_test = 0
     for task_id in iter_keys:
         if not quiet:
             print_l(f'Testing solver for task_id: {task_id}')
 
-        task = data['train'][task_id] + data['test'][task_id]
-        num_train = len(data['train'][task_id])
+        task = data['demo'][task_id] + data['test'][task_id]
+        num_demo = len(data['demo'][task_id])
         num_test = len(data['test'][task_id])
 
         # imports = None if quiet else [solvers_pre, solvers_dir]
@@ -258,7 +258,7 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
         try:
             correct = 1
             for i, ex in enumerate(task):
-                k_type = 'Train' if i < num_train else 'Test'
+                k_type = 'Train' if i < num_demo else 'Test'
 
                 ok = 'OK'
                 if quiet:
@@ -534,6 +534,10 @@ def main():
     eval_data = get_data(train=False)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
     total_data = train_data
+
+    # Rename 'train' samples 'demo' to avoid confusion with the 'train' dataset
+    # So we have train/eval datasets and demo/test samples
+    total_data['demo'] = total_data.pop('train')
     
     if args.task_id is not None:
         task_id = args.task_id
