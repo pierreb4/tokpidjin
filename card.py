@@ -311,11 +311,15 @@ class Code:
             old_args[i] = self.substitute_symbol(old_arg, A4_NAMES)
         elif old_hint == 'A8':
             old_args[i] = self.substitute_grid_angle(old_arg)
+        elif old_hint == 'Boolean':
+            old_args[i] = self.substitute_symbol(old_arg, B_NAMES)
+        elif old_hint == 'IJ':
+            old_args[i] = self.substitute_symbol(old_arg, PAIR_GENERIC_CONSTANTS)
         elif old_hint not in [ 'Samples', 'Grid', 'Tuple',
                 'Object', 'Objects', 'FrozenSet', 'Patch', 
                 'Callable', 'Container', 'ContainerContainer',
                 'Integer', 'IntegerSet', 'Numerical', 'Indices', 
-                'Boolean', 'IJ', 'TupleTuple', 'Any',
+                'TupleTuple', 'Any',
                 None
             ]:
             print_l(f'{old_hint = }')
