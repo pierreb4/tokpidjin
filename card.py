@@ -223,13 +223,13 @@ class Code:
                 for i, old_arg in enumerate(old_args):
                     # First deal with t variables
                     if re.match(r't\d+', old_arg):
+                        if not freeze:
+                            t_n = int(old_arg[1:])
+                            has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
                         if self.t_num not in self.t_isok:
                             self.t_isok[self.t_num] = f'{old_arg}.ok'
                         else:
                             self.t_isok[self.t_num] += f' and {old_arg}.ok'
-                        if not freeze:
-                            t_n = int(old_arg[1:])
-                            has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
                     elif not freeze:
                         has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
@@ -238,13 +238,13 @@ class Code:
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
                 # First deal with t variables
                 if re.match(r't\d+', old_arg):
+                    if not freeze:
+                        t_n = int(old_arg[1:])
+                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
                     if self.t_num not in self.t_isok:
                         self.t_isok[self.t_num] =  f'{old_arg}.ok'
                     else:
                         self.t_isok[self.t_num] += f' and {old_arg}.ok'
-                    if not freeze:
-                        t_n = int(old_arg[1:])
-                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
                 elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
@@ -269,38 +269,24 @@ class Code:
             # TODO Check parameter impact on mutation numbers            
             t_offset = random.randint(1, t_n)
             if t_offset > 0:
-            # if t_offset > self.last_differ_t_num:
-                new_call = clean_call(self.t_call[t_offset])
-                new_items = get_items(new_call)
+                # new_call = clean_call(self.t_call[t_offset])
+                # new_items = get_items(new_call)
 
-                if random.randint(0, 1) == 0:
-                    new_func_name = new_items[0].strip()
+                # if random.randint(0, 1) == 0:
+                #     new_func_name = new_items[0].strip()
+                # else:
+                #     # XXX Pick a random function name from dsl.py
+                #     #     If promising, make more structural
+                #     new_func_name = random.choice(DSL_FUNCNAMES)
+                #     new_items[0] = new_func_name
 
-                    new_hints = get_hints(new_func_name)
-                    new_hint = new_hints[0] if new_hints else None
+                # new_hints = get_hints(new_func_name)
+                # new_hint = new_hints[0] if new_hints else None
 
-                    if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
-                        # has_mutation = True
-                        pattern = rf'\bt{t_n}\b'
-                        self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-                        has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
-
-                else:
-                    # XXX Pick a random function name from dsl.py
-                    #     If promising, make more structural
-                    new_func_name = random.choice(DSL_FUNCNAMES)
-                    # print_l(f'Random function name {new_func_name} for t{t_offset} in {old_call}')
-
-                    new_hints = get_hints(new_func_name)
-                    new_hint = new_hints[0] if new_hints else None
-                    # print_l(f'{old_hint = } - {new_hints = }')
-
-                    if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
-                        # has_mutation = True
-                        pattern = rf'\bt{t_n}\b'
-                        self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-                        has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
-                        # print_l(f'- Mutated {old_call} to {self.t_call[self.t_num]}')
+                # if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
+                pattern = rf'\bt{t_n}\b'
+                self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+                has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
 
         return has_mutation
 
