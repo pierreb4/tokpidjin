@@ -570,8 +570,8 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     # solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
     pre_solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
     dir_solvers = get_solvers([solvers_dir], best_only=freeze_solvers)
-    # all_solvers = {**dir_solvers, **pre_solvers}
-    all_solvers = {**pre_solvers, **dir_solvers}
+    all_solvers = {**dir_solvers, **pre_solvers}
+    # all_solvers = {**pre_solvers, **dir_solvers}
     all_task_ids = list(all_solvers.keys())    
 
     print_l(f"{len(all_solvers) = }")
