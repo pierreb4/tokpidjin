@@ -215,9 +215,9 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
     for solution in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = solution
 
-        task_o_score = o_score.get(sol_solver_id)
-        if task_o_score == 0:
-            continue
+        # task_o_score = o_score.get(sol_solver_id)
+        # if task_o_score == 0:
+        #     continue
 
         # Track calls then reverse sequence to rebuild solver
         done = track_solution(sol_t, None)
@@ -287,10 +287,10 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
 
         for name, last_t in d_score.last_t.items():
 
-            task_s_score_iz = s_score[name]['iz'].get(sol_solver_id)
-            task_s_score_zo = s_score[name]['zo'].get(sol_solver_id)
-            if task_s_score_iz == 0 and task_s_score_zo == 0:
-                continue
+            # task_s_score_iz = s_score[name]['iz'].get(sol_solver_id)
+            # task_s_score_zo = s_score[name]['zo'].get(sol_solver_id)
+            # if task_s_score_iz == 0 and task_s_score_zo == 0:
+            #     continue
 
             # print_l(f"{name} - {last_t}")
             done = track_solution(last_t, None)
@@ -334,8 +334,8 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
             for score_type in ['iz', 'zo']:
                 task_s_score = s_score[name][score_type].get(sol_solver_id)
 
-                if task_s_score == 0:
-                    continue
+                # if task_s_score == 0:
+                #     continue
 
                 # differ_score = f'differ_dir/solve_{task_id}/{score_type}/{task_s_score}/{t_log}'
                 # differ_link = f'{differ_score}/{solver_md5}/{md5_hash}.py'
