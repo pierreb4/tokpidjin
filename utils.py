@@ -178,7 +178,7 @@ def get_data(train=True, sort_by_size=False, task_id=None):
     Returns:
         Dictionary containing task data organized by train/test sets
     """
-    prefix = '../input/arc-prize-2025'
+    prefix = '../arc-prize-2025'
     stage = 'training' if train else 'evaluation'
     challenges_path = f'{prefix}/arc-agi_{stage}_challenges.json'
     solutions_path = f'{prefix}/arc-agi_{stage}_solutions.json'
