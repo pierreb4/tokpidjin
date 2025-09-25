@@ -209,7 +209,7 @@ class Code:
         return f't{t_num + 1}'
 
 
-    def mutate(self, freeze=False):
+    def mutate(self, is_solver, freeze=False):
         old_call = clean_call(self.t_call[self.t_num])
         self.t_call[self.t_num] = old_call
 
@@ -236,13 +236,13 @@ class Code:
                 if re.match(r't\d+', old_arg):
                     if not freeze:
                         t_n = int(old_arg[1:])
-                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
+                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
                     if self.t_num not in self.t_isok:
                         self.t_isok[self.t_num] = f'{old_arg}.ok'
                     else:
                         self.t_isok[self.t_num] += f' and {old_arg}.ok'
                 elif not freeze:
-                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
+                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
         else:
             # old_func_name is a known function
             for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
@@ -250,13 +250,13 @@ class Code:
                 if re.match(r't\d+', old_arg):
                     if not freeze:
                         t_n = int(old_arg[1:])
-                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
+                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
                     if self.t_num not in self.t_isok:
                         self.t_isok[self.t_num] =  f'{old_arg}.ok'
                     else:
                         self.t_isok[self.t_num] += f' and {old_arg}.ok'
                 elif not freeze:
-                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
+                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
 
         return self.file_pile(has_mutation)
 
@@ -277,34 +277,43 @@ class Code:
         return has_mutation
 
 
-    def do_offset_mutation(self, old_hint, old_call, t_n, has_mutation):
+    def do_offset_mutation(self, old_hint, old_call, t_n, is_solver, has_mutation):
         while random.random() < 0.01:
-            # TODO Check parameter impact on mutation numbers            
-            t_offset = random.randint(1, t_n)
-            if t_offset > 0:
-                # new_call = clean_call(self.t_call[t_offset])
-                # new_items = get_items(new_call)
+            # TODO Check parameter impact on mutation numbers
 
-                # if random.randint(0, 1) == 0:
-                #     new_func_name = new_items[0].strip()
-                # else:
-                #     # XXX Pick a random function name from dsl.py
-                #     #     If promising, make more structural
-                #     new_func_name = random.choice(DSL_FUNCNAMES)
-                #     new_items[0] = new_func_name
+            while True:
+                t_offset = random.randint(1, t_n)
+                if is_solver and self.solver.get(t_offset, False) or not is_solver:
+                    pattern = rf'\bt{t_n}\b'
+                    self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+                    has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
+                    break
 
-                # new_hints = get_hints(new_func_name)
-                # new_hint = new_hints[0] if new_hints else None
+            # t_offset = random.randint(1, t_n)
+            # if t_offset > 0:
+            #     # new_call = clean_call(self.t_call[t_offset])
+            #     # new_items = get_items(new_call)
 
-                # if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
-                pattern = rf'\bt{t_n}\b'
-                self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-                has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
+            #     # if random.randint(0, 1) == 0:
+            #     #     new_func_name = new_items[0].strip()
+            #     # else:
+            #     #     # XXX Pick a random function name from dsl.py
+            #     #     #     If promising, make more structural
+            #     #     new_func_name = random.choice(DSL_FUNCNAMES)
+            #     #     new_items[0] = new_func_name
+
+            #     # new_hints = get_hints(new_func_name)
+            #     # new_hint = new_hints[0] if new_hints else None
+
+            #     # if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
+            #     pattern = rf'\bt{t_n}\b'
+            #     self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+            #     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
 
         return has_mutation
 
 
-    def do_arg_substitutions(self, old_hint, old_call, old_args, old_arg, i, has_mutation):
+    def do_arg_substitutions(self, old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation):
         if old_hint in ['C_']:
             old_args[i] = self.substitute_color(old_arg)
         elif old_hint == 'FL':
@@ -342,12 +351,13 @@ class Code:
             else:
                 # Replace with a t variable
                 t_n = self.t_num - 1
-                t_offset = random.randint(1, t_n)
-                old_args[i] = f't{t_offset}'
-            # print_l(f'- Replacing {old_arg} with {old_args[i]} in {old_call}')
+                while True:
+                    t_offset = random.randint(1, t_n)
+                    if is_solver and self.solver.get(t_offset, False) or not is_solver:
+                        old_args[i] = f't{t_offset}'
+                        break
 
         if old_args[i] != old_arg:
-            # has_mutation = True
             pattern = rf'\b{old_arg}\b'
             self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call)
             has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
@@ -505,6 +515,9 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
     old_name, old_call = next(iter(equals.items()))
     uses[old_call] = 0
 
+    old_items = get_items(old_call)
+    old_func_name = old_items[0].strip()
+
     # Remove entry from equals
     del equals[old_name]
 
@@ -514,8 +527,11 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         code.t_num += 1
         code.t_call[code.t_num] = old_call
         code.differ[code.t_num] = True
-        code.solver[code.t_num] = False
-        has_mutation = code.mutate(freeze_differs)
+        # Make t_num available for solver mutation when it fills conditions
+        code.solver[code.t_num] = bool(
+            len(equals) == 1 and old_func_name.startswith('get_nth_')
+        )
+        has_mutation = code.mutate(False, freeze_differs)
         code.t_number[old_call] = code.t_num
     else:
         # has_mutation = False
@@ -556,7 +572,7 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
         code.t_call[code.t_num] = old_call
         code.differ[code.t_num] = False
         code.solver[code.t_num] = True
-        has_mutation = code.mutate(freeze_solvers)
+        has_mutation = code.mutate(True, freeze_solvers)
         code.t_number[old_call] = code.t_num
     else:
         # has_mutation = False
