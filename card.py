@@ -62,6 +62,10 @@ class Code:
         self.t_isok = t_isok if t_isok is not None else {}
         self.t_number = t_number if t_number is not None else {}
 
+        # List t_nums available for differ or solver mutation
+        self.differ = {}
+        self.solver = {}
+
         self.t_num = t_num
         self.score = score
 
@@ -215,11 +219,18 @@ class Code:
         old_func_name = old_items[0].strip()
         old_hints = get_hints(old_func_name)
 
+        differ = self.differ[self.t_num]
+        solver = self.solver[self.t_num]
+        print(f'    # t{self.t_num} - {differ = } - {solver = } - {old_items = } - {old_hints = }', file=self.file)
+
         has_mutation = Mutation(False, None, None)
         if old_args := re.findall(r'\b(\w+)\b', old_call):
+            # old_args = re.findall(r'\b(\w+)\b', old_call)
+
             # TODO Track t variables to get to hints
             if old_hints is None:
                 old_hint = None
+                # old_func_name is a t variable
                 for i, old_arg in enumerate(old_args):
                     # First deal with t variables
                     if re.match(r't\d+', old_arg):
@@ -232,22 +243,24 @@ class Code:
                             self.t_isok[self.t_num] += f' and {old_arg}.ok'
                     elif not freeze:
                         has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
+            else:
+                # old_func_name is a known function
+                for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
+                    # First deal with t variables
+                    if re.match(r't\d+', old_arg):
+                        if not freeze:
+                            t_n = int(old_arg[1:])
+                            has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
+                        if self.t_num not in self.t_isok:
+                            self.t_isok[self.t_num] =  f'{old_arg}.ok'
+                        else:
+                            self.t_isok[self.t_num] += f' and {old_arg}.ok'
+                    elif not freeze:
+                        has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
 
-                return self.file_pile(has_mutation)
+            return self.file_pile(has_mutation)
 
-            for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
-                # First deal with t variables
-                if re.match(r't\d+', old_arg):
-                    if not freeze:
-                        t_n = int(old_arg[1:])
-                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, has_mutation)
-                    if self.t_num not in self.t_isok:
-                        self.t_isok[self.t_num] =  f'{old_arg}.ok'
-                    else:
-                        self.t_isok[self.t_num] += f' and {old_arg}.ok'
-                elif not freeze:
-                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, has_mutation)
-
+        assert False, f'No args found in {old_call}'
         return self.file_pile(has_mutation)
 
 
@@ -458,6 +471,7 @@ class Differs:
                 freeze_differs = self.freeze_differs if task_id is None else True
                 add_differ_line(equals_name, code, uses, task_id, freeze_differs)
 
+            # XXX Looks unused
             if task_id is None:
                 done = track_solution(code.t_call, code.t_num, None)
 
@@ -499,6 +513,8 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
+        code.differ[code.t_num] = True
+        code.solver[code.t_num] = False
         has_mutation = code.mutate(freeze_differs)
         code.t_number[old_call] = code.t_num
     else:
@@ -538,6 +554,8 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
+        code.differ[code.t_num] = False
+        code.solver[code.t_num] = True
         has_mutation = code.mutate(freeze_solvers)
         code.t_number[old_call] = code.t_num
     else:
@@ -570,8 +588,8 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     # solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
     pre_solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
     dir_solvers = get_solvers([solvers_dir], best_only=freeze_solvers)
-    # all_solvers = {**dir_solvers, **pre_solvers}
-    all_solvers = {**pre_solvers, **dir_solvers}
+    all_solvers = {**dir_solvers, **pre_solvers}
+    # all_solvers = {**pre_solvers, **dir_solvers}
     all_task_ids = list(all_solvers.keys())    
 
     print_l(f"{len(all_solvers) = }")

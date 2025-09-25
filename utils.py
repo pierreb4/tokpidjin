@@ -301,11 +301,18 @@ def get_solver_source(task_id, imports=None, best_only=False):
             weights = []
             best_o_score = -1
             best_item = None
-            file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
+            # file_paths = glob.glob(f'solver_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py')
+
+            # Pick solver from this task only if it solves at least one sample
+            file_paths = glob.glob(f'solver_dir/solve_{task_id}/[1-9]*/[0-9]*/[0-9a-f]*.py')
             if not file_paths:
                 # print_l(f'No solver found for {task_id}, using identity')
                 # return Solver('solve', None, None, 0, 0)
-                return Solver('solve', None, solve_identity, 0, 0)
+                # return Solver('solve', None, solve_identity, 0, 0)
+
+                # Pick random solver from any task
+                # file_paths = glob.glob('solver_dir/solve_*/[0-9]*/[0-9]*/[0-9a-f]*.py')
+                continue
             random.shuffle(file_paths)
             for file_path in file_paths:
                 sections = file_path.split('/')
