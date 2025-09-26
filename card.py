@@ -14,6 +14,7 @@ from dsl import *
 import dsl
 DSL_FUNCTIONS = inspect.getmembers(dsl, inspect.isfunction)
 DSL_FUNCNAMES = [name for name, func in DSL_FUNCTIONS]
+DSL_FUNC_DICT = {name: func for name, func in DSL_FUNCTIONS}
 
 
 # Borrowed from regin.py maybe can go to utils.py?
@@ -350,13 +351,19 @@ class Code:
                 # old_args[i] = random.choice(DSL_FUNCNAMES)
 
                 # Replace with random function of same arity
-                function = old_args[i]
-                old_n = function.__code__.co_argcount
-                while True:
-                    function = random.choice(DSL_FUNCNAMES)
-                    if function.__code__.co_argcount == old_n:
-                        break
-                old_args[i] = function
+                old_func_name = old_args[i]
+                if old_func_name in DSL_FUNC_DICT:
+                    old_function = DSL_FUNC_DICT[old_func_name]
+                    arity = old_function.__code__.co_argcount
+                    while True:
+                        new_func_name = random.choice(DSL_FUNCNAMES)
+                        new_function = DSL_FUNC_DICT[new_func_name]
+                        if new_function.__code__.co_argcount == arity:
+                            break
+                    old_args[i] = new_func_name
+                # else:
+                #     # If old_function not found in DSL_FUNC_DICT, just pick a random one
+                #     old_args[i] = random.choice(DSL_FUNCNAMES)
 
             else:
                 # Replace with a t variable
