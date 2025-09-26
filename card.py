@@ -534,7 +534,6 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         has_mutation = code.mutate(False, freeze_differs)
         code.t_number[old_call] = code.t_num
     else:
-        # has_mutation = False
         has_mutation = Mutation(False, None, None)
 
     if has_mutation.present and not freeze_differs and task_id is None:
@@ -548,12 +547,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
             equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
 
 
-# def append_to_o(code, last_call, has_mutation, task_id):
-    # last_t = code.t_number[last_call]
 def append_to_o(code, last_t, has_mutation, task_id):
-    # check_t = f't{last_t}.ok and t{last_t}.t == O'
-    # print(f"    o.append(({last_t}, {has_mutation}, '{task_id}', {check_t}))", file=code.file)
-    # check_t = f't{last_t}.t if t{last_t}.ok else None'
     print(f"    o.append(({last_t}, {has_mutation.present}, '{task_id}', t{last_t}))", file=code.file)
 
 
@@ -575,15 +569,11 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
         has_mutation = code.mutate(True, freeze_solvers)
         code.t_number[old_call] = code.t_num
     else:
-        # has_mutation = False
         has_mutation = Mutation(False, None, None)
 
     # Was the left side O?
     if old_name == 'O':
         append_to_o(code, code.t_num, has_mutation, task_id)
-        # # differs = Differs(freeze_differs=True, I=f't{code.t_number[old_call]}')
-        # differs.sub_I(I=f't{code.t_number[old_call]}')
-        # differs.add_lines(code, uses, task_id=task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
     for x_name, x_call in equals.items():
