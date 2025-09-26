@@ -544,6 +544,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
     for x_name, x_call in equals.items():
         if old_name in x_call:
             uses[old_call] += 1
+            # Replace old_name with t_number[old_call] to track mutations
             equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
 
 
