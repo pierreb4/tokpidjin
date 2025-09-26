@@ -347,7 +347,17 @@ class Code:
             print_l(f'{old_hint = }')
         elif self.t_num > 1 and random.random() < 0.01:
             if old_hint == 'Callable':
-                old_args[i] = random.choice(DSL_FUNCNAMES)
+                # old_args[i] = random.choice(DSL_FUNCNAMES)
+
+                # Replace with random function of same arity
+                function = old_args[i]
+                old_n = function.__code__.co_argcount
+                while True:
+                    function = random.choice(DSL_FUNCNAMES)
+                    if function.__code__.co_argcount == old_n:
+                        break
+                old_args[i] = function
+
             else:
                 # Replace with a t variable
                 t_n = self.t_num - 1
