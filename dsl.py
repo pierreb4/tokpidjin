@@ -1088,17 +1088,13 @@ def rbind(
         n = function._original_argcount
     else:
         n = function.__code__.co_argcount
-    print(f"lbind: function has {n} arguments")
 
     if n == 2:
         return lambda x: function(x, fixed)
+    elif n == 3:
+        return lambda x, y: function(x, y, fixed)
     else:
-        assert False, "rbind currently only supports functions with 2 arguments"
-
-    # elif n == 3:
-    #     return lambda x, y: function(x, y, fixed)
-    # else:
-    #     return lambda x, y, z: function(x, y, z, fixed)
+        return lambda x, y, z: function(x, y, z, fixed)
 
 
 # def rbind_1(
@@ -1136,17 +1132,13 @@ def lbind(
         n = function._original_argcount
     else:
         n = function.__code__.co_argcount
-    print(f"lbind: function has {n} arguments")
 
     if n == 2:
         return lambda y: function(fixed, y)
+    elif n == 3:
+        return lambda y, z: function(fixed, y, z)
     else:
-        assert False, "lbind currently only supports functions with 2 arguments"
-
-    # elif n == 3:
-    #     return lambda y, z: function(fixed, y, z)
-    # else:
-    #     return lambda y, z, a: function(fixed, y, z, a)
+        return lambda y, z, a: function(fixed, y, z, a)
 
 
 # def lbind_1(
