@@ -352,18 +352,14 @@ class Code:
 
                 # Replace with random function of same arity
                 old_func_name = old_args[i]
-                if old_func_name in DSL_FUNC_DICT:
-                    old_function = DSL_FUNC_DICT[old_func_name]
-                    arity = old_function.__code__.co_argcount
-                    while True:
-                        new_func_name = random.choice(DSL_FUNCNAMES)
-                        new_function = DSL_FUNC_DICT[new_func_name]
-                        if new_function.__code__.co_argcount == arity:
-                            break
-                    old_args[i] = new_func_name
-                # else:
-                #     # If old_function not found in DSL_FUNC_DICT, just pick a random one
-                #     old_args[i] = random.choice(DSL_FUNCNAMES)
+                old_function = DSL_FUNC_DICT[old_func_name]
+                arity = old_function.__code__.co_argcount
+                while True:
+                    new_func_name = random.choice(DSL_FUNCNAMES)
+                    new_function = DSL_FUNC_DICT[new_func_name]
+                    if new_function.__code__.co_argcount == arity:
+                        break
+                old_args[i] = new_func_name
 
             else:
                 # Replace with a t variable
