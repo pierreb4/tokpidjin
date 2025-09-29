@@ -265,7 +265,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
 
             if worst_file is not None:
                 os.remove(worst_file)
-                print_l(f'Remove {worst_file.stem} to make space')
+                # print_l(f'Remove {worst_file.stem} to make space')
                 files.remove(worst_file)
 
         if no_save:

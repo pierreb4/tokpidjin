@@ -137,9 +137,8 @@ while date && [ $STOP -eq 0 ]; do
     # do python replace_arg.py -q --input solvers_yyy.py --output-dir solver_md5/ $k
     # done
 
-    # for f in solver_dir/solve_*; do bash clean_solver.sh $f; done
-    find solver_dir -maxdepth 1 -type d -name 'solve_*' \
-        -exec bash clean_solve.sh {} \;
+    # find solver_dir -maxdepth 1 -type d -name 'solve_*' \
+    #     -exec bash clean_solve.sh {} \;
 
     # # Remove .def files in solver_def if corresponding .py file does not exist in solver_md5
     # find solver_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
