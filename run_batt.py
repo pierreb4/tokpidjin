@@ -264,7 +264,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
         task_o_score = o_score.get(sol_solver_id)
 
         if check_save(solve_task, task_o_score, max_files):
-            print_l(f'Skip saving solver {sol_solver_id} as worse than existing ones')
+            # print_l(f'Skip saving solver {sol_solver_id} as worse than existing ones')
             continue
 
         # Track calls then reverse sequence to rebuild solver
@@ -380,7 +380,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
 
                 differ_task = f'differ_dir/{score_type}/solve_{task_id}'
                 if check_save(differ_task, task_s_score, max_files):
-                    print_l(f'Skip saving differ {name} as worse than existing ones')
+                    # print_l(f'Skip saving differ {name} as worse than existing ones')
                     continue
 
 
