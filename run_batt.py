@@ -215,9 +215,62 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
     for solution in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = solution
 
-        # task_o_score = o_score.get(sol_solver_id)
-        # if task_o_score == 0:
-        #     continue
+        # Prepare storage folder
+        ensure_dir('solver_dir')
+        solve_task = f'solver_dir/solve_{task_id}'
+        ensure_dir(solve_task)
+
+        task_o_score = o_score.get(sol_solver_id)
+
+        # Check how many files have been saved for this task
+        root_path = Path(solve_task)
+
+        paths = list(root_path.rglob("*"))
+        # List files in paths (not folders)
+        files = [f for f in paths if f.is_file()]
+
+        no_save = False
+        max_files = 128
+        keep_no_files = (max_files if no_save else max_files - 1)
+        while len(files) > keep_no_files: 
+            # Too many files, remove worst one before saving new one
+            worst_o = None
+            worst_t = None
+            worst_file = None
+            for file in files:
+                if file.is_file():
+                    file_parts = file.relative_to(root_path).parts
+                    saved_o = int(file_parts[0])
+                    saved_t = int(file_parts[1])
+
+                    if worst_o is None or saved_o < worst_o:
+                        worst_o = saved_o
+                        worst_t = saved_t
+                        worst_file = file
+                    elif saved_o == worst_o and saved_t < worst_t:
+                        worst_t = saved_t
+                        worst_file = file
+
+            # if task_o_score < worst_o or (task_o_score == worst_o and t_log < worst_t):
+            if task_o_score < worst_o:
+                # New solution is worse than worst saved one, don't save
+                no_save = True
+                break
+            # elif task_o_score == worst_o:
+            #     # Pull logic here from below to calculate t_log
+            #     t_log = 11 - int(math.log(timer() - start_time))
+            #     if t_log <= worst_t:
+            #         no_save = True
+            #         break
+
+            if worst_file is not None:
+                os.remove(worst_file)
+                print_l(f'Remove {worst_file} to make space')
+                files.remove(worst_file)
+
+        if no_save:
+            print_l(f'Skip saving solution {solution} as worse than existing ones')
+            continue
 
         # Track calls then reverse sequence to rebuild solver
         done = track_solution(sol_t, None)
@@ -244,11 +297,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
         # Put task_id in function name to make solvers_dir.py usable
         # solver_source = re.sub(r'def solve\((.*)\):', f'def solve_{task_id}(\g<1>):', solver_source)
         # inlined_source = inline_variables(solver_source)
-
-        # Write inlined source to file
-        ensure_dir('solver_dir')
-        solve_task = f'solver_dir/solve_{task_id}'
-        ensure_dir(solve_task)
 
         # ensure_dir('solver_def')
         # solver_def_path = f'solver_def/{md5_hash}.def'
