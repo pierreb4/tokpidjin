@@ -199,6 +199,46 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     return all_o, o_score, s_score
 
 
+def check_save(path, score, max_files=128):
+    # List subpaths in path
+    root_path = Path(path)
+    paths = list(root_path.rglob("*"))
+
+    # List files (not folders) in subpaths
+    files = [f for f in paths if f.is_file()]
+
+    no_save = False
+    while len(files) > max_files: 
+        # Too many files, remove worst one before saving new one
+        worst_score = None
+        worst_time = None
+        worst_file = None
+        for file in files:
+            if file.is_file():
+                file_parts = file.relative_to(root_path).parts
+                saved_o = int(file_parts[0])
+                saved_t = int(file_parts[1])
+
+                if worst_score is None or saved_o < worst_score:
+                    worst_score = saved_o
+                    worst_time = saved_t
+                    worst_file = file
+                elif saved_o == worst_score and saved_t < worst_time:
+                    worst_time = saved_t
+                    worst_file = file
+
+        if score < worst_score:
+            # New candidate is worse than worst saved one, don't save
+            no_save = True
+            break
+
+        if worst_file is not None:
+            os.remove(worst_file)
+            files.remove(worst_file)
+
+    return no_save
+
+
 def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
     if prof is not None:
         prof_call_start = timer()
@@ -223,53 +263,8 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
 
         task_o_score = o_score.get(sol_solver_id)
 
-        # Check how many files have been saved for this task
-        root_path = Path(solve_task)
-
-        paths = list(root_path.rglob("*"))
-        # List files in paths (not folders)
-        files = [f for f in paths if f.is_file()]
-
-        no_save = False
-        keep_no_files = (max_files if no_save else max_files - 1)
-        while len(files) > keep_no_files: 
-            # Too many files, remove worst one before saving new one
-            worst_o = None
-            worst_t = None
-            worst_file = None
-            for file in files:
-                if file.is_file():
-                    file_parts = file.relative_to(root_path).parts
-                    saved_o = int(file_parts[0])
-                    saved_t = int(file_parts[1])
-
-                    if worst_o is None or saved_o < worst_o:
-                        worst_o = saved_o
-                        worst_t = saved_t
-                        worst_file = file
-                    elif saved_o == worst_o and saved_t < worst_t:
-                        worst_t = saved_t
-                        worst_file = file
-
-            # if task_o_score < worst_o or (task_o_score == worst_o and t_log < worst_t):
-            if task_o_score < worst_o:
-                # New candidate is worse than worst saved one, don't save
-                no_save = True
-                break
-            # elif task_o_score == worst_o:
-            #     # Pull logic here from below to calculate t_log
-            #     t_log = 11 - int(math.log(timer() - start_time))
-            #     if t_log <= worst_t:
-            #         no_save = True
-            #         break
-
-            if worst_file is not None:
-                os.remove(worst_file)
-                # print_l(f'Remove {worst_file.stem} to make space')
-                files.remove(worst_file)
-
-        if no_save:
-            print_l(f'Skip saving candidate {sol_solver_id} as worse than existing ones')
+        if check_save(solve_task, task_o_score, max_files):
+            print_l(f'Skip saving solver {sol_solver_id} as worse than existing ones')
             continue
 
         # Track calls then reverse sequence to rebuild solver
@@ -381,6 +376,13 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
 
             for score_type in ['iz', 'zo']:
                 task_s_score = s_score[name][score_type].get(sol_solver_id)
+
+
+                differ_task = f'differ_dir/{score_type}/solve_{task_id}'
+                if check_save(differ_task, task_s_score, max_files):
+                    print_l(f'Skip saving differ {name} as worse than existing ones')
+                    continue
+
 
                 # if task_s_score == 0:
                 #     continue
