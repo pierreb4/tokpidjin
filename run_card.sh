@@ -178,8 +178,8 @@ while date && [ $STOP -eq 0 ]; do
     # done
 
     # Note maxdepth 2, because of iz and zo sub-folders
-    find differ_dir -maxdepth 2 -type d -name 'solve_*' \
-        -exec bash clean_solve.sh {} \;
+    # find differ_dir -maxdepth 2 -type d -name 'solve_*' \
+    #     -exec bash clean_solve.sh {} \;
 
     # # Remove .def files in differ_def if corresponding .py file does not exist in differ_md5
     # find differ_def -maxdepth 1 -name '*.def' -print0 | while IFS= read -r -d '' def_file; do
