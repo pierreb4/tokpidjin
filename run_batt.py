@@ -207,13 +207,14 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
     if prof is not None:
         prof['run_batt.check_batt'] += timer() - prof_call_start
 
-    print_l(f'-- {task_id} - {task_i} done - {len(all_o)} solutions found')
+    print_l(f'-- {task_id} - {task_i} done - {len(all_o)} candidates scored')
 
-    # NOTE all_o contains solutions to 'demo' and 'test' tasks
+    # NOTE all_o contains candidates for 'demo' and 'test' tasks
     #      Maybe don't save twice the same things
     t_log = 10
-    for solution in all_o:
-        sol_t, sol_e, sol_solver_id, sol_m = solution
+    max_files = 128
+    for candidate in all_o:
+        sol_t, sol_e, sol_solver_id, sol_m = candidate
 
         # Prepare storage folder
         ensure_dir('solver_dir')
@@ -230,7 +231,6 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
         files = [f for f in paths if f.is_file()]
 
         no_save = False
-        max_files = 128
         keep_no_files = (max_files if no_save else max_files - 1)
         while len(files) > keep_no_files: 
             # Too many files, remove worst one before saving new one
@@ -253,7 +253,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
 
             # if task_o_score < worst_o or (task_o_score == worst_o and t_log < worst_t):
             if task_o_score < worst_o:
-                # New solution is worse than worst saved one, don't save
+                # New candidate is worse than worst saved one, don't save
                 no_save = True
                 break
             # elif task_o_score == worst_o:
@@ -269,13 +269,13 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
                 files.remove(worst_file)
 
         if no_save:
-            print_l(f'Skip saving solution {solution} as worse than existing ones')
+            print_l(f'Skip saving candidate {candidate} as worse than existing ones')
             continue
 
         # Track calls then reverse sequence to rebuild solver
         done = track_solution(sol_t, None)
 
-        # Build solution body
+        # Build candidate body
         solver_body = ''
         for t_num in sorted(done):
             t_split = [item.strip() for item in t_call[t_num].split(',')]
@@ -331,7 +331,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
         # python_exp = 'python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py'
         # python_cmd = f'python run_test.py --solvers solvers_dir -k {task_id}_{md5_hash}'
         # os.system(python_exp)
-        # assert(os.system(python_cmd) == 0), f"Incorrect solution found by:\n{python_cmd}"
+        # assert(os.system(python_cmd) == 0), f"Unfit candidate found by:\n{python_cmd}"
 
         for name, last_t in d_score.last_t.items():
 
