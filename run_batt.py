@@ -269,7 +269,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
                 files.remove(worst_file)
 
         if no_save:
-            print_l(f'Skip saving candidate {candidate} as worse than existing ones')
+            print_l(f'Skip saving candidate {sol_solver_id} as worse than existing ones')
             continue
 
         # Track calls then reverse sequence to rebuild solver
