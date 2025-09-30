@@ -268,7 +268,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
         solve_task = f'solver_dir/solve_{task_id}'
         ensure_dir(solve_task)
 
-        task_o_score = o_score.get(sol_solver_id)
+        task_o_score = o_score.get(sol_solver_id, 0)
 
         if check_save(solve_task, task_o_score, max_files):
             # print_l(f'Skip saving solver {sol_solver_id} as worse than existing ones')
@@ -320,7 +320,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
             # expand_file(solver_def_path, solver_md5_path, None, True)
             generate_expanded_content(inlined_source, solver_md5_path)
 
-        task_o_score = o_score.get(sol_solver_id)
+        task_o_score = o_score.get(sol_solver_id, 0)
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{t_log}'
 
         ensure_dir(solver_score)
