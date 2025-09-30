@@ -7,6 +7,7 @@ import math
 import importlib
 import os
 
+from contextlib import suppress
 from timeit import default_timer as timer
 from pathlib import Path
 from collections import defaultdict
@@ -202,7 +203,12 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
 def check_save(path, score, max_files=128):
     # List subpaths in path
     root_path = Path(path)
-    paths = list(root_path.rglob("*"))
+
+    done = False
+    while not done:
+        with suppress(FileNotFoundError):
+            paths = list(root_path.rglob("*"))
+            done = True
 
     # List files (not folders) in subpaths
     files = [f for f in paths if f.is_file()]
