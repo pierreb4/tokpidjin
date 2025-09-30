@@ -6,7 +6,13 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-SOLVER_DIR="$HOME/dsl/tokpidjin/$1"
+# SOLVER_DIR="$HOME/dsl/tokpidjin/$1"
+if [[ "$HOME" == "/root" ]]; then
+    SOLVER_DIR="/kaggle/working/tokpidjin/$1"
+else
+    SOLVER_DIR="$HOME/dsl/tokpidjin/$1"
+fi
+
 MAX_NUM_FILES="$2"
 
 if [ -z "$MAX_NUM_FILES" ]; then
