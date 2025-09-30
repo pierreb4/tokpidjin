@@ -64,8 +64,6 @@ import glob
 import math
 import importlib
 
-from func_timeout import func_timeout, FunctionTimedOut
-
 import arc_types
 import constants
 import dsl

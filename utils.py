@@ -9,7 +9,6 @@ import random
 import glob
 
 from pathlib import Path
-from func_timeout import func_timeout, FunctionTimedOut
 from collections import namedtuple
 from timeit import default_timer as timer
 
@@ -455,10 +454,13 @@ def load_module(module_name):
 
 
 def run_with_timeout(func, args, timeout=5):
-    try:
-        return False, func_timeout(timeout, func, args)
-    except FunctionTimedOut:
-        return True, None
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(func, *args)
+        try:
+            result = future.result(timeout=timeout)
+            return False, result
+        except concurrent.futures.TimeoutError:
+            return True, None
 
 
 def print_l(msg, sep=' ', end='\n', flush=False):
