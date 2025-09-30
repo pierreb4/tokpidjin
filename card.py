@@ -285,31 +285,44 @@ class Code:
             while True:
                 t_offset = random.randint(1, t_n)
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
+
+
+                    if random.randint(0, 2) == 0:
+                        item = f't{t_offset}'
+                    elif random.randint(0, 1) == 0:
+                        item = random.choice(DSL_FUNCNAMES)
+                    else:
+                        item = random.choice(ALL_CONSTANT_NAMES)
+
+                    print_l(f'{item = }')
+
+
                     pattern = rf'\bt{t_n}\b'
-                    self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+                    # self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+                    self.t_call[self.t_num] = re.sub(pattern, item, old_call)
                     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
                     break
 
-            # t_offset = random.randint(1, t_n)
-            # if t_offset > 0:
-            #     # new_call = clean_call(self.t_call[t_offset])
-            #     # new_items = get_items(new_call)
+                # t_offset = random.randint(1, t_n)
+                # if t_offset > 0:
+                #     # new_call = clean_call(self.t_call[t_offset])
+                #     # new_items = get_items(new_call)
 
-            #     # if random.randint(0, 1) == 0:
-            #     #     new_func_name = new_items[0].strip()
-            #     # else:
-            #     #     # XXX Pick a random function name from dsl.py
-            #     #     #     If promising, make more structural
-            #     #     new_func_name = random.choice(DSL_FUNCNAMES)
-            #     #     new_items[0] = new_func_name
+                #     # if random.randint(0, 1) == 0:
+                #     #     new_func_name = new_items[0].strip()
+                #     # else:
+                #     #     # XXX Pick a random function name from dsl.py
+                #     #     #     If promising, make more structural
+                #     #     new_func_name = random.choice(DSL_FUNCNAMES)
+                #     #     new_items[0] = new_func_name
 
-            #     # new_hints = get_hints(new_func_name)
-            #     # new_hint = new_hints[0] if new_hints else None
+                #     # new_hints = get_hints(new_func_name)
+                #     # new_hint = new_hints[0] if new_hints else None
 
-            #     # if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
-            #     pattern = rf'\bt{t_n}\b'
-            #     self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-            #     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
+                #     # if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
+                #     pattern = rf'\bt{t_n}\b'
+                #     self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
+                #     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
 
         return has_mutation
 
