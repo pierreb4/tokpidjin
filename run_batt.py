@@ -239,7 +239,8 @@ def check_save(path, score, max_files=128):
             break
 
         if worst_file is not None:
-            os.remove(worst_file)
+            with suppress(FileNotFoundError):
+                os.remove(worst_file)
             files.remove(worst_file)
 
     return no_save
