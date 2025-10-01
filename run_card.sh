@@ -90,7 +90,7 @@ while date && [ $STOP -eq 0 ]; do
     mem_limit=$((1 * 1024 * 1024))
     ulimit -v $mem_limit &>/dev/null || echo "Memory limit not supported"
     # unbuffer timeout 300s python run_batt.py -i -t $TIMEOUT -c $COUNT \
-    timeout 600s python -u run_batt.py -i -t $TIMEOUT -c $COUNT \
+    timeout 3600s python -u run_batt.py -i -t $TIMEOUT -c $COUNT \
         -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
   fi
 
