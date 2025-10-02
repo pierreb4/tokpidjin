@@ -1110,25 +1110,25 @@ def rbind(
     else:
         n = function.__code__.co_argcount
 
-    # if n == 2:
-    #     return lambda x: function(x, fixed)
-    # elif n == 3:
-    #     return lambda x, y: function(x, y, fixed)
-    # else:
-    #     return lambda x, y, z: function(x, y, z, fixed)
-
     if n == 2:
-        def f(y):
-            return function(fixed, y)
-        return f
+        return lambda x: function(x, fixed)
     elif n == 3:
-        def f(y, z):
-            return function(fixed, y, z)
-        return f
+        return lambda x, y: function(x, y, fixed)
     else:
-        def f(y, z, a):
-            return function(fixed, y, z, a)
-        return f
+        return lambda x, y, z: function(x, y, z, fixed)
+
+    # if n == 2:
+    #     def f(y):
+    #         return function(fixed, y)
+    #     return f
+    # elif n == 3:
+    #     def f(y, z):
+    #         return function(fixed, y, z)
+    #     return f
+    # else:
+    #     def f(y, z, a):
+    #         return function(fixed, y, z, a)
+    #     return f
 
 
 # def rbind_1(
@@ -1167,25 +1167,25 @@ def lbind(
     else:
         n = function.__code__.co_argcount
 
-    # if n == 2:
-    #     return lambda y: function(fixed, y)
-    # elif n == 3:
-    #     return lambda y, z: function(fixed, y, z)
-    # else:
-    #     return lambda y, z, a: function(fixed, y, z, a)
-
     if n == 2:
-        def f(y):
-            return function(fixed, y)
-        return f
+        return lambda y: function(fixed, y)
     elif n == 3:
-        def f(y, z):
-            return function(fixed, y, z)
-        return f
+        return lambda y, z: function(fixed, y, z)
     else:
-        def f(y, z, a):
-            return function(fixed, y, z, a)
-        return f
+        return lambda y, z, a: function(fixed, y, z, a)
+
+    # if n == 2:
+    #     def f(y):
+    #         return function(fixed, y)
+    #     return f
+    # elif n == 3:
+    #     def f(y, z):
+    #         return function(fixed, y, z)
+    #     return f
+    # else:
+    #     def f(y, z, a):
+    #         return function(fixed, y, z, a)
+    #     return f
 
 
 # def lbind_1(
