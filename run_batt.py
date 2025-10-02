@@ -19,6 +19,34 @@ from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import multiprocessing as mp
+
+class GPUBatchProcessor:
+    def __init__(self, batch_size=32):
+        self.batch_size = batch_size
+        
+    def process_tasks_batch(self, tasks):
+        """Process multiple tasks in parallel on GPU"""
+        with ThreadPoolExecutor(max_workers=mp.cpu_count()) as executor:
+            futures = []
+            for i in range(0, len(tasks), self.batch_size):
+                batch = tasks[i:i+self.batch_size] 
+                future = executor.submit(self._process_batch_gpu, batch)
+                futures.append(future)
+            
+            results = []
+            for future in as_completed(futures):
+                results.extend(future.result())
+        return results
+        
+    def _process_batch_gpu(self, task_batch):
+        # Move grid operations to GPU
+        if GPU_AVAILABLE:
+            # Batch process grids on GPU
+            return self._gpu_batch_solve(task_batch)
+        return self._cpu_batch_solve(task_batch)
+
 
 class O_Score:    
     def __init__(self):
@@ -96,7 +124,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     all_o = set()
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in demo_task)
 
-    print_l(f'-- {task_id} - {task_i} --')
+    print_l(f'-- {task_id} - {task_i} --') if DO_PRINT else None
 
     o_score = O_Score()
     s_score = {}
@@ -117,8 +145,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if solve_result is not None:
             o['demo'][i], _ = solve_result
 
-            # print_l(f"demo[{i}] - {task_id} - {len(o['demo'][i])} - {len(s['demo'][i])}")
-            print_l(f"demo[{i}] - {task_id} - {len(o['demo'][i])}")
+            print_l(f"demo[{i}] - {task_id} - {len(o['demo'][i])}") if DO_PRINT else None
 
             all_o = all_o.union(o['demo'][i])
             for t_n, evo, o_solver_id, okt in o['demo'][i]:
@@ -167,8 +194,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if solve_result is not None:
             o['test'][i], _ = solve_result
 
-            # print_l(f"test[{i}] - {task_id} - {len(o['test'][i])} - {len(s['test'][i])}")
-            print_l(f"test[{i}] - {task_id} - {len(o['test'][i])}")
+            print_l(f"test[{i}] - {task_id} - {len(o['test'][i])}") if DO_PRINT else None
 
             all_o = all_o.union(o['test'][i])
             for t_n, evo, o_solver_id, okt in o['test'][i]:
@@ -254,7 +280,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
     if prof is not None:
         prof['run_batt.check_batt'] += timer() - prof_call_start
 
-    print_l(f'-- {task_id} - {task_i} done - {len(all_o)} candidates scored')
+    print_l(f'-- {task_id} - {task_i} done - {len(all_o)} candidates scored') if DO_PRINT else None
 
     # NOTE all_o contains candidates for 'demo' and 'test' tasks
     #      Maybe don't save twice the same things

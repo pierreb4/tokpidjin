@@ -300,7 +300,7 @@ class Code:
                     else:
                         item = random.choice(GENERIC_CONSTANT_NAMES)
 
-                    print_l(f'{item = }')
+                    print_l(f'{item = }') if DO_PRINT else None
 
 
                     pattern = rf'\bt{t_n}\b'
@@ -569,7 +569,8 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
     else:
         has_mutation = Mutation(False, None, None)
 
-    if has_mutation.present and not freeze_differs and task_id is None:
+    if has_mutation.present and not freeze_differs and task_id is None \
+            and DO_PRINT:
         print_l(f'{old_name = } - {old_call = }')
         print_l(f'{code.t_call[code.t_num] = }')
 
