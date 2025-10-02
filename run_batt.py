@@ -140,7 +140,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if prof is not None:
             prof['batt.demo.run_with_timeout'] += timer() - prof_start
 
-        if solve_timed_out:
+        if solve_timed_out and DO_PRINT:
             print_l(f'-- {task_id} - demo[{i}] timed out')
 
         t_set = set()
@@ -189,7 +189,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if prof is not None:
             prof['batt.test.run_with_timeout'] += timer() - prof_start
 
-        if solve_timed_out:
+        if solve_timed_out and DO_PRINT:
             print_l(f'-- {task_id} - test[{i}] timed out')
 
         t_set = set()
