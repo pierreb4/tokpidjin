@@ -7,6 +7,8 @@ import math
 import importlib
 import os
 
+import dill as pickle
+
 from contextlib import suppress
 from timeit import default_timer as timer
 from pathlib import Path
