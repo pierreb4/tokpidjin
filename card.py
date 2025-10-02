@@ -36,7 +36,6 @@ def get_hints(node_name):
     return hints[-1:] + hints[:-1]
 
 
-
 def clean_call(call):
     return call.replace('(', ', ').replace(')', '')
 

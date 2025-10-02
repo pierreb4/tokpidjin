@@ -12,6 +12,7 @@ try:
     import cupy as cp
     import numpy as np
     GPU_AVAILABLE = True
+    cp.show_config()
 except ImportError:
     GPU_AVAILABLE = False
     
