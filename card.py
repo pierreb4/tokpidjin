@@ -286,6 +286,7 @@ class Code:
                 t_offset = random.randint(1, t_n)
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
 
+                    # NOTE We could also try to match type
 
                     if random.randint(0, 2) == 0:
                         item = f't{t_offset}'
@@ -361,7 +362,8 @@ class Code:
             print_l(f'{old_hint = }')
         elif self.t_num > 1 and random.random() < 0.01:
             if old_hint == 'Callable':
-                # old_args[i] = random.choice(DSL_FUNCTION_NAMES)
+
+                # NOTE We could also try to match return type
 
                 # Replace with random function of same arity
                 old_func_name = old_args[i]
