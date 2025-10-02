@@ -12,7 +12,13 @@ from constants import *
 from dsl import *
 
 import dsl
-DSL_FUNCTIONS = inspect.getmembers(dsl, inspect.isfunction)
+
+ALL_DSL_FUNCTIONS = inspect.getmembers(dsl, inspect.isfunction)
+GPU_FUNCTIONS = {
+    'grid_to_gpu', 'batch_grid_operations'
+}
+DSL_FUNCTIONS = [ (name, func) for name, func in ALL_DSL_FUNCTIONS \
+        if name not in GPU_FUNCTIONS and not name.startswith('_') ]
 DSL_FUNCTION_NAMES = [name for name, func in DSL_FUNCTIONS]
 DSL_FUNCTION_DICT = dict(DSL_FUNCTIONS)
 

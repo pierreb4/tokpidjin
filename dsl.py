@@ -8,6 +8,26 @@ from collections import Counter
 from arc_types import *
 from utils import *
 
+try:
+    import cupy as cp
+    import numpy as np
+    GPU_AVAILABLE = True
+except ImportError:
+    GPU_AVAILABLE = False
+    
+def grid_to_gpu(grid):
+    """Convert grid to CuPy array if GPU available"""
+    return cp.asarray(grid) if GPU_AVAILABLE else np.asarray(grid)
+
+def batch_grid_operations(grids, operation):
+    """Process multiple grids in parallel on GPU"""
+    if GPU_AVAILABLE and len(grids) > 1:
+        gpu_grids = cp.stack([cp.asarray(g) for g in grids])
+        result = operation(gpu_grids)
+        return [cp.asnumpy(r) for r in result]
+    return [operation(g) for g in grids]
+
+
 # Activate logging
 logger = logging.getLogger(__name__)
 
