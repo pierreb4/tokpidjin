@@ -13,8 +13,8 @@ from dsl import *
 
 import dsl
 DSL_FUNCTIONS = inspect.getmembers(dsl, inspect.isfunction)
-DSL_FUNCNAMES = [name for name, func in DSL_FUNCTIONS]
-DSL_FUNC_DICT = {name: func for name, func in DSL_FUNCTIONS}
+DSL_FUNCTION_NAMES = [name for name, func in DSL_FUNCTIONS]
+DSL_FUNCTION_DICT = dict(DSL_FUNCTIONS)
 
 
 # Borrowed from regin.py maybe can go to utils.py?
@@ -290,9 +290,9 @@ class Code:
                     if random.randint(0, 2) == 0:
                         item = f't{t_offset}'
                     elif random.randint(0, 1) == 0:
-                        item = random.choice(DSL_FUNCNAMES)
+                        item = random.choice(DSL_FUNCTION_NAMES)
                     else:
-                        item = random.choice(ALL_CONSTANT_NAMES)
+                        item = random.choice(GENERIC_CONSTANT_NAMES)
 
                     print_l(f'{item = }')
 
@@ -313,7 +313,7 @@ class Code:
                 #     # else:
                 #     #     # XXX Pick a random function name from dsl.py
                 #     #     #     If promising, make more structural
-                #     #     new_func_name = random.choice(DSL_FUNCNAMES)
+                #     #     new_func_name = random.choice(DSL_FUNCTION_NAMES)
                 #     #     new_items[0] = new_func_name
 
                 #     # new_hints = get_hints(new_func_name)
@@ -361,15 +361,15 @@ class Code:
             print_l(f'{old_hint = }')
         elif self.t_num > 1 and random.random() < 0.01:
             if old_hint == 'Callable':
-                # old_args[i] = random.choice(DSL_FUNCNAMES)
+                # old_args[i] = random.choice(DSL_FUNCTION_NAMES)
 
                 # Replace with random function of same arity
                 old_func_name = old_args[i]
-                old_function = DSL_FUNC_DICT[old_func_name]
+                old_function = DSL_FUNCTION_DICT[old_func_name]
                 arity = old_function.__code__.co_argcount
                 while True:
-                    new_func_name = random.choice(DSL_FUNCNAMES)
-                    new_function = DSL_FUNC_DICT[new_func_name]
+                    new_func_name = random.choice(DSL_FUNCTION_NAMES)
+                    new_function = DSL_FUNCTION_DICT[new_func_name]
                     if new_function.__code__.co_argcount == arity:
                         break
                 old_args[i] = new_func_name
