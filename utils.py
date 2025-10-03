@@ -458,7 +458,7 @@ def load_module(module_name):
 
 
 def run_with_timeout(func, args, timeout=5):
-    with concurrent.futures.ProcessPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor() as executor:
         future = executor.submit(func, *args)
         try:
             result = future.result(timeout=timeout)
