@@ -27,6 +27,7 @@ import re
 import sys
 import traceback
 import logging
+import asyncio
 
 import arc_types
 # import constants
@@ -152,7 +153,7 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
     print_l(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
-def check_solver_speed(data, solver, task_id, timeout=1):
+async def check_solver_speed(data, solver, task_id, timeout=1):
     """ checks the speed of the solver """
     task = data['demo'][task_id] + data['test'][task_id]
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
@@ -160,7 +161,7 @@ def check_solver_speed(data, solver, task_id, timeout=1):
     with contextlib.suppress(Exception):
         for i, ex in enumerate(task):
             # assert solver(S, ex['input']) == ex['output']
-            timed_out, result = run_with_timeout(solver, [S, ex['input']], timeout)
+            timed_out, result = await run_with_timeout(solver, [S, ex['input']], timeout)
             if timed_out:
                 print_l(f'Solver for {task_id} failed sample {i} (or timed out)')
                 return True

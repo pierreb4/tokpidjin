@@ -6,6 +6,7 @@ import hashlib
 import math
 import importlib
 import os
+import asyncio
 
 import dill as pickle
 
@@ -21,7 +22,7 @@ from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
+# from concurrent.futures import ThreadPoolExecutor, as_completed
 import multiprocessing as mp
 
 class GPUBatchProcessor:
@@ -115,7 +116,7 @@ class D_Score:
             self.score[solver_id][d_name]['zo'] += size.t > 0
 
 
-def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
+async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
     task_start = timer()
     demo_task = total_data['demo'][task_id]
     test_task = total_data['test'][task_id]
@@ -135,7 +136,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         O = sample['output']
         if prof is not None:
             prof_start = timer()
-        solve_timed_out, solve_result = run_with_timeout(batt,
+        solve_timed_out, solve_result = await run_with_timeout(batt,
             [task_id, S, I, None, pile_log_path], timeout)
         if prof is not None:
             prof['batt.demo.run_with_timeout'] += timer() - prof_start
@@ -161,7 +162,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                 o_score.update(o_solver_id, match)
 
                 # We know the correct output for both train and eval tasks
-                diff_timed_out, diff_result = run_with_timeout(batt,
+                diff_timed_out, diff_result = await run_with_timeout(batt,
                     [task_id, S, I, O, pile_log_path], timeout)
                     # [task_id, S, I, C, pile_log_path], timeout)
 
@@ -184,7 +185,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         O = sample['output']
         if prof is not None:
             prof_start = timer()
-        solve_timed_out, solve_result = run_with_timeout(batt,
+        solve_timed_out, solve_result = await run_with_timeout(batt,
             [task_id, S, I, None, pile_log_path], timeout)
         if prof is not None:
             prof['batt.test.run_with_timeout'] += timer() - prof_start
@@ -213,7 +214,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                 # TODO Try comparing to C when we start dealing with eval tasks
                 # XXX Or just do that all the time, to simplify? The performance
                 # hit is only on demoing tasks, that are pre-processed, right? 
-                diff_timed_out, diff_result = run_with_timeout(batt,
+                diff_timed_out, diff_result = await run_with_timeout(batt,
                     # [task_id, S, I, O, pile_log_path], timeout)
                     [task_id, S, I, C, pile_log_path], timeout)
 
@@ -274,10 +275,10 @@ def check_save(path, score, max_files=128):
     return no_save
 
 
-def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
+async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
     if prof is not None:
         prof_call_start = timer()
-    all_o, o_score, s_score = check_batt(total_data,
+    all_o, o_score, s_score = await check_batt(total_data,
             task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=prof)
     if prof is not None:
         prof['run_batt.check_batt'] += timer() - prof_call_start
@@ -287,7 +288,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
     # NOTE all_o contains candidates for 'demo' and 'test' tasks
     #      Maybe don't save twice the same things
     t_log = 10
-    max_files = 128
+    max_files = 64
     for candidate in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = candidate
 
@@ -335,7 +336,7 @@ def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, ti
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
         check_start = timer()
-        timed_out = check_solver_speed(total_data, solver_source, task_id, timeout)
+        timed_out = await check_solver_speed(total_data, solver_source, task_id, timeout)
         t_log = 11 - int(math.log(timer() - check_start))
 
         # if not Path(solver_def_path).exists():
@@ -493,7 +494,7 @@ def pick_rnd_task(task_list, total_data):
     return [task_id]
 
 
-def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None):
+async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
@@ -530,7 +531,7 @@ def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None
     for task_i, task_id in enumerate(do_list):
         d_score = D_Score()
         loop_start = timer() if prof is not None else None
-        timed_out = run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof)
+        timed_out = await run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof)
         if prof is not None:
             prof['main.run_batt'] += timer() - loop_start
         if timed_out:
@@ -578,7 +579,7 @@ if __name__ == "__main__":
         import cProfile, pstats, io
         pr = cProfile.Profile()
         pr.enable()
-        main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing)
+        asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))
         pr.disable()
         s = io.StringIO()
         ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
@@ -591,4 +592,4 @@ if __name__ == "__main__":
         print('\n[cProfile tottime top]')
         print(s.getvalue())
     else:
-        main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing)
+        asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))

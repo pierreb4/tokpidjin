@@ -2,11 +2,12 @@ import os
 import json
 import inspect
 import ast
-import concurrent.futures
+# import concurrent.futures
 import importlib.util
 import sys
 import random
 import glob
+import asyncio
 
 from pathlib import Path
 from collections import namedtuple
@@ -457,14 +458,26 @@ def load_module(module_name):
     return module
 
 
-def run_with_timeout(func, args, timeout=5):
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(func, *args)
-        try:
-            result = future.result(timeout=timeout)
-            return False, result
-        except concurrent.futures.TimeoutError:
-            return True, None
+# def run_with_timeout(func, args, timeout=5):
+#     with concurrent.futures.ThreadPoolExecutor() as executor:
+#         future = executor.submit(func, *args)
+#         try:
+#             result = future.result(timeout=timeout)
+#             return False, result
+#         except concurrent.futures.TimeoutError:
+#             return True, None
+
+
+async def run_with_timeout(func, args, timeout=5):
+    try:
+        # Run the synchronous function in a thread pool
+        loop = asyncio.get_event_loop()
+        result = await asyncio.wait_for(
+            loop.run_in_executor(None, func, *args), timeout
+        )
+        return False, result
+    except asyncio.TimeoutError:
+        return True, None
 
 
 def print_l(msg, sep=' ', end='\n', flush=False):
