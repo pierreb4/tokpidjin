@@ -10,6 +10,7 @@ from utils import *
 
 try:
     import cupy as cp
+    import cupy.cuda.cudnn
     import numpy as np
     GPU_AVAILABLE = True
     cp.show_config()
