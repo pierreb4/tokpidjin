@@ -569,11 +569,11 @@ if __name__ == "__main__":
     call_module = importlib.import_module(f'{args.batt_import}_call')
     t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
 
-    # # Try prioritizing mix_task_ids included by card.py
-    # mix_module = importlib.import_module(f'{args.batt_import}_mix')
-    # mix_task_ids = mix_module.mix_task_ids if hasattr(mix_module, 'mix_task_ids') else {}
-    # print_l(f'Prioritizing: {mix_task_ids = }')
-    # args.task_ids = mix_task_ids
+    # Try prioritizing mix_task_ids included by card.py
+    mix_module = importlib.import_module(f'{args.batt_import}_mix')
+    mix_task_ids = mix_module.mix_task_ids if hasattr(mix_module, 'mix_task_ids') else {}
+    print_l(f'Prioritizing: {mix_task_ids = }')
+    args.task_ids = mix_task_ids
 
     if args.cprofile:
         import cProfile, pstats, io
