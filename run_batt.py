@@ -229,7 +229,7 @@ async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_
     return all_o, o_score, s_score
 
 
-def check_save(path, score, max_files=32):
+def check_save(path, score, max_files=128):
     # List subpaths in path
     root_path = Path(path)
 
@@ -288,7 +288,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # NOTE all_o contains candidates for 'demo' and 'test' tasks
     #      Maybe don't save twice the same things
     t_log = 10
-    max_files = 32
+    max_files = 128
     for candidate in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = candidate
 
