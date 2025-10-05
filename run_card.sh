@@ -51,7 +51,7 @@ if [ -z "$TIMEOUT" ]; then
   TIMEOUT=1.0
 fi
 
-export LD_LIBRARY_PATH=/root/.cupy/cuda_lib/12.x/cudnn/8.8.1/lib:$LD_LIBRARY_PATH
+# export LD_LIBRARY_PATH=/root/.cupy/cuda_lib/12.x/cudnn/8.8.1/lib:$LD_LIBRARY_PATH
 CHARS=({0..9} {a..f})
 
 TMPFILE=$(mktemp)

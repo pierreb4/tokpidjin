@@ -627,7 +627,7 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
 
     # Get one of best solvers if not mutating (while running main.py for instance)
     all_solvers = get_solvers([solvers_dir, solvers_pre], best_only=freeze_solvers)
-    # pre_solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
+    pre_solvers = get_solvers([solvers_pre], best_only=freeze_solvers)
     # dir_solvers = get_solvers([solvers_dir], best_only=freeze_solvers)
     # all_solvers = {**dir_solvers, **pre_solvers}
     # all_solvers = {**pre_solvers, **dir_solvers}
@@ -665,18 +665,18 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     else:
         solvers = all_solvers
 
-    # task_ids = list(solvers.keys())
+    task_ids = list(solvers.keys())
     # pre_task_ids = [k for k in all_task_ids if k in pre_solvers]
     # dir_task_ids = [k for k in all_task_ids if k in dir_solvers]
     # print_l(f'{len(solvers) = } - {len(pre_solvers) = } - {len(dir_solvers) = }')
     # print_l(f'{len(task_ids) = } - {len(pre_task_ids) = } - {len(dir_task_ids) = }')
 
-    # # Write pre_task_ids into file based on batt_file_name
-    # # Used in run_batt.py (from call import pre_task_ids)
-    # pre_task_ids = task_ids
-    # pre_file_name = batt_file_name.replace('.py', '_pre.py')
-    # with open(pre_file_name, 'w') as pre_file:
-    #     print(f'{pre_task_ids = }', file=pre_file)
+    # Write mix_task_ids into file based on batt_file_name
+    # Used in run_batt.py (from call import mix_task_ids)
+    mix_task_ids = task_ids
+    mix_file_name = batt_file_name.replace('.py', '_mix.py')
+    with open(mix_file_name, 'w') as mix_file:
+        print(f'{mix_task_ids = }', file=mix_file)
 
     task_ids = list(solvers.keys())
     differs = Differs(task_ids, freeze_differs=args.freeze_differs)
@@ -729,6 +729,12 @@ def batt(task_id, S, I, C, log_path):
                     # Then remove it from solver list
                     del solvers[task_id]
                     continue
+
+                if solver in pre_solvers.values():
+                    # Don't mutate pre_solvers
+                    freeze_solvers = True
+                else:
+                    freeze_solvers = freeze_solvers
 
                 get_O = add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
                 if get_O:
