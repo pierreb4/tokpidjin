@@ -19,8 +19,8 @@ def differ_fc9e44c913711da609a9e25126b4b296(S, I, C):
     x2 = x1(I)
     x3 = x1(C)
     x4 = difference_tuple(x2, x3)
-    x5 = get_nth_t(x4, F0)
-    x6 = size(x4)
+    x5 = size(x4)
+    x6 = get_nth_t(x4, F0)
     x7 = astuple(x5, x6)
     return x7
 
@@ -32,8 +32,8 @@ def differ_c59e6ae069a9205b311cf67a15473d64(S, I, C):
     x2 = x1(I)
     x3 = x1(C)
     x4 = difference_tuple(x3, x2)
-    x5 = get_nth_t(x4, F0)
-    x6 = size(x4)
+    x5 = size(x4)
+    x6 = get_nth_t(x4, F0)
     x7 = astuple(x5, x6)
     return x7
 
@@ -48,8 +48,8 @@ def differ_d50e4f6db9fab7b53f413af7de3a35da(S, I, C):
     x5 = x4(x2)
     x6 = x4(x3)
     x7 = difference(x5, x6)
-    x8 = get_nth_f(x7, F0)
-    x9 = size(x7)
+    x8 = size(x7)
+    x9 = get_nth_f(x7, F0)
     x10 = astuple(x8, x9)
     return x10
 
@@ -64,8 +64,8 @@ def differ_f4a4346405e974b919a4b5a52f28e40c(S, I, C):
     x5 = x4(x2)
     x6 = x4(x3)
     x7 = difference(x6, x5)
-    x8 = get_nth_f(x7, F0)
-    x9 = size(x7)
+    x8 = size(x7)
+    x9 = get_nth_f(x7, F0)
     x10 = astuple(x8, x9)
     return x10
 

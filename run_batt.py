@@ -85,7 +85,7 @@ class D_Score:
     def update(self, solver_id, s_item):
         # NOTE: Add whether it's iz or zo differ
         # or just pick the best score?
-        last_t, s_solver_id, d_name, size_nth = s_item
+        last_t, s_solver_id, d_name, return_tuple = s_item
 
         # Keep track of last_t per differ
         if s_solver_id == 'None':
@@ -100,10 +100,10 @@ class D_Score:
                 'zo': 0    
             }
         
-        if not size_nth.ok or type(size_nth.t) != tuple or type(size_nth.t[0] != int):
+        if not return_tuple.ok or type(return_tuple.t) != tuple or type(return_tuple.t[0] != int):
             return
 
-        size = size_nth.t[0]
+        size = return_tuple.t[0]
 
         # Score for iz differ
         if s_solver_id == 'None':
