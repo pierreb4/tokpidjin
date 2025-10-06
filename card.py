@@ -77,7 +77,7 @@ class Code:
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
-        budget_random = 0.01
+        budget_random = 0.005
 
         # Get number corresponding to color constant
         # NOTE Maybe some x_n variables carry constants and could be replaced?
@@ -161,7 +161,7 @@ class Code:
         if arg not in constant_dict.keys():
             return arg
 
-        budget_random = 0.01
+        budget_random = 0.005
 
         return (
             replace_random(arg, list(constant_dict.keys()))
@@ -171,7 +171,7 @@ class Code:
 
 
     def substitute_symbol(self, arg, constant_dict):
-        budget_random = 0.01
+        budget_random = 0.005
 
         # Substitute constants or calls
         if random.random() < budget_random:
@@ -181,7 +181,7 @@ class Code:
 
 
     def substitute_grid_angle(self, arg, constant_dict=R8_NAMES):
-        budget_random = 0.01
+        budget_random = 0.005
 
         # Only substitute constants 
         if arg not in constant_dict.keys():
@@ -284,7 +284,7 @@ class Code:
 
 
     def do_offset_mutation(self, old_hint, old_call, t_n, is_solver, has_mutation):
-        while random.random() < 0.01:
+        while random.random() < 0.005:
             # TODO Check parameter impact on mutation numbers
 
             while True:
@@ -365,7 +365,7 @@ class Code:
                 None
             ]:
             print_l(f'{old_hint = }')
-        elif self.t_num > 1 and random.random() < 0.01:
+        elif self.t_num > 1 and random.random() < 0.005:
             if old_hint == 'Callable':
 
                 # NOTE We could also try to match return type
