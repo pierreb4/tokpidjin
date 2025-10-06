@@ -228,8 +228,14 @@ def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=Fals
         num_test = len(data['test'][task_id])
 
         # imports = None if quiet else [solvers_pre, solvers_dir]
-        imports = [solvers_dir, solvers_pre]
-        solver_source = get_solver_source(task_id, imports=imports, best_only=True)
+        # imports = [solvers_dir, solvers_pre]
+        # solver_source = get_solver_source(task_id, imports=imports, best_only=True)
+
+
+        solver_source_pre = get_solver_source(task_id, imports=[solvers_pre], best_only=True)
+        solver_source_dir = get_solver_source(task_id, imports=[solvers_dir], best_only=True)
+        solver_source = solver_source_dir if solver_source_pre.source is None else solver_source_pre
+
 
         if solver_source.path is None:
             if not quiet:
