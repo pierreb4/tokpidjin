@@ -8,10 +8,25 @@ import sys
 import random
 import glob
 import asyncio
+import threading
 
 from pathlib import Path
 from collections import namedtuple
 from timeit import default_timer as timer
+
+# Global thread pool executor to limit the number of threads
+_executor = None
+_executor_lock = threading.Lock()
+
+def get_executor():
+    """Get or create a global ThreadPoolExecutor with limited threads"""
+    global _executor
+    if _executor is None:
+        with _executor_lock:
+            if _executor is None:
+                # Limit to 4 threads to avoid system limits
+                _executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
+    return _executor
 
 # namedtuple: A factory function from the collections module that creates tuple subclasses with named fields.
 # It enables access to elements by attribute (dot notation) as well as by index, improving code readability.
@@ -470,10 +485,19 @@ def load_module(module_name):
 
 async def run_with_timeout(func, args, timeout=5):
     try:
-        # Run the synchronous function in a thread pool
+        async with asyncio.timeout(timeout):
+            result = await asyncio.to_thread(func, *args)
+        return False, result
+    except TimeoutError:
+        return True, None
+
+async def old_run_with_timeout(func, args, timeout=5):
+    try:
+        # Use the global thread pool executor with limited threads
         loop = asyncio.get_event_loop()
+        executor = get_executor()
         result = await asyncio.wait_for(
-            loop.run_in_executor(None, func, *args), timeout
+            loop.run_in_executor(executor, func, *args), timeout
         )
         return False, result
     except asyncio.TimeoutError:
