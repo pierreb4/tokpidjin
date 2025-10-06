@@ -730,11 +730,11 @@ def batt(task_id, S, I, C, log_path):
                     del solvers[task_id]
                     continue
 
-                if solver in pre_solvers.values():
-                    # Don't mutate pre_solvers
-                    freeze_solvers = True
-                else:
-                    freeze_solvers = freeze_solvers
+                # if solver in pre_solvers.values():
+                #     # Don't mutate pre_solvers
+                #     freeze_solvers = True
+                # else:
+                #     freeze_solvers = freeze_solvers
 
                 get_O = add_solver_line(equals[task_id], code, uses, task_id=task_id, freeze_solvers=freeze_solvers)
                 if get_O:
