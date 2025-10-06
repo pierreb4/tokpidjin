@@ -413,8 +413,10 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 generate_expanded_content(inlined_source, differ_md5_path)
 
             for score_type in ['iz', 'zo']:
-                task_s_score = s_score[name][score_type].get(sol_solver_id)
+                if name not in s_score:
+                    continue
 
+                task_s_score = s_score[name][score_type].get(sol_solver_id)
 
                 differ_task = f'differ_dir/{score_type}/solve_{task_id}'
                 if check_save(differ_task, task_s_score, max_files):

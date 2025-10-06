@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Default values
-INTERVAL=300
+INTERVAL=60
 CLEANUP="rm run_test.log"
 DEFAULT="python run_test.py -q"
 CMD="$DEFAULT"
