@@ -485,14 +485,6 @@ def load_module(module_name):
 
 async def run_with_timeout(func, args, timeout=5):
     try:
-        async with asyncio.timeout(timeout):
-            result = await asyncio.to_thread(func, *args)
-        return False, result
-    except TimeoutError:
-        return True, None
-
-async def old_run_with_timeout(func, args, timeout=5):
-    try:
         # Use the global thread pool executor with limited threads
         loop = asyncio.get_event_loop()
         executor = get_executor()
