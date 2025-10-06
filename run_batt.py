@@ -107,15 +107,15 @@ class D_Score:
 
         # Score for iz differ
         if s_solver_id == 'None':
-            self.score[solver_id][d_name]['iz'] += size.t > 0
+            self.score[solver_id][d_name]['iz'] += size > 0
         if s_solver_id == solver_id:
-            self.score[solver_id][d_name]['iz'] += size.t == 0
+            self.score[solver_id][d_name]['iz'] += size == 0
 
         # Score for zo differ
         if s_solver_id == 'None':
-            self.score[solver_id][d_name]['zo'] += size.t == 0
+            self.score[solver_id][d_name]['zo'] += size == 0
         if s_solver_id == solver_id:
-            self.score[solver_id][d_name]['zo'] += size.t > 0
+            self.score[solver_id][d_name]['zo'] += size > 0
 
 
 async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
