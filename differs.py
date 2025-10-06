@@ -21,7 +21,8 @@ def differ_fc9e44c913711da609a9e25126b4b296(S, I, C):
     x4 = difference_tuple(x2, x3)
     x5 = get_nth_t(x4, F0)
     x6 = size(x4)
-    return x6
+    x7 = astuple(x5, x6)
+    return x7
 
 
 # def differ_p_g_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
@@ -33,7 +34,8 @@ def differ_c59e6ae069a9205b311cf67a15473d64(S, I, C):
     x4 = difference_tuple(x3, x2)
     x5 = get_nth_t(x4, F0)
     x6 = size(x4)
-    return x6
+    x7 = astuple(x5, x6)
+    return x7
 
 
 # def differ_o_g_size_iz(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
@@ -48,7 +50,8 @@ def differ_d50e4f6db9fab7b53f413af7de3a35da(S, I, C):
     x7 = difference(x5, x6)
     x8 = get_nth_f(x7, F0)
     x9 = size(x7)
-    return x9
+    x10 = astuple(x8, x9)
+    return x10
 
 
 # def differ_o_g_size_zo(I: 'Grid', O: 'Grid', flags: 'Flags') -> 'Integer':
@@ -63,7 +66,8 @@ def differ_f4a4346405e974b919a4b5a52f28e40c(S, I, C):
     x7 = difference(x6, x5)
     x8 = get_nth_f(x7, F0)
     x9 = size(x7)
-    return x9
+    x10 = astuple(x8, x9)
+    return x10
 
 
 # S needs to be the list of training I/O pairs

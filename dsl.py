@@ -981,8 +981,8 @@ def interval(
 
 
 def astuple(
-    a: 'Integer',
-    b: 'Integer'
+    a: 'Any',
+    b: 'Any'
 ) -> 'Tuple':
     """ constructs a tuple """
     logger.info(f'astuple: {a = }, {b = }')
