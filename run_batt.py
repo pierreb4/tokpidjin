@@ -100,7 +100,7 @@ class D_Score:
                 'zo': 0    
             }
         
-        if not return_tuple.ok or type(return_tuple.t) != tuple or type(return_tuple.t[0] != int):
+        if not return_tuple.ok or type(return_tuple.t) != tuple or type(return_tuple.t[0]) != int:
             return
 
         size = return_tuple.t[0]
