@@ -413,6 +413,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 generate_expanded_content(inlined_source, differ_md5_path)
 
             for score_type in ['iz', 'zo']:
+                # Differs aren't always scored
                 if name not in s_score:
                     continue
 
