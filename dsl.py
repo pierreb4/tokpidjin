@@ -6,7 +6,7 @@ import logging
 from collections import Counter
 
 from arc_types import *
-from utils import *
+# from utils import *
 
 try:
     import cupy as cp
