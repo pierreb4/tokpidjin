@@ -77,7 +77,7 @@ BAD_SOLVERS = {
     # 'e26a3af2', # Seems to hang
 } 
 
-DO_PRINT_LIST = [ 'mbp-2022.local', 'simone' ]
+DO_PRINT_LIST = [ 'mbp-2022.lan', 'mbp-2022.local', 'simone' ]
 # DO_PRINT_LIST = [ 'simone' ]
 DO_PRINT = os.uname()[1] in DO_PRINT_LIST
 
