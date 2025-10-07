@@ -440,25 +440,6 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     return False, d_score
 
 
-def symlink(file_path, link_path):
-    """
-    Create a symlink for the given file.
-    If the symlink already exists, remove it and create a new one.
-    """
-    home_folder = Path.home()
-    full_name = f'{home_folder}/dsl/tokpidjin/{file_path}'
-    try:
-        os.symlink(full_name, link_path)
-    except FileExistsError:
-        os.remove(link_path)
-        os.symlink(full_name, link_path)
-
-
-def ensure_dir(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-
 def track_solution(t_num, done):
     if done is None:
         done = set()
@@ -574,11 +555,11 @@ if __name__ == "__main__":
     call_module = importlib.import_module(f'{args.batt_import}_call')
     t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
 
-    # Try prioritizing mix_task_ids included by card.py
-    mix_module = importlib.import_module(f'{args.batt_import}_mix')
-    mix_task_ids = mix_module.mix_task_ids if hasattr(mix_module, 'mix_task_ids') else {}
-    print_l(f'Prioritizing: {mix_task_ids = }')
-    args.task_ids = mix_task_ids
+    # # Try prioritizing mix_task_ids included by card.py
+    # mix_module = importlib.import_module(f'{args.batt_import}_mix')
+    # mix_task_ids = mix_module.mix_task_ids if hasattr(mix_module, 'mix_task_ids') else {}
+    # print_l(f'Prioritizing: {mix_task_ids = }')
+    # args.task_ids = mix_task_ids
 
     if args.cprofile:
         import cProfile, pstats, io

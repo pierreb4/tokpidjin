@@ -39,8 +39,9 @@ if [ -n "$INITIAL" ]; then
   rm -rf differ_dir differ_md5 differ_def
   mkdir differ_dir differ_md5 differ_def
   rm main.log
-  CARD_OPTION="-fs -fd"
   # Gets unset for ONERUN
+  CARD_OPTION="-fs -fd"
+  python prep_solver_dir.py
 fi
 
 if [ -z "$COUNT" ]; then

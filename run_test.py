@@ -28,6 +28,7 @@ import sys
 import traceback
 import logging
 import asyncio
+import types
 
 import arc_types
 # import constants
@@ -158,13 +159,46 @@ async def check_solver_speed(data, solver, task_id, timeout=1):
     task = data['demo'][task_id] + data['test'][task_id]
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
 
+    # Create a temporary module to hold the solver function
+    solver_module = types.ModuleType('temp_solver_module')
+    exec(solver, solver_module.__dict__)
+    solver = solver_module.solve
+    # Ensure solver has access to DSL functions by updating its globals
+    solver.__globals__.update(globals())
+
     with contextlib.suppress(Exception):
         for i, ex in enumerate(task):
-            timed_out, result = await run_with_timeout(solver, [S, ex['input']], timeout)
+            timed_out, result = await run_with_timeout(solver, [S, ex['input'], None], timeout)
             if timed_out:
                 print_l(f'Solver for {task_id} failed sample {i} (or timed out)')
                 return True
     return False
+
+
+async def check_solvers_pre(data, task_id, timeout=1):
+    """ checks the speed of the solver """
+    task = data['demo'][task_id] + data['test'][task_id]
+    S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
+    total_timed_out = 0
+    total_result = 0
+
+    # print_l(f'Processing solver for task {task_id}')
+
+    solver = getattr(solvers_pre, f'solve_{task_id}')
+    # Ensure solver has access to DSL functions by updating its globals
+    solver.__globals__.update(globals())
+
+
+    with contextlib.suppress(Exception):
+        for ex in task:
+            timed_out, result = await run_with_timeout(solver, [S, ex['input'], None], timeout)
+            if timed_out:
+                # print_l(f'Solver for {task_id} timed out on sample {i}')
+                total_timed_out += 1
+            elif result == ex['output']:
+                # print_l(f'Solver for {task_id} correct on sample {i}: {result =}')
+                total_result += 1
+    return total_timed_out, total_result
 
 
 def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=False, patch=False, update=False):

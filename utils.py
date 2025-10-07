@@ -14,19 +14,6 @@ from pathlib import Path
 from collections import namedtuple
 from timeit import default_timer as timer
 
-# Global thread pool executor to limit the number of threads
-_executor = None
-_executor_lock = threading.Lock()
-
-def get_executor():
-    """Get or create a global ThreadPoolExecutor with limited threads"""
-    global _executor
-    if _executor is None:
-        with _executor_lock:
-            if _executor is None:
-                # Limit to 4 threads to avoid system limits
-                _executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
-    return _executor
 
 # namedtuple: A factory function from the collections module that creates tuple subclasses with named fields.
 # It enables access to elements by attribute (dot notation) as well as by index, improving code readability.
@@ -95,6 +82,40 @@ BAD_SOLVERS = {
 DO_PRINT_LIST = [ 'mbp-2022.lan', 'mbp-2022.local', 'simone' ]
 # DO_PRINT_LIST = [ 'simone' ]
 DO_PRINT = os.uname()[1] in DO_PRINT_LIST
+
+
+# Global thread pool executor to limit the number of threads
+_executor = None
+_executor_lock = threading.Lock()
+
+def get_executor():
+    """Get or create a global ThreadPoolExecutor with limited threads"""
+    global _executor
+    if _executor is None:
+        with _executor_lock:
+            if _executor is None:
+                # Limit to 4 threads to avoid system limits
+                _executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
+    return _executor
+
+
+def ensure_dir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+
+def symlink(file_path, link_path):
+    """
+    Create a symlink for the given file.
+    If the symlink already exists, remove it and create a new one.
+    """
+    home_folder = Path.home()
+    full_name = f'{home_folder}/dsl/tokpidjin/{file_path}'
+    try:
+        os.symlink(full_name, link_path)
+    except FileExistsError:
+        os.remove(link_path)
+        os.symlink(full_name, link_path)
 
 
 class VariableInliner(ast.NodeTransformer):
