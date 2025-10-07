@@ -154,7 +154,7 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
     print_l(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
-async def check_solver_speed(data, solver, task_id, timeout=1):
+async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=1):
     """ checks the speed of the solver """
     task = data['demo'][task_id] + data['test'][task_id]
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
@@ -167,10 +167,10 @@ async def check_solver_speed(data, solver, task_id, timeout=1):
     solver.__globals__.update(globals())
 
     with contextlib.suppress(Exception):
-        for i, ex in enumerate(task):
-            timed_out, result = await run_with_timeout(solver, [S, ex['input'], None], timeout)
+        for i, sample in enumerate(task):
+            timed_out, result = await run_with_timeout(solver, [S, sample['input'], None], timeout)
             if timed_out:
-                print_l(f'Solver for {task_id} timed out for sample {i}')
+                print_l(f'{task_id =} {sol_solver_id =} timed out for sample {i}')
                 return True
     return False
 
@@ -190,12 +190,12 @@ async def check_solvers_pre(data, task_id, timeout=1):
 
 
     with contextlib.suppress(Exception):
-        for ex in task:
-            timed_out, result = await run_with_timeout(solver, [S, ex['input'], None], timeout)
+        for sample in task:
+            timed_out, result = await run_with_timeout(solver, [S, sample['input'], None], timeout)
             if timed_out:
                 # print_l(f'Solver for {task_id} timed out on sample {i}')
                 total_timed_out += 1
-            elif result == ex['output']:
+            elif result == sample['output']:
                 # print_l(f'Solver for {task_id} correct on sample {i}: {result =}')
                 total_result += 1
     return total_timed_out, total_result
