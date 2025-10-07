@@ -170,7 +170,7 @@ async def check_solver_speed(data, solver, task_id, timeout=1):
         for i, ex in enumerate(task):
             timed_out, result = await run_with_timeout(solver, [S, ex['input'], None], timeout)
             if timed_out:
-                print_l(f'Solver for {task_id} failed sample {i} (or timed out)')
+                print_l(f'Solver for {task_id} timed out for sample {i}')
                 return True
     return False
 
