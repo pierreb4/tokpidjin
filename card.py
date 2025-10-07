@@ -671,12 +671,12 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     # print_l(f'{len(solvers) = } - {len(pre_solvers) = } - {len(dir_solvers) = }')
     # print_l(f'{len(task_ids) = } - {len(pre_task_ids) = } - {len(dir_task_ids) = }')
 
-    # Write mix_task_ids into file based on batt_file_name
-    # Used in run_batt.py (from call import mix_task_ids)
-    mix_task_ids = task_ids
-    mix_file_name = batt_file_name.replace('.py', '_mix.py')
-    with open(mix_file_name, 'w') as mix_file:
-        print(f'{mix_task_ids = }', file=mix_file)
+    # # Write mix_task_ids into file based on batt_file_name
+    # # Used in run_batt.py (from call import mix_task_ids)
+    # mix_task_ids = task_ids
+    # mix_file_name = batt_file_name.replace('.py', '_mix.py')
+    # with open(mix_file_name, 'w') as mix_file:
+    #     print(f'{mix_task_ids = }', file=mix_file)
 
     task_ids = list(solvers.keys())
     differs = Differs(task_ids, freeze_differs=args.freeze_differs)
