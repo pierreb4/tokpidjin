@@ -338,7 +338,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
         check_start = timer()
-        timed_out = await check_solver_speed(total_data, solver_source, task_id, timeout)
+        timed_out = await check_solver_speed(total_data, solver_source, task_id, sol_solver_id, timeout)
         t_log = 11 - int(math.log(timer() - check_start))
 
         # if not Path(solver_def_path).exists():
