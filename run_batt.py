@@ -288,7 +288,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     print_l(f'-- {task_id} - {task_i} done - {len(all_o)} candidates scored') if DO_PRINT else None
 
     # NOTE all_o contains candidates for 'demo' and 'test' tasks
-    #      Maybe don't save twice the same things
+    # TODO Avoid double work below
     t_log = 10
     max_files = 32
     for candidate in all_o:
