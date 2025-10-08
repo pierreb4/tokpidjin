@@ -647,7 +647,10 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
         # rnd_pre_solvers = {k: pre_solvers[k] for k in random.sample(list(pre_solvers.keys()), pre_count)}
         # # XXX Don't apply sourcery suggestion below. It breaks things!
         # rnd_solvers = {**rnd_dir_solvers, **rnd_pre_solvers}
-        rnd_solvers = {k: all_solvers[k] for k in random.sample(list(all_solvers.keys()), count)}
+
+        assert len(all_task_ids) >= count, f'Not enough tasks to sample {count} from {len(all_task_ids)}'
+
+        rnd_solvers = {k: all_solvers[k] for k in random.sample(all_task_ids, count)}
         rnd_task_ids = list(rnd_solvers.keys())
 
         task_sizes = []
