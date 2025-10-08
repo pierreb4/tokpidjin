@@ -110,7 +110,13 @@ def symlink(file_path, link_path):
     If the symlink already exists, remove it and create a new one.
     """
     home_folder = Path.home()
-    full_name = f'{home_folder}/dsl/tokpidjin/{file_path}'
+
+    if home_folder == Path('/root'):
+        # Running in Kaggle
+        full_name = f'/kaggle/working/tokpidjin/{file_path}'
+    else:
+        full_name = f'{home_folder}/dsl/tokpidjin/{file_path}'
+
     try:
         os.symlink(full_name, link_path)
     except FileExistsError:
@@ -403,6 +409,28 @@ def get_solver_source(task_id, imports=None, best_only=False):
     # return Solver('solve', None, solve_identity, 0, 0)
 
 
+def get_solvers(imports, best_only=False):
+    # Get both train and test tasks
+    train_data = get_data(train=True)
+    # eval_data = get_data(train=False)
+    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
+    total_data = {k: {**train_data[k]} for k in ['demo', 'test']}
+
+    task_list = list(total_data['demo'].keys())
+
+    # Exclude known bad solvers
+    # bad_solvers = BAD_SOLVERS
+    # task_list = [task_id for task_id in task_list if task_id not in bad_solvers]
+
+    solvers = {}
+    for task_id in task_list:
+        solver = get_solver_source(task_id, imports, best_only=best_only)
+        if solver.source is not None:
+            solvers[task_id] = solver
+
+    return solvers
+
+
 def get_differs(import_names, best_only=False):
     differs = {}
     for imp_name in import_names:
@@ -433,28 +461,6 @@ def get_differs(import_names, best_only=False):
             differs[name] = Differ(name, differ_md5, inspect.getsource(differ), None, 0, 999)
 
     return differs
-
-
-def get_solvers(imports, best_only=False):
-    # Get both train and test tasks
-    train_data = get_data(train=True)
-    # eval_data = get_data(train=False)
-
-    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
-    total_data = {k: {**train_data[k]} for k in ['demo', 'test']}
-    task_list = list(total_data['demo'].keys())
-
-    # Exclude known bad solvers
-    # bad_solvers = BAD_SOLVERS
-    # task_list = [task_id for task_id in task_list if task_id not in bad_solvers]
-
-    solvers = {}
-    for task_id in task_list:
-        solver = get_solver_source(task_id, imports, best_only=best_only)
-        if solver.source is not None:
-            solvers[task_id] = solver
-
-    return solvers
 
 
 def load_path(file_path):
