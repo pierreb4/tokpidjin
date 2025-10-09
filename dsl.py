@@ -3082,8 +3082,28 @@ def partition(
 def fgpartition(
     grid: 'Grid'
 ) -> 'Objects':
+    """GPU-accelerated fgpartition"""
+    if GPU_AVAILABLE:
+        gpu_grid = cp.asarray(grid)
+        # Vectorized operations on GPU
+        colors = cp.unique(gpu_grid)
+        result = []
+        for color in colors:
+            if color != 0:  # Skip background
+                positions = cp.where(gpu_grid == color)
+                color_objects = frozenset((int(color), (int(i), int(j))) 
+                                        for i, j in zip(positions[0], positions[1]))
+                result.append(color_objects)
+        return frozenset(result)
+    else:
+        return _fgpartition_cpu(grid)  # fallback
+
+
+def _fgpartition_cpu(
+    grid: 'Grid'
+) -> 'Objects':
     """ each cell with the same color of the same object without background """
-    logger.info(f'fgpartition: {grid = }')
+    logger.info(f'_fgpartition_cpu: {grid = }')
     return frozenset(
         frozenset(
             (i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r) if c == color

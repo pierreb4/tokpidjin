@@ -22,7 +22,13 @@ from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
-# from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed
+try:
+    import cupy as cp
+    from dsl import GPU_AVAILABLE
+except ImportError:
+    GPU_AVAILABLE = False
+
 import multiprocessing as mp
 
 class GPUBatchProcessor:
@@ -50,6 +56,27 @@ class GPUBatchProcessor:
             return self._gpu_batch_solve(task_batch)
         return self._cpu_batch_solve(task_batch)
 
+    def _gpu_batch_solve(self, task_batch):
+        """Process task batch on GPU"""
+        if not GPU_AVAILABLE:
+            return self._cpu_batch_solve(task_batch)
+        
+        try:
+            # Convert grids to GPU arrays
+            gpu_grids = [cp.asarray(task['grid']) for task in task_batch]
+            # Batch process on GPU
+            results = []
+            for gpu_grid in gpu_grids:
+                result = self._solve_on_gpu(gpu_grid)
+                results.append(cp.asnumpy(result))
+            return results
+        except Exception as e:
+            print(f"GPU batch failed, falling back to CPU: {e}")
+            return self._cpu_batch_solve(task_batch)
+
+    def _cpu_batch_solve(self, task_batch):
+        """Fallback CPU processing"""
+        return [self._solve_cpu(task) for task in task_batch]
 
 # Add GPU memory management to run_batt.py:
 def configure_gpu_memory():
