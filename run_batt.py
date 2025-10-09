@@ -22,33 +22,32 @@ from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
-# from concurrent.futures import ThreadPoolExecutor, as_completed
-import multiprocessing as mp
+# import multiprocessing as mp
 
-class GPUBatchProcessor:
-    def __init__(self, batch_size=32):
-        self.batch_size = batch_size
+# class GPUBatchProcessor:
+#     def __init__(self, batch_size=32):
+#         self.batch_size = batch_size
         
-    def process_tasks_batch(self, tasks):
-        """Process multiple tasks in parallel on GPU"""
-        with ThreadPoolExecutor(max_workers=mp.cpu_count()) as executor:
-            futures = []
-            for i in range(0, len(tasks), self.batch_size):
-                batch = tasks[i:i+self.batch_size] 
-                future = executor.submit(self._process_batch_gpu, batch)
-                futures.append(future)
+#     def process_tasks_batch(self, tasks):
+#         """Process multiple tasks in parallel on GPU"""
+#         with ThreadPoolExecutor(max_workers=mp.cpu_count()) as executor:
+#             futures = []
+#             for i in range(0, len(tasks), self.batch_size):
+#                 batch = tasks[i:i+self.batch_size] 
+#                 future = executor.submit(self._process_batch_gpu, batch)
+#                 futures.append(future)
             
-            results = []
-            for future in as_completed(futures):
-                results.extend(future.result())
-        return results
+#             results = []
+#             for future in as_completed(futures):
+#                 results.extend(future.result())
+#         return results
         
-    def _process_batch_gpu(self, task_batch):
-        # Move grid operations to GPU
-        if GPU_AVAILABLE:
-            # Batch process grids on GPU
-            return self._gpu_batch_solve(task_batch)
-        return self._cpu_batch_solve(task_batch)
+#     def _process_batch_gpu(self, task_batch):
+#         # Move grid operations to GPU
+#         if GPU_AVAILABLE:
+#             # Batch process grids on GPU
+#             return self._gpu_batch_solve(task_batch)
+#         return self._cpu_batch_solve(task_batch)
 
 
 class O_Score:    
