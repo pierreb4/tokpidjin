@@ -93,7 +93,8 @@ while date && [ $STOP -eq 0 ]; do
     ulimit -v $mem_limit &>/dev/null || echo "Memory limit not supported"
     # unbuffer timeout 300s python run_batt.py -i -t $TIMEOUT -c $COUNT \
     timeout 3600s python -u run_batt.py -i -t $TIMEOUT -c $COUNT \
-        -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
+        -b ${TMPBATT}_run
+        # -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
   fi
 
   # Remove results that are too large (for now)

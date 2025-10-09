@@ -555,11 +555,15 @@ if __name__ == "__main__":
     parser.add_argument('--cprofile-top', type=int, default=30, help='Number of top functions to show in cProfile')
     args = parser.parse_args()
 
+    print_l(f'Importing batt from {args.batt_import}')
+
     batt_module = importlib.import_module(args.batt_import)
     batt = batt_module.batt if hasattr(batt_module, 'batt') else batt
 
     call_module = importlib.import_module(f'{args.batt_import}_call')
     t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
+
+    print_l(f'Loaded {len(t_call)} t_call entries')
 
     # # Try prioritizing mix_task_ids included by card.py
     # mix_module = importlib.import_module(f'{args.batt_import}_mix')
