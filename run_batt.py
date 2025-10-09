@@ -1,4 +1,4 @@
-print_l('Starting run_batt.py')
+print('Starting run_batt.py')
 
 import argparse
 import random
@@ -10,11 +10,11 @@ import importlib
 import os
 import asyncio
 
-print_l('Imported standard modules')
+print('Imported standard modules')
 
 import dill as pickle
 
-print_l('Imported dill as pickle')
+print('Imported dill as pickle')
 
 from contextlib import suppress
 from timeit import default_timer as timer
@@ -22,7 +22,7 @@ from pathlib import Path
 from collections import defaultdict
 from contextlib import contextmanager
 
-print_l('Imported more standard modules')
+print('Imported more standard modules')
 
 from utils import *
 import utils as utils_module
@@ -30,7 +30,7 @@ from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
-print_l('Importing run_batt.py')
+print('Imported local modules')
 
 # import multiprocessing as mp
 
