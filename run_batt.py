@@ -1,3 +1,5 @@
+print_l('Starting run_batt.py')
+
 import argparse
 import random
 import re
@@ -8,13 +10,19 @@ import importlib
 import os
 import asyncio
 
+print_l('Imported standard modules')
+
 import dill as pickle
+
+print_l('Imported dill as pickle')
 
 from contextlib import suppress
 from timeit import default_timer as timer
 from pathlib import Path
 from collections import defaultdict
 from contextlib import contextmanager
+
+print_l('Imported more standard modules')
 
 from utils import *
 import utils as utils_module
