@@ -22,6 +22,8 @@ from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
 from run_test import check_solver_speed
 
+print_l('Importing run_batt.py')
+
 # import multiprocessing as mp
 
 # class GPUBatchProcessor:
