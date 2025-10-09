@@ -53,12 +53,24 @@ if [ -z "$TIMEOUT" ]; then
   TIMEOUT=1.0
 fi
 
+if command -v nvidia-smi &> /dev/null; then
+    echo "Testing GPU acceleration..."
+    python -c "
+from dsl import GPU_AVAILABLE, grid_to_gpu
+from run_batt import configure_gpu_memory
+print(f'GPU Available: {GPU_AVAILABLE}')
+if GPU_AVAILABLE:
+    configure_gpu_memory()
+    print('GPU memory configured')
+"
+fi
+
 # Add GPU detection and configuration
 if command -v nvidia-smi &> /dev/null; then
     echo "GPU detected, enabling GPU acceleration"
     export CUDA_VISIBLE_DEVICES=0
     export GPU_BATCH_SIZE=32
-    GPU_ARGS="--use-gpu --batch-size 32"
+    # GPU_ARGS="--use-gpu --batch-size 32"
 else
     echo "No GPU detected, using CPU"
     GPU_ARGS=""
