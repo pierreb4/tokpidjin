@@ -716,7 +716,7 @@ def batt(task_id, S, I, C, log_path):
             # Go through each solver
             solvers_copy = solvers.copy()
             for task_id, solver in solvers_copy.items():
-                # print_l(f'Processing {task_id} - {len(solvers)} solvers left')
+                print_l(f'Processing {task_id} - {len(solvers)} solvers left')
 
                 func_name = solver.name
                 # solver_path = solver.path
