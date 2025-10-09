@@ -752,12 +752,15 @@ def batt(task_id, S, I, C, log_path):
 
         print("    return o, s", file=batt_file)
 
+    print_l(f'Finished writing batt to {batt_file_name}')
+
     # Write t_call into file based on batt_file_name
     # Used in run_batt.py (call_module.t_call)
     call_file_name = batt_file_name.replace('.py', '_call.py')
     with open(call_file_name, 'w') as call_file:
         print(f't_call = {code.t_call}', file=call_file)
 
+    print_l(f'Wrote t_call to {call_file_name}')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run batt on specified tasks')
