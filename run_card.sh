@@ -40,7 +40,7 @@ if [ -n "$INITIAL" ]; then
   mkdir differ_dir differ_md5 differ_def
   rm main.log
   # Gets unset for ONERUN
-  CARD_OPTION="-fs -fd"
+  # CARD_OPTION="-fs -fd"
   CARD_OPTION="-fd"
   python prep_solver_dir.py
 fi
@@ -53,7 +53,6 @@ if [ -z "$TIMEOUT" ]; then
   TIMEOUT=1.0
 fi
 
-# export LD_LIBRARY_PATH=/root/.cupy/cuda_lib/12.x/cudnn/8.8.1/lib:$LD_LIBRARY_PATH
 CHARS=({0..9} {a..f})
 
 TMPFILE=$(mktemp)
@@ -94,7 +93,8 @@ while date && [ $STOP -eq 0 ]; do
     ulimit -v $mem_limit &>/dev/null || echo "Memory limit not supported"
     # unbuffer timeout 300s python run_batt.py -i -t $TIMEOUT -c $COUNT \
     timeout 3600s python -u run_batt.py -i -t $TIMEOUT -c $COUNT \
-        -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
+        -b ${TMPBATT}_run
+        # -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
   fi
 
   # Remove results that are too large (for now)
