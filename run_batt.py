@@ -585,4 +585,5 @@ if __name__ == "__main__":
         print('\n[cProfile tottime top]')
         print(s.getvalue())
     else:
+        print_l(f'Running batt with timeout {args.timeout}s')
         asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))
