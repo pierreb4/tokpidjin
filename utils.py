@@ -1,4 +1,14 @@
 import os
+
+os.environ["CUDA_HOME"] = "/usr/local/cuda-12.5"
+os.environ["PATH"] = "/usr/local/cuda-12.5/bin:" + os.environ["PATH"]
+os.environ["LD_LIBRARY_PATH"] = "/usr/local/cuda-12.5/lib64:" + os.environ.get("LD_LIBRARY_PATH", "")
+cuda_stub_path = "/usr/local/cuda-12.5/targets/x86_64-linux/lib/stubs"
+if "LD_LIBRARY_PATH" in os.environ:
+    os.environ["LD_LIBRARY_PATH"] += f":{cuda_stub_path}"
+else:
+    os.environ["LD_LIBRARY_PATH"] = cuda_stub_path
+
 import json
 import inspect
 import ast
