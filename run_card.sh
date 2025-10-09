@@ -41,6 +41,7 @@ if [ -n "$INITIAL" ]; then
   rm main.log
   # Gets unset for ONERUN
   CARD_OPTION="-fs -fd"
+  CARD_OPTION="-fd"
   python prep_solver_dir.py
 fi
 
