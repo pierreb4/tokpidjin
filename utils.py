@@ -23,6 +23,7 @@ import threading
 from pathlib import Path
 from collections import namedtuple
 from timeit import default_timer as timer
+# from concurrent.futures import ProcessPoolExecutor
 
 
 # namedtuple: A factory function from the collections module that creates tuple subclasses with named fields.
@@ -214,6 +215,25 @@ def inline_variables(source_code):
         _prof['utils.inline_variables.total'] += total_dt
 
     return unparse_source
+
+
+def parallel_inline_variables(source_codes):
+    """Process multiple source codes in parallel"""
+    with ProcessPoolExecutor() as executor:
+        return list(executor.map(inline_variables, source_codes))
+
+
+class GPUVariableInliner(VariableInliner):
+    def __init__(self, use_gpu=True):
+        super().__init__()
+        self.use_gpu = use_gpu and GPU_AVAILABLE
+        
+    def batch_process(self, nodes):
+        """Process multiple AST nodes in parallel"""
+        if self.use_gpu and len(nodes) > 10:
+            return self._gpu_batch_visit(nodes)
+        return [self.visit(node) for node in nodes]
+
 
 # Lightweight module-level profiler wiring
 _prof = None
