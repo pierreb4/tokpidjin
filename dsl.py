@@ -24,7 +24,7 @@ try:
     import cupy.cuda.cudnn
     import numpy as np
     GPU_AVAILABLE = True
-    cp.show_config()
+    # cp.show_config()
 except ImportError:
     GPU_AVAILABLE = False
     
@@ -3083,20 +3083,20 @@ def fgpartition(
     grid: 'Grid'
 ) -> 'Objects':
     """GPU-accelerated fgpartition"""
-    if GPU_AVAILABLE:
-        gpu_grid = cp.asarray(grid)
-        # Vectorized operations on GPU
-        colors = cp.unique(gpu_grid)
-        result = []
-        for color in colors:
-            if color != 0:  # Skip background
-                positions = cp.where(gpu_grid == color)
-                color_objects = frozenset((int(color), (int(i), int(j))) 
-                                        for i, j in zip(positions[0], positions[1]))
-                result.append(color_objects)
-        return frozenset(result)
-    else:
+    if not GPU_AVAILABLE:
         return _fgpartition_cpu(grid)  # fallback
+
+    gpu_grid = cp.asarray(grid)
+    # Vectorized operations on GPU
+    colors = cp.unique(gpu_grid)
+    result = []
+    for color in colors:
+        if color != 0:  # Skip background
+            positions = cp.where(gpu_grid == color)
+            color_objects = frozenset((int(color), (int(i), int(j))) 
+                                    for i, j in zip(positions[0], positions[1]))
+            result.append(color_objects)
+    return frozenset(result)
 
 
 def _fgpartition_cpu(
