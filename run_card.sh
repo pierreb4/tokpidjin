@@ -53,6 +53,17 @@ if [ -z "$TIMEOUT" ]; then
   TIMEOUT=1.0
 fi
 
+# Add GPU detection and configuration
+if command -v nvidia-smi &> /dev/null; then
+    echo "GPU detected, enabling GPU acceleration"
+    export CUDA_VISIBLE_DEVICES=0
+    export GPU_BATCH_SIZE=32
+    GPU_ARGS="--use-gpu --batch-size 32"
+else
+    echo "No GPU detected, using CPU"
+    GPU_ARGS=""
+fi
+
 CHARS=({0..9} {a..f})
 
 TMPFILE=$(mktemp)
@@ -75,7 +86,7 @@ while date && [ $STOP -eq 0 ]; do
     # Remove old temporary files
     find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
 
-    python card.py $CARD_OPTION -c 32 -f ${TMPBATT}_run.py
+    python card.py $CARD_OPTION -c 32 -f ${TMPBATT}_run.py $GPU_ARGS
     # python card.py $CARD_OPTION -f ${TMPBATT}_run.py
     unset CARD_OPTION
 
@@ -96,7 +107,7 @@ while date && [ $STOP -eq 0 ]; do
     fi
 
     timeout 3600s python -u run_batt.py -i -t $TIMEOUT -c $COUNT \
-        -b ${TMPBATT}_run | tee ${TMPBATT}_run.log
+        -b ${TMPBATT}_run $GPU_ARGS | tee ${TMPBATT}_run.log
   fi
 
   # Remove results that are too large (for now)

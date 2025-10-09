@@ -51,6 +51,22 @@ class GPUBatchProcessor:
         return self._cpu_batch_solve(task_batch)
 
 
+# Add GPU memory management to run_batt.py:
+def configure_gpu_memory():
+    if GPU_AVAILABLE:
+        # Set memory pool to prevent fragmentation
+        cp.cuda.MemoryPool().set_limit(size=2**30)  # 1GB limit
+        cp.cuda.runtime.setDevice(0)  # Use first GPU
+        return True
+    return False
+
+
+def gpu_memory_cleanup():
+    if GPU_AVAILABLE:
+        cp.get_default_memory_pool().free_all_blocks()
+        cp.get_default_pinned_memory_pool().free_all_blocks()
+
+
 class O_Score:    
     def __init__(self):
         self.score = {}
