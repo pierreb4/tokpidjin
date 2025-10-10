@@ -38,7 +38,7 @@ class KaggleGPUOptimizer:
         self.optimal_batch_size = 128  # Sweet spot for T4/P100
         self.max_batch_size = 512  # Memory limit consideration
         
-    def batch_grid_op_optimized(self, grids, operation, keep_on_gpu=False, vectorized=False):
+    def batch_grid_op_optimized(self, grids, operation, keep_on_gpu=False, vectorized=False, operation_single=None):
         """
         Optimized batch processing that achieves real speedup
         
@@ -48,16 +48,21 @@ class KaggleGPUOptimizer:
         
         Args:
             grids: List of 2D grids (as tuples or lists)
-            operation: Function to apply
+            operation: Function to apply (vectorized version if vectorized=True)
             keep_on_gpu: If True, return GPU arrays (for chaining ops)
             vectorized: If True, operation expects 3D batch tensor
+            operation_single: Per-grid operation for CPU fallback (required if vectorized=True)
         
         Returns:
             List of processed grids (CPU or GPU arrays)
         """
         if not GPU_AVAILABLE or len(grids) < self.min_batch_size:
             # CPU is faster for small batches due to overhead
-            return [operation(np.asarray(g)) for g in grids]
+            # Use per-grid operation for CPU
+            if vectorized and operation_single is not None:
+                return [operation_single(np.asarray(g)) for g in grids]
+            else:
+                return [operation(np.asarray(g)) for g in grids]
         
         try:
             with cp.cuda.Device(self.device_id):
@@ -106,22 +111,25 @@ class KaggleGPUOptimizer:
             print(f"GPU batch failed ({e}), falling back to CPU")
             return [operation(np.asarray(g)) for g in grids]
     
-    def pipeline_operations(self, grids, operations, vectorized=True):
+    def pipeline_operations(self, grids, operations, vectorized=True, operations_single=None):
         """
         Pipeline multiple operations on GPU without transferring back to CPU
         This is where GPU really shines vs CPU
         
         Args:
             grids: Input grids
-            operations: List of functions to apply sequentially
+            operations: List of functions to apply sequentially (vectorized versions if vectorized=True)
             vectorized: If True, operations work on 3D batch tensors
+            operations_single: List of per-grid operations for CPU fallback (required if vectorized=True)
         
         Returns:
             Final processed grids
         """
         if not GPU_AVAILABLE or len(grids) < self.min_batch_size:
+            # Use per-grid operations for CPU
+            ops_to_use = operations_single if (vectorized and operations_single) else operations
             results = grids
-            for op in operations:
+            for op in ops_to_use:
                 results = [op(np.asarray(g)) for g in results]
             return results
         
@@ -271,7 +279,12 @@ def benchmark_gpu_batching():
         
         # GPU timing (vectorized - FAST)
         start = timer()
-        gpu_results = optimizer.batch_grid_op_optimized(grids, test_op_vectorized, vectorized=True)
+        gpu_results = optimizer.batch_grid_op_optimized(
+            grids, 
+            test_op_vectorized, 
+            vectorized=True,
+            operation_single=test_op_single
+        )
         gpu_time = timer() - start
         
         speedup = cpu_time / gpu_time if gpu_time > 0 else 0

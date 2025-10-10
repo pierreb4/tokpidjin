@@ -112,7 +112,12 @@ if GPU_AVAILABLE:
         
         # Optimized GPU (vectorized)
         gpu_start = timer()
-        gpu_results = optimizer.batch_grid_op_optimized(grids, complex_op_vectorized, vectorized=True)
+        gpu_results = optimizer.batch_grid_op_optimized(
+            grids, 
+            complex_op_vectorized, 
+            vectorized=True,
+            operation_single=complex_op_single
+        )
         gpu_time = timer() - gpu_start
         
         speedup = cpu_time / gpu_time if gpu_time > 0 else 0
@@ -174,7 +179,12 @@ if GPU_AVAILABLE:
     
     # GPU: Vectorized pipeline (stays on GPU throughout)
     gpu_start = timer()
-    gpu_pipeline = optimizer.pipeline_operations(grids, operations_vectorized, vectorized=True)
+    gpu_pipeline = optimizer.pipeline_operations(
+        grids, 
+        operations_vectorized, 
+        vectorized=True,
+        operations_single=operations_single
+    )
     gpu_time = timer() - gpu_start
     
     speedup = cpu_time / gpu_time if gpu_time > 0 else 0
