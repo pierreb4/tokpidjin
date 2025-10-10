@@ -256,7 +256,7 @@ if __name__ == "__main__":
     print("\nGPU-DSL Module Test Suite")
     print("="*60)
     print(f"GPU Available: {GPU_AVAILABLE}")
-    
+
     if GPU_AVAILABLE:
         print(f"CuPy version: {cp.__version__}")
         try:
@@ -265,9 +265,9 @@ if __name__ == "__main__":
             mem = device.mem_info
             print(f"GPU Memory: {mem[1]/1024**3:.1f}GB total, "
                   f"{(mem[1]-mem[0])/1024**3:.1f}GB used")
-        except:
+        except Exception:
             print("Could not get GPU device info")
-    
+
     # Run tests
     if test_rot90_correctness():
         benchmark_rot90()
