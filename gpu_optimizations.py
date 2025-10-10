@@ -38,18 +38,19 @@ class KaggleGPUOptimizer:
         self.optimal_batch_size = 128  # Sweet spot for T4/P100
         self.max_batch_size = 512  # Memory limit consideration
         
-    def batch_grid_op_optimized(self, grids, operation, keep_on_gpu=False):
+    def batch_grid_op_optimized(self, grids, operation, keep_on_gpu=False, vectorized=False):
         """
-        Optimized batch processing that actually achieves speedup
+        Optimized batch processing that achieves real speedup
         
-        Strategy: Transfer all grids to GPU, apply operation to each grid on GPU,
-        then transfer results back. This minimizes CPU<->GPU transfers while
-        allowing operations to work on individual grids.
+        Two modes:
+        1. vectorized=True: Operation works on 3D tensor (batch_size, h, w) - FASTEST
+        2. vectorized=False: Operation applied per-grid but all grids stay on GPU
         
         Args:
             grids: List of 2D grids (as tuples or lists)
-            operation: Function to apply to each grid (must work on GPU arrays)
+            operation: Function to apply
             keep_on_gpu: If True, return GPU arrays (for chaining ops)
+            vectorized: If True, operation expects 3D batch tensor
         
         Returns:
             List of processed grids (CPU or GPU arrays)
@@ -61,24 +62,51 @@ class KaggleGPUOptimizer:
         try:
             with cp.cuda.Device(self.device_id):
                 with self.stream:
-                    # Transfer all grids to GPU at once
+                    # Convert to numpy arrays
                     np_grids = [np.asarray(g, dtype=np.int32) for g in grids]
-                    gpu_grids = [cp.asarray(g) for g in np_grids]
                     
-                    # Apply operation to each grid on GPU (parallelized by GPU)
-                    results_gpu = [operation(g) for g in gpu_grids]
+                    if vectorized:
+                        # VECTORIZED MODE: Stack into 3D tensor and process as batch
+                        # This is the fastest way - true parallel processing
+                        
+                        # Pad grids to same size for stacking
+                        max_h = max(g.shape[0] for g in np_grids)
+                        max_w = max(g.shape[1] for g in np_grids)
+                        
+                        # Create padded batch tensor on GPU
+                        batch_tensor = cp.zeros((len(grids), max_h, max_w), dtype=cp.int32)
+                        original_shapes = []
+                        
+                        for i, g in enumerate(np_grids):
+                            h, w = g.shape
+                            batch_tensor[i, :h, :w] = cp.asarray(g)
+                            original_shapes.append((h, w))
+                        
+                        # Apply operation to entire batch at once (TRUE GPU PARALLELISM)
+                        result_tensor = operation(batch_tensor)
+                        
+                        # Extract individual grids (crop padding)
+                        if keep_on_gpu:
+                            return [result_tensor[i, :h, :w] for i, (h, w) in enumerate(original_shapes)]
+                        else:
+                            return [cp.asnumpy(result_tensor[i, :h, :w]) for i, (h, w) in enumerate(original_shapes)]
                     
-                    # Return GPU arrays for chaining, or transfer back to CPU
-                    if keep_on_gpu:
-                        return results_gpu
                     else:
-                        return [cp.asnumpy(g) for g in results_gpu]
+                        # PER-GRID MODE: Process each grid individually on GPU
+                        # Slower but works with operations that can't be vectorized
+                        gpu_grids = [cp.asarray(g) for g in np_grids]
+                        results_gpu = [operation(g) for g in gpu_grids]
+                        
+                        if keep_on_gpu:
+                            return results_gpu
+                        else:
+                            return [cp.asnumpy(g) for g in results_gpu]
                 
         except Exception as e:
             print(f"GPU batch failed ({e}), falling back to CPU")
             return [operation(np.asarray(g)) for g in grids]
     
-    def pipeline_operations(self, grids, operations):
+    def pipeline_operations(self, grids, operations, vectorized=True):
         """
         Pipeline multiple operations on GPU without transferring back to CPU
         This is where GPU really shines vs CPU
@@ -86,6 +114,7 @@ class KaggleGPUOptimizer:
         Args:
             grids: Input grids
             operations: List of functions to apply sequentially
+            vectorized: If True, operations work on 3D batch tensors
         
         Returns:
             Final processed grids
@@ -98,18 +127,40 @@ class KaggleGPUOptimizer:
         
         try:
             with cp.cuda.Device(self.device_id):
-                # Transfer to GPU once
-                gpu_grids = self.batch_grid_op_optimized(
-                    grids, lambda x: x, keep_on_gpu=True
-                )
+                if vectorized:
+                    # VECTORIZED PIPELINE: Process entire batch through all operations
+                    # Convert to batch tensor once
+                    np_grids = [np.asarray(g, dtype=np.int32) for g in grids]
+                    max_h = max(g.shape[0] for g in np_grids)
+                    max_w = max(g.shape[1] for g in np_grids)
+                    
+                    batch_tensor = cp.zeros((len(grids), max_h, max_w), dtype=cp.int32)
+                    original_shapes = []
+                    
+                    for i, g in enumerate(np_grids):
+                        h, w = g.shape
+                        batch_tensor[i, :h, :w] = cp.asarray(g)
+                        original_shapes.append((h, w))
+                    
+                    # Apply all operations to batch tensor (stays on GPU)
+                    for op in operations:
+                        batch_tensor = op(batch_tensor)
+                    
+                    # Extract results
+                    return [cp.asnumpy(batch_tensor[i, :h, :w]) for i, (h, w) in enumerate(original_shapes)]
                 
-                # Apply all operations on GPU
-                for op in operations:
-                    with self.stream:
-                        gpu_grids = op(gpu_grids)
-                
-                # Transfer back once
-                return [cp.asnumpy(g) for g in gpu_grids]
+                else:
+                    # PER-GRID PIPELINE: Keep grids on GPU but process individually
+                    gpu_grids = self.batch_grid_op_optimized(
+                        grids, lambda x: x, keep_on_gpu=True, vectorized=False
+                    )
+                    
+                    # Apply all operations on GPU
+                    for op in operations:
+                        gpu_grids = [op(g) for g in gpu_grids]
+                    
+                    # Transfer back once
+                    return [cp.asnumpy(g) for g in gpu_grids]
                 
         except Exception as e:
             print(f"GPU pipeline failed ({e}), falling back to CPU")
@@ -199,20 +250,28 @@ def benchmark_gpu_batching():
         # Generate test data
         grids = [np.random.randint(0, 10, (20, 20)) for _ in range(batch_size)]
         
-        # Define a moderately complex operation
-        def test_op(g):
+        # Define operations - both per-grid and vectorized versions
+        def test_op_single(g):
+            """Operation for single grid"""
             if isinstance(g, cp.ndarray):
                 return cp.rot90(g) + (g > 5).astype(cp.int32)
             return np.rot90(g) + (g > 5).astype(np.int32)
         
+        def test_op_vectorized(batch):
+            """Vectorized operation for 3D batch tensor"""
+            if isinstance(batch, cp.ndarray):
+                # batch shape: (batch_size, h, w)
+                return cp.rot90(batch, axes=(1, 2)) + (batch > 5).astype(cp.int32)
+            return np.rot90(batch, axes=(1, 2)) + (batch > 5).astype(np.int32)
+        
         # CPU timing
         start = timer()
-        cpu_results = [test_op(g) for g in grids]
+        cpu_results = [test_op_single(g) for g in grids]
         cpu_time = timer() - start
         
-        # GPU timing (optimized)
+        # GPU timing (vectorized - FAST)
         start = timer()
-        gpu_results = optimizer.batch_grid_op_optimized(grids, test_op)
+        gpu_results = optimizer.batch_grid_op_optimized(grids, test_op_vectorized, vectorized=True)
         gpu_time = timer() - start
         
         speedup = cpu_time / gpu_time if gpu_time > 0 else 0
