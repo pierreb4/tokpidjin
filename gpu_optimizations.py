@@ -42,9 +42,13 @@ class KaggleGPUOptimizer:
         """
         Optimized batch processing that actually achieves speedup
         
+        Strategy: Transfer all grids to GPU, apply operation to each grid on GPU,
+        then transfer results back. This minimizes CPU<->GPU transfers while
+        allowing operations to work on individual grids.
+        
         Args:
             grids: List of 2D grids (as tuples or lists)
-            operation: Function to apply (must work on GPU arrays)
+            operation: Function to apply to each grid (must work on GPU arrays)
             keep_on_gpu: If True, return GPU arrays (for chaining ops)
         
         Returns:
@@ -56,38 +60,19 @@ class KaggleGPUOptimizer:
         
         try:
             with cp.cuda.Device(self.device_id):
-                # Convert grids efficiently
-                np_grids = [np.asarray(g, dtype=np.int32) for g in grids]
-                
-                # Get max dimensions
-                max_h = max(g.shape[0] for g in np_grids)
-                max_w = max(g.shape[1] for g in np_grids)
-                
-                # Pre-allocate GPU memory (single allocation)
-                batch_size = len(grids)
-                gpu_batch = cp.zeros((batch_size, max_h, max_w), dtype=cp.int32)
-                
-                # Copy all grids to GPU in one transfer
-                for i, g in enumerate(np_grids):
-                    h, w = g.shape
-                    gpu_batch[i, :h, :w] = cp.asarray(g)
-                
-                # Apply operation on entire batch (GPU kernels parallelized)
                 with self.stream:
-                    results_gpu = operation(gpu_batch)
-                
-                # Transfer results back (single transfer)
-                if keep_on_gpu:
-                    return results_gpu
-                
-                # Convert back to original shapes
-                results = []
-                for i, orig_grid in enumerate(np_grids):
-                    h, w = orig_grid.shape
-                    result = cp.asnumpy(results_gpu[i, :h, :w])
-                    results.append(result)
-                
-                return results
+                    # Transfer all grids to GPU at once
+                    np_grids = [np.asarray(g, dtype=np.int32) for g in grids]
+                    gpu_grids = [cp.asarray(g) for g in np_grids]
+                    
+                    # Apply operation to each grid on GPU (parallelized by GPU)
+                    results_gpu = [operation(g) for g in gpu_grids]
+                    
+                    # Return GPU arrays for chaining, or transfer back to CPU
+                    if keep_on_gpu:
+                        return results_gpu
+                    else:
+                        return [cp.asnumpy(g) for g in results_gpu]
                 
         except Exception as e:
             print(f"GPU batch failed ({e}), falling back to CPU")
