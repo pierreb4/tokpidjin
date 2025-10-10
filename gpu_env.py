@@ -180,17 +180,12 @@ class GPUEnv(Env):
                 'o_g': o_g_gpu,
                 'objects': objects_gpu,
             }
-            
-            if self.log:
-                print(f"[GPUEnv] Registered {len(self.gpu_ops)} GPU operations: {list(self.gpu_ops.keys())}")
         
         except ImportError as e:
-            if self.log:
-                print(f"[GPUEnv] Warning: Could not import GPU operations: {e}")
+            # Could not import GPU operations - leave registry empty
             self.gpu_ops = {}
         except Exception as e:
-            if self.log:
-                print(f"[GPUEnv] Warning: Error registering GPU operations: {e}")
+            # Error registering GPU operations - leave registry empty
             self.gpu_ops = {}
     
     def do_pile(self, t_num: int, t, isok=True) -> OKT:
