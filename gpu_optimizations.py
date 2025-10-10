@@ -363,5 +363,146 @@ def benchmark_gpu_batching():
         print(f"  Correctness: ✓")
 
 
+class MultiGPUOptimizer:
+    """
+    Multi-GPU optimizer for L4x4, T4x2, or any multi-GPU setup
+    Distributes batches across multiple GPUs for parallel processing
+    """
+    
+    def __init__(self, num_gpus=None):
+        """
+        Initialize multi-GPU optimizer
+        
+        Args:
+            num_gpus: Number of GPUs to use (None = use all available)
+        """
+        if not GPU_AVAILABLE:
+            raise RuntimeError("GPU not available")
+        
+        # Detect available GPUs
+        self.total_gpus = cp.cuda.runtime.getDeviceCount()
+        self.num_gpus = min(num_gpus or self.total_gpus, self.total_gpus)
+        
+        # Create optimizer for each GPU
+        self.optimizers = [KaggleGPUOptimizer(device_id=i) for i in range(self.num_gpus)]
+        
+        print(f"MultiGPUOptimizer initialized with {self.num_gpus}/{self.total_gpus} GPUs")
+    
+    def batch_grid_op_optimized(self, grids, operation, vectorized=False, operation_single=None):
+        """
+        Process grids across multiple GPUs in parallel
+        
+        Args:
+            grids: List of grids to process
+            operation: Vectorized operation function
+            vectorized: Whether operation is vectorized
+            operation_single: Single-grid operation for CPU fallback
+        
+        Returns:
+            List of processed grids (order preserved)
+        """
+        if len(grids) < self.num_gpus * 30:
+            # Too few grids for multi-GPU - use single GPU
+            return self.optimizers[0].batch_grid_op_optimized(
+                grids, operation, vectorized=vectorized, operation_single=operation_single
+            )
+        
+        # Split grids across GPUs (round-robin for load balancing)
+        gpu_batches = [[] for _ in range(self.num_gpus)]
+        for i, grid in enumerate(grids):
+            gpu_batches[i % self.num_gpus].append(grid)
+        
+        # Process on each GPU in parallel using threads
+        from concurrent.futures import ThreadPoolExecutor
+        
+        def process_on_gpu(gpu_id):
+            if len(gpu_batches[gpu_id]) == 0:
+                return []
+            return self.optimizers[gpu_id].batch_grid_op_optimized(
+                gpu_batches[gpu_id],
+                operation,
+                vectorized=vectorized,
+                operation_single=operation_single
+            )
+        
+        with ThreadPoolExecutor(max_workers=self.num_gpus) as executor:
+            futures = [executor.submit(process_on_gpu, i) for i in range(self.num_gpus)]
+            gpu_results = [f.result() for f in futures]
+        
+        # Reconstruct original order
+        results = []
+        for i in range(len(grids)):
+            gpu_id = i % self.num_gpus
+            batch_idx = i // self.num_gpus
+            results.append(gpu_results[gpu_id][batch_idx])
+        
+        return results
+    
+    def pipeline_operations(self, grids, operations, vectorized=True, operations_single=None):
+        """
+        Pipeline operations across multiple GPUs
+        
+        Note: Each GPU processes its batch through the full pipeline
+        (not pipelining across GPUs, which would require inter-GPU communication)
+        """
+        if len(grids) < self.num_gpus * 30:
+            # Use single GPU for small batches
+            return self.optimizers[0].pipeline_operations(
+                grids, operations, vectorized=vectorized, operations_single=operations_single
+            )
+        
+        # Split grids across GPUs
+        gpu_batches = [[] for _ in range(self.num_gpus)]
+        for i, grid in enumerate(grids):
+            gpu_batches[i % self.num_gpus].append(grid)
+        
+        # Process pipeline on each GPU
+        from concurrent.futures import ThreadPoolExecutor
+        
+        def process_pipeline_on_gpu(gpu_id):
+            if len(gpu_batches[gpu_id]) == 0:
+                return []
+            return self.optimizers[gpu_id].pipeline_operations(
+                gpu_batches[gpu_id],
+                operations,
+                vectorized=vectorized,
+                operations_single=operations_single
+            )
+        
+        with ThreadPoolExecutor(max_workers=self.num_gpus) as executor:
+            futures = [executor.submit(process_pipeline_on_gpu, i) for i in range(self.num_gpus)]
+            gpu_results = [f.result() for f in futures]
+        
+        # Reconstruct original order
+        results = []
+        for i in range(len(grids)):
+            gpu_id = i % self.num_gpus
+            batch_idx = i // self.num_gpus
+            results.append(gpu_results[gpu_id][batch_idx])
+        
+        return results
+
+
+def auto_select_optimizer(prefer_multi_gpu=True):
+    """
+    Automatically select the best optimizer for the available hardware
+    
+    Args:
+        prefer_multi_gpu: If True and multiple GPUs available, use MultiGPUOptimizer
+    
+    Returns:
+        Optimizer instance (MultiGPUOptimizer or KaggleGPUOptimizer)
+    """
+    if not GPU_AVAILABLE:
+        raise RuntimeError("GPU not available")
+    
+    num_gpus = cp.cuda.runtime.getDeviceCount()
+    
+    if num_gpus > 1 and prefer_multi_gpu:
+        return MultiGPUOptimizer(num_gpus=num_gpus)
+    else:
+        return KaggleGPUOptimizer(device_id=0)
+
+
 if __name__ == "__main__":
     benchmark_gpu_batching()

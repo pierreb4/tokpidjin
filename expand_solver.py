@@ -80,10 +80,8 @@ def parse_function_body(content):
     # func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
     # func_match = re.search(r'def\s+(solve_[a-f0-9]+(?:_[a-f0-9]+)?)\s*\(([^)]*)\)\s*:', content)
 
-    func_match = re.search(r'def\s+(solve|differ)\s*\(([^)]*)\)\s*:', content)
-
-    if not func_match:
-        func_match = re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
+    func_match = re.search(r'def\s+(solve|differ)\s*\(([^)]*)\)\s*:', content) \
+            or re.search(r'def\s+(solve_[a-f0-9]+)\s*\(([^)]*)\)\s*:', content)
 
     if not func_match:
         print_l("Failed to match function definition in content")
@@ -102,18 +100,9 @@ def parse_function_body(content):
 
     # Parse the expression using AST
     try:
-        t0 = timer()
-        tree = ast.parse(return_expr)
-        parse_dt = timer() - t0
-
-        t1 = timer()
-        steps, _ = expand_expression(tree.body[0].value)
-        expand_dt = timer() - t1
-
-        if _prof is not None:
-            _prof['expand_solver.parse_function_body.parse'] += parse_dt
-            _prof['expand_solver.parse_function_body.expand'] += expand_dt
-        return func_name, func_params, steps
+        return time_parse_func(
+            return_expr, func_name, func_params
+        )
     except SyntaxError as e:
         print_l(f"Error parsing expression: {return_expr}")
         print_l(f"Syntax error: {e}")
@@ -122,6 +111,21 @@ def parse_function_body(content):
         print_l(f"Unexpected error: {e}")
         print_l(f"- traceback: {traceback.format_exc()}")
         return None
+
+
+def time_parse_func(return_expr, func_name, func_params):
+    t0 = timer()
+    tree = ast.parse(return_expr)
+    parse_dt = timer() - t0
+
+    t1 = timer()
+    steps, _ = expand_expression(tree.body[0].value)
+    expand_dt = timer() - t1
+
+    if _prof is not None:
+        _prof['expand_solver.parse_function_body.parse'] += parse_dt
+        _prof['expand_solver.parse_function_body.expand'] += expand_dt
+    return func_name, func_params, steps
 
 def expand_expression(node, depth=1, parent_expr=None, var_map=None, next_var_id=None):
     """
