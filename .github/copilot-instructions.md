@@ -54,14 +54,22 @@ Based on extensive testing:
 
 **❌ DON'T GPU Accelerate (Transfer overhead > Compute):**
 - Simple ops: rot90, flip, transpose, shift, crop
-- Operations < 5ms compute time per batch
-- Operations with ratio < 5:1 (compute:transfer)
+- Scanning ops: fgpartition (even though it seems complex!)
+- Operations < 10ms compute time per 100 grids
+- Operations with < 10 iterations
+- Operations requiring complex Python object conversion (frozensets, tuples)
 
 **✅ DO GPU Accelerate (Compute >> Transfer):**
-- Complex ops: fgpartition, gravitate, neighbor analysis
-- Operations > 20ms compute time per batch
-- Operations with ratio > 5:1 (compute:transfer)
-- Operation pipelines (chain multiple ops on GPU)
+- Iterative ops: gravitate (42 iterations), flood_fill (100+ iterations)
+- High arithmetic intensity: convolutions, matrix multiplications
+- Operations > 50ms compute time per 100 grids
+- Operations that naturally stay on GPU (numerical arrays)
+- Operation pipelines (chain multiple ops on GPU without CPU transfer)
+
+**Key Insight from Testing:**
+- fgpartition: Expected 5-10x speedup, got 0.04x (23x slower!)
+- Why: Per-grid GPU transfers (3000+ transfers), simple scan operations
+- Lesson: Complexity alone doesn't guarantee GPU benefit - transfer overhead matters more!
 
 ### Code Quality Standards
 
