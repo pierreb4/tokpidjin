@@ -8,21 +8,21 @@ Transformed GPU performance from **830x SLOWER** than CPU to **10-35x FASTER** t
 
 ## Final Results
 
-### All Three Kaggle GPUs Tested Successfully
+### All Three Kaggle GPUs Tested Successfully (All Same Cost!)
 
 | GPU Type | Single GPU Speedup | Multi-GPU Speedup | Best For |
 |----------|-------------------|-------------------|----------|
-| **T4x2** 🥇 | **9.69x** | ~18x (2 GPUs) | **Best overall** |
-| L4x4 🥈 | 9.35x | ~35x (4 GPUs) | Maximum throughput |
+| **L4x4** 🥇 | 9.35x | **~35x (4 GPUs)** | **Maximum performance** ⭐⭐⭐ |
+| **T4x2** 🥈 | **9.69x** | ~18x (2 GPUs) | **Best availability** ⭐⭐ |
 | P100 🥉 | 7.64x | N/A (1 GPU) | Fallback option |
 
-### Winner: T4x2 (Best Availability) / L4x4 (Best Performance) 🏆
-- **T4x2**: 9.69x speedup (1 GPU), ~18x (2 GPUs)
-- **L4x4**: 9.35x speedup (1 GPU), ~35x (4 GPUs)
-- **All GPUs cost the same** on Kaggle
-- **Best choice**: L4x4 if available (35x), otherwise T4x2 (18x)
-- **Best availability**: T4x2 (most common on Kaggle)
-- **Fastest execution**: T4 @ 0.87ms for 100 grids vs 1.17ms on P100
+### Recommendations (All Same Cost!)
+- **L4x4**: 35x speedup (4 GPUs) - **Try to get this allocation!**
+- **T4x2**: 18x speedup (2 GPUs) - **Most reliable choice (excellent availability)**
+- **P100**: 7.64x speedup (1 GPU) - Use only when others unavailable
+- **All GPUs cost the same** on Kaggle - choose based on availability
+- **Single-GPU winner**: T4x2 @ 9.69x (marginally better than L4x4 @ 9.35x)
+- **Multi-GPU winner**: L4x4 @ 35x (much better than T4x2 @ 18x)
 
 ---
 
