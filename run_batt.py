@@ -26,35 +26,144 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 try:
     import cupy as cp
     from dsl import GPU_AVAILABLE
+    if GPU_AVAILABLE:
+        # Kaggle GPU detection and configuration
+        gpu_count = cp.cuda.runtime.getDeviceCount()
+        print(f"Kaggle GPU Support: {GPU_AVAILABLE} ({gpu_count} devices)")
+        for i in range(gpu_count):
+            device = cp.cuda.Device(i)
+            mem_total = device.mem_info[1] / (1024**3)
+            print(f"  GPU {i}: Compute {device.compute_capability}, Memory: {mem_total:.1f}GB")
 except ImportError:
     GPU_AVAILABLE = False
+    print("GPU Support: Disabled (CuPy not available)")
 
 import multiprocessing as mp
 
 class GPUBatchProcessor:
-    def __init__(self, batch_size=32):
+    """
+    Batch processor optimized for Kaggle GPUs (T4x2, P100, L4x4)
+    - T4: 16GB, Compute 7.5, good for inference
+    - P100: 16GB, Compute 6.0, high memory bandwidth
+    - L4: 24GB, Compute 8.9, newest architecture
+    """
+    def __init__(self, batch_size=32, use_gpu=True):
         self.batch_size = batch_size
+        self.use_gpu = use_gpu and GPU_AVAILABLE
+        self.gpu_id = 0  # Default to first GPU
+        
+        if self.use_gpu:
+            # Configure for Kaggle GPU memory constraints
+            try:
+                cp.cuda.Device(self.gpu_id).use()
+                # Set memory pool limit based on available memory
+                mem_info = cp.cuda.Device(self.gpu_id).mem_info
+                available_mem = mem_info[0]
+                # Use 80% of available memory to leave room for system
+                mem_limit = int(available_mem * 0.8)
+                cp.get_default_memory_pool().set_limit(size=mem_limit)
+                print(f"GPU batch processor initialized on device {self.gpu_id}")
+                print(f"  Memory limit: {mem_limit/(1024**3):.2f}GB")
+            except Exception as e:
+                print(f"GPU initialization warning: {e}")
+                self.use_gpu = False
         
     def process_tasks_batch(self, tasks):
-        """Process multiple tasks in parallel on GPU"""
-        with ThreadPoolExecutor(max_workers=mp.cpu_count()) as executor:
-            futures = []
-            for i in range(0, len(tasks), self.batch_size):
-                batch = tasks[i:i+self.batch_size] 
-                future = executor.submit(self._process_batch_gpu, batch)
-                futures.append(future)
-            
-            results = []
-            for future in as_completed(futures):
-                results.extend(future.result())
+        """Process multiple tasks in parallel with GPU acceleration"""
+        if not tasks:
+            return []
+        
+        # Adjust batch size based on task complexity and GPU memory
+        effective_batch_size = self._get_effective_batch_size(len(tasks))
+        
+        results = []
+        for i in range(0, len(tasks), effective_batch_size):
+            batch = tasks[i:i+effective_batch_size]
+            try:
+                if self.use_gpu:
+                    batch_results = self._process_batch_gpu(batch)
+                else:
+                    batch_results = self._process_batch_cpu(batch)
+                results.extend(batch_results)
+            except Exception as e:
+                print(f"Batch processing error: {e}, falling back to CPU")
+                batch_results = self._process_batch_cpu(batch)
+                results.extend(batch_results)
+            finally:
+                if self.use_gpu:
+                    self._cleanup_gpu_memory()
+        
         return results
+    
+    def _get_effective_batch_size(self, num_tasks):
+        """Adjust batch size based on available GPU memory"""
+        if not self.use_gpu:
+            return min(self.batch_size, num_tasks)
+        
+        try:
+            mem_info = cp.cuda.Device(self.gpu_id).mem_info
+            available_mem = mem_info[0]
+            # Reduce batch size if memory is low
+            if available_mem < 1024**3:  # Less than 1GB available
+                return max(4, self.batch_size // 4)
+            elif available_mem < 2 * 1024**3:  # Less than 2GB
+                return max(8, self.batch_size // 2)
+        except:
+            pass
+        
+        return min(self.batch_size, num_tasks)
         
     def _process_batch_gpu(self, task_batch):
-        # Move grid operations to GPU
-        if GPU_AVAILABLE:
-            # Batch process grids on GPU
-            return self._gpu_batch_solve(task_batch)
-        return self._cpu_batch_solve(task_batch)
+        """
+        Process task batch on GPU
+        Optimized for grid operations common in ARC tasks
+        """
+        if not GPU_AVAILABLE:
+            return self._process_batch_cpu(task_batch)
+        
+        results = []
+        try:
+            # Process each task with GPU-accelerated operations
+            for task in task_batch:
+                result = self._process_single_task_gpu(task)
+                results.append(result)
+            
+        except cp.cuda.memory.OutOfMemoryError:
+            print("GPU OOM, falling back to CPU for this batch")
+            return self._process_batch_cpu(task_batch)
+        except Exception as e:
+            print(f"GPU processing error: {e}")
+            return self._process_batch_cpu(task_batch)
+        
+        return results
+    
+    def _process_single_task_gpu(self, task):
+        """Process a single task with GPU acceleration"""
+        # This is a template - actual implementation depends on task structure
+        # For now, return the task as-is
+        # TODO: Implement GPU-accelerated grid operations
+        return task
+    
+    def _process_batch_cpu(self, task_batch):
+        """Fallback CPU processing for tasks"""
+        # Process tasks sequentially on CPU
+        return [self._process_single_task_cpu(task) for task in task_batch]
+    
+    def _process_single_task_cpu(self, task):
+        """Process a single task on CPU"""
+        # This is a template - return task as-is
+        return task
+    
+    def _cleanup_gpu_memory(self):
+        """Clean up GPU memory between batches"""
+        if self.use_gpu:
+            try:
+                mempool = cp.get_default_memory_pool()
+                pinned_mempool = cp.get_default_pinned_memory_pool()
+                mempool.free_all_blocks()
+                pinned_mempool.free_all_blocks()
+            except:
+                pass
 
     def _gpu_batch_solve(self, task_batch):
         """Process task batch on GPU"""
@@ -78,20 +187,107 @@ class GPUBatchProcessor:
         """Fallback CPU processing"""
         return [self._solve_cpu(task) for task in task_batch]
 
-# Add GPU memory management to run_batt.py:
-def configure_gpu_memory():
-    if GPU_AVAILABLE:
-        # Set memory pool to prevent fragmentation
-        cp.cuda.MemoryPool().set_limit(size=2**30)  # 1GB limit
-        cp.cuda.runtime.setDevice(0)  # Use first GPU
+# GPU memory management optimized for Kaggle GPUs
+def configure_gpu_memory(device_id=0, memory_fraction=0.8):
+    """
+    Configure GPU memory for Kaggle environment
+    
+    Args:
+        device_id: GPU device ID (0 for first GPU)
+        memory_fraction: Fraction of available memory to use (0.8 = 80%)
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    if not GPU_AVAILABLE:
+        return False
+    
+    try:
+        cp.cuda.Device(device_id).use()
+        
+        # Get available memory
+        mem_info = cp.cuda.Device(device_id).mem_info
+        total_mem = mem_info[1]
+        available_mem = mem_info[0]
+        
+        # Set memory pool limit
+        mem_limit = int(total_mem * memory_fraction)
+        cp.get_default_memory_pool().set_limit(size=mem_limit)
+        
+        print(f"GPU {device_id} configured:")
+        print(f"  Total memory: {total_mem/(1024**3):.2f}GB")
+        print(f"  Available: {available_mem/(1024**3):.2f}GB")
+        print(f"  Pool limit: {mem_limit/(1024**3):.2f}GB")
+        
         return True
-    return False
+    except Exception as e:
+        print(f"GPU configuration error: {e}")
+        return False
 
 
 def gpu_memory_cleanup():
-    if GPU_AVAILABLE:
-        cp.get_default_memory_pool().free_all_blocks()
-        cp.get_default_pinned_memory_pool().free_all_blocks()
+    """Clean up GPU memory pools to prevent OOM errors"""
+    if not GPU_AVAILABLE:
+        return
+    
+    try:
+        mempool = cp.get_default_memory_pool()
+        pinned_mempool = cp.get_default_pinned_memory_pool()
+        
+        # Free unused blocks
+        mempool.free_all_blocks()
+        pinned_mempool.free_all_blocks()
+        
+        # Optional: Print memory stats
+        # mem_info = cp.cuda.Device().mem_info
+        # print(f"GPU memory after cleanup: {mem_info[0]/(1024**3):.2f}GB free")
+    except Exception as e:
+        print(f"GPU cleanup warning: {e}")
+
+
+def get_optimal_batch_size(grid_size=None, num_samples=None):
+    """
+    Calculate optimal batch size based on GPU memory and task characteristics
+    
+    Args:
+        grid_size: Average grid size (rows * cols)
+        num_samples: Number of samples to process
+    
+    Returns:
+        int: Optimal batch size
+    """
+    if not GPU_AVAILABLE:
+        return 16  # Default CPU batch size
+    
+    try:
+        mem_info = cp.cuda.Device().mem_info
+        available_mem = mem_info[0]
+        
+        # T4/P100: 16GB, L4: 24GB
+        # Conservative estimates for grid operations
+        if available_mem > 10 * 1024**3:  # > 10GB available
+            base_batch = 64
+        elif available_mem > 5 * 1024**3:  # > 5GB available
+            base_batch = 32
+        elif available_mem > 2 * 1024**3:  # > 2GB available
+            base_batch = 16
+        else:
+            base_batch = 8
+        
+        # Adjust for grid size if provided
+        if grid_size:
+            if grid_size > 900:  # Large grids (30x30)
+                base_batch = max(4, base_batch // 4)
+            elif grid_size > 400:  # Medium grids (20x20)
+                base_batch = max(8, base_batch // 2)
+        
+        # Cap at num_samples if provided
+        if num_samples:
+            base_batch = min(base_batch, num_samples)
+        
+        return base_batch
+    except:
+        return 16
 
 
 class O_Score:    

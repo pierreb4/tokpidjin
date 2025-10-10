@@ -24,21 +24,96 @@ try:
     import cupy.cuda.cudnn
     import numpy as np
     GPU_AVAILABLE = True
-    # cp.show_config()
+    # cp.show_config()  # Enable for debugging
+    print("CuPy GPU support enabled for Kaggle")
 except ImportError:
     GPU_AVAILABLE = False
+    import numpy as np
+    print("CuPy not available, using CPU only")
     
 def grid_to_gpu(grid):
     """Convert grid to CuPy array if GPU available"""
-    return cp.asarray(grid) if GPU_AVAILABLE else np.asarray(grid)
+    if GPU_AVAILABLE:
+        try:
+            return cp.asarray(grid)
+        except:
+            return np.asarray(grid)
+    return np.asarray(grid)
 
 def batch_grid_operations(grids, operation):
-    """Process multiple grids in parallel on GPU"""
+    """
+    Process multiple grids in parallel on GPU
+    Optimized for Kaggle T4/P100/L4 GPUs
+    """
+    if not grids:
+        return []
+    
     if GPU_AVAILABLE and len(grids) > 1:
-        gpu_grids = cp.stack([cp.asarray(g) for g in grids])
-        result = operation(gpu_grids)
-        return [cp.asnumpy(r) for r in result]
+        try:
+            # Convert to numpy first to ensure consistent format
+            np_grids = [np.asarray(g) if not isinstance(g, np.ndarray) else g for g in grids]
+            
+            # Check if grids have same shape for efficient batching
+            shapes = [g.shape for g in np_grids]
+            if len(set(shapes)) == 1:
+                # Same shape - can stack efficiently
+                gpu_batch = cp.asarray(np_grids)
+                result = operation(gpu_batch)
+                if isinstance(result, cp.ndarray):
+                    return [cp.asnumpy(r) for r in result]
+                return result
+            else:
+                # Different shapes - process individually on GPU
+                results = []
+                for g in np_grids:
+                    gpu_grid = cp.asarray(g)
+                    result = operation(gpu_grid)
+                    if isinstance(result, cp.ndarray):
+                        result = cp.asnumpy(result)
+                    results.append(result)
+                return results
+        except Exception as e:
+            print(f"GPU batch operation failed: {e}, using CPU")
+            return [operation(np.asarray(g)) for g in grids]
+    
+    # CPU fallback
     return [operation(g) for g in grids]
+
+
+def gpu_grid_transform(grid, transform_func):
+    """
+    Apply transformation to grid using GPU if available
+    
+    Args:
+        grid: Input grid (tuple of tuples or numpy array)
+        transform_func: Function to apply to grid
+    
+    Returns:
+        Transformed grid in original format
+    """
+    if not GPU_AVAILABLE:
+        return transform_func(grid)
+    
+    try:
+        # Convert to numpy/cupy
+        was_tuple = isinstance(grid, tuple)
+        np_grid = np.asarray(grid)
+        gpu_grid = cp.asarray(np_grid)
+        
+        # Apply transformation
+        result = transform_func(gpu_grid)
+        
+        # Convert back
+        if isinstance(result, cp.ndarray):
+            result = cp.asnumpy(result)
+        
+        # Restore original format
+        if was_tuple:
+            return tuple(tuple(row) for row in result)
+        return result
+    except Exception as e:
+        # Fallback to CPU
+        return transform_func(grid)
 
 
 # Activate logging
