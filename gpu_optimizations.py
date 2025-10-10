@@ -33,8 +33,8 @@ class KaggleGPUOptimizer:
             self.stream = cp.cuda.Stream(non_blocking=True)
         
         # Tuned thresholds for Kaggle GPUs
-        # Based on T4 Compute 7.5, 16GB memory
-        self.min_batch_size = 20  # Below this, CPU is faster
+        # Based on empirical testing on P100
+        self.min_batch_size = 30  # Below this, CPU is faster (was 20, but 20 showed 120ms overhead)
         self.optimal_batch_size = 128  # Sweet spot for T4/P100
         self.max_batch_size = 512  # Memory limit consideration
         
@@ -300,6 +300,22 @@ def benchmark_gpu_batching():
     print("="*60)
     
     optimizer = KaggleGPUOptimizer()
+    
+    # Warmup run to trigger JIT compilation (avoids first-run slowdown)
+    print("\nWarming up GPU (JIT compilation)...")
+    warmup_grids = [np.random.randint(0, 10, (20, 20)) for _ in range(50)]
+    def warmup_op(batch):
+        if isinstance(batch, cp.ndarray):
+            return cp.rot90(batch, axes=(1, 2)) + (batch > 5).astype(cp.int32)
+        return np.rot90(batch, axes=(1, 2)) + (batch > 5).astype(np.int32)
+    def warmup_single(g):
+        if isinstance(g, cp.ndarray):
+            return cp.rot90(g) + (g > 5).astype(cp.int32)
+        return np.rot90(g) + (g > 5).astype(np.int32)
+    
+    # Run once to compile kernels
+    _ = optimizer.batch_grid_op_optimized(warmup_grids, warmup_op, vectorized=True, operation_single=warmup_single)
+    print("Warmup complete\n")
     
     # Test with increasing batch sizes
     for batch_size in [10, 50, 100, 200]:

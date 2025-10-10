@@ -39,6 +39,47 @@ print("Test 1: Optimized Batch Processing Benchmark")
 print("="*70)
 
 if GPU_AVAILABLE:
+    # Comprehensive warmup for all operation types
+    print("\nWarming up GPU (triggering JIT compilation for all operations)...")
+    warmup_optimizer = KaggleGPUOptimizer()
+    warmup_grids = [np.random.randint(0, 10, (25, 25)) for _ in range(30)]
+    
+    # Warmup 1: Simple rotation
+    def warmup_op1(batch):
+        if isinstance(batch, cp.ndarray):
+            return cp.rot90(batch, axes=(1, 2))
+        return np.rot90(batch, axes=(1, 2))
+    
+    # Warmup 2: Complex operation (like Test 2)
+    def warmup_op2(batch):
+        if isinstance(batch, cp.ndarray):
+            mask = (batch > 0)
+            rotated = cp.rot90(batch, axes=(1, 2))
+            return rotated * mask.astype(cp.int32)
+        mask = (batch > 0)
+        rotated = np.rot90(batch, axes=(1, 2))
+        return rotated * mask.astype(np.int32)
+    
+    # Warmup 3: Flip
+    def warmup_op3(batch):
+        if isinstance(batch, cp.ndarray):
+            return cp.flip(batch, axis=1)
+        return np.flip(batch, axis=1)
+    
+    def warmup_single(g):
+        if isinstance(g, cp.ndarray):
+            return cp.rot90(g)
+        return np.rot90(g)
+    
+    # Run warmup with different operations
+    _ = warmup_optimizer.batch_grid_op_optimized(warmup_grids, warmup_op1, vectorized=True, operation_single=warmup_single)
+    _ = warmup_optimizer.batch_grid_op_optimized(warmup_grids, warmup_op2, vectorized=True, operation_single=warmup_single)
+    
+    # Warmup pipeline
+    _ = warmup_optimizer.pipeline_operations(warmup_grids, [warmup_op1, warmup_op3, warmup_op2], vectorized=True, operations_single=[warmup_single]*3)
+    
+    print("Warmup complete (all kernels compiled)")
+    
     # This will run the full benchmark
     benchmark_gpu_batching()
 else:
