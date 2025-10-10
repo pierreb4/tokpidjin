@@ -6,14 +6,29 @@ This is an ARC (Abstraction and Reasoning Corpus) solver project with GPU accele
 
 ## GPU Optimization Status
 
-**READ FIRST**: `GPU_PROJECT_SUMMARY.md` - Complete GPU optimization overview
+**READ FIRST**: `GPU_SOLVER_STRATEGY.md` - Complete solver GPU acceleration strategy
 
-### Key Achievement
-- GPU acceleration is **COMPLETE and PRODUCTION READY** 🎉
-- **10-35x speedup** vs CPU across all Kaggle GPU types
-- Single-line integration: `auto_select_optimizer()`
+### Key Achievement - Strategy Pivot
+- **Previous approach**: GPU-accelerate individual DSL operations → ❌ FAILED (p_g: GPU 3x slower)
+- **New approach**: GPU-accelerate solver functions → ✅ VALIDATED (expect 2-6x speedup)
+- **Discovery**: Solver functions are 10-1000x longer than DSL ops (1-120ms vs 0.1ms)
+- **Result**: GPU overhead (0.2ms) becomes negligible for long solvers (0.2-2% vs 167%)
 
-### GPU Performance
+### Solver Benchmark Results (Kaggle L4 GPU)
+| Solver | Operations | CPU Time | GPU Viability | Expected Speedup |
+|--------|------------|----------|---------------|------------------|
+| solve_36d67576 | 33 | 120.674 ms | ✅✅ Excellent | 3-6x (→20-40ms) |
+| solve_36fdfd69 | 16 | 58.314 ms | ✅✅ Excellent | 3-5x (→12-19ms) |
+| solve_1a07d186 | 16 | 11.004 ms | ✅ Good | 2-3x |
+| solve_09629e4f | 7 | 6.379 ms | ✅ Good | 2-3x |
+
+**Distribution (28 solvers tested)**:
+- 21% too fast (<1ms) → CPU only
+- 54% borderline (1-5ms) → marginal GPU benefit
+- 18% good (5-15ms) → 2-3x speedup
+- 7% excellent (>15ms) → 3-6x speedup
+
+### Batch Operations (Previous Work)
 | GPU Type | Single GPU | Multi-GPU | Recommendation |
 |----------|------------|-----------|----------------|
 | L4x4 🥇 | 9.35x | ~35x (4 GPUs) | Maximum performance |
@@ -26,26 +41,34 @@ This is an ARC (Abstraction and Reasoning Corpus) solver project with GPU accele
 
 ### When Working with GPU Code
 
-1. **GPU optimization is DONE** - Don't rewrite `gpu_optimizations.py` without good reason
-2. **Use existing patterns** - See `INTEGRATION_GUIDE.md` for examples
+1. **Two GPU strategies**:
+   - Batch operations (PRODUCTION): Use `auto_select_optimizer()` for batch grid processing
+   - Solver acceleration (IN DEVELOPMENT): GPU-resident solver functions (2-6x speedup target)
+
+2. **Current focus**: Profiling and GPU-accelerating solver functions
+   - Target: Complex solvers (>5ms execution time)
+   - Strategy: Keep all intermediate results on GPU, single transfer in/out
+   - Priority: Profile first to identify expensive DSL operations
+
 3. **Test on Kaggle** - Always verify GPU code on actual Kaggle hardware
-4. **Batch operations** - Optimal batch size is 200 grids
+4. **Batch operations** - Optimal batch size is 200 grids (for batch processing)
 5. **Auto-detection** - Use `auto_select_optimizer()` for automatic GPU selection
 
 ### When Suggesting GPU Changes
 
 **DON'T:**
-- ❌ Suggest "simple" GPU acceleration without checking overhead analysis
-- ❌ Propose per-element GPU transfers (use batch processing)
+- ❌ Suggest GPU-accelerating individual DSL operations <1ms (proven ineffective)
+- ❌ Propose per-element GPU transfers (use batch processing or solver-level transfer)
 - ❌ Ignore JIT warmup (causes inconsistent performance)
 - ❌ Hard-code GPU types (use auto-detection)
 - ❌ Rewrite vectorized operations to use loops
 
 **DO:**
-- ✅ Check `GPU_PROJECT_SUMMARY.md` for proven patterns
-- ✅ Use `KaggleGPUOptimizer` or `MultiGPUOptimizer` classes
+- ✅ Focus on solver functions (>5ms execution time) for GPU acceleration
+- ✅ Check `GPU_SOLVER_STRATEGY.md` for current approach
+- ✅ Profile before implementing (use `profile_solvers.py`)
+- ✅ Use `KaggleGPUOptimizer` or `MultiGPUOptimizer` for batch operations
 - ✅ Maintain batch processing architecture
-- ✅ Include JIT warmup in benchmarks
 - ✅ Test on all GPU types (T4x2, P100, L4x4)
 
 ### Operation Complexity Guidelines
@@ -53,23 +76,22 @@ This is an ARC (Abstraction and Reasoning Corpus) solver project with GPU accele
 Based on extensive testing:
 
 **❌ DON'T GPU Accelerate (Transfer overhead > Compute):**
-- Simple ops: rot90, flip, transpose, shift, crop
-- Scanning ops: fgpartition (even though it seems complex!)
-- Operations < 10ms compute time per 100 grids
-- Operations with < 10 iterations
+- Simple DSL ops: p_g, rot90, flip, transpose, shift, crop (all <0.5ms)
+- Any operation with CPU time <1ms
 - Operations requiring complex Python object conversion (frozensets, tuples)
+- Operations in solver functions that execute <1ms
 
 **✅ DO GPU Accelerate (Compute >> Transfer):**
-- Iterative ops: gravitate (42 iterations), flood_fill (100+ iterations)
-- High arithmetic intensity: convolutions, matrix multiplications
-- Operations > 50ms compute time per 100 grids
-- Operations that naturally stay on GPU (numerical arrays)
+- **Solver functions** with >5ms CPU time (PRIMARY FOCUS)
+- Complex DSL operations within solvers: o_g, fgpartition, gravitate
+- Iterative ops: flood_fill (100+ iterations), gravitate (42 iterations)
+- Batch operations: processing 100+ grids simultaneously
 - Operation pipelines (chain multiple ops on GPU without CPU transfer)
 
 **Key Insight from Testing:**
-- fgpartition: Expected 5-10x speedup, got 0.04x (23x slower!)
-- Why: Per-grid GPU transfers (3000+ transfers), simple scan operations
-- Lesson: Complexity alone doesn't guarantee GPU benefit - transfer overhead matters more!
+- Individual DSL operation GPU acceleration: FAILED (p_g 3x slower)
+- Solver function GPU acceleration: VALIDATED (expect 2-6x faster)
+- Lesson: Target execution time matters more than operation complexity
 
 ### Code Quality Standards
 
@@ -171,24 +193,30 @@ result = await run_with_timeout(function, args, timeout=10.0)
 
 ### Quick Start (Read These First)
 1. **GPU_DOCS_INDEX.md** - Complete documentation index and navigation
-2. **GPU_PROJECT_SUMMARY.md** - Overall status and results (START HERE)
-3. **COMPLETE_GPU_COMPARISON.md** - Which GPU to use
-4. **INTEGRATION_GUIDE.md** - How to integrate
+2. **GPU_SOLVER_STRATEGY.md** - Solver GPU acceleration strategy (START HERE FOR NEW WORK)
+3. **GPU_PROJECT_SUMMARY.md** - Batch operations status and results
+4. **COMPLETE_GPU_COMPARISON.md** - Which GPU to use
+5. **INTEGRATION_GUIDE.md** - How to integrate batch operations
 
-### Technical Deep Dives
-5. **GPU_OPTIMIZATION_SUCCESS.md** - Complete analysis
-6. **MULTI_GPU_SUPPORT.md** - Multi-GPU details
-7. **GPU_VECTORIZATION_UPDATE.md** - Vectorization patterns
-8. **KAGGLE_GPU_OPTIMIZATION.md** - GPU specs
-9. **GPU_TRANSFER_FIX.md** - Batch transfer details
-10. **GPU_JIT_WARMUP.md** - JIT compilation handling
-11. **GPU_FALLBACK_FIX.md** - Error handling patterns
-12. **GPU_COMPARISON_P100_L4.md** - P100 vs L4 comparison
-13. **GPU_BATCH_README.md** - Batch processing details
+### Recent Discovery (Solver GPU Acceleration)
+6. **benchmark_solvers.py** - Benchmarks solver execution times (validated on Kaggle)
+7. **profile_solvers.py** - Profiles DSL operations within solvers (ready to run)
+8. **SOLVER_BENCHMARK_RESULTS.md** - Analysis of benchmark results (58ms, 120ms solvers found!)
+9. **GPU_STRATEGY_PIVOT.md** - Why we pivoted from DSL ops to solver functions
+
+### Technical Deep Dives (Batch Operations)
+10. **GPU_OPTIMIZATION_SUCCESS.md** - Complete batch operations analysis
+11. **MULTI_GPU_SUPPORT.md** - Multi-GPU details
+12. **GPU_VECTORIZATION_UPDATE.md** - Vectorization patterns
+13. **KAGGLE_GPU_OPTIMIZATION.md** - GPU specs
+14. **GPU_TRANSFER_FIX.md** - Batch transfer details
+15. **GPU_JIT_WARMUP.md** - JIT compilation handling
+16. **GPU_FALLBACK_FIX.md** - Error handling patterns
+17. **GPU_COMPARISON_P100_L4.md** - P100 vs L4 comparison
+18. **GPU_BATCH_README.md** - Batch processing details
 
 ### Archived Documentation
 - **archive/gpu_docs_superseded/** - Older docs replaced by comprehensive guides
-  - QUICK_REF.md, SUMMARY.md, GPU_STRATEGY.md, GPU_OPTIMIZATION_APPLIED.md
   - Kept for historical reference only
 
 ## Testing Requirements
@@ -243,13 +271,13 @@ python test_multi_gpu.py
 
 ## Current Status (October 2025)
 
-✅ **GPU optimization**: Production ready, 10-35x speedup  
+✅ **GPU optimization for batch operations**: Production ready, 10-35x speedup  
 ✅ **Multi-GPU support**: Working on T4x2 and L4x4  
-✅ **Documentation**: Complete with 9 guides  
-✅ **Testing**: Comprehensive test suites  
-✅ **Integration**: One-line integration available  
+✅ **Strategy pivot**: Discovered solver functions are perfect GPU target (not individual DSL ops)  
+✅ **Solver benchmarks**: Validated 28 solvers, found 2 excellent candidates (58ms, 120ms)  
+🔄 **In progress**: Profiling slow solvers to identify expensive DSL operations  
 
-**Next focus**: Integrating GPU acceleration into production solvers in `run_batt.py`
+**Current focus**: GPU-accelerating solver functions for 2-6x speedup
 
 ## Important Notes
 

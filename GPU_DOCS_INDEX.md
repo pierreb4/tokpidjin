@@ -8,30 +8,55 @@ This index helps you find the right GPU documentation for your needs.
 
 ## 🚀 Start Here
 
-### For New Users
-1. **[GPU_PROJECT_SUMMARY.md](GPU_PROJECT_SUMMARY.md)** ⭐ **READ THIS FIRST**
-   - Executive summary of GPU optimization achievements
-   - Performance results: 10-35x speedup across all GPU types
-   - Quick stats and recommendations
-   - **Start here if you're new to the project**
+### For GPU Solver Acceleration (Current Focus)
+1. **[GPU_SOLVER_STRATEGY.md](GPU_SOLVER_STRATEGY.md)** ⭐ **READ THIS FIRST FOR NEW WORK**
+   - Complete strategy for GPU-accelerating solver functions
+   - Benchmark results: 28 solvers tested, 2 excellent candidates (58ms, 120ms)
+   - Expected speedup: 2-6x for complex solvers
+   - Three-phase implementation plan
+   - **Start here for solver GPU acceleration**
 
-2. **[COMPLETE_GPU_COMPARISON.md](COMPLETE_GPU_COMPARISON.md)** 
+### For Batch Operations (Production Ready)
+2. **[GPU_PROJECT_SUMMARY.md](GPU_PROJECT_SUMMARY.md)** ⭐ **BATCH PROCESSING REFERENCE**
+   - Executive summary of batch GPU optimization (10-35x speedup)
+   - Performance results across T4x2, P100, L4x4
+   - Quick stats and recommendations for batch processing
+   - **Use this for batch grid operations**
+
+3. **[COMPLETE_GPU_COMPARISON.md](COMPLETE_GPU_COMPARISON.md)** 
    - Detailed comparison of T4x2, P100, and L4x4 GPUs
    - Which GPU to choose (all same cost!)
    - Performance benchmarks for each GPU type
    - **Read this to choose your GPU**
 
-3. **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)**
-   - Step-by-step guide to integrate GPU acceleration
+4. **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)**
+   - Step-by-step guide to integrate GPU batch processing
    - Code examples and patterns
    - Common pitfalls and solutions
-   - **Read this to use GPU acceleration in your code**
+   - **Read this to use batch GPU acceleration in your code**
 
 ---
 
 ## 📚 Deep Dive Documentation
 
-### Multi-GPU Support
+### Solver GPU Acceleration (In Development)
+- **[GPU_SOLVER_STRATEGY.md](GPU_SOLVER_STRATEGY.md)** ⭐ **MAIN STRATEGY DOC**
+  - Complete strategy for solver GPU acceleration
+  - Benchmark results and analysis
+  - Three-phase implementation plan
+  - Expected 2-6x speedup for complex solvers
+
+- **benchmark_solvers.py**
+  - Benchmarks solver execution times
+  - Validated on Kaggle L4 GPU
+  - Found 28 solver performance profiles
+
+- **profile_solvers.py**
+  - Profiles DSL operations within solvers
+  - Identifies expensive operations for GPU targeting
+  - Ready to run on Kaggle
+
+### Multi-GPU Support (Batch Operations)
 - **[MULTI_GPU_SUPPORT.md](MULTI_GPU_SUPPORT.md)**
   - How to use multiple GPUs simultaneously
   - T4x2 dual GPU (18x speedup) and L4x4 quad GPU (35x speedup)
@@ -83,9 +108,22 @@ This index helps you find the right GPU documentation for your needs.
 
 ## 📁 Archived Documentation
 
-These files were superseded by newer, more comprehensive documentation:
+### Solver Analysis (Archived 2025-10-10)
+**Location:** `archive/gpu_solver_analysis_2025_10_10/`
 
-### Moved to `archive/gpu_docs_superseded/`
+These intermediate analysis files have been consolidated into **GPU_SOLVER_STRATEGY.md**:
+- **SOLVER_GPU_ANALYSIS.md** - Initial analysis (now in GPU_SOLVER_STRATEGY.md)
+- **SOLVER_BENCHMARK_RESULTS.md** - Benchmark analysis (now in GPU_SOLVER_STRATEGY.md)
+- **GPU_STRATEGY_PIVOT.md** - Strategy pivot explanation (now in GPU_SOLVER_STRATEGY.md)
+- **P_G_PERFORMANCE_ANALYSIS.md** - p_g failure analysis (now in GPU_SOLVER_STRATEGY.md)
+- **GPU_REALITY_CHECK.md** - Why DSL ops don't work (now in GPU_SOLVER_STRATEGY.md)
+
+**Archived because:** All insights consolidated into comprehensive strategy document
+
+### Batch Operations (Archived Earlier)
+**Location:** `archive/gpu_docs_superseded/`
+
+These files were superseded by newer, more comprehensive documentation:
 - **QUICK_REF.md** - Superseded by GPU_PROJECT_SUMMARY.md
 - **SUMMARY.md** - Superseded by GPU_PROJECT_SUMMARY.md
 - **GPU_STRATEGY.md** - Superseded by INTEGRATION_GUIDE.md
@@ -99,11 +137,19 @@ These files contain early analysis about why `rot90` failed (GPU 2x slower) and 
 
 ## 🎯 Common Use Cases
 
-### "I want to use GPU acceleration in my code"
+### "I want to GPU-accelerate solver functions" ⭐ NEW
+1. Read **GPU_SOLVER_STRATEGY.md** (10 min)
+2. Run **benchmark_solvers.py** to identify slow solvers
+3. Run **profile_solvers.py** to identify expensive DSL operations
+4. Implement GPU version of expensive operations
+5. Expected: 2-6x speedup for complex solvers (>5ms)
+
+### "I want to use GPU batch processing" (Production Ready)
 1. Read **GPU_PROJECT_SUMMARY.md** (5 min)
 2. Read **INTEGRATION_GUIDE.md** (10 min)
 3. Copy integration pattern from guide
 4. Use `auto_select_optimizer()` in your code
+5. Expected: 10-35x speedup for batch grid operations
 
 ### "Which GPU should I choose on Kaggle?"
 1. Read **COMPLETE_GPU_COMPARISON.md** (5 min)
@@ -138,7 +184,12 @@ These files contain early analysis about why `rot90` failed (GPU 2x slower) and 
 ## 📊 Documentation Hierarchy
 
 ```
-GPU_PROJECT_SUMMARY.md (Executive Summary - START HERE)
+GPU_SOLVER_STRATEGY.md (Solver GPU Acceleration - NEW FOCUS)
+├── benchmark_solvers.py (Measure solver execution times)
+├── profile_solvers.py (Identify expensive DSL operations)
+└── (Future) gpu_dsl_core.py (GPU implementations)
+
+GPU_PROJECT_SUMMARY.md (Batch Processing - PRODUCTION READY)
 ├── COMPLETE_GPU_COMPARISON.md (GPU Selection Guide)
 ├── INTEGRATION_GUIDE.md (How to Use)
 │   ├── MULTI_GPU_SUPPORT.md (Multi-GPU Details)
@@ -172,6 +223,13 @@ GPU_PROJECT_SUMMARY.md (Executive Summary - START HERE)
 
 ## 💡 Quick Tips
 
+### Solver GPU Acceleration (New Focus)
+- **Target solvers >5ms execution time** - Best GPU candidates
+- **Profile before implementing** - Use profile_solvers.py to find bottlenecks
+- **Expected 2-6x speedup** - For complex solvers (>15ms even better)
+- **Focus on 7% excellent solvers** - 120ms and 58ms execution times found
+
+### Batch Operations (Production Ready)
 - **All Kaggle GPUs cost the same** - Choose L4x4 for best performance
 - **Batch size 200 is optimal** - For single-GPU operations
 - **Multi-GPU auto-enabled** - For batch size >= 120
@@ -190,4 +248,8 @@ GPU_PROJECT_SUMMARY.md (Executive Summary - START HERE)
 ---
 
 **Last Updated**: October 10, 2025  
-**Status**: GPU optimization complete and production-ready ✅
+**Status**: 
+- ✅ Batch GPU optimization complete and production-ready (10-35x speedup)
+- 🔄 Solver GPU acceleration in progress (2-6x speedup expected)
+
+**Next Action**: Run `profile_solvers.py` on Kaggle to identify expensive DSL operations
