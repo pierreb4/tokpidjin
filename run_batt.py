@@ -26,6 +26,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 try:
     import cupy as cp
     from dsl import GPU_AVAILABLE
+    # Import optimized GPU batch processor
+    from gpu_optimizations import KaggleGPUOptimizer
+    
     if GPU_AVAILABLE:
         # Kaggle GPU detection and configuration
         gpu_count = cp.cuda.runtime.getDeviceCount()
@@ -34,8 +37,15 @@ try:
             device = cp.cuda.Device(i)
             mem_total = device.mem_info[1] / (1024**3)
             print(f"  GPU {i}: Compute {device.compute_capability}, Memory: {mem_total:.1f}GB")
+        
+        # Initialize optimized batch processor
+        gpu_optimizer = KaggleGPUOptimizer(device_id=0)
+        print("✓ Kaggle GPU Optimizer initialized")
+    else:
+        gpu_optimizer = None
 except ImportError:
     GPU_AVAILABLE = False
+    gpu_optimizer = None
     print("GPU Support: Disabled (CuPy not available)")
 
 import multiprocessing as mp
@@ -52,21 +62,27 @@ class GPUBatchProcessor:
         self.use_gpu = use_gpu and GPU_AVAILABLE
         self.gpu_id = 0  # Default to first GPU
         
-        if self.use_gpu:
-            # Configure for Kaggle GPU memory constraints
+        # Use optimized Kaggle GPU processor if available
+        if self.use_gpu and gpu_optimizer is not None:
+            self.optimizer = gpu_optimizer
+            print(f"Using KaggleGPUOptimizer (batch_size={batch_size})")
+        elif self.use_gpu:
+            # Fallback: Configure GPU manually
             try:
                 cp.cuda.Device(self.gpu_id).use()
-                # Set memory pool limit based on available memory
                 mem_info = cp.cuda.Device(self.gpu_id).mem_info
                 available_mem = mem_info[0]
-                # Use 80% of available memory to leave room for system
                 mem_limit = int(available_mem * 0.8)
                 cp.get_default_memory_pool().set_limit(size=mem_limit)
                 print(f"GPU batch processor initialized on device {self.gpu_id}")
                 print(f"  Memory limit: {mem_limit/(1024**3):.2f}GB")
+                self.optimizer = None
             except Exception as e:
                 print(f"GPU initialization warning: {e}")
                 self.use_gpu = False
+                self.optimizer = None
+        else:
+            self.optimizer = None
         
     def process_tasks_batch(self, tasks):
         """Process multiple tasks in parallel with GPU acceleration"""
