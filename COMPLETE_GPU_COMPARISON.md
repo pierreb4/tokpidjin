@@ -1,4 +1,14 @@
-# Complete Kaggle GPU Comparison: T4x2 vs P100 vs L4x4
+# Complete Kaggle GPU Comparison: L4x4 vs T4x2 vs P100
+
+**TL;DR: All GPUs cost the same on Kaggle. L4x4 (35x) > T4x2 (18x) > P100 (7.6x) for multi-GPU.**
+
+## Quick Summary (All Same Cost!)
+
+| Priority | GPU | Single GPU | Multi-GPU | Recommendation |
+|----------|-----|------------|-----------|----------------|
+| 🥇 **#1** | **L4x4** | 9.35x | **35x (4 GPUs)** | **Try to get this allocation - MAXIMUM PERFORMANCE!** |
+| 🥈 **#2** | **T4x2** | **9.69x** | **18x (2 GPUs)** | **Default choice - best availability + excellent performance** |
+| 🥉 **#3** | P100 | 7.64x | N/A (1 GPU) | Fallback only when others unavailable |
 
 ## Performance Results Summary
 
@@ -27,29 +37,40 @@
 | P100 | 1.17ms | 0.70ms | 1.67x |
 | L4x4 | 1.32ms | 0.72ms | 1.84x |
 
-## 🏆 The Verdict: T4x2 is the WINNER for Single-GPU!
+## 🏆 The Verdict: Choose Based on Availability (All Same Cost!)
 
-### Why T4x2 Wins
+### Since All GPUs Cost the Same on Kaggle:
 
-1. **Best Speedups**:
-   - Batch 200: **9.69x** (vs 7.64x P100, 9.35x L4x4)
-   - Batch 100: **8.19x** (vs 5.32x P100, 8.11x L4x4)
-   - Consistently outperforms P100 by 20-50%
+**Priority #1: L4x4** (Maximum Performance) 🥇
+- Single GPU: 9.35x speedup
+- **Multi-GPU: ~35x speedup (4 GPUs)** ⭐⭐⭐
+- Most memory (89GB total)
+- Newest architecture (Compute 8.9)
+- Limited availability
+- **Use when**: You can get L4x4 allocation - MAXIMUM PERFORMANCE!
 
-2. **Fastest Execution**:
-   - Batch 100: **0.87ms** (vs 1.17ms P100, 0.89ms L4x4)
-   - Batch 200: **1.45ms** (vs 1.61ms P100, 1.56ms L4x4)
+**Priority #2: T4x2** (Best Availability) 🥈
+- **Single GPU: 9.69x speedup - BEST SINGLE GPU!**
+- Multi-GPU: ~18x speedup (2 GPUs)
+- Most common GPU on Kaggle
+- Fastest execution times
+- Excellent availability
+- **Use when**: L4x4 not available (most of the time) - BEST RELIABILITY!
 
-3. **Best Pipeline Performance**:
-   - **2.05x** speedup (vs 1.67x P100, 1.84x L4x4)
+**Priority #3: P100** (Fallback) 🥉
+- Single GPU: 7.64x speedup
+- No multi-GPU (only 1 GPU)
+- Highest bandwidth (732 GB/s)
+- Good availability
+- **Use when**: T4x2 and L4x4 unavailable
 
-4. **Excellent Availability**:
-   - T4 is the most common GPU on Kaggle
-   - Same cost as P100/L4 on Kaggle
+### Key Points:
 
-5. **Dual GPU Ready**:
-   - Has 2 GPUs for multi-GPU parallelism
-   - Can achieve 15-20x speedup with both GPUs
+1. **All GPUs have the same cost** - choose based on performance and availability
+2. **L4x4 offers maximum performance** (35x) but limited availability
+3. **T4x2 is most reliable choice** (excellent availability + 18x speedup)
+4. **For single GPU work**, T4 is marginally better (9.69x vs 9.35x)
+5. **For multi-GPU work**, L4x4 is much better (35x vs 18x)
 
 ## Complete Comparison Table
 
@@ -90,35 +111,38 @@
 | P100 | 7.64x (200) | N/A | N/A |
 | **L4x4** | 9.35x (200) | ~35x (800) | 3.7x |
 
-## Ranking by Use Case
+## Ranking by Use Case (All Same Cost!)
 
-### 1. Best Overall Performance: **T4x2** 🥇
-- ✅ Highest single-GPU speedups (9.69x)
-- ✅ Fastest execution times
-- ✅ Best availability on Kaggle
-- ✅ 2 GPUs for multi-GPU (potential 18x speedup)
-- ✅ Lower quota cost
-- **Use when**: You want the best performance-to-cost ratio
-
-### 2. Best for Large Batches: **L4x4** 🥈
-- ✅ 4 GPUs for massive parallelism (potential 35x speedup)
+### 1. Maximum Absolute Performance: **L4x4** 🥇
+- ✅ **35x speedup with 4 GPUs** - MAXIMUM PERFORMANCE!
+- ✅ 9.35x single-GPU speedup (close to T4)
 - ✅ Most memory (89GB total)
 - ✅ Newest architecture (Compute 8.9)
-- ✅ Comparable single-GPU performance (9.35x)
+- ✅ Same cost as all others
 - ❌ Limited availability on Kaggle
-- **Use when**: You need multi-GPU and can get L4x4 allocation
+- **Use when**: You can get L4x4 allocation - always try first!
 
-### 3. Best for Memory Bandwidth: **P100** 🥉
-- ✅ Highest bandwidth (732 GB/s)
-- ✅ Good single-GPU performance (7.64x)
+### 2. Best Reliability + Excellent Performance: **T4x2** 🥈
+- ✅ **9.69x single-GPU speedup** - BEST SINGLE GPU!
+- ✅ **18x speedup with 2 GPUs**
+- ✅ Most common GPU on Kaggle - BEST AVAILABILITY
+- ✅ Fastest execution times (0.87ms vs 1.56ms L4)
+- ✅ Best pipeline performance (2.05x)
+- ✅ Same cost as all others
+- **Use when**: Your default choice (L4x4 not available)
+
+### 3. Fallback Option: **P100** 🥉
+- ✅ 7.64x speedup
 - ✅ Good availability
+- ✅ Highest bandwidth (732 GB/s)
+- ✅ Same cost as all others
 - ❌ Slower than T4/L4 for compute-heavy ops
-- ❌ Only 1 GPU
-- **Use when**: T4x2 and L4x4 are unavailable
+- ❌ Only 1 GPU (no multi-GPU)
+- **Use when**: T4x2 and L4x4 are unavailable (rare)
 
-## Why T4x2 Outperforms P100
+## Why T4 and L4 Outperform P100
 
-Despite P100's higher memory bandwidth (732 vs 320 GB/s), T4x2 wins because:
+Despite P100's higher memory bandwidth (732 vs 320 GB/s), newer GPUs win because:
 
 1. **Better Compute Efficiency**:
    - Turing architecture (2018) vs Pascal (2016)
@@ -267,20 +291,25 @@ optimizer = auto_select_optimizer()  # Auto-detects T4x2 or L4x4
 
 ### For Your Workflow (ARC Solver)
 
-**Primary Choice: T4x2** 🏆
-- Use single T4 GPU (9.69x speedup)
-- Best performance-to-cost ratio
-- Excellent availability
-- Easy to get on Kaggle
+**Since all GPUs have the same cost, prioritize by availability:**
 
-**Secondary Choice: L4x4** (if available)
+**Priority #1: L4x4** 🥇 (If you can get allocation)
 - Use all 4 GPUs (35x speedup potential)
-- Best absolute performance
-- Great for final optimization runs
+- **Maximum absolute performance**
+- Same cost as others
+- Limited availability - try to get this!
 
-**Fallback: P100**
-- Still good performance (7.64x)
-- Use when T4x2/L4x4 unavailable
+**Priority #2: T4x2** 🥈 (Your default choice)
+- Use 2 GPUs (18x speedup) or single GPU (9.69x)
+- **Best availability + excellent performance**
+- Same cost as others
+- Most reliable - use when L4x4 unavailable
+
+**Priority #3: P100** 🥉 (Only if needed)
+- Single GPU only (7.64x speedup)
+- Good availability
+- Same cost as others
+- Use only when T4x2/L4x4 unavailable
 
 ### Implementation
 ```python
