@@ -16,6 +16,8 @@ Date: October 10, 2025
 Status: Initial Implementation
 """
 
+
+import contextlib
 import time
 import traceback
 from collections import defaultdict
@@ -167,9 +169,29 @@ class GPUEnv(Env):
     
     def _register_gpu_operations(self):
         """Register available GPU operations"""
-        # Will be populated in future phases
-        # For now, this is a placeholder
-        pass
+        if not self.enable_gpu:
+            return
+        
+        try:
+            from dsl_gpu import o_g_gpu, objects_gpu
+            
+            # Register GPU-accelerated operations
+            self.gpu_ops = {
+                'o_g': o_g_gpu,
+                'objects': objects_gpu,
+            }
+            
+            if self.log:
+                print(f"[GPUEnv] Registered {len(self.gpu_ops)} GPU operations: {list(self.gpu_ops.keys())}")
+        
+        except ImportError as e:
+            if self.log:
+                print(f"[GPUEnv] Warning: Could not import GPU operations: {e}")
+            self.gpu_ops = {}
+        except Exception as e:
+            if self.log:
+                print(f"[GPUEnv] Warning: Error registering GPU operations: {e}")
+            self.gpu_ops = {}
     
     def do_pile(self, t_num: int, t, isok=True) -> OKT:
         """
@@ -304,13 +326,11 @@ class GPUEnv(Env):
         """Cleanup GPU resources (call at end of batt() execution)"""
         if self.transfer_manager:
             self.transfer_manager.clear()
-        
+
         # Force garbage collection for GPU memory
         if GPU_AVAILABLE:
-            try:
+            with contextlib.suppress(Exception):
                 cp.get_default_memory_pool().free_all_blocks()
-            except Exception:
-                pass
 
 
 # Convenience functions
