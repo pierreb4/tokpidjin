@@ -16,12 +16,13 @@ Transformed GPU performance from **830x SLOWER** than CPU to **10-35x FASTER** t
 | L4x4 🥈 | 9.35x | ~35x (4 GPUs) | Maximum throughput |
 | P100 🥉 | 7.64x | N/A (1 GPU) | Fallback option |
 
-### Winner: T4x2 🏆
-- **9.69x speedup** for batch 200 (complex operations)
-- **Best availability** on Kaggle (most common GPU)
-- **Best value**: 9.69 performance per dollar
-- **Dual GPU ready**: 18x speedup with multi-GPU
-- **Fastest execution**: 0.87ms for 100 grids vs 1.17ms on P100
+### Winner: T4x2 (Best Availability) / L4x4 (Best Performance) 🏆
+- **T4x2**: 9.69x speedup (1 GPU), ~18x (2 GPUs)
+- **L4x4**: 9.35x speedup (1 GPU), ~35x (4 GPUs)
+- **All GPUs cost the same** on Kaggle
+- **Best choice**: L4x4 if available (35x), otherwise T4x2 (18x)
+- **Best availability**: T4x2 (most common on Kaggle)
+- **Fastest execution**: T4 @ 0.87ms for 100 grids vs 1.17ms on P100
 
 ---
 
@@ -135,27 +136,27 @@ results = optimizer.batch_grid_op_optimized(
 
 ## GPU Selection Guide
 
-### When to Use Each GPU
+### When to Use Each GPU (All Have Same Cost!)
 
-**T4x2** (Recommended) ✅
-- 9.69x speedup (single GPU)
-- ~18x speedup (dual GPU)
-- Best availability on Kaggle
-- Best performance per dollar
-- **Use for**: 95% of your workflow
-
-**L4x4** (If Available) ✅
+**L4x4** (Maximum Performance) 🥇
 - 9.35x speedup (single GPU)
-- ~35x speedup (4 GPUs)
+- ~35x speedup (4 GPUs) - **MAXIMUM**
 - Most memory (89GB total)
 - Newest architecture
-- **Use for**: Final optimization runs with huge batches
+- **Use for**: Maximum performance (if you can get allocation)
 
-**P100** (Fallback) ✅
-- 7.64x speedup
+**T4x2** (Best Availability) 🥈
+- 9.69x speedup (single GPU) - **BEST SINGLE GPU**
+- ~18x speedup (dual GPU)
+- Excellent availability on Kaggle
+- Most common GPU
+- **Use for**: Reliable, excellent performance (recommended default)
+
+**P100** (Fallback) 🥉
+- 7.64x speedup (single GPU only)
 - Highest bandwidth (732 GB/s)
 - Good availability
-- **Use for**: When T4x2 unavailable
+- **Use for**: When T4x2/L4x4 unavailable
 
 ---
 
@@ -332,12 +333,16 @@ Starting from GPU being **830x slower** than CPU, we achieved:
 
 ### The Winning Formula
 
-1. **Vectorized batch processing** (3D tensors, not loops)
-2. **Single batch transfers** (not per-element)
-3. **JIT warmup** (consistent performance)
-4. **Smart thresholds** (automatic CPU/GPU selection)
-5. **Multi-GPU support** (near-linear scaling)
-6. **Automatic detection** (works everywhere)
+**Since all GPUs have the same cost on Kaggle:**
+
+1. **Try L4x4 FIRST** (35x speedup with 4 GPUs) - Maximum bang!
+2. **Use T4x2** as primary (18x with 2 GPUs, best availability)
+3. **Vectorized batch processing** (3D tensors, not loops)
+4. **Single batch transfers** (not per-element)
+5. **JIT warmup** (consistent performance)
+6. **Smart thresholds** (automatic CPU/GPU selection)
+7. **Multi-GPU support** (near-linear scaling)
+8. **Automatic detection** (works everywhere)
 
 ### The Result
 
@@ -350,10 +355,13 @@ You now have **production-ready GPU acceleration** that will:
 
 ### Your Path Forward
 
-1. **Start using T4x2** today (best GPU for your workflow)
-2. **Batch size 200** for optimal performance
-3. **Enable multi-GPU** when you need maximum throughput
-4. **Integrate into production** with one line of code
+**Since all GPUs cost the same, maximize your performance:**
+
+1. **Try L4x4 FIRST** (35x speedup if you can get allocation)
+2. **Use T4x2** for reliable excellent performance (18x speedup)
+3. **Batch size 200** for optimal single-GPU performance
+4. **Enable multi-GPU** automatically with `auto_select_optimizer()`
+5. **Integrate into production** with one line of code
 
 The GPU optimization is **complete, tested, and ready for production use**! 🎉
 

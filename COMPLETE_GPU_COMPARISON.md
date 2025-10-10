@@ -45,7 +45,7 @@
 
 4. **Excellent Availability**:
    - T4 is the most common GPU on Kaggle
-   - Lower quota cost than P100/L4
+   - Same cost as P100/L4 on Kaggle
 
 5. **Dual GPU Ready**:
    - Has 2 GPUs for multi-GPU parallelism
@@ -140,29 +140,32 @@ Despite P100's higher memory bandwidth (732 vs 320 GB/s), T4x2 wins because:
 
 ## Recommendations by Scenario
 
-### Scenario 1: Maximum Performance per Dollar
-**Use: T4x2 (single GPU)**
-- Speedup: 9.69x at batch 200
-- Cost: Lowest quota impact
-- Availability: Excellent
-
-### Scenario 2: Maximum Absolute Performance
+### Scenario 1: Maximum Absolute Performance (Same Cost!)
 **Use: L4x4 (4 GPUs) with MultiGPUOptimizer**
 - Speedup: ~35x at batch 800 (estimated)
-- Cost: Highest quota impact
+- Cost: **Same as all others**
 - Availability: Limited
+- **Best choice if available!**
 
-### Scenario 3: Balanced Performance
+### Scenario 2: Excellent Performance with Great Availability
 **Use: T4x2 (2 GPUs) with MultiGPUOptimizer**
 - Speedup: ~18x at batch 400 (estimated)
-- Cost: Medium quota impact
+- Cost: **Same as all others**
+- Availability: Excellent
+- **Most practical choice**
+
+### Scenario 3: Good Single-GPU Performance
+**Use: T4x2 (single GPU)**
+- Speedup: 9.69x at batch 200
+- Cost: **Same as all others**
 - Availability: Excellent
 
-### Scenario 4: T4x2 Not Available
+### Scenario 4: Only P100 Available
 **Use: P100 (single GPU)**
 - Speedup: 7.64x at batch 200
-- Cost: Medium quota impact
+- Cost: **Same as all others**
 - Availability: Good
+- **Use only when T4x2/L4x4 unavailable**
 
 ## Performance Projection: Multi-GPU
 
@@ -199,18 +202,20 @@ Batch 800 (split 200+200+200+200):
 
 ## Cost-Benefit Analysis
 
-### GPU Hours Cost (Approximate Kaggle Quota)
+### Kaggle GPU Costs
 
-| GPU | Relative Cost | Speedup (batch 200) | Performance/Cost |
-|-----|---------------|---------------------|------------------|
-| T4x2 | 1.0x | 9.69x | **9.69** ⭐ |
-| P100 | 1.5x | 7.64x | 5.09 |
-| L4x4 | 3.0x | 9.35x (1 GPU) | 3.12 |
-| L4x4 | 3.0x | ~35x (4 GPUs) | **11.67** ⭐⭐ |
+**Note**: All GPUs have the same cost in Kaggle competitions (equal quota usage).
 
-**Best value**:
-1. **T4x2** (single GPU): 9.69 perf/cost
-2. **L4x4** (4 GPUs): 11.67 perf/cost (if you can get it)
+| GPU | Speedup (single GPU) | Multi-GPU Speedup | Best Value |
+|-----|----------------------|-------------------|------------|
+| **T4x2** | **9.69x** | ~18x (2 GPUs) | **Best: Same cost + 2 GPUs** ⭐⭐ |
+| L4x4 | 9.35x | ~35x (4 GPUs) | **Best: Same cost + 4 GPUs** ⭐⭐⭐ |
+| P100 | 7.64x | N/A (1 GPU) | Lowest performance per GPU |
+
+**Since all GPUs cost the same**:
+1. **L4x4** (4 GPUs): 35x speedup - **BEST ABSOLUTE PERFORMANCE** 🏆
+2. **T4x2** (2 GPUs): 18x speedup - **BEST AVAILABILITY** 🥇
+3. **P100** (1 GPU): 7.64x speedup - Use only if others unavailable
 
 ## Production Strategy
 
@@ -295,33 +300,36 @@ optimizer = auto_select_optimizer()
 ### The Rankings 🏆
 
 **Single GPU Performance**:
-1. 🥇 **T4 (9.69x)** - WINNER
+1. 🥇 **T4 (9.69x)** - BEST single GPU
 2. 🥈 **L4 (9.35x)** - Close second
-3. 🥉 **P100 (7.64x)** - Still good
+3. 🥉 **P100 (7.64x)** - Fallback only
 
-**Multi-GPU Potential**:
-1. 🥇 **L4x4 (35x)** - 4 GPUs
-2. 🥈 **T4x2 (18x)** - 2 GPUs
+**Multi-GPU Potential (All Same Cost!)**:
+1. 🥇 **L4x4 (35x)** - 4 GPUs = **MAXIMUM PERFORMANCE** 🏆
+2. 🥈 **T4x2 (18x)** - 2 GPUs = **BEST AVAILABILITY** ⭐
 3. 🥉 **P100 (7.6x)** - 1 GPU only
 
-**Best Value**:
-1. 🥇 **T4x2** - 9.69 performance per dollar
-2. 🥈 **L4x4** (multi) - 11.67 performance per dollar (if available)
-3. 🥉 **P100** - 5.09 performance per dollar
+**Best Choice (Since All GPUs Cost the Same)**:
+1. 🥇 **L4x4** (4 GPUs, 35x speedup) - **Use if you can get it!**
+2. 🥈 **T4x2** (2 GPUs, 18x speedup) - **Most reliable choice**
+3. 🥉 **T4x2** (1 GPU, 9.69x speedup) - Conservative approach
+4. ❌ **P100** - Only if nothing else available
 
 ### Your Action Plan
 
-1. **Use T4x2** as your primary GPU (best availability + performance)
-2. **Use batch size 200** for optimal speedup (9.69x)
-3. **Implement multi-GPU** for 18x speedup when needed
-4. **Fallback to P100** when T4x2 unavailable (still 7.64x)
+**Since all GPUs cost the same on Kaggle:**
+
+1. **Try L4x4 FIRST** (35x speedup with 4 GPUs) - Maximum performance!
+2. **Use T4x2** if L4x4 unavailable (18x with 2 GPUs, excellent availability)
+3. **Use batch size 200** for optimal single-GPU speedup
+4. **Fallback to P100** only when nothing else available (7.64x)
 
 The GPU optimization journey is complete with **excellent results across all Kaggle GPU types**! 🎉
 
-**T4x2 emerges as the clear winner** for your use case, delivering the best combination of:
-- ✅ Performance (9.69x speedup)
-- ✅ Availability (most common on Kaggle)
-- ✅ Value (best performance per dollar)
-- ✅ Scalability (2 GPUs for 18x speedup)
+**Since all GPUs have the same cost**, your priority should be:
+- 🥇 **L4x4** (4 GPUs, 35x speedup) - **Try to get this allocation!**
+- 🥈 **T4x2** (2 GPUs, 18x speedup) - **Most reliable + excellent performance**
+- 🥉 **T4x2** (1 GPU, 9.69x speedup) - Conservative but still great
+- ⚠️ **P100** (1 GPU, 7.64x speedup) - Only when others unavailable
 
 You're now equipped to achieve **10-35x speedup** on any Kaggle GPU! 🚀
