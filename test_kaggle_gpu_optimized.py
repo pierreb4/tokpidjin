@@ -190,7 +190,7 @@ if GPU_AVAILABLE:
     speedup = cpu_time / gpu_time if gpu_time > 0 else 0
     status = "✓" if speedup > 1.0 else "✗"
     
-    print(f"Pipeline: {len(operations)} operations on {batch_size} grids")
+    print(f"Pipeline: {len(operations_vectorized)} operations on {batch_size} grids")
     print(f"  CPU:     {cpu_time*1000:7.2f}ms")
     print(f"  GPU:     {gpu_time*1000:7.2f}ms")
     print(f"  Speedup: {speedup:7.2f}x {status}")

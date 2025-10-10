@@ -74,27 +74,52 @@ class KaggleGPUOptimizer:
                         # VECTORIZED MODE: Stack into 3D tensor and process as batch
                         # This is the fastest way - true parallel processing
                         
-                        # Pad grids to same size for stacking
-                        max_h = max(g.shape[0] for g in np_grids)
-                        max_w = max(g.shape[1] for g in np_grids)
+                        # Check if all grids have the same shape (common case - FAST path)
+                        shapes = [g.shape for g in np_grids]
+                        all_same_shape = all(s == shapes[0] for s in shapes)
                         
-                        # Create padded batch tensor on GPU
-                        batch_tensor = cp.zeros((len(grids), max_h, max_w), dtype=cp.int32)
-                        original_shapes = []
-                        
-                        for i, g in enumerate(np_grids):
-                            h, w = g.shape
-                            batch_tensor[i, :h, :w] = cp.asarray(g)
-                            original_shapes.append((h, w))
-                        
-                        # Apply operation to entire batch at once (TRUE GPU PARALLELISM)
-                        result_tensor = operation(batch_tensor)
-                        
-                        # Extract individual grids (crop padding)
-                        if keep_on_gpu:
-                            return [result_tensor[i, :h, :w] for i, (h, w) in enumerate(original_shapes)]
+                        if all_same_shape:
+                            # FAST PATH: Direct stack (no padding needed)
+                            batch_np = np.stack(np_grids, axis=0)  # Stack on CPU first
+                            batch_tensor = cp.asarray(batch_np)     # Single GPU transfer
+                            
+                            # Apply operation to entire batch at once
+                            result_tensor = operation(batch_tensor)
+                            
+                            # Split results
+                            if keep_on_gpu:
+                                return [result_tensor[i] for i in range(len(grids))]
+                            else:
+                                # Single GPU->CPU transfer for all results
+                                result_np = cp.asnumpy(result_tensor)
+                                return [result_np[i] for i in range(len(grids))]
                         else:
-                            return [cp.asnumpy(result_tensor[i, :h, :w]) for i, (h, w) in enumerate(original_shapes)]
+                            # SLOW PATH: Need padding for different shapes
+                            max_h = max(g.shape[0] for g in np_grids)
+                            max_w = max(g.shape[1] for g in np_grids)
+                            
+                            # Pre-allocate on CPU, then transfer to GPU once
+                            batch_np = np.zeros((len(grids), max_h, max_w), dtype=np.int32)
+                            original_shapes = []
+                            
+                            for i, g in enumerate(np_grids):
+                                h, w = g.shape
+                                batch_np[i, :h, :w] = g
+                                original_shapes.append((h, w))
+                            
+                            # Single CPU->GPU transfer
+                            batch_tensor = cp.asarray(batch_np)
+                            
+                            # Apply operation to entire batch at once
+                            result_tensor = operation(batch_tensor)
+                            
+                            # Extract individual grids (crop padding)
+                            if keep_on_gpu:
+                                return [result_tensor[i, :h, :w] for i, (h, w) in enumerate(original_shapes)]
+                            else:
+                                # Single GPU->CPU transfer
+                                result_np = cp.asnumpy(result_tensor)
+                                return [result_np[i, :h, :w] for i, (h, w) in enumerate(original_shapes)]
                     
                     else:
                         # PER-GRID MODE: Process each grid individually on GPU
@@ -139,23 +164,46 @@ class KaggleGPUOptimizer:
                     # VECTORIZED PIPELINE: Process entire batch through all operations
                     # Convert to batch tensor once
                     np_grids = [np.asarray(g, dtype=np.int32) for g in grids]
-                    max_h = max(g.shape[0] for g in np_grids)
-                    max_w = max(g.shape[1] for g in np_grids)
                     
-                    batch_tensor = cp.zeros((len(grids), max_h, max_w), dtype=cp.int32)
-                    original_shapes = []
+                    # Check if all grids have the same shape
+                    shapes = [g.shape for g in np_grids]
+                    all_same_shape = all(s == shapes[0] for s in shapes)
                     
-                    for i, g in enumerate(np_grids):
-                        h, w = g.shape
-                        batch_tensor[i, :h, :w] = cp.asarray(g)
-                        original_shapes.append((h, w))
-                    
-                    # Apply all operations to batch tensor (stays on GPU)
-                    for op in operations:
-                        batch_tensor = op(batch_tensor)
-                    
-                    # Extract results
-                    return [cp.asnumpy(batch_tensor[i, :h, :w]) for i, (h, w) in enumerate(original_shapes)]
+                    if all_same_shape:
+                        # FAST PATH: Direct stack
+                        batch_np = np.stack(np_grids, axis=0)
+                        batch_tensor = cp.asarray(batch_np)  # Single transfer
+                        
+                        # Apply all operations to batch tensor (stays on GPU)
+                        for op in operations:
+                            batch_tensor = op(batch_tensor)
+                        
+                        # Single transfer back
+                        result_np = cp.asnumpy(batch_tensor)
+                        return [result_np[i] for i in range(len(grids))]
+                    else:
+                        # SLOW PATH: Need padding
+                        max_h = max(g.shape[0] for g in np_grids)
+                        max_w = max(g.shape[1] for g in np_grids)
+                        
+                        batch_np = np.zeros((len(grids), max_h, max_w), dtype=np.int32)
+                        original_shapes = []
+                        
+                        for i, g in enumerate(np_grids):
+                            h, w = g.shape
+                            batch_np[i, :h, :w] = g
+                            original_shapes.append((h, w))
+                        
+                        # Single CPU->GPU transfer
+                        batch_tensor = cp.asarray(batch_np)
+                        
+                        # Apply all operations to batch tensor (stays on GPU)
+                        for op in operations:
+                            batch_tensor = op(batch_tensor)
+                        
+                        # Single GPU->CPU transfer and extract
+                        result_np = cp.asnumpy(batch_tensor)
+                        return [result_np[i, :h, :w] for i, (h, w) in enumerate(original_shapes)]
                 
                 else:
                     # PER-GRID PIPELINE: Keep grids on GPU but process individually
