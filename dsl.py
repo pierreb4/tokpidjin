@@ -287,37 +287,37 @@ def dedupe_pair_tuple(S: 'Samples') -> 'Samples':
 #     ret_tuple = b_zo(S, function)
 #     return C_(ret_tuple[index]) if index < len(ret_tuple) else None
 
-# # c_ for C_
-# def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
-#     logger.info(f'c_iz: {S = }, {function = }')
-#     x1 = apply(first, S)
-#     x2 = apply(second, S)
-#     x3 = dedupe(mapply_t(function, x1))
-#     x4 = dedupe(mapply_t(function, x2))
-#     return difference_tuple(x3, x4)
+# c_ for C_
+def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
+    logger.info(f'c_iz: {S = }, {function = }')
+    x1 = apply(first, S)
+    x2 = apply(second, S)
+    x3 = dedupe(mapply_t(function, x1))
+    x4 = dedupe(mapply_t(function, x2))
+    return difference_tuple(x3, x4)
 
 
-# def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
-#     """Returns pick of a color value from the input-output difference"""
-#     logger.info(f'c_iz_n: {S = }, {function = }, {pick = }')
-#     ret_tuple = c_iz(S, function)
-#     return pick(ret_tuple)
+def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
+    """Returns pick of a color value from the input-output difference"""
+    logger.info(f'c_iz_n: {S = }, {function = }, {pick = }')
+    ret_tuple = c_iz(S, function)
+    return pick(ret_tuple)
 
 
-# def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
-#     logger.info(f'c_zo: {S = }, {function = }')
-#     x1 = apply(first, S)
-#     x2 = apply(second, S)
-#     x3 = dedupe(mapply_t(function, x1))
-#     x4 = dedupe(mapply_t(function, x2))
-#     return difference_tuple(x4, x3)
+def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
+    logger.info(f'c_zo: {S = }, {function = }')
+    x1 = apply(first, S)
+    x2 = apply(second, S)
+    x3 = dedupe(mapply_t(function, x1))
+    x4 = dedupe(mapply_t(function, x2))
+    return difference_tuple(x4, x3)
 
 
-# def c_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
-#     """Returns pick of a color value from the output-input difference"""
-#     logger.info(f'c_zo_n: {S = }, {function = }, {pick = }')
-#     ret_tuple = c_zo(S, function)
-#     return pick(ret_tuple)
+def c_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
+    """Returns pick of a color value from the output-input difference"""
+    logger.info(f'c_zo_n: {S = }, {function = }, {pick = }')
+    ret_tuple = c_zo(S, function)
+    return pick(ret_tuple)
 
 
 # a_ for A_
