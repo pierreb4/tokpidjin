@@ -14,6 +14,8 @@ def gpu_solve_23b5c85d_hybrid(S, I, C):
     """
     Hybrid version of solve_23b5c85d.
     Automatically uses CPU for small grids, GPU for large grids.
+    
+    Original: x1 = o_g(I, R7); x2 = get_arg_rank_f(x1, size, L1); O = subgrid(x2, I)
     """
     x1 = o_g_hybrid(I, R7)  # Auto CPU/GPU selection
     x2 = get_arg_rank_f(x1, size, L1)
@@ -24,29 +26,30 @@ def gpu_solve_23b5c85d_hybrid(S, I, C):
 def gpu_solve_09629e4f_hybrid(S, I, C):
     """
     Hybrid version of solve_09629e4f.
+    
+    Original: x1 = o_g(I, R3); x2 = get_arg_rank(x1, numcolors_f, L1);
+              x3 = normalize(x2); x4 = upscale_f(x3, FOUR);
+              x5 = paint(I, x4); x6 = f_ofcolor(I, FIVE); O = fill(x5, FIVE, x6)
     """
-    x1 = astuple(TWO, THREE)
-    x2 = initset(x1)
-    x3 = o_g_hybrid(I, R1)  # Auto CPU/GPU selection
-    x4 = sizefilter(x3, ONE)
-    x5 = get_nth_f(x4, F0)
-    x6 = color(x5)
-    O = replace(I, x6, ZERO)
+    x1 = o_g_hybrid(I, R3)  # Auto CPU/GPU selection
+    x2 = get_arg_rank(x1, numcolors_f, L1)
+    x3 = normalize(x2)
+    x4 = upscale_f(x3, FOUR)
+    x5 = paint(I, x4)
+    x6 = f_ofcolor(I, FIVE)
+    O = fill(x5, FIVE, x6)
     return O
 
 
 def gpu_solve_1f85a75f_hybrid(S, I, C):
     """
     Hybrid version of solve_1f85a75f.
+    
+    Original: x1 = o_g(I, R7); x2 = get_arg_rank_f(x1, size, F0); O = subgrid(x2, I)
     """
-    x1 = asindices(I)
-    x2 = o_g_hybrid(I, R7)  # Auto CPU/GPU selection
-    x3 = sizefilter(x2, ONE)
-    x4 = rbind(adjacent, x1)
-    x5 = compose(x4, first_t)
-    x6 = mfilter(x3, x5)
-    x7 = merge(x6)
-    O = fill(I, ZERO, x7)
+    x1 = o_g_hybrid(I, R7)  # Auto CPU/GPU selection
+    x2 = get_arg_rank_f(x1, size, F0)
+    O = subgrid(x2, I)
     return O
 
 
