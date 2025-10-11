@@ -157,15 +157,19 @@ def _extract_objects_multivalued(
     # GPU connected components (0.8-1.5ms)
     labels, num_features = cp_ndimage.label(mask, structure=structure)
     
-    # Extract objects from labels (0.15ms)
+    # Transfer to CPU once (0.05ms)
+    labels_cpu = cp.asnumpy(labels)
+    grid_cpu = cp.asnumpy(grid_array)
+    
+    # Extract objects from labels on CPU (0.1ms)
     objects_list = []
     for label_id in range(1, num_features + 1):
-        # Get all cells with this label
-        indices = cp.argwhere(labels == label_id)
+        # Get all cells with this label (now on CPU)
+        indices = np.argwhere(labels_cpu == label_id)
         obj = []
         for idx in indices:
             i, j = int(idx[0]), int(idx[1])
-            color = int(grid_array[i, j])
+            color = int(grid_cpu[i, j])
             obj.append((i, j, color))
         if obj:  # Only add non-empty objects
             objects_list.append(obj)
@@ -221,9 +225,12 @@ def _extract_objects_univalued(
         # GPU connected components for this color
         labels, num_features = cp_ndimage.label(mask, structure=structure)
         
-        # Extract objects for this color
+        # Transfer to CPU once for this color
+        labels_cpu = cp.asnumpy(labels)
+        
+        # Extract objects for this color (on CPU)
         for label_id in range(1, num_features + 1):
-            indices = cp.argwhere(labels == label_id)
+            indices = np.argwhere(labels_cpu == label_id)
             obj = []
             for idx in indices:
                 i, j = int(idx[0]), int(idx[1])
