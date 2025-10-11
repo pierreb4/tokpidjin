@@ -91,25 +91,29 @@ def gpu_o_g(
         )
     
     # Step 3.5: Sort objects for deterministic ordering (CRITICAL for correctness!)
-    # Problem: get_arg_rank_f breaks ties by frozenset's natural comparison order
-    # Frozensets compare by their sorted tuple representation: tuple(sorted(frozenset))
-    # Solution: Sort objects_list to match Python's frozenset comparison order
+    # Problem: get_arg_rank_f uses sorted(frozenset, key=size) with stable sort
+    # When size is tied, stable sort preserves the ITERATION ORDER of the frozenset
+    # Frozenset iteration order is based on HASH VALUES, not insertion order!
+    # Solution: We CANNOT control frozenset iteration order, so we must match CPU exactly
     
-    # First: Sort cells within each object (canonical order)
-    objects_list = [sorted(obj) for obj in objects_list]
+    # The CPU builds: set → frozenset → set → frozenset (all hash-based ordering)
+    # We build: list → frozenset (but frozenset ignores our list order!)
     
-    # Second: Sort objects by their tuple representation (THIS is what frozenset uses for comparison!)
-    # When Python sorts frozensets with equal keys, it compares them as: tuple(sorted(fs))
-    # So we must sort our objects_list the same way!
-    objects_list.sort(key=lambda obj: tuple(obj))
+    # CRITICAL INSIGHT: We can't control frozenset iteration order!
+    # But we CAN ensure the CONTENTS match CPU exactly (same cells, same objects)
+    # Then when get_arg_rank_f sorts with ties, both CPU and GPU will have
+    # the SAME frozenset with the SAME hash-based iteration order!
     
     # Step 4: Convert to requested format
     if return_format == 'tuple':
         # Fast tuple conversion (0.1ms)
+        # Sort for deterministic order in tuple format
+        objects_list = [sorted(obj) for obj in objects_list]
+        objects_list.sort(key=lambda obj: tuple(obj))
         return tuple(tuple(obj) for obj in objects_list)
     else:
         # DSL-compatible frozenset conversion (0.4ms)
-        # Frozensets will now iterate in sorted(tuple) order, matching Python's comparison
+        # Just convert - iteration order will be hash-based (same as CPU!)
         return frozenset(frozenset(obj) for obj in objects_list)
 
 

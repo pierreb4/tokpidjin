@@ -70,10 +70,41 @@ if CUPY_AVAILABLE:
     print("\n--- Object Set Comparison ---")
     if cpu_objects == gpu_objects:
         print("✓ Objects are equal as frozensets")
+        # But let's verify they REALLY are the same
+        print(f"  cpu_objects id: {id(cpu_objects)}")
+        print(f"  gpu_objects id: {id(gpu_objects)}")
+        print(f"  Are they the same object? {cpu_objects is gpu_objects}")
     else:
         print("✗ Objects differ!")
         print(f"CPU: {len(cpu_objects)} objects")
         print(f"GPU: {len(gpu_objects)} objects")
+        # Find the difference
+        cpu_only = cpu_objects - gpu_objects
+        gpu_only = gpu_objects - cpu_objects
+        if cpu_only:
+            print(f"CPU has {len(cpu_only)} objects not in GPU")
+        if gpu_only:
+            print(f"GPU has {len(gpu_only)} objects not in CPU")
+    
+    # Detailed comparison: Check if iteration orders match
+    print("\n--- Iteration Order Comparison ---")
+    cpu_list = list(cpu_objects)
+    gpu_list = list(gpu_objects)
+    
+    print("CPU iteration order:")
+    for i, obj in enumerate(cpu_list):
+        color = {c for _, _, c in obj}
+        print(f"  [{i}] size={len(obj):2d}, color={color}")
+    
+    print("\nGPU iteration order:")
+    for i, obj in enumerate(gpu_list):
+        color = {c for _, _, c in obj}
+        print(f"  [{i}] size={len(obj):2d}, color={color}")
+    
+    if cpu_list == gpu_list:
+        print("\n✓ Iteration orders match!")
+    else:
+        print("\n✗ Iteration orders differ!")
     
     # Detailed comparison of sorted objects
     print("\n--- Sorted Order Comparison ---")
