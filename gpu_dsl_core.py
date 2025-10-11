@@ -91,12 +91,18 @@ def gpu_o_g(
         )
     
     # Step 3.5: Sort objects for deterministic ordering (CRITICAL for correctness!)
-    # get_arg_rank_f breaks ties by frozenset iteration order.
-    # Must match CPU's order: objects discovered by grid scan (top→bottom, left→right)
-    # Sort by: (min_row, min_col) of each object
+    # Problem: get_arg_rank_f breaks ties by frozenset iteration order, which is non-deterministic!
+    # Solution: Sort cells within each object to make frozensets comparable, 
+    # then sort objects by (min_row, min_col, size) to match CPU's grid scan order
+    
+    # First: Sort cells within each object (canonical order)
+    objects_list = [sorted(obj) for obj in objects_list]
+    
+    # Second: Sort objects by (min_row, min_col, size)
     objects_list.sort(key=lambda obj: (
-        min(cell[0] for cell in obj),  # Minimum row
-        min(cell[1] for cell in obj),  # Minimum col
+        obj[0][0],  # Min row (first cell's row, since sorted)
+        obj[0][1],  # Min col (first cell's col)
+        len(obj),   # Size (for additional stability)
     ))
     
     # Step 4: Convert to requested format
@@ -105,6 +111,7 @@ def gpu_o_g(
         return tuple(tuple(obj) for obj in objects_list)
     else:
         # DSL-compatible frozenset conversion (0.4ms)
+        # Now frozensets will have deterministic iteration order because cells are sorted
         return frozenset(frozenset(obj) for obj in objects_list)
 
 
