@@ -90,6 +90,15 @@ def gpu_o_g(
             grid_array, diagonal, without_bg, h, w
         )
     
+    # Step 3.5: Sort objects for deterministic ordering (CRITICAL for correctness!)
+    # get_arg_rank_f breaks ties by frozenset iteration order.
+    # Must match CPU's order: objects discovered by grid scan (top→bottom, left→right)
+    # Sort by: (min_row, min_col) of each object
+    objects_list.sort(key=lambda obj: (
+        min(cell[0] for cell in obj),  # Minimum row
+        min(cell[1] for cell in obj),  # Minimum col
+    ))
+    
     # Step 4: Convert to requested format
     if return_format == 'tuple':
         # Fast tuple conversion (0.1ms)
