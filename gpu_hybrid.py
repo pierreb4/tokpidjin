@@ -16,7 +16,7 @@ Usage:
 """
 
 from typing import Literal
-from arc_types import Grid, Objects, R8
+from arc_types import Grid, Objects
 
 # Default threshold: grids smaller than this use CPU
 # Based on Week 1 & 2 benchmarks:
@@ -28,7 +28,7 @@ DEFAULT_THRESHOLD = 70  # cells
 
 def o_g_hybrid(
     grid: Grid,
-    type: R8,
+    type: int,  # o_g mode (0-7)
     threshold: int = DEFAULT_THRESHOLD,
     force_mode: Literal['auto', 'cpu', 'gpu'] = 'auto',
     return_format: Literal['frozenset', 'tuple'] = 'frozenset'
