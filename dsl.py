@@ -36,7 +36,7 @@ def grid_to_gpu(grid):
     if GPU_AVAILABLE:
         try:
             return cp.asarray(grid)
-        except:
+        except Exception:
             return np.asarray(grid)
     return np.asarray(grid)
 
@@ -51,7 +51,7 @@ def batch_grid_operations(grids, operation):
     if GPU_AVAILABLE and len(grids) > 1:
         try:
             # Convert to numpy first to ensure consistent format
-            np_grids = [np.asarray(g) if not isinstance(g, np.ndarray) else g for g in grids]
+            np_grids = [g if isinstance(g, np.ndarray) else np.asarray(g) for g in grids]
             
             # Check if grids have same shape for efficient batching
             shapes = [g.shape for g in np_grids]
