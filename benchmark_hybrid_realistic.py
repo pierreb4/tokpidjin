@@ -18,8 +18,7 @@ from collections import defaultdict
 import numpy as np
 
 # Import core modules
-from grid import get_data
-from utils import get_solver_source, load_module
+from utils import get_data, get_solver_source, load_module
 from dsl import *
 from constants import *
 
