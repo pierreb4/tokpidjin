@@ -172,152 +172,152 @@ def dedupe_pair_tuple(S: 'Samples') -> 'Samples':
     return tuple((a, b) for a, b in S if a != b)
 
 
-def s_iz(S: 'Samples', solver: 'Callable', x_n: int, function: 'Callable') -> 'Any':
-    logger.info(f's_iz: {S = }, {solver = }, {x_n = }, {function = }')
-    # Filter out identical pairs first
-    # For now, we don't use them
-    x1 = dedupe_pair_tuple(S)
-    # Check that we have something left
-    if not x1:
-        return False, None
-    # Apply first to each sample left in x1 -> sample['input]
-    x2 = apply(first, x1)
-    # Build call and apply solver to inputs
-    x3 = rbind(solver, S)
-    x4 = lbind(x3, x_n)
-    # Apply partial solver to get intermediate grid
-    x5 = apply(x4, x2)
-    # Apply function to each item of x5
-    x6 = apply(function, x5)
+# def s_iz(S: 'Samples', solver: 'Callable', x_n: int, function: 'Callable') -> 'Any':
+#     logger.info(f's_iz: {S = }, {solver = }, {x_n = }, {function = }')
+#     # Filter out identical pairs first
+#     # For now, we don't use them
+#     x1 = dedupe_pair_tuple(S)
+#     # Check that we have something left
+#     if not x1:
+#         return False, None
+#     # Apply first to each sample left in x1 -> sample['input]
+#     x2 = apply(first, x1)
+#     # Build call and apply solver to inputs
+#     x3 = rbind(solver, S)
+#     x4 = lbind(x3, x_n)
+#     # Apply partial solver to get intermediate grid
+#     x5 = apply(x4, x2)
+#     # Apply function to each item of x5
+#     x6 = apply(function, x5)
 
-    # Apply second to each sample left in x1 -> sample['output]
-    x7 = apply(second, x1)
-    # Apply function to each item of x3
-    x8 = apply(function, x7)
-    # Calculate difference after applying function
-    x9 = papply(difference_tuple, x6, x8)
-    x10 = dedupe(x9)
+#     # Apply second to each sample left in x1 -> sample['output]
+#     x7 = apply(second, x1)
+#     # Apply function to each item of x3
+#     x8 = apply(function, x7)
+#     # Calculate difference after applying function
+#     x9 = papply(difference_tuple, x6, x8)
+#     x10 = dedupe(x9)
 
-    if len(x10) == 1:
-        # if x10[0] != ():
-        #     print(f"Single result in s_iz: {solver.__name__} - {x} - {x10[0]}")
-        return True, x10[0] if x10[0] != () else None
-    return False, x10 if len(x10) > 0 else None
-
-
-def s_iz_n(S: 'Samples', solver: 'Callable', x_n: int, function: 'Callable', index: 'R_') -> C_:
-    """Returns a color value from the input-output difference at specified index"""
-    logger.info(f's_iz_n: {S = }, {solver = }, {x_n = }, {function = }, {index = }')
-    (ret_bool, ret_tuple) = s_iz(S, solver, x_n, function)
-    if ret_bool and ret_tuple is not None:
-        return C_(ret_tuple[index]) if index < len(ret_tuple) else None
-    return None
+#     if len(x10) == 1:
+#         # if x10[0] != ():
+#         #     print(f"Single result in s_iz: {solver.__name__} - {x} - {x10[0]}")
+#         return True, x10[0] if x10[0] != () else None
+#     return False, x10 if len(x10) > 0 else None
 
 
-def s_zo(S: 'Samples', solver: 'Callable', x_n: int, function: 'Callable') -> 'Any':
-    logger.info(f's_zo: {S = }, {solver = }, {x_n = }, {function = }')
-    # Filter out identical pairs first
-    # For now, we don't use them
-    x1 = dedupe_pair_tuple(S)
-    # Check that we have something left
-    if not x1:
-        return False, None
-    # Apply first to each sample left in x1 -> sample['input]
-    x2 = apply(first, x1)
-    # Build call and apply solver to inputs
-    x3 = rbind(solver, S)
-    x4 = lbind(x3, x_n)
-    # Apply partial solver to get intermediate grid
-    x5 = apply(x4, x2)
-    # Apply function to each item of x5
-    x6 = apply(function, x5)
-
-    # Apply second to each sample left in x1 -> sample['output]
-    x7 = apply(second, x1)
-    # Apply function to each item of x3
-    x8 = apply(function, x7)
-    # Calculate difference after applying function
-    x9 = papply(difference_tuple, x8, x6)
-    x10 = dedupe(x9)
-
-    if len(x10) == 1:
-        # if x10[0] != ():
-        #     print(f"Single result in s_iz: {solver.__name__} - {x} - {x10[0]}")
-        return True, x10[0] if x10[0] != () else None
-    return False, x10 if len(x10) > 0 else None
+# def s_iz_n(S: 'Samples', solver: 'Callable', x_n: int, function: 'Callable', index: 'R_') -> C_:
+#     """Returns a color value from the input-output difference at specified index"""
+#     logger.info(f's_iz_n: {S = }, {solver = }, {x_n = }, {function = }, {index = }')
+#     (ret_bool, ret_tuple) = s_iz(S, solver, x_n, function)
+#     if ret_bool and ret_tuple is not None:
+#         return C_(ret_tuple[index]) if index < len(ret_tuple) else None
+#     return None
 
 
-def s_zo_n(S: 'Samples', solver: 'Callable', x_n: int, function: 'Callable', index: 'R_') -> C_:
-    """Returns a color value from the input-output difference at specified index"""
-    logger.info(f's_zo_n: {S = }, {solver = }, {x_n = }, {function = }, {index = }')
-    (ret_bool, ret_tuple) = s_zo(S, solver, x_n, function)
-    if ret_bool and ret_tuple is not None:
-        return C_(ret_tuple[index]) if index < len(ret_tuple) else None
-    return None
+# def s_zo(S: 'Samples', solver: 'Callable', x_n: int, function: 'Callable') -> 'Any':
+#     logger.info(f's_zo: {S = }, {solver = }, {x_n = }, {function = }')
+#     # Filter out identical pairs first
+#     # For now, we don't use them
+#     x1 = dedupe_pair_tuple(S)
+#     # Check that we have something left
+#     if not x1:
+#         return False, None
+#     # Apply first to each sample left in x1 -> sample['input]
+#     x2 = apply(first, x1)
+#     # Build call and apply solver to inputs
+#     x3 = rbind(solver, S)
+#     x4 = lbind(x3, x_n)
+#     # Apply partial solver to get intermediate grid
+#     x5 = apply(x4, x2)
+#     # Apply function to each item of x5
+#     x6 = apply(function, x5)
+
+#     # Apply second to each sample left in x1 -> sample['output]
+#     x7 = apply(second, x1)
+#     # Apply function to each item of x3
+#     x8 = apply(function, x7)
+#     # Calculate difference after applying function
+#     x9 = papply(difference_tuple, x8, x6)
+#     x10 = dedupe(x9)
+
+#     if len(x10) == 1:
+#         # if x10[0] != ():
+#         #     print(f"Single result in s_iz: {solver.__name__} - {x} - {x10[0]}")
+#         return True, x10[0] if x10[0] != () else None
+#     return False, x10 if len(x10) > 0 else None
 
 
-def b_iz(S: 'Samples', function: 'Callable') -> 'Any':
-    logger.info(f'b_iz: {S = }, {function = }')
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    x3 = dedupe(mapply_t(function, x1))
-    x4 = dedupe(mapply_t(function, x2))
-    return difference_tuple(x3, x4)
+# def s_zo_n(S: 'Samples', solver: 'Callable', x_n: int, function: 'Callable', index: 'R_') -> C_:
+#     """Returns a color value from the input-output difference at specified index"""
+#     logger.info(f's_zo_n: {S = }, {solver = }, {x_n = }, {function = }, {index = }')
+#     (ret_bool, ret_tuple) = s_zo(S, solver, x_n, function)
+#     if ret_bool and ret_tuple is not None:
+#         return C_(ret_tuple[index]) if index < len(ret_tuple) else None
+#     return None
 
 
-def b_iz_n(S: 'Samples', function: 'Callable', index: 'F_') -> 'C_':
-    """Returns a color value from the output-input difference at specified index"""
-    logger.info(f'b_iz_n: {S = }, {function = }, {index = }')
-    ret_tuple = b_iz(S, function)
-    return C_(ret_tuple[index]) if index < len(ret_tuple) else None
+# def b_iz(S: 'Samples', function: 'Callable') -> 'Any':
+#     logger.info(f'b_iz: {S = }, {function = }')
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     x3 = dedupe(mapply_t(function, x1))
+#     x4 = dedupe(mapply_t(function, x2))
+#     return difference_tuple(x3, x4)
 
 
-def b_zo(S: 'Samples', function: 'Callable') -> 'Any':
-    logger.info(f'b_zo: {S = }, {function = }')
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    x3 = dedupe(mapply_t(function, x1))
-    x4 = dedupe(mapply_t(function, x2))
-    return difference_tuple(x4, x3)
+# def b_iz_n(S: 'Samples', function: 'Callable', index: 'F_') -> 'C_':
+#     """Returns a color value from the output-input difference at specified index"""
+#     logger.info(f'b_iz_n: {S = }, {function = }, {index = }')
+#     ret_tuple = b_iz(S, function)
+#     return C_(ret_tuple[index]) if index < len(ret_tuple) else None
 
 
-def b_zo_n(S: 'Samples', function: 'Callable', index: 'F_') -> 'C_':
-    """Returns a color value from the output-input difference at specified index"""
-    logger.info(f'b_zo_n: {S = }, {function = }, {index = }')
-    ret_tuple = b_zo(S, function)
-    return C_(ret_tuple[index]) if index < len(ret_tuple) else None
-
-# c_ for C_
-def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
-    logger.info(f'c_iz: {S = }, {function = }')
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    x3 = dedupe(mapply_t(function, x1))
-    x4 = dedupe(mapply_t(function, x2))
-    return difference_tuple(x3, x4)
+# def b_zo(S: 'Samples', function: 'Callable') -> 'Any':
+#     logger.info(f'b_zo: {S = }, {function = }')
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     x3 = dedupe(mapply_t(function, x1))
+#     x4 = dedupe(mapply_t(function, x2))
+#     return difference_tuple(x4, x3)
 
 
-def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
-    """Returns pick of a color value from the input-output difference"""
-    logger.info(f'c_iz_n: {S = }, {function = }, {pick = }')
-    ret_tuple = c_iz(S, function)
-    return pick(ret_tuple)
+# def b_zo_n(S: 'Samples', function: 'Callable', index: 'F_') -> 'C_':
+#     """Returns a color value from the output-input difference at specified index"""
+#     logger.info(f'b_zo_n: {S = }, {function = }, {index = }')
+#     ret_tuple = b_zo(S, function)
+#     return C_(ret_tuple[index]) if index < len(ret_tuple) else None
+
+# # c_ for C_
+# def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
+#     logger.info(f'c_iz: {S = }, {function = }')
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     x3 = dedupe(mapply_t(function, x1))
+#     x4 = dedupe(mapply_t(function, x2))
+#     return difference_tuple(x3, x4)
 
 
-def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
-    logger.info(f'c_zo: {S = }, {function = }')
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    x3 = dedupe(mapply_t(function, x1))
-    x4 = dedupe(mapply_t(function, x2))
-    return difference_tuple(x4, x3)
+# def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
+#     """Returns pick of a color value from the input-output difference"""
+#     logger.info(f'c_iz_n: {S = }, {function = }, {pick = }')
+#     ret_tuple = c_iz(S, function)
+#     return pick(ret_tuple)
 
 
-def c_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
-    """Returns pick of a color value from the output-input difference"""
-    logger.info(f'c_zo_n: {S = }, {function = }, {pick = }')
-    ret_tuple = c_zo(S, function)
-    return pick(ret_tuple)
+# def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
+#     logger.info(f'c_zo: {S = }, {function = }')
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     x3 = dedupe(mapply_t(function, x1))
+#     x4 = dedupe(mapply_t(function, x2))
+#     return difference_tuple(x4, x3)
+
+
+# def c_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
+#     """Returns pick of a color value from the output-input difference"""
+#     logger.info(f'c_zo_n: {S = }, {function = }, {pick = }')
+#     ret_tuple = c_zo(S, function)
+#     return pick(ret_tuple)
 
 
 # a_ for A_
@@ -333,37 +333,37 @@ def a_mr(S: 'Samples') -> 'A8':
     )
 
 
-# i_ for integer
-def i_iz(S: 'Samples', function: 'Callable') -> 'Any':
-    logger.info(f'i_iz: {S = }, {function = }')
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    # No need to dedupe a frozenset
-    x3 = mapply(function, x1)
-    x4 = mapply(function, x2)
-    return difference(x3, x4)
+# # i_ for integer
+# def i_iz(S: 'Samples', function: 'Callable') -> 'Any':
+#     logger.info(f'i_iz: {S = }, {function = }')
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     # No need to dedupe a frozenset
+#     x3 = mapply(function, x1)
+#     x4 = mapply(function, x2)
+#     return difference(x3, x4)
 
 
-def i_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
-    logger.info(f'i_iz_n: {S = }, {function = }, {pick = }')
-    ret_frozenset = i_iz(S, function)
-    return pick(ret_frozenset)
+# def i_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
+#     logger.info(f'i_iz_n: {S = }, {function = }, {pick = }')
+#     ret_frozenset = i_iz(S, function)
+#     return pick(ret_frozenset)
 
 
-def i_zo(S: 'Samples', function: 'Callable') -> 'Any':
-    logger.info(f'i_zo: {S = }, {function = }')
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    # No need to dedupe a frozenset
-    x3 = mapply(function, x1)
-    x4 = mapply(function, x2)
-    return difference(x4, x3)
+# def i_zo(S: 'Samples', function: 'Callable') -> 'Any':
+#     logger.info(f'i_zo: {S = }, {function = }')
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     # No need to dedupe a frozenset
+#     x3 = mapply(function, x1)
+#     x4 = mapply(function, x2)
+#     return difference(x4, x3)
 
 
-def i_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
-    logger.info(f'i_zo_n: {S = }, {function = }, {pick = }')
-    ret_frozenset = i_zo(S, function)
-    return pick(ret_frozenset)
+# def i_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
+#     logger.info(f'i_zo_n: {S = }, {function = }, {pick = }')
+#     ret_frozenset = i_zo(S, function)
+#     return pick(ret_frozenset)
 
 
 # NOTE Function needs to take a grid and return a frozenset, like ottt_g
@@ -383,49 +383,49 @@ def i_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
 #     return get_arg_rank_f(ret_frozenset, key, index)
 
 
-# f_ fot frozenset
-def f_iz(S: Samples, function: 'Callable') -> 'Any':
-    logger.info(f'f_iz: {S = }, {function = }')
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    x4 = dedupe(mapply(function, x1))
-    x5 = dedupe(mapply(function, x2))
-    return difference(x4, x5)
-
-
-def f_iz_n(S: Samples, function: 'Callable', pick: 'Callable') -> 'Object':
-    logger.info(f'f_iz_n: {S = }, {function = }, {pick = }')
-    ret_frozenset = f_iz(S, function)
-    return pick(ret_frozenset)
-
-
-# def f_zo(S: Samples, function: 'Callable', r_n: 'R8') -> 'Any':
+# # f_ fot frozenset
+# def f_iz(S: Samples, function: 'Callable') -> 'Any':
+#     logger.info(f'f_iz: {S = }, {function = }')
 #     x1 = apply(first, S)
 #     x2 = apply(second, S)
-#     x3 = lbind(function, r_n)
-#     x4 = dedupe(mapply(x3, x1))
-#     x5 = dedupe(mapply(x3, x2))
+#     x4 = dedupe(mapply(function, x1))
+#     x5 = dedupe(mapply(function, x2))
+#     return difference(x4, x5)
+
+
+# def f_iz_n(S: Samples, function: 'Callable', pick: 'Callable') -> 'Object':
+#     logger.info(f'f_iz_n: {S = }, {function = }, {pick = }')
+#     ret_frozenset = f_iz(S, function)
+#     return pick(ret_frozenset)
+
+
+# # def f_zo(S: Samples, function: 'Callable', r_n: 'R8') -> 'Any':
+# #     x1 = apply(first, S)
+# #     x2 = apply(second, S)
+# #     x3 = lbind(function, r_n)
+# #     x4 = dedupe(mapply(x3, x1))
+# #     x5 = dedupe(mapply(x3, x2))
+# #     return difference(x5, x4)
+
+
+# # def f_zo_n(S: Samples, function: 'Callable', key: 'Callable', index: 'FL') -> 'Object':
+# #     ret_frozenset = f_zo(S, function, r_n)
+# #     return get_arg_rank_f(ret_frozenset, key, index)
+
+
+# def f_zo(S: Samples, function: 'Callable') -> 'Any':
+#     logger.info(f'f_zo: {S = }, {function = }')
+#     x1 = apply(first, S)
+#     x2 = apply(second, S)
+#     x4 = dedupe(mapply(function, x1))
+#     x5 = dedupe(mapply(function, x2))
 #     return difference(x5, x4)
 
 
-# def f_zo_n(S: Samples, function: 'Callable', key: 'Callable', index: 'FL') -> 'Object':
-#     ret_frozenset = f_zo(S, function, r_n)
-#     return get_arg_rank_f(ret_frozenset, key, index)
-
-
-def f_zo(S: Samples, function: 'Callable') -> 'Any':
-    logger.info(f'f_zo: {S = }, {function = }')
-    x1 = apply(first, S)
-    x2 = apply(second, S)
-    x4 = dedupe(mapply(function, x1))
-    x5 = dedupe(mapply(function, x2))
-    return difference(x5, x4)
-
-
-def f_zo_n(S: Samples, function: 'Callable', pick: 'Callable') -> 'Object':
-    logger.info(f'f_zo_n: {S = }, {function = }, {pick = }')
-    ret_frozenset = f_zo(S, function)
-    return pick(ret_frozenset)
+# def f_zo_n(S: Samples, function: 'Callable', pick: 'Callable') -> 'Object':
+#     logger.info(f'f_zo_n: {S = }, {function = }, {pick = }')
+#     ret_frozenset = f_zo(S, function)
+#     return pick(ret_frozenset)
 
 
 def get_nth_t(container: 'Tuple', rank: 'FL') -> 'Any':
