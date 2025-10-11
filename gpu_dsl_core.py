@@ -90,19 +90,21 @@ def gpu_o_g(
             grid_array, diagonal, without_bg, h, w
         )
     
-    # Step 3.5: Sort objects for deterministic ordering (CRITICAL for correctness!)
-    # Problem: get_arg_rank_f uses sorted(frozenset, key=size) with stable sort
-    # When size is tied, stable sort preserves the ITERATION ORDER of the frozenset
-    # Frozenset iteration order is based on HASH VALUES, not insertion order!
-    # Solution: We CANNOT control frozenset iteration order, so we must match CPU exactly
-    
-    # The CPU builds: set → frozenset → set → frozenset (all hash-based ordering)
-    # We build: list → frozenset (but frozenset ignores our list order!)
-    
-    # CRITICAL INSIGHT: We can't control frozenset iteration order!
-    # But we CAN ensure the CONTENTS match CPU exactly (same cells, same objects)
-    # Then when get_arg_rank_f sorts with ties, both CPU and GPU will have
-    # the SAME frozenset with the SAME hash-based iteration order!
+    # Step 3.5: Build frozenset to match CPU construction order
+    # CRITICAL INSIGHT: Frozenset iteration order depends on construction!
+    # 
+    # CPU builds (dsl.py objects()):
+    #   objs = set()
+    #   objs.add(frozenset(obj))
+    #   return frozenset(objs)
+    #
+    # Problem: Generator expression frozenset(frozenset(obj) for obj in list)
+    # creates frozenset differently than set().add() → frozenset(set)!
+    #
+    # When get_arg_rank_f does sorted(frozenset, key=size), ties are broken by
+    # the frozenset's iteration order. Different construction → different iteration!
+    #
+    # Solution: Build using set() intermediate (exactly like CPU does)
     
     # Step 4: Convert to requested format
     if return_format == 'tuple':
@@ -113,8 +115,11 @@ def gpu_o_g(
         return tuple(tuple(obj) for obj in objects_list)
     else:
         # DSL-compatible frozenset conversion (0.4ms)
-        # Just convert - iteration order will be hash-based (same as CPU!)
-        return frozenset(frozenset(obj) for obj in objects_list)
+        # Build using set() intermediate to match CPU construction order!
+        objs = set()
+        for obj in objects_list:
+            objs.add(frozenset(obj))
+        return frozenset(objs)
 
 
 def _decode_o_g_type(type: int) -> Tuple[bool, bool, bool]:
