@@ -43,16 +43,23 @@ This is an ARC (Abstraction and Reasoning Corpus) solver project with GPU accele
 
 1. **Two GPU strategies**:
    - Batch operations (PRODUCTION): Use `auto_select_optimizer()` for batch grid processing
-   - Solver acceleration (IN DEVELOPMENT): GPU-resident solver functions (2-6x speedup target)
+   - Solver acceleration (IN DEVELOPMENT): Hybrid GPU strategy for solver functions
 
-2. **Current focus**: Profiling and GPU-accelerating solver functions
-   - Target: Complex solvers (>5ms execution time)
-   - Strategy: Keep all intermediate results on GPU, single transfer in/out
-   - Priority: Profile first to identify expensive DSL operations
+2. **Hybrid GPU approach** (NEW STRATEGY):
+   - GPU works with arrays/tuples internally (optimal performance)
+   - Converts to frozensets only at boundaries (DSL compatibility)
+   - No need to refactor dsl.py frozensets (80-90% speedup with 5% effort)
+   - Target: `gpu_o_g` implementation for 2.3-7.8x speedup
 
-3. **Test on Kaggle** - Always verify GPU code on actual Kaggle hardware
-4. **Batch operations** - Optimal batch size is 200 grids (for batch processing)
-5. **Auto-detection** - Use `auto_select_optimizer()` for automatic GPU selection
+3. **Implementation priority**: 
+   - Week 1: Hybrid GPU o_g with frozenset return
+   - Week 2: Validation on profiled solvers
+   - Week 3: Add dual-return API (tuple for GPU-resident solvers)
+   - Week 4: Convert 10-20 solvers to GPU-resident
+
+4. **Test on Kaggle** - Always verify GPU code on actual Kaggle hardware
+5. **Batch operations** - Optimal batch size is 200 grids (for batch processing)
+6. **Auto-detection** - Use `auto_select_optimizer()` for automatic GPU selection
 
 ### When Suggesting GPU Changes
 
@@ -62,10 +69,12 @@ This is an ARC (Abstraction and Reasoning Corpus) solver project with GPU accele
 - ❌ Ignore JIT warmup (causes inconsistent performance)
 - ❌ Hard-code GPU types (use auto-detection)
 - ❌ Rewrite vectorized operations to use loops
+- ❌ Suggest refactoring dsl.py frozensets to tuples (172 occurrences, high risk, low ROI)
 
 **DO:**
 - ✅ Focus on solver functions (>5ms execution time) for GPU acceleration
-- ✅ Check `GPU_SOLVER_STRATEGY.md` for current approach
+- ✅ Check `GPU_O_G_IMPLEMENTATION.md` for current implementation plan
+- ✅ Use hybrid GPU strategy (arrays on GPU, frozenset at boundaries)
 - ✅ Profile before implementing (use `profile_solvers.py`)
 - ✅ Use `KaggleGPUOptimizer` or `MultiGPUOptimizer` for batch operations
 - ✅ Maintain batch processing architecture
@@ -198,25 +207,25 @@ result = await run_with_timeout(function, args, timeout=10.0)
 4. **COMPLETE_GPU_COMPARISON.md** - Which GPU to use
 5. **INTEGRATION_GUIDE.md** - How to integrate batch operations
 
-### Recent Discovery (Solver GPU Acceleration)
-6. **benchmark_solvers.py** - Benchmarks solver execution times (validated on Kaggle)
-7. **profile_solvers.py** - Profiles DSL operations within solvers (ready to run)
-8. **SOLVER_BENCHMARK_RESULTS.md** - Analysis of benchmark results (58ms, 120ms solvers found!)
-9. **GPU_STRATEGY_PIVOT.md** - Why we pivoted from DSL ops to solver functions
+### Implementation Guide (CURRENT WORK)
+6. **GPU_O_G_IMPLEMENTATION.md** - Complete implementation guide for GPU o_g (START HERE) ⭐
+7. **benchmark_solvers.py** - Benchmarks solver execution times (validated on Kaggle)
+8. **profile_solvers.py** - Profiles DSL operations within solvers (validated, found o_g bottleneck)
 
 ### Technical Deep Dives (Batch Operations)
-10. **GPU_OPTIMIZATION_SUCCESS.md** - Complete batch operations analysis
-11. **MULTI_GPU_SUPPORT.md** - Multi-GPU details
-12. **GPU_VECTORIZATION_UPDATE.md** - Vectorization patterns
-13. **KAGGLE_GPU_OPTIMIZATION.md** - GPU specs
-14. **GPU_TRANSFER_FIX.md** - Batch transfer details
-15. **GPU_JIT_WARMUP.md** - JIT compilation handling
-16. **GPU_FALLBACK_FIX.md** - Error handling patterns
-17. **GPU_COMPARISON_P100_L4.md** - P100 vs L4 comparison
-18. **GPU_BATCH_README.md** - Batch processing details
+9. **GPU_OPTIMIZATION_SUCCESS.md** - Complete batch operations analysis
+10. **MULTI_GPU_SUPPORT.md** - Multi-GPU details
+11. **GPU_VECTORIZATION_UPDATE.md** - Vectorization patterns
+12. **KAGGLE_GPU_OPTIMIZATION.md** - GPU specs
+13. **GPU_TRANSFER_FIX.md** - Batch transfer details
+14. **GPU_JIT_WARMUP.md** - JIT compilation handling
+15. **GPU_FALLBACK_FIX.md** - Error handling patterns
+16. **GPU_COMPARISON_P100_L4.md** - P100 vs L4 comparison
+17. **GPU_BATCH_README.md** - Batch processing details
 
 ### Archived Documentation
 - **archive/gpu_docs_superseded/** - Older docs replaced by comprehensive guides
+- **archive/gpu_solver_analysis_2025_10_10/** - Intermediate analysis (o_g bottleneck discovery)
   - Kept for historical reference only
 
 ## Testing Requirements
@@ -275,9 +284,11 @@ python test_multi_gpu.py
 ✅ **Multi-GPU support**: Working on T4x2 and L4x4  
 ✅ **Strategy pivot**: Discovered solver functions are perfect GPU target (not individual DSL ops)  
 ✅ **Solver benchmarks**: Validated 28 solvers, found 2 excellent candidates (58ms, 120ms)  
-🔄 **In progress**: Profiling slow solvers to identify expensive DSL operations  
+✅ **Profiling complete**: Identified o_g as THE bottleneck (75-92% of solver time)  
+✅ **Implementation plan**: Hybrid GPU strategy (arrays on GPU, frozenset at boundaries)  
+🔄 **In progress**: Implementing GPU o_g with hybrid approach (Week 1 starting)  
 
-**Current focus**: GPU-accelerating solver functions for 2-6x speedup
+**Current focus**: Implementing `gpu_o_g` with 2.3-7.8x expected speedup
 
 ## Important Notes
 

@@ -9,27 +9,33 @@ This index helps you find the right GPU documentation for your needs.
 ## 🚀 Start Here
 
 ### For GPU Solver Acceleration (Current Focus)
-1. **[GPU_SOLVER_STRATEGY.md](GPU_SOLVER_STRATEGY.md)** ⭐ **READ THIS FIRST FOR NEW WORK**
+1. **[GPU_O_G_IMPLEMENTATION.md](GPU_O_G_IMPLEMENTATION.md)** ⭐ **START HERE FOR IMPLEMENTATION**
+   - Complete implementation guide for GPU o_g (the bottleneck operation)
+   - Hybrid strategy: arrays on GPU, frozenset at boundaries
+   - Four-phase plan with weekly checkpoints
+   - Expected speedup: 2.3-7.8x for o_g, 2.7x average solver speedup
+   - **Use this as your implementation guide**
+
+2. **[GPU_SOLVER_STRATEGY.md](GPU_SOLVER_STRATEGY.md)** - Strategy Overview
    - Complete strategy for GPU-accelerating solver functions
    - Benchmark results: 28 solvers tested, 2 excellent candidates (58ms, 120ms)
-   - Expected speedup: 2-6x for complex solvers
-   - Three-phase implementation plan
-   - **Start here for solver GPU acceleration**
+   - Why we pivoted from DSL ops to solver functions
+   - **Read for strategic context**
 
 ### For Batch Operations (Production Ready)
-2. **[GPU_PROJECT_SUMMARY.md](GPU_PROJECT_SUMMARY.md)** ⭐ **BATCH PROCESSING REFERENCE**
+3. **[GPU_PROJECT_SUMMARY.md](GPU_PROJECT_SUMMARY.md)** ⭐ **BATCH PROCESSING REFERENCE**
    - Executive summary of batch GPU optimization (10-35x speedup)
    - Performance results across T4x2, P100, L4x4
    - Quick stats and recommendations for batch processing
    - **Use this for batch grid operations**
 
-3. **[COMPLETE_GPU_COMPARISON.md](COMPLETE_GPU_COMPARISON.md)** 
+4. **[COMPLETE_GPU_COMPARISON.md](COMPLETE_GPU_COMPARISON.md)** 
    - Detailed comparison of T4x2, P100, and L4x4 GPUs
    - Which GPU to choose (all same cost!)
    - Performance benchmarks for each GPU type
    - **Read this to choose your GPU**
 
-4. **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)**
+5. **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)**
    - Step-by-step guide to integrate GPU batch processing
    - Code examples and patterns
    - Common pitfalls and solutions
@@ -40,21 +46,28 @@ This index helps you find the right GPU documentation for your needs.
 ## 📚 Deep Dive Documentation
 
 ### Solver GPU Acceleration (In Development)
-- **[GPU_SOLVER_STRATEGY.md](GPU_SOLVER_STRATEGY.md)** ⭐ **MAIN STRATEGY DOC**
+- **[GPU_O_G_IMPLEMENTATION.md](GPU_O_G_IMPLEMENTATION.md)** ⭐ **PRIMARY IMPLEMENTATION GUIDE**
+  - Complete implementation guide for GPU o_g operation
+  - Hybrid strategy: arrays on GPU, frozenset at boundaries (no dsl.py refactoring needed)
+  - Four-phase plan: Week 1 (hybrid o_g), Week 2 (validation), Week 3 (dual-return API), Week 4 (GPU-resident solvers)
+  - Expected speedup: 2.3-7.8x for o_g, 2.7x average solver speedup
+  - Implementation checklist with weekly milestones
+
+- **[GPU_SOLVER_STRATEGY.md](GPU_SOLVER_STRATEGY.md)** - Strategic Overview
   - Complete strategy for solver GPU acceleration
-  - Benchmark results and analysis
-  - Three-phase implementation plan
+  - Benchmark results and analysis (28 solvers profiled)
+  - Why we pivoted from DSL ops to solver functions
   - Expected 2-6x speedup for complex solvers
 
 - **benchmark_solvers.py**
   - Benchmarks solver execution times
   - Validated on Kaggle L4 GPU
-  - Found 28 solver performance profiles
+  - Found 28 solver performance profiles (120ms and 58ms excellent candidates)
 
 - **profile_solvers.py**
   - Profiles DSL operations within solvers
-  - Identifies expensive operations for GPU targeting
-  - Ready to run on Kaggle
+  - Validated on Kaggle - identified o_g as 75-92% bottleneck
+  - Executed successfully on 3 solvers
 
 ### Multi-GPU Support (Batch Operations)
 - **[MULTI_GPU_SUPPORT.md](MULTI_GPU_SUPPORT.md)**
@@ -108,17 +121,21 @@ This index helps you find the right GPU documentation for your needs.
 
 ## 📁 Archived Documentation
 
-### Solver Analysis (Archived 2025-10-10)
+### Solver Analysis (Archived 2025-10-11)
 **Location:** `archive/gpu_solver_analysis_2025_10_10/`
 
-These intermediate analysis files have been consolidated into **GPU_SOLVER_STRATEGY.md**:
-- **SOLVER_GPU_ANALYSIS.md** - Initial analysis (now in GPU_SOLVER_STRATEGY.md)
-- **SOLVER_BENCHMARK_RESULTS.md** - Benchmark analysis (now in GPU_SOLVER_STRATEGY.md)
-- **GPU_STRATEGY_PIVOT.md** - Strategy pivot explanation (now in GPU_SOLVER_STRATEGY.md)
-- **P_G_PERFORMANCE_ANALYSIS.md** - p_g failure analysis (now in GPU_SOLVER_STRATEGY.md)
-- **GPU_REALITY_CHECK.md** - Why DSL ops don't work (now in GPU_SOLVER_STRATEGY.md)
+These intermediate analysis files have been consolidated into **GPU_O_G_IMPLEMENTATION.md**:
+- **SOLVER_GPU_ANALYSIS.md** - Initial analysis (now in GPU_O_G_IMPLEMENTATION.md)
+- **SOLVER_BENCHMARK_RESULTS.md** - Benchmark analysis (now in GPU_O_G_IMPLEMENTATION.md)
+- **GPU_STRATEGY_PIVOT.md** - Strategy pivot explanation (now in GPU_O_G_IMPLEMENTATION.md)
+- **P_G_PERFORMANCE_ANALYSIS.md** - p_g failure analysis (now in GPU_O_G_IMPLEMENTATION.md)
+- **GPU_REALITY_CHECK.md** - Why DSL ops don't work (now in GPU_O_G_IMPLEMENTATION.md)
+- **PROFILE_RESULTS_ANALYSIS.md** - o_g bottleneck discovery (now in GPU_O_G_IMPLEMENTATION.md)
+- **GPU_O_G_IMPLEMENTATION_PLAN.md** - Implementation planning (now in GPU_O_G_IMPLEMENTATION.md)
+- **PROFILE_SUMMARY.md** - Profile quick reference (now in GPU_O_G_IMPLEMENTATION.md)
+- **GPU_SOLVER_README.md** - Quick start guide (now in GPU_O_G_IMPLEMENTATION.md)
 
-**Archived because:** All insights consolidated into comprehensive strategy document
+**Archived because:** All insights consolidated into comprehensive implementation guide
 
 ### Batch Operations (Archived Earlier)
 **Location:** `archive/gpu_docs_superseded/`
@@ -138,11 +155,11 @@ These files contain early analysis about why `rot90` failed (GPU 2x slower) and 
 ## 🎯 Common Use Cases
 
 ### "I want to GPU-accelerate solver functions" ⭐ NEW
-1. Read **GPU_SOLVER_STRATEGY.md** (10 min)
-2. Run **benchmark_solvers.py** to identify slow solvers
-3. Run **profile_solvers.py** to identify expensive DSL operations
-4. Implement GPU version of expensive operations
-5. Expected: 2-6x speedup for complex solvers (>5ms)
+1. Read **GPU_O_G_IMPLEMENTATION.md** (20 min) - Complete implementation guide
+2. Run **benchmark_solvers.py** to identify slow solvers (if not done)
+3. Profiling already complete: o_g is 75-92% of execution time
+4. Follow Week 1 checklist: Create `gpu_dsl_core.py` with hybrid `gpu_o_g`
+5. Expected: 2.3-7.8x speedup for o_g, 2.7x average solver speedup
 
 ### "I want to use GPU batch processing" (Production Ready)
 1. Read **GPU_PROJECT_SUMMARY.md** (5 min)
@@ -184,10 +201,16 @@ These files contain early analysis about why `rot90` failed (GPU 2x slower) and 
 ## 📊 Documentation Hierarchy
 
 ```
-GPU_SOLVER_STRATEGY.md (Solver GPU Acceleration - NEW FOCUS)
-├── benchmark_solvers.py (Measure solver execution times)
-├── profile_solvers.py (Identify expensive DSL operations)
-└── (Future) gpu_dsl_core.py (GPU implementations)
+GPU_O_G_IMPLEMENTATION.md (Implementation Guide - START HERE)
+├── Week 1: Hybrid GPU o_g with frozenset return
+├── Week 2: Validation on profiled solvers
+├── Week 3: Dual-return API (tuple for GPU-resident)
+└── Week 4: GPU-resident solver conversions
+
+GPU_SOLVER_STRATEGY.md (Strategic Overview)
+├── benchmark_solvers.py (Solver timing - DONE)
+├── profile_solvers.py (Operation profiling - DONE)
+└── Analysis: o_g is 75-92% bottleneck
 
 GPU_PROJECT_SUMMARY.md (Batch Processing - PRODUCTION READY)
 ├── COMPLETE_GPU_COMPARISON.md (GPU Selection Guide)
@@ -247,9 +270,10 @@ GPU_PROJECT_SUMMARY.md (Batch Processing - PRODUCTION READY)
 
 ---
 
-**Last Updated**: October 10, 2025  
+**Last Updated**: October 11, 2025  
 **Status**: 
 - ✅ Batch GPU optimization complete and production-ready (10-35x speedup)
-- 🔄 Solver GPU acceleration in progress (2-6x speedup expected)
+- ✅ Solver profiling complete - o_g identified as 75-92% bottleneck
+- 🔄 GPU o_g implementation ready to start (Week 1 checklist available)
 
-**Next Action**: Run `profile_solvers.py` on Kaggle to identify expensive DSL operations
+**Next Action**: Follow GPU_O_G_IMPLEMENTATION.md Week 1 checklist to create `gpu_dsl_core.py`
