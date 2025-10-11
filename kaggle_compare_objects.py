@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, '/kaggle/working')
 
 from arc_types import *
-from dsl import objects as cpu_o_g, get_arg_rank_f, subgrid, size
+from dsl import o_g as cpu_o_g, get_arg_rank_f, subgrid, size
 from constants import R7, L1
 from gpu_dsl_core import gpu_o_g
 import cupy as cp

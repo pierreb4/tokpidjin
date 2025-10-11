@@ -7,7 +7,7 @@ import sys
 sys.path.insert(0, '/kaggle/working')
 
 from arc_types import *
-from dsl import objects as cpu_o_g
+from dsl import o_g as cpu_o_g
 from constants import R7
 from gpu_dsl_core import gpu_o_g
 
