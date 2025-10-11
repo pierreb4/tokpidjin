@@ -6,9 +6,14 @@ solver infrastructure from run_test.py. This provides realistic
 performance data across diverse grid sizes and operations.
 
 Usage:
-  python benchmark_hybrid_realistic.py              # Test all solvers with hybrid versions
-  python benchmark_hybrid_realistic.py -k 23b5c85d  # Test specific task
-  python benchmark_hybrid_realistic.py --analyze    # Analyze grid sizes only
+  # Analyze grid sizes
+  python benchmark_hybrid_realistic.py --analyze          # Just hybrid solvers (6 tasks)
+  python benchmark_hybrid_realistic.py --analyze-all      # All ARC training tasks (400 tasks)
+  python benchmark_hybrid_realistic.py --analyze -k 23b5c85d  # Specific task
+  
+  # Benchmark performance
+  python benchmark_hybrid_realistic.py                    # Test all hybrid solvers
+  python benchmark_hybrid_realistic.py -k 23b5c85d -v     # Test specific task with verbose errors
 """
 
 import argparse
@@ -345,6 +350,8 @@ def main():
     parser = argparse.ArgumentParser(description="Realistic GPU Hybrid Benchmark")
     parser.add_argument("-k", "--task_id", help="Specific task to test", type=str)
     parser.add_argument("--analyze", help="Only analyze grid sizes", action="store_true")
+    parser.add_argument("--analyze-all", help="Analyze all ARC tasks (not just hybrid solvers)", 
+                        action="store_true")
     parser.add_argument("-n", "--trials", help="Number of benchmark trials", 
                         type=int, default=50)
     parser.add_argument("-v", "--verbose", help="Show detailed error messages",
@@ -361,18 +368,29 @@ def main():
     
     print(f"Found {len(hybrid_solvers)} hybrid solver(s): {', '.join(hybrid_solvers)}")
     
-    # Determine which tasks to test
+    # Determine which tasks to analyze/test
+    if args.analyze or args.analyze_all:
+        # For analysis, can use all tasks or just hybrid solvers
+        if args.analyze_all:
+            task_ids = list(train_data['demo'].keys())
+            print(f"\nAnalyzing ALL {len(task_ids)} ARC training tasks")
+        elif args.task_id:
+            task_ids = [args.task_id]
+            print(f"\nAnalyzing specific task: {args.task_id}")
+        else:
+            task_ids = hybrid_solvers
+            print(f"\nAnalyzing {len(task_ids)} hybrid solver tasks")
+        
+        analyze_task_grid_sizes(train_data, task_ids)
+        return
+    
+    # For benchmarking, determine which tasks to test
     if args.task_id:
         task_ids = [args.task_id]
         print(f"\nTesting specific task: {args.task_id}")
     else:
         task_ids = hybrid_solvers
         print(f"\nTesting all {len(task_ids)} hybrid solvers")
-    
-    # If analyze mode, just show grid sizes
-    if args.analyze:
-        analyze_task_grid_sizes(train_data, task_ids)
-        return
     
     print("\n" + "=" * 70)
     print("REALISTIC HYBRID STRATEGY BENCHMARK")
