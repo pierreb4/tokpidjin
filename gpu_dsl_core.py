@@ -91,19 +91,17 @@ def gpu_o_g(
         )
     
     # Step 3.5: Sort objects for deterministic ordering (CRITICAL for correctness!)
-    # Problem: get_arg_rank_f breaks ties by frozenset iteration order, which is non-deterministic!
-    # Solution: Sort cells within each object to make frozensets comparable, 
-    # then sort objects by (min_row, min_col, size) to match CPU's grid scan order
+    # Problem: get_arg_rank_f breaks ties by frozenset's natural comparison order
+    # Frozensets compare by their sorted tuple representation: tuple(sorted(frozenset))
+    # Solution: Sort objects_list to match Python's frozenset comparison order
     
     # First: Sort cells within each object (canonical order)
     objects_list = [sorted(obj) for obj in objects_list]
     
-    # Second: Sort objects by (min_row, min_col, size)
-    objects_list.sort(key=lambda obj: (
-        obj[0][0],  # Min row (first cell's row, since sorted)
-        obj[0][1],  # Min col (first cell's col)
-        len(obj),   # Size (for additional stability)
-    ))
+    # Second: Sort objects by their tuple representation (THIS is what frozenset uses for comparison!)
+    # When Python sorts frozensets with equal keys, it compares them as: tuple(sorted(fs))
+    # So we must sort our objects_list the same way!
+    objects_list.sort(key=lambda obj: tuple(obj))
     
     # Step 4: Convert to requested format
     if return_format == 'tuple':
@@ -111,7 +109,7 @@ def gpu_o_g(
         return tuple(tuple(obj) for obj in objects_list)
     else:
         # DSL-compatible frozenset conversion (0.4ms)
-        # Now frozensets will have deterministic iteration order because cells are sorted
+        # Frozensets will now iterate in sorted(tuple) order, matching Python's comparison
         return frozenset(frozenset(obj) for obj in objects_list)
 
 
