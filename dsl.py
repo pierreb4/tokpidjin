@@ -1,13 +1,17 @@
 import os
 
-os.environ["CUDA_HOME"] = "/usr/local/cuda-12.5"
-os.environ["PATH"] = "/usr/local/cuda-12.5/bin:" + os.environ["PATH"]
-os.environ["LD_LIBRARY_PATH"] = "/usr/local/cuda-12.5/lib64:" + os.environ.get("LD_LIBRARY_PATH", "")
-cuda_stub_path = "/usr/local/cuda-12.5/targets/x86_64-linux/lib/stubs"
-if "LD_LIBRARY_PATH" in os.environ:
-    os.environ["LD_LIBRARY_PATH"] += f":{cuda_stub_path}"
-else:
-    os.environ["LD_LIBRARY_PATH"] = cuda_stub_path
+# Only set CUDA environment if CUDA_HOME doesn't exist or if running in Kaggle
+# This prevents bus errors when CUDA paths don't exist
+cuda_home = "/usr/local/cuda-12.5"
+if os.path.exists(cuda_home) or "KAGGLE_KERNEL_RUN_TYPE" in os.environ:
+    os.environ["CUDA_HOME"] = cuda_home
+    os.environ["PATH"] = f"{cuda_home}/bin:" + os.environ["PATH"]
+    os.environ["LD_LIBRARY_PATH"] = f"{cuda_home}/lib64:" + os.environ.get("LD_LIBRARY_PATH", "")
+    cuda_stub_path = f"{cuda_home}/targets/x86_64-linux/lib/stubs"
+    if "LD_LIBRARY_PATH" in os.environ:
+        os.environ["LD_LIBRARY_PATH"] += f":{cuda_stub_path}"
+    else:
+        os.environ["LD_LIBRARY_PATH"] = cuda_stub_path
 
 import itertools
 import random
