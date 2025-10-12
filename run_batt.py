@@ -543,7 +543,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     print_l(f'-- {task_id} - {task_i} start --') if DO_PRINT else None
 
     all_o, o_score, s_score = await check_batt(total_data,
-            task_i, task_id, d_score, start_time, pile_log_path, timeout=0.4, prof=prof)
+            task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=prof)
 
     print_l(f'-- {task_id} - {task_i} scored --') if DO_PRINT else None
 
