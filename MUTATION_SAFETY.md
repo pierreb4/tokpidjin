@@ -51,50 +51,28 @@ except (TypeError, AttributeError, ValueError):
 
 ### Type-Aware Fallback System
 
-The `_safe_default()` helper inspects function type hints and returns appropriate defaults:
+The `_get_safe_default()` helper (from `safe_dsl.py`) inspects function type hints and returns appropriate defaults:
 
 | Return Type | Default Value | Example Functions |
 |-------------|---------------|-------------------|
 | FrozenSet types | `frozenset()` | `objects`, `o_g`, `indices` |
-| Tuple types | `()` | `identity`, `shape_t`, `IJ` |
+| Tuple types | `()` | `shape_t`, `IJ` |
 | Integer types | `0` | `size`, `count_colors`, `width` |
 | Boolean types | `False` | Boolean operations |
 | Callable types | `lambda: ()` | `rbind`, `lbind` |
-| Unknown | `()` | Fallback for any type |
+| Any/Unknown | `()` | `identity`, fallback for any type |
 
 ### Implementation in Generated Files
 
-**Helper function added to file header:**
+**Helper imported from safe_dsl.py:**
 
 ```python
-from typing import get_type_hints
-
-def _safe_default(func):
-    """Get type-appropriate default for failed operations"""
-    try:
-        hints = get_type_hints(func)
-        return_type = str(hints.get('return', ''))
-        
-        # FrozenSet-based types
-        if any(t in return_type for t in ['FrozenSet', 'Object', 'Objects', 'Indices']):
-            return frozenset()
-        # Tuple-based types
-        elif any(t in return_type for t in ['Tuple', 'Grid', 'IJ']):
-            return ()
-        # Numeric types
-        elif any(t in return_type for t in ['Integer', 'Numerical', 'int']):
-            return 0
-        # Boolean types
-        elif any(t in return_type for t in ['Boolean', 'bool']):
-            return False
-        # Callable types
-        elif 'Callable' in return_type:
-            return lambda *a, **k: ()
-        else:
-            return ()
-    except:
-        return ()
+from safe_dsl import _get_safe_default
 ```
+
+This reuses the existing type-aware default logic from `safe_dsl.py`, ensuring consistency between:
+- `@safe_dsl` decorator (protects DSL function internals)
+- Try-except wrappers (protects function calls in generated code)
 
 ### Implementation in `card.py`
 
@@ -201,13 +179,15 @@ This works **in combination** with `@safe_dsl` decorator:
 | `@safe_dsl` | Exceptions **inside** DSL functions | Type-appropriate via `_get_safe_default()` | `objects(invalid)` → `frozenset()` |
 | `try-except` | Exceptions from **calling** functions | Type-appropriate via `_safe_default()` | `rbind(wrong_sig)` → `lambda: ()` |
 
-**Both use the same type-inspection logic** for consistency:
-- `@safe_dsl` uses `_get_safe_default(func)` in `safe_dsl.py`
-- Generated code uses `_safe_default(func)` (same logic, duplicated for independence)
+**Both use the same `_get_safe_default()` function** for consistency:
+- `@safe_dsl` uses `_get_safe_default(func)` in decorator wrapper
+- Generated code imports and uses `_get_safe_default(func)` in try-except
+
+No code duplication - single source of truth in `safe_dsl.py`.
 
 Together they provide **two layers of safety**:
-1. DSL function crashes → type-aware safe default (from decorator)
-2. Bad function calls → type-aware safe default (from try-except)
+1. DSL function crashes → type-aware safe default (from `@safe_dsl` decorator)
+2. Bad function calls → type-aware safe default (from try-except wrapper)
 
 **Example showing both layers:**
 ```python
@@ -215,12 +195,14 @@ Together they provide **two layers of safety**:
 try:
     t1 = objects(wrong, signature, here)  # TypeError caught by try-except
 except (TypeError, AttributeError, ValueError):
-    t1 = _safe_default(objects)  # → frozenset()
+    t1 = _get_safe_default(objects)  # → frozenset()
 
 # Layer 1 catches internal error (if call signature was correct)
 t2 = objects(malformed_grid)  # @safe_dsl catches error inside objects()
-                              # Returns frozenset() automatically
+                              # Returns frozenset() automatically (via _get_safe_default)
 ```
+
+Both layers call the same `_get_safe_default()` function from `safe_dsl.py`.
 
 ## Testing
 
@@ -244,25 +226,27 @@ All will fall back to `()` instead of crashing.
 ## Status
 
 - **Implemented**: 2025-10-12
-- **Enhanced**: 2025-10-12 (added type-aware defaults)
+- **Enhanced**: 2025-10-12 (added type-aware defaults using `_get_safe_default`)
 - **Files modified**: 
-  - `card.py` lines 217-230 (`file_pile` method)
-  - `card.py` lines 638-672 (generated file header with `_safe_default`)
+  - `card.py` lines 217-230 (`file_pile` method) - generates try-except with `_get_safe_default()`
+  - `card.py` lines 638-645 (generated file header) - imports `_get_safe_default` from `safe_dsl.py`
+  - `safe_dsl.py` lines 66-120 (`_get_safe_default` function) - returns `()` for `Any` and unknown types
 - **Tested**: 
   - ✅ Handles wrong signatures, type errors, attribute errors
   - ✅ Type-aware defaults validated (`test_safe_default.py`)
-  - ✅ FrozenSet → `frozenset()`, Tuple → `()`, Integer → `0`, Boolean → `False`
+  - ✅ FrozenSet → `frozenset()`, Tuple → `()`, Integer → `0`, Boolean → `False`, Any → `()`
+  - ✅ No code duplication - single function in `safe_dsl.py`
 - **Production ready**: ✅ Generate new batch files to activate
 
 ## Benefits
 
 ✅ **Never crashes**: Bad mutations return type-appropriate defaults  
 ✅ **Better type propagation**: FrozenSet ops get frozenset, Integer ops get 0  
-✅ **Evolution continues**: Solver can complete even with failed steps  
-✅ **Preserves valid code**: No overhead for correct operations  
-✅ **Complements `@safe_dsl`**: Two layers of protection with same logic  
-✅ **Simple**: 4-line wrapper + helper function, no complex runtime checks  
-✅ **Consistent**: Both layers use same type-inspection approach
+✅ **Reduced downstream errors**: Correct types prevent cascading failures  
+✅ **Semantic correctness**: `size()` returning `0` vs `()` is more meaningful  
+✅ **Consistency**: Both layers use **same function** (`_get_safe_default`)  
+✅ **No duplication**: Single source of truth in `safe_dsl.py`  
+✅ **Simple**: 4-line wrapper + import, no complex runtime checks
 
 ## Related
 
