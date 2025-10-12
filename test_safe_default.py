@@ -1,59 +1,32 @@
 #!/usr/bin/env python3
-"""Test the _safe_default helper function generation"""
+"""Test the _get_safe_default helper function from safe_dsl.py"""
 
 from pile import *
-from typing import get_type_hints
-
-
-def _safe_default(func):
-    """Get type-appropriate default for failed operations"""
-    try:
-        hints = get_type_hints(func)
-        return_type = str(hints.get('return', ''))
-        
-        # FrozenSet-based types
-        if any(t in return_type for t in ['FrozenSet', 'Object', 'Objects', 'Indices', 'IndicesSet', 'IntegerSet', 'Patch']):
-            return frozenset()
-        # Tuple-based types
-        elif any(t in return_type for t in ['Tuple', 'Grid', 'IJ', 'Samples', 'TupleTuple', 'Container', 'Cell']):
-            return ()
-        # Numeric types
-        elif any(t in return_type for t in ['Integer', 'Numerical', 'int']):
-            return 0
-        # Boolean types
-        elif any(t in return_type for t in ['Boolean', 'bool']):
-            return False
-        # Callable types
-        elif 'Callable' in return_type:
-            return lambda *a, **k: ()
-        else:
-            return ()
-    except:
-        return ()
+from safe_dsl import _get_safe_default
 
 
 # Test cases
 if __name__ == "__main__":
-    print("Testing _safe_default with DSL functions:")
+    print("Testing _get_safe_default from safe_dsl.py:")
     
     # Test FrozenSet return types
-    result = _safe_default(objects)
+    result = _get_safe_default(objects)
     print(f"objects -> {result!r} (expected: frozenset())")
     assert result == frozenset(), f"Expected frozenset(), got {result!r}"
     
     # Test Tuple return types
-    result = _safe_default(identity)
+    result = _get_safe_default(identity)
     print(f"identity -> {result!r} (expected: ())")
     assert result == (), f"Expected (), got {result!r}"
     
     # Test Integer return types
-    result = _safe_default(size)
+    result = _get_safe_default(size)
     print(f"size -> {result!r} (expected: 0)")
     assert result == 0, f"Expected 0, got {result!r}"
     
     # Test Callable return types
-    result = _safe_default(rbind)
-    print(f"rbind -> {result!r} (expected: lambda)")
+    result = _get_safe_default(rbind)
+    print(f"rbind -> {result!r} (expected: callable)")
     assert callable(result), f"Expected callable, got {result!r}"
     
     # Test that it works in exception handlers
@@ -63,7 +36,7 @@ if __name__ == "__main__":
     try:
         result = objects("invalid", "args")  # Wrong signature
     except (TypeError, AttributeError, ValueError):
-        result = _safe_default(objects)
+        result = _get_safe_default(objects)
     print(f"objects with bad args -> {result!r} (expected: frozenset())")
     assert result == frozenset()
     
@@ -71,8 +44,10 @@ if __name__ == "__main__":
     try:
         result = size("not", "enough", "args")  # Wrong signature
     except (TypeError, AttributeError, ValueError):
-        result = _safe_default(size)
+        result = _get_safe_default(size)
     print(f"size with bad args -> {result!r} (expected: 0)")
     assert result == 0
     
     print("\n✅ All tests passed!")
+    print("✅ Using _get_safe_default from safe_dsl.py (no duplication)")
+

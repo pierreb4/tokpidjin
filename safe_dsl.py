@@ -71,14 +71,14 @@ def _get_safe_default(func: Callable) -> Any:
         func: Function to get default for
         
     Returns:
-        Safe default value (frozenset(), tuple(), 0, False, None, etc.)
+        Safe default value (frozenset(), tuple(), 0, False, etc.)
     """
     try:
         hints = get_type_hints(func)
         return_type = hints.get('return', None)
         
         if return_type is None:
-            return None
+            return ()
         
         # Convert type to string for easier matching
         type_str = str(return_type)
@@ -113,13 +113,13 @@ def _get_safe_default(func: Callable) -> Any:
                 return ()
             return safe_callable
         
-        # Default
+        # Default for Any or unknown types
         else:
-            return None
+            return ()
             
     except Exception:
-        # If type inspection fails, return None
-        return None
+        # If type inspection fails, return empty tuple
+        return ()
 
 
 def make_all_dsl_safe(module):
