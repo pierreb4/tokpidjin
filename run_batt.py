@@ -442,7 +442,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     # Uses call_with_timeout (pure threading) instead of asyncio.gather
     prof_start = timer() if prof is not None else None
     
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=15) as executor:
         # Prepare arguments for each demo sample
         demo_args = [
             (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
