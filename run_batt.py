@@ -628,20 +628,44 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # Filter out failures
     inlined_data = [d for d in inlined_data if d is not None]
     
-    # Phase 3: Process each candidate with inlined results
     if prof is not None:
         prof['run_batt.phase2_inline_batch'] = timer() - phase2_start
     
-    # Phase 3: Process each candidate with inlined results
+    # Phase 3a: Batch validate all solvers in parallel
     if prof is not None:
-        phase3_start = timer()
+        phase3a_start = timer()
     
-    for data in inlined_data:
+    async def check_one_solver(data):
+        """Validate a single solver and return timing info"""
+        solver_source = data['solver_source']
+        sol_solver_id = data['sol_solver_id']
+        check_start = timer()
+        timed_out = await check_solver_speed(total_data, solver_source, task_id, sol_solver_id, timeout)
+        check_time = timer() - check_start
+        t_log = 11 - int(math.log(check_time)) if check_time > 0 else 10
+        return {**data, 'timed_out': timed_out, 't_log': t_log, 'check_time': check_time}
+    
+    # Validate all solvers in parallel using asyncio.gather
+    import asyncio
+    validated_data = await asyncio.gather(*[check_one_solver(d) for d in inlined_data])
+    
+    if prof is not None:
+        phase3a_time = timer() - phase3a_start
+        prof['run_batt.phase3a_validate_batch'] = phase3a_time
+        prof['run_batt.check_solver_speed'] = sum(d['check_time'] for d in validated_data)
+        print_l(f'-- Phase 3a: Validated {len(validated_data)} solvers in {phase3a_time:.3f}s (parallelized)')
+    
+    # Phase 3b: Process validated results (file I/O, symlinks)
+    if prof is not None:
+        phase3b_start = timer()
+    
+    for data in validated_data:
         sol_t = data['sol_t']
         sol_solver_id = data['sol_solver_id']
         solver_source = data['solver_source']
         inlined_source = data['inlined_source']
         md5_hash = data['md5_hash']
+        t_log = data['t_log']
 
         # Prepare storage folder
         ensure_dir('solver_dir')
@@ -656,13 +680,6 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
 
         ensure_dir('solver_md5')
         solver_md5_path = f'solver_md5/{md5_hash}.py'
-
-        check_start = timer()
-        timed_out = await check_solver_speed(total_data, solver_source, task_id, sol_solver_id, timeout)
-        check_time = timer() - check_start
-        t_log = 11 - int(math.log(check_time))
-        if prof is not None:
-            prof['run_batt.check_solver_speed'] += check_time
 
         # Expand to .py file (only if doesn't exist)
         expand_start = timer()
@@ -679,12 +696,20 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
 
         symlink(solver_md5_path, solver_link)
 
-        # Phase 4: Batch process differs
-        if prof is not None:
-            phase4_start = timer()
-        
-        # Collect all differ data first
-        differ_data_list = []
+        # Collect differ data for this solver (will batch process all differs later)
+        # Phase 4 moved outside the loop
+    
+    if prof is not None:
+        prof['run_batt.phase3b_file_ops'] = timer() - phase3b_start
+    
+    # Phase 4: Batch process differs for all solvers
+    if prof is not None:
+        phase4_start = timer()
+    
+    # Collect all differ data first
+    differ_data_list = []
+    for data in validated_data:
+        sol_solver_id = data['sol_solver_id']
         for name, last_t in d_score.last_t.items():
             done_differ = track_solution(last_t, None)
             
@@ -703,64 +728,62 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 'differ_source': differ_source,
                 'sol_solver_id': sol_solver_id
             })
-        
-        # Batch inline differs
-        def inline_differ(data):
-            try:
-                inlined = inline_variables(data['differ_source'])
-                md5 = hashlib.md5(inlined.encode()).hexdigest()
-                return {**data, 'inlined_source': inlined, 'md5_hash': md5}
-            except Exception as e:
-                print_l(f"Error inlining differ: {e}")
-                return None
-        
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            inlined_differs = list(executor.map(inline_differ, differ_data_list))
-        
-        inlined_differs = [d for d in inlined_differs if d is not None]
-        
-        if prof is not None:
-            prof['run_batt.phase4_differs'] = timer() - phase4_start
-        
-        # Process inlined differs
-        for differ_data in inlined_differs:
-            name = differ_data['name']
-            inlined_source = differ_data['inlined_source']
-            md5_hash = differ_data['md5_hash']
-            
-            ensure_dir('differ_dir')
-            ensure_dir('differ_md5')
-            differ_md5_path = f'differ_md5/{md5_hash}.py'
-            
-            if not Path(differ_md5_path).exists():
-                generate_expanded_content(inlined_source, differ_md5_path)
-
-            for score_type in ['iz', 'zo']:
-                # Differs aren't always scored
-                if name not in s_score:
-                    continue
-
-                task_s_score = s_score[name][score_type].get(sol_solver_id)
-
-                differ_task = f'differ_dir/{score_type}/solve_{task_id}'
-                if check_save(differ_task, task_s_score, max_files):
-                    # print_l(f'Skip saving differ {name} as worse than existing ones')
-                    continue
-
-
-                # if task_s_score == 0:
-                #     continue
-
-                # differ_score = f'differ_dir/solve_{task_id}/{score_type}/{task_s_score}/{t_log}'
-                # differ_link = f'{differ_score}/{solver_md5}/{md5_hash}.py'
-                # ensure_dir(f'{differ_score}/{solver_md5}')
-                differ_score = f'differ_dir/{score_type}/solve_{task_id}/{task_s_score}/{t_log}'
-                ensure_dir(differ_score)
-                differ_link = f'{differ_score}/{md5_hash}.py'
-                symlink(differ_md5_path, differ_link)
+    
+    # Batch inline differs
+    def inline_differ(data):
+        try:
+            inlined = inline_variables(data['differ_source'])
+            md5 = hashlib.md5(inlined.encode()).hexdigest()
+            return {**data, 'inlined_source': inlined, 'md5_hash': md5}
+        except Exception as e:
+            print_l(f"Error inlining differ: {e}")
+            return None
+    
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        inlined_differs = list(executor.map(inline_differ, differ_data_list))
+    
+    inlined_differs = [d for d in inlined_differs if d is not None]
     
     if prof is not None:
-        prof['run_batt.phase3_process'] = timer() - phase3_start
+        prof['run_batt.phase4_differs'] = timer() - phase4_start
+    
+    # Process inlined differs
+    for differ_data in inlined_differs:
+        name = differ_data['name']
+        inlined_source = differ_data['inlined_source']
+        md5_hash = differ_data['md5_hash']
+        sol_solver_id = differ_data['sol_solver_id']
+        
+        ensure_dir('differ_dir')
+        ensure_dir('differ_md5')
+        differ_md5_path = f'differ_md5/{md5_hash}.py'
+        
+        if not Path(differ_md5_path).exists():
+            generate_expanded_content(inlined_source, differ_md5_path)
+
+        for score_type in ['iz', 'zo']:
+            # Differs aren't always scored
+            if name not in s_score:
+                continue
+
+            task_s_score = s_score[name][score_type].get(sol_solver_id)
+
+            differ_task = f'differ_dir/{score_type}/solve_{task_id}'
+            if check_save(differ_task, task_s_score, max_files):
+                continue
+
+            # Use t_log from the corresponding solver
+            # Find the matching validated_data entry
+            t_log = 10  # default
+            for vdata in validated_data:
+                if vdata['sol_solver_id'] == sol_solver_id:
+                    t_log = vdata['t_log']
+                    break
+            
+            differ_score = f'differ_dir/{score_type}/solve_{task_id}/{task_s_score}/{t_log}'
+            ensure_dir(differ_score)
+            differ_link = f'{differ_score}/{md5_hash}.py'
+            symlink(differ_md5_path, differ_link)
 
     # No timeout
     return False, d_score
