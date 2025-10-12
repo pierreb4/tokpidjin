@@ -3722,3 +3722,9 @@ def upscale_f(
             o.add((i * factor + io, j * factor + jo, c))
     return shift(frozenset(o), (di_inv, dj_inv))
 
+
+# Make all DSL functions exception-safe
+import sys
+from safe_dsl import make_all_dsl_safe
+make_all_dsl_safe(sys.modules[__name__])
+

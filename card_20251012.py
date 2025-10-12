@@ -59,13 +59,14 @@ def replace_random(value, input_list):
 
 
 class Code:
-    def __init__(self, file, task_id=None, S=None, t_call=None, 
+    def __init__(self, file, task_id=None, S=None, t_call=None, t_isok=None, 
             t_number=None, t_num=0, score=0):
         self.file = file
         self.task_id = task_id
         self.S = S
 
         self.t_call = t_call if t_call is not None else {}
+        self.t_isok = t_isok if t_isok is not None else {}
         self.t_number = t_number if t_number is not None else {}
 
         # List t_nums available for differ or solver mutation
@@ -109,20 +110,50 @@ class Code:
     def substitute_color_izzo(self, arg_i, arg_o, f_n):
         self.score -= 1
         t_call = self.t_call
+        t_isok = self.t_isok
         t_num = self.t_num
 
-        t_call[t_num + 0] = 'apply(first, S)'
-        t_call[t_num + 1] = 'apply(second, S)'
-        t_call[t_num + 2] = f'mapply(p_g, t{t_num + 0})'
-        t_call[t_num + 3] = f'mapply(p_g, t{t_num + 1})'
-        t_call[t_num + 4] = f'dedupe(t{t_num + 2})'
-        t_call[t_num + 5] = f'dedupe(t{t_num + 3})'
-        t_call[t_num + 6] = f'difference_tuple(t{t_num + arg_i}, t{t_num + arg_o})'
-        t_call[t_num + 7] = f'get_nth_t(t{t_num + 6}, {f_n})'
+        t_call[t_num + 0] = 'apply, first, S'
+        t_isok[t_num + 0] = 'True'
+        t_call[t_num + 1] = 'apply, second, S'
+        t_isok[t_num + 1] = 'True'
+        t_call[t_num + 2] = f'mapply, p_g, t{t_num + 0}.t'
+        t_isok[t_num + 2] = f't{t_num + 0}.ok'
+        t_call[t_num + 3] = f'mapply, p_g, t{t_num + 1}.t'
+        t_isok[t_num + 3] = f't{t_num + 1}.ok'
+        t_call[t_num + 4] = f'dedupe, t{t_num + 2}.t'
+        t_isok[t_num + 4] = f't{t_num + 2}.ok'
+        t_call[t_num + 5] = f'dedupe, t{t_num + 3}.t'
+        t_isok[t_num + 5] = f't{t_num + 3}.ok'
+        t_call[t_num + 6] = f'difference_tuple, t{t_num + arg_i}.t, t{t_num + arg_o}.t'
+        t_isok[t_num + 6] = f't{t_num + arg_i}.ok and t{t_num + arg_o}.ok'
+        t_call[t_num + 7] = f'get_nth_t, t{t_num + 6}.t, {f_n}'
+        t_isok[t_num + 7] = f't{t_num + 6}.ok'
         self.t_num += 8
         for t in range(8):
-            print( f'    t{t_num + t} = {t_call[t_num + t]}', file=self.file, )
+            print(
+                f'    t{t_num + t} = env.do_pile({t_num + t}, [{t_call[t_num + t]}], {t_isok[t_num + t]}) # {self.task_id} - True',
+                file=self.file,
+            )
         return f't{t_num + 7}'
+
+
+    def old_substitute_color_izzo(self, c_izzo_n, f_n):
+        # Change the score at substitution time
+        self.score -= 1
+        t_call = self.t_call
+        t_num = self.t_num
+
+        t_call[t_num + 0] = 'identity, S'
+        t_call[t_num + 1] = 'identity, p_g'
+        t_call[t_num + 2] = f'rbind, get_nth_t, {f_n}'
+        t_call[t_num + 3] = f'identity, t{t_num + 2}'
+        t_call[t_num + 4] = f'{c_izzo_n}, t{t_num + 0}, t{t_num + 1}, t{t_num + 3}'
+        self.t_num += 5
+
+        for t in range(5):
+            print(f'    t{t_num + t} = env.do_pile({t_num + t}, [{t_call[t_num + t]}]) # {self.task_id} - True', file=self.file)
+        return f't{t_num + 4}'
 
 
     def substitute_rank(self, arg, constant_dict):
@@ -163,14 +194,17 @@ class Code:
         # Change the score at substitution time
         self.score -= 1
         t_call = self.t_call
+        t_isok = self.t_isok
         t_num = self.t_num
 
-        t_call[t_num + 0] = 'identity(S)'
-        t_call[t_num + 1] = f'a_mr(t{t_num + 0})'
+        t_call[t_num + 0] = 'identity, S'
+        t_isok[t_num + 0] = 'True'
+        t_call[t_num + 1] = f'a_mr, t{t_num + 0}.t'
+        t_isok[t_num + 1] = f't{t_num + 0}.ok'
         self.t_num += 2
 
-        print(f'    t{t_num + 0} = {t_call[t_num + 0]}', file=self.file)
-        print(f'    t{t_num + 1} = {t_call[t_num + 1]}', file=self.file)
+        print(f'    t{t_num + 0} = env.do_pile({t_num + 0}, [{t_call[t_num + 0]}], {t_isok[t_num + 0]}) # {self.task_id} - True', file=self.file)
+        print(f'    t{t_num + 1} = env.do_pile({t_num + 1}, [{t_call[t_num + 1]}], {t_isok[t_num + 1]}) # {self.task_id} - True', file=self.file)
         return f't{t_num + 1}'
 
 
@@ -189,6 +223,7 @@ class Code:
         print(f'    # t{self.t_num} - {differ = } - {solver = } - {old_items = } - {old_hints = }', file=self.file)
 
         has_mutation = Mutation(False, None, None)
+        # if old_args := re.findall(r'\b(\w+)\b', old_call):
         old_args = re.findall(r'\b(\w+)\b', old_call)
 
         # TODO Track t variables to get to hints
@@ -201,6 +236,10 @@ class Code:
                     if not freeze:
                         t_n = int(old_arg[1:])
                         has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
+                    if self.t_num not in self.t_isok:
+                        self.t_isok[self.t_num] = f'{old_arg}.ok'
+                    else:
+                        self.t_isok[self.t_num] += f' and {old_arg}.ok'
                 elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
         else:
@@ -211,18 +250,29 @@ class Code:
                     if not freeze:
                         t_n = int(old_arg[1:])
                         has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
+                    if self.t_num not in self.t_isok:
+                        self.t_isok[self.t_num] =  f'{old_arg}.ok'
+                    else:
+                        self.t_isok[self.t_num] += f' and {old_arg}.ok'
                 elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
 
         return self.file_pile(has_mutation)
 
+        # assert False, f'No args found in {old_call}'
+        # return self.file_pile(has_mutation)
+
 
     def file_pile(self, has_mutation):
         t_call = self.t_call[self.t_num]
         call_list = [c.strip() for c in t_call.split(',')]
-        call_string = f'{call_list[0]}(' + ', '.join(call_list[1:]) + ')'
+        call = [f'{c}.t' if re.match(r't\d+', c) else c for c in call_list]
+        call_string = ', '.join(call)
 
-        print(f'    t{self.t_num} = {call_string}', file=self.file)
+        if self.t_num not in self.t_isok:
+            self.t_isok[self.t_num] = 'True'
+        isok = self.t_isok[self.t_num]
+        print(f'    t{self.t_num} = env.do_pile({self.t_num}, [{call_string}], {isok}) # {self.task_id} - [{has_mutation.old}]', file=self.file)
         return has_mutation
 
 
@@ -641,7 +691,8 @@ from gpu_env import GPUEnv as Env
 
 def batt(task_id, S, I, C, log_path):
     s = []
-    o = []""", file=batt_file)
+    o = []
+    env = Env({seed}, task_id, S, log_path)""", file=batt_file)
 
         code = Code(batt_file)
         uses = {}
