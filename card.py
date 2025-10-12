@@ -162,7 +162,7 @@ class Code:
 
         return (
             replace_random(arg, list(constant_dict.keys()))
-            if random.random() < BUDGET_RANDOM:
+            if random.random() < BUDGET_RANDOM
             else arg
         )
 
