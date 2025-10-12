@@ -14,11 +14,8 @@ from dsl import *
 import dsl
 
 ALL_DSL_FUNCTIONS = inspect.getmembers(dsl, inspect.isfunction)
-GPU_FUNCTIONS = {
-    'grid_to_gpu', 'batch_grid_operations'
-}
 DSL_FUNCTIONS = [ (name, func) for name, func in ALL_DSL_FUNCTIONS \
-        if name not in GPU_FUNCTIONS and not name.startswith('_') ]
+        if not name.startswith('_') ]
 DSL_FUNCTION_NAMES = [name for name, func in DSL_FUNCTIONS]
 DSL_FUNCTION_DICT = dict(DSL_FUNCTIONS)
 
@@ -222,6 +219,10 @@ class Code:
         call_list = [c.strip() for c in t_call.split(',')]
         call_string = f'{call_list[0]}(' + ', '.join(call_list[1:]) + ')'
 
+        if call_list[0] not in DSL_FUNCTION_DICT:
+            # call_string = f'identity({call_list[1]})'
+            call_string = 'astuple(' + ', '.join(call_list[1:]) + ')'
+    
         print(f'    t{self.t_num} = {call_string}', file=self.file)
         return has_mutation
 

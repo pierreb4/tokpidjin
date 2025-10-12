@@ -355,10 +355,12 @@ class D_Score:
                 'zo': 0    
             }
         
-        if not return_tuple.ok or type(return_tuple.t) != tuple or type(return_tuple.t[0]) != int:
+        # if not return_tuple.ok or type(return_tuple.t) != tuple or type(return_tuple.t[0]) != int:
+        if not type(return_tuple) != tuple or type(return_tuple[0]) != int:
             return
 
-        size = return_tuple.t[0]
+        # size = return_tuple.t[0]
+        size = return_tuple[0]
 
         # Score for iz differ
         if s_solver_id == 'None':
@@ -409,11 +411,12 @@ async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_
 
             all_o = all_o.union(o['demo'][i])
             for t_n, evo, o_solver_id, okt in o['demo'][i]:
-                if not okt.ok:
-                    continue
+                # if not okt.ok:
+                #     continue
 
                 # Compare candidate C with expected output O
-                C = okt.t
+                # C = okt.t
+                C = okt
                 if match := C == O:
                     print_l(f'- {o_solver_id = } - {match = }')
                 o_score.update(o_solver_id, match)
@@ -458,11 +461,12 @@ async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_
 
             all_o = all_o.union(o['test'][i])
             for t_n, evo, o_solver_id, okt in o['test'][i]:
-                if not okt.ok:
-                    continue
+                # if not okt.ok:
+                #     continue
 
                 # Compare candidate C with expected output O
-                C = okt.t
+                # C = okt.t
+                C = okt
                 if match := C == O:
                     print_l(f'- {o_solver_id = } - {match = }')
                 o_score.update(o_solver_id, match)
