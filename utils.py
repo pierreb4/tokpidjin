@@ -108,10 +108,11 @@ def call_with_timeout(func, args, timeout=5):
     Call a function with a timeout using threads (no asyncio).
     
     This is a pure threading approach that doesn't interfere with ThreadPoolExecutor
-    or asyncio event loops. Each timeout runs in its own non-daemon thread.
+    or asyncio event loops. Each timeout runs in its own daemon thread.
     
-    NON-DAEMON: Threads are non-daemon so MemoryError and other critical exceptions
-    crash immediately instead of being silently ignored. This prevents blocked execution.
+    DAEMON + EXCEPTION RE-RAISING: Threads are daemon (clean exit) but critical
+    exceptions (MemoryError, SystemError) are re-raised in the main thread to
+    crash immediately instead of being silently ignored.
     
     Args:
         func: Function to call
@@ -121,7 +122,8 @@ def call_with_timeout(func, args, timeout=5):
     Returns:
         (timed_out: bool, result: Any)
         - (False, result) if function completed successfully
-        - (True, None) if function timed out or raised an exception
+        - (True, None) if function timed out
+        - Raises exception if critical error occurred
     """
     result_queue = Queue()
     exception_queue = Queue()
@@ -134,7 +136,7 @@ def call_with_timeout(func, args, timeout=5):
             exception_queue.put(e)
     
     thread = threading.Thread(target=worker)
-    thread.daemon = False  # Non-daemon: Let critical exceptions crash immediately
+    thread.daemon = True  # Daemon: Allow clean Python exit
     thread.start()
     thread.join(timeout=timeout)
     
@@ -145,8 +147,12 @@ def call_with_timeout(func, args, timeout=5):
     # Check for exceptions
     try:
         exception = exception_queue.get_nowait()
-        # Could log exception here if needed for debugging
-        return True, None  # Treat exceptions as timeouts
+        # Re-raise critical exceptions immediately
+        if isinstance(exception, (MemoryError, SystemError, KeyboardInterrupt)):
+            raise exception
+        # Log other exceptions if needed for debugging
+        # print(f"Exception in timeout thread: {type(exception).__name__}: {exception}")
+        return True, None  # Treat non-critical exceptions as timeouts
     except Empty:
         pass
     
