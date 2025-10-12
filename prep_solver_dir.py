@@ -17,6 +17,9 @@ async def main():
 
     solvers = get_solvers([solvers_pre], best_only=True)
 
+    ensure_dir('solver_dir')
+    ensure_dir('solver_md5')
+
     # Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 't_score'])
     for task_id, solver in solvers.items():
 
@@ -35,8 +38,6 @@ async def main():
         solver_source = f'def solve(S, I, C):\n{solver_body}'
         inlined_source = inline_variables(solver_source)
         md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-
-        ensure_dir('solver_md5')
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
         if not Path(solver_md5_path).exists():
