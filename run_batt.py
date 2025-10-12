@@ -741,7 +741,12 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             return None
     
     # Use thread pool for parallel inlining
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    # CPU-only fix: Use shared executor to avoid thread exhaustion
+    if GPU_AVAILABLE:
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            inlined_data = list(executor.map(inline_one, candidate_data))
+    else:
+        executor = get_low_level_executor()
         inlined_data = list(executor.map(inline_one, candidate_data))
     
     # Filter out failures
@@ -916,7 +921,12 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             print_l(f"Error inlining differ: {e}")
             return None
     
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    # CPU-only fix: Use shared executor to avoid thread exhaustion
+    if GPU_AVAILABLE:
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            inlined_differs = list(executor.map(inline_differ, differ_data_list))
+    else:
+        executor = get_low_level_executor()
         inlined_differs = list(executor.map(inline_differ, differ_data_list))
     
     inlined_differs = [d for d in inlined_differs if d is not None]
