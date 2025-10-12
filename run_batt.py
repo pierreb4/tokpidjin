@@ -391,6 +391,8 @@ def score_demo_sample(args):
     
     demo_o = []
     demo_s = []
+    diff_call_count = 0
+    match_count = 0
     
     if solve_result is not None:
         demo_o, _ = solve_result
@@ -402,22 +404,30 @@ def score_demo_sample(args):
         for t_n, evo, o_solver_id, okt in demo_o:
             C = okt
             match = C == O
-            if match and DO_PRINT:
-                print_l(f'- {o_solver_id = } - {match = }')
+            if match:
+                match_count += 1
+                if DO_PRINT:
+                    print_l(f'- {o_solver_id = } - {match = }')
             
-            # Run diff to get solver-level scores
-            diff_timed_out, diff_result = call_with_timeout(batt,
-                [task_id, S, I, O, pile_log_path], timeout)
-            
-            if diff_result is not None:
-                _, demo_s_result = diff_result
-                demo_s.extend(demo_s_result)
+            # OPTIMIZATION: Only run diff for MATCHING outputs
+            # Non-matching outputs don't contribute useful solver scores
+            if match:
+                diff_call_count += 1
+                # Run diff to get solver-level scores
+                diff_timed_out, diff_result = call_with_timeout(batt,
+                    [task_id, S, I, O, pile_log_path], timeout)
+                
+                if diff_result is not None:
+                    _, demo_s_result = diff_result
+                    demo_s.extend(demo_s_result)
     
     return {
         'index': i,
         'outputs': demo_o,
         'solver_scores': demo_s,
-        'timed_out': solve_timed_out
+        'timed_out': solve_timed_out,
+        'diff_calls': diff_call_count,
+        'matches': match_count
     }
 
 
@@ -474,6 +484,12 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     if prof is not None:
         prof['batt.demo.parallel'] = timer() - prof_start
+        # Track optimization metrics
+        total_diff_calls = sum(r.get('diff_calls', 0) for r in demo_results if r is not None)
+        total_matches = sum(r.get('matches', 0) for r in demo_results if r is not None)
+        total_outputs = sum(len(r.get('outputs', [])) for r in demo_results if r is not None)
+        if DO_PRINT:
+            print_l(f"-- Demo scoring: {total_outputs} outputs, {total_matches} matches, {total_diff_calls} diff calls (skipped {total_outputs - total_diff_calls})")
     
     # Aggregate demo results
     for result in demo_results:
