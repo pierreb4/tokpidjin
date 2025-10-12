@@ -356,7 +356,7 @@ class D_Score:
             }
         
         # if not return_tuple.ok or type(return_tuple.t) != tuple or type(return_tuple.t[0]) != int:
-        if not type(return_tuple) != tuple or type(return_tuple[0]) != int:
+        if type(return_tuple) != tuple or type(return_tuple[0]) != int:
             return
 
         # size = return_tuple.t[0]
