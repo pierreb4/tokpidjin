@@ -50,7 +50,7 @@ if [ -z "$COUNT" ]; then
 fi
 
 if [ -z "$TIMEOUT" ]; then
-  TIMEOUT=1.0
+  TIMEOUT=0.1
 fi
 
 if command -v nvidia-smi &> /dev/null; then
