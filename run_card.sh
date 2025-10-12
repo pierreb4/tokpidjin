@@ -56,7 +56,7 @@ fi
 if command -v nvidia-smi &> /dev/null; then
     echo "Testing GPU acceleration..."
     python -c "
-from dsl import GPU_AVAILABLE, grid_to_gpu
+from dsl import GPU_AVAILABLE, _grid_to_gpu
 from run_batt import configure_gpu_memory
 print(f'GPU Available: {GPU_AVAILABLE}')
 if GPU_AVAILABLE:
