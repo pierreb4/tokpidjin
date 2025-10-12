@@ -38,7 +38,7 @@ if [ -n "$INITIAL" ]; then
   mkdir solver_dir solver_md5 solver_def
   rm -rf differ_dir differ_md5 differ_def
   mkdir differ_dir differ_md5 differ_def
-  rm main.log
+  rm -f main.log  # Added -f flag to ignore if file doesn't exist
   # Gets unset for ONERUN
   # CARD_OPTION="-fs -fd"
   CARD_OPTION="-fd"

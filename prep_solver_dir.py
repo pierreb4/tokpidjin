@@ -53,4 +53,14 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    # Use try/except to handle asyncio issues in different environments
+    try:
+        asyncio.run(main())
+    except RuntimeError:
+        # Fallback for environments where asyncio.run() has issues
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            loop.run_until_complete(main())
+        finally:
+            loop.close()
