@@ -453,24 +453,57 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     # Uses call_with_timeout (pure threading) instead of asyncio.gather
     prof_start = timer() if prof is not None else None
     
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        # Prepare arguments for each demo sample
-        demo_args = [
-            (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
-            for i, sample in enumerate(demo_task)
-        ]
-        
-        # Submit all demo samples for parallel execution
+    # CPU-only fix: Use shared global executor to avoid thread exhaustion
+    # GPU environments can handle more concurrent threads, but CPU-only environments
+    # exhaust system threads when many tasks run concurrently via asyncio.gather
+    if GPU_AVAILABLE:
+        # GPU: Use dedicated ThreadPoolExecutor (original behavior)
+        executor_context = ThreadPoolExecutor(max_workers=5)
+        use_context_manager = True
+    else:
+        # CPU-only: Use shared global executor to prevent thread exhaustion
+        executor_context = get_high_level_executor()
+        use_context_manager = False
+    
+    # Prepare arguments for each demo sample
+    demo_args = [
+        (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
+        for i, sample in enumerate(demo_task)
+    ]
+    
+    if use_context_manager:
+        # GPU path: use context manager for cleanup
+        with executor_context as executor:
+            # Submit all demo samples for parallel execution
+            demo_futures = {executor.submit(score_demo_sample, args): args[0] 
+                           for args in demo_args}
+            
+            # Collect results as they complete
+            demo_results = [None] * len(demo_task)
+            for future in as_completed(demo_futures):
+                try:
+                    result = future.result(timeout=None)
+                    demo_results[result['index']] = result
+                except Exception as e:
+                    sample_idx = demo_futures[future]
+                    if DO_PRINT:
+                        print_l(f"-- {task_id} - demo[{sample_idx}] failed: {e}")
+                    demo_results[sample_idx] = {
+                        'index': sample_idx,
+                        'outputs': [],
+                        'solver_scores': [],
+                        'timed_out': True
+                    }
+    else:
+        # CPU-only path: use shared executor directly (no context manager)
+        executor = executor_context
         demo_futures = {executor.submit(score_demo_sample, args): args[0] 
                        for args in demo_args}
         
-        # Collect results as they complete
         demo_results = [None] * len(demo_task)
         for future in as_completed(demo_futures):
             try:
-                # Wait longer for parallel execution (each batt can take 2-3s, plus overhead)
-                # No need to timeout here - let the individual batt() timeouts handle it
-                result = future.result(timeout=None)  # Wait indefinitely for worker
+                result = future.result(timeout=None)
                 demo_results[result['index']] = result
             except Exception as e:
                 sample_idx = demo_futures[future]
