@@ -218,15 +218,17 @@ class Code:
         t_call = self.t_call[self.t_num]
         call_list = [c.strip() for c in t_call.split(',')]
         call_string = f'{call_list[0]}(' + ', '.join(call_list[1:]) + ')'
-            
+        
+        extra_info = ''
         if call_list[0] not in DSL_FUNCTION_DICT:
             if call_list[0].startswith('t') and call_list[0][1:].isdigit():
                 t_n = int(call_list[0][1:])
-                if t_n in self.t_number and self.t_number[t_n] in ['rbind', 'lbind']:
+                extra_info = self.t_call[t_n]
+                if self.t_call[t_n].startswith('rbind,') or self.t_call[t_n].startswith('lbind,'):
                     print(f'    t{self.t_num} = {call_string}', file=self.file)
                     return has_mutation
 
-            call_string = 'astuple(' + ', '.join(call_list[1:]) + f') # {self.t_num} - {call_list[0]} not in DSL_FUNCTION_DICT'
+            call_string = 'astuple(' + ', '.join(call_list[1:]) + f') # {call_list[0]} - {extra_info}'
 
         print(f'    t{self.t_num} = {call_string}', file=self.file)
         return has_mutation
