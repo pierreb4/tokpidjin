@@ -108,7 +108,10 @@ def call_with_timeout(func, args, timeout=5):
     Call a function with a timeout using threads (no asyncio).
     
     This is a pure threading approach that doesn't interfere with ThreadPoolExecutor
-    or asyncio event loops. Each timeout runs in its own daemon thread.
+    or asyncio event loops. Each timeout runs in its own non-daemon thread.
+    
+    NON-DAEMON: Threads are non-daemon so MemoryError and other critical exceptions
+    crash immediately instead of being silently ignored. This prevents blocked execution.
     
     Args:
         func: Function to call
@@ -131,7 +134,7 @@ def call_with_timeout(func, args, timeout=5):
             exception_queue.put(e)
     
     thread = threading.Thread(target=worker)
-    thread.daemon = True  # Daemon thread will be killed when main thread exits
+    thread.daemon = False  # Non-daemon: Let critical exceptions crash immediately
     thread.start()
     thread.join(timeout=timeout)
     
