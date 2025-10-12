@@ -556,8 +556,92 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # TODO Avoid double work below
     t_log = 10
     max_files = 32
+    
+    # Phase 1: Quick filter - build solver bodies and check for duplicates
+    if prof is not None:
+        phase1_start = timer()
+    
+    candidate_data = []
+    seen_bodies = {}  # Cache to detect duplicate solver bodies
+    
     for candidate in all_o:
         sol_t, sol_e, sol_solver_id, sol_m = candidate
+        
+        task_o_score = o_score.get(sol_solver_id)
+        solve_task = f'solver_dir/solve_{task_id}'
+        
+        # Quick check if score is too low before expensive operations
+        if check_save(solve_task, task_o_score, max_files):
+            continue
+        
+        # Track calls and build solver body (lightweight operation)
+        done = track_solution(sol_t, None)
+        
+        solver_body = ''
+        for t_num in sorted(done):
+            t_split = [item.strip() for item in t_call[t_num].split(',')]
+            t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+            func = t[0]
+            args = t[1:]
+            solver_body += f'    t{t_num} = {func}({", ".join(args)})\n'
+        solver_body += f'    return t{sol_t}\n'
+        
+        # Quick dedup check using body hash before expensive inline_variables
+        body_hash = hashlib.md5(solver_body.encode()).hexdigest()
+        if body_hash in seen_bodies:
+            continue
+        seen_bodies[body_hash] = True
+        
+        solver_source = f'def solve(S, I, C):\n{solver_body}'
+        candidate_data.append({
+            'candidate': candidate,
+            'solver_source': solver_source,
+            'solver_body': solver_body,
+            'sol_t': sol_t,
+            'sol_solver_id': sol_solver_id,
+            'done': done
+        })
+    
+    if prof is not None:
+        prof['run_batt.phase1_filter'] = timer() - phase1_start
+    
+    print_l(f'-- Filtered to {len(candidate_data)} unique candidates (from {len(all_o)})') if DO_PRINT else None
+    
+    # Phase 2: Batch inline_variables (the expensive AST operation)
+    if prof is not None:
+        phase2_start = timer()
+    
+    # Batch process inlining - do all at once to amortize AST overhead
+    def inline_one(data):
+        try:
+            inlined = inline_variables(data['solver_source'])
+            md5 = hashlib.md5(inlined.encode()).hexdigest()
+            return {**data, 'inlined_source': inlined, 'md5_hash': md5}
+        except Exception as e:
+            print_l(f"Error inlining: {e}")
+            return None
+    
+    # Use thread pool for parallel inlining
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        inlined_data = list(executor.map(inline_one, candidate_data))
+    
+    # Filter out failures
+    inlined_data = [d for d in inlined_data if d is not None]
+    
+    # Phase 3: Process each candidate with inlined results
+    if prof is not None:
+        prof['run_batt.phase2_inline_batch'] = timer() - phase2_start
+    
+    # Phase 3: Process each candidate with inlined results
+    if prof is not None:
+        phase3_start = timer()
+    
+    for data in inlined_data:
+        sol_t = data['sol_t']
+        sol_solver_id = data['sol_solver_id']
+        solver_source = data['solver_source']
+        inlined_source = data['inlined_source']
+        md5_hash = data['md5_hash']
 
         # Prepare storage folder
         ensure_dir('solver_dir')
@@ -566,38 +650,9 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
 
         task_o_score = o_score.get(sol_solver_id)
 
+        # Double-check score (might have changed)
         if check_save(solve_task, task_o_score, max_files):
-            # print_l(f'Skip saving solver {sol_solver_id} as worse than existing ones')
             continue
-
-        # Track calls then reverse sequence to rebuild solver
-        done = track_solution(sol_t, None)
-
-        # Build candidate body
-        solver_body = ''
-        for t_num in sorted(done):
-            t_split = [item.strip() for item in t_call[t_num].split(',')]
-            t = [s[:-2] if s.endswith('.t') else s for s in t_split]
-
-            func = t[0]
-            args = t[1:]
-            solver_body += f'    t{t_num} = '
-            solver_body += f'{func}('
-            solver_body += ', '.join(args)
-            solver_body += ')\n'
-        solver_body += f'    return t{sol_t}\n'
-
-        # Get md5_hash of inlined source code
-        solver_source = f'def solve(S, I, C):\n{solver_body}'
-        inlined_source = inline_variables(solver_source)
-        md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-
-        # Put task_id in function name to make solvers_dir.py usable
-        # solver_source = re.sub(r'def solve\((.*)\):', f'def solve_{task_id}(\g<1>):', solver_source)
-        # inlined_source = inline_variables(solver_source)
-
-        # ensure_dir('solver_def')
-        # solver_def_path = f'solver_def/{md5_hash}.def'
 
         ensure_dir('solver_md5')
         solver_md5_path = f'solver_md5/{md5_hash}.py'
@@ -606,15 +661,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         timed_out = await check_solver_speed(total_data, solver_source, task_id, sol_solver_id, timeout)
         t_log = 11 - int(math.log(timer() - check_start))
 
-        # if not Path(solver_def_path).exists():
-        #     with open(solver_def_path, 'w') as f:
-        #         f.write(inlined_source)
-        #         f.write('\n')
-
-        # Expand to .py file
+        # Expand to .py file (only if doesn't exist)
         if not Path(solver_md5_path).exists():
-            # expand_file(solver_def_path, solver_md5_path, None, True)
-            # TODO Check if generate_expanded_content can be stremlined
             generate_expanded_content(inlined_source, solver_md5_path)
 
         task_o_score = o_score.get(sol_solver_id)
@@ -625,57 +673,60 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
 
         symlink(solver_md5_path, solver_link)
 
-        # TODO Control this with option
-        # # Check things
-        # python_exp = 'python expand_solver.py -q --source solver_dir/ --solvers-file solvers_dir.py'
-        # python_cmd = f'python run_test.py --solvers solvers_dir -k {task_id}_{md5_hash}'
-        # os.system(python_exp)
-        # assert(os.system(python_cmd) == 0), f"Unfit candidate found by:\n{python_cmd}"
-
+        # Phase 4: Batch process differs
+        if prof is not None:
+            phase4_start = timer()
+        
+        # Collect all differ data first
+        differ_data_list = []
         for name, last_t in d_score.last_t.items():
-
-            # task_s_score_iz = s_score[name]['iz'].get(sol_solver_id)
-            # task_s_score_zo = s_score[name]['zo'].get(sol_solver_id)
-            # if task_s_score_iz == 0 and task_s_score_zo == 0:
-            #     continue
-
-            # print_l(f"{name} - {last_t}")
-            done = track_solution(last_t, None)
-
-            # Build differ body
+            done_differ = track_solution(last_t, None)
+            
             differ_body = ''
-            for t_num in sorted(done):
+            for t_num in sorted(done_differ):
                 t_split = [item.strip() for item in t_call[t_num].split(',')]
                 t = [s[:-2] if s.endswith('.t') else s for s in t_split]
-
                 func = t[0]
                 args = t[1:]
-                differ_body += f'    t{t_num} = '
-                differ_body += f'{func}('
-                differ_body += ', '.join(args)
-                differ_body += ')\n'
+                differ_body += f'    t{t_num} = {func}({", ".join(args)})\n'
             differ_body += f'    return t{last_t}\n'
-
+            
             differ_source = f'def differ(S, I, C):\n{differ_body}'
-            inlined_source = inline_variables(differ_source)
-            md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-
+            differ_data_list.append({
+                'name': name,
+                'differ_source': differ_source,
+                'sol_solver_id': sol_solver_id
+            })
+        
+        # Batch inline differs
+        def inline_differ(data):
+            try:
+                inlined = inline_variables(data['differ_source'])
+                md5 = hashlib.md5(inlined.encode()).hexdigest()
+                return {**data, 'inlined_source': inlined, 'md5_hash': md5}
+            except Exception as e:
+                print_l(f"Error inlining differ: {e}")
+                return None
+        
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            inlined_differs = list(executor.map(inline_differ, differ_data_list))
+        
+        inlined_differs = [d for d in inlined_differs if d is not None]
+        
+        if prof is not None:
+            prof['run_batt.phase4_differs'] = timer() - phase4_start
+        
+        # Process inlined differs
+        for differ_data in inlined_differs:
+            name = differ_data['name']
+            inlined_source = differ_data['inlined_source']
+            md5_hash = differ_data['md5_hash']
+            
             ensure_dir('differ_dir')
-
-            # ensure_dir('differ_def')
-            # differ_def_path = f'differ_def/{md5_hash}.def'
-
             ensure_dir('differ_md5')
             differ_md5_path = f'differ_md5/{md5_hash}.py'
-
-            # if not Path(differ_def_path).exists():
-            #     with open(differ_def_path, 'w') as f:
-            #         f.write(inlined_source)
-            #         f.write('\n')
-
-            # Expand to .py file
+            
             if not Path(differ_md5_path).exists():
-                # expand_file(differ_def_path, differ_md5_path, None, True)
                 generate_expanded_content(inlined_source, differ_md5_path)
 
             for score_type in ['iz', 'zo']:
@@ -701,6 +752,9 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 ensure_dir(differ_score)
                 differ_link = f'{differ_score}/{md5_hash}.py'
                 symlink(differ_md5_path, differ_link)
+    
+    if prof is not None:
+        prof['run_batt.phase3_process'] = timer() - phase3_start
 
     # No timeout
     return False, d_score
