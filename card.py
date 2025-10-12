@@ -22,6 +22,7 @@ DSL_FUNCTIONS = [ (name, func) for name, func in ALL_DSL_FUNCTIONS \
 DSL_FUNCTION_NAMES = [name for name, func in DSL_FUNCTIONS]
 DSL_FUNCTION_DICT = dict(DSL_FUNCTIONS)
 
+BUDGET_RANDOM = 0.01
 
 # Borrowed from regin.py maybe can go to utils.py?
 def get_hints(node_name):
@@ -77,8 +78,6 @@ class Code:
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
-        budget_random = 0.005
-
         # Get number corresponding to color constant
         # NOTE Maybe some x_n variables carry constants and could be replaced?
         if arg in constant_dict.keys():
@@ -99,7 +98,7 @@ class Code:
         elif c in c_zo_l and random.random() < 0.5:
             f_n = f'F{c_zo_l.index(c)}'
             return self.substitute_color_izzo(5, 4, f_n)
-        elif random.random() < budget_random:
+        elif random.random() < BUDGET_RANDOM:
             # Same as usual random replacement
             return random.choice(list(constant_dict.keys()))
 
@@ -161,28 +160,22 @@ class Code:
         if arg not in constant_dict.keys():
             return arg
 
-        budget_random = 0.005
-
         return (
             replace_random(arg, list(constant_dict.keys()))
-            if random.random() < budget_random
+            if random.random() < BUDGET_RANDOM:
             else arg
         )
 
 
     def substitute_symbol(self, arg, constant_dict):
-        budget_random = 0.005
-
         # Substitute constants or calls
-        if random.random() < budget_random:
+        if random.random() < BUDGET_RANDOM:
             return random.choice(list(constant_dict.keys()))
 
         return arg
 
 
     def substitute_grid_angle(self, arg, constant_dict=R8_NAMES):
-        budget_random = 0.005
-
         # Only substitute constants 
         if arg not in constant_dict.keys():
             return arg
@@ -191,7 +184,7 @@ class Code:
         S = self.S
         if c == a_mr(S) and random.random() < 0.5:
             return self.substitute_grid_angle_mr()
-        elif random.random() < budget_random:
+        elif random.random() < BUDGET_RANDOM:
             # Same as usual random replacement
             return random.choice(list(constant_dict.keys()))
 
@@ -284,7 +277,7 @@ class Code:
 
 
     def do_offset_mutation(self, old_hint, old_call, t_n, is_solver, has_mutation):
-        while random.random() < 0.005:
+        while random.random() < BUDGET_RANDOM:
             # TODO Check parameter impact on mutation numbers
 
             while True:
@@ -365,7 +358,7 @@ class Code:
                 None
             ]:
             print_l(f'{old_hint = }')
-        elif self.t_num > 1 and random.random() < 0.005:
+        elif self.t_num > 1 and random.random() < BUDGET_RANDOM:
             if old_hint == 'Callable':
 
                 # NOTE We could also try to match return type
