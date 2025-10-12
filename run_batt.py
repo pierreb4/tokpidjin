@@ -658,6 +658,10 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # Phase 3b: Process validated results (file I/O, symlinks)
     if prof is not None:
         phase3b_start = timer()
+        phase3b_ensure_dir_time = 0
+        phase3b_check_save_time = 0
+        phase3b_symlink_time = 0
+        phase3b_score_calc_time = 0
     
     for data in validated_data:
         sol_t = data['sol_t']
@@ -668,17 +672,36 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         t_log = data['t_log']
 
         # Prepare storage folder
+        if prof is not None:
+            dir_start = timer()
         ensure_dir('solver_dir')
         solve_task = f'solver_dir/solve_{task_id}'
         ensure_dir(solve_task)
+        if prof is not None:
+            phase3b_ensure_dir_time += timer() - dir_start
 
+        if prof is not None:
+            score_start = timer()
         task_o_score = o_score.get(sol_solver_id)
+        if prof is not None:
+            phase3b_score_calc_time += timer() - score_start
 
         # Double-check score (might have changed)
-        if check_save(solve_task, task_o_score, max_files):
+        if prof is not None:
+            check_start = timer()
+        should_skip = check_save(solve_task, task_o_score, max_files)
+        if prof is not None:
+            phase3b_check_save_time += timer() - check_start
+        
+        if should_skip:
             continue
 
+        if prof is not None:
+            dir_start = timer()
         ensure_dir('solver_md5')
+        if prof is not None:
+            phase3b_ensure_dir_time += timer() - dir_start
+            
         solver_md5_path = f'solver_md5/{md5_hash}.py'
 
         # Expand to .py file (only if doesn't exist)
@@ -688,25 +711,54 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         if prof is not None:
             prof['run_batt.generate_expanded'] += timer() - expand_start
 
+        if prof is not None:
+            score_start = timer()
         task_o_score = o_score.get(sol_solver_id)
+        if prof is not None:
+            phase3b_score_calc_time += timer() - score_start
+            
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{t_log}'
 
+        if prof is not None:
+            dir_start = timer()
         ensure_dir(solver_score)
+        if prof is not None:
+            phase3b_ensure_dir_time += timer() - dir_start
+            
         solver_link = f'{solver_score}/{md5_hash}.py'
 
+        if prof is not None:
+            sym_start = timer()
         symlink(solver_md5_path, solver_link)
+        if prof is not None:
+            phase3b_symlink_time += timer() - sym_start
 
         # Collect differ data for this solver (will batch process all differs later)
         # Phase 4 moved outside the loop
     
     if prof is not None:
-        prof['run_batt.phase3b_file_ops'] = timer() - phase3b_start
+        phase3b_total = timer() - phase3b_start
+        prof['run_batt.phase3b_file_ops'] = phase3b_total
+        prof['run_batt.phase3b_ensure_dir'] = phase3b_ensure_dir_time
+        prof['run_batt.phase3b_check_save'] = phase3b_check_save_time
+        prof['run_batt.phase3b_symlink'] = phase3b_symlink_time
+        prof['run_batt.phase3b_score_calc'] = phase3b_score_calc_time
+        phase3b_overhead = phase3b_total - (phase3b_ensure_dir_time + phase3b_check_save_time + 
+                                           phase3b_symlink_time + phase3b_score_calc_time + 
+                                           prof.get('run_batt.generate_expanded', 0))
+        prof['run_batt.phase3b_overhead'] = max(0, phase3b_overhead)
     
     # Phase 4: Batch process differs for all solvers
     if prof is not None:
         phase4_start = timer()
+        phase4_build_time = 0
+        phase4_inline_time = 0
+        phase4_process_time = 0
     
     # Collect all differ data first
+    if prof is not None:
+        build_start = timer()
+        
     differ_data_list = []
     for data in validated_data:
         sol_solver_id = data['sol_solver_id']
@@ -729,7 +781,13 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 'sol_solver_id': sol_solver_id
             })
     
+    if prof is not None:
+        phase4_build_time = timer() - build_start
+    
     # Batch inline differs
+    if prof is not None:
+        inline_start = timer()
+        
     def inline_differ(data):
         try:
             inlined = inline_variables(data['differ_source'])
@@ -745,9 +803,12 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     inlined_differs = [d for d in inlined_differs if d is not None]
     
     if prof is not None:
-        prof['run_batt.phase4_differs'] = timer() - phase4_start
+        phase4_inline_time = timer() - inline_start
     
     # Process inlined differs
+    if prof is not None:
+        process_start = timer()
+        
     for differ_data in inlined_differs:
         name = differ_data['name']
         inlined_source = differ_data['inlined_source']
@@ -784,6 +845,14 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             ensure_dir(differ_score)
             differ_link = f'{differ_score}/{md5_hash}.py'
             symlink(differ_md5_path, differ_link)
+    
+    if prof is not None:
+        phase4_process_time = timer() - process_start
+        phase4_total = timer() - phase4_start
+        prof['run_batt.phase4_differs'] = phase4_total
+        prof['run_batt.phase4_build'] = phase4_build_time
+        prof['run_batt.phase4_inline'] = phase4_inline_time
+        prof['run_batt.phase4_process'] = phase4_process_time
 
     # No timeout
     return False, d_score
