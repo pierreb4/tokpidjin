@@ -453,30 +453,18 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     # Uses call_with_timeout (pure threading) instead of asyncio.gather
     prof_start = timer() if prof is not None else None
     
-    # CPU-only fix: Use shared global executor to avoid thread exhaustion
+    # CPU-only fix: Use sequential processing to avoid thread exhaustion
     # GPU environments can handle more concurrent threads, but CPU-only environments
-    # exhaust system threads when many tasks run concurrently via asyncio.gather
+    # exhaust system threads even with reduced concurrency due to daemon thread creation
     if GPU_AVAILABLE:
-        # GPU: Use dedicated ThreadPoolExecutor (original behavior)
-        executor_context = ThreadPoolExecutor(max_workers=5)
-        use_context_manager = True
-    else:
-        # CPU-only: Use dedicated ThreadPoolExecutor with reduced concurrency
-        # Limit to 2 concurrent demo samples in CPU mode to reduce thread pressure
-        # Each demo sample creates 2-3 daemon threads via call_with_timeout (batt + optional diff)
-        # Total threads: 2 workers × 3 daemon threads = ~6 threads (manageable)
-        executor_context = ThreadPoolExecutor(max_workers=2)
-        use_context_manager = True
-    
-    # Prepare arguments for each demo sample
-    demo_args = [
-        (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
-        for i, sample in enumerate(demo_task)
-    ]
-    
-    if use_context_manager:
-        # GPU path: use context manager for cleanup
-        with executor_context as executor:
+        # GPU: Parallel execution with ThreadPoolExecutor (original behavior)
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            # Prepare arguments for each demo sample
+            demo_args = [
+                (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
+                for i, sample in enumerate(demo_task)
+            ]
+            
             # Submit all demo samples for parallel execution
             demo_futures = {executor.submit(score_demo_sample, args): args[0] 
                            for args in demo_args}
@@ -498,26 +486,24 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                         'timed_out': True
                     }
     else:
-        # CPU-only path: use shared executor directly (no context manager)
-        executor = executor_context
-        demo_futures = {executor.submit(score_demo_sample, args): args[0] 
-                       for args in demo_args}
-        
-        demo_results = [None] * len(demo_task)
-        for future in as_completed(demo_futures):
+        # CPU-only: Sequential execution to minimize thread creation
+        # Each score_demo_sample creates 2-3 daemon threads via call_with_timeout
+        # Sequential execution prevents thread accumulation
+        demo_results = []
+        for i, sample in enumerate(demo_task):
+            args = (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
             try:
-                result = future.result(timeout=None)
-                demo_results[result['index']] = result
+                result = score_demo_sample(args)
+                demo_results.append(result)
             except Exception as e:
-                sample_idx = demo_futures[future]
                 if DO_PRINT:
-                    print_l(f"-- {task_id} - demo[{sample_idx}] failed: {e}")
-                demo_results[sample_idx] = {
-                    'index': sample_idx,
+                    print_l(f"-- {task_id} - demo[{i}] failed: {e}")
+                demo_results.append({
+                    'index': i,
                     'outputs': [],
                     'solver_scores': [],
                     'timed_out': True
-                }
+                })
     
     if prof is not None:
         prof['batt.demo.parallel'] = timer() - prof_start
