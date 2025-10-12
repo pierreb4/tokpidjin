@@ -659,11 +659,17 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
 
         check_start = timer()
         timed_out = await check_solver_speed(total_data, solver_source, task_id, sol_solver_id, timeout)
-        t_log = 11 - int(math.log(timer() - check_start))
+        check_time = timer() - check_start
+        t_log = 11 - int(math.log(check_time))
+        if prof is not None:
+            prof['run_batt.check_solver_speed'] += check_time
 
         # Expand to .py file (only if doesn't exist)
+        expand_start = timer()
         if not Path(solver_md5_path).exists():
             generate_expanded_content(inlined_source, solver_md5_path)
+        if prof is not None:
+            prof['run_batt.generate_expanded'] += timer() - expand_start
 
         task_o_score = o_score.get(sol_solver_id)
         solver_score = f'solver_dir/solve_{task_id}/{task_o_score}/{t_log}'
