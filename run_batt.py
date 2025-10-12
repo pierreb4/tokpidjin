@@ -461,9 +461,12 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         executor_context = ThreadPoolExecutor(max_workers=5)
         use_context_manager = True
     else:
-        # CPU-only: Use shared global executor to prevent thread exhaustion
-        executor_context = get_high_level_executor()
-        use_context_manager = False
+        # CPU-only: Use dedicated ThreadPoolExecutor with reduced concurrency
+        # Limit to 2 concurrent demo samples in CPU mode to reduce thread pressure
+        # Each demo sample creates 2-3 daemon threads via call_with_timeout (batt + optional diff)
+        # Total threads: 2 workers × 3 daemon threads = ~6 threads (manageable)
+        executor_context = ThreadPoolExecutor(max_workers=2)
+        use_context_manager = True
     
     # Prepare arguments for each demo sample
     demo_args = [
@@ -741,13 +744,14 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             return None
     
     # Use thread pool for parallel inlining
-    # CPU-only fix: Use shared executor to avoid thread exhaustion
+    # CPU-only fix: Reduce concurrency to avoid thread exhaustion
     if GPU_AVAILABLE:
         with ThreadPoolExecutor(max_workers=4) as executor:
             inlined_data = list(executor.map(inline_one, candidate_data))
     else:
-        executor = get_low_level_executor()
-        inlined_data = list(executor.map(inline_one, candidate_data))
+        # CPU-only: Use smaller pool to limit total threads
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            inlined_data = list(executor.map(inline_one, candidate_data))
     
     # Filter out failures
     inlined_data = [d for d in inlined_data if d is not None]
@@ -921,13 +925,14 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             print_l(f"Error inlining differ: {e}")
             return None
     
-    # CPU-only fix: Use shared executor to avoid thread exhaustion
+    # CPU-only fix: Reduce concurrency to avoid thread exhaustion  
     if GPU_AVAILABLE:
         with ThreadPoolExecutor(max_workers=4) as executor:
             inlined_differs = list(executor.map(inline_differ, differ_data_list))
     else:
-        executor = get_low_level_executor()
-        inlined_differs = list(executor.map(inline_differ, differ_data_list))
+        # CPU-only: Use smaller pool to limit total threads
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            inlined_differs = list(executor.map(inline_differ, differ_data_list))
     
     inlined_differs = [d for d in inlined_differs if d is not None]
     
