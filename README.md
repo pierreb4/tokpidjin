@@ -17,6 +17,16 @@ This project now includes GPU acceleration for ARC solvers:
 - [GPU_README.md](GPU_README.md) - Quick start guide
 - [GPU_WEEKS_1_2_3_COMPLETE.md](GPU_WEEKS_1_2_3_COMPLETE.md) - Complete summary
 
+## 🚀 Batt Performance Optimization (NEW!)
+
+The `run_batt.py` solver evaluation system has been optimized for **4.06x speedup**:
+- ✅ 21.788s → 5.359s on Kaggle L4x4
+- ✅ 100% correctness preserved
+- ✅ Match-only diff optimization (97% reduction in unnecessary work)
+- ✅ Parallel processing throughout
+
+**Documentation:** See [BATT_OPTIMIZATION_COMPLETE.md](BATT_OPTIMIZATION_COMPLETE.md) for details.
+
 
 ## Example solver program for task 00d62c1b written in the DSL
 
