@@ -81,7 +81,7 @@ CHARS=({0..9} {a..f})
 TMPFILE=$(mktemp)
 TMPBATT="tmp_batt_${TMPFILE##*.}"
 STOP=0
-clear
+# clear
 while date && [ $STOP -eq 0 ]; do
   if [ "$COUNT" -ne 0 ]; then
     if [ -n "$ONERUN" ]; then
