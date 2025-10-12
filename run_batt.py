@@ -442,7 +442,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     # Uses call_with_timeout (pure threading) instead of asyncio.gather
     prof_start = timer() if prof is not None else None
     
-    with ThreadPoolExecutor(max_workers=15) as executor:
+    with ThreadPoolExecutor(max_workers=5) as executor:
         # Prepare arguments for each demo sample
         demo_args = [
             (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
@@ -457,7 +457,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         demo_results = [None] * len(demo_task)
         for future in as_completed(demo_futures):
             try:
-                result = future.result(timeout=timeout + 1)  # Extra second for safety
+                # Wait longer for parallel execution (each batt can take 2-3s, plus overhead)
+                # No need to timeout here - let the individual batt() timeouts handle it
+                result = future.result(timeout=None)  # Wait indefinitely for worker
                 demo_results[result['index']] = result
             except Exception as e:
                 sample_idx = demo_futures[future]
@@ -610,7 +612,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     print_l(f'-- {task_id} - {task_i} start --') if DO_PRINT else None
 
     all_o, o_score, s_score = check_batt(total_data,
-            task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=prof)
+            task_i, task_id, d_score, start_time, pile_log_path, timeout=5, prof=prof)
 
     print_l(f'-- {task_id} - {task_i} scored --') if DO_PRINT else None
 
