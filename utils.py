@@ -100,19 +100,68 @@ DO_PRINT = os.uname()[1] in DO_PRINT_LIST
 DO_PRINT = True
 
 
-# Global thread pool executor to limit the number of threads
-_executor = None
+# Dual thread pool architecture to avoid nested usage conflicts
+# 
+# High-level executor: For parallel batch operations (sample scoring, batch inline)
+# Low-level executor: For run_with_timeout and other internal operations
+# 
+# This separation prevents thread pool deadlock where high-level operations
+# that use the executor internally would exhaust all workers.
+
+_high_level_executor = None
+_low_level_executor = None
 _executor_lock = threading.Lock()
 
-def get_executor():
-    """Get or create a global ThreadPoolExecutor with limited threads"""
-    global _executor
-    if _executor is None:
+def get_high_level_executor():
+    """
+    Get executor for high-level parallel operations (sample scoring, batch processing).
+    
+    Use this for:
+    - Parallel sample scoring
+    - Batch inline_variables processing
+    - Other top-level parallel operations
+    
+    Start with 4 workers (conservative), can be increased to 6-8 if stable.
+    """
+    global _high_level_executor
+    if _high_level_executor is None:
         with _executor_lock:
-            if _executor is None:
-                # Limit to 4 threads to avoid system limits
-                _executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
-    return _executor
+            if _high_level_executor is None:
+                # Conservative start: 4 workers (same as low-level)
+                # Can increase to 6-8 after validating no resource contention
+                _high_level_executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
+    return _high_level_executor
+
+def get_low_level_executor():
+    """
+    Get executor for low-level operations (run_with_timeout, internal operations).
+    
+    Use this for:
+    - run_with_timeout wrapper
+    - Internal batt() operations
+    - Any operation that might be called from high-level parallel code
+    
+    Reasons for 4 worker limit:
+    1. Avoid macOS file descriptor limits (~256 per process)
+    2. Prevent resource contention (GPU, memory, I/O)
+    3. Limit concurrent batt() calls which are resource-intensive
+    4. Balance between parallelism and system stability
+    """
+    global _low_level_executor
+    if _low_level_executor is None:
+        with _executor_lock:
+            if _low_level_executor is None:
+                _low_level_executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
+    return _low_level_executor
+
+def get_executor():
+    """
+    Get default executor for backward compatibility.
+    
+    Legacy code uses this, which returns the low-level executor.
+    New code should use get_high_level_executor() or get_low_level_executor() explicitly.
+    """
+    return get_low_level_executor()
 
 
 def ensure_dir(directory):
@@ -547,9 +596,9 @@ def load_module(module_name):
 
 async def run_with_timeout(func, args, timeout=5):
     try:
-        # Use the global thread pool executor with limited threads
+        # Use low-level executor to avoid conflicts with high-level parallel operations
         loop = asyncio.get_event_loop()
-        executor = get_executor()
+        executor = get_low_level_executor()
         result = await asyncio.wait_for(
             loop.run_in_executor(executor, func, *args), timeout
         )

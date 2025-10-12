@@ -390,11 +390,15 @@ async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_
 
     o_score = O_Score()
     s_score = {}
-    for i, sample in enumerate(demo_task):
+    
+    # Phase 4: Parallel demo sample scoring with dual thread pool architecture
+    # Use high-level executor for parallel samples, low-level for run_with_timeout
+    async def score_demo_sample(i, sample):
+        """Score a single demo sample in parallel"""
         I = sample['input']
         O = sample['output']
-        if prof is not None:
-            prof_start = timer()
+        
+        prof_start = timer() if prof is not None else None
         solve_timed_out, solve_result = await run_with_timeout(batt,
             [task_id, S, I, None, pile_log_path], timeout)
         if prof is not None:
@@ -403,34 +407,55 @@ async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_
         if solve_timed_out and DO_PRINT:
             print_l(f'-- {task_id} - demo[{i}] timed out')
 
-        t_set = set()
+        demo_o = []
+        demo_s = []
         if solve_result is not None:
-            o['demo'][i], _ = solve_result
-
-            print_l(f"demo[{i}] - {task_id} - {len(o['demo'][i])}") if DO_PRINT else None
-
-            all_o = all_o.union(o['demo'][i])
-            for t_n, evo, o_solver_id, okt in o['demo'][i]:
-                # if not okt.ok:
-                #     continue
-
-                # Compare candidate C with expected output O
-                # C = okt.t
+            demo_o, _ = solve_result
+            print_l(f"demo[{i}] - {task_id} - {len(demo_o)}") if DO_PRINT else None
+            
+            # Score outputs and run diff for this sample
+            for t_n, evo, o_solver_id, okt in demo_o:
                 C = okt
-                if match := C == O:
+                match = C == O
+                if match:
                     print_l(f'- {o_solver_id = } - {match = }')
-                o_score.update(o_solver_id, match)
-
-                # We know the correct output for both train and eval tasks
+                
+                # Run diff to get solver-level scores
                 diff_timed_out, diff_result = await run_with_timeout(batt,
                     [task_id, S, I, O, pile_log_path], timeout)
-                    # [task_id, S, I, C, pile_log_path], timeout)
-
+                
                 if diff_result is not None:
-                    _, s['demo'][i] = diff_result
-
-                    for s_item in s['demo'][i]:
-                        d_score.update(o_solver_id, s_item)
+                    _, demo_s_result = diff_result
+                    demo_s.extend(demo_s_result)
+        
+        return {
+            'index': i,
+            'outputs': demo_o,
+            'solver_scores': demo_s,
+            'timed_out': solve_timed_out
+        }
+    
+    # Score all demo samples in parallel
+    demo_results = await asyncio.gather(*[
+        score_demo_sample(i, sample) for i, sample in enumerate(demo_task)
+    ])
+    
+    # Aggregate demo results
+    for result in demo_results:
+        i = result['index']
+        o['demo'][i] = result['outputs']
+        s['demo'][i] = result['solver_scores']
+        all_o = all_o.union(result['outputs'])
+        
+        # Update scores
+        for t_n, evo, o_solver_id, okt in result['outputs']:
+            C = okt
+            match = C == demo_task[i]['output']
+            o_score.update(o_solver_id, match)
+            
+        # Update solver scores
+        for s_item in result['solver_scores']:
+            d_score.update(result['outputs'][0][2] if result['outputs'] else None, s_item)
 
     # NOTE Move this around when we start with 'eval' runs?
     for o_solver_id in d_score.score.keys():
@@ -440,11 +465,13 @@ async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_
             for score_type in ['iz', 'zo']:
                 s_score[name][score_type].update(o_solver_id, d_score.score[o_solver_id][name][score_type])
 
-    for i, sample in enumerate(test_task):
+    # Phase 4: Parallel test sample scoring
+    async def score_test_sample(i, sample):
+        """Score a single test sample in parallel"""
         I = sample['input']
         O = sample['output']
-        if prof is not None:
-            prof_start = timer()
+        
+        prof_start = timer() if prof is not None else None
         solve_timed_out, solve_result = await run_with_timeout(batt,
             [task_id, S, I, None, pile_log_path], timeout)
         if prof is not None:
@@ -453,37 +480,55 @@ async def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_
         if solve_timed_out and DO_PRINT:
             print_l(f'-- {task_id} - test[{i}] timed out')
 
-        t_set = set()
+        test_o = []
+        test_s = []
         if solve_result is not None:
-            o['test'][i], _ = solve_result
-
-            print_l(f"test[{i}] - {task_id} - {len(o['test'][i])}") if DO_PRINT else None
-
-            all_o = all_o.union(o['test'][i])
-            for t_n, evo, o_solver_id, okt in o['test'][i]:
-                # if not okt.ok:
-                #     continue
-
-                # Compare candidate C with expected output O
-                # C = okt.t
+            test_o, _ = solve_result
+            print_l(f"test[{i}] - {task_id} - {len(test_o)}") if DO_PRINT else None
+            
+            # Score outputs and run diff for this sample
+            for t_n, evo, o_solver_id, okt in test_o:
                 C = okt
-                if match := C == O:
+                match = C == O
+                if match:
                     print_l(f'- {o_solver_id = } - {match = }')
-                o_score.update(o_solver_id, match)
-
-                # We know the correct output for demo tasks, not eval tasks
-                # TODO Try comparing to C when we start dealing with eval tasks
-                # XXX Or just do that all the time, to simplify? The performance
-                # hit is only on demoing tasks, that are pre-processed, right? 
+                
+                # Run diff with candidate C for test samples
                 diff_timed_out, diff_result = await run_with_timeout(batt,
-                    # [task_id, S, I, O, pile_log_path], timeout)
                     [task_id, S, I, C, pile_log_path], timeout)
-
+                
                 if diff_result is not None:
-                    _, s['test'][i] = diff_result
-
-                    for s_item in s['test'][i]:
-                        d_score.update(o_solver_id, s_item)
+                    _, test_s_result = diff_result
+                    test_s.extend(test_s_result)
+        
+        return {
+            'index': i,
+            'outputs': test_o,
+            'solver_scores': test_s,
+            'timed_out': solve_timed_out
+        }
+    
+    # Score all test samples in parallel
+    test_results = await asyncio.gather(*[
+        score_test_sample(i, sample) for i, sample in enumerate(test_task)
+    ])
+    
+    # Aggregate test results
+    for result in test_results:
+        i = result['index']
+        o['test'][i] = result['outputs']
+        s['test'][i] = result['solver_scores']
+        all_o = all_o.union(result['outputs'])
+        
+        # Update scores
+        for t_n, evo, o_solver_id, okt in result['outputs']:
+            C = okt
+            match = C == test_task[i]['output']
+            o_score.update(o_solver_id, match)
+            
+        # Update solver scores
+        for s_item in result['solver_scores']:
+            d_score.update(result['outputs'][0][2] if result['outputs'] else None, s_item)
 
     len_task = len(demo_task) + len(test_task)
     elapsed = timer() - start_time
