@@ -100,6 +100,61 @@ DO_PRINT = os.uname()[1] in DO_PRINT_LIST
 DO_PRINT = True
 
 
+# Thread-based timeout function (no asyncio needed!)
+from queue import Queue, Empty
+
+def call_with_timeout(func, args, timeout=5):
+    """
+    Call a function with a timeout using threads (no asyncio).
+    
+    This is a pure threading approach that doesn't interfere with ThreadPoolExecutor
+    or asyncio event loops. Each timeout runs in its own daemon thread.
+    
+    Args:
+        func: Function to call
+        args: List of arguments to pass to function
+        timeout: Timeout in seconds
+    
+    Returns:
+        (timed_out: bool, result: Any)
+        - (False, result) if function completed successfully
+        - (True, None) if function timed out or raised an exception
+    """
+    result_queue = Queue()
+    exception_queue = Queue()
+    
+    def worker():
+        try:
+            result = func(*args)
+            result_queue.put(result)
+        except Exception as e:
+            exception_queue.put(e)
+    
+    thread = threading.Thread(target=worker)
+    thread.daemon = True  # Daemon thread will be killed when main thread exits
+    thread.start()
+    thread.join(timeout=timeout)
+    
+    if thread.is_alive():
+        # Thread is still running after timeout
+        return True, None  # (timed_out, result)
+    
+    # Check for exceptions
+    try:
+        exception = exception_queue.get_nowait()
+        # Could log exception here if needed for debugging
+        return True, None  # Treat exceptions as timeouts
+    except Empty:
+        pass
+    
+    # Get successful result
+    try:
+        result = result_queue.get_nowait()
+        return False, result  # (timed_out, result)
+    except Empty:
+        return True, None
+
+
 # Dual thread pool architecture to avoid nested usage conflicts
 # 
 # High-level executor: For parallel batch operations (sample scoring, batch inline)
