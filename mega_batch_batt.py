@@ -6,23 +6,41 @@ Coordinates GPU mega-batch processing of 4000+ batt() calls across all tasks.
 Strategy:
 1. Collect all inputs from training + evaluation data (~4000 samples)
 2. Batch into chunks of 1000 samples  
-3. Call vectorized batt() on each batch
+3. Process batches in parallel with GPU-accelerated operations
 4. Merge results back to per-task format
 
-Expected speedup: 4.8-9x (1200s → 133-250s)
+Integration approach:
+- Phase 1: Parallel batch processing (current)
+- Phase 2: GPU-accelerate individual operations within batt (Week 5 Day 2-3)
+- Phase 3: Full vectorization (Week 5 Day 4-5)
+
+Expected speedup: 
+- Phase 1: 1.2-1.5x (parallel processing)
+- Phase 2: 3.5-4.5x (GPU Tier 1+2 ops)
+- Phase 3: 4.8-9x (full optimization)
 
 Author: Pierre
 Date: October 13, 2025
+Week: 5 Day 2
 """
 
 import importlib
 import asyncio
-from typing import Dict, List, Tuple, Any
+import concurrent.futures
+from typing import Dict, List, Tuple, Any, Optional
 from collections import defaultdict
 from timeit import default_timer as timer
 import logging
 
 logger = logging.getLogger(__name__)
+
+# Try to import GPU operations
+try:
+    from gpu_dsl_operations import get_gpu_ops, GPUDSLOperations
+    GPU_OPS_AVAILABLE = True
+except ImportError:
+    GPU_OPS_AVAILABLE = False
+    GPUDSLOperations = None
 
 
 class BatchInput:
@@ -54,17 +72,35 @@ class BatchResult:
 class MegaBatchCoordinator:
     """Coordinates mega-batch processing of batt() calls"""
     
-    def __init__(self, batt_module_name: str = 'batt', batch_size: int = 1000):
+    def __init__(self, batt_module_name: str = 'batt', batch_size: int = 1000, 
+                 enable_gpu: bool = True, parallel: bool = True, max_workers: int = 4):
         """
         Initialize coordinator.
         
         Args:
             batt_module_name: Name of module containing batt() function
             batch_size: Number of samples per batch (default 1000)
+            enable_gpu: Enable GPU operations if available (default True)
+            parallel: Enable parallel batch processing (default True)
+            max_workers: Max parallel workers (default 4)
         """
         self.batt_module_name = batt_module_name
         self.batch_size = batch_size
+        self.enable_gpu = enable_gpu and GPU_OPS_AVAILABLE
+        self.parallel = parallel
+        self.max_workers = max_workers
         self.batt = None
+        self.gpu_ops = None
+        
+        # Initialize GPU operations if available
+        if self.enable_gpu:
+            try:
+                self.gpu_ops = get_gpu_ops(enable_gpu=True)
+                logger.info(f"GPU operations initialized: {self.gpu_ops.get_stats()}")
+            except Exception as e:
+                logger.warning(f"GPU initialization failed: {e}, using CPU only")
+                self.enable_gpu = False
+                self.gpu_ops = None
         
     def load_batt(self):
         """Load batt function from module"""
@@ -151,11 +187,41 @@ class MegaBatchCoordinator:
         logger.info(f"Created {len(batches)} batches of size ~{self.batch_size}")
         return batches
     
+    def process_single_input(self, batch_input: BatchInput, input_idx: int, 
+                           batch_idx: int) -> BatchResult:
+        """
+        Process a single batt() input.
+        
+        Args:
+            batch_input: Input to process
+            input_idx: Index within batch
+            batch_idx: Batch number
+            
+        Returns:
+            BatchResult object
+        """
+        try:
+            o_result, s_result = self.batt(*batch_input.to_args())
+            return BatchResult(
+                batch_idx=input_idx,
+                o_result=o_result,
+                s_result=s_result
+            )
+        except Exception as e:
+            logger.error(f"Batch {batch_idx}, input {input_idx} failed: {e}")
+            # Return empty results on error
+            return BatchResult(
+                batch_idx=input_idx,
+                o_result=[],
+                s_result=[]
+            )
+    
     def process_batch(self, batch: List[BatchInput], batch_idx: int) -> List[BatchResult]:
         """
         Process a single batch by calling batt() for each input.
         
-        Note: This is currently sequential. Week 5 will add GPU vectorization.
+        Phase 1: Parallel processing of independent batt() calls
+        Phase 2: GPU-accelerated operations within batt (TODO: Week 5 Day 2-3)
         
         Args:
             batch: List of BatchInput objects to process
@@ -164,29 +230,37 @@ class MegaBatchCoordinator:
         Returns:
             List of BatchResult objects
         """
-        results = []
-        
-        for input_idx, batch_input in enumerate(batch):
-            # Call batt function
-            try:
-                o_result, s_result = self.batt(*batch_input.to_args())
-                result = BatchResult(
-                    batch_idx=input_idx,
-                    o_result=o_result,
-                    s_result=s_result
-                )
+        if self.parallel and len(batch) > 1:
+            # Parallel processing with ThreadPoolExecutor
+            results = [None] * len(batch)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+                futures = {
+                    executor.submit(self.process_single_input, batch_input, input_idx, batch_idx): input_idx
+                    for input_idx, batch_input in enumerate(batch)
+                }
+                
+                for future in concurrent.futures.as_completed(futures):
+                    input_idx = futures[future]
+                    try:
+                        result = future.result()
+                        results[input_idx] = result
+                    except Exception as e:
+                        logger.error(f"Batch {batch_idx}, input {input_idx} parallel failed: {e}")
+                        results[input_idx] = BatchResult(
+                            batch_idx=input_idx,
+                            o_result=[],
+                            s_result=[]
+                        )
+            
+            return results
+        else:
+            # Sequential processing (fallback or single item)
+            results = []
+            for input_idx, batch_input in enumerate(batch):
+                result = self.process_single_input(batch_input, input_idx, batch_idx)
                 results.append(result)
-            except Exception as e:
-                logger.error(f"Batch {batch_idx}, input {input_idx} failed: {e}")
-                # Return empty results on error
-                result = BatchResult(
-                    batch_idx=input_idx,
-                    o_result=[],
-                    s_result=[]
-                )
-                results.append(result)
-        
-        return results
+            
+            return results
     
     def merge_results(self, inputs: List[BatchInput], results: List[List[BatchResult]]) -> Dict:
         """
@@ -241,12 +315,25 @@ class MegaBatchCoordinator:
         """
         start_time = timer()
         
+        # Log configuration
+        logger.info("="*60)
+        logger.info("MegaBatchCoordinator Configuration:")
+        logger.info(f"  Batch size: {self.batch_size}")
+        logger.info(f"  Parallel: {self.parallel} (workers: {self.max_workers})")
+        logger.info(f"  GPU enabled: {self.enable_gpu}")
+        if self.enable_gpu and self.gpu_ops:
+            stats = self.gpu_ops.get_stats()
+            logger.info(f"  GPU available: {stats['gpu_available']}")
+            logger.info(f"  GPU count: {stats['gpu_count']}")
+        logger.info("="*60)
+        
         # Load batt function
         self.load_batt()
         
         # Collect all inputs
         inputs = self.collect_inputs(total_data, task_list, log_path)
-        logger.info(f"Collection time: {timer() - start_time:.3f}s")
+        collection_time = timer() - start_time
+        logger.info(f"Collection time: {collection_time:.3f}s")
         
         # Create batches
         batches = self.create_batches(inputs)
@@ -255,24 +342,32 @@ class MegaBatchCoordinator:
         batch_results = []
         batch_start = timer()
         for batch_idx, batch in enumerate(batches):
-            if batch_idx % 10 == 0:
+            if batch_idx % 10 == 0 and batch_idx > 0:
                 elapsed = timer() - batch_start
-                logger.info(f"Processing batch {batch_idx}/{len(batches)} ({elapsed:.1f}s elapsed)")
+                rate = batch_idx * self.batch_size / elapsed
+                logger.info(f"Processing batch {batch_idx}/{len(batches)} "
+                          f"({elapsed:.1f}s elapsed, {rate:.0f} samples/s)")
             
             results = self.process_batch(batch, batch_idx)
             batch_results.append(results)
         
         batch_time = timer() - batch_start
         logger.info(f"Batch processing time: {batch_time:.3f}s")
+        logger.info(f"Throughput: {len(inputs)/batch_time:.1f} samples/s")
         
         # Merge results
         merge_start = timer()
         merged = self.merge_results(inputs, batch_results)
-        logger.info(f"Merge time: {timer() - merge_start:.3f}s")
+        merge_time = timer() - merge_start
+        logger.info(f"Merge time: {merge_time:.3f}s")
         
         total_time = timer() - start_time
-        logger.info(f"Total time: {total_time:.3f}s for {len(inputs)} calls")
+        logger.info("="*60)
+        logger.info(f"TOTAL TIME: {total_time:.3f}s for {len(inputs)} calls")
         logger.info(f"Average: {total_time/len(inputs)*1000:.2f}ms per call")
+        logger.info(f"Breakdown: Collection {collection_time:.1f}s, "
+                   f"Processing {batch_time:.1f}s, Merge {merge_time:.1f}s")
+        logger.info("="*60)
         
         return merged, total_time
 
@@ -325,16 +420,49 @@ if __name__ == '__main__':
         }
     }
     
-    # Test coordinator
-    print("Testing MegaBatchCoordinator...")
-    coordinator = MegaBatchCoordinator(batt_module_name='mock_batt', batch_size=2)
+    # Test coordinator - Sequential mode
+    print("\n" + "="*60)
+    print("Testing MegaBatchCoordinator - SEQUENTIAL MODE")
+    print("="*60)
+    coordinator_seq = MegaBatchCoordinator(
+        batt_module_name='mock_batt', 
+        batch_size=2,
+        parallel=False,
+        enable_gpu=False
+    )
     
     task_list = ['task1', 'task2']
-    results, elapsed = coordinator.process_all(mock_data, task_list)
+    results_seq, elapsed_seq = coordinator_seq.process_all(mock_data, task_list)
     
-    print(f"\n✅ Processed {len(task_list)} tasks in {elapsed:.3f}s")
-    print(f"Results structure: {list(results.keys())}")
-    for task_id in results:
-        print(f"  {task_id}: {len(results[task_id]['demo'])} demo, {len(results[task_id]['test'])} test")
+    print(f"\n✅ Sequential: Processed {len(task_list)} tasks in {elapsed_seq:.3f}s")
+    print(f"   Throughput: {5/elapsed_seq:.1f} samples/s")
+    
+    # Test coordinator - Parallel mode
+    print("\n" + "="*60)
+    print("Testing MegaBatchCoordinator - PARALLEL MODE")
+    print("="*60)
+    coordinator_par = MegaBatchCoordinator(
+        batt_module_name='mock_batt', 
+        batch_size=2,
+        parallel=True,
+        max_workers=4,
+        enable_gpu=False  # GPU ops tested separately
+    )
+    
+    results_par, elapsed_par = coordinator_par.process_all(mock_data, task_list)
+    
+    print(f"\n✅ Parallel: Processed {len(task_list)} tasks in {elapsed_par:.3f}s")
+    print(f"   Throughput: {5/elapsed_par:.1f} samples/s")
+    
+    # Compare
+    speedup = elapsed_seq / elapsed_par if elapsed_par > 0 else 1.0
+    print(f"\n{'='*60}")
+    print(f"SPEEDUP: {speedup:.2f}x (Parallel vs Sequential)")
+    print(f"{'='*60}")
+    
+    # Verify results match
+    assert results_seq.keys() == results_par.keys(), "Result keys don't match!"
+    print("✅ Results verified: Sequential and Parallel produce same structure")
     
     print("\n✅ MegaBatchCoordinator working!")
+    print("\nNext: Test with GPU operations enabled on Kaggle")
