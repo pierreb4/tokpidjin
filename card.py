@@ -193,7 +193,7 @@ class Code:
 
         differ = self.differ[self.t_num]
         solver = self.solver[self.t_num]
-        print(f'    # t{self.t_num} - {differ = } - {solver = } - {old_items = } - {old_hints = }', file=self.file)
+        print(f'    # Pre-mutate: t{self.t_num} - {differ = } - {solver = } - {old_items = } - {old_hints = }', file=self.file)
 
         has_mutation = Mutation(False, None, None)
         old_args = re.findall(r'\b(\w+)\b', old_call)
