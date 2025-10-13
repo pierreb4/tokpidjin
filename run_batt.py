@@ -399,13 +399,18 @@ class D_Score:
 
 def score_sample(args):
     """Score a single sample - works for both demo and test (Week 6B optimization)"""
-    i, sample, sample_type, task_id, S, pile_log_path, timeout, DO_PRINT = args
+    i, sample, sample_type, task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name = args
+    
+    # Import batt in worker process (needed for ProcessPoolExecutor)
+    import importlib
+    batt_module = importlib.import_module(batt_module_name)
+    batt_func = batt_module.batt
     
     I = sample['input']
     O = sample['output']
     
     # Call batt with thread-based timeout
-    solve_timed_out, solve_result = call_with_timeout(batt,
+    solve_timed_out, solve_result = call_with_timeout(batt_func,
         [task_id, S, I, None, pile_log_path], timeout)
     
     if solve_timed_out and DO_PRINT:
@@ -436,7 +441,7 @@ def score_sample(args):
             if match:
                 diff_call_count += 1
                 # Run diff to get solver-level scores
-                diff_timed_out, diff_result = call_with_timeout(batt,
+                diff_timed_out, diff_result = call_with_timeout(batt_func,
                     [task_id, S, I, O, pile_log_path], timeout)
                 
                 if diff_result is not None:
@@ -454,7 +459,7 @@ def score_sample(args):
     }
 
 
-def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
+def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None, batt_module_name='batt'):
     """Check batt - now synchronous with parallel demo sample scoring"""
     task_start = timer()
     demo_task = total_data['demo'][task_id]
@@ -484,11 +489,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     # Add demo samples
     for i, sample in enumerate(demo_task):
-        all_sample_args.append((i, sample, 'demo', task_id, S, pile_log_path, timeout, DO_PRINT))
+        all_sample_args.append((i, sample, 'demo', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name))
     
     # Add test samples
     for i, sample in enumerate(test_task):
-        all_sample_args.append((i, sample, 'test', task_id, S, pile_log_path, timeout, DO_PRINT))
+        all_sample_args.append((i, sample, 'test', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name))
     
     if GPU_AVAILABLE:
         # GPU: Parallel execution with ThreadPoolExecutor (GPU context not fork-safe)
@@ -741,7 +746,7 @@ def check_save(path, score, max_files=32):
     return no_save
 
 
-async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None):
+async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None, batt_module_name='batt'):
     """Run batt - async for validation, but check_batt is now synchronous"""
     if prof is not None:
         prof_call_start = timer()
@@ -749,7 +754,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     print_l(f'-- {task_id} - {task_i} start --') if DO_PRINT else None
 
     all_o, o_score, s_score = check_batt(total_data,
-            task_i, task_id, d_score, start_time, pile_log_path, timeout=timeout, prof=prof)
+            task_i, task_id, d_score, start_time, pile_log_path, timeout=timeout, prof=prof, batt_module_name=batt_module_name)
 
     print_l(f'-- {task_id} - {task_i} scored --') if DO_PRINT else None
 
@@ -1211,7 +1216,7 @@ async def main_mega_batch(do_list, start=0, count=0, batch_size=1000, batt_modul
     return results
 
 
-async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None):
+async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None, batt_module_name='batt'):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
@@ -1248,7 +1253,7 @@ async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profil
     for task_i, task_id in enumerate(do_list):
         d_score = D_Score()
         loop_start = timer() if prof is not None else None
-        timed_out = await run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof)
+        timed_out = await run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof, batt_module_name=batt_module_name)
         if prof is not None:
             prof['main.run_batt'] += timer() - loop_start
         if timed_out:
@@ -1318,7 +1323,7 @@ if __name__ == "__main__":
             import cProfile, pstats, io
             pr = cProfile.Profile()
             pr.enable()
-            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))
+            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing, batt_module_name=args.batt_import))
             pr.disable()
             s = io.StringIO()
             ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
@@ -1331,4 +1336,4 @@ if __name__ == "__main__":
             print('\n[cProfile tottime top]')
             print(s.getvalue())
         else:
-            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))
+            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing, batt_module_name=args.batt_import))
