@@ -578,13 +578,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     print_l(f'- {o_solver_id = } - {match = }')
                 o_score.update(o_solver_id, match)
 
-                # We know the correct output for demo tasks, not eval tasks
-                # TODO Try comparing to C when we start dealing with eval tasks
-                # XXX Or just do that all the time, to simplify? The performance
-                # hit is only on demoing tasks, that are pre-processed, right? 
+                # XXX We'll have to change this when we don't have O
                 diff_timed_out, diff_result = call_with_timeout(batt,
-                    # [task_id, S, I, O, pile_log_path], timeout)
-                    [task_id, S, I, C, pile_log_path], timeout)
+                    [task_id, S, I, O, pile_log_path], timeout)
 
                 if diff_result is not None:
                     _, s['test'][i] = diff_result
