@@ -230,24 +230,38 @@ class MegaBatchCoordinator:
         Returns:
             List of BatchResult objects
         """
+        # ALWAYS print this to know we reached this code
+        print(f"🔍 process_batch called: batch_idx={batch_idx}, enable_gpu={self.enable_gpu}, batch_size={len(batch)}")
+        
         # Try to import batch context for GPU-aware DSL operations
         batch_context = None
         if self.enable_gpu:
+            print(f"🔍 GPU enabled, attempting to import batch_dsl_context...")
             try:
                 from batch_dsl_context import batch_dsl_context
+                print(f"✅ batch_dsl_context imported successfully")
                 batch_context = batch_dsl_context(gpu_ops=self.gpu_ops, enable_gpu=True)
+                print(f"🔥 GPU-aware context activated for batch processing")
                 logger.info("🔥 GPU-aware context activated for batch processing")
             except ImportError as e:
+                print(f"❌ ImportError: {e}")
                 logger.warning(f"⚠️  batch_dsl_context not available: {e}")
                 logger.warning("⚠️  GPU operations will NOT be used (Option 1 not active)")
             except Exception as e:
+                print(f"❌ Exception: {e}")
+                import traceback
+                traceback.print_exc()
                 logger.error(f"❌ Failed to activate GPU context: {e}")
+        else:
+            print(f"🔍 GPU disabled (enable_gpu={self.enable_gpu}), skipping batch context")
         
         # Use GPU-aware context if available, otherwise process directly
         if batch_context is not None:
+            print(f"✅ Using GPU context manager")
             with batch_context:
                 return self._process_batch_impl(batch, batch_idx)
         else:
+            print(f"⚠️  Processing without GPU context")
             return self._process_batch_impl(batch, batch_idx)
     
     def _process_batch_impl(self, batch: List[BatchInput], batch_idx: int) -> List[BatchResult]:
