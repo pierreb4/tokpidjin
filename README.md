@@ -2,30 +2,34 @@
 
 The DSL was created with the aim of being expressive enough to allow programs solving arbitrary ARC tasks, and generic, i.e. consisting of only few primitives, each useful for many tasks (see [`dsl.py`](dsl.py)). As a proof of concept, solver programs for the training tasks were written (see [`solvers.py`](solvers.py)). See [`arc_dsl_writeup.pdf`](arc_dsl_writeup.pdf) for a more detailed description of the work.
 
-## 🚀 GPU Acceleration (NEW!)
+## 🚀 Performance Optimization
 
-**Looking for GPU acceleration?** → Start with **[QUICK_START.md](QUICK_START.md)** (25-minute onboarding)
+### Week 6: Caching & Parallelization ✅ COMPLETE
+**Achievement: 3.6x speedup** (~8s → ~2.2s per task on Kaggle)
 
-This project now includes GPU acceleration for ARC solvers:
-- ✅ 2.0-2.5x expected speedup (validated on 8,616 grids)
+The `run_batt.py` solver evaluation system has been optimized through:
+- ✅ **Week 6A**: Smart caching for validation and inlining (2.8x speedup)
+  - Inlining cache: 78-80% hit rate, 7.3x faster
+  - Validation: Already optimal at 18x parallelization
+- ✅ **Week 6B**: Unified sample processing with multiprocessing (1.25x additional)
+  - Combined demo + test samples for better parallelization
+  - ProcessPoolExecutor with loky for closure support
+  - 20-30% speedup on multi-sample tasks
+
+**Current Status**: Week 6A & 6B complete. Ready for Week 6C (algorithm optimizations).
+
+**Documentation:**
+- [WEEK6_COMPLETE_SUMMARY.md](WEEK6_COMPLETE_SUMMARY.md) - Complete Week 6A & 6B overview (START HERE)
+- [WEEK6A_COMPLETE_ANALYSIS.md](WEEK6A_COMPLETE_ANALYSIS.md) - Cache implementation details
+- [WEEK6B_LOKY_INSTALL.md](WEEK6B_LOKY_INSTALL.md) - Installation guide
+
+### GPU Acceleration (Separate Track)
+GPU optimization for batch operations (100+ samples):
+- ✅ 10-35x speedup for mega-batch processing
+- ✅ Kaggle GPU support (T4x2, P100, L4x4)
 - ✅ 100% correctness maintained
-- ✅ Automatic CPU/GPU selection (hybrid strategy)
-- ✅ Kaggle compatible
 
-**Quick Links:**
-- [QUICK_START.md](QUICK_START.md) - 25-minute introduction
-- [GPU_README.md](GPU_README.md) - Quick start guide
-- [GPU_WEEKS_1_2_3_COMPLETE.md](GPU_WEEKS_1_2_3_COMPLETE.md) - Complete summary
-
-## 🚀 Batt Performance Optimization (NEW!)
-
-The `run_batt.py` solver evaluation system has been optimized for **4.06x speedup**:
-- ✅ 21.788s → 5.359s on Kaggle L4x4
-- ✅ 100% correctness preserved
-- ✅ Match-only diff optimization (97% reduction in unnecessary work)
-- ✅ Parallel processing throughout
-
-**Documentation:** See [BATT_OPTIMIZATION_COMPLETE.md](BATT_OPTIMIZATION_COMPLETE.md) for details.
+**Documentation:** [GPU_DOCS_INDEX.md](GPU_DOCS_INDEX.md) - Complete GPU documentation index
 
 
 ## Example solver program for task 00d62c1b written in the DSL
