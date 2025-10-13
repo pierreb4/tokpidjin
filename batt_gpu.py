@@ -48,7 +48,14 @@ def batch_process_samples_gpu(S):
     GPU-accelerated batch processing of samples.
     
     Pattern: apply(first/second, S) + mapply(p_g, ...)
-    Expected speedup: 10-35x on L4x4 GPU
+    
+    NOTE: GPU has significant overhead (initialization, transfers).
+    For small batches (< 100 samples), CPU is actually FASTER!
+    - Local CPU: ~10ms per batt() call
+    - Kaggle GPU: ~127ms per batt() call (10x slower!)
+    
+    GPU only beneficial for mega-batches (100+ samples).
+    For normal batt execution (2-5 samples), use CPU fallback.
     
     Args:
         S: Tuple of (input, output) sample pairs
@@ -58,7 +65,9 @@ def batch_process_samples_gpu(S):
     """
     from pile import apply, first, second, mapply, p_g
     
-    if not USE_GPU or len(S) < 3:
+    # GPU overhead dominates for small batches - use CPU fallback
+    # Threshold: 100 samples (GPU beneficial for mega-batch operations only)
+    if not USE_GPU or len(S) < 100:
         # CPU fallback for small batches or no GPU
         t1 = apply(first, S)
         t2 = apply(second, S)
