@@ -3,8 +3,7 @@
 # Unlike batt_mega_test.py which uses old batch_process_samples_gpu
 
 from pile import *
-from gpu_env import GPUEnv as Env
-from safe_dsl import _get_safe_default
+# Note: We don't need GPUEnv here - mega_batch_batt.py handles GPU coordination
 
 def batt(task_id, S, I, C, log_path):
     """
