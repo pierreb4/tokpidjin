@@ -237,7 +237,7 @@ class Code:
         if self.vectorized:
             # Vectorized mode: direct assignment, no exception handling
             # Pre-validation happens at batch level
-            print(f'        t{self.t_num} = {call_string}', file=self.file)
+            print(f'    t{self.t_num} = {call_string}', file=self.file)
         else:
             # Standard mode: safe with try/except
             print(f'    try:', file=self.file)

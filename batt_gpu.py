@@ -3,7 +3,19 @@ Batt GPU Support - Preamble for generated batt files.
 
 This module provides GPU initialization and batch processing support
 that gets imported by generated batt files instead of being inlined.
+
+Exports:
+    - GPU optimization objects (gpu_opt, multi_gpu_opt, USE_GPU, etc.)
+    - batch_process_samples_gpu() - GPU-accelerated sample processing
+    - Batch validation functions from batt_validation module
 """
+
+# Export validation functions for vectorized mode
+from batt_validation import (
+    validate_and_call,
+    batch_validate_and_call,
+    safe_batch_operation
+)
 
 try:
     from gpu_optimizations import auto_select_optimizer, MultiGPUOptimizer

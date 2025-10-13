@@ -21,6 +21,7 @@ import utils as utils_module
 from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
 from run_test import check_solver_speed
+from mega_batch_batt import MegaBatchCoordinator
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 try:
@@ -1014,6 +1015,96 @@ def pick_rnd_task(task_list, total_data):
     return [task_id]
 
 
+async def main_mega_batch(do_list, start=0, count=0, batch_size=1000, batt_module_name='batt', enable_timing=False):
+    """
+    Mega-batch mode: Process all tasks using GPU batch optimization.
+    
+    Instead of calling batt() 4000+ times sequentially, this:
+    1. Collects all inputs from all tasks
+    2. Batches them into chunks of ~1000
+    3. Processes each batch (Week 5: GPU vectorized)
+    4. Merges results back per-task
+    
+    Expected speedup (Week 5): 4.8-9x faster than sequential
+    """
+    print(f"\n{'='*60}")
+    print("MEGA-BATCH MODE - GPU Batch Processing")
+    print(f"{'='*60}")
+    print(f"Batch size: {batch_size}")
+    print(f"Batt module: {batt_module_name}")
+    
+    start_time = timer()
+    
+    # Load data
+    train_data = get_data(train=True, sort_by_size=True)
+    total_data = train_data
+    
+    # Determine task list
+    full_list = list(total_data['demo'].keys())
+    
+    if start == 0 and count < 0:
+        task_list = random.sample(full_list, -count)
+    else:
+        task_list = full_list[start:start + count] if count > 0 else full_list[start:]
+    
+    if do_list is None:
+        do_list = pick_rnd_task(task_list, total_data)
+    elif len(do_list) == 0:
+        do_list = task_list
+    
+    print(f"Processing {len(do_list)} tasks")
+    
+    # Initialize mega-batch coordinator
+    coordinator = MegaBatchCoordinator(
+        batt_module_name=batt_module_name,
+        batch_size=batch_size
+    )
+    
+    # Process all tasks with mega-batch
+    pile_log_path = 'pile.log'
+    if os.path.isfile(pile_log_path):
+        os.remove(pile_log_path)
+    
+    print("\nCollecting inputs from all tasks...")
+    results, elapsed = coordinator.process_all(total_data, do_list, pile_log_path)
+    
+    print(f"\n{'='*60}")
+    print("MEGA-BATCH RESULTS")
+    print(f"{'='*60}")
+    print(f"Total time: {elapsed:.3f}s")
+    print(f"Tasks processed: {len(results)}")
+    
+    # Calculate statistics
+    total_samples = 0
+    total_candidates = 0
+    for task_id, task_results in results.items():
+        demo_count = len(task_results['demo'])
+        test_count = len(task_results['test'])
+        total_samples += demo_count + test_count
+        
+        # Count candidates
+        for sample_results in task_results['demo'].values():
+            total_candidates += len(sample_results.get('o', []))
+        for sample_results in task_results['test'].values():
+            total_candidates += len(sample_results.get('o', []))
+    
+    print(f"Total samples: {total_samples}")
+    print(f"Total candidates: {total_candidates}")
+    print(f"Average time per sample: {elapsed/total_samples*1000:.2f}ms")
+    print(f"Average time per task: {elapsed/len(results):.3f}s")
+    
+    if enable_timing:
+        print("\nPerformance Notes:")
+        print("  - This is CPU sequential baseline (Week 4)")
+        print("  - Week 5 will add GPU vectorization")
+        print("  - Expected Week 5 speedup: 4.8-9x faster")
+        print(f"  - Projected GPU time: {elapsed/6:.3f}s (assuming 6x speedup)")
+    
+    print(f"{'='*60}\n")
+    
+    return results
+
+
 async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None):
     train_data = get_data(train=True, sort_by_size=True)
     # eval_data = get_data(train=False, sort_by_size=True)
@@ -1081,35 +1172,54 @@ if __name__ == "__main__":
     parser.add_argument('--timing', action='store_true', help='Print lightweight timing breakdown')
     parser.add_argument('--cprofile', action='store_true', help='Run with cProfile and print top stats')
     parser.add_argument('--cprofile-top', type=int, default=30, help='Number of top functions to show in cProfile')
+    parser.add_argument('--mega-batch', action='store_true', help='Use mega-batch GPU processing (4000+ samples)')
+    parser.add_argument('--batch-size', type=int, default=1000, help='Batch size for mega-batch mode (default: 1000)')
     args = parser.parse_args()
 
-    batt_module = importlib.import_module(args.batt_import)
-    batt = batt_module.batt if hasattr(batt_module, 'batt') else batt
-
-    call_module = importlib.import_module(f'{args.batt_import}_call')
-    t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
-
-    # # Try prioritizing mix_task_ids included by card.py
-    # mix_module = importlib.import_module(f'{args.batt_import}_mix')
-    # mix_task_ids = mix_module.mix_task_ids if hasattr(mix_module, 'mix_task_ids') else {}
-    # print_l(f'Prioritizing: {mix_task_ids = }')
-    # args.task_ids = mix_task_ids
-
-    if args.cprofile:
-        import cProfile, pstats, io
-        pr = cProfile.Profile()
-        pr.enable()
-        asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))
-        pr.disable()
-        s = io.StringIO()
-        ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
-        ps.print_stats(args.cprofile_top)
-        print('\n[cProfile cumulative top]')
-        print(s.getvalue())
-        s = io.StringIO()
-        ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
-        ps.print_stats(args.cprofile_top)
-        print('\n[cProfile tottime top]')
-        print(s.getvalue())
+    # Choose execution mode
+    if args.mega_batch:
+        # Mega-batch mode: GPU batch processing (Week 4-5)
+        # Batt module will be loaded by MegaBatchCoordinator
+        asyncio.run(main_mega_batch(
+            do_list=args.task_ids,
+            start=args.start,
+            count=args.count,
+            batch_size=args.batch_size,
+            batt_module_name=args.batt_import,
+            enable_timing=args.timing
+        ))
     else:
-        asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))
+        # Standard mode: Load batt module for traditional processing
+        batt_module = importlib.import_module(args.batt_import)
+        batt = batt_module.batt if hasattr(batt_module, 'batt') else None
+        
+        if batt is None:
+            raise ValueError(f"Module {args.batt_import} has no batt function")
+
+        call_module = importlib.import_module(f'{args.batt_import}_call')
+        t_call = call_module.t_call if hasattr(call_module, 't_call') else {}
+
+        # # Try prioritizing mix_task_ids included by card.py
+        # mix_module = importlib.import_module(f'{args.batt_import}_mix')
+        # mix_task_ids = mix_module.mix_task_ids if hasattr(mix_module, 'mix_task_ids') else {}
+        # print_l(f'Prioritizing: {mix_task_ids = }')
+        # args.task_ids = mix_task_ids
+
+        if args.cprofile:
+            import cProfile, pstats, io
+            pr = cProfile.Profile()
+            pr.enable()
+            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))
+            pr.disable()
+            s = io.StringIO()
+            ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
+            ps.print_stats(args.cprofile_top)
+            print('\n[cProfile cumulative top]')
+            print(s.getvalue())
+            s = io.StringIO()
+            ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
+            ps.print_stats(args.cprofile_top)
+            print('\n[cProfile tottime top]')
+            print(s.getvalue())
+        else:
+            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing))
