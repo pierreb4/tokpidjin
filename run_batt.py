@@ -8,6 +8,7 @@ import importlib
 import os
 import asyncio
 import multiprocessing as mp
+import gc
 
 import dill as pickle
 
@@ -580,9 +581,13 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             if DO_PRINT:
                 print_l(f"-- {executor_class.__name__} failed ({error_type}: {e}), trying ThreadPoolExecutor")
             
+            # Force garbage collection to free memory before trying fallback
+            gc.collect()
+            
             # Try ThreadPoolExecutor as fallback (lighter weight)
+            # Use only 1 worker to minimize memory usage
             try:
-                with ThreadPoolExecutor(max_workers=2) as executor:
+                with ThreadPoolExecutor(max_workers=1) as executor:
                     sample_futures = {executor.submit(score_sample, args): args 
                                     for args in all_sample_args}
                     
@@ -605,7 +610,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 'diff_calls': 0,
                                 'matches': 0
                             })
-            except Exception as e:
+            except (OSError, MemoryError, RuntimeError, Exception) as e:
                 # ThreadPoolExecutor also failed - fall back to sequential
                 if DO_PRINT:
                     print_l(f"-- ThreadPoolExecutor also failed ({e}), using sequential processing")
