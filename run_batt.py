@@ -37,17 +37,23 @@ try:
     from gpu_optimizations import KaggleGPUOptimizer
     
     if GPU_AVAILABLE:
-        # Kaggle GPU detection and configuration
-        gpu_count = cp.cuda.runtime.getDeviceCount()
-        print(f"Kaggle GPU Support: {GPU_AVAILABLE} ({gpu_count} devices)")
-        for i in range(gpu_count):
-            device = cp.cuda.Device(i)
-            mem_total = device.mem_info[1] / (1024**3)
-            print(f"  GPU {i}: Compute {device.compute_capability}, Memory: {mem_total:.1f}GB")
-        
-        # Initialize optimized batch processor
-        gpu_optimizer = KaggleGPUOptimizer(device_id=0)
-        print("✓ Kaggle GPU Optimizer initialized")
+        try:
+            # Kaggle GPU detection and configuration
+            gpu_count = cp.cuda.runtime.getDeviceCount()
+            print(f"Kaggle GPU Support: {GPU_AVAILABLE} ({gpu_count} devices)")
+            for i in range(gpu_count):
+                device = cp.cuda.Device(i)
+                mem_total = device.mem_info[1] / (1024**3)
+                print(f"  GPU {i}: Compute {device.compute_capability}, Memory: {mem_total:.1f}GB")
+            
+            # Initialize optimized batch processor
+            gpu_optimizer = KaggleGPUOptimizer(device_id=0)
+            print("✓ Kaggle GPU Optimizer initialized")
+        except Exception as e:
+            # CUDA driver not available or insufficient (common on Kaggle CPU-only sessions)
+            print(f"GPU detected but not accessible: {e}")
+            GPU_AVAILABLE = False
+            gpu_optimizer = None
     else:
         gpu_optimizer = None
 except ImportError:
