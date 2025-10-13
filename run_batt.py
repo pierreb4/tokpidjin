@@ -1231,7 +1231,11 @@ async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profil
         task_list = full_list[start:start + count] if count > 0 else full_list[start:]
 
     if do_list is None:
-        do_list = pick_rnd_task(task_list, total_data)
+        # If count is negative, we already randomly sampled, so use all of task_list
+        if start == 0 and count < 0:
+            do_list = task_list
+        else:
+            do_list = pick_rnd_task(task_list, total_data)
     elif len(do_list) == 0:
         # List all tasks
         do_list = task_list
