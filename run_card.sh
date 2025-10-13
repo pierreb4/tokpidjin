@@ -63,16 +63,18 @@ if [ -z "$TIMEOUT" ]; then
 fi
 
 # Determine GPU mode
+# TEMPORARY: Default to CPU mode because --vectorized is broken
 USE_GPU=false
 if [ -n "$FORCE_GPU" ]; then
-    echo "=== FORCED GPU MODE ==="
+    echo "=== FORCED GPU MODE (WARNING: vectorized code may have bugs!) ==="
     USE_GPU=true
 elif [ -n "$FORCE_CPU" ]; then
     echo "=== FORCED CPU MODE ==="
     USE_GPU=false
 elif command -v nvidia-smi &> /dev/null; then
-    echo "=== GPU DETECTED - AUTO GPU MODE ==="
-    USE_GPU=true
+    echo "=== GPU DETECTED - DEFAULTING TO CPU MODE (vectorized code broken) ==="
+    echo "Use -g flag to force GPU mode if needed"
+    USE_GPU=false  # Changed from true to false
     nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
 else
     echo "=== NO GPU - CPU MODE ==="
