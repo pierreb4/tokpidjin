@@ -1,0 +1,60 @@
+# Ignore data and folders with generated files
+data/
+stats/
+error/
+solver_*/
+differ_*/
+solvers_*.py
+batt.py
+batt_call.py
+batt_diff.py
+batt_main.py
+batt_run.py
+call.py
+key_*.txt
+next_task_dev.txt
+todo_set_dev.txt
+best_s_count.txt
+last_s_count.txt
+scratch.*
+*.log
+tmp_batt_*
+
+# Ignore cache directory
+.cache/
+
+# Ignore .gitignore
+.gitignore
+git_pb.sh
+
+# Ignore environment files
+.venv/
+old.venv/
+.envrc
+old.envrc
+.env
+.python-version
+
+# Ignore Python transients
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Ignore rex files
+requirements.txt
+.to-requirements.txt/
+logs/to-requirements.txt.log
+
+# Ignore IDE files
+.idea/
+.vscode/
+.sourcery.yaml
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+.metadata_never_index
