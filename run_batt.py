@@ -579,6 +579,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if DO_PRINT:
             print_l(f"-- Demo+Test scoring: {total_outputs} outputs, {total_matches} matches, {total_diff_calls} diff calls (skipped {total_outputs - total_diff_calls})")
     
+    # Week 6B: Profile result aggregation to find overhead
+    if prof is not None:
+        agg_start = timer()
+    
     # Aggregate demo results
     for result in demo_results:
         if result is None:
@@ -587,21 +591,35 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         i = result['index']
         o['demo'][i] = result['outputs']
         s['demo'][i] = result['solver_scores']
+        
+        # Use update instead of union for better performance
+        if prof is not None:
+            union_start = timer()
         all_o = all_o.union(result['outputs'])
+        if prof is not None:
+            prof['batt.result.union'] = prof.get('batt.result.union', 0) + (timer() - union_start)
         
         # Update scores
+        if prof is not None:
+            score_start = timer()
         O = demo_task[i]['output']
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
             match = C == O
             o_score.update(o_solver_id, match)
+        if prof is not None:
+            prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
         
         # Update solver scores
+        if prof is not None:
+            dscore_start = timer()
         for s_item in result['solver_scores']:
             # Extract o_solver_id from first output if available
             if result['outputs']:
                 o_solver_id = result['outputs'][0][2]
                 d_score.update(o_solver_id, s_item)
+        if prof is not None:
+            prof['batt.dscore.update'] = prof.get('batt.dscore.update', 0) + (timer() - dscore_start)
 
     # Aggregate test results (now processed in parallel with demo!)
     for result in test_results:
@@ -611,29 +629,52 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         i = result['index']
         o['test'][i] = result['outputs']
         s['test'][i] = result['solver_scores']
+        
+        # Use update instead of union for better performance
+        if prof is not None:
+            union_start = timer()
         all_o = all_o.union(result['outputs'])
+        if prof is not None:
+            prof['batt.result.union'] = prof.get('batt.result.union', 0) + (timer() - union_start)
         
         # Update scores
+        if prof is not None:
+            score_start = timer()
         O = test_task[i]['output']
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
             match = C == O
             o_score.update(o_solver_id, match)
+        if prof is not None:
+            prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
         
         # Update solver scores
+        if prof is not None:
+            dscore_start = timer()
         for s_item in result['solver_scores']:
             # Extract o_solver_id from first output if available
             if result['outputs']:
                 o_solver_id = result['outputs'][0][2]
                 d_score.update(o_solver_id, s_item)
+        if prof is not None:
+            prof['batt.dscore.update'] = prof.get('batt.dscore.update', 0) + (timer() - dscore_start)
+    
+    if prof is not None:
+        prof['batt.aggregation.total'] = timer() - agg_start
 
     # NOTE Move this around when we start with 'eval' runs?
+    if prof is not None:
+        consolidate_start = timer()
+    
     for o_solver_id in d_score.score.keys():
         for name in d_score.score[o_solver_id].keys():
             if name not in s_score:
                 s_score[name] = {'iz': S_Score(), 'zo': S_Score()}
             for score_type in ['iz', 'zo']:
                 s_score[name][score_type].update(o_solver_id, d_score.score[o_solver_id][name][score_type])
+    
+    if prof is not None:
+        prof['batt.score.consolidate'] = timer() - consolidate_start
 
     # Week 6B: Test samples now processed in parallel with demo samples above!
     # Old sequential test processing removed - all samples processed together
