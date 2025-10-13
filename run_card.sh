@@ -1,12 +1,15 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [-b] [-c COUNT] [-i] [-o] [-t TIMEOUT]"
+  echo "Usage: $0 [-b] [-c COUNT] [-i] [-o] [-t TIMEOUT] [-g] [-m] [-T]"
   echo "  -b: Build solvers_*.py"
   echo "  -c: Count of tasks to run (default is all tasks)"
   echo "  -i: Initial run (removes old solvers)"
   echo "  -o: One run only (stops after one iteration)"
-  echo "  -t: Maximum timeout for each run (default is 1.0 seconds)"
+  echo "  -t: Maximum timeout for each run (default is 10.0 seconds)"
+  echo "  -g: Force GPU mode (generate vectorized batt)"
+  echo "  -m: Force CPU mode (no GPU, no vectorized)"
+  echo "  -T: Enable timing output (--timing flag)"
 }
 
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
@@ -19,14 +22,20 @@ COUNT=
 INITIAL=
 ONERUN=
 TIMEOUT=
+FORCE_GPU=
+FORCE_CPU=
+TIMING=
 
-while getopts "bc:iot:" opt; do
+while getopts "bc:iot:gmT" opt; do
   case $opt in
     b) BUILD=true ;;
     c) COUNT="$OPTARG" ;;
     i) INITIAL=true ;;
     o) ONERUN=true ;;
     t) TIMEOUT="$OPTARG" ;;
+    g) FORCE_GPU=true ;;
+    m) FORCE_CPU=true ;;
+    T) TIMING=true ;;
     *) echo "Invalid option: -$OPTARG" >&2; usage; exit 1 ;;
   esac
 done
@@ -50,30 +59,44 @@ if [ -z "$COUNT" ]; then
 fi
 
 if [ -z "$TIMEOUT" ]; then
-  TIMEOUT=1.0
+  TIMEOUT=10.0
 fi
 
-if command -v nvidia-smi &> /dev/null; then
-    echo "Testing GPU acceleration..."
-    python -c "
-from dsl import GPU_AVAILABLE, _grid_to_gpu
-from run_batt import configure_gpu_memory
-print(f'GPU Available: {GPU_AVAILABLE}')
-if GPU_AVAILABLE:
-    configure_gpu_memory()
-    print('GPU memory configured')
-"
-fi
-
-# Add GPU detection and configuration
-if command -v nvidia-smi &> /dev/null; then
-    echo "GPU detected, enabling GPU acceleration"
-    export CUDA_VISIBLE_DEVICES=0
-    export GPU_BATCH_SIZE=32
-    # GPU_ARGS="--use-gpu --batch-size 32"
+# Determine GPU mode
+USE_GPU=false
+if [ -n "$FORCE_GPU" ]; then
+    echo "=== FORCED GPU MODE ==="
+    USE_GPU=true
+elif [ -n "$FORCE_CPU" ]; then
+    echo "=== FORCED CPU MODE ==="
+    USE_GPU=false
+elif command -v nvidia-smi &> /dev/null; then
+    echo "=== GPU DETECTED - AUTO GPU MODE ==="
+    USE_GPU=true
+    nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
 else
-    echo "No GPU detected, using CPU"
-    GPU_ARGS=""
+    echo "=== NO GPU - CPU MODE ==="
+    USE_GPU=false
+fi
+
+# Set GPU-related variables
+if [ "$USE_GPU" = true ]; then
+    export CUDA_VISIBLE_DEVICES=0,1,2,3
+    CARD_GPU_ARGS="--vectorized"
+    BATT_GPU_ARGS=""
+    echo "Card.py: Generating vectorized batt for GPU"
+    echo "Timeout: ${TIMEOUT}s (GPU operations need more time)"
+else
+    CARD_GPU_ARGS=""
+    BATT_GPU_ARGS=""
+    echo "Card.py: Generating standard batt for CPU"
+    echo "Timeout: ${TIMEOUT}s"
+fi
+
+# Add timing flag if requested
+if [ -n "$TIMING" ]; then
+    BATT_GPU_ARGS="$BATT_GPU_ARGS --timing"
+    echo "Timing: ENABLED"
 fi
 
 CHARS=({0..9} {a..f})
@@ -98,8 +121,9 @@ while date && [ $STOP -eq 0 ]; do
     # Remove old temporary files
     find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
 
-    python card.py $CARD_OPTION -c 32 -f ${TMPBATT}_run.py $GPU_ARGS
-    # python card.py $CARD_OPTION -f ${TMPBATT}_run.py
+    # Generate batt with GPU support if enabled
+    echo "Generating batt: python card.py $CARD_OPTION -c 32 $CARD_GPU_ARGS -f ${TMPBATT}_run.py"
+    python card.py $CARD_OPTION -c 32 $CARD_GPU_ARGS -f ${TMPBATT}_run.py
     unset CARD_OPTION
 
     # Pick a random timeout between 0.1 and 0.5 * TIMEOUT
@@ -118,8 +142,10 @@ while date && [ $STOP -eq 0 ]; do
       ulimit -v $mem_limit &>/dev/null || echo "Memory limit not supported"
     fi
 
-    timeout 3600s python -u run_batt.py -i -t $TIMEOUT -c $COUNT \
-        -b ${TMPBATT}_run $GPU_ARGS | tee ${TMPBATT}_run.log
+    # Run batt with timing and GPU args
+    echo "Running: python run_batt.py -t $TIMEOUT -c $COUNT -b ${TMPBATT}_run $BATT_GPU_ARGS"
+    timeout 3600s python -u run_batt.py -t $TIMEOUT -c $COUNT \
+        -b ${TMPBATT}_run $BATT_GPU_ARGS | tee ${TMPBATT}_run.log
   fi
 
   # Remove results that are too large (for now)
