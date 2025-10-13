@@ -14,7 +14,11 @@ Usage:
 
 Requirements:
     - Kaggle notebook with GPU enabled
-    - Files: gpu_dsl_operations.py, mega_batch_batt.py, batt_gpu_operations_test.py, dsl.py, arc_types.py
+    - Files: 
+        * Core: gpu_dsl_operations.py, mega_batch_batt.py, batt_gpu_operations_test.py
+        * DSL: dsl.py, safe_dsl.py, arc_types.py, pile.py, utils.py, constants.py, differs.py
+        * GPU: gpu_optimizations.py (MultiGPUOptimizer)
+        * Solvers: solvers_pre.py, solvers_lnk.py, solvers_dir.py
     - Note: Uses batt_gpu_operations_test.py (calls actual GPU ops) not batt_mega_test.py (calls old GPU system)
 
 Author: Pierre
