@@ -1,0 +1,2 @@
+def solve(S, I, C):
+    return merge_t(hsplit(paint(hconcat(I, canvas(BLACK, astuple(THREE, subtract(multiply(multiply(colorcount_t(I, BLACK), THREE), colorcount_t(I, BLACK)), THREE)))), mapply(astuple(ONE, subtract(FIVE, size_f(sizefilter(colorfilter(rbind(subgrid, I), BLUE), FOUR)))), apply(rbind(multiply, THREE), interval(ZERO, subtract(NINE, colorcount_t(I, BLACK)), ONE)))), colorcount_t(I, BLACK)))

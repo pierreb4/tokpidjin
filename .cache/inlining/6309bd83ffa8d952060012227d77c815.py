@@ -1,0 +1,2 @@
+def solve(S, I, C):
+    return downscale(paint(fill(upscale_t(I, TWO), YELLOW, mapply(mfilter_t, apply(merge, sfilter_f(product(colorfilter(o_g(upscale_t(I, TWO), R7), RED), colorfilter(o_g(upscale_t(I, TWO), R7), RED)), compose(lbind(greater, FIVE), fork(manhattan, width_t(subgrid(get_arg_rank_f(o_g(I, R3), size, F0), I)), width_t(subgrid(get_arg_rank_f(o_g(I, R3), size, L1), I)))))))), merge(colorfilter(o_g(upscale_t(I, TWO), R7), RED))), TWO)

@@ -1,0 +1,2 @@
+def solve(S, I, C):
+    return fill(paint(canvas(BLACK, shape_t(I)), get_arg_rank_f(colorfilter(o_g(upscale_t(I, TWO), R7), RED), size, F0)), BLACK, sfilter_f(width_t(subgrid(get_arg_rank_f(o_g(I, R3), size, F0), I)), compose(lbind(greater, THREE), chain(rbind(colorcount_f, get_color_rank_f(get_arg_rank_f(colorfilter(o_g(upscale_t(I, TWO), R7), RED), size, F0), F0)), rbind(toobject, paint(canvas(BLACK, shape_t(I)), get_arg_rank_f(colorfilter(o_g(upscale_t(I, TWO), R7), RED), size, F0))), neighbors))))
