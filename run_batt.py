@@ -7,6 +7,7 @@ import math
 import importlib
 import os
 import asyncio
+import multiprocessing as mp
 
 import dill as pickle
 
@@ -29,7 +30,14 @@ from batt_cache import (
     get_cache_stats
 )
 
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed
+# Use loky for better pickling support (handles closures like rbind.<locals>.f)
+try:
+    from loky import ProcessPoolExecutor
+    LOKY_AVAILABLE = True
+except ImportError:
+    from concurrent.futures import ProcessPoolExecutor
+    LOKY_AVAILABLE = False
 try:
     import cupy as cp
     from dsl import GPU_AVAILABLE
@@ -512,7 +520,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     else:
         # CPU-only: Use ProcessPoolExecutor for true CPU parallelism (Week 6B)
         # Conservative 4 workers for multi-instance server (8 concurrent run_card.sh)
-        # ProcessPoolExecutor avoids GIL, provides 4x speedup on CPU-bound work
+        # Uses loky if available (better pickling support for DSL closures like rbind)
+        if not LOKY_AVAILABLE and DO_PRINT:
+            print_l("Warning: loky not available, using standard ProcessPoolExecutor (may fail on closures)")
+        
         try:
             with ProcessPoolExecutor(max_workers=4) as executor:
                 # Submit all samples (demo + test) for parallel execution
