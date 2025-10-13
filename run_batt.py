@@ -524,13 +524,31 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     })
     else:
         # CPU-only: Use ProcessPoolExecutor for true CPU parallelism (Week 6B)
-        # Conservative 4 workers for multi-instance server (8 concurrent run_card.sh)
-        # Uses loky if available (better pickling support for DSL closures like rbind)
-        if not LOKY_AVAILABLE and DO_PRINT:
+        # Conservative workers for multi-instance server environment
+        # Check sample count to decide strategy
+        sample_count = len(all_sample_args)
+        
+        # Memory-aware worker selection
+        # Small batches (<4 samples): Use threads (lighter, good for small work)
+        # Large batches (>=4 samples): Try processes (better CPU parallelism)
+        use_threads = sample_count < 4
+        
+        if not LOKY_AVAILABLE and not use_threads and DO_PRINT:
             print_l("Warning: loky not available, using standard ProcessPoolExecutor (may fail on closures)")
         
+        # Try ProcessPoolExecutor first for CPU parallelism, fall back to threads if memory issues
+        process_pool_failed = False
         try:
-            with ProcessPoolExecutor(max_workers=4) as executor:
+            if use_threads:
+                # Small batch: Use ThreadPoolExecutor (lighter weight)
+                executor_class = ThreadPoolExecutor
+                max_workers = min(sample_count, 3)
+            else:
+                # Large batch: Try ProcessPoolExecutor
+                executor_class = ProcessPoolExecutor
+                max_workers = min(sample_count, 3)  # Reduced from 4 to 3 for memory safety
+            
+            with executor_class(max_workers=max_workers) as executor:
                 # Submit all samples (demo + test) for parallel execution
                 sample_futures = {executor.submit(score_sample, args): args 
                                 for args in all_sample_args}
@@ -555,10 +573,64 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             'diff_calls': 0,
                             'matches': 0
                         })
-        except Exception as e:
-            # Fallback to sequential if ProcessPoolExecutor fails
+        except (OSError, MemoryError, RuntimeError) as e:
+            # Memory or resource errors - fall back to ThreadPoolExecutor or sequential
+            process_pool_failed = True
+            error_type = type(e).__name__
             if DO_PRINT:
-                print_l(f"-- ProcessPoolExecutor failed ({e}), falling back to sequential")
+                print_l(f"-- {executor_class.__name__} failed ({error_type}: {e}), trying ThreadPoolExecutor")
+            
+            # Try ThreadPoolExecutor as fallback (lighter weight)
+            try:
+                with ThreadPoolExecutor(max_workers=2) as executor:
+                    sample_futures = {executor.submit(score_sample, args): args 
+                                    for args in all_sample_args}
+                    
+                    all_results = []
+                    for future in as_completed(sample_futures):
+                        try:
+                            result = future.result(timeout=None)
+                            all_results.append(result)
+                        except Exception as e:
+                            args = sample_futures[future]
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                            all_results.append({
+                                'index': sample_idx,
+                                'sample_type': sample_type,
+                                'outputs': [],
+                                'solver_scores': [],
+                                'timed_out': True,
+                                'diff_calls': 0,
+                                'matches': 0
+                            })
+            except Exception as e:
+                # ThreadPoolExecutor also failed - fall back to sequential
+                if DO_PRINT:
+                    print_l(f"-- ThreadPoolExecutor also failed ({e}), using sequential processing")
+                all_results = []
+                for args in all_sample_args:
+                    try:
+                        result = score_sample(args)
+                        all_results.append(result)
+                    except Exception as e:
+                        sample_type, sample_idx = args[2], args[0]
+                        if DO_PRINT:
+                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                        all_results.append({
+                            'index': sample_idx,
+                            'sample_type': sample_type,
+                            'outputs': [],
+                            'solver_scores': [],
+                            'timed_out': True,
+                            'diff_calls': 0,
+                            'matches': 0
+                        })
+        except Exception as e:
+            # Other errors - fall back to sequential
+            if DO_PRINT:
+                print_l(f"-- Parallel execution failed ({e}), falling back to sequential")
             all_results = []
             for args in all_sample_args:
                 try:
