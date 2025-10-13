@@ -29,7 +29,7 @@ from batt_cache import (
     get_cache_stats
 )
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 try:
     import cupy as cp
     from dsl import GPU_AVAILABLE
@@ -466,18 +466,19 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     # Uses call_with_timeout (pure threading) instead of asyncio.gather
     prof_start = timer() if prof is not None else None
     
-    # CPU-only fix: Use sequential processing to avoid thread exhaustion
-    # GPU environments can handle more concurrent threads, but CPU-only environments
-    # exhaust system threads even with reduced concurrency due to daemon thread creation
+    # Week 6B: Use ProcessPoolExecutor for CPU-only mode to get true parallelism
+    # GPU environments use ThreadPoolExecutor (lightweight, works with GPU context)
+    # CPU environments use ProcessPoolExecutor (avoids GIL, better for CPU-bound work)
+    
+    # Prepare arguments for each demo sample
+    demo_args = [
+        (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
+        for i, sample in enumerate(demo_task)
+    ]
+    
     if GPU_AVAILABLE:
-        # GPU: Parallel execution with ThreadPoolExecutor (original behavior)
+        # GPU: Parallel execution with ThreadPoolExecutor (GPU context not fork-safe)
         with ThreadPoolExecutor(max_workers=5) as executor:
-            # Prepare arguments for each demo sample
-            demo_args = [
-                (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
-                for i, sample in enumerate(demo_task)
-            ]
-            
             # Submit all demo samples for parallel execution
             demo_futures = {executor.submit(score_demo_sample, args): args[0] 
                            for args in demo_args}
@@ -499,24 +500,50 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                         'timed_out': True
                     }
     else:
-        # CPU-only: Sequential execution to minimize thread creation
-        # Each score_demo_sample creates 2-3 daemon threads via call_with_timeout
-        # Sequential execution prevents thread accumulation
-        demo_results = []
-        for i, sample in enumerate(demo_task):
-            args = (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
-            try:
-                result = score_demo_sample(args)
-                demo_results.append(result)
-            except Exception as e:
-                if DO_PRINT:
-                    print_l(f"-- {task_id} - demo[{i}] failed: {e}")
-                demo_results.append({
-                    'index': i,
-                    'outputs': [],
-                    'solver_scores': [],
-                    'timed_out': True
-                })
+        # CPU-only: Use ProcessPoolExecutor for true CPU parallelism (Week 6B)
+        # Conservative 4 workers for multi-instance server (8 concurrent run_card.sh)
+        # ProcessPoolExecutor avoids GIL, provides 4x speedup on CPU-bound work
+        try:
+            with ProcessPoolExecutor(max_workers=4) as executor:
+                # Submit all demo samples for parallel execution
+                demo_futures = {executor.submit(score_demo_sample, args): args[0] 
+                               for args in demo_args}
+                
+                # Collect results as they complete
+                demo_results = [None] * len(demo_task)
+                for future in as_completed(demo_futures):
+                    try:
+                        result = future.result(timeout=None)
+                        demo_results[result['index']] = result
+                    except Exception as e:
+                        sample_idx = demo_futures[future]
+                        if DO_PRINT:
+                            print_l(f"-- {task_id} - demo[{sample_idx}] failed: {e}")
+                        demo_results[sample_idx] = {
+                            'index': sample_idx,
+                            'outputs': [],
+                            'solver_scores': [],
+                            'timed_out': True
+                        }
+        except Exception as e:
+            # Fallback to sequential if ProcessPoolExecutor fails
+            if DO_PRINT:
+                print_l(f"-- ProcessPoolExecutor failed ({e}), falling back to sequential")
+            demo_results = []
+            for args in demo_args:
+                try:
+                    result = score_demo_sample(args)
+                    demo_results.append(result)
+                except Exception as e:
+                    i = args[0]
+                    if DO_PRINT:
+                        print_l(f"-- {task_id} - demo[{i}] failed: {e}")
+                    demo_results.append({
+                        'index': i,
+                        'outputs': [],
+                        'solver_scores': [],
+                        'timed_out': True
+                    })
     
     if prof is not None:
         prof['batt.demo.parallel'] = timer() - prof_start
