@@ -648,7 +648,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     print_l(f'-- {task_id} - {task_i} start --') if DO_PRINT else None
 
     all_o, o_score, s_score = check_batt(total_data,
-            task_i, task_id, d_score, start_time, pile_log_path, timeout=5, prof=prof)
+            task_i, task_id, d_score, start_time, pile_log_path, timeout=timeout, prof=prof)
 
     print_l(f'-- {task_id} - {task_i} scored --') if DO_PRINT else None
 
@@ -1165,8 +1165,8 @@ if __name__ == "__main__":
                         help='Start from this task number (default: 0)')
     parser.add_argument('-c', '--count', type=int, default=0,
                         help='Number of tasks to run (default: 0 - all tasks)')
-    parser.add_argument('-t', '--timeout', type=float, default=1,
-                        help='Timeout for each task in seconds (default: 1)')
+    parser.add_argument('-t', '--timeout', type=float, default=10,
+                        help='Timeout for each task in seconds (default: 10)')
     parser.add_argument('-b', '--batt_import', type=str, default='batt',
                         help='Module to import for batt (default: batt)')
     parser.add_argument('--timing', action='store_true', help='Print lightweight timing breakdown')
