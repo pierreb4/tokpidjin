@@ -389,9 +389,9 @@ class D_Score:
             self.score[solver_id][d_name]['zo'] += size > 0
 
 
-def score_demo_sample(args):
-    """Score a single demo sample (for parallel execution with ThreadPoolExecutor)"""
-    i, sample, task_id, S, pile_log_path, timeout, DO_PRINT = args
+def score_sample(args):
+    """Score a single sample - works for both demo and test (Week 6B optimization)"""
+    i, sample, sample_type, task_id, S, pile_log_path, timeout, DO_PRINT = args
     
     I = sample['input']
     O = sample['output']
@@ -401,21 +401,21 @@ def score_demo_sample(args):
         [task_id, S, I, None, pile_log_path], timeout)
     
     if solve_timed_out and DO_PRINT:
-        print_l(f'-- {task_id} - demo[{i}] timed out')
+        print_l(f'-- {task_id} - {sample_type}[{i}] timed out')
     
-    demo_o = []
-    demo_s = []
+    sample_o = []
+    sample_s = []
     diff_call_count = 0
     match_count = 0
     
     if solve_result is not None:
-        demo_o, _ = solve_result
+        sample_o, _ = solve_result
         
         if DO_PRINT:
-            print_l(f"demo[{i}] - {task_id} - {len(demo_o)}")
+            print_l(f"{sample_type}[{i}] - {task_id} - {len(sample_o)}")
         
         # Score outputs and run diff for this sample
-        for t_n, evo, o_solver_id, okt in demo_o:
+        for t_n, evo, o_solver_id, okt in sample_o:
             C = okt
             match = C == O
             if match:
@@ -432,13 +432,14 @@ def score_demo_sample(args):
                     [task_id, S, I, O, pile_log_path], timeout)
                 
                 if diff_result is not None:
-                    _, demo_s_result = diff_result
-                    demo_s.extend(demo_s_result)
+                    _, sample_s_result = diff_result
+                    sample_s.extend(sample_s_result)
     
     return {
         'index': i,
-        'outputs': demo_o,
-        'solver_scores': demo_s,
+        'sample_type': sample_type,
+        'outputs': sample_o,
+        'solver_scores': sample_s,
         'timed_out': solve_timed_out,
         'diff_calls': diff_call_count,
         'matches': match_count
@@ -462,97 +463,121 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     o_score = O_Score()
     s_score = {}
     
-    # Phase 4 Alternative: Parallel demo scoring with ThreadPoolExecutor
+    # Week 6B: Unified parallel sample scoring for demo + test together
     # Uses call_with_timeout (pure threading) instead of asyncio.gather
     prof_start = timer() if prof is not None else None
     
-    # Week 6B: Use ProcessPoolExecutor for CPU-only mode to get true parallelism
-    # GPU environments use ThreadPoolExecutor (lightweight, works with GPU context)
+    # Week 6B Optimization: Process ALL samples (demo + test) together for better parallelization
+    # GPU environments use ThreadPoolExecutor (GPU context not fork-safe)
     # CPU environments use ProcessPoolExecutor (avoids GIL, better for CPU-bound work)
     
-    # Prepare arguments for each demo sample
-    demo_args = [
-        (i, sample, task_id, S, pile_log_path, timeout, DO_PRINT)
-        for i, sample in enumerate(demo_task)
-    ]
+    # Prepare arguments for ALL samples (demo + test combined)
+    all_sample_args = []
+    
+    # Add demo samples
+    for i, sample in enumerate(demo_task):
+        all_sample_args.append((i, sample, 'demo', task_id, S, pile_log_path, timeout, DO_PRINT))
+    
+    # Add test samples
+    for i, sample in enumerate(test_task):
+        all_sample_args.append((i, sample, 'test', task_id, S, pile_log_path, timeout, DO_PRINT))
     
     if GPU_AVAILABLE:
         # GPU: Parallel execution with ThreadPoolExecutor (GPU context not fork-safe)
         with ThreadPoolExecutor(max_workers=5) as executor:
-            # Submit all demo samples for parallel execution
-            demo_futures = {executor.submit(score_demo_sample, args): args[0] 
-                           for args in demo_args}
+            # Submit all samples (demo + test) for parallel execution
+            sample_futures = {executor.submit(score_sample, args): args 
+                            for args in all_sample_args}
             
             # Collect results as they complete
-            demo_results = [None] * len(demo_task)
-            for future in as_completed(demo_futures):
+            all_results = []
+            for future in as_completed(sample_futures):
                 try:
                     result = future.result(timeout=None)
-                    demo_results[result['index']] = result
+                    all_results.append(result)
                 except Exception as e:
-                    sample_idx = demo_futures[future]
+                    args = sample_futures[future]
+                    sample_type, sample_idx = args[2], args[0]
                     if DO_PRINT:
-                        print_l(f"-- {task_id} - demo[{sample_idx}] failed: {e}")
-                    demo_results[sample_idx] = {
+                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                    all_results.append({
                         'index': sample_idx,
+                        'sample_type': sample_type,
                         'outputs': [],
                         'solver_scores': [],
-                        'timed_out': True
-                    }
+                        'timed_out': True,
+                        'diff_calls': 0,
+                        'matches': 0
+                    })
     else:
         # CPU-only: Use ProcessPoolExecutor for true CPU parallelism (Week 6B)
         # Conservative 4 workers for multi-instance server (8 concurrent run_card.sh)
         # ProcessPoolExecutor avoids GIL, provides 4x speedup on CPU-bound work
         try:
             with ProcessPoolExecutor(max_workers=4) as executor:
-                # Submit all demo samples for parallel execution
-                demo_futures = {executor.submit(score_demo_sample, args): args[0] 
-                               for args in demo_args}
+                # Submit all samples (demo + test) for parallel execution
+                sample_futures = {executor.submit(score_sample, args): args 
+                                for args in all_sample_args}
                 
                 # Collect results as they complete
-                demo_results = [None] * len(demo_task)
-                for future in as_completed(demo_futures):
+                all_results = []
+                for future in as_completed(sample_futures):
                     try:
                         result = future.result(timeout=None)
-                        demo_results[result['index']] = result
+                        all_results.append(result)
                     except Exception as e:
-                        sample_idx = demo_futures[future]
+                        args = sample_futures[future]
+                        sample_type, sample_idx = args[2], args[0]
                         if DO_PRINT:
-                            print_l(f"-- {task_id} - demo[{sample_idx}] failed: {e}")
-                        demo_results[sample_idx] = {
+                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                        all_results.append({
                             'index': sample_idx,
+                            'sample_type': sample_type,
                             'outputs': [],
                             'solver_scores': [],
-                            'timed_out': True
-                        }
+                            'timed_out': True,
+                            'diff_calls': 0,
+                            'matches': 0
+                        })
         except Exception as e:
             # Fallback to sequential if ProcessPoolExecutor fails
             if DO_PRINT:
                 print_l(f"-- ProcessPoolExecutor failed ({e}), falling back to sequential")
-            demo_results = []
-            for args in demo_args:
+            all_results = []
+            for args in all_sample_args:
                 try:
-                    result = score_demo_sample(args)
-                    demo_results.append(result)
+                    result = score_sample(args)
+                    all_results.append(result)
                 except Exception as e:
-                    i = args[0]
+                    sample_type, sample_idx = args[2], args[0]
                     if DO_PRINT:
-                        print_l(f"-- {task_id} - demo[{i}] failed: {e}")
-                    demo_results.append({
-                        'index': i,
+                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                    all_results.append({
+                        'index': sample_idx,
+                        'sample_type': sample_type,
                         'outputs': [],
                         'solver_scores': [],
-                        'timed_out': True
+                        'timed_out': True,
+                        'diff_calls': 0,
+                        'matches': 0
                     })
+    
+    # Split results back into demo and test
+    demo_results = [r for r in all_results if r['sample_type'] == 'demo']
+    test_results = [r for r in all_results if r['sample_type'] == 'test']
+    
+    # Sort by index to maintain order
+    demo_results.sort(key=lambda x: x['index'])
+    test_results.sort(key=lambda x: x['index'])
     
     if prof is not None:
         prof['batt.demo.parallel'] = timer() - prof_start
-        # Track optimization metrics
-        total_diff_calls = sum(r.get('diff_calls', 0) for r in demo_results if r is not None)
-        total_matches = sum(r.get('matches', 0) for r in demo_results if r is not None)
-        total_outputs = sum(len(r.get('outputs', [])) for r in demo_results if r is not None)
+        # Track optimization metrics for ALL samples (demo + test)
+        total_diff_calls = sum(r.get('diff_calls', 0) for r in all_results)
+        total_matches = sum(r.get('matches', 0) for r in all_results)
+        total_outputs = sum(len(r.get('outputs', [])) for r in all_results)
         if DO_PRINT:
-            print_l(f"-- Demo scoring: {total_outputs} outputs, {total_matches} matches, {total_diff_calls} diff calls (skipped {total_outputs - total_diff_calls})")
+            print_l(f"-- Demo+Test scoring: {total_outputs} outputs, {total_matches} matches, {total_diff_calls} diff calls (skipped {total_outputs - total_diff_calls})")
     
     # Aggregate demo results
     for result in demo_results:
@@ -578,6 +603,30 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                 o_solver_id = result['outputs'][0][2]
                 d_score.update(o_solver_id, s_item)
 
+    # Aggregate test results (now processed in parallel with demo!)
+    for result in test_results:
+        if result is None:
+            continue
+            
+        i = result['index']
+        o['test'][i] = result['outputs']
+        s['test'][i] = result['solver_scores']
+        all_o = all_o.union(result['outputs'])
+        
+        # Update scores
+        O = test_task[i]['output']
+        for t_n, evo, o_solver_id, okt in result['outputs']:
+            C = okt
+            match = C == O
+            o_score.update(o_solver_id, match)
+        
+        # Update solver scores
+        for s_item in result['solver_scores']:
+            # Extract o_solver_id from first output if available
+            if result['outputs']:
+                o_solver_id = result['outputs'][0][2]
+                d_score.update(o_solver_id, s_item)
+
     # NOTE Move this around when we start with 'eval' runs?
     for o_solver_id in d_score.score.keys():
         for name in d_score.score[o_solver_id].keys():
@@ -586,48 +635,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             for score_type in ['iz', 'zo']:
                 s_score[name][score_type].update(o_solver_id, d_score.score[o_solver_id][name][score_type])
 
-    # Test sample scoring (sequential - typically only 1 test sample)
-    for i, sample in enumerate(test_task):
-        I = sample['input']
-        O = sample['output']
-        if prof is not None:
-            prof_start = timer()
-        solve_timed_out, solve_result = call_with_timeout(batt,
-            [task_id, S, I, None, pile_log_path], timeout)
-        if prof is not None:
-            prof['batt.test.call_with_timeout'] += timer() - prof_start
-
-        if solve_timed_out and DO_PRINT:
-            print_l(f'-- {task_id} - test[{i}] timed out')
-
-        t_set = set()
-        if solve_result is not None:
-            o['test'][i], _ = solve_result
-
-            print_l(f"test[{i}] - {task_id} - {len(o['test'][i])}") if DO_PRINT else None
-
-            all_o = all_o.union(o['test'][i])
-            for t_n, evo, o_solver_id, okt in o['test'][i]:
-                # if not okt.ok:
-                #     continue
-
-                # Compare candidate C with expected output O
-                # C = okt.t
-                C = okt
-                if match := C == O:
-                    print_l(f'- {o_solver_id = } - {match = }')
-                o_score.update(o_solver_id, match)
-
-                # XXX We'll have to change this when we don't have O
-                diff_timed_out, diff_result = call_with_timeout(batt,
-                    [task_id, S, I, O, pile_log_path], timeout)
-
-                if diff_result is not None:
-                    _, s['test'][i] = diff_result
-
-                    for s_item in s['test'][i]:
-                        d_score.update(o_solver_id, s_item)
-
+    # Week 6B: Test samples now processed in parallel with demo samples above!
+    # Old sequential test processing removed - all samples processed together
+    
     len_task = len(demo_task) + len(test_task)
     elapsed = timer() - start_time
     return all_o, o_score, s_score
