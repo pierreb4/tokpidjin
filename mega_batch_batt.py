@@ -221,7 +221,7 @@ class MegaBatchCoordinator:
         Process a single batch by calling batt() for each input.
         
         Phase 1: Parallel processing of independent batt() calls
-        Phase 2: GPU-accelerated operations within batt (TODO: Week 5 Day 2-3)
+        Phase 2: GPU-accelerated operations within batt (GPU context wraps DSL ops)
         
         Args:
             batch: List of BatchInput objects to process
@@ -230,37 +230,42 @@ class MegaBatchCoordinator:
         Returns:
             List of BatchResult objects
         """
-        if self.parallel and len(batch) > 1:
-            # Parallel processing with ThreadPoolExecutor
-            results = [None] * len(batch)
-            with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-                futures = {
-                    executor.submit(self.process_single_input, batch_input, input_idx, batch_idx): input_idx
-                    for input_idx, batch_input in enumerate(batch)
-                }
+        # Import batch context for GPU-aware DSL operations
+        from batch_dsl_context import batch_dsl_context
+        
+        # Use GPU-aware context if enabled
+        with batch_dsl_context(gpu_ops=self.gpu_ops, enable_gpu=self.enable_gpu):
+            if self.parallel and len(batch) > 1:
+                # Parallel processing with ThreadPoolExecutor
+                results = [None] * len(batch)
+                with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+                    futures = {
+                        executor.submit(self.process_single_input, batch_input, input_idx, batch_idx): input_idx
+                        for input_idx, batch_input in enumerate(batch)
+                    }
+                    
+                    for future in concurrent.futures.as_completed(futures):
+                        input_idx = futures[future]
+                        try:
+                            result = future.result()
+                            results[input_idx] = result
+                        except Exception as e:
+                            logger.error(f"Batch {batch_idx}, input {input_idx} parallel failed: {e}")
+                            results[input_idx] = BatchResult(
+                                batch_idx=input_idx,
+                                o_result=[],
+                                s_result=[]
+                            )
                 
-                for future in concurrent.futures.as_completed(futures):
-                    input_idx = futures[future]
-                    try:
-                        result = future.result()
-                        results[input_idx] = result
-                    except Exception as e:
-                        logger.error(f"Batch {batch_idx}, input {input_idx} parallel failed: {e}")
-                        results[input_idx] = BatchResult(
-                            batch_idx=input_idx,
-                            o_result=[],
-                            s_result=[]
-                        )
-            
-            return results
-        else:
-            # Sequential processing (fallback or single item)
-            results = []
-            for input_idx, batch_input in enumerate(batch):
-                result = self.process_single_input(batch_input, input_idx, batch_idx)
-                results.append(result)
-            
-            return results
+                return results
+            else:
+                # Sequential processing (fallback or single item)
+                results = []
+                for input_idx, batch_input in enumerate(batch):
+                    result = self.process_single_input(batch_input, input_idx, batch_idx)
+                    results.append(result)
+                
+                return results
     
     def merge_results(self, inputs: List[BatchInput], results: List[List[BatchResult]]) -> Dict:
         """
