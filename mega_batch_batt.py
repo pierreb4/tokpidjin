@@ -230,12 +230,32 @@ class MegaBatchCoordinator:
         Returns:
             List of BatchResult objects
         """
-        # Import batch context for GPU-aware DSL operations
-        from batch_dsl_context import batch_dsl_context
+        # Try to import batch context for GPU-aware DSL operations
+        batch_context = None
+        if self.enable_gpu:
+            try:
+                from batch_dsl_context import batch_dsl_context
+                batch_context = batch_dsl_context(gpu_ops=self.gpu_ops, enable_gpu=True)
+                logger.info("🔥 GPU-aware context activated for batch processing")
+            except ImportError as e:
+                logger.warning(f"⚠️  batch_dsl_context not available: {e}")
+                logger.warning("⚠️  GPU operations will NOT be used (Option 1 not active)")
+            except Exception as e:
+                logger.error(f"❌ Failed to activate GPU context: {e}")
         
-        # Use GPU-aware context if enabled
-        with batch_dsl_context(gpu_ops=self.gpu_ops, enable_gpu=self.enable_gpu):
-            if self.parallel and len(batch) > 1:
+        # Use GPU-aware context if available, otherwise process directly
+        if batch_context is not None:
+            with batch_context:
+                return self._process_batch_impl(batch, batch_idx)
+        else:
+            return self._process_batch_impl(batch, batch_idx)
+    
+    def _process_batch_impl(self, batch: List[BatchInput], batch_idx: int) -> List[BatchResult]:
+        """
+        Internal implementation of batch processing.
+        Called within GPU context if available.
+        """
+        if self.parallel and len(batch) > 1:
                 # Parallel processing with ThreadPoolExecutor
                 results = [None] * len(batch)
                 with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
