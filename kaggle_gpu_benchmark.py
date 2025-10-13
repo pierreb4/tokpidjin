@@ -14,7 +14,8 @@ Usage:
 
 Requirements:
     - Kaggle notebook with GPU enabled
-    - Files: gpu_dsl_operations.py, mega_batch_batt.py, batt_mega_test.py, dsl.py, arc_types.py
+    - Files: gpu_dsl_operations.py, mega_batch_batt.py, batt_gpu_operations_test.py, dsl.py, arc_types.py
+    - Note: Uses batt_gpu_operations_test.py (calls actual GPU ops) not batt_mega_test.py (calls old GPU system)
 
 Author: Pierre
 Date: October 13, 2025
@@ -130,8 +131,10 @@ def run_benchmark(mode='sequential', enable_gpu=False, parallel=True, max_worker
     print(f"{'='*70}\n")
     
     # Create coordinator
+    # NOTE: Using batt_gpu_operations_test.py which actually calls our GPU operations
+    # (batch_mapply, batch_o_g, batch_apply) instead of old batch_process_samples_gpu
     coordinator = MegaBatchCoordinator(
-        batt_module_name='batt_mega_test',
+        batt_module_name='batt_gpu_operations_test',
         batch_size=20,
         enable_gpu=enable_gpu,
         parallel=parallel,
