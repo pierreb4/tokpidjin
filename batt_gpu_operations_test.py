@@ -2,8 +2,8 @@
 # This tests the actual GPU operations (batch_mapply, batch_o_g, batch_apply)
 # Unlike batt_mega_test.py which uses old batch_process_samples_gpu
 
-from pile import *
-# Note: We don't need GPUEnv here - mega_batch_batt.py handles GPU coordination
+from dsl import *  # All DSL functions: mapply, apply, rot90, flip, objects, o_g, etc.
+# Note: mega_batch_batt.py handles GPU coordination via gpu_dsl_operations.py
 
 def batt(task_id, S, I, C, log_path):
     """
