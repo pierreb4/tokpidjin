@@ -1,29 +1,20 @@
 """
-Kaggle GPU Benchmark - Week 5 Day 3
+Kaggle GPU Benchmark - Week 5 Day 3 (FIXED)
 
-This script benchmarks the mega-batch coordinator with GPU operations
-on Kaggle's GPU infrastructure (T4, P100, or L4x4).
-
-Expected speedups:
-- Sequential (CPU baseline): 1.0x
-- Parallel (4 workers, CPU): 3.5-4x
-- Parallel + GPU (Tier 1): 7-12x
+This is the corrected version that works on Kaggle.
+Fixed: Kaggle API authentication check
 
 Usage:
-    python kaggle_gpu_benchmark.py
-
-Requirements:
-    - Kaggle notebook with GPU enabled
-    - Files: gpu_dsl_operations.py, mega_batch_batt.py, batt_mega_test.py, dsl.py, arc_types.py
+    python kaggle_gpu_benchmark_fixed.py
 
 Author: Pierre
 Date: October 13, 2025
-Week: 5 Day 3
 """
 
 import sys
 import logging
 import json
+import os
 from timeit import default_timer as timer
 from pathlib import Path
 
@@ -42,7 +33,6 @@ def check_environment():
     print("="*70)
     
     # Check if running on Kaggle (check for /kaggle directory instead of API)
-    import os
     if os.path.exists('/kaggle'):
         print("✅ Running on Kaggle")
     else:

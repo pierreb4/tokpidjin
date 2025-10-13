@@ -57,7 +57,7 @@ print(f"GPU count: {cp.cuda.runtime.getDeviceCount()}")
 ```python
 # Cell 3: Setup path
 import sys
-sys.path.insert(0, '/kaggle/input/your-dataset-name')  # Adjust path
+sys.path.insert(0, '/kaggle/input/tokpidjin')  # Dataset name: tokpidjin
 
 # Verify imports
 from gpu_dsl_operations import get_gpu_ops
@@ -70,7 +70,7 @@ print("✅ All imports successful")
 ### Step 5: Run Benchmark
 ```python
 # Cell 4: Run benchmark
-!python /kaggle/input/your-dataset-name/kaggle_gpu_benchmark.py
+!python /kaggle/input/tokpidjin/kaggle_gpu_benchmark.py
 ```
 - [ ] Benchmark started
 - [ ] All 3 modes tested (Sequential, Parallel CPU, Parallel GPU)
@@ -225,10 +225,10 @@ Based on actual speedup:
 import cupy as cp; print(f"GPUs: {cp.cuda.runtime.getDeviceCount()}")
 
 # Setup path
-import sys; sys.path.insert(0, '/kaggle/input/your-dataset-name')
+import sys; sys.path.insert(0, '/kaggle/input/tokpidjin')
 
 # Run benchmark
-!python /kaggle/input/your-dataset-name/kaggle_gpu_benchmark.py
+!python /kaggle/input/tokpidjin/kaggle_gpu_benchmark.py
 
 # Check results
 import json
