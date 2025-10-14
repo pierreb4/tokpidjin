@@ -591,8 +591,23 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             all_results = []
             for future in as_completed(sample_futures):
                 try:
-                    result = future.result(timeout=None)
+                    # Use generous timeout to prevent hanging on stuck workers
+                    result = future.result(timeout=600)  # 10 minutes max per sample result
                     all_results.append(result)
+                except TimeoutError:
+                    args = sample_futures[future]
+                    sample_type, sample_idx = args[2], args[0]
+                    if DO_PRINT:
+                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
+                    all_results.append({
+                        'index': sample_idx,
+                        'sample_type': sample_type,
+                        'outputs': [],
+                        'solver_scores': [],
+                        'timed_out': True,
+                        'diff_calls': 0,
+                        'matches': 0
+                    })
                 except Exception as e:
                     args = sample_futures[future]
                     sample_type, sample_idx = args[2], args[0]
@@ -703,8 +718,24 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                 all_results = list(failed_samples)  # Start with pre-failed samples
                 for future in as_completed(sample_futures):
                     try:
-                        result = future.result(timeout=None)
+                        # Use generous timeout to prevent hanging on stuck workers
+                        # Each sample has internal timeout, but this catches worker hangs
+                        result = future.result(timeout=600)  # 10 minutes max per sample result
                         all_results.append(result)
+                    except TimeoutError:
+                        args = sample_futures[future]
+                        sample_type, sample_idx = args[2], args[0]
+                        if DO_PRINT:
+                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
+                        all_results.append({
+                            'index': sample_idx,
+                            'sample_type': sample_type,
+                            'outputs': [],
+                            'solver_scores': [],
+                            'timed_out': True,
+                            'diff_calls': 0,
+                            'matches': 0
+                        })
                     except Exception as e:
                         args = sample_futures[future]
                         sample_type, sample_idx = args[2], args[0]
@@ -781,8 +812,23 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     all_results = []
                     for future in as_completed(sample_futures):
                         try:
-                            result = future.result(timeout=None)
+                            # Use generous timeout to prevent hanging on stuck workers
+                            result = future.result(timeout=600)  # 10 minutes max per sample result
                             all_results.append(result)
+                        except TimeoutError:
+                            args = sample_futures[future]
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
+                            all_results.append({
+                                'index': sample_idx,
+                                'sample_type': sample_type,
+                                'outputs': [],
+                                'solver_scores': [],
+                                'timed_out': True,
+                                'diff_calls': 0,
+                                'matches': 0
+                            })
                         except Exception as e:
                             args = sample_futures[future]
                             sample_type, sample_idx = args[2], args[0]
