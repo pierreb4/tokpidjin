@@ -149,7 +149,7 @@ while date && [ $STOP -eq 0 ]; do
     # Run batt with timing and GPU args
     # Timeout reduced from 3600s (1hr) to 1s per task to fail faster on thread exhaustion
     echo "Running: python run_batt.py -t $TIMEOUT -c $COUNT -b ${TMPBATT}_run $BATT_GPU_ARGS"
-    timeout ${COUNT}s python -u run_batt.py -t $TIMEOUT -c $COUNT \
+    timeout ${COUNT#-}s python -u run_batt.py -t $TIMEOUT -c $COUNT \
         -b ${TMPBATT}_run $BATT_GPU_ARGS | tee ${TMPBATT}_run.log
   fi
 
