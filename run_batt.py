@@ -12,6 +12,7 @@ import gc
 import threading
 import atexit
 import signal
+import time
 
 import dill as pickle
 
@@ -623,8 +624,36 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             
             try:
                 # Submit all samples (demo + test) for parallel execution
-                sample_futures = {executor.submit(score_sample, args): args 
-                                for args in all_sample_args}
+                # Use retry with backoff for "can't start new thread" errors
+                sample_futures = {}
+                for args in all_sample_args:
+                    # Retry submission with exponential backoff if thread creation fails
+                    max_retries = 5
+                    retry_delay = 0.1  # Start with 100ms
+                    
+                    for attempt in range(max_retries):
+                        try:
+                            future = executor.submit(score_sample, args)
+                            sample_futures[future] = args
+                            break  # Success, move to next sample
+                        except RuntimeError as e:
+                            if "can't start new thread" in str(e):
+                                if attempt < max_retries - 1:
+                                    # Backoff and retry
+                                    if DO_PRINT and attempt == 0:
+                                        sample_type, sample_idx = args[2], args[0]
+                                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed, retrying with backoff...")
+                                    time.sleep(retry_delay)
+                                    retry_delay *= 2  # Exponential backoff
+                                    gc.collect()  # Try to free resources
+                                else:
+                                    # Max retries exceeded, mark as failed
+                                    if DO_PRINT:
+                                        sample_type, sample_idx = args[2], args[0]
+                                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed after {max_retries} retries")
+                                    raise  # Re-raise to handle below
+                            else:
+                                raise  # Different RuntimeError, don't retry
                 
                 # Collect results as they complete
                 all_results = []
@@ -676,8 +705,35 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     _active_executors.append(executor)
                 
                 try:
-                    sample_futures = {executor.submit(score_sample, args): args 
-                                    for args in all_sample_args}
+                    # Submit tasks with retry for thread creation failures
+                    sample_futures = {}
+                    for args in all_sample_args:
+                        max_retries = 5
+                        retry_delay = 0.1  # Start with 100ms
+                        
+                        for attempt in range(max_retries):
+                            try:
+                                future = executor.submit(score_sample, args)
+                                sample_futures[future] = args
+                                break  # Success
+                            except RuntimeError as e:
+                                if "can't start new thread" in str(e):
+                                    if attempt < max_retries - 1:
+                                        # Log on first retry only to avoid spam
+                                        if DO_PRINT and attempt == 0:
+                                            sample_type, sample_idx = args[2], args[0]
+                                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed (ThreadPool fallback), retrying with backoff...")
+                                        time.sleep(retry_delay)
+                                        retry_delay *= 2  # Exponential backoff: 0.1, 0.2, 0.4, 0.8, 1.6s
+                                        gc.collect()  # Free resources before retry
+                                    else:
+                                        # Max retries exceeded
+                                        sample_type, sample_idx = args[2], args[0]
+                                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed after {max_retries} retries")
+                                        raise
+                                else:
+                                    # Different RuntimeError, don't retry
+                                    raise
                     
                     all_results = []
                     for future in as_completed(sample_futures):
