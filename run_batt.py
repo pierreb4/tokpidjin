@@ -196,6 +196,24 @@ def _log_execution_stats(task_id, execution_time, error_type=None, error_msg=Non
         # Don't let stats logging break the main execution
         print_l(f"Warning: Failed to log execution stats: {e}")
 
+def _log_and_exit(task_id, start_time, error_type, error_msg, timeout_value=None):
+    """
+    Log execution stats for a critical error and exit.
+    Used when encountering MemoryError or other critical failures.
+    
+    Args:
+        task_id: The ARC task ID
+        start_time: The start time (from timer())
+        error_type: Type of error ('memory_error', 'critical_error', etc.)
+        error_msg: Brief error message
+        timeout_value: The timeout value used
+    """
+    execution_time = timer() - start_time
+    _log_execution_stats(task_id, execution_time, error_type=error_type, 
+                        error_msg=error_msg, timeout_value=timeout_value)
+    import sys
+    sys.exit(1)
+
 class GPUBatchProcessor:
     """
     Batch processor optimized for Kaggle GPUs (T4x2, P100, L4x4)
@@ -688,8 +706,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             if DO_PRINT:
                                 print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
                             print_l(f"CRITICAL: MemoryError in GPU ThreadPoolExecutor. System out of memory. Exiting.")
-                            import sys
-                            sys.exit(1)
+                            _log_and_exit(task_id, start_time, 'memory_error', 
+                                        f"GPU ThreadPoolExecutor MemoryError at {sample_type}[{sample_idx}]", timeout)
                         except RuntimeError as e:
                             # Handle "can't start new thread" from nested call_with_timeout
                             if "can't start new thread" in str(e):
@@ -740,8 +758,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                 # This happens before any futures can be collected
                 print_l(f"CRITICAL: MemoryError during GPU ThreadPoolExecutor thread creation (Thread._bootstrap)")
                 print_l(f"System critically low on memory. Cannot create worker threads. Exiting.")
-                import sys
-                sys.exit(1)
+                _log_and_exit(task_id, start_time, 'memory_error', 
+                            'GPU ThreadPoolExecutor thread creation MemoryError (Thread._bootstrap)', timeout)
     else:
         # CPU-only: Use ProcessPoolExecutor for true CPU parallelism (Week 6B)
         # Conservative workers for multi-instance server environment
@@ -863,8 +881,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                         if DO_PRINT:
                             print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
                         print_l(f"CRITICAL: MemoryError in CPU ProcessPoolExecutor. System out of memory. Exiting.")
-                        import sys
-                        sys.exit(1)
+                        _log_and_exit(task_id, start_time, 'memory_error', 
+                                    f"CPU ProcessPoolExecutor MemoryError at {sample_type}[{sample_idx}]", timeout)
                     except RuntimeError as e:
                         # Handle "can't start new thread" from nested call_with_timeout
                         if "can't start new thread" in str(e):
@@ -925,8 +943,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             # Do NOT try fallback as it will also fail
             print_l(f"CRITICAL: MemoryError in CPU {executor_class.__name__}")
             print_l(f"System critically low on memory. Cannot create workers. Exiting.")
-            import sys
-            sys.exit(1)
+            _log_and_exit(task_id, start_time, 'memory_error', 
+                        f"CPU {executor_class.__name__} creation MemoryError", timeout)
         except (OSError, RuntimeError) as e:
             # Resource errors (not memory) - fall back to ThreadPoolExecutor or sequential
             process_pool_failed = True
@@ -1004,8 +1022,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 if DO_PRINT:
                                     print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
                                 print_l(f"CRITICAL: MemoryError in ThreadPoolExecutor fallback. System out of memory. Exiting.")
-                                import sys
-                                sys.exit(1)
+                                _log_and_exit(task_id, start_time, 'memory_error', 
+                                            f"ThreadPoolExecutor fallback MemoryError at {sample_type}[{sample_idx}]", timeout)
                             except RuntimeError as e:
                                 # Handle "can't start new thread" from nested call_with_timeout
                                 if "can't start new thread" in str(e):
@@ -1064,8 +1082,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     # System is critically low on memory - immediate exit
                     print_l(f"CRITICAL: MemoryError in ThreadPoolExecutor fallback (Thread._bootstrap)")
                     print_l(f"System critically low on memory. Cannot create fallback threads. Exiting.")
-                    import sys
-                    sys.exit(1)
+                    _log_and_exit(task_id, start_time, 'memory_error', 
+                                'ThreadPoolExecutor fallback creation MemoryError (Thread._bootstrap)', timeout)
             except (OSError, RuntimeError, Exception) as e:
                 # ThreadPoolExecutor also failed - fall back to sequential
                 if DO_PRINT:

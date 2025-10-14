@@ -134,14 +134,23 @@ def analyze_timing(stats, show_errors=False, show_percentiles=False):
     # Error analysis
     if failed:
         print("-" * 70)
-        print("ERROR ANALYSIS")
+        print("ERROR ANALYSIS (INCLUDING EXIT CODES)")
         print("-" * 70)
         
         error_types = Counter(s['error_type'] for s in failed)
         print("Error Types:")
         for error_type, count in error_types.most_common():
             pct = (count / failure_count * 100)
-            print(f"  {error_type:20s}: {count:4d} ({pct:5.1f}%)")
+            # Highlight critical errors that cause exit
+            marker = "⚠️  " if error_type == 'memory_error' else "   "
+            print(f"{marker}{error_type:20s}: {count:4d} ({pct:5.1f}%)")
+        
+        # Count exit codes (memory_error means sys.exit(1))
+        exit_count = sum(1 for s in failed if s['error_type'] == 'memory_error')
+        if exit_count > 0:
+            print()
+            print(f"⚠️  {exit_count} executions exited with code 1 (MemoryError)")
+            print(f"   These are NOT successful - script terminated early!")
         print()
         
         if show_errors:
