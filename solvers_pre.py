@@ -60,9 +60,9 @@ def solve_56dc2b01(S, I, C):
     return O
 
 def solve_3618c87e(S, I, C):
-    x1 = o_g(I, R5)
-    x2 = sizefilter(x1, ONE)
-    x3 = merge_f(x2)
+    x1 = o_g_t(I, R5)
+    x2 = sizefilter_t(x1, ONE)
+    x3 = merge_t(x2)
     O = move(I, x3, TWO_BY_ZERO)
     return O
 
@@ -261,12 +261,12 @@ def solve_36fdfd69(S, I, C):
     return O
 
 def solve_88a10436(S, I, C):
-    x1 = o_g(I, R1)
-    x2 = colorfilter(x1, FIVE)
-    x3 = difference(x1, x2)
-    x4 = get_nth_f(x3, F0)
+    x1 = o_g_t(I, R1)
+    x2 = colorfilter_t(x1, FIVE)
+    x3 = difference_t(x1, x2)
+    x4 = get_nth_t(x3, F0)
     x5 = normalize(x4)
-    x6 = get_nth_f(x2, F0)
+    x6 = get_nth_t(x2, F0)
     x7 = center(x6)
     x8 = shift(x5, x7)
     x9 = shift(x8, NEG_UNITY)
@@ -274,11 +274,11 @@ def solve_88a10436(S, I, C):
     return O
 
 def solve_543a7ed5(S, I, C):
-    x1 = o_g(I, R5)
-    x2 = colorfilter(x1, SIX)
-    x3 = mapply(outbox, x2)
+    x1 = o_g_t(I, R5)
+    x2 = colorfilter_t(x1, SIX)
+    x3 = mapply_t(outbox, x2)
     x4 = fill(I, THREE, x3)
-    x5 = mapply(delta, x2)
+    x5 = mapply_t(delta, x2)
     O = fill(x4, FOUR, x5)
     return O
 
