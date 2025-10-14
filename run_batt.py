@@ -245,6 +245,42 @@ def _log_task_start(task_id, timeout_value):
         # Don't let stats logging break the main execution
         print_l(f"Warning: Failed to log task start: {e}")
 
+def _safe_map_with_timeout(executor, func, items, timeout_per_item=30, operation_name="operation"):
+    """
+    Safe version of executor.map() that doesn't hang on stuck tasks.
+    Uses submit() + as_completed() with per-item timeout.
+    
+    Args:
+        executor: ThreadPoolExecutor or ProcessPoolExecutor
+        func: Function to apply to each item
+        items: Iterable of items to process
+        timeout_per_item: Timeout in seconds for each item (default 30s)
+        operation_name: Name for logging (e.g., "inline_variables")
+    
+    Returns:
+        List of results (None for timed-out items)
+    """
+    from concurrent.futures import as_completed
+    
+    # Submit all tasks
+    futures = {executor.submit(func, item): (i, item) for i, item in enumerate(items)}
+    
+    # Collect results with timeout
+    results = [None] * len(items)
+    for future in as_completed(futures, timeout=timeout_per_item * len(items)):
+        i, item = futures[future]
+        try:
+            result = future.result(timeout=timeout_per_item)
+            results[i] = result
+        except TimeoutError:
+            print_l(f"Warning: {operation_name} timed out after {timeout_per_item}s for item {i}")
+            results[i] = None
+        except Exception as e:
+            print_l(f"Warning: {operation_name} failed for item {i}: {type(e).__name__}: {e}")
+            results[i] = None
+    
+    return results
+
 class GPUBatchProcessor:
     """
     Batch processor optimized for Kaggle GPUs (T4x2, P100, L4x4)
@@ -1429,13 +1465,16 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     
     # Use thread pool for parallel inlining
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion
+    # CRITICAL: Use _safe_map_with_timeout to prevent hangs on stuck inline operations
     if GPU_AVAILABLE:
         with ThreadPoolExecutor(max_workers=4) as executor:
-            inlined_data = list(executor.map(inline_one, candidate_data))
+            inlined_data = _safe_map_with_timeout(executor, inline_one, candidate_data, 
+                                                 timeout_per_item=30, operation_name="inline_variables")
     else:
         # CPU-only: Use smaller pool to limit total threads
         with ThreadPoolExecutor(max_workers=2) as executor:
-            inlined_data = list(executor.map(inline_one, candidate_data))
+            inlined_data = _safe_map_with_timeout(executor, inline_one, candidate_data,
+                                                 timeout_per_item=30, operation_name="inline_variables")
     
     # Filter out failures
     inlined_data = [d for d in inlined_data if d is not None]
@@ -1614,13 +1653,16 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             return None
     
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion  
+    # CRITICAL: Use _safe_map_with_timeout to prevent hangs on stuck inline operations
     if GPU_AVAILABLE:
         with ThreadPoolExecutor(max_workers=4) as executor:
-            inlined_differs = list(executor.map(inline_differ, differ_data_list))
+            inlined_differs = _safe_map_with_timeout(executor, inline_differ, differ_data_list,
+                                                    timeout_per_item=30, operation_name="inline_differ")
     else:
         # CPU-only: Use smaller pool to limit total threads
         with ThreadPoolExecutor(max_workers=2) as executor:
-            inlined_differs = list(executor.map(inline_differ, differ_data_list))
+            inlined_differs = _safe_map_with_timeout(executor, inline_differ, differ_data_list,
+                                                    timeout_per_item=30, operation_name="inline_differ")
     
     inlined_differs = [d for d in inlined_differs if d is not None]
     
