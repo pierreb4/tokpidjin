@@ -45,8 +45,8 @@ Implemented tuple variants of the most commonly used DSL functions for GPU optim
 
 ✅ **merge_t** - Already exists in dsl.py
 ✅ **mapply_t** - Already exists in dsl.py
-✅ **objects_g** - Just created
-✅ **o_g_tuple** - Just created
+✅ **objects_t** - Just created
+✅ **o_g_t** - Just created
 
 ## Complete Function Mapping
 
@@ -59,8 +59,8 @@ Implemented tuple variants of the most commonly used DSL functions for GPU optim
 | remove_f | remove_t | ✅ EXISTS | ~1617 |
 | merge_f | merge_t | ✅ EXISTS | - |
 | mapply | mapply_t | ✅ EXISTS | - |
-| objects | objects_g | ✅ EXISTS | ~3173 |
-| o_g | o_g_tuple | ✅ EXISTS | ~509 |
+| objects | objects_t | ✅ EXISTS | ~3173 |
+| o_g | o_g_t | ✅ EXISTS | ~509 |
 
 ## Ready for Testing! 🚀
 
@@ -76,7 +76,7 @@ x2 = sizefilter(x1, ONE)  # frozenset
 x3 = merge_f(x2)          # frozenset
 
 # Tuple version
-x1 = o_g_tuple(I, R5)        # tuple ✅
+x1 = o_g_t(I, R5)        # tuple ✅
 x2 = sizefilter_t(x1, ONE)   # tuple ✅
 x3 = merge_t(x2)             # tuple ✅
 ```
@@ -91,7 +91,7 @@ x4 = get_nth_f(x3, F0)
 x6 = get_nth_f(x2, F0)
 
 # Tuple version
-x1 = o_g_tuple(I, R1)       # tuple ✅
+x1 = o_g_t(I, R1)       # tuple ✅
 x2 = colorfilter_t(x1, FIVE) # tuple ✅
 x3 = difference_t(x1, x2)    # tuple ✅
 x4 = get_nth_t(x3, F0)       # tuple ✅
@@ -107,7 +107,7 @@ x3 = mapply(outbox, x2)
 x5 = mapply(delta, x2)
 
 # Tuple version
-x1 = o_g_tuple(I, R5)       # tuple ✅
+x1 = o_g_t(I, R5)       # tuple ✅
 x2 = colorfilter_t(x1, SIX)  # tuple ✅
 x3 = mapply_t(outbox, x2)    # tuple ✅
 x5 = mapply_t(delta, x2)     # tuple ✅

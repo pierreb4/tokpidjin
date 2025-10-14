@@ -77,8 +77,8 @@ x13 = remove_f(x2, x1)             # Objects → Objects
 
 ✅ **merge_t** - Already exists  
 ✅ **mapply_t** - Already exists  
-✅ **objects_g** - Just created!  
-✅ **o_g_tuple** - Just created!
+✅ **objects_t** - Just created!  
+✅ **o_g_t** - Just created!
 
 ## Recommended Implementation Order
 
@@ -142,7 +142,7 @@ def solve_3618c87e(S, I, C):
 **Converted (tuple):**
 ```python
 def solve_3618c87e_tuple(S, I, C):
-    x1 = o_g_tuple(I, R5)        # tuple
+    x1 = o_g_t(I, R5)        # tuple
     x2 = sizefilter_t(x1, ONE)   # tuple
     x3 = merge_t(x2)             # tuple
     O = move(I, x3, TWO_BY_ZERO)
@@ -163,7 +163,7 @@ def solve_88a10436(S, I, C):
 **Converted (tuple):**
 ```python
 def solve_88a10436_tuple(S, I, C):
-    x1 = o_g_tuple(I, R1)
+    x1 = o_g_t(I, R1)
     x2 = colorfilter_t(x1, FIVE)
     x3 = difference_t(x1, x2)
     x4 = get_nth_t(x3, F0)
@@ -219,7 +219,7 @@ Start with the simplest solvers:
 
 ## Next Steps
 
-1. ✅ **DONE:** Create objects_g and o_g_tuple
+1. ✅ **DONE:** Create objects_t and o_g_t
 2. **TODO:** Implement Phase 1 functions (colorfilter_t, sizefilter_t, get_nth_t, difference_t, remove_t)
 3. **TODO:** Test on solve_3618c87e and solve_88a10436
 4. **TODO:** Validate 100% correctness
