@@ -622,34 +622,21 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     if GPU_AVAILABLE:
         # GPU: Parallel execution with ThreadPoolExecutor (GPU context not fork-safe)
-        with ThreadPoolExecutor(max_workers=5) as executor:
-            # Submit all samples (demo + test) for parallel execution
-            sample_futures = {executor.submit(score_sample, args): args 
-                            for args in all_sample_args}
+        # Check system health before attempting parallel execution
+        thread_count = threading.active_count()
+        system_overloaded = thread_count > 40  # Conservative threshold
+        
+        if system_overloaded:
+            # System under heavy load - use sequential processing
+            if DO_PRINT:
+                print_l(f"-- System overloaded ({thread_count} threads), using sequential processing")
             
-            # Collect results as they complete
             all_results = []
-            for future in as_completed(sample_futures):
+            for args in all_sample_args:
                 try:
-                    # Use generous timeout to prevent hanging on stuck workers
-                    result = future.result(timeout=600)  # 10 minutes max per sample result
+                    result = score_sample(args)
                     all_results.append(result)
-                except TimeoutError:
-                    args = sample_futures[future]
-                    sample_type, sample_idx = args[2], args[0]
-                    if DO_PRINT:
-                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
-                    all_results.append({
-                        'index': sample_idx,
-                        'sample_type': sample_type,
-                        'outputs': [],
-                        'solver_scores': [],
-                        'timed_out': True,
-                        'diff_calls': 0,
-                        'matches': 0
-                    })
                 except Exception as e:
-                    args = sample_futures[future]
                     sample_type, sample_idx = args[2], args[0]
                     if DO_PRINT:
                         print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
@@ -662,6 +649,51 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                         'diff_calls': 0,
                         'matches': 0
                     })
+        else:
+            # Normal load - use limited parallelism
+            # Reduce max_workers from 5 to 2 for memory safety
+            max_workers = min(2, len(all_sample_args))
+            
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                # Submit all samples (demo + test) for parallel execution
+                sample_futures = {executor.submit(score_sample, args): args 
+                                for args in all_sample_args}
+                
+                # Collect results as they complete
+                all_results = []
+                for future in as_completed(sample_futures):
+                    try:
+                        # Use generous timeout to prevent hanging on stuck workers
+                        result = future.result(timeout=600)  # 10 minutes max per sample result
+                        all_results.append(result)
+                    except TimeoutError:
+                        args = sample_futures[future]
+                        sample_type, sample_idx = args[2], args[0]
+                        if DO_PRINT:
+                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
+                        all_results.append({
+                            'index': sample_idx,
+                            'sample_type': sample_type,
+                            'outputs': [],
+                            'solver_scores': [],
+                            'timed_out': True,
+                            'diff_calls': 0,
+                            'matches': 0
+                        })
+                    except Exception as e:
+                        args = sample_futures[future]
+                        sample_type, sample_idx = args[2], args[0]
+                        if DO_PRINT:
+                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                        all_results.append({
+                            'index': sample_idx,
+                            'sample_type': sample_type,
+                            'outputs': [],
+                            'solver_scores': [],
+                            'timed_out': True,
+                            'diff_calls': 0,
+                            'matches': 0
+                        })
     else:
         # CPU-only: Use ProcessPoolExecutor for true CPU parallelism (Week 6B)
         # Conservative workers for multi-instance server environment
