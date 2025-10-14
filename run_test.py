@@ -184,20 +184,33 @@ async def check_solvers_pre(data, task_id, timeout=1):
 
     # print_l(f'Processing solver for task {task_id}')
 
-    solver = getattr(solvers_pre, f'solve_{task_id}')
-    # Ensure solver has access to DSL functions by updating its globals
-    solver.__globals__.update(globals())
+    try:
+        solver = getattr(solvers_pre, f'solve_{task_id}')
+        # Ensure solver has access to DSL functions by updating its globals
+        solver.__globals__.update(globals())
 
-
-    with contextlib.suppress(Exception):
         for sample in task:
-            timed_out, result = await run_with_timeout(solver, [S, sample['input'], None], timeout)
-            if timed_out:
-                # print_l(f'Solver for {task_id} timed out on sample {i}')
-                total_timed_out += 1
-            elif result == sample['output']:
-                # print_l(f'Solver for {task_id} correct on sample {i}: {result =}')
-                total_result += 1
+            try:
+                timed_out, result = await run_with_timeout(solver, [S, sample['input'], None], timeout)
+                if timed_out:
+                    # print_l(f'Solver for {task_id} timed out on sample {i}')
+                    total_timed_out += 1
+                elif result == sample['output']:
+                    # print_l(f'Solver for {task_id} correct on sample {i}: {result =}')
+                    total_result += 1
+            except (asyncio.CancelledError, KeyboardInterrupt):
+                # Propagate cancellation/interrupt
+                raise
+            except Exception:
+                # Suppress other exceptions for individual samples
+                pass
+    except (asyncio.CancelledError, KeyboardInterrupt):
+        # Propagate cancellation/interrupt
+        raise
+    except Exception:
+        # Suppress exceptions for the whole task
+        pass
+        
     return total_timed_out, total_result
 
 
