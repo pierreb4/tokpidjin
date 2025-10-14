@@ -113,17 +113,22 @@ def analyze_timing(stats, show_errors=False, show_percentiles=False):
         print(f"Conservative (covers 95%): {int(p95 * 1.2)}s")
         print(f"Balanced     (covers 99%): {int(p99 * 1.2)}s")
         print(f"Generous     (covers all): {int(max_time * 1.5)}s")
-        print(f"Current setting:            600s")
+        print()
+        print("NOTE: run_card.sh timeout is now COUNT seconds (1s per task)")
+        print(f"      Script timeout = COUNT × 1s (dynamic based on task count)")
+        print(f"      Per-task timeout = 10s (default, or -t value)")
         print()
         
-        if max_time > 600:
-            print("⚠️  WARNING: Some tasks exceeded 600s timeout!")
-            print(f"   Consider increasing timeout or optimizing slow tasks.")
-        elif p99 < 300:
-            print("✓ Current 600s timeout is generous (P99 < 300s)")
-            print(f"  Could reduce to {int(p99 * 1.5)}s for faster failure detection.")
+        # Analyze based on per-task execution time
+        if max_time > 10:
+            print("⚠️  WARNING: Some tasks exceeded 10s default per-task timeout!")
+            print(f"   Max execution time: {max_time:.2f}s")
+            print(f"   Consider using -t {int(max_time * 1.5)} for per-task timeout.")
+        elif p99 < 5:
+            print("✓ Default 10s per-task timeout is generous (P99 < 5s)")
+            print(f"  Tasks completing quickly. Script timeout = COUNT seconds is appropriate.")
         else:
-            print(f"✓ Current 600s timeout is appropriate.")
+            print(f"✓ Default 10s per-task timeout is appropriate (P99 = {p99:.2f}s).")
         print()
     
     # Error analysis
