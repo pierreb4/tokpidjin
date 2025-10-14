@@ -19,6 +19,30 @@ from pathlib import Path
 from collections import defaultdict
 from contextlib import contextmanager
 
+# Monkey patch to suppress harmless thread cleanup KeyError under high load
+# Issue: threading._active can have race condition during rapid thread creation/deletion
+# Symptom: "Exception ignored in thread started by: ... KeyError: <thread_id>"
+# Impact: Harmless but noisy - thread cleanup issue in Python's threading module
+import sys
+_original_thread_delete = None
+try:
+    import threading as _threading_module
+    _original_thread_delete = _threading_module.Thread._delete
+    
+    def _patched_thread_delete(self):
+        """Suppress KeyError during thread cleanup (race condition in threading._active)"""
+        try:
+            _original_thread_delete(self)
+        except KeyError:
+            # Ignore KeyError during thread cleanup - harmless race condition
+            # Thread was already removed from _active by another operation
+            pass
+    
+    _threading_module.Thread._delete = _patched_thread_delete
+except Exception:
+    # If patch fails, continue without it (error will still be noisy but functional)
+    pass
+
 from utils import *
 import utils as utils_module
 from expand_solver import expand_file, generate_expanded_content
@@ -535,7 +559,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         # Check system health before attempting parallel execution
         # If too many threads already exist, skip ProcessPoolExecutor entirely
         thread_count = threading.active_count()
-        system_overloaded = thread_count > 50  # Conservative threshold
+        # Lower threshold to 40 (was 50) to prevent thread cleanup issues
+        # Under extreme load, thread cleanup can fail with KeyError in threading._active
+        system_overloaded = thread_count > 40  # Conservative threshold
         
         if system_overloaded and DO_PRINT:
             print_l(f"-- System overloaded ({thread_count} threads), using sequential processing")
