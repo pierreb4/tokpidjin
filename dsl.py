@@ -158,6 +158,10 @@ def difference_tuple(a: 'Tuple', b: 'Tuple') -> 'Tuple':
     return type(a)(e for e in a if e not in b)
 
 
+# Alias for consistency with naming convention
+difference_t = difference_tuple
+
+
 def p_f( element: 'FrozenSet' ) -> 'IntegerSet':
     """ colors occurring in object """
     logger.info(f'p_f: {element = }')
@@ -2892,6 +2896,15 @@ def colorfilter(
     return frozenset(obj for obj in objs if next(iter(obj))[2] == color)
 
 
+def colorfilter_t(
+    objs: 'Tuple[Tuple[Tuple[int, int, int], ...], ...]',
+    color: 'Integer'
+) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+    """ filter objects by color - tuple variant """
+    logger.info(f'colorfilter_t: {objs = }, {color = }')
+    return tuple(obj for obj in objs if obj[0][2] == color)
+
+
 def sizefilter(
     container: 'Container',
     n: 'Integer'
@@ -2899,6 +2912,15 @@ def sizefilter(
     """ filter items by size """
     logger.info(f'sizefilter: {container = }, {n = }')
     return frozenset(item for item in container if len(item) == n)
+
+
+def sizefilter_t(
+    container: 'Tuple',
+    n: 'Integer'
+) -> 'Tuple':
+    """ filter items by size - tuple variant """
+    logger.info(f'sizefilter_t: {container = }, {n = }')
+    return tuple(item for item in container if len(item) == n)
 
 
 def asindices(
