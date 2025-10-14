@@ -15,29 +15,47 @@ from datetime import datetime
 def load_stats(stats_file='logs/run_batt_timing_stats.jsonl'):
     """Load timing stats from JSONL file."""
     stats = []
+    task_starts = {}  # Track task starts to detect incomplete executions
+    
     stats_path = Path(stats_file)
     
     if not stats_path.exists():
         print(f"Stats file not found: {stats_file}")
         print("Run some tasks to generate timing data.")
-        return []
+        return [], {}
     
     with open(stats_path, 'r') as f:
         for line in f:
             if line.strip():
-                stats.append(json.loads(line))
+                entry = json.loads(line)
+                
+                # Check if this is a task start event
+                if entry.get('event') == 'task_start':
+                    task_id = entry['task_id']
+                    task_starts[task_id] = {
+                        'timestamp': entry['timestamp'],
+                        'timeout_value': entry.get('timeout_value')
+                    }
+                else:
+                    # This is a completion/error event
+                    stats.append(entry)
+                    # Remove from task_starts if it was there (task completed)
+                    task_id = entry.get('task_id')
+                    if task_id in task_starts:
+                        del task_starts[task_id]
     
-    return stats
+    return stats, task_starts
 
-def analyze_timing(stats, show_errors=False, show_percentiles=False):
+def analyze_timing(stats, task_starts, show_errors=False, show_percentiles=False):
     """Analyze timing statistics."""
-    if not stats:
+    if not stats and not task_starts:
         print("No statistics available.")
         return
     
     # Separate successful and failed executions
     successful = [s for s in stats if s['success']]
     failed = [s for s in stats if not s['success']]
+    incomplete = len(task_starts)  # Tasks that started but never completed
     
     print("=" * 70)
     print("RUN_BATT.PY EXECUTION TIMING ANALYSIS")
@@ -48,11 +66,22 @@ def analyze_timing(stats, show_errors=False, show_percentiles=False):
     total = len(stats)
     success_count = len(successful)
     failure_count = len(failed)
-    success_rate = (success_count / total * 100) if total > 0 else 0
+    incomplete_count = incomplete
+    total_attempts = total + incomplete_count
     
-    print(f"Total Executions: {total}")
-    print(f"Successful: {success_count} ({success_rate:.1f}%)")
-    print(f"Failed: {failure_count} ({100 - success_rate:.1f}%)")
+    success_rate = (success_count / total_attempts * 100) if total_attempts > 0 else 0
+    
+    print(f"Total Attempts: {total_attempts}")
+    print(f"Completed: {total} ({total / total_attempts * 100:.1f}%)")
+    print(f"  - Successful: {success_count} ({success_rate:.1f}%)")
+    print(f"  - Failed: {failure_count} ({failure_count / total_attempts * 100:.1f}%)")
+    print(f"Incomplete (crashed/timeout): {incomplete_count} ({incomplete_count / total_attempts * 100:.1f}%)")
+    
+    if incomplete_count > 0:
+        print()
+        print("⚠️  INCOMPLETE EXECUTIONS DETECTED")
+        print(f"   {incomplete_count} tasks started but never completed (logged or exited)")
+        print(f"   Likely causes: script timeout (run_card.sh), uncaught MemoryError, crash")
     print()
     
     # Successful execution timing
@@ -163,6 +192,25 @@ def analyze_timing(stats, show_errors=False, show_percentiles=False):
                 print(f"  {timestamp} | {task_id} | {error_type:15s} | {error_msg}")
             print()
     
+    # Incomplete execution details
+    if task_starts:
+        print("-" * 70)
+        print("INCOMPLETE EXECUTIONS (CRASHED/TIMEOUT)")
+        print("-" * 70)
+        print(f"{len(task_starts)} tasks started but never completed:")
+        print()
+        for task_id, info in sorted(task_starts.items(), key=lambda x: x[1]['timestamp']):
+            timestamp = datetime.fromisoformat(info['timestamp']).strftime('%H:%M:%S')
+            timeout_val = info.get('timeout_value', 'N/A')
+            print(f"  {timestamp} | {task_id} | timeout={timeout_val}s | NO COMPLETION LOG")
+        print()
+        print("Possible causes:")
+        print("  - Script timeout (run_card.sh timeout ${COUNT}s)")
+        print("  - Uncaught MemoryError (before our handlers)")
+        print("  - System crash or kill signal")
+        print("  - Thread._bootstrap MemoryError not caught")
+        print()
+    
     # Timeout value analysis
     timeout_values = Counter(s['timeout_value'] for s in stats if s.get('timeout_value'))
     if timeout_values:
@@ -184,8 +232,8 @@ def main():
     
     args = parser.parse_args()
     
-    stats = load_stats(args.file)
-    analyze_timing(stats, show_errors=args.show_errors, show_percentiles=args.percentiles)
+    stats, task_starts = load_stats(args.file)
+    analyze_timing(stats, task_starts, show_errors=args.show_errors, show_percentiles=args.percentiles)
 
 if __name__ == '__main__':
     main()

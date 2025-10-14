@@ -214,6 +214,37 @@ def _log_and_exit(task_id, start_time, error_type, error_msg, timeout_value=None
     import sys
     sys.exit(1)
 
+def _log_task_start(task_id, timeout_value):
+    """
+    Log the start of a task execution.
+    Used to detect incomplete executions (crashes, timeouts) by comparing starts vs completions.
+    
+    Args:
+        task_id: The ARC task ID
+        timeout_value: The timeout value used
+    """
+    import json
+    from datetime import datetime
+    
+    stats_entry = {
+        'timestamp': datetime.now().isoformat(),
+        'task_id': task_id,
+        'event': 'task_start',  # Mark as start event
+        'timeout_value': timeout_value
+    }
+    
+    try:
+        with _stats_lock:
+            # Ensure logs directory exists
+            _stats_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Append to JSONL file
+            with open(_stats_file, 'a') as f:
+                f.write(json.dumps(stats_entry) + '\n')
+    except Exception as e:
+        # Don't let stats logging break the main execution
+        print_l(f"Warning: Failed to log task start: {e}")
+
 class GPUBatchProcessor:
     """
     Batch processor optimized for Kaggle GPUs (T4x2, P100, L4x4)
@@ -1299,6 +1330,9 @@ def check_save(path, score, max_files=32):
 
 async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None, batt_module_name='batt'):
     """Run batt - async for validation, but check_batt is now synchronous"""
+    # Log task start for crash/timeout detection
+    _log_task_start(task_id, timeout)
+    
     # Track execution time for timeout optimization
     run_batt_start = timer()
     
