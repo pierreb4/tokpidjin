@@ -10,6 +10,8 @@ import asyncio
 import multiprocessing as mp
 import gc
 import threading
+import atexit
+import signal
 
 import dill as pickle
 
@@ -98,6 +100,34 @@ except ImportError:
         print_l("GPU Support: Disabled (CuPy not available)")
 
 import multiprocessing as mp
+
+# Track active executors for cleanup on exit/interrupt
+_active_executors = []
+_executor_lock = threading.Lock()
+
+def _cleanup_executors():
+    """Clean up any active executors to prevent semaphore leaks"""
+    with _executor_lock:
+        for executor in _active_executors[:]:
+            try:
+                if hasattr(executor, 'shutdown'):
+                    executor.shutdown(wait=False, cancel_futures=True)
+            except Exception:
+                pass
+        _active_executors.clear()
+
+# Register cleanup on normal exit
+atexit.register(_cleanup_executors)
+
+# Register cleanup on interrupt (Ctrl-C)
+def _signal_handler(signum, frame):
+    """Handle interrupt signals by cleaning up executors"""
+    _cleanup_executors()
+    # Re-raise KeyboardInterrupt to allow normal handling
+    raise KeyboardInterrupt
+
+signal.signal(signal.SIGINT, _signal_handler)
+signal.signal(signal.SIGTERM, _signal_handler)
 
 class GPUBatchProcessor:
     """
@@ -586,7 +616,12 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                 executor_class = ProcessPoolExecutor
                 max_workers = min(sample_count, 3)  # Reduced from 4 to 3 for memory safety
             
-            with executor_class(max_workers=max_workers) as executor:
+            executor = executor_class(max_workers=max_workers)
+            # Register executor for cleanup on exit/interrupt to prevent semaphore leaks
+            with _executor_lock:
+                _active_executors.append(executor)
+            
+            try:
                 # Submit all samples (demo + test) for parallel execution
                 sample_futures = {executor.submit(score_sample, args): args 
                                 for args in all_sample_args}
@@ -611,6 +646,17 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             'diff_calls': 0,
                             'matches': 0
                         })
+                
+                # Explicit shutdown to ensure clean resource cleanup
+                # Prevents "leaked semlock objects" warning from loky
+                if hasattr(executor, 'shutdown'):
+                    executor.shutdown(wait=True, cancel_futures=False)
+            finally:
+                # Remove executor from tracking
+                with _executor_lock:
+                    if executor in _active_executors:
+                        _active_executors.remove(executor)
+                        
         except (OSError, MemoryError, RuntimeError) as e:
             # Memory or resource errors - fall back to ThreadPoolExecutor or sequential
             process_pool_failed = True
@@ -624,7 +670,12 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             # Try ThreadPoolExecutor as fallback (lighter weight)
             # Use only 1 worker to minimize memory usage
             try:
-                with ThreadPoolExecutor(max_workers=1) as executor:
+                executor = ThreadPoolExecutor(max_workers=1)
+                # Register executor for cleanup
+                with _executor_lock:
+                    _active_executors.append(executor)
+                
+                try:
                     sample_futures = {executor.submit(score_sample, args): args 
                                     for args in all_sample_args}
                     
@@ -647,6 +698,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 'diff_calls': 0,
                                 'matches': 0
                             })
+                    
+                    # Explicit shutdown for clean resource cleanup
+                    if hasattr(executor, 'shutdown'):
+                        executor.shutdown(wait=True, cancel_futures=False)
+                finally:
+                    # Remove executor from tracking
+                    with _executor_lock:
+                        if executor in _active_executors:
+                            _active_executors.remove(executor)
             except (OSError, MemoryError, RuntimeError, Exception) as e:
                 # ThreadPoolExecutor also failed - fall back to sequential
                 if DO_PRINT:
