@@ -9,6 +9,7 @@ import os
 import asyncio
 import multiprocessing as mp
 import gc
+import threading
 
 import dill as pickle
 
@@ -68,7 +69,7 @@ try:
 except ImportError:
     GPU_AVAILABLE = False
     gpu_optimizer = None
-    print("GPU Support: Disabled (CuPy not available)")
+    print_l("GPU Support: Disabled (CuPy not available)")
 
 import multiprocessing as mp
 
@@ -529,10 +530,18 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         # Check sample count to decide strategy
         sample_count = len(all_sample_args)
         
+        # Check system health before attempting parallel execution
+        # If too many threads already exist, skip ProcessPoolExecutor entirely
+        thread_count = threading.active_count()
+        system_overloaded = thread_count > 50  # Conservative threshold
+        
+        if system_overloaded and DO_PRINT:
+            print_l(f"-- System overloaded ({thread_count} threads), using sequential processing")
+        
         # Memory-aware worker selection
         # Small batches (<4 samples): Use threads (lighter, good for small work)
         # Large batches (>=4 samples): Try processes (better CPU parallelism)
-        use_threads = sample_count < 4
+        use_threads = sample_count < 4 or system_overloaded
         
         if not LOKY_AVAILABLE and not use_threads and DO_PRINT:
             print_l("Warning: loky not available, using standard ProcessPoolExecutor (may fail on closures)")
@@ -541,9 +550,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         process_pool_failed = False
         try:
             if use_threads:
-                # Small batch: Use ThreadPoolExecutor (lighter weight)
+                # Small batch or system overloaded: Use ThreadPoolExecutor (lighter weight)
                 executor_class = ThreadPoolExecutor
-                max_workers = min(sample_count, 3)
+                max_workers = 1 if system_overloaded else min(sample_count, 3)
             else:
                 # Large batch: Try ProcessPoolExecutor
                 executor_class = ProcessPoolExecutor
