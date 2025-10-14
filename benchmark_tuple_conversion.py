@@ -436,10 +436,10 @@ def main():
         
         if weighted_speedup >= 2.5:
             print_l("✅ EXCELLENT! Phase 3 conversion shows strong speedup potential!")
-            print_l()
+            print()
             print_l(f"Expected speedup: {weighted_speedup:.2f}x average")
             print_l(f"GPU-worthy solvers: {gpu_worthy}/{len(results)} ({gpu_worthy/len(results)*100:.1f}%)")
-            print_l()
+            print()
             print_l("Next Steps:")
             print_l("1. ✅ Deploy to Kaggle GPU (T4 or L4)")
             print_l("2. ✅ Run actual benchmarks on GPU hardware")
@@ -448,32 +448,32 @@ def main():
             print_l("5. ✅ Consider batching for additional 2x speedup")
         elif weighted_speedup >= 2.0:
             print_l("✅ GOOD! Phase 3 conversion should provide solid speedup!")
-            print_l()
+            print()
             print_l(f"Expected speedup: {weighted_speedup:.2f}x average")
             print_l(f"GPU-worthy solvers: {gpu_worthy}/{len(results)} ({gpu_worthy/len(results)*100:.1f}%)")
-            print_l()
+            print()
             print_l("Next Steps:")
             print_l("1. Deploy to Kaggle GPU")
             print_l("2. Benchmark on real hardware")
             print_l("3. Focus on Strong/Excellent solvers for best results")
         else:
             print_l("⚠️  MARGINAL - Speedup may be limited")
-            print_l()
+            print()
             print_l(f"Expected speedup: {weighted_speedup:.2f}x average")
             print_l(f"GPU-worthy solvers: {gpu_worthy}/{len(results)} ({gpu_worthy/len(results)*100:.1f}%)")
-            print_l()
+            print()
             print_l("Recommendations:")
             print_l("- Focus on Strong/Excellent solvers only")
             print_l("- Consider selective deployment")
             print_l("- Benchmark carefully before full rollout")
         
-        print_l()
+        print()
         print_l("=" * 100)
         print()
         
         print_l("Phase 3 Status: ✅ COMPLETE - 804 function calls converted")
         print_l("Next Milestone: 🚀 Kaggle GPU Benchmark")
-        print_l()
+        print()
 
 
 if __name__ == '__main__':
