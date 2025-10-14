@@ -680,6 +680,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             'diff_calls': 0,
                             'matches': 0
                         })
+                    except MemoryError:
+                        # Handle memory exhaustion in thread - immediate exit to prevent hang
+                        args = sample_futures[future]
+                        sample_type, sample_idx = args[2], args[0]
+                        if DO_PRINT:
+                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
+                        print_l(f"CRITICAL: MemoryError in GPU ThreadPoolExecutor. System out of memory. Exiting.")
+                        import sys
+                        sys.exit(1)
                     except RuntimeError as e:
                         # Handle "can't start new thread" from nested call_with_timeout
                         if "can't start new thread" in str(e):
@@ -839,6 +848,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             'diff_calls': 0,
                             'matches': 0
                         })
+                    except MemoryError:
+                        # Handle memory exhaustion in process - immediate exit to prevent hang
+                        args = sample_futures[future]
+                        sample_type, sample_idx = args[2], args[0]
+                        if DO_PRINT:
+                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
+                        print_l(f"CRITICAL: MemoryError in CPU ProcessPoolExecutor. System out of memory. Exiting.")
+                        import sys
+                        sys.exit(1)
                     except RuntimeError as e:
                         # Handle "can't start new thread" from nested call_with_timeout
                         if "can't start new thread" in str(e):
@@ -963,6 +981,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 'diff_calls': 0,
                                 'matches': 0
                             })
+                        except MemoryError:
+                            # Handle memory exhaustion in thread - immediate exit to prevent hang
+                            args = sample_futures[future]
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
+                            print_l(f"CRITICAL: MemoryError in ThreadPoolExecutor fallback. System out of memory. Exiting.")
+                            import sys
+                            sys.exit(1)
                         except RuntimeError as e:
                             # Handle "can't start new thread" from nested call_with_timeout
                             if "can't start new thread" in str(e):
