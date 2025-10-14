@@ -506,6 +506,27 @@ def o_g( grid: 'Grid', type: 'R8' ) -> 'Objects':
         return objects(grid, True, True, True)
 
 
+def o_g_tuple( grid: 'Grid', type: 'R8' ) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+    """ o_g variant that returns tuple of tuples instead of frozenset """
+    logger.info(f'o_g_tuple: {grid = }, {type = }')
+    if type == 0:
+        return objects_g(grid, False, False, False)
+    elif type == 1:
+        return objects_g(grid, False, False, True)
+    elif type == 2:
+        return objects_g(grid, False, True, False)
+    elif type == 3:
+        return objects_g(grid, False, True, True)
+    elif type == 4:
+        return objects_g(grid, True, False, False)
+    elif type == 5:
+        return objects_g(grid, True, False, True)
+    elif type == 6:
+        return objects_g(grid, True, True, False)
+    elif type == 7:
+        return objects_g(grid, True, True, True)
+
+
 def mir_rot_t( grid: 'Grid', type: 'A8' ) -> 'Grid':
     logger.info(f'mir_rot_t: {grid = }, {type = }')
     if type == 0:
@@ -3150,6 +3171,46 @@ def objects(
             cands = neighborhood - occupied
         objs.add(frozenset(obj))
     return frozenset(objs)
+
+
+def objects_g(
+    grid: 'Grid',
+    univalued: 'Boolean',
+    diagonal: 'Boolean',
+    without_bg: 'Boolean'
+) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+    """ objects occurring on the grid - returns tuple of tuples instead of frozenset """
+    logger.info(f'objects_g: {grid = }, {univalued = }, {diagonal = }, {without_bg = }')
+    if grid == ():
+        return ()
+
+    bg = mostcolor_t(grid) if without_bg else None
+    objs = []
+    occupied = set()
+    h, w = len(grid), len(grid[0])
+    unvisited = asindices(grid)
+    diagfun = neighbors if diagonal else dneighbors
+    for loc in unvisited:
+        if loc in occupied:
+            continue
+        val = grid[loc[0]][loc[1]]
+        if val == bg:
+            continue
+        obj = []
+        cands = {loc}
+        while cands:
+            neighborhood = set()
+            for cand in cands:
+                v = grid[cand[0]][cand[1]]
+                if (val == v) if univalued else (v != bg):
+                    obj.append((cand[0], cand[1], v))
+                    occupied.add(cand)
+                    neighborhood |= {
+                        (i, j) for i, j in diagfun(cand) if 0 <= i < h and 0 <= j < w
+                    }
+            cands = neighborhood - occupied
+        objs.append(tuple(obj))
+    return tuple(objs)
 
 
 def partition(
