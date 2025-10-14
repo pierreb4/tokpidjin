@@ -680,6 +680,37 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             'diff_calls': 0,
                             'matches': 0
                         })
+                    except RuntimeError as e:
+                        # Handle "can't start new thread" from nested call_with_timeout
+                        if "can't start new thread" in str(e):
+                            args = sample_futures[future]
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
+                            all_results.append({
+                                'index': sample_idx,
+                                'sample_type': sample_type,
+                                'outputs': [],
+                                'solver_scores': [],
+                                'timed_out': True,
+                                'diff_calls': 0,
+                                'matches': 0
+                            })
+                        else:
+                            # Different RuntimeError
+                            args = sample_futures[future]
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                            all_results.append({
+                                'index': sample_idx,
+                                'sample_type': sample_type,
+                                'outputs': [],
+                                'solver_scores': [],
+                                'timed_out': True,
+                                'diff_calls': 0,
+                                'matches': 0
+                            })
                     except Exception as e:
                         args = sample_futures[future]
                         sample_type, sample_idx = args[2], args[0]
@@ -808,6 +839,37 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             'diff_calls': 0,
                             'matches': 0
                         })
+                    except RuntimeError as e:
+                        # Handle "can't start new thread" from nested call_with_timeout
+                        if "can't start new thread" in str(e):
+                            args = sample_futures[future]
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
+                            all_results.append({
+                                'index': sample_idx,
+                                'sample_type': sample_type,
+                                'outputs': [],
+                                'solver_scores': [],
+                                'timed_out': True,
+                                'diff_calls': 0,
+                                'matches': 0
+                            })
+                        else:
+                            # Different RuntimeError
+                            args = sample_futures[future]
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                            all_results.append({
+                                'index': sample_idx,
+                                'sample_type': sample_type,
+                                'outputs': [],
+                                'solver_scores': [],
+                                'timed_out': True,
+                                'diff_calls': 0,
+                                'matches': 0
+                            })
                     except Exception as e:
                         args = sample_futures[future]
                         sample_type, sample_idx = args[2], args[0]
@@ -901,6 +963,37 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 'diff_calls': 0,
                                 'matches': 0
                             })
+                        except RuntimeError as e:
+                            # Handle "can't start new thread" from nested call_with_timeout
+                            if "can't start new thread" in str(e):
+                                args = sample_futures[future]
+                                sample_type, sample_idx = args[2], args[0]
+                                if DO_PRINT:
+                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
+                                all_results.append({
+                                    'index': sample_idx,
+                                    'sample_type': sample_type,
+                                    'outputs': [],
+                                    'solver_scores': [],
+                                    'timed_out': True,
+                                    'diff_calls': 0,
+                                    'matches': 0
+                                })
+                            else:
+                                # Different RuntimeError
+                                args = sample_futures[future]
+                                sample_type, sample_idx = args[2], args[0]
+                                if DO_PRINT:
+                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                                all_results.append({
+                                    'index': sample_idx,
+                                    'sample_type': sample_type,
+                                    'outputs': [],
+                                    'solver_scores': [],
+                                    'timed_out': True,
+                                    'diff_calls': 0,
+                                    'matches': 0
+                                })
                         except Exception as e:
                             args = sample_futures[future]
                             sample_type, sample_idx = args[2], args[0]
