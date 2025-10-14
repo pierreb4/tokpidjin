@@ -106,13 +106,39 @@ import multiprocessing as mp
 _active_executors = []
 _executor_lock = threading.Lock()
 
+def _safe_executor_shutdown(executor, wait=True, cancel_futures=False):
+    """
+    Safely shutdown executor with compatibility for both stdlib and loky.
+    
+    - Standard library ProcessPoolExecutor uses 'cancel_futures' (Python 3.9+)
+    - Loky ProcessPoolExecutor uses 'kill_workers' instead
+    - ThreadPoolExecutor uses 'cancel_futures' (Python 3.9+)
+    
+    Falls back to simple shutdown(wait) if neither parameter is supported.
+    """
+    if not hasattr(executor, 'shutdown'):
+        return
+    
+    try:
+        # Try loky's API first (kill_workers)
+        executor.shutdown(wait=wait, kill_workers=cancel_futures)
+    except TypeError:
+        try:
+            # Try stdlib API (cancel_futures)
+            executor.shutdown(wait=wait, cancel_futures=cancel_futures)
+        except TypeError:
+            # Fall back to basic API (Python 3.7-3.8 or other)
+            try:
+                executor.shutdown(wait=wait)
+            except Exception:
+                pass
+
 def _cleanup_executors():
     """Clean up any active executors to prevent semaphore leaks"""
     with _executor_lock:
         for executor in _active_executors[:]:
             try:
-                if hasattr(executor, 'shutdown'):
-                    executor.shutdown(wait=False, cancel_futures=True)
+                _safe_executor_shutdown(executor, wait=False, cancel_futures=True)
             except Exception:
                 pass
         _active_executors.clear()
@@ -678,8 +704,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                 
                 # Explicit shutdown to ensure clean resource cleanup
                 # Prevents "leaked semlock objects" warning from loky
-                if hasattr(executor, 'shutdown'):
-                    executor.shutdown(wait=True, cancel_futures=False)
+                _safe_executor_shutdown(executor, wait=True, cancel_futures=False)
             finally:
                 # Remove executor from tracking
                 with _executor_lock:
@@ -756,8 +781,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             })
                     
                     # Explicit shutdown for clean resource cleanup
-                    if hasattr(executor, 'shutdown'):
-                        executor.shutdown(wait=True, cancel_futures=False)
+                    _safe_executor_shutdown(executor, wait=True, cancel_futures=False)
                 finally:
                     # Remove executor from tracking
                     with _executor_lock:
