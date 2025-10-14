@@ -156,6 +156,46 @@ def _signal_handler(signum, frame):
 signal.signal(signal.SIGINT, _signal_handler)
 signal.signal(signal.SIGTERM, _signal_handler)
 
+# Execution timing and error tracking for timeout optimization
+_stats_lock = threading.Lock()
+_stats_file = Path('logs/run_batt_timing_stats.jsonl')
+
+def _log_execution_stats(task_id, execution_time, error_type=None, error_msg=None, timeout_value=None):
+    """
+    Log execution timing and error stats for timeout optimization.
+    
+    Args:
+        task_id: The ARC task ID
+        execution_time: Time in seconds for the execution
+        error_type: Type of error if any ('timeout', 'thread_error', 'memory_error', etc.)
+        error_msg: Brief error message
+        timeout_value: The timeout value used (for correlation analysis)
+    """
+    import json
+    from datetime import datetime
+    
+    stats_entry = {
+        'timestamp': datetime.now().isoformat(),
+        'task_id': task_id,
+        'execution_time': round(execution_time, 3),
+        'success': error_type is None,
+        'error_type': error_type,
+        'error_msg': error_msg,
+        'timeout_value': timeout_value
+    }
+    
+    try:
+        with _stats_lock:
+            # Ensure logs directory exists
+            _stats_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Append to JSONL file (one JSON object per line)
+            with open(_stats_file, 'a') as f:
+                f.write(json.dumps(stats_entry) + '\n')
+    except Exception as e:
+        # Don't let stats logging break the main execution
+        print_l(f"Warning: Failed to log execution stats: {e}")
+
 class GPUBatchProcessor:
     """
     Batch processor optimized for Kaggle GPUs (T4x2, P100, L4x4)
@@ -1066,6 +1106,9 @@ def check_save(path, score, max_files=32):
 
 async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None, batt_module_name='batt'):
     """Run batt - async for validation, but check_batt is now synchronous"""
+    # Track execution time for timeout optimization
+    run_batt_start = timer()
+    
     if prof is not None:
         prof_call_start = timer()
 
@@ -1406,6 +1449,11 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         prof['run_batt.phase4_inline'] = phase4_inline_time
         prof['run_batt.phase4_process'] = phase4_process_time
 
+    # Log successful execution stats for timeout optimization
+    execution_time = timer() - run_batt_start
+    _log_execution_stats(task_id, execution_time, error_type=None, 
+                       error_msg=None, timeout_value=timeout)
+    
     # No timeout
     return False, d_score
 
