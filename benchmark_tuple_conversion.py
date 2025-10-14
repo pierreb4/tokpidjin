@@ -70,10 +70,11 @@ def benchmark_solver_multiple_samples(
     S: tuple, 
     samples: List[dict],
     warmup_iters: int = 5,
-    benchmark_iters: int = 20
+    benchmark_iters: int = 20,
+    timeout_seconds: float = 10.0
 ) -> Tuple[List[float], bool, List[int]]:
     """
-    Benchmark solver on multiple samples.
+    Benchmark solver on multiple samples with timeout protection.
     
     Returns:
         (times_ms, success, grid_sizes): Time for each sample, success flag, and grid sizes
@@ -85,20 +86,28 @@ def benchmark_solver_multiple_samples(
         I = sample['input']
         grid_sizes.append(get_grid_size(I))
         
-        # Warmup runs
+        # Warmup runs with timeout
         for _ in range(warmup_iters):
             try:
+                start = time.perf_counter()
                 result = solver_func(S, I, None)
+                elapsed = time.perf_counter() - start
+                # If warmup takes too long, skip this solver
+                if elapsed > timeout_seconds:
+                    return [], False, []
             except Exception:
                 return [], False, []
         
-        # Benchmark runs
+        # Benchmark runs with timeout
         times = []
         for _ in range(benchmark_iters):
             try:
                 start = time.perf_counter()
                 result = solver_func(S, I, None)
                 elapsed = time.perf_counter() - start
+                # Skip if individual run is too slow
+                if elapsed > timeout_seconds:
+                    return [], False, []
                 times.append(elapsed * 1000)  # Convert to ms
             except Exception as e:
                 return [], False, []
@@ -132,11 +141,13 @@ def analyze_solver_performance(task_id: str, data: dict) -> Dict:
     # Prepare sample data
     S = tuple((tuple(s['input']), tuple(s['output'])) for s in task)
     
-    # Benchmark
-    times_ms, success, grid_sizes = benchmark_solver_multiple_samples(solver_func, S, task)
+    # Benchmark with reduced iterations for speed (Kaggle GPU environment)
+    times_ms, success, grid_sizes = benchmark_solver_multiple_samples(
+        solver_func, S, task, warmup_iters=2, benchmark_iters=10, timeout_seconds=10.0
+    )
     
     if not success or len(times_ms) == 0:
-        return None
+        return 'TIMEOUT'  # Return special value for timeout/failure
     
     # Count operations
     total_ops, tuple_ops = count_tuple_operations(solver_func)
@@ -251,6 +262,8 @@ def main():
     print_l("=" * 100)
     
     results = []
+    skipped_count = 0
+    timeout_count = 0
     
     for i, task_id in enumerate(selected_solvers):
         print_l(f"[{i+1}/{len(selected_solvers)}] Benchmarking {task_id}...", end=' ')
@@ -258,7 +271,13 @@ def main():
         result = analyze_solver_performance(task_id, total_data)
         
         if result is None:
-            print_l("SKIP")
+            print_l("SKIP (no data)")
+            skipped_count += 1
+            continue
+        
+        if result == 'TIMEOUT':
+            print_l("TIMEOUT (>10s)")
+            timeout_count += 1
             continue
         
         results.append(result)
@@ -272,6 +291,8 @@ def main():
                f"{result['speedup_category']}")
     
     print_l("=" * 100)
+    print_l(f"Completed: {len(results)}/{len(selected_solvers)} solvers "
+           f"(Skipped: {skipped_count}, Timeout: {timeout_count})")
     print()
     
     # Summary statistics
