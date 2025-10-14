@@ -1064,7 +1064,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             'solver_body': solver_body,
             'sol_t': sol_t,
             'sol_solver_id': sol_solver_id,
-            'done': done
+            'done': done,
+            'task_id': task_id  # Add task_id for error reporting
         })
     
     if prof is not None:
@@ -1084,7 +1085,12 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             md5 = hashlib.md5(inlined.encode()).hexdigest()
             return {**data, 'inlined_source': inlined, 'md5_hash': md5}
         except Exception as e:
-            print_l(f"Error inlining: {e}")
+            # Provide context about which solver failed
+            task_id = data.get('task_id', 'unknown')
+            sol_solver_id = data.get('sol_solver_id', 'unknown')
+            candidate = data.get('candidate', 'unknown')
+            error_type = type(e).__name__
+            print_l(f"Error inlining task_id={task_id} solver_id={sol_solver_id} candidate={candidate}: {error_type}: {e}")
             return None
     
     # Use thread pool for parallel inlining
