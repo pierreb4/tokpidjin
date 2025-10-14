@@ -27,7 +27,7 @@ async def main():
         timed_out, task_o_score = await check_solvers_pre(total_data, task_id, timeout=1)
         t_log = 11 - int(math.log(timer() - check_start))
 
-        print_l(f'Processed solver for {task_id=} with {task_o_score=}, {timed_out=} and {t_log=}')
+        print_l(f'Process solver for {task_id=} with {task_o_score=}, {timed_out=} and {t_log=}')
         # print(f'{solver.source=}')
 
         old_head = f'from dsl import *\nfrom constants import *\n\ndef solve_{task_id}(S, I, C):\n'
