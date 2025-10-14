@@ -652,15 +652,19 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                 # Submit all samples (demo + test) for parallel execution
                 # Use retry with backoff for "can't start new thread" errors
                 sample_futures = {}
+                failed_samples = []  # Track samples that failed to submit even after retries
+                
                 for args in all_sample_args:
                     # Retry submission with exponential backoff if thread creation fails
                     max_retries = 5
                     retry_delay = 0.1  # Start with 100ms
+                    submitted = False
                     
                     for attempt in range(max_retries):
                         try:
                             future = executor.submit(score_sample, args)
                             sample_futures[future] = args
+                            submitted = True
                             break  # Success, move to next sample
                         except RuntimeError as e:
                             if "can't start new thread" in str(e):
@@ -673,16 +677,30 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                     retry_delay *= 2  # Exponential backoff
                                     gc.collect()  # Try to free resources
                                 else:
-                                    # Max retries exceeded, mark as failed
+                                    # Max retries exceeded, record as failed
                                     if DO_PRINT:
                                         sample_type, sample_idx = args[2], args[0]
                                         print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed after {max_retries} retries")
-                                    raise  # Re-raise to handle below
+                                    break  # Exit retry loop, will handle below
                             else:
-                                raise  # Different RuntimeError, don't retry
+                                # Different RuntimeError, don't retry
+                                break
+                    
+                    # If submission failed after all retries, record the failure
+                    if not submitted:
+                        sample_type, sample_idx = args[2], args[0]
+                        failed_samples.append({
+                            'index': sample_idx,
+                            'sample_type': sample_type,
+                            'outputs': [],
+                            'solver_scores': [],
+                            'timed_out': True,
+                            'diff_calls': 0,
+                            'matches': 0
+                        })
                 
                 # Collect results as they complete
-                all_results = []
+                all_results = list(failed_samples)  # Start with pre-failed samples
                 for future in as_completed(sample_futures):
                     try:
                         result = future.result(timeout=None)
