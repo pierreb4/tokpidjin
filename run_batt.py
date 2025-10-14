@@ -654,48 +654,24 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             # Reduce max_workers from 5 to 2 for memory safety
             max_workers = min(2, len(all_sample_args))
             
-            with ThreadPoolExecutor(max_workers=max_workers) as executor:
-                # Submit all samples (demo + test) for parallel execution
-                sample_futures = {executor.submit(score_sample, args): args 
-                                for args in all_sample_args}
-                
-                # Collect results as they complete
-                all_results = []
-                for future in as_completed(sample_futures):
-                    try:
-                        # Use generous timeout to prevent hanging on stuck workers
-                        result = future.result(timeout=600)  # 10 minutes max per sample result
-                        all_results.append(result)
-                    except TimeoutError:
-                        args = sample_futures[future]
-                        sample_type, sample_idx = args[2], args[0]
-                        if DO_PRINT:
-                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
-                        all_results.append({
-                            'index': sample_idx,
-                            'sample_type': sample_type,
-                            'outputs': [],
-                            'solver_scores': [],
-                            'timed_out': True,
-                            'diff_calls': 0,
-                            'matches': 0
-                        })
-                    except MemoryError:
-                        # Handle memory exhaustion in thread - immediate exit to prevent hang
-                        args = sample_futures[future]
-                        sample_type, sample_idx = args[2], args[0]
-                        if DO_PRINT:
-                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
-                        print_l(f"CRITICAL: MemoryError in GPU ThreadPoolExecutor. System out of memory. Exiting.")
-                        import sys
-                        sys.exit(1)
-                    except RuntimeError as e:
-                        # Handle "can't start new thread" from nested call_with_timeout
-                        if "can't start new thread" in str(e):
+            try:
+                with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                    # Submit all samples (demo + test) for parallel execution
+                    sample_futures = {executor.submit(score_sample, args): args 
+                                    for args in all_sample_args}
+                    
+                    # Collect results as they complete
+                    all_results = []
+                    for future in as_completed(sample_futures):
+                        try:
+                            # Use generous timeout to prevent hanging on stuck workers
+                            result = future.result(timeout=600)  # 10 minutes max per sample result
+                            all_results.append(result)
+                        except TimeoutError:
                             args = sample_futures[future]
                             sample_type, sample_idx = args[2], args[0]
                             if DO_PRINT:
-                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
                             all_results.append({
                                 'index': sample_idx,
                                 'sample_type': sample_type,
@@ -705,8 +681,47 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 'diff_calls': 0,
                                 'matches': 0
                             })
-                        else:
-                            # Different RuntimeError
+                        except MemoryError:
+                            # Handle memory exhaustion in thread - immediate exit to prevent hang
+                            args = sample_futures[future]
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
+                            print_l(f"CRITICAL: MemoryError in GPU ThreadPoolExecutor. System out of memory. Exiting.")
+                            import sys
+                            sys.exit(1)
+                        except RuntimeError as e:
+                            # Handle "can't start new thread" from nested call_with_timeout
+                            if "can't start new thread" in str(e):
+                                args = sample_futures[future]
+                                sample_type, sample_idx = args[2], args[0]
+                                if DO_PRINT:
+                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
+                                all_results.append({
+                                    'index': sample_idx,
+                                    'sample_type': sample_type,
+                                    'outputs': [],
+                                    'solver_scores': [],
+                                    'timed_out': True,
+                                    'diff_calls': 0,
+                                    'matches': 0
+                                })
+                            else:
+                                # Different RuntimeError
+                                args = sample_futures[future]
+                                sample_type, sample_idx = args[2], args[0]
+                                if DO_PRINT:
+                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                                all_results.append({
+                                    'index': sample_idx,
+                                    'sample_type': sample_type,
+                                    'outputs': [],
+                                    'solver_scores': [],
+                                    'timed_out': True,
+                                    'diff_calls': 0,
+                                    'matches': 0
+                                })
+                        except Exception as e:
                             args = sample_futures[future]
                             sample_type, sample_idx = args[2], args[0]
                             if DO_PRINT:
@@ -720,20 +735,13 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 'diff_calls': 0,
                                 'matches': 0
                             })
-                    except Exception as e:
-                        args = sample_futures[future]
-                        sample_type, sample_idx = args[2], args[0]
-                        if DO_PRINT:
-                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
-                        all_results.append({
-                            'index': sample_idx,
-                            'sample_type': sample_type,
-                            'outputs': [],
-                            'solver_scores': [],
-                            'timed_out': True,
-                            'diff_calls': 0,
-                            'matches': 0
-                        })
+            except MemoryError:
+                # MemoryError during thread creation (Thread._bootstrap)
+                # This happens before any futures can be collected
+                print_l(f"CRITICAL: MemoryError during GPU ThreadPoolExecutor thread creation (Thread._bootstrap)")
+                print_l(f"System critically low on memory. Cannot create worker threads. Exiting.")
+                import sys
+                sys.exit(1)
     else:
         # CPU-only: Use ProcessPoolExecutor for true CPU parallelism (Week 6B)
         # Conservative workers for multi-instance server environment
@@ -912,8 +920,15 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     if executor in _active_executors:
                         _active_executors.remove(executor)
                         
-        except (OSError, MemoryError, RuntimeError) as e:
-            # Memory or resource errors - fall back to ThreadPoolExecutor or sequential
+        except MemoryError as e:
+            # MemoryError is critical - system is out of memory
+            # Do NOT try fallback as it will also fail
+            print_l(f"CRITICAL: MemoryError in CPU {executor_class.__name__}")
+            print_l(f"System critically low on memory. Cannot create workers. Exiting.")
+            import sys
+            sys.exit(1)
+        except (OSError, RuntimeError) as e:
+            # Resource errors (not memory) - fall back to ThreadPoolExecutor or sequential
             process_pool_failed = True
             error_type = type(e).__name__
             if DO_PRINT:
@@ -925,78 +940,54 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             # Try ThreadPoolExecutor as fallback (lighter weight)
             # Use only 1 worker to minimize memory usage
             try:
-                executor = ThreadPoolExecutor(max_workers=1)
-                # Register executor for cleanup
-                with _executor_lock:
-                    _active_executors.append(executor)
-                
                 try:
-                    # Submit tasks with retry for thread creation failures
-                    sample_futures = {}
-                    for args in all_sample_args:
-                        max_retries = 5
-                        retry_delay = 0.1  # Start with 100ms
-                        
-                        for attempt in range(max_retries):
-                            try:
-                                future = executor.submit(score_sample, args)
-                                sample_futures[future] = args
-                                break  # Success
-                            except RuntimeError as e:
-                                if "can't start new thread" in str(e):
-                                    if attempt < max_retries - 1:
-                                        # Log on first retry only to avoid spam
-                                        if DO_PRINT and attempt == 0:
-                                            sample_type, sample_idx = args[2], args[0]
-                                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed (ThreadPool fallback), retrying with backoff...")
-                                        time.sleep(retry_delay)
-                                        retry_delay *= 2  # Exponential backoff: 0.1, 0.2, 0.4, 0.8, 1.6s
-                                        gc.collect()  # Free resources before retry
-                                    else:
-                                        # Max retries exceeded
-                                        sample_type, sample_idx = args[2], args[0]
-                                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed after {max_retries} retries")
-                                        raise
-                                else:
-                                    # Different RuntimeError, don't retry
-                                    raise
+                    executor = ThreadPoolExecutor(max_workers=1)
+                    # Register executor for cleanup
+                    with _executor_lock:
+                        _active_executors.append(executor)
                     
-                    all_results = []
-                    for future in as_completed(sample_futures):
-                        try:
-                            # Use generous timeout to prevent hanging on stuck workers
-                            result = future.result(timeout=600)  # 10 minutes max per sample result
-                            all_results.append(result)
-                        except TimeoutError:
-                            args = sample_futures[future]
-                            sample_type, sample_idx = args[2], args[0]
-                            if DO_PRINT:
-                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
-                            all_results.append({
-                                'index': sample_idx,
-                                'sample_type': sample_type,
-                                'outputs': [],
-                                'solver_scores': [],
-                                'timed_out': True,
-                                'diff_calls': 0,
-                                'matches': 0
-                            })
-                        except MemoryError:
-                            # Handle memory exhaustion in thread - immediate exit to prevent hang
-                            args = sample_futures[future]
-                            sample_type, sample_idx = args[2], args[0]
-                            if DO_PRINT:
-                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
-                            print_l(f"CRITICAL: MemoryError in ThreadPoolExecutor fallback. System out of memory. Exiting.")
-                            import sys
-                            sys.exit(1)
-                        except RuntimeError as e:
-                            # Handle "can't start new thread" from nested call_with_timeout
-                            if "can't start new thread" in str(e):
+                    try:
+                        # Submit tasks with retry for thread creation failures
+                        sample_futures = {}
+                        for args in all_sample_args:
+                            max_retries = 5
+                            retry_delay = 0.1  # Start with 100ms
+                            
+                            for attempt in range(max_retries):
+                                try:
+                                    future = executor.submit(score_sample, args)
+                                    sample_futures[future] = args
+                                    break  # Success
+                                except RuntimeError as e:
+                                    if "can't start new thread" in str(e):
+                                        if attempt < max_retries - 1:
+                                            # Log on first retry only to avoid spam
+                                            if DO_PRINT and attempt == 0:
+                                                sample_type, sample_idx = args[2], args[0]
+                                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed (ThreadPool fallback), retrying with backoff...")
+                                            time.sleep(retry_delay)
+                                            retry_delay *= 2  # Exponential backoff: 0.1, 0.2, 0.4, 0.8, 1.6s
+                                            gc.collect()  # Free resources before retry
+                                        else:
+                                            # Max retries exceeded
+                                            sample_type, sample_idx = args[2], args[0]
+                                            print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed after {max_retries} retries")
+                                            raise
+                                    else:
+                                        # Different RuntimeError, don't retry
+                                        raise
+                        
+                        all_results = []
+                        for future in as_completed(sample_futures):
+                            try:
+                                # Use generous timeout to prevent hanging on stuck workers
+                                result = future.result(timeout=600)  # 10 minutes max per sample result
+                                all_results.append(result)
+                            except TimeoutError:
                                 args = sample_futures[future]
                                 sample_type, sample_idx = args[2], args[0]
                                 if DO_PRINT:
-                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
+                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
                                 all_results.append({
                                     'index': sample_idx,
                                     'sample_type': sample_type,
@@ -1006,8 +997,47 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                     'diff_calls': 0,
                                     'matches': 0
                                 })
-                            else:
-                                # Different RuntimeError
+                            except MemoryError:
+                                # Handle memory exhaustion in thread - immediate exit to prevent hang
+                                args = sample_futures[future]
+                                sample_type, sample_idx = args[2], args[0]
+                                if DO_PRINT:
+                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
+                                print_l(f"CRITICAL: MemoryError in ThreadPoolExecutor fallback. System out of memory. Exiting.")
+                                import sys
+                                sys.exit(1)
+                            except RuntimeError as e:
+                                # Handle "can't start new thread" from nested call_with_timeout
+                                if "can't start new thread" in str(e):
+                                    args = sample_futures[future]
+                                    sample_type, sample_idx = args[2], args[0]
+                                    if DO_PRINT:
+                                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
+                                    all_results.append({
+                                        'index': sample_idx,
+                                        'sample_type': sample_type,
+                                        'outputs': [],
+                                        'solver_scores': [],
+                                        'timed_out': True,
+                                        'diff_calls': 0,
+                                        'matches': 0
+                                    })
+                                else:
+                                    # Different RuntimeError
+                                    args = sample_futures[future]
+                                    sample_type, sample_idx = args[2], args[0]
+                                    if DO_PRINT:
+                                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                                    all_results.append({
+                                        'index': sample_idx,
+                                        'sample_type': sample_type,
+                                        'outputs': [],
+                                        'solver_scores': [],
+                                        'timed_out': True,
+                                        'diff_calls': 0,
+                                        'matches': 0
+                                    })
+                            except Exception as e:
                                 args = sample_futures[future]
                                 sample_type, sample_idx = args[2], args[0]
                                 if DO_PRINT:
@@ -1021,29 +1051,22 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                     'diff_calls': 0,
                                     'matches': 0
                                 })
-                        except Exception as e:
-                            args = sample_futures[future]
-                            sample_type, sample_idx = args[2], args[0]
-                            if DO_PRINT:
-                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
-                            all_results.append({
-                                'index': sample_idx,
-                                'sample_type': sample_type,
-                                'outputs': [],
-                                'solver_scores': [],
-                                'timed_out': True,
-                                'diff_calls': 0,
-                                'matches': 0
-                            })
-                    
-                    # Explicit shutdown for clean resource cleanup
-                    _safe_executor_shutdown(executor, wait=True, cancel_futures=False)
-                finally:
-                    # Remove executor from tracking
-                    with _executor_lock:
-                        if executor in _active_executors:
-                            _active_executors.remove(executor)
-            except (OSError, MemoryError, RuntimeError, Exception) as e:
+                        
+                        # Explicit shutdown for clean resource cleanup
+                        _safe_executor_shutdown(executor, wait=True, cancel_futures=False)
+                    finally:
+                        # Remove executor from tracking
+                        with _executor_lock:
+                            if executor in _active_executors:
+                                _active_executors.remove(executor)
+                except MemoryError:
+                    # MemoryError during ThreadPoolExecutor fallback creation/execution
+                    # System is critically low on memory - immediate exit
+                    print_l(f"CRITICAL: MemoryError in ThreadPoolExecutor fallback (Thread._bootstrap)")
+                    print_l(f"System critically low on memory. Cannot create fallback threads. Exiting.")
+                    import sys
+                    sys.exit(1)
+            except (OSError, RuntimeError, Exception) as e:
                 # ThreadPoolExecutor also failed - fall back to sequential
                 if DO_PRINT:
                     print_l(f"-- ThreadPoolExecutor also failed ({e}), using sequential processing")
