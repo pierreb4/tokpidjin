@@ -645,7 +645,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     all_o = set()
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in demo_task)
 
-    print_l(f'-- {task_id} - {task_i} --') if DO_PRINT else None
+    # print_l(f'-- {task_id} - {task_i} --') if DO_PRINT else None
 
     o_score = O_Score()
     s_score = {}
@@ -1344,7 +1344,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     all_o, o_score, s_score = check_batt(total_data,
             task_i, task_id, d_score, start_time, pile_log_path, timeout=timeout, prof=prof, batt_module_name=batt_module_name)
 
-    print_l(f'-- {task_id} - {task_i} scored --') if DO_PRINT else None
+    # print_l(f'-- {task_id} - {task_i} scored --') if DO_PRINT else None
 
     if prof is not None:
         prof['run_batt.check_batt'] += timer() - prof_call_start
