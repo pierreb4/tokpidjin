@@ -69,7 +69,9 @@ try:
 except ImportError:
     GPU_AVAILABLE = False
     gpu_optimizer = None
-    print_l("GPU Support: Disabled (CuPy not available)")
+    # Only print message if GPU was expected (not in forced CPU mode)
+    if os.environ.get('EXPECT_GPU', '1') != '0':
+        print_l("GPU Support: Disabled (CuPy not available)")
 
 import multiprocessing as mp
 

@@ -84,11 +84,13 @@ fi
 # Set GPU-related variables
 if [ "$USE_GPU" = true ]; then
     export CUDA_VISIBLE_DEVICES=0,1,2,3
+    export EXPECT_GPU=1  # Signal that GPU is expected
     CARD_GPU_ARGS="--vectorized"
     BATT_GPU_ARGS=""
     echo "Card.py: Generating vectorized batt for GPU"
     echo "Timeout: ${TIMEOUT}s (GPU operations need more time)"
 else
+    export EXPECT_GPU=0  # Signal that CPU mode is expected (no warnings needed)
     CARD_GPU_ARGS=""
     BATT_GPU_ARGS=""
     echo "Card.py: Generating standard batt for CPU"

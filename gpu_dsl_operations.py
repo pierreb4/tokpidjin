@@ -39,7 +39,10 @@ try:
 except ImportError:
     GPU_AVAILABLE = False
     cp = None
-    logger.warning("GPU not available - using CPU fallback")
+    # Only log warning if GPU was expected (not in forced CPU mode)
+    import os
+    if os.environ.get('EXPECT_GPU', '1') != '0':
+        logger.warning("GPU not available - using CPU fallback")
 
 
 class GPUDSLOperations:
