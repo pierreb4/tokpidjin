@@ -33,10 +33,13 @@ try:
 except ImportError:
     GPU_AVAILABLE = False
     import numpy as np
-    # Only print message if GPU was expected (not in forced CPU mode)
     import os
-    if os.environ.get('EXPECT_GPU', '1') != '0':
-        print("CuPy not available, using CPU only")
+    import sys
+    # Only print message if GPU was expected (not in forced CPU mode)
+    # Use stderr to avoid polluting stdout, and only show once
+    if os.environ.get('EXPECT_GPU', '1') != '0' and not hasattr(sys, '_dsl_cupy_warning_shown'):
+        print("CuPy not available, using CPU only", file=sys.stderr)
+        sys._dsl_cupy_warning_shown = True
     
 def _grid_to_gpu(grid):
     """Convert grid to CuPy array if GPU available"""
