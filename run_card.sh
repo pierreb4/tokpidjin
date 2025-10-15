@@ -57,6 +57,7 @@ if [ -n "$INITIAL" ]; then
       || [[ "$HOSTNAME" == "mbp-2022.local" ]]; then
     python prep_solver_dir.py
   else
+    rmdir solver_dir  # Remove empty dir created above
     cp -R solver_dir_mbp solver_dir
   fi
 fi
