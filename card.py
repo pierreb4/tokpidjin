@@ -680,7 +680,6 @@ from gpu_env import GPUEnv as Env
 from safe_dsl import _get_safe_default
 from batt_gpu import batch_process_samples_gpu
 
-@profile
 def batt(task_id, S, I, C, log_path):
     s = []
     o = []""", file=batt_file)

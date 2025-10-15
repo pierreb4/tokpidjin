@@ -285,11 +285,12 @@ python test_multi_gpu.py
 ✅ **Strategy pivot**: Discovered solver functions are perfect GPU target (not individual DSL ops)  
 ✅ **Solver benchmarks**: Validated 28 solvers, found 2 excellent candidates (58ms, 120ms)  
 ✅ **Scale analysis complete**: GPU optimization ROI increases 25x from testing (32 tasks) to production (400 tasks)  
-✅ **Profiling tools created**: profile_batt_dsl.py and profile_batt_batch.py ready for Kaggle deployment  
-🔄 **In progress**: Deploying profilers to Kaggle to identify real DSL bottlenecks with GPU environment  
-⏳ **Next**: Implement GPU-accelerated DSL operations based on Kaggle profiling data  
+✅ **Kaggle profiling complete**: 100 tasks profiled, discovered 4 outliers (infinite loops), validated framework is 92.4% bottleneck  
+✅ **Filtered analysis**: Removed outliers, confirmed priorities unchanged (framework 92.4%, DSL 7.6%)  
+🔄 **In progress**: Framework bottleneck profiling with cProfile to identify specific functions (batch_process_samples_gpu, dedupe, etc.)  
+⏳ **Next**: Implement framework optimizations (2-5x speedup target) based on detailed profiling data  
 
-**Current focus**: Getting real profiling data from Kaggle to validate which DSL operations need GPU acceleration
+**Current focus**: Using profile_batt_framework.py to identify specific bottlenecks within 92.4% framework overhead
 
 ## Competition Resources
 
