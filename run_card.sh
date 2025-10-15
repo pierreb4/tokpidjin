@@ -51,15 +51,18 @@ if [ -n "$INITIAL" ]; then
   # Gets unset for ONERUN
   # CARD_OPTION="-fs -fd"
   CARD_OPTION="-fd"
-  # On simone or mbp
-  if [[ "$HOSTNAME" == "simone" ]] \
-      || [[ "$HOSTNAME" == "mbp-2022.lan" ]] \
-      || [[ "$HOSTNAME" == "mbp-2022.local" ]]; then
-    python prep_solver_dir.py
-  else
-    mv -f solver_dir solver_old
-    mv -f mbp_solver solver_dir
-  fi
+
+  python prep_solver_dir.py
+
+  # # On simone or mbp
+  # if [[ "$HOSTNAME" == "simone" ]] \
+  #     || [[ "$HOSTNAME" == "mbp-2022.lan" ]] \
+  #     || [[ "$HOSTNAME" == "mbp-2022.local" ]]; then
+  #   python prep_solver_dir.py
+  # else
+  #   mv -f solver_dir solver_old
+  #   mv -f mbp_solver solver_dir
+  # fi
 fi
 
 if [ -z "$COUNT" ]; then
