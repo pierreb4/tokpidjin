@@ -55,9 +55,9 @@ if [ -n "$INITIAL" ]; then
   python prep_solver_dir.py
 
   # # On simone or mbp
-  # if [[ "$HOSTNAME" == "simone" ]] \
-  #     || [[ "$HOSTNAME" == "mbp-2022.lan" ]] \
-  #     || [[ "$HOSTNAME" == "mbp-2022.local" ]]; then
+  # if [[ "$HOSTNAME" == "simone" \
+  #     || "$HOSTNAME" == "mbp-2022.lan" \
+  #     || "$HOSTNAME" == "mbp-2022.local" ]]; then
   #   python prep_solver_dir.py
   # else
   #   mv -f solver_dir solver_old
@@ -74,18 +74,23 @@ if [ -z "$TIMEOUT" ]; then
 fi
 
 # Determine GPU mode
-# TEMPORARY: Default to CPU mode because --vectorized is broken
+# IMPORTANT: --vectorized mode is BROKEN and should NOT be used for normal runs!
+# It generates code with batch_process_samples_gpu() which times out.
+# GPU acceleration works ONLY for batch operations (gpu_optimizations.py), not for solver generation.
 USE_GPU=false
 if [ -n "$FORCE_GPU" ]; then
-    echo "=== FORCED GPU MODE (WARNING: vectorized code may have bugs!) ==="
-    USE_GPU=true
+    echo "=== ERROR: GPU MODE IS BROKEN - DO NOT USE -g FLAG ==="
+    echo "The --vectorized code generation is incompatible with normal solver execution."
+    echo "All tasks will timeout because generated code calls non-functional batch_process_samples_gpu()."
+    echo "For GPU acceleration, use gpu_optimizations.py batch operations, not -g flag."
+    echo "Defaulting to CPU mode..."
+    USE_GPU=false
 elif [ -n "$FORCE_CPU" ]; then
     echo "=== FORCED CPU MODE ==="
     USE_GPU=false
 elif command -v nvidia-smi &> /dev/null; then
-    echo "=== GPU DETECTED - DEFAULTING TO CPU MODE (vectorized code broken) ==="
-    echo "Use -g flag to force GPU mode if needed"
-    USE_GPU=false  # Changed from true to false
+    echo "=== GPU DETECTED - USING CPU MODE (vectorized is broken) ==="
+    USE_GPU=false
     nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
 else
     echo "=== NO GPU - CPU MODE ==="
@@ -94,12 +99,13 @@ fi
 
 # Set GPU-related variables
 if [ "$USE_GPU" = true ]; then
+    # This code path should NEVER execute - GPU mode is broken
     export CUDA_VISIBLE_DEVICES=0,1,2,3
-    export EXPECT_GPU=1  # Signal that GPU is expected
+    export EXPECT_GPU=1
     CARD_GPU_ARGS="--vectorized"
     BATT_GPU_ARGS=""
-    echo "Card.py: Generating vectorized batt for GPU"
-    echo "Timeout: ${TIMEOUT}s (GPU operations need more time)"
+    echo "ERROR: GPU mode should not be active!"
+    echo "Timeout: ${TIMEOUT}s"
 else
     export EXPECT_GPU=0  # Signal that CPU mode is expected (no warnings needed)
     CARD_GPU_ARGS=""
@@ -158,15 +164,10 @@ while date && [ $STOP -eq 0 ]; do
     fi
 
     # Run batt with timing and GPU args
-    # Timeout: 2s per task for CPU, 30s per task for GPU (allows for validation + GPU overhead)
-    # GPU mode needs more time: each task tries ~32 solvers with up to 10s timeout each
+    # Timeout: 2s per task for CPU mode (sufficient for normal execution)
     # -k 5s: Send SIGKILL 5s after SIGTERM if process doesn't exit
     # This prevents hung cleanup handlers from delaying termination
-    if [ "$USE_GPU" = true ]; then
-        BATT_TIMEOUT=$(( 30 * ${COUNT#-} ))
-    else
-        BATT_TIMEOUT=$(( 2 * ${COUNT#-} ))
-    fi
+    BATT_TIMEOUT=$(( 2 * ${COUNT#-} ))
     echo "Running: timeout -k 5s ${BATT_TIMEOUT}s python run_batt.py -t $TIMEOUT -c $COUNT -b ${TMPBATT}_run $BATT_GPU_ARGS"
     timeout -k 5s ${BATT_TIMEOUT}s python -u run_batt.py -t $TIMEOUT -c $COUNT \
         -b ${TMPBATT}_run $BATT_GPU_ARGS | tee ${TMPBATT}_run.log
