@@ -133,20 +133,20 @@ def identity(
     x: 'Any'
 ) -> 'Any':
     """ identity function """
-    logger.info(f'identity: {x = }')
+    # logger.info(f'identity: {x = }')  # Disabled: excessive logging overhead
     return x
 
 
 def first(container: 'Container') -> 'Any':
     """First item of container"""
-    logger.info(f'first: {container = }')
+    # logger.info(f'first: {container = }')  # Disabled: excessive logging overhead
     iterator = iter(container)
     return next(iterator, None)
 
 
 def second(container: 'Container') -> 'Any':
     """Second item of container"""
-    logger.info(f'second: {container = }')
+    # logger.info(f'second: {container = }')  # Disabled: excessive logging overhead
     iterator = iter(container)
     next(iterator)
     return next(iterator, None)
@@ -154,7 +154,7 @@ def second(container: 'Container') -> 'Any':
 
 def difference_tuple(a: 'Tuple', b: 'Tuple') -> 'Tuple':
     """Tuple difference"""
-    logger.info(f'difference_tuple: {a = }, {b = }')
+    # logger.info(f'difference_tuple: {a = }, {b = }')  # Disabled: excessive logging overhead
     return type(a)(e for e in a if e not in b)
 
 
@@ -164,25 +164,25 @@ difference_t = difference_tuple
 
 def p_f( element: 'FrozenSet' ) -> 'IntegerSet':
     """ colors occurring in object """
-    logger.info(f'p_f: {element = }')
+    # logger.info(f'p_f: {element = }')  # Disabled: excessive logging overhead
     return frozenset(c for _, _, c in element)
 
 
 def p_g( grid: 'Grid' ) -> 'IntegerSet':
     """ colors occurring in grid """
-    logger.info(f'p_g: {grid = }')
+    # logger.info(f'p_g: {grid = }')  # Disabled: excessive logging overhead
     return tuple({cell for row in grid for cell in row})
 
 
 def p_o( obj: 'Object' ) -> 'IntegerSet':
     """ colors occurring in object """
-    logger.info(f'p_o: {obj = }')
+    # logger.info(f'p_o: {obj = }')  # Disabled: excessive logging overhead
     return tuple({c for _, _, c in obj})
 
 
 def dedupe_pair_tuple(S: 'Samples') -> 'Samples':
     """Remove sample pairs where input equals output"""
-    logger.info(f'dedupe_pair_tuple: {S = }')
+    # logger.info(f'dedupe_pair_tuple: {S = }')  # Disabled: excessive logging overhead
     return tuple((a, b) for a, b in S if a != b)
 
 
@@ -303,7 +303,7 @@ def dedupe_pair_tuple(S: 'Samples') -> 'Samples':
 
 # c_ for C_
 def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
-    logger.info(f'c_iz: {S = }, {function = }')
+    # logger.info(f'c_iz: {S = }, {function = }')
     x1 = apply(first, S)
     x2 = apply(second, S)
     x3 = dedupe(mapply_t(function, x1))
@@ -313,13 +313,13 @@ def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
 
 def c_iz_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
     """Returns pick of a color value from the input-output difference"""
-    logger.info(f'c_iz_n: {S = }, {function = }, {pick = }')
+    # logger.info(f'c_iz_n: {S = }, {function = }, {pick = }')
     ret_tuple = c_iz(S, function)
     return pick(ret_tuple)
 
 
 def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
-    logger.info(f'c_zo: {S = }, {function = }')
+    # logger.info(f'c_zo: {S = }, {function = }')
     x1 = apply(first, S)
     x2 = apply(second, S)
     x3 = dedupe(mapply_t(function, x1))
@@ -329,14 +329,14 @@ def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
 
 def c_zo_n(S: 'Samples', function: 'Callable', pick: 'Callable') -> 'C_':
     """Returns pick of a color value from the output-input difference"""
-    logger.info(f'c_zo_n: {S = }, {function = }, {pick = }')
+    # logger.info(f'c_zo_n: {S = }, {function = }, {pick = }')
     ret_tuple = c_zo(S, function)
     return pick(ret_tuple)
 
 
 # a_ for A_
 def a_mr(S: 'Samples') -> 'A8':
-    logger.info(f'a_mr: {S = }')
+    # logger.info(f'a_mr: {S = }')
     return next(
         (
             a
@@ -444,7 +444,7 @@ def a_mr(S: 'Samples') -> 'A8':
 
 def get_nth_t(container: 'Tuple', rank: 'FL') -> 'Any':
     """Nth item of container, 0-based"""
-    logger.info(f'get_nth_t: {container = }, {rank = }')
+    # logger.info(f'get_nth_t: {container = }, {rank = }')
     if type(container) is not tuple:
         return math.nan
     if not -len(container) <= rank < len(container):
@@ -454,7 +454,7 @@ def get_nth_t(container: 'Tuple', rank: 'FL') -> 'Any':
 
 def get_nth_f(container: 'FrozenSet', rank: 'FL') -> 'Any':
     """Nth item of container, 0-based"""
-    logger.info(f'get_nth_f: {container = }, {rank = }')
+    # logger.info(f'get_nth_f: {container = }, {rank = }')
     # if not hasattr(container, '__iter__'):
     #     return frozenset()
     if rank < 0:
@@ -473,7 +473,7 @@ def get_nth_f(container: 'FrozenSet', rank: 'FL') -> 'Any':
 # Reverse sorting with: key=invert (only for numeric types)
 def get_nth_by_key_t( container: 'Tuple', rank: 'FL', key = identity ) -> 'Any':
     """Nth item of container, 0-based, using key function"""
-    logger.info(f'get_nth_by_key_t: {container = }, {rank = }, {key = }')
+    # logger.info(f'get_nth_by_key_t: {container = }, {rank = }, {key = }')
     sorted_tuple = sorted(container, key=key)
     return sorted_tuple[rank] if sorted_tuple else None
 
@@ -482,7 +482,7 @@ def get_nth_by_key_t( container: 'Tuple', rank: 'FL', key = identity ) -> 'Any':
 # Reverse sorting with: key=invert (only for numeric types)
 def get_nth_by_key_f( container: 'FrozenSet', rank: 'F_', key = identity ) -> 'Any':
     """Nth item of container, 0-based, using key function"""
-    logger.info(f'get_nth_by_key_f: {container = }, {rank = }, {key = }')
+    # logger.info(f'get_nth_by_key_f: {container = }, {rank = }, {key = }')
     sorted_frozenset = sorted(container, key=key)
     iterator = iter(sorted_frozenset)
     for _ in range(rank):
@@ -491,7 +491,7 @@ def get_nth_by_key_f( container: 'FrozenSet', rank: 'F_', key = identity ) -> 'A
 
 
 def o_g( grid: 'Grid', type: 'R8' ) -> 'Objects':
-    logger.info(f'o_g: {grid = }, {type = }')
+    # logger.info(f'o_g: {grid = }, {type = }')
     if type == 0:
         return objects(grid, False, False, False)
     elif type == 1:
@@ -512,7 +512,7 @@ def o_g( grid: 'Grid', type: 'R8' ) -> 'Objects':
 
 def o_g_t( grid: 'Grid', type: 'R8' ) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
     """ o_g variant that returns tuple of tuples instead of frozenset """
-    logger.info(f'o_g_t: {grid = }, {type = }')
+    # logger.info(f'o_g_t: {grid = }, {type = }')
     if type == 0:
         return objects_t(grid, False, False, False)
     elif type == 1:
@@ -536,7 +536,7 @@ o_g_tuple = o_g_t
 
 
 def mir_rot_t( grid: 'Grid', type: 'A8' ) -> 'Grid':
-    logger.info(f'mir_rot_t: {grid = }, {type = }')
+    # logger.info(f'mir_rot_t: {grid = }, {type = }')
     if type == 0:
         # Horizontal mirror
         return hmirror_t(grid)
@@ -562,7 +562,7 @@ def mir_rot_t( grid: 'Grid', type: 'A8' ) -> 'Grid':
 
 
 def mir_rot_f( patch: 'Patch', type: 'A4' ) -> 'Patch':
-    logger.info(f'mir_rot_f: {patch = }, {type = }')
+    # logger.info(f'mir_rot_f: {patch = }, {type = }')
     if type == 0:
         # Horizontal mirror
         return hmirror_f(patch)
@@ -581,7 +581,7 @@ def mir_rot_f( patch: 'Patch', type: 'A4' ) -> 'Patch':
 # NOTE rank can go positive or negative
 # rank=0: most common, rank=-1: least common
 def get_color_rank_t( grid: 'Grid', rank: 'FL' ) -> 'C_':
-    logger.info(f'get_color_rank_t: {grid = }, {rank = }')
+    # logger.info(f'get_color_rank_t: {grid = }, {rank = }')
     colors = [v for row in grid for v in row]
     ranked = Counter(colors).most_common()
     return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else ()
@@ -590,14 +590,14 @@ def get_color_rank_t( grid: 'Grid', rank: 'FL' ) -> 'C_':
 # NOTE rank can go positive or negative
 # rank=0: most common, rank=-1: least common
 def get_color_rank_f( obj: 'Object', rank: 'FL' ) -> 'C_':
-    logger.info(f'get_color_rank_f: {obj = }, {rank = }')
+    # logger.info(f'get_color_rank_f: {obj = }, {rank = }')
     colors = [c for _, _, c in obj]
     ranked = Counter(colors).most_common()
     return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else frozenset()
 
 
 def get_rank( container: 'IntegerSet', rank: 'FL') -> 'Integer':
-    logger.info(f'get_rank: {container = }, {rank = }')
+    # logger.info(f'get_rank: {container = }, {rank = }')
     # if not all(isinstance(e, int) for e in container):
     #     return None
     ranked = sorted(container, reverse=True)
@@ -605,25 +605,25 @@ def get_rank( container: 'IntegerSet', rank: 'FL') -> 'Integer':
 
 
 def get_arg_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    logger.info(f'get_arg_rank: {container = }, {compfunc = }, {rank = }')
+    # logger.info(f'get_arg_rank: {container = }, {compfunc = }, {rank = }')
     ranked = sorted(container, key=compfunc, reverse=True)
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else type(container)()
 
 
 def get_arg_rank_t( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    logger.info(f'get_arg_rank_t: {container = }, {compfunc = }, {rank = }')
+    # logger.info(f'get_arg_rank_t: {container = }, {compfunc = }, {rank = }')
     ranked = sorted(container, key=compfunc, reverse=True)
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else ()
 
 
 def get_arg_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    logger.info(f'get_arg_rank_f: {container = }, {compfunc = }, {rank = }')
+    # logger.info(f'get_arg_rank_f: {container = }, {compfunc = }, {rank = }')
     ranked = sorted(container, key=compfunc, reverse=True)
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else frozenset()
 
 
 def get_val_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    logger.info(f'get_val_rank: {container = }, {compfunc = }, {rank = }')
+    # logger.info(f'get_val_rank: {container = }, {compfunc = }, {rank = }')
     ranked = sorted(container, key=compfunc)
     if -len(ranked) <= rank < len(ranked):
         return compfunc(ranked[rank])
@@ -631,7 +631,7 @@ def get_val_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> '
 
 
 def get_val_rank_t( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    logger.info(f'get_val_rank_t: {container = }, {compfunc = }, {rank = }')
+    # logger.info(f'get_val_rank_t: {container = }, {compfunc = }, {rank = }')
     ranked = sorted(container, key=compfunc)
     if -len(ranked) <= rank < len(ranked):
         return compfunc(ranked[rank])
@@ -639,7 +639,7 @@ def get_val_rank_t( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'An
 
 
 def get_val_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') -> 'Any':
-    logger.info(f'get_val_rank_f: {container = }, {compfunc = }, {rank = }')
+    # logger.info(f'get_val_rank_f: {container = }, {compfunc = }, {rank = }')
     ranked = sorted(container, key=compfunc)
     if -len(ranked) <= rank < len(ranked):
         return compfunc(ranked[rank])
@@ -647,19 +647,19 @@ def get_val_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') ->
 
 
 def get_common_rank( container: 'Container', rank: 'FL') -> 'Any':
-    logger.info(f'get_common_rank: {container = }, {rank = }')
+    # logger.info(f'get_common_rank: {container = }, {rank = }')
     ranked = sorted(set(container), key=container.count)
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else type(container)()
 
 
 def get_common_rank_t( container: 'Tuple', rank: 'FL') -> 'Any':
-    logger.info(f'get_common_rank_t: {container = }, {rank = }')
+    # logger.info(f'get_common_rank_t: {container = }, {rank = }')
     ranked = sorted(set(container), key=container.count)
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else ()
 
 
 def get_common_rank_f( container: 'FrozenSet', rank: 'FL') -> 'Any':
-    logger.info(f'get_common_rank_f: {container = }, {rank = }')
+    # logger.info(f'get_common_rank_f: {container = }, {rank = }')
     # Since frozensets have unique elements, convert to list first
     container_list = list(container)
     ranked = sorted(set(container_list), key=container_list.count)
@@ -671,7 +671,7 @@ def add(
     b: 'Numerical'
 ) -> 'Numerical':
     """ addition """
-    logger.info(f'add: {a = }, {b = }')
+    # logger.info(f'add: {a = }, {b = }')
     if b == ():
         b = 0
     if a == ():
@@ -690,7 +690,7 @@ def subtract(
     b: 'Numerical'
 ) -> 'Numerical':
     """ subtraction """
-    logger.info(f'subtract: {a = }, {b = }')
+    # logger.info(f'subtract: {a = }, {b = }')
     if b == ():
         b = 0
     if a == ():
@@ -709,7 +709,7 @@ def multiply(
     b: 'Numerical'
 ) -> 'Numerical':
     """ multiplication """
-    logger.info(f'multiply: {a = }, {b = }')
+    # logger.info(f'multiply: {a = }, {b = }')
     if b == ():
         b = 1
     if a == ():
@@ -728,7 +728,7 @@ def divide(
     b: 'Numerical'
 ) -> 'Numerical':
     """ floor division """
-    logger.info(f'divide: {a = }, {b = }')
+    # logger.info(f'divide: {a = }, {b = }')
     if b == ():
         b = 1
     if a == ():
@@ -746,7 +746,7 @@ def invert(
     n: 'Numerical'
 ) -> 'Numerical':
     """ inversion with respect to addition """
-    logger.info(f'invert: {n = }')
+    # logger.info(f'invert: {n = }')
     return -n if isinstance(n, int) else (-n[0], -n[1])
 
 
@@ -754,7 +754,7 @@ def even(
     n: 'Integer'
 ) -> 'Boolean':
     """ evenness """
-    logger.info(f'even: {n = }')
+    # logger.info(f'even: {n = }')
     return n % 2 == 0
 
 
@@ -762,7 +762,7 @@ def double(
     n: 'Numerical'
 ) -> 'Numerical':
     """ scaling by two """
-    logger.info(f'double: {n = }')
+    # logger.info(f'double: {n = }')
     return n * 2 if isinstance(n, int) else (n[0] * 2, n[1] * 2)
 
 
@@ -770,7 +770,7 @@ def halve(
     n: 'Numerical'
 ) -> 'Numerical':
     """ scaling by one half """
-    logger.info(f'halve: {n = }')
+    # logger.info(f'halve: {n = }')
     return n // 2 if isinstance(n, int) else (n[0] // 2, n[1] // 2)
 
 
@@ -778,7 +778,7 @@ def flip(
     b: 'Boolean'
 ) -> 'Boolean':
     """ logical not """
-    logger.info(f'flip: {b = }')
+    # logger.info(f'flip: {b = }')
     return not b
 
 
@@ -787,7 +787,7 @@ def equality(
     b: 'Any'
 ) -> 'Boolean':
     """ equality """
-    logger.info(f'equality: {a = }, {b = }')
+    # logger.info(f'equality: {a = }, {b = }')
     return a == b
 
 
@@ -796,7 +796,7 @@ def contained(
     container: 'Container'
 ) -> 'Boolean':
     """ element of """
-    logger.info(f'contained: {value = }, {container = }')
+    # logger.info(f'contained: {value = }, {container = }')
     return value in container
 
 
@@ -805,7 +805,7 @@ def combine(
     b: 'Container'
 ) -> 'Container':
     """ union """
-    logger.info(f'combine: {a = }, {b = }')
+    # logger.info(f'combine: {a = }, {b = }')
     return type(a)((*a, *b))
 
 
@@ -814,7 +814,7 @@ def intersection(
     b: 'FrozenSet'
 ) -> 'FrozenSet':
     """ returns the intersection of two containers """
-    logger.info(f'intersection: {a = }, {b = }')
+    # logger.info(f'intersection: {a = }, {b = }')
     return a & b
 
 
@@ -823,7 +823,7 @@ def difference(
     b: 'FrozenSet'
 ) -> 'FrozenSet':
     """ set difference """
-    logger.info(f'difference: {a = }, {b = }')
+    # logger.info(f'difference: {a = }, {b = }')
     return type(a)(e for e in a if e not in b)
 
 
@@ -831,7 +831,7 @@ def dedupe(
     tup: 'Tuple'
 ) -> 'Tuple':
     """ remove duplicates """
-    logger.info(f'dedupe: {tup = }')
+    # logger.info(f'dedupe: {tup = }')
     return tuple(e for i, e in enumerate(tup) if tup.index(e) == i)
 
 
@@ -840,7 +840,7 @@ def order(
     compfunc: 'Callable'
 ) -> 'Tuple':
     """ order container by custom key """
-    logger.info(f'order: {container = }, {compfunc = }')
+    # logger.info(f'order: {container = }, {compfunc = }')
     return tuple(sorted(container, key=compfunc))
 
 
@@ -849,7 +849,7 @@ def repeat(
     num: 'C_'
 ) -> 'Tuple':
     """ repetition of item within vector """
-    logger.info(f'repeat: {item = }, {num = }')
+    # logger.info(f'repeat: {item = }, {num = }')
     return tuple(item for _ in range(num))
 
 
@@ -858,7 +858,7 @@ def greater(
     b: 'Integer'
 ) -> 'Boolean':
     """ greater """
-    logger.info(f'greater: {a = }, {b = }')
+    # logger.info(f'greater: {a = }, {b = }')
     return a > b
 
 
@@ -866,7 +866,7 @@ def size(
     container: 'Container'
 ) -> 'Integer':
     """ cardinality """
-    logger.info(f'size: {container = }')
+    # logger.info(f'size: {container = }')
     return len(container)
 
 
@@ -874,7 +874,7 @@ def merge(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    logger.info(f'merge: {containers = }')
+    # logger.info(f'merge: {containers = }')
     return type(containers)(e for c in containers for e in c)
 
 
@@ -882,7 +882,7 @@ def merge_f(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    logger.info(f'merge_f: {containers = }')
+    # logger.info(f'merge_f: {containers = }')
     return type(containers)(e for c in containers for e in c)
 
 
@@ -890,7 +890,7 @@ def merge_t(
     containers: 'ContainerContainer'
 ) -> 'Container':
     """ merging """
-    logger.info(f'merge_t: {containers = }')
+    # logger.info(f'merge_t: {containers = }')
     return type(containers)(e for c in containers for e in c)
 
 
@@ -899,7 +899,7 @@ def maximum(
     container: 'IntegerSet'
 ) -> 'Integer':
     """ maximum """
-    logger.info(f'maximum: {container = }')
+    # logger.info(f'maximum: {container = }')
     return max(container, default=0)
 
 
@@ -908,7 +908,7 @@ def minimum(
     container: 'IntegerSet'
 ) -> 'Integer':
     """ minimum """
-    logger.info(f'minimum: {container = }')
+    # logger.info(f'minimum: {container = }')
     return min(container, default=0)
 
 
@@ -918,7 +918,7 @@ def valmax(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ maximum by custom function """
-    logger.info(f'valmax: {container = }, {compfunc = }')
+    # logger.info(f'valmax: {container = }, {compfunc = }')
     return compfunc(max(container, key=compfunc, default=0))
 
 
@@ -928,7 +928,7 @@ def valmin(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ minimum by custom function """
-    logger.info(f'valmin: {container = }, {compfunc = }')
+    # logger.info(f'valmin: {container = }, {compfunc = }')
     return compfunc(min(container, key=compfunc, default=0))
 
 
@@ -938,7 +938,7 @@ def argmax(
     compfunc: 'Callable'
 ) -> 'Any':
     """ largest item by custom order """
-    logger.info(f'argmax: {container = }, {compfunc = }')
+    # logger.info(f'argmax: {container = }, {compfunc = }')
     return max(container, key=compfunc)
 
 
@@ -948,7 +948,7 @@ def argmin(
     compfunc: 'Callable'
 ) -> 'Any':
     """ smallest item by custom order """
-    logger.info(f'argmin: {container = }, {compfunc = }')
+    # logger.info(f'argmin: {container = }, {compfunc = }')
     return min(container, key=compfunc)
 
 
@@ -956,7 +956,7 @@ def mostcommon(
     container: 'Container'
 ) -> 'Any':
     """ most common item """
-    logger.info(f'mostcommon: {container = }')
+    # logger.info(f'mostcommon: {container = }')
     return max(set(container), key=container.count)
 
 
@@ -964,7 +964,7 @@ def leastcommon(
     container: 'Container'
 ) -> 'Any':
     """ least common item """
-    logger.info(f'leastcommon: {container = }')
+    # logger.info(f'leastcommon: {container = }')
     return min(set(container), key=container.count)
 
 
@@ -972,7 +972,7 @@ def initset(
     value: 'Any'
 ) -> 'FrozenSet':
     """ initialize container """
-    logger.info(f'initset: {value = }')
+    # logger.info(f'initset: {value = }')
     return frozenset({value})
 
 
@@ -981,7 +981,7 @@ def both(
     b: 'Boolean'
 ) -> 'Boolean':
     """ logical and """
-    logger.info(f'both: {a = }, {b = }')
+    # logger.info(f'both: {a = }, {b = }')
     return a and b
 
 
@@ -990,7 +990,7 @@ def either(
     b: 'Boolean'
 ) -> 'Boolean':
     """ logical or """
-    logger.info(f'either: {a = }, {b = }')
+    # logger.info(f'either: {a = }, {b = }')
     return a or b
 
 
@@ -998,7 +998,7 @@ def increment(
     x: 'Numerical'
 ) -> 'Numerical':
     """ incrementing """
-    logger.info(f'increment: {x = }')
+    # logger.info(f'increment: {x = }')
     return x + 1 if isinstance(x, int) else (x[0] + 1, x[1] + 1)
 
 
@@ -1006,7 +1006,7 @@ def decrement(
     x: 'Numerical'
 ) -> 'Numerical':
     """ decrementing """
-    logger.info(f'decrement: {x = }')
+    # logger.info(f'decrement: {x = }')
     return x - 1 if isinstance(x, int) else (x[0] - 1, x[1] - 1)
 
 
@@ -1014,7 +1014,7 @@ def crement(
     x: 'Numerical'
 ) -> 'Numerical':
     """ incrementing positive and decrementing negative """
-    logger.info(f'crement: {x = }')
+    # logger.info(f'crement: {x = }')
     if isinstance(x, int):
         return 0 if x == 0 else (x + 1 if x > 0 else x - 1)
     return (
@@ -1027,7 +1027,7 @@ def sign(
     x: 'Numerical'
 ) -> 'Numerical':
     """ sign """
-    logger.info(f'sign: {x = }')
+    # logger.info(f'sign: {x = }')
     if isinstance(x, int):
         return 0 if x == 0 else (1 if x > 0 else -1)
     return (
@@ -1040,7 +1040,7 @@ def positive(
     x: 'Integer'
 ) -> 'Boolean':
     """ positive """
-    logger.info(f'positive: {x = }')
+    # logger.info(f'positive: {x = }')
     return x > 0
 
 
@@ -1048,7 +1048,7 @@ def toivec(
     i: 'Integer'
 ) -> 'IJ':
     """ vector pointing vertically """
-    logger.info(f'toivec: {i = }')
+    # logger.info(f'toivec: {i = }')
     return (i, 0)
 
 
@@ -1056,7 +1056,7 @@ def tojvec(
     j: 'Integer'
 ) -> 'IJ':
     """ vector pointing horizontally """
-    logger.info(f'tojvec: {j = }')
+    # logger.info(f'tojvec: {j = }')
     return (0, j)
 
 
@@ -1065,7 +1065,7 @@ def extract(
     condition: 'Callable'
 ) -> 'Any':
     """ first element of container that satisfies condition """
-    logger.info(f'extract: {container = }, {condition = }')
+    # logger.info(f'extract: {container = }, {condition = }')
     return next((e for e in container if condition(e)), frozenset())
 
 
@@ -1073,7 +1073,7 @@ def totuple(
     container: 'FrozenSet'
 ) -> 'Tuple':
     """ conversion to tuple """
-    logger.info(f'totuple: {container = }')
+    # logger.info(f'totuple: {container = }')
     return tuple(container)
 
 
@@ -1082,7 +1082,7 @@ def insert(
     container: 'FrozenSet'
 ) -> 'FrozenSet':
     """ insert item into container """
-    logger.info(f'insert: {value = }, {container = }')
+    # logger.info(f'insert: {value = }, {container = }')
     return container.union(frozenset({value}))
 
 
@@ -1091,7 +1091,7 @@ def other(
     value: 'Any'
 ) -> 'Any':
     """ other value in the container """
-    logger.info(f'other: {container = }, {value = }')
+    # logger.info(f'other: {container = }, {value = }')
     return first(remove(value, container))
 
 
@@ -1101,7 +1101,7 @@ def interval(
     step: 'Integer'
 ) -> 'Tuple':
     """ range """
-    logger.info(f'interval: {start = }, {stop = }, {step = }')
+    # logger.info(f'interval: {start = }, {stop = }, {step = }')
     return tuple(range(start, stop, step))
 
 
@@ -1110,7 +1110,7 @@ def astuple(
     b: 'Any'
 ) -> 'Tuple':
     """ constructs a tuple """
-    logger.info(f'astuple: {a = }, {b = }')
+    # logger.info(f'astuple: {a = }, {b = }')
     # XXX a and b aren't just integers :/
     # return (b[0], b[1], a) if isinstance(b, tuple) else (a, b)
     return (a, b)
@@ -1121,7 +1121,7 @@ def ascell(
     c: 'C_'
 ) -> 'Tuple':
     """ constructs a cell tuple """
-    logger.info(f'ascell: {ij = }, {c = }')
+    # logger.info(f'ascell: {ij = }, {c = }')
     return (ij[0], ij[1], c)
 
 
@@ -1129,7 +1129,7 @@ def toij(
     c: 'Cell'
 ) -> 'IJ':
     """ converts a cell to ij coordinates """
-    logger.info(f'toij: {c = }')
+    # logger.info(f'toij: {c = }')
     return (c[0], c[1])
 
 
@@ -1139,7 +1139,7 @@ def astriple(
     c: 'C_'
 ) -> 'Tuple':
     """ constructs a triple tuple """
-    logger.info(f'astriple: {i = }, {j = }, {c = }')
+    # logger.info(f'astriple: {i = }, {j = }, {c = }')
     return (i, j, c)
 
 
@@ -1148,7 +1148,7 @@ def product(
     b: 'Container'
 ) -> 'FrozenSet':
     """ cartesian product """
-    logger.info(f'product: {a = }, {b = }')
+    # logger.info(f'product: {a = }, {b = }')
     return frozenset((i, j) for j in b for i in a)
 
 
@@ -1157,7 +1157,7 @@ def pair(
     b: 'Tuple'
 ) -> 'TupleTuple':
     """ zipping of two tuples """
-    logger.info(f'pair: {a = }, {b = }')
+    # logger.info(f'pair: {a = }, {b = }')
     return tuple(zip(a, b))
 
 
@@ -1166,7 +1166,7 @@ def celltuple(
     b: 'Tuple'
 ) -> 'TupleTuple':
     """ constructs a cell tuple from two tuples """
-    logger.info(f'celltuple: {a = }, {b = }')
+    # logger.info(f'celltuple: {a = }, {b = }')
     return tuple((x, y, z) for (x, y), z in zip(a, b))
 
 def branch(
@@ -1175,7 +1175,7 @@ def branch(
     b: 'Any'
 ) -> 'Any':
     """ if else branching """
-    logger.info(f'branch: {condition = }, {a = }, {b = }')
+    # logger.info(f'branch: {condition = }, {a = }, {b = }')
     return a if condition else b
 
 
@@ -1185,7 +1185,7 @@ def c_branch(
     b: 'C_'
 ) -> 'Any':
     """ if else branching """
-    logger.info(f'c_branch: {condition = }, {a = }, {b = }')
+    # logger.info(f'c_branch: {condition = }, {a = }, {b = }')
     return a if condition else b
 
 
@@ -1194,7 +1194,7 @@ def compose(
     inner: 'Callable'
 ) -> 'Callable':
     """ function composition """
-    logger.info(f'compose: {outer = }, {inner = }')
+    # logger.info(f'compose: {outer = }, {inner = }')
     return lambda x: outer(inner(x))
 
 
@@ -1204,7 +1204,7 @@ def chain(
     f: 'Callable',
 ) -> 'Callable':
     """ function composition with three functions """
-    logger.info(f'chain: {h = }, {g = }, {f = }')
+    # logger.info(f'chain: {h = }, {g = }, {f = }')
     return lambda x: h(g(f(x)))
     # Print intermediate results
     # return lambda x: (
@@ -1220,7 +1220,7 @@ def matcher(
     target: 'Any'
 ) -> 'Callable':
     """ construction of equality function """
-    logger.info(f'matcher: {function = }, {target = }')
+    # logger.info(f'matcher: {function = }, {target = }')
     return lambda x: function(x) == target
 
 
@@ -1229,7 +1229,7 @@ def rbind(
     fixed: 'Any'
 ) -> 'Callable':
     """ fix the rightmost argument """
-    logger.info(f'rbind: {function = }, {fixed = }')
+    # logger.info(f'rbind: {function = }, {fixed = }')
     # Use _original_argcount if available (for decorated functions)
     if hasattr(function, '_original_argcount'):
         n = function._original_argcount
@@ -1286,7 +1286,7 @@ def lbind(
     fixed: 'Any'
 ) -> 'Callable':
     """ fix the leftmost argument """
-    logger.info(f'lbind: {function = }, {fixed = }')
+    # logger.info(f'lbind: {function = }, {fixed = }')
     # Use _original_argcount if available (for decorated functions)
     if hasattr(function, '_original_argcount'):
         n = function._original_argcount
@@ -1343,7 +1343,7 @@ def power(
     n: 'Integer'
 ) -> 'Callable':
     """ power of function """
-    logger.info(f'power: {function = }, {n = }')
+    # logger.info(f'power: {function = }, {n = }')
     return function if n == 1 else compose(function, power(function, n - 1))
 
 
@@ -1353,7 +1353,7 @@ def fork(
     b: 'Callable'
 ) -> 'Callable':
     """ creates a wrapper function """
-    logger.info(f'fork: {outer = }, {a = }, {b = }')
+    # logger.info(f'fork: {outer = }, {a = }, {b = }')
     return lambda x: outer(a(x), b(x))
 
 
@@ -1362,7 +1362,7 @@ def combine_t(
     b: 'Tuple'
 ) -> 'Tuple':
     """ union for tuples """
-    logger.info(f'combine_t: {a = }, {b = }')
+    # logger.info(f'combine_t: {a = }, {b = }')
     return a + b
 
 
@@ -1371,7 +1371,7 @@ def combine_f(
     b: 'FrozenSet'
 ) -> 'FrozenSet':
     """ union for frozensets """
-    logger.info(f'combine_f: {a = }, {b = }')
+    # logger.info(f'combine_f: {a = }, {b = }')
     return a | b
 
 
@@ -1379,7 +1379,7 @@ def size_t(
     container: 'Tuple'
 ) -> 'Integer':
     """ cardinality of tuple """
-    logger.info(f'size_t: {container = }')
+    # logger.info(f'size_t: {container = }')
     return len(container)
 
 
@@ -1387,7 +1387,7 @@ def size_f(
     container: 'FrozenSet'
 ) -> 'Integer':
     """ cardinality of frozenset """
-    logger.info(f'size_f: {container = }')
+    # logger.info(f'size_f: {container = }')
     return len(container)
 
 # See get_val_rank_t
@@ -1396,7 +1396,7 @@ def valmax_t(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ maximum by custom function for tuples """
-    logger.info(f'valmax_t: {container = }, {compfunc = }')
+    # logger.info(f'valmax_t: {container = }, {compfunc = }')
     return compfunc(max(container, key=compfunc, default=0))
 
 
@@ -1406,7 +1406,7 @@ def valmax_f(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ maximum by custom function for frozensets """
-    logger.info(f'valmax_f: {container = }, {compfunc = }')
+    # logger.info(f'valmax_f: {container = }, {compfunc = }')
     return compfunc(max(container, key=compfunc, default=0))
 
 # See get_val_rank_t
@@ -1415,7 +1415,7 @@ def valmin_t(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ minimum by custom function for tuples """
-    logger.info(f'valmin_t: {container = }, {compfunc = }')
+    # logger.info(f'valmin_t: {container = }, {compfunc = }')
     return compfunc(min(container, key=compfunc, default=0))
 
 
@@ -1425,7 +1425,7 @@ def valmin_f(
     compfunc: 'Callable'
 ) -> 'Integer':
     """ minimum by custom function for frozensets """
-    logger.info(f'valmin_f: {container = }, {compfunc = }')
+    # logger.info(f'valmin_f: {container = }, {compfunc = }')
     return compfunc(min(container, key=compfunc, default=0))
 
 
@@ -1435,7 +1435,7 @@ def argmax_t(
     compfunc: 'Callable'
 ) -> 'Any':
     """ largest item by custom order for tuples """
-    logger.info(f'argmax_t: {container = }, {compfunc = }')
+    # logger.info(f'argmax_t: {container = }, {compfunc = }')
     return max(container, key=compfunc)
 
 
@@ -1445,7 +1445,7 @@ def argmax_f(
     compfunc: 'Callable'
 ) -> 'Any':
     """ largest item by custom order for frozensets """
-    logger.info(f'argmax_f: {container = }, {compfunc = }')
+    # logger.info(f'argmax_f: {container = }, {compfunc = }')
     return max(container, key=compfunc)
 
 
@@ -1455,7 +1455,7 @@ def argmin_t(
     compfunc: 'Callable'
 ) -> 'Any':
     """ smallest item by custom order for tuples """
-    logger.info(f'argmin_t: {container = }, {compfunc = }')
+    # logger.info(f'argmin_t: {container = }, {compfunc = }')
     return min(container, key=compfunc)
 
 
@@ -1465,7 +1465,7 @@ def argmin_f(
     compfunc: 'Callable'
 ) -> 'Any':
     """ smallest item by custom order for frozensets """
-    logger.info(f'argmin_f: {container = }, {compfunc = }')
+    # logger.info(f'argmin_f: {container = }, {compfunc = }')
     return min(container, key=compfunc)
 
 
@@ -1474,7 +1474,7 @@ def mostcommon_t(
     container: 'Tuple'
 ) -> 'Any':
     """ most common item in tuple """
-    logger.info(f'mostcommon_t: {container = }')
+    # logger.info(f'mostcommon_t: {container = }')
     return max(set(container), key=container.count)
 
 
@@ -1483,7 +1483,7 @@ def mostcommon_f(
     container: 'FrozenSet'
 ) -> 'Any':
     """ most common item in frozenset - returns the item itself for frozensets """
-    logger.info(f'mostcommon_f: {container = }')
+    # logger.info(f'mostcommon_f: {container = }')
     # Since frozensets have unique elements, convert to list first
     container_list = list(container)
     return max(set(container_list), key=container_list.count)
@@ -1494,7 +1494,7 @@ def leastcommon_t(
     container: 'Tuple'
 ) -> 'Any':
     """ least common item in tuple """
-    logger.info(f'leastcommon_t: {container = }')
+    # logger.info(f'leastcommon_t: {container = }')
     return min(set(container), key=container.count)
 
 
@@ -1503,7 +1503,7 @@ def leastcommon_f(
     container: 'FrozenSet'
 ) -> 'Any':
     """ least common item in frozenset - returns the item itself for frozensets """
-    logger.info(f'leastcommon_f: {container = }')
+    # logger.info(f'leastcommon_f: {container = }')
     # Since frozensets have unique elements, convert to list first
     container_list = list(container)
     return min(set(container_list), key=container_list.count)
@@ -1514,7 +1514,7 @@ def sfilter(
     condition: 'Callable'
 ) -> 'Container':
     """ keep elements in container that satisfy condition """
-    logger.info(f'sfilter: {container = }, {condition = }')
+    # logger.info(f'sfilter: {container = }, {condition = }')
     return type(container)(e for e in container if condition(e))
 
 
@@ -1523,7 +1523,7 @@ def sfilter_t(
     condition: 'Callable'
 ) -> 'Tuple':
     """ keep elements in tuple that satisfy condition """
-    logger.info(f'sfilter_t: {container = }, {condition = }')
+    # logger.info(f'sfilter_t: {container = }, {condition = }')
     return tuple(e for e in container if condition(e))
 
 
@@ -1532,7 +1532,7 @@ def sfilter_f(
     condition: 'Callable'
 ) -> 'FrozenSet':
     """ keep elements in frozenset that satisfy condition """
-    logger.info(f'sfilter_f: {container = }, {condition = }')
+    # logger.info(f'sfilter_f: {container = }, {condition = }')
     return frozenset(e for e in container if condition(e))
 
 
@@ -1541,7 +1541,7 @@ def mfilter(
     function: 'Callable'
 ) -> 'FrozenSet':
     """ filter and merge """
-    logger.info(f'mfilter: {container = }, {function = }')
+    # logger.info(f'mfilter: {container = }, {function = }')
     return merge_f(sfilter(container, function))
 
 
@@ -1550,7 +1550,7 @@ def mfilter_t(
     function: 'Callable'
 ) -> 'FrozenSet':
     """ filter and merge for tuples """
-    logger.info(f'mfilter_t: {container = }, {function = }')
+    # logger.info(f'mfilter_t: {container = }, {function = }')
     # Directly create a frozenset of filtered elements
     return frozenset(e for e in container if function(e))
 
@@ -1560,7 +1560,7 @@ def mfilter_f(
     function: 'Callable'
 ) -> 'FrozenSet':
     """ filter and merge for frozensets """
-    logger.info(f'mfilter_f: {container = }, {function = }')
+    # logger.info(f'mfilter_f: {container = }, {function = }')
     # Directly create a frozenset of filtered elements
     # return frozenset(e for e in container if function(e))
     return merge_f(sfilter(container, function))
@@ -1577,7 +1577,7 @@ def first_t(
     container: 'Tuple'
 ) -> 'Any':
     """ first item of tuple """
-    logger.info(f'first_t: {container = }')
+    # logger.info(f'first_t: {container = }')
     return container[0] if container else ()
 
 
@@ -1585,7 +1585,7 @@ def first_f(
     container: 'FrozenSet'
 ) -> 'Any':
     """ first item of frozenset """
-    logger.info(f'first_f: {container = }')
+    # logger.info(f'first_f: {container = }')
     return next(iter(container), None) if container else frozenset()
 
 
@@ -1593,7 +1593,7 @@ def last(
     container: 'Container'
 ) -> 'Any':
     """ last item of container """
-    logger.info(f'last: {container = }')
+    # logger.info(f'last: {container = }')
     return max(enumerate(container))[1] if container else ()
 
 
@@ -1601,7 +1601,7 @@ def last_t(
     container: 'Tuple'
 ) -> 'Any':
     """ last item of tuple """
-    logger.info(f'last_t: {container = }')
+    # logger.info(f'last_t: {container = }')
     return container[-1] if container else ()
 
 
@@ -1609,7 +1609,7 @@ def last_f(
     container: 'FrozenSet'
 ) -> 'Any':
     """ last item of frozenset - not truly ordered, so returns an arbitrary element """
-    logger.info(f'last_f: {container = }')
+    # logger.info(f'last_f: {container = }')
     return max(enumerate(container))[1] if container else frozenset()
 
 
@@ -1618,7 +1618,7 @@ def remove(
     container: 'Container'
 ) -> 'Container':
     """ remove item from container """
-    logger.info(f'remove: {value = }, {container = }')
+    # logger.info(f'remove: {value = }, {container = }')
     return type(container)(e for e in container if e != value)
 
 
@@ -1627,7 +1627,7 @@ def remove_t(
     container: 'Tuple'
 ) -> 'Tuple':
     """ remove item from tuple """
-    logger.info(f'remove_t: {value = }, {container = }')
+    # logger.info(f'remove_t: {value = }, {container = }')
     return tuple(e for e in container if e != value)
 
 
@@ -1636,7 +1636,7 @@ def remove_f(
     container: 'FrozenSet'
 ) -> 'FrozenSet':
     """ remove item from frozenset """
-    logger.info(f'remove_f: {value = }, {container = }')
+    # logger.info(f'remove_f: {value = }, {container = }')
     # return container - {value}
     return type(container)(e for e in container if e != value)
 
@@ -1646,7 +1646,7 @@ def other_t(
     value: 'Any'
 ) -> 'Any':
     """ other value in the tuple """
-    logger.info(f'other_t: {container = }, {value = }')
+    # logger.info(f'other_t: {container = }, {value = }')
     # # Only proceed if the value is actually in the container
     # if value not in container:
     #     return None
@@ -1660,7 +1660,7 @@ def other_f(
     value: 'Any'
 ) -> 'Any':
     """ other value in the frozenset """
-    logger.info(f'other_f: {container = }, {value = }')
+    # logger.info(f'other_f: {container = }, {value = }')
     # # Only proceed if the value is actually in the container
     # if value not in container:
     #     return None
@@ -1674,7 +1674,7 @@ def apply(
     container: 'Container'
 ) -> 'Container':
     """ apply function to each item in container """
-    logger.info(f'apply: {function = }, {container = }')
+    # logger.info(f'apply: {function = }, {container = }')
     return type(container)(function(e) for e in container)
 
 
@@ -1683,7 +1683,7 @@ def apply_t(
     container: 'Tuple'
 ) -> 'Tuple':
     """ apply function to each item in tuple """
-    logger.info(f'apply_t: {function = }, {container = }')
+    # logger.info(f'apply_t: {function = }, {container = }')
     return tuple(function(e) for e in container)
 
 
@@ -1692,7 +1692,7 @@ def apply_f(
     container: 'FrozenSet'
 ) -> 'FrozenSet':
     """ apply function to each item in frozenset """
-    logger.info(f'apply_f: {function = }, {container = }')
+    # logger.info(f'apply_f: {function = }, {container = }')
     return type(container)(function(e) for e in container)
 
 
@@ -1701,7 +1701,7 @@ def rapply(
     value: 'Any'
 ) -> 'Container':
     """ apply each function in container to value """
-    logger.info(f'rapply: {functions = }, {value = }')
+    # logger.info(f'rapply: {functions = }, {value = }')
     return type(functions)(function(value) for function in functions)
 
 
@@ -1710,7 +1710,7 @@ def rapply_t(
     value: 'Any'
 ) -> 'Tuple':
     """ apply each function in tuple to value """
-    logger.info(f'rapply_t: {functions = }, {value = }')
+    # logger.info(f'rapply_t: {functions = }, {value = }')
     return tuple(function(value) for function in functions)
 
 
@@ -1719,7 +1719,7 @@ def rapply_f(
     value: 'Any'
 ) -> 'FrozenSet':
     """ apply each function in frozenset to value """
-    logger.info(f'rapply_f: {functions = }, {value = }')
+    # logger.info(f'rapply_f: {functions = }, {value = }')
     return type(functions)(function(value) for function in functions)
 
 
@@ -1728,7 +1728,7 @@ def mapply(
     container: 'ContainerContainer'
 ) -> 'FrozenSet':
     """ apply and merge """
-    logger.info(f'mapply: {function = }, {container = }')
+    # logger.info(f'mapply: {function = }, {container = }')
     return merge(apply(function, container))
 
 
@@ -1737,7 +1737,7 @@ def mapply_t(
     container: 'Tuple'
 ) -> 'Tuple':
     """ apply and merge for tuples"""
-    logger.info(f'mapply_t: {function = }, {container = }')
+    # logger.info(f'mapply_t: {function = }, {container = }')
     return merge_t(apply_t(function, container))
 
 
@@ -1746,7 +1746,7 @@ def mapply_f(
     container: 'FrozenSet'
 ) -> 'FrozenSet':
     """ apply and merge for frozensets """
-    logger.info(f'mapply_f: {function = }, {container = }')
+    # logger.info(f'mapply_f: {function = }, {container = }')
     return merge_f(apply_f(function, container))
 
 
@@ -1756,7 +1756,7 @@ def papply(
     b: 'Tuple'
 ) -> 'Tuple':
     """ apply function on two vectors """
-    logger.info(f'papply: {function = }, {a = }, {b = }')
+    # logger.info(f'papply: {function = }, {a = }, {b = }')
     return tuple(function(i, j) for i, j in zip(a, b))
 
 
@@ -1766,7 +1766,7 @@ def mpapply(
     b: 'Tuple'
 ) -> 'Tuple':
     """ apply function on two vectors and merge """
-    logger.info(f'mpapply: {function = }, {a = }, {b = }')
+    # logger.info(f'mpapply: {function = }, {a = }, {b = }')
     return merge_t(papply(function, a, b))
 
 
@@ -1776,7 +1776,7 @@ def prapply(
     b: 'Container'
 ) -> 'FrozenSet':
     """ apply function on cartesian product """
-    logger.info(f'prapply: {function = }, {a = }, {b = }')
+    # logger.info(f'prapply: {function = }, {a = }, {b = }')
     return frozenset(function(i, j) for j in b for i in a)
 
 
@@ -1792,7 +1792,7 @@ def mostcolor_t(
     grid: 'Grid'
 ) -> 'Integer':
     """ most common color """
-    logger.info(f'mostcolor_t: {grid = }')
+    # logger.info(f'mostcolor_t: {grid = }')
     values = [v for r in grid for v in r]
     return max(set(values), key=values.count) if values else math.nan
     
@@ -1801,7 +1801,7 @@ def mostcolor_f(
     obj: 'Object'
 ) -> 'Integer':
     """ most common color """
-    logger.info(f'mostcolor_f: {obj = }')
+    # logger.info(f'mostcolor_f: {obj = }')
     values = [v for _, _, v in obj]
     return max(set(values), key=values.count) if values else math.nan
     
@@ -1818,7 +1818,7 @@ def leastcolor_t(
     grid: 'Grid'
 ) -> 'Integer':
     """ least common color """
-    logger.info(f'leastcolor_t: {grid = }')
+    # logger.info(f'leastcolor_t: {grid = }')
     values = [v for r in grid for v in r]
     return min(set(values), key=values.count) if values else math.nan
 
@@ -1827,7 +1827,7 @@ def leastcolor_f(
     obj: 'Object'
 ) -> 'Integer':
     """ least common color """
-    logger.info(f'leastcolor_f: {obj = }')
+    # logger.info(f'leastcolor_f: {obj = }')
     values = [v for _, _, v in obj]
     return min(set(values), key=values.count) if values else math.nan
 
@@ -1858,7 +1858,7 @@ def height_t(
     piece: 'Tuple'
 ) -> 'Integer':
     """ height of grid """
-    logger.info(f'height_t: {piece = }')
+    # logger.info(f'height_t: {piece = }')
     return len(piece)
 
 
@@ -1866,7 +1866,7 @@ def height_f(
     piece: 'Indices'
 ) -> 'Integer':
     """ height of patch """
-    logger.info(f'height_f: {piece = }')
+    # logger.info(f'height_f: {piece = }')
     return 0 if len(piece) == 0 else lowermost(piece) - uppermost(piece) + 1
 
 
@@ -1874,7 +1874,7 @@ def height_i(
     piece: 'Indices'
 ) -> 'Integer':
     """ height of patch """
-    logger.info(f'height_i: {piece = }')
+    # logger.info(f'height_i: {piece = }')
     return 0 if len(piece) == 0 else lowermost_i(piece) - uppermost_i(piece) + 1
 
 
@@ -1882,7 +1882,7 @@ def height_o(
     piece: 'Object'
 ) -> 'Integer':
     """ height of patch """
-    logger.info(f'height_o: {piece = }')
+    # logger.info(f'height_o: {piece = }')
     return 0 if len(piece) == 0 else lowermost_o(piece) - uppermost_o(piece) + 1
 
 
@@ -1890,7 +1890,7 @@ def width_t(
     piece: 'Tuple'
 ) -> 'Integer':
     """ width of grid """
-    logger.info(f'width_t: {piece = }')
+    # logger.info(f'width_t: {piece = }')
     return len(piece[0]) if piece else 0
 
 
@@ -1898,7 +1898,7 @@ def width_f(
     piece: 'Indices'
 ) -> 'Integer':
     """ width of patch """
-    logger.info(f'width_f: {piece = }')
+    # logger.info(f'width_f: {piece = }')
     return 0 if len(piece) == 0 else rightmost(piece) - leftmost(piece) + 1
 
 
@@ -1906,7 +1906,7 @@ def width_i(
     piece: 'Indices'
 ) -> 'Integer':
     """ width of patch """
-    logger.info(f'width_i: {piece = }')
+    # logger.info(f'width_i: {piece = }')
     return 0 if len(piece) == 0 else rightmost_i(piece) - leftmost_i(piece) + 1
 
 
@@ -1914,7 +1914,7 @@ def width_o(
     piece: 'Object'
 ) -> 'Integer':
     """ width of patch """
-    logger.info(f'width_o: {piece = }')
+    # logger.info(f'width_o: {piece = }')
     return 0 if len(piece) == 0 else rightmost_o(piece) - leftmost_o(piece) + 1
 
 
@@ -1922,7 +1922,7 @@ def shape_t(
     piece: 'Tuple'
 ) -> 'IJ':
     """ height and width of grid """
-    logger.info(f'shape_t: {piece = }')
+    # logger.info(f'shape_t: {piece = }')
     return (len(piece), len(piece[0]) if piece else 0)
 
 
@@ -1930,7 +1930,7 @@ def shape_f(
     piece: 'FrozenSet'
 ) -> 'IJ':
     """ height and width of patch """
-    logger.info(f'shape_f: {piece = }')
+    # logger.info(f'shape_f: {piece = }')
     return (height_f(piece), width_f(piece))
 
 
@@ -1939,7 +1939,7 @@ def col_row(
     type: 'R4'
 ) -> 'Integer':
     """ indices of corners """
-    logger.info(f'col_row: {patch = }, {type = }')
+    # logger.info(f'col_row: {patch = }, {type = }')
     if type == 0:
         return lowermost(patch)
     elif type == 1:
@@ -1954,7 +1954,7 @@ def lowermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    logger.info(f'lowermost: {patch = }')
+    # logger.info(f'lowermost: {patch = }')
     return max(i for i, j in toindices(patch)) if patch else math.nan
 
 
@@ -1962,7 +1962,7 @@ def lowermost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    logger.info(f'lowermost_i: {indices = }')
+    # logger.info(f'lowermost_i: {indices = }')
     return max(i for i, j in toindices_i(indices)) if indices else math.nan
 
 
@@ -1970,7 +1970,7 @@ def lowermost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ row index of lowermost occupied cell """
-    logger.info(f'lowermost_o: {obj = }')
+    # logger.info(f'lowermost_o: {obj = }')
     return max(i for i, j in toindices_o(obj)) if obj else math.nan
 
 
@@ -1978,7 +1978,7 @@ def uppermost(
     patch: 'Patch'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    logger.info(f'uppermost: {patch = }')
+    # logger.info(f'uppermost: {patch = }')
     return min(i for i, j in toindices(patch)) if patch else math.nan
 
 
@@ -1986,7 +1986,7 @@ def uppermost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    logger.info(f'uppermost_i: {indices = }')
+    # logger.info(f'uppermost_i: {indices = }')
     return min(i for i, j in toindices_i(indices)) if indices else math.nan
 
 
@@ -1994,7 +1994,7 @@ def uppermost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ row index of uppermost occupied cell """
-    logger.info(f'uppermost_o: {obj = }')
+    # logger.info(f'uppermost_o: {obj = }')
     return min(i for i, j in toindices_o(obj)) if obj else math.nan
 
 
@@ -2002,7 +2002,7 @@ def leftmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    logger.info(f'leftmost: {patch = }')
+    # logger.info(f'leftmost: {patch = }')
     return min(j for i, j in toindices(patch)) if patch else math.nan
 
 
@@ -2010,7 +2010,7 @@ def leftmost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    logger.info(f'leftmost_i: {indices = }')
+    # logger.info(f'leftmost_i: {indices = }')
     return min(j for i, j in toindices_i(indices)) if indices else math.nan
 
 
@@ -2018,7 +2018,7 @@ def leftmost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ column index of leftmost occupied cell """
-    logger.info(f'leftmost_o: {obj = }')
+    # logger.info(f'leftmost_o: {obj = }')
     return min(j for i, j in toindices_o(obj)) if obj else math.nan
 
 
@@ -2026,7 +2026,7 @@ def rightmost(
     patch: 'Patch'
 ) -> 'Integer':
     """ column index of rightmost occupied cell """
-    logger.info(f'rightmost: {patch = }')
+    # logger.info(f'rightmost: {patch = }')
     return max(j for i, j in toindices(patch)) if patch else math.nan
 
 
@@ -2034,7 +2034,7 @@ def rightmost_i(
     indices: 'Indices'
 ) -> 'Integer':
     """ column index of rightmost occupied cell """
-    logger.info(f'rightmost_i: {indices = }')
+    # logger.info(f'rightmost_i: {indices = }')
     return max(j for i, j in toindices_i(indices))
 
 
@@ -2042,7 +2042,7 @@ def rightmost_o(
     obj: 'Object'
 ) -> 'Integer':
     """ column index of rightmost occupied cell """
-    logger.info(f'rightmost_o: {obj = }')
+    # logger.info(f'rightmost_o: {obj = }')
     return max(j for i, j in toindices_o(obj))
 
 
@@ -2050,7 +2050,7 @@ def square_t(
     piece: 'Tuple'
 ) -> 'Boolean':
     """ whether the grid forms a square """
-    logger.info(f'square_t: {piece = }')
+    # logger.info(f'square_t: {piece = }')
     return len(piece) == len(piece[0]) if piece else False
 
 
@@ -2058,7 +2058,7 @@ def square_f(
     piece: 'FrozenSet'
 ) -> 'Boolean':
     """ whether the patch forms a square """
-    logger.info(f'square_f: {piece = }')
+    # logger.info(f'square_f: {piece = }')
     return height_f(piece) * width_f(piece) == len(piece) and height_f(piece) == width_f(piece)
 
 
@@ -2075,7 +2075,7 @@ def palette_t(
     element: 'Tuple'
 ) -> 'IntegerSet':
     """ colors occurring in grid """
-    logger.info(f'palette_t: {element = }')
+    # logger.info(f'palette_t: {element = }')
     return frozenset(v for r in element for v in r)
 
 
@@ -2083,7 +2083,7 @@ def palette_f(
     element: 'FrozenSet'
 ) -> 'IntegerSet':
     """ colors occurring in object """
-    logger.info(f'palette_f: {element = }')
+    # logger.info(f'palette_f: {element = }')
     return frozenset(c for _, _, c in element)
 
 
@@ -2091,7 +2091,7 @@ def normalize_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ moves upper left corner of grid to origin (no-op for grid) """
-    logger.info(f'normalize_t: {piece = }')
+    # logger.info(f'normalize_t: {piece = }')
     return piece
 
 
@@ -2099,7 +2099,7 @@ def normalize(
     indices: 'Indices'
 ) -> 'Indices':
     """ moves upper left corner of indices to origin """
-    logger.info(f'normalize: {indices = }')
+    # logger.info(f'normalize: {indices = }')
     if len(indices) == 0:
         return indices
     return shift(indices, (-uppermost(indices), -leftmost(indices)))
@@ -2109,7 +2109,7 @@ def normalize_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ moves upper left corner of indices to origin """
-    logger.info(f'normalize_i: {indices = }')
+    # logger.info(f'normalize_i: {indices = }')
     if len(indices) == 0:
         return indices
     return shift(indices, (-uppermost_i(indices), -leftmost_i(indices)))
@@ -2119,7 +2119,7 @@ def normalize_o(
     obj: 'Object'
 ) -> 'Object':
     """ moves upper left corner of obj to origin """
-    logger.info(f'normalize_o: {obj = }')
+    # logger.info(f'normalize_o: {obj = }')
     if len(obj) == 0:
         return obj
     return shift(obj, (-uppermost_o(obj), -leftmost_o(obj)))
@@ -2129,7 +2129,7 @@ def hmirror_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ mirroring grid along horizontal """
-    logger.info(f'hmirror_t: {piece = }')
+    # logger.info(f'hmirror_t: {piece = }')
     return piece[::-1]
 
 
@@ -2137,7 +2137,7 @@ def hmirror_f(
     piece: 'FrozenSet'
 ) -> 'FrozenSet':
     """ mirroring patch along horizontal """
-    logger.info(f'hmirror_f: {piece = }')
+    # logger.info(f'hmirror_f: {piece = }')
     if len(piece) == 0:
         return frozenset()
     
@@ -2151,7 +2151,7 @@ def hmirror_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ mirroring patch along horizontal """
-    logger.info(f'hmirror_i: {indices = }')
+    # logger.info(f'hmirror_i: {indices = }')
     if len(indices) == 0:
         return frozenset()
     
@@ -2163,7 +2163,7 @@ def hmirror_o(
     obj: 'Object'
 ) -> 'Object':
     """ mirroring patch along horizontal """
-    logger.info(f'hmirror_o: {obj = }')
+    # logger.info(f'hmirror_o: {obj = }')
     if len(obj) == 0:
         return frozenset()
     
@@ -2175,7 +2175,7 @@ def vmirror_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ mirroring grid along vertical """
-    logger.info(f'vmirror_t: {piece = }')
+    # logger.info(f'vmirror_t: {piece = }')
     return tuple(row[::-1] for row in piece)
 
 
@@ -2183,7 +2183,7 @@ def vmirror_f(
     piece: 'FrozenSet'
 ) -> 'FrozenSet':
     """ mirroring patch along vertical """
-    logger.info(f'vmirror_f: {piece = }')
+    # logger.info(f'vmirror_f: {piece = }')
     if len(piece) == 0:
         return frozenset()
     
@@ -2197,7 +2197,7 @@ def vmirror_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ mirroring patch along vertical """
-    logger.info(f'vmirror_i: {indices = }')
+    # logger.info(f'vmirror_i: {indices = }')
     if len(indices) == 0:
         return frozenset()
     
@@ -2209,7 +2209,7 @@ def vmirror_o(
     obj: 'Object'
 ) -> 'Object':
     """ mirroring patch along vertical """
-    logger.info(f'vmirror_o: {obj = }')
+    # logger.info(f'vmirror_o: {obj = }')
     if len(obj) == 0:
         return frozenset()
     
@@ -2221,7 +2221,7 @@ def dmirror_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ mirroring grid along diagonal """
-    logger.info(f'dmirror_t: {piece = }')
+    # logger.info(f'dmirror_t: {piece = }')
     return tuple(zip(*piece))
 
 
@@ -2229,7 +2229,7 @@ def dmirror_f(
     piece: 'FrozenSet'
 ) -> 'FrozenSet':
     """ mirroring patch along diagonal """
-    logger.info(f'dmirror_f: {piece = }')
+    # logger.info(f'dmirror_f: {piece = }')
     if len(piece) == 0:
         return frozenset()
     
@@ -2243,7 +2243,7 @@ def dmirror_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ mirroring patch along diagonal """
-    logger.info(f'dmirror_i: {indices = }')
+    # logger.info(f'dmirror_i: {indices = }')
     if len(indices) == 0:
         return frozenset()
     
@@ -2255,7 +2255,7 @@ def dmirror_o(
     obj: 'Object'
 ) -> 'Object':
     """ mirroring patch along diagonal """
-    logger.info(f'dmirror_o: {obj = }')
+    # logger.info(f'dmirror_o: {obj = }')
     if len(obj) == 0:
         return frozenset()
     
@@ -2267,7 +2267,7 @@ def cmirror_t(
     piece: 'Tuple'
 ) -> 'Tuple':
     """ mirroring grid along counterdiagonal """
-    logger.info(f'cmirror_t: {piece = }')
+    # logger.info(f'cmirror_t: {piece = }')
     return tuple(zip(*(r[::-1] for r in piece[::-1])))
 
 
@@ -2275,7 +2275,7 @@ def cmirror_f(
     piece: 'FrozenSet'
 ) -> 'FrozenSet':
     """ mirroring patch along counterdiagonal """
-    logger.info(f'cmirror_f: {piece = }')
+    # logger.info(f'cmirror_f: {piece = }')
     return frozenset() if len(piece) == 0 else vmirror(dmirror(vmirror(piece)))
 
 
@@ -2284,7 +2284,7 @@ def upscale_t(
     factor: 'Integer'
 ) -> 'Tuple':
     """ upscale grid """
-    logger.info(f'upscale_t: {element = }, {factor = }')
+    # logger.info(f'upscale_t: {element = }, {factor = }')
     g = ()
     for row in element:
         upscaled_row = ()
@@ -2299,7 +2299,7 @@ def upscale_f(
     factor: 'Integer'
 ) -> 'FrozenSet':
     """ upscale object """
-    logger.info(f'upscale_f: {element = }, {factor = }')
+    # logger.info(f'upscale_f: {element = }, {factor = }')
     if len(element) == 0:
         return frozenset()
     di_inv, dj_inv = ulcorner(element)
@@ -2317,7 +2317,7 @@ def downscale(
     factor: 'Integer'
 ) -> 'Grid':
     """ downscale grid """
-    logger.info(f'downscale: {grid = }, {factor = }')
+    # logger.info(f'downscale: {grid = }, {factor = }')
     h, w = len(grid), len(grid[0])
     g = ()
     for i in range(h):
@@ -2339,7 +2339,7 @@ def hconcat(
     b: 'Grid'
 ) -> 'Grid':
     """ concatenate two grids horizontally """
-    logger.info(f'hconcat: {a = }, {b = }')
+    # logger.info(f'hconcat: {a = }, {b = }')
     return tuple(i + j for i, j in zip(a, b))
 
 
@@ -2348,7 +2348,7 @@ def vconcat(
     b: 'Grid'
 ) -> 'Grid':
     """ concatenate two grids vertically """
-    logger.info(f'vconcat: {a = }, {b = }')
+    # logger.info(f'vconcat: {a = }, {b = }')
     return a + b
 
 
@@ -2357,7 +2357,7 @@ def subgrid(
     grid: 'Grid'
 ) -> 'Grid':
     """ smallest subgrid containing object """
-    logger.info(f'subgrid: {patch = }, {grid = }')
+    # logger.info(f'subgrid: {patch = }, {grid = }')
     if patch in [frozenset(), ()]:
         return ()
     return crop(grid, ulcorner(patch), shape_f(patch))
@@ -2368,7 +2368,7 @@ def hsplit(
     n: 'Integer'
 ) -> 'Tuple':
     """ split grid horizontally """
-    logger.info(f'hsplit: {grid = }, {n = }')
+    # logger.info(f'hsplit: {grid = }, {n = }')
     h, w = len(grid), len(grid[0]) // n
     offset = len(grid[0]) % n != 0
     return tuple(crop(grid, (0, w * i + i * offset), (h, w)) for i in range(n))
@@ -2379,7 +2379,7 @@ def vsplit(
     n: 'Integer'
 ) -> 'Tuple':
     """ split grid vertically """
-    logger.info(f'vsplit: {grid = }, {n = }')
+    # logger.info(f'vsplit: {grid = }, {n = }')
     h, w = len(grid) // n, len(grid[0])
     offset = len(grid) % n != 0
     return tuple(crop(grid, (h * i + i * offset, 0), (h, w)) for i in range(n))
@@ -2391,7 +2391,7 @@ def cellwise(
     fallback: 'Integer'
 ) -> 'Grid':
     """ cellwise match of two grids """
-    logger.info(f'cellwise: {a = }, {b = }, {fallback = }')
+    # logger.info(f'cellwise: {a = }, {b = }, {fallback = }')
     h, w = len(a), len(a[0])
     resulting_grid = ()
     for i in range(h):
@@ -2411,7 +2411,7 @@ def replace(
     replacer: 'C_'
 ) -> 'Grid':
     """ color substitution """
-    logger.info(f'replace: {grid = }, {replacee = }, {replacer = }')
+    # logger.info(f'replace: {grid = }, {replacee = }, {replacer = }')
     return tuple(tuple(replacer if v == replacee else v for v in r) for r in grid)
 
 
@@ -2421,7 +2421,7 @@ def switch(
     b: 'C_'
 ) -> 'Grid':
     """ color switching """
-    logger.info(f'switch: {grid = }, {a = }, {b = }')
+    # logger.info(f'switch: {grid = }, {a = }, {b = }')
     return tuple(
         tuple(v if v not in [a, b] else {a: b, b: a}[v] for v in r)
         for r in grid
@@ -2432,7 +2432,7 @@ def center(
     patch: 'Patch'
 ) -> 'IJ':
     """ center of the patch """
-    logger.info(f'center: {patch = }')
+    # logger.info(f'center: {patch = }')
     if uppermost(patch) is math.nan:
         return ()
     if leftmost(patch) is math.nan:
@@ -2445,7 +2445,7 @@ def position(
     b: 'Patch'
 ) -> 'IJ':
     """ relative position between two patches """
-    logger.info(f'position: {a = }, {b = }')
+    # logger.info(f'position: {a = }, {b = }')
     ia, ja = center(toindices(a))
     ib, jb = center(toindices(b))
     if ia == ib:
@@ -2463,7 +2463,7 @@ def index(
     loc: 'IJ'
 ) -> 'Integer':
     """ color at location """
-    logger.info(f'index: {grid = }, {loc = }')
+    # logger.info(f'index: {grid = }, {loc = }')
     if loc == ():
         return -math.inf
     i, j = loc
@@ -2476,7 +2476,7 @@ def canvas(
     dimensions: 'IJ'
 ) -> 'Grid':
     """ grid construction """
-    logger.info(f'canvas: {color = }, {dimensions = }')
+    # logger.info(f'canvas: {color = }, {dimensions = }')
     return tuple(
         tuple(color for _ in range(dimensions[1]))
         for _ in range(dimensions[0])
@@ -2487,7 +2487,7 @@ def corners(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices of corners """
-    logger.info(f'corners: {patch = }')
+    # logger.info(f'corners: {patch = }')
     return frozenset({ulcorner(patch), urcorner(patch), llcorner(patch), lrcorner(patch)})
 
 
@@ -2496,7 +2496,7 @@ def connect(
     b: 'IJ'
 ) -> 'Indices':
     """ line between two points """
-    logger.info(f'connect: {a = }, {b = }')
+    # logger.info(f'connect: {a = }, {b = }')
     # print(f"Connecting {a} to {b}")
     if a == ():
         return frozenset()
@@ -2525,7 +2525,7 @@ def cover(
     patch: 'Patch'
 ) -> 'Grid':
     """ remove object from grid """
-    logger.info(f'cover: {grid = }, {patch = }')
+    # logger.info(f'cover: {grid = }, {patch = }')
     return fill(grid, mostcolor_t(grid), toindices(patch))
 
 
@@ -2533,7 +2533,7 @@ def trim(
     grid: 'Grid'
 ) -> 'Grid':
     """ trim border of grid """
-    logger.info(f'trim: {grid = }')
+    # logger.info(f'trim: {grid = }')
     return tuple(r[1:-1] for r in grid[1:-1])
 
 
@@ -2543,7 +2543,7 @@ def move(
     offset: 'IJ'
 ) -> 'Grid':
     """ move object on grid """
-    logger.info(f'move: {grid = }, {obj = }, {offset = }')
+    # logger.info(f'move: {grid = }, {obj = }, {offset = }')
     return paint(cover(grid, obj), shift(obj, offset))
 
 
@@ -2551,7 +2551,7 @@ def tophalf(
     grid: 'Grid'
 ) -> 'Grid':
     """ upper half of grid """
-    logger.info(f'tophalf: {grid = }')
+    # logger.info(f'tophalf: {grid = }')
     return grid[:len(grid) // 2]
 
 
@@ -2559,7 +2559,7 @@ def bottomhalf(
     grid: 'Grid'
 ) -> 'Grid':
     """ lower half of grid """
-    logger.info(f'bottomhalf: {grid = }')
+    # logger.info(f'bottomhalf: {grid = }')
     return grid[len(grid) // 2 + len(grid) % 2:]
 
 
@@ -2567,7 +2567,7 @@ def lefthalf(
     grid: 'Grid'
 ) -> 'Grid':
     """ left half of grid """
-    logger.info(f'lefthalf: {grid = }')
+    # logger.info(f'lefthalf: {grid = }')
     return rot270(tophalf(rot90(grid)))
 
 
@@ -2575,7 +2575,7 @@ def righthalf(
     grid: 'Grid'
 ) -> 'Grid':
     """ right half of grid """
-    logger.info(f'righthalf: {grid = }')
+    # logger.info(f'righthalf: {grid = }')
     return rot270(bottomhalf(rot90(grid)))
 
 
@@ -2583,7 +2583,7 @@ def vfrontier(
     location: 'IJ'
 ) -> 'Indices':
     """ vertical frontier """
-    logger.info(f'vfrontier: {location = }')
+    # logger.info(f'vfrontier: {location = }')
     return frozenset((i, location[1]) for i in range(30))
 
 
@@ -2591,7 +2591,7 @@ def hfrontier(
     location: 'IJ'
 ) -> 'Indices':
     """ horizontal frontier """
-    logger.info(f'hfrontier: {location = }')
+    # logger.info(f'hfrontier: {location = }')
 
     if location == ():
         return frozenset()
@@ -2603,7 +2603,7 @@ def backdrop(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices in bounding box of patch """
-    logger.info(f'backdrop: {patch = }')
+    # logger.info(f'backdrop: {patch = }')
     if not hasattr(patch, '__len__') or len(patch) == 0:
         return frozenset()
     si, sj = ulcorner(patch)
@@ -2615,7 +2615,7 @@ def delta(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices in bounding box but not part of patch """
-    logger.info(f'delta: {patch = }')
+    # logger.info(f'delta: {patch = }')
     if not hasattr(patch, '__len__') or len(patch) == 0:
         return frozenset()
     return backdrop(patch) - toindices(patch)
@@ -2626,7 +2626,7 @@ def gravitate(
     destination: 'Patch'
 ) -> 'IJ':
     """ direction to move source until adjacent to destination """
-    logger.info(f'gravitate: {source = }, {destination = }')
+    # logger.info(f'gravitate: {source = }, {destination = }')
 
     if not destination:
         return source
@@ -2653,7 +2653,7 @@ def inbox(
     patch: 'Patch'
 ) -> 'Indices':
     """ inbox for patch """
-    logger.info(f'inbox: {patch = }')
+    # logger.info(f'inbox: {patch = }')
     if patch in [frozenset(), ()]:
         return frozenset()
     ai, aj = uppermost(patch) + 1, leftmost(patch) + 1
@@ -2669,7 +2669,7 @@ def outbox(
     patch: 'Patch'
 ) -> 'Indices':
     """ outbox for patch """
-    logger.info(f'outbox: {patch = }')
+    # logger.info(f'outbox: {patch = }')
     if patch in [frozenset(), ()]:
         return frozenset()
     ai, aj = uppermost(patch) - 1, leftmost(patch) - 1
@@ -2685,7 +2685,7 @@ def box(
     patch: 'Patch'
 ) -> 'Indices':
     """ outline of patch """
-    logger.info(f'box: {patch = }')
+    # logger.info(f'box: {patch = }')
     if patch in [frozenset(), ()]:
         return frozenset()
     ai, aj = ulcorner(patch)
@@ -2702,7 +2702,7 @@ def shoot(
     direction: 'IJ'
 ) -> 'Indices':
     """ line from starting point and direction """
-    logger.info(f'shoot: {start = }, {direction = }')
+    # logger.info(f'shoot: {start = }, {direction = }')
     if start == () or start == frozenset() or direction == () or direction == frozenset():
         return frozenset()
     return connect(start, (start[0] + 42 * direction[0], start[1] + 42 * direction[1]))
@@ -2713,7 +2713,7 @@ def occurrences(
     obj: 'Object'
 ) -> 'Indices':
     """ locations of occurrences of object in grid """
-    logger.info(f'occurrences: {grid = }, {obj = }')
+    # logger.info(f'occurrences: {grid = }, {obj = }')
     occs = set()
     normed = normalize(obj)
     h, w = len(grid), len(grid[0])
@@ -2734,7 +2734,7 @@ def frontiers(
     grid: 'Grid'
 ) -> 'Objects':
     """ set of frontiers """
-    logger.info(f'frontiers: {grid = }')
+    # logger.info(f'frontiers: {grid = }')
     h, w = len(grid), len(grid[0])
     row_indices = tuple(i for i, r in enumerate(grid) if len(set(r)) == 1)
     column_indices = tuple(j for j, c in enumerate(dmirror_t(grid)) if len(set(c)) == 1)
@@ -2747,7 +2747,7 @@ def compress(
     grid: 'Grid'
 ) -> 'Grid':
     """ removes frontiers from grid """
-    logger.info(f'compress: {grid = }')
+    # logger.info(f'compress: {grid = }')
     ri = tuple(i for i, r in enumerate(grid) if len(set(r)) == 1)
     ci = tuple(j for j, c in enumerate(dmirror_t(grid)) if len(set(c)) == 1)
     return tuple(tuple(v for j, v in enumerate(r) if j not in ci) for i, r in enumerate(grid) if i not in ri)
@@ -2757,7 +2757,7 @@ def hperiod(
     obj: 'Object'
 ) -> 'Integer':
     """ horizontal periodicity """
-    logger.info(f'hperiod: {obj = }')
+    # logger.info(f'hperiod: {obj = }')
     normalized = normalize(obj)
     w = width_f(normalized)
     for p in range(1, w):
@@ -2772,7 +2772,7 @@ def vperiod(
     obj: 'Object'
 ) -> 'Integer':
     """ vertical periodicity """
-    logger.info(f'vperiod: {obj = }')
+    # logger.info(f'vperiod: {obj = }')
     normalized = normalize(obj)
     h = height_f(normalized)
     for p in range(1, h):
@@ -2787,7 +2787,7 @@ def toindices(
     patch: 'Patch'
 ) -> 'Indices':
     """ indices of object cells """
-    logger.info(f'toindices: {patch = }')
+    # logger.info(f'toindices: {patch = }')
     if not hasattr(patch, '__len__') or len(patch) == 0:
         return frozenset()
     if not hasattr(next(iter(patch)), '__len__'):
@@ -2801,7 +2801,7 @@ def toindices_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ indices of object cells """
-    logger.info(f'toindices_i: {indices = }')
+    # logger.info(f'toindices_i: {indices = }')
     return indices
 
 
@@ -2809,7 +2809,7 @@ def toindices_o(
     obj: 'Object'
 ) -> 'Indices':
     """ indices of object cells """
-    logger.info(f'toindices_o: {obj = }')
+    # logger.info(f'toindices_o: {obj = }')
     if not hasattr(obj, '__len__') or len(obj) == 0:
         return frozenset()
     return frozenset((i, j) for i, j, c in obj)
@@ -2826,7 +2826,7 @@ def shape_t(
     grid: 'Grid'
 ) -> 'IJ':
     """ height and width of grid or patch """
-    logger.info(f'shape_t: {grid = }')
+    # logger.info(f'shape_t: {grid = }')
     return (height_t(grid), width_t(grid))
 
 
@@ -2834,7 +2834,7 @@ def shape_f(
     patch: 'Patch'
 ) -> 'IJ':
     """ height and width of grid or patch """
-    logger.info(f'shape_f: {patch = }')
+    # logger.info(f'shape_f: {patch = }')
     return (height_f(patch), width_f(patch))
 
 
@@ -2849,7 +2849,7 @@ def portrait_t(
     grid: 'Grid'
 ) -> 'Boolean':
     """ whether height is greater than width """
-    logger.info(f'portrait_t: {grid = }')
+    # logger.info(f'portrait_t: {grid = }')
     return height_t(grid) > width_t(grid)
 
 
@@ -2857,7 +2857,7 @@ def portrait_f(
     patch: 'Patch'
 ) -> 'Boolean':
     """ whether height is greater than width """
-    logger.info(f'portrait_f: {patch = }')
+    # logger.info(f'portrait_f: {patch = }')
     return height_f(patch) > width_f(patch)
 
 
@@ -2876,7 +2876,7 @@ def colorcount_t(
     color: 'C_'
 ) -> 'Integer':
     """ number of cells with color """
-    logger.info(f'colorcount_t: {grid = }, {color = }')
+    # logger.info(f'colorcount_t: {grid = }, {color = }')
     return sum(row.count(color) for row in grid)
 
 
@@ -2885,7 +2885,7 @@ def colorcount_f(
     color: 'C_'
 ) -> 'Integer':
     """ number of cells with color """
-    logger.info(f'colorcount_f: {obj = }, {color = }')
+    # logger.info(f'colorcount_f: {obj = }, {color = }')
     # if not isinstance(obj, frozenset):
     #     return None
     return sum(c == color for _, _, c in obj)
@@ -2896,7 +2896,7 @@ def colorfilter(
     color: 'C_'
 ) -> 'Objects':
     """ filter objects by color """
-    logger.info(f'colorfilter: {objs = }, {color = }')
+    # logger.info(f'colorfilter: {objs = }, {color = }')
     return frozenset(obj for obj in objs if next(iter(obj))[2] == color)
 
 
@@ -2905,7 +2905,7 @@ def colorfilter_t(
     color: 'Integer'
 ) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
     """ filter objects by color - tuple variant """
-    logger.info(f'colorfilter_t: {objs = }, {color = }')
+    # logger.info(f'colorfilter_t: {objs = }, {color = }')
     return tuple(obj for obj in objs if obj[0][2] == color)
 
 
@@ -2914,7 +2914,7 @@ def sizefilter(
     n: 'Integer'
 ) -> 'Object':
     """ filter items by size """
-    logger.info(f'sizefilter: {container = }, {n = }')
+    # logger.info(f'sizefilter: {container = }, {n = }')
     return frozenset(item for item in container if len(item) == n)
 
 
@@ -2923,7 +2923,7 @@ def sizefilter_t(
     n: 'Integer'
 ) -> 'Tuple':
     """ filter items by size - tuple variant """
-    logger.info(f'sizefilter_t: {container = }, {n = }')
+    # logger.info(f'sizefilter_t: {container = }, {n = }')
     return tuple(item for item in container if len(item) == n)
 
 
@@ -2931,7 +2931,7 @@ def asindices(
     grid: 'Grid'
 ) -> 'Indices':
     """ indices of all grid cells """
-    logger.info(f'asindices: {grid = }')
+    # logger.info(f'asindices: {grid = }')
     return frozenset((i, j) for i in range(len(grid)) for j in range(len(grid[0])))
 
 
@@ -2940,7 +2940,7 @@ def f_ofcolor(
     color: 'C_'
 ) -> 'Indices':
     """ indices of all grid cells with color """
-    logger.info(f'f_ofcolor: {grid = }, {color = }')
+    # logger.info(f'f_ofcolor: {grid = }, {color = }')
     return frozenset((i, j) for i, r in enumerate(grid) for j, c in enumerate(r) if c == color)
 
 
@@ -2949,7 +2949,7 @@ def corner(
     type: 'R4'
 ) -> 'IJ':
     """ indices of corners """
-    logger.info(f'corner: {patch = }, {type = }')
+    # logger.info(f'corner: {patch = }, {type = }')
     if type == 0:
         return ulcorner(patch)
     elif type == 1:
@@ -2965,7 +2965,7 @@ def ulcorner(
     patch: 'Patch'
 ) -> 'IJ':
     """ index of upper left corner """
-    logger.info(f'ulcorner: {patch = }')
+    # logger.info(f'ulcorner: {patch = }')
     return tuple(map(min, zip(*toindices(patch))))
 
 
@@ -2973,7 +2973,7 @@ def ulcorner_i(
     indices: 'Indices'
 ) -> 'IJ':
     """ index of upper left corner """
-    logger.info(f'ulcorner_i: {indices = }')
+    # logger.info(f'ulcorner_i: {indices = }')
     return tuple(map(min, zip(*toindices_i(indices))))
 
 
@@ -2981,7 +2981,7 @@ def ulcorner_o(
     obj: 'Object'
 ) -> 'IJ':
     """ index of upper left corner """
-    logger.info(f'ulcorner_o: {obj = }')
+    # logger.info(f'ulcorner_o: {obj = }')
     return tuple(map(min, zip(*toindices_o(obj))))
 
 
@@ -2989,7 +2989,7 @@ def urcorner(
     patch: 'Patch'
 ) -> 'IJ':
     """ index of upper right corner """
-    logger.info(f'urcorner: {patch = }')
+    # logger.info(f'urcorner: {patch = }')
     return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices(patch)))))
 
 
@@ -2997,7 +2997,7 @@ def urcorner_i(
     indices: 'Indices'
 ) -> 'IJ':
     """ index of upper right corner """
-    logger.info(f'urcorner_i: {indices = }')
+    # logger.info(f'urcorner_i: {indices = }')
     return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices_i(indices)))))
 
 
@@ -3005,7 +3005,7 @@ def urcorner_o(
     obj: 'Object'
 ) -> 'IJ':
     """ index of upper right corner """
-    logger.info(f'urcorner_o: {obj = }')
+    # logger.info(f'urcorner_o: {obj = }')
     return tuple(map(lambda ix: {0: min, 1: max}[ix[0]](ix[1]), enumerate(zip(*toindices_o(obj)))))
 
 
@@ -3013,7 +3013,7 @@ def llcorner(
     patch: 'Patch'
 ) -> 'IJ':
     """ index of lower left corner """
-    logger.info(f'llcorner: {patch = }')
+    # logger.info(f'llcorner: {patch = }')
     return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices(patch)))))
 
 
@@ -3021,7 +3021,7 @@ def llcorner_i(
     indices: 'Indices'
 ) -> 'IJ':
     """ index of lower left corner """
-    logger.info(f'llcorner_i: {indices = }')
+    # logger.info(f'llcorner_i: {indices = }')
     return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices_i(indices)))))
 
 
@@ -3029,7 +3029,7 @@ def llcorner_o(
     obj: 'Object'
 ) -> 'IJ':
     """ index of lower left corner """
-    logger.info(f'llcorner_o: {obj = }')
+    # logger.info(f'llcorner_o: {obj = }')
     return tuple(map(lambda ix: {0: max, 1: min}[ix[0]](ix[1]), enumerate(zip(*toindices_o(obj)))))
 
 
@@ -3037,7 +3037,7 @@ def lrcorner(
     patch: 'Patch'
 ) -> 'IJ':
     """ index of lower right corner """
-    logger.info(f'lrcorner: {patch = }')
+    # logger.info(f'lrcorner: {patch = }')
     return tuple(map(max, zip(*toindices(patch))))
 
 
@@ -3045,7 +3045,7 @@ def lrcorner_i(
     indices: 'Indices'
 ) -> 'IJ':
     """ index of lower right corner """
-    logger.info(f'lrcorner_i: {indices = }')
+    # logger.info(f'lrcorner_i: {indices = }')
     return tuple(map(max, zip(*toindices_i(indices))))
 
 
@@ -3053,7 +3053,7 @@ def lrcorner_o(
     obj: 'Object'
 ) -> 'IJ':
     """ index of lower right corner """
-    logger.info(f'lrcorner_o: {obj = }')
+    # logger.info(f'lrcorner_o: {obj = }')
     return tuple(map(max, zip(*toindices_o(obj))))
 
 
@@ -3063,7 +3063,7 @@ def crop(
     dims: 'IJ'
 ) -> 'Grid':
     """ subgrid specified by start and dimension """
-    logger.info(f'crop: {grid = }, {start = }, {dims = }')
+    # logger.info(f'crop: {grid = }, {start = }, {dims = }')
     if grid == ():
         return ()
     h, w = len(grid), len(grid[0])
@@ -3078,7 +3078,7 @@ def recolor_i(
     indices: 'Indices'
 ) -> 'Object':
     """ recolor indices """
-    logger.info(f'recolor_i: {color = }, {indices = }')
+    # logger.info(f'recolor_i: {color = }, {indices = }')
     return frozenset((i, j, color) for i, j in toindices_i(indices))
 
 
@@ -3087,7 +3087,7 @@ def recolor_o(
     obj: 'Object'
 ) -> 'Object':
     """ recolor obj """
-    logger.info(f'recolor_o: {color = }, {obj = }')
+    # logger.info(f'recolor_o: {color = }, {obj = }')
     return frozenset((i, j, color) for i, j in toindices_o(obj))
 
 
@@ -3096,7 +3096,7 @@ def shift(
     directions: 'IJ'
 ) -> 'Patch':
     """ shift patch """
-    logger.info(f'shift: {patch = }, {directions = }')
+    # logger.info(f'shift: {patch = }, {directions = }')
     if not patch:
         return frozenset()
     
@@ -3113,7 +3113,7 @@ def normalize_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ moves upper left corner to origin """
-    logger.info(f'normalize_i: {indices = }')
+    # logger.info(f'normalize_i: {indices = }')
     if len(indices) == 0:
         return indices
     return shift(indices, (-uppermost_i(indices), -leftmost_i(indices)))
@@ -3123,7 +3123,7 @@ def normalize_o(
     obj: 'Object'
 ) -> 'Object':
     """ moves upper left corner to origin """
-    logger.info(f'normalize_o: {obj = }')
+    # logger.info(f'normalize_o: {obj = }')
     if len(obj) == 0:
         return obj
     return shift(obj, (-uppermost_o(obj), -leftmost_o(obj)))
@@ -3133,7 +3133,7 @@ def dneighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ directly adjacent indices """
-    logger.info(f'dneighbors: {loc = }')
+    # logger.info(f'dneighbors: {loc = }')
     if loc == () or type(loc) is not tuple:
         return frozenset()
     return frozenset({(loc[0] - 1, loc[1]), (loc[0] + 1, loc[1]), (loc[0], loc[1] - 1), (loc[0], loc[1] + 1)})
@@ -3143,7 +3143,7 @@ def ineighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ diagonally adjacent indices """
-    logger.info(f'ineighbors: {loc = }')
+    # logger.info(f'ineighbors: {loc = }')
     if loc == () or type(loc) is not tuple:
         return frozenset()
     return frozenset({(loc[0] - 1, loc[1] - 1), (loc[0] - 1, loc[1] + 1), (loc[0] + 1, loc[1] - 1), (loc[0] + 1, loc[1] + 1)})
@@ -3153,7 +3153,7 @@ def neighbors(
     loc: 'IJ'
 ) -> 'Indices':
     """ adjacent indices """
-    logger.info(f'neighbors: {loc = }')
+    # logger.info(f'neighbors: {loc = }')
     return dneighbors(loc) | ineighbors(loc)
 
 
@@ -3164,7 +3164,7 @@ def objects(
     without_bg: 'Boolean'
 ) -> 'Objects':
     """ objects occurring on the grid """
-    logger.info(f'objects: {grid = }, {univalued = }, {diagonal = }, {without_bg = }')
+    # logger.info(f'objects: {grid = }, {univalued = }, {diagonal = }, {without_bg = }')
     if grid == ():
         return frozenset()
 
@@ -3206,7 +3206,7 @@ def objects_t(
     without_bg: 'Boolean'
 ) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
     """ objects occurring on the grid - returns tuple of tuples instead of frozenset """
-    logger.info(f'objects_t: {grid = }, {univalued = }, {diagonal = }, {without_bg = }')
+    # logger.info(f'objects_t: {grid = }, {univalued = }, {diagonal = }, {without_bg = }')
     if grid == ():
         return ()
 
@@ -3247,7 +3247,7 @@ def partition(
     grid: 'Grid'
 ) -> 'Objects':
     """ each cell with the same color of the same object """
-    logger.info(f'partition: {grid = }')
+    # logger.info(f'partition: {grid = }')
     return frozenset(
         frozenset(
             (i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r) if c == color
@@ -3279,7 +3279,7 @@ def _fgpartition_cpu(
     grid: 'Grid'
 ) -> 'Objects':
     """ each cell with the same color of the same object without background """
-    logger.info(f'_fgpartition_cpu: {grid = }')
+    # logger.info(f'_fgpartition_cpu: {grid = }')
     return frozenset(
         frozenset(
             (i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r) if c == color
@@ -3298,7 +3298,7 @@ def square_t(
     grid: 'Grid'
 ) -> 'Boolean':
     """ whether the grid forms a square """
-    logger.info(f'square_t: {grid = }')
+    # logger.info(f'square_t: {grid = }')
     return len(grid) == len(grid[0])
 
 
@@ -3306,7 +3306,7 @@ def square_f(
     patch: 'Patch'
 ) -> 'Boolean':
     """ whether the patch forms a square """
-    logger.info(f'square_f: {patch = }')
+    # logger.info(f'square_f: {patch = }')
     return height_f(patch) * width_f(patch) == len(patch) and height_f(patch) == width_f(patch)
 
 
@@ -3314,7 +3314,7 @@ def vline_i(
     patch: 'Indices'
 ) -> 'Boolean':
     """ whether the piece forms a vertical line """
-    logger.info(f'vline_i: {patch = }')
+    # logger.info(f'vline_i: {patch = }')
     return height_i(patch) == len(patch) and width_i(patch) == 1
 
 
@@ -3322,7 +3322,7 @@ def vline_o(
     patch: 'Object'
 ) -> 'Boolean':
     """ whether the piece forms a vertical line """
-    logger.info(f'vline_o: {patch = }')
+    # logger.info(f'vline_o: {patch = }')
     return height_o(patch) == len(patch) and width_o(patch) == 1
 
 
@@ -3330,7 +3330,7 @@ def hline_i(
     patch: 'Indices'
 ) -> 'Boolean':
     """ whether the piece forms a horizontal line """
-    logger.info(f'hline_i: {patch = }')
+    # logger.info(f'hline_i: {patch = }')
     return width_i(patch) == len(patch) and height_i(patch) == 1
 
 
@@ -3338,7 +3338,7 @@ def hline_o(
     patch: 'Object'
 ) -> 'Boolean':
     """ whether the piece forms a horizontal line """
-    logger.info(f'hline_o: {patch = }')
+    # logger.info(f'hline_o: {patch = }')
     return width_o(patch) == len(patch) and height_o(patch) == 1
 
 
@@ -3347,7 +3347,7 @@ def hmatching(
     b: 'Patch'
 ) -> 'Boolean':
     """ whether there exists a row for which both patches have cells """
-    logger.info(f'hmatching: {a = }, {b = }')
+    # logger.info(f'hmatching: {a = }, {b = }')
     return len({i for i, j in toindices(a)} & {i for i, j in toindices(b)}) > 0
 
 
@@ -3356,7 +3356,7 @@ def vmatching(
     b: 'Patch'
 ) -> 'Boolean':
     """ whether there exists a column for which both patches have cells """
-    logger.info(f'vmatching: {a = }, {b = }')
+    # logger.info(f'vmatching: {a = }, {b = }')
     return len({j for i, j in toindices(a)} & {j for i, j in toindices(b)}) > 0
 
 
@@ -3365,7 +3365,7 @@ def manhattan(
     b: 'Patch'
 ) -> 'Integer':
     """ closest manhattan distance between two patches """
-    logger.info(f'manhattan: {a = }, {b = }')
+    # logger.info(f'manhattan: {a = }, {b = }')
     if not hasattr(a, '__len__') or not hasattr(b, '__len__'):
         return math.inf
     if len(a) == 0 or len(b) == 0:
@@ -3378,7 +3378,7 @@ def adjacent(
     b: 'Patch'
 ) -> 'Boolean':
     """ whether two patches are adjacent """
-    logger.info(f'adjacent: {a = }, {b = }')
+    # logger.info(f'adjacent: {a = }, {b = }')
     return manhattan(a, b) == 1
 
 
@@ -3387,7 +3387,7 @@ def bordering(
     grid: 'Grid'
 ) -> 'Boolean':
     """ whether a patch is adjacent to a grid border """
-    logger.info(f'bordering: {patch = }, {grid = }')
+    # logger.info(f'bordering: {patch = }, {grid = }')
     return uppermost(patch) == 0 or leftmost(patch) == 0 or lowermost(patch) == len(grid) - 1 or rightmost(patch) == len(grid[0]) - 1
 
 
@@ -3395,7 +3395,7 @@ def centerofmass(
     patch: 'Patch'
 ) -> 'IJ':
     """ center of mass """
-    logger.info(f'centerofmass: {patch = }')
+    # logger.info(f'centerofmass: {patch = }')
     return tuple(map(lambda x: sum(x) // len(patch), zip(*toindices(patch))))
 
 
@@ -3410,7 +3410,7 @@ def numcolors_t(
     grid: 'Grid'
 ) -> 'Integer':
     """ number of colors occurring in object or grid """
-    logger.info(f'numcolors_t: {grid = }')
+    # logger.info(f'numcolors_t: {grid = }')
     return len(palette_t(grid))
 
 
@@ -3418,7 +3418,7 @@ def numcolors_f(
     obj: 'Object'
 ) -> 'Integer':
     """ number of colors occurring in object or grid """
-    logger.info(f'numcolors_f: {obj = }')
+    # logger.info(f'numcolors_f: {obj = }')
     return len(palette_f(obj))
 
 
@@ -3426,7 +3426,7 @@ def color(
     obj: 'Object'
 ) -> 'Integer':
     """ color of object """
-    logger.info(f'color: {obj = }')
+    # logger.info(f'color: {obj = }')
     first_element = next(iter(obj), (0, 0, -math.inf))
     return first_element[2] if isinstance(first_element, tuple) else -math.inf
 
@@ -3436,13 +3436,13 @@ def toobject(
     grid: 'Grid'
 ) -> 'Object':
     """ object from patch and grid """
-    logger.info(f'toobject: {patch = }, {grid = }')
+    # logger.info(f'toobject: {patch = }, {grid = }')
     h, w = len(grid), len(grid[0])
     return frozenset((i, j, grid[i][j]) for i, j in toindices(patch) if 0 <= i < h and 0 <= j < w)
 
 
 def is_no_grid(x):
-    logger.info(f'is_no_grid: {x = }')
+    # logger.info(f'is_no_grid: {x = }')
     if not isinstance(x, tuple):  # Not a tuple at all
         return True
     for inner in x:
@@ -3457,7 +3457,7 @@ def asobject(
     grid: 'Grid'
 ) -> 'Object':
     """ conversion of grid to object """
-    logger.info(f'asobject: {grid = }')
+    # logger.info(f'asobject: {grid = }')
     if is_no_grid(grid):
         return frozenset()
     return frozenset((i, j, c) for i, r in enumerate(grid) for j, c in enumerate(r))
@@ -3467,7 +3467,7 @@ def rot90(
     grid: 'Grid'
 ) -> 'Grid':
     """ quarter clockwise rotation """
-    logger.info(f'rot90: {grid = }')
+    # logger.info(f'rot90: {grid = }')
     return tuple(zip(*grid[::-1]))
 
 
@@ -3475,7 +3475,7 @@ def rot180(
     grid: 'Grid'
 ) -> 'Grid':
     """ half rotation """
-    logger.info(f'rot180: {grid = }')
+    # logger.info(f'rot180: {grid = }')
     return tuple(tuple(row[::-1]) for row in grid[::-1])
 
 
@@ -3483,7 +3483,7 @@ def rot270(
     grid: 'Grid'
 ) -> 'Grid':
     """ quarter anticlockwise rotation """
-    logger.info(f'rot270: {grid = }')
+    # logger.info(f'rot270: {grid = }')
     return tuple(tuple(row[::-1]) for row in zip(*grid[::-1]))[::-1]
 
 
@@ -3503,7 +3503,7 @@ def hmirror_t(
     grid: 'Grid'
 ) -> 'Grid':
     """ mirroring along horizontal """
-    logger.info(f'hmirror_t: {grid = }')
+    # logger.info(f'hmirror_t: {grid = }')
     return grid[::-1]
 
 
@@ -3511,7 +3511,7 @@ def hmirror_f(
     patch: 'Patch'
 ) -> 'Patch':
     """ mirroring along horizontal """
-    logger.info(f'hmirror_f: {patch = }')
+    # logger.info(f'hmirror_f: {patch = }')
     d = ulcorner(patch)[0] + lrcorner(patch)[0]
     if len(next(iter(patch))) == 3:
         return frozenset((d - i, j, c) for i, j, c in patch)
@@ -3522,7 +3522,7 @@ def hmirror_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ mirroring along horizontal """
-    logger.info(f'hmirror_i: {indices = }')
+    # logger.info(f'hmirror_i: {indices = }')
     d = ulcorner(indices)[0] + lrcorner(indices)[0]
     return frozenset((d - i, j) for i, j in indices)
 
@@ -3531,7 +3531,7 @@ def hmirror_o(
     obj: 'Object'
 ) -> 'Object':
     """ mirroring along horizontal """
-    logger.info(f'hmirror_o: {obj = }')
+    # logger.info(f'hmirror_o: {obj = }')
     d = ulcorner(obj)[0] + lrcorner(obj)[0]
     return frozenset((d - i, j, c) for i, j, c in obj)
 
@@ -3552,7 +3552,7 @@ def vmirror_t(
     grid: 'Grid'
 ) -> 'Grid':
     """ mirroring along vertical """
-    logger.info(f'vmirror_t: {grid = }')
+    # logger.info(f'vmirror_t: {grid = }')
     return tuple(row[::-1] for row in grid)
 
 
@@ -3560,7 +3560,7 @@ def vmirror_f(
     patch: 'Patch'
 ) -> 'Patch':
     """ mirroring along vertical """
-    logger.info(f'vmirror_f: {patch = }')
+    # logger.info(f'vmirror_f: {patch = }')
     if patch == frozenset():
         return patch
     d = ulcorner(patch)[1] + lrcorner(patch)[1]
@@ -3573,7 +3573,7 @@ def vmirror_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ mirroring along vertical """
-    logger.info(f'vmirror_i: {indices = }')
+    # logger.info(f'vmirror_i: {indices = }')
     d = ulcorner(indices)[1] + lrcorner(indices)[1]
     return frozenset((i, d - j) for i, j in indices)
 
@@ -3582,7 +3582,7 @@ def vmirror_o(
     obj: 'Object'
 ) -> 'Object':
     """ mirroring along vertical """
-    logger.info(f'vmirror_o: {obj = }')
+    # logger.info(f'vmirror_o: {obj = }')
     d = ulcorner(obj)[1] + lrcorner(obj)[1]
     return frozenset((i, d - j, c) for i, j, c in obj)
 
@@ -3603,7 +3603,7 @@ def dmirror_t(
     grid: 'Grid'
 ) -> 'Grid':
     """ mirroring along diagonal """
-    logger.info(f'dmirror_t: {grid = }')
+    # logger.info(f'dmirror_t: {grid = }')
     return tuple(zip(*grid))
 
 
@@ -3611,7 +3611,7 @@ def dmirror_f(
     patch: 'Patch'
 ) -> 'Patch':
     """ mirroring along diagonal """
-    logger.info(f'dmirror_f: {patch = }')
+    # logger.info(f'dmirror_f: {patch = }')
     a, b = ulcorner(patch)
     if len(next(iter(patch))) == 3:
         return frozenset((j - b + a, i - a + b, c) for i, j, c in patch)
@@ -3622,7 +3622,7 @@ def dmirror_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ mirroring along diagonal """
-    logger.info(f'dmirror_i: {indices = }')
+    # logger.info(f'dmirror_i: {indices = }')
     a, b = ulcorner(indices)
     return frozenset((j - b + a, i - a + b) for i, j in indices)
 
@@ -3631,7 +3631,7 @@ def dmirror_o(
     obj: 'Object'
 ) -> 'Object':
     """ mirroring along diagonal """
-    logger.info(f'dmirror_o: {obj = }')
+    # logger.info(f'dmirror_o: {obj = }')
     a, b = ulcorner(obj)
     return frozenset((j - b + a, i - a + b, c) for i, j, c in obj)
 
@@ -3649,7 +3649,7 @@ def cmirror_t(
     grid: 'Grid'
 ) -> 'Grid':
     """ mirroring along counterdiagonal """
-    logger.info(f'cmirror_t: {grid = }')
+    # logger.info(f'cmirror_t: {grid = }')
     return tuple(zip(*(r[::-1] for r in grid[::-1])))
 
 
@@ -3657,7 +3657,7 @@ def cmirror_f(
     patch: 'Patch'
 ) -> 'Patch':
     """ mirroring along counterdiagonal """
-    logger.info(f'cmirror_f: {patch = }')
+    # logger.info(f'cmirror_f: {patch = }')
     return vmirror_f(dmirror_f(vmirror_f(patch)))
 
 
@@ -3665,7 +3665,7 @@ def cmirror_i(
     indices: 'Indices'
 ) -> 'Indices':
     """ mirroring along counterdiagonal """
-    logger.info(f'cmirror_i: {indices = }')
+    # logger.info(f'cmirror_i: {indices = }')
     return vmirror_f(dmirror_f(vmirror_f(indices)))
 
 
@@ -3673,7 +3673,7 @@ def cmirror_o(
     obj: 'Object'
 ) -> 'Object':
     """ mirroring along counterdiagonal """
-    logger.info(f'cmirror_o: {obj = }')
+    # logger.info(f'cmirror_o: {obj = }')
     return vmirror_f(dmirror_f(vmirror_f(obj)))
 
 
@@ -3683,7 +3683,7 @@ def fill(
     patch: 'Patch'
 ) -> 'Grid':
     """ fill color at indices """
-    logger.info(f'fill: {grid = }, {color = }, {patch = }')
+    # logger.info(f'fill: {grid = }, {color = }, {patch = }')
     h, w = len(grid), len(grid[0])
     grid_filled = [list(row) for row in grid]
     for i, j in toindices(patch):
@@ -3697,7 +3697,7 @@ def paint(
     obj: 'Object'
 ) -> 'Grid':
     """ paint object to grid """
-    logger.info(f'paint: {grid = }, {obj = }')
+    # logger.info(f'paint: {grid = }, {obj = }')
     h, w = len(grid), len(grid[0])
     grid_painted = [list(row) for row in grid]
     for i, j, c in obj:
@@ -3712,7 +3712,7 @@ def underfill(
     patch: 'Patch'
 ) -> 'Grid':
     """ fill color at indices that are background """
-    logger.info(f'underfill: {grid = }, {color = }, {patch = }')
+    # logger.info(f'underfill: {grid = }, {color = }, {patch = }')
     h, w = len(grid), len(grid[0])
     bg = mostcolor_t(grid)
     g = [list(r) for r in grid]
@@ -3727,7 +3727,7 @@ def underpaint(
     obj: 'Object'
 ) -> 'Grid':
     """ paint object to grid where there is background """
-    logger.info(f'underpaint: {grid = }, {obj = }')
+    # logger.info(f'underpaint: {grid = }, {obj = }')
     h, w = len(grid), len(grid[0])
     bg = mostcolor_t(grid)
     g = [list(r) for r in grid]
@@ -3742,7 +3742,7 @@ def hupscale(
     factor: 'Integer'
 ) -> 'Grid':
     """ upscale grid horizontally """
-    logger.info(f'hupscale: {grid = }, {factor = }')
+    # logger.info(f'hupscale: {grid = }, {factor = }')
     g = ()
     for row in grid:
         r = ()
@@ -3757,7 +3757,7 @@ def vupscale(
     factor: 'Integer'
 ) -> 'Grid':
     """ upscale grid vertically """
-    logger.info(f'vupscale: {grid = }, {factor = }')
+    # logger.info(f'vupscale: {grid = }, {factor = }')
     g = ()
     for row in grid:
         g = g + tuple(row for _ in range(factor))
@@ -3796,7 +3796,7 @@ def upscale_t(
     factor: 'Integer'
 ) -> 'Grid':
     """ upscale grid """
-    logger.info(f'upscale_t: {grid = }, {factor = }')
+    # logger.info(f'upscale_t: {grid = }, {factor = }')
     g = ()
     for row in grid:
         upscaled_row = ()
@@ -3811,7 +3811,7 @@ def upscale_f(
     factor: 'Integer'
 ) -> 'Object':
     """ upscale object """
-    logger.info(f'upscale_f: {obj = }, {factor = }')
+    # logger.info(f'upscale_f: {obj = }, {factor = }')
     if len(obj) == 0:
         return frozenset()
     di_inv, dj_inv = ulcorner(obj)
