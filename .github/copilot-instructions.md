@@ -284,19 +284,42 @@ python test_multi_gpu.py
 ✅ **Multi-GPU support**: Working on T4x2 and L4x4  
 ✅ **Strategy pivot**: Discovered solver functions are perfect GPU target (not individual DSL ops)  
 ✅ **Solver benchmarks**: Validated 28 solvers, found 2 excellent candidates (58ms, 120ms)  
-✅ **Profiling complete**: Identified o_g as THE bottleneck (75-92% of solver time)  
-✅ **Implementation plan**: Hybrid GPU strategy (arrays on GPU, frozenset at boundaries)  
-🔄 **In progress**: Implementing GPU o_g with hybrid approach (Week 1 starting)  
+✅ **Profiling tools created**: profile_batt_dsl.py and profile_batt_batch.py ready for Kaggle deployment  
+🔄 **In progress**: Deploying profilers to Kaggle to identify real DSL bottlenecks with GPU environment  
+⏳ **Next**: Implement GPU-accelerated DSL operations based on Kaggle profiling data  
 
-**Current focus**: Implementing `gpu_o_g` with 2.3-7.8x expected speedup
+**Current focus**: Getting real profiling data from Kaggle to validate which DSL operations need GPU acceleration
+
+## Profiling Workflow
+
+### Local Development (Laptop)
+- ❌ **Don't profile on local laptop** - Threading/multiprocessing obscures DSL function times
+- ❌ **Don't trust local timing data** - No GPU, different threading model than production
+- ✅ **Do develop profiling tools locally** - Create and test profilers on small examples
+- ✅ **Do commit profilers to repo** - Deploy to Kaggle for real data collection
+
+### Kaggle Profiling (Production Environment)
+- ✅ **Run profile_batt_batch.py on Kaggle** - With GPU enabled, across 50-100 tasks
+- ✅ **Profile generated batt functions** - Use tmp_batt_onerun_run.py or similar
+- ✅ **Collect aggregate statistics** - Which DSL ops are bottlenecks across all tasks
+- ✅ **Prioritize by % of execution time** - Target ops with >5% total time
+- ✅ **Validate with multiple runs** - Ensure consistent bottleneck identification
+
+### Development Cycle
+1. **Local**: Create profiling tools, test on small examples
+2. **Kaggle**: Deploy profilers, collect real data with GPU
+3. **Local**: Implement GPU DSL operations based on Kaggle data
+4. **Kaggle**: Test GPU ops, measure actual speedup, validate correctness
+5. **Local**: Document results, iterate on implementation
 
 ## Important Notes
 
 1. **All Kaggle GPUs cost the same** - Choose based on availability, not cost
 2. **T4x2 has best availability** - Recommended default choice
-3. **L4x4 has best performance** - Try to get this allocation (35x speedup)
-4. **Batch size 200 is optimal** - For single-GPU operations
+3. **L4x4 has best performance** - Try to get this allocation (35x speedup for batch ops)
+4. **Batch size 200 is optimal** - For batch grid operations
 5. **Multi-GPU auto-enabled** - When batch size >= 120 grids
+6. **Profile on Kaggle, not locally** - Threading obscures DSL function times on local machines
 
 ## Quick Reference
 
