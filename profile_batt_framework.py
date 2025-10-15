@@ -336,13 +336,12 @@ def save_detailed_report(stats, wall_time, category_totals, sorted_categories, o
         f.write(f"{'='*80}\n\n")
         
         stream = io.StringIO()
-        ps = pstats.Stats(stats, stream=stream)
-        ps.strip_dirs()
-        ps.sort_stats('cumulative')
+        # stats is already a pstats.Stats object, just redirect its stream
+        stats.stream = stream
         if top_n:
-            ps.print_stats(top_n)
+            stats.print_stats(top_n)
         else:
-            ps.print_stats()
+            stats.print_stats()
         
         f.write(stream.getvalue())
     
