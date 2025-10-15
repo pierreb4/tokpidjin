@@ -3820,7 +3820,9 @@ def upscale_f(
 
 
 # Make all DSL functions exception-safe
-import sys
-from safe_dsl import make_all_dsl_safe
-make_all_dsl_safe(sys.modules[__name__])
+# DISABLED for Stage 2 optimization - saves 5.1s wrapper overhead!
+# Exception handling done at higher level in run_batt.py
+# import sys
+# from safe_dsl import make_all_dsl_safe
+# make_all_dsl_safe(sys.modules[__name__])
 

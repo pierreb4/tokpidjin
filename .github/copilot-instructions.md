@@ -39,6 +39,60 @@ This is an ARC (Abstraction and Reasoning Corpus) solver project with GPU accele
 
 ## Code Guidelines
 
+### Documentation Management
+
+**CRITICAL**: Keep documentation clean and consolidated to prevent sprawl.
+
+**DO:**
+- ✅ **Update existing docs** - Prefer editing over creating new files
+- ✅ **Consolidate on completion** - Merge related docs into comprehensive guides
+- ✅ **Archive outdated files** - Move superseded docs to `archive/` with date subdirectory
+- ✅ **Archive test scripts** - Move temporary test/benchmark scripts to `archive/` after results documented
+- ✅ **Use existing structure** - Follow patterns in GPU_DOCS_INDEX.md
+- ✅ **Single source of truth** - One authoritative doc per topic
+
+**DON'T:**
+- ❌ **Create intermediate docs** - Avoid progress snapshots, drafts, version suffixes
+- ❌ **Leave test scripts** - Remove temporary benchmarks, profiles, experiments after use
+- ❌ **Duplicate information** - Cross-reference instead of copying
+- ❌ **Keep outdated docs** - Archive immediately when superseded
+- ❌ **Create doc variants** - No _v2, _new, _updated suffixes
+
+**Archiving Pattern:**
+```bash
+# Archive superseded documentation
+mkdir -p archive/gpu_docs_superseded_2025_10_15/
+mv OLD_DOC.md archive/gpu_docs_superseded_2025_10_15/
+
+# Archive temporary test scripts
+mkdir -p archive/testing_2025_10_15/
+mv benchmark_*.py profile_*.py archive/testing_2025_10_15/
+
+# Update references in active docs
+grep -r "OLD_DOC.md" *.md  # Find and update references
+```
+
+**Documentation Lifecycle:**
+1. **Research phase**: Create minimal notes in single file
+2. **Implementation phase**: Update notes inline as work progresses
+3. **Completion phase**: Consolidate into authoritative guide
+4. **Archive phase**: Move intermediate docs/scripts to archive/ with date
+
+**Example - Good Practice:**
+- Write implementation notes in GPU_O_G_IMPLEMENTATION.md
+- Update as progress is made (no _draft, _wip versions)
+- Archive intermediate benchmarks after extracting results
+- Final state: One comprehensive guide + archived history
+
+**Example - Bad Practice:**
+- ❌ GPU_O_G_NOTES.md → GPU_O_G_IMPLEMENTATION_v1.md → GPU_O_G_IMPLEMENTATION_v2.md
+- ❌ benchmark_test.py, benchmark_test2.py, benchmark_final.py scattered in root
+- ❌ Multiple overlapping docs covering same topic
+
+**Current Archive Structure:**
+- `archive/gpu_docs_superseded/` - Older GPU docs replaced by comprehensive guides
+- `archive/gpu_solver_analysis_2025_10_10/` - Intermediate solver analysis (kept for reference)
+
 ### When Working with GPU Code
 
 1. **Two GPU strategies**:
@@ -147,6 +201,41 @@ Based on extensive testing:
 3. **Use existing patterns** - See `INTEGRATION_GUIDE.md`
 4. **Test on Kaggle** - Verify actual speedup on real hardware
 5. **Document results** - Update relevant .md files
+6. **Archive test scripts** - After documenting results, move temporary scripts to `archive/`
+
+### Managing Test/Benchmark Scripts
+
+**Lifecycle:**
+1. **Create** - Generate profiling/benchmarking script for specific investigation
+2. **Run** - Execute on local or Kaggle, collect data
+3. **Document** - Extract key findings into relevant .md file
+4. **Archive** - Move script to `archive/testing_YYYY_MM_DD/` directory
+5. **Clean** - Remove from root directory to prevent clutter
+
+**Example Workflow:**
+```bash
+# Create benchmark script
+vim benchmark_o_g_performance.py
+
+# Run on Kaggle, document results in GPU_O_G_IMPLEMENTATION.md
+
+# Archive after documenting
+mkdir -p archive/testing_2025_10_15/
+mv benchmark_o_g_performance.py archive/testing_2025_10_15/
+git add archive/testing_2025_10_15/benchmark_o_g_performance.py
+git commit -m "archive: Move o_g benchmark script after documenting results"
+```
+
+**Keep in Root Directory:**
+- Production scripts used in workflow (run_batt.py, run_test.py)
+- Reusable utilities (utils.py, helpers.py)
+- Main codebase files (dsl.py, solvers.py)
+
+**Archive to archive/:**
+- One-off benchmark scripts (benchmark_*.py)
+- Profiling experiments (profile_*.py)
+- Test variations (test_experiment_*.py)
+- Superseded documentation
 
 ### Fixing Errors
 
