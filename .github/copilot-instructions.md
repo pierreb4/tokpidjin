@@ -4,6 +4,31 @@
 
 This is an ARC (Abstraction and Reasoning Corpus) solver project with GPU acceleration for Kaggle competition.
 
+### Project Orchestration
+
+**Main Workflow Scripts:**
+- **`run_card.sh`** - Primary orchestration script that runs the solver pipeline
+  - Invokes `card.py` to generate/update solvers
+  - Runs `run_batt.py` to test solvers with configurable timeout and count
+  - Manages temporary files, logging, and GPU configuration
+  - Usage: `bash run_card.sh -c -32` (test 32 tasks), `bash run_card.sh -b` (benchmark mode)
+  
+- **`follow.sh`** - Monitoring script for tracking progress
+  - Watches solver_dir, differ_dir, solver_md5 file counts
+  - Displays real-time progress during long-running operations
+  - Usage: `bash follow.sh -q -i 60 -c 'ls solver_dir | wc -l'` (check every 60s)
+
+**Typical Development Cycle:**
+1. **Mac terminal**: Edit code, commit: `git commit -a -m 'message' && git push && date`
+2. **Simone server**: Pull updates: `git pull && date`
+3. **Run pipeline**: `bash run_card.sh -c -32` (test on 32 tasks)
+4. **Monitor progress**: `bash follow.sh` to watch solver generation in real-time
+
+**Multi-Instance Deployment** (Week 6D):
+- Run multiple `run_card.sh` instances concurrently for production scale
+- Recommended: 2-3 instances on 12-core CPU
+- Each instance uses ~5-6 CPU cores (ProcessPoolExecutor + inline threads)
+
 ## GPU Optimization Status
 
 **READ FIRST**: `GPU_SOLVER_STRATEGY.md` - Complete solver GPU acceleration strategy
@@ -166,6 +191,13 @@ Based on extensive testing:
 
 ## File Organization
 
+### Orchestration Scripts
+- **`run_card.sh`** - Main pipeline orchestration (runs card.py + run_batt.py)
+- **`follow.sh`** - Progress monitoring (real-time file count tracking)
+- **`card.py`** - Solver generation/update logic
+- **`run_batt.py`** - Batch solver evaluation (async)
+- **`scratch.sh`** - Development workflow examples and common commands
+
 ### GPU-Related Files
 - **`gpu_optimizations.py`** - Main GPU implementation (530 lines, PRODUCTION READY)
 - **`GPU_PROJECT_SUMMARY.md`** - Executive summary (READ THIS FIRST)
@@ -180,7 +212,6 @@ Based on extensive testing:
 - **`solvers.py`** - ARC solver implementations
 
 ### Testing & Validation
-- **`run_batt.py`** - Batch solver evaluation (async)
 - **`run_test.py`** - DSL test runner (async)
 - **`test_kaggle_gpu_optimized.py`** - GPU test suite
 - **`test_multi_gpu.py`** - Multi-GPU validation

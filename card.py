@@ -249,7 +249,7 @@ class Code:
             # Standard mode: safe with try/except
             print(f'    try:', file=self.file)
             print(f'        t{self.t_num} = {call_string}', file=self.file)
-            print(f'    except (TypeError, AttributeError, ValueError):', file=self.file)
+            print(f'    except (TypeError, AttributeError, ValueError, IndexError, KeyError):', file=self.file)
             print(f'        t{self.t_num} = _get_safe_default({func_name})', file=self.file)
         return has_mutation
 
