@@ -274,8 +274,17 @@ def analyze_framework_bottlenecks(stats, wall_time):
     return category_totals, sorted_categories
 
 
-def save_detailed_report(stats, wall_time, category_totals, sorted_categories, output_file):
-    """Save detailed profiling report to file."""
+def save_detailed_report(stats, wall_time, category_totals, sorted_categories, output_file, top_n=100):
+    """Save detailed profiling report to file.
+    
+    Args:
+        stats: cProfile.Profile() object
+        wall_time: Wall-clock time in seconds
+        category_totals: Dictionary of category statistics
+        sorted_categories: List of (category, data) tuples sorted by cumulative time
+        output_file: Path to output file
+        top_n: Number of top functions to include (default: 100, use None for all)
+    """
     
     with open(output_file, 'w') as f:
         f.write(f"{'='*80}\n")
@@ -323,18 +332,79 @@ def save_detailed_report(stats, wall_time, category_totals, sorted_categories, o
         f.write(f"\n{'='*80}\n\n")
         
         # Full stats dump
-        f.write("FULL PROFILING STATS (Top 100)\n")
+        f.write(f"FULL PROFILING STATS (Top {top_n if top_n else 'ALL'})\n")
         f.write(f"{'='*80}\n\n")
         
         stream = io.StringIO()
-        ps = pstats.Stats(stats.stats, stream=stream)
+        ps = pstats.Stats(stats, stream=stream)
         ps.strip_dirs()
         ps.sort_stats('cumulative')
-        ps.print_stats(100)
+        if top_n:
+            ps.print_stats(top_n)
+        else:
+            ps.print_stats()
         
         f.write(stream.getvalue())
     
     print(f"Detailed report saved to: {output_file}")
+
+
+def search_functions(stats, patterns):
+    """Search for functions matching patterns in profiling stats.
+    
+    Args:
+        stats: cProfile.Profile() object
+        patterns: List of function name patterns to search for
+        
+    Returns:
+        Dictionary mapping pattern to list of matching functions with stats
+    """
+    results = {pattern: [] for pattern in patterns}
+    
+    for func_key, (cc, nc, tt, ct, callers) in stats.stats.items():
+        filename, line, func_name = func_key
+        
+        # Search for patterns in function name
+        for pattern in patterns:
+            if pattern.lower() in func_name.lower():
+                results[pattern].append({
+                    'name': func_name,
+                    'file': filename,
+                    'line': line,
+                    'calls': nc,
+                    'total_time': tt,
+                    'cumulative_time': ct,
+                    'per_call': ct / nc if nc > 0 else 0
+                })
+    
+    return results
+
+
+def print_search_results(search_results):
+    """Print search results in a readable format."""
+    print(f"\n{'='*80}")
+    print("FUNCTION SEARCH RESULTS")
+    print(f"{'='*80}\n")
+    
+    for pattern, matches in search_results.items():
+        if matches:
+            print(f"\nPattern: '{pattern}' ({len(matches)} matches)")
+            print(f"{'-'*80}")
+            print(f"{'Function':<40} {'Calls':>10}  {'Cum Time':>10}  {'Per Call':>10}")
+            print(f"{'-'*80}")
+            
+            # Sort by cumulative time
+            matches.sort(key=lambda x: x['cumulative_time'], reverse=True)
+            
+            for match in matches:
+                print(f"{match['name'][:39]:<40} "
+                      f"{match['calls']:>10}  "
+                      f"{match['cumulative_time']:>10.3f}s  "
+                      f"{match['per_call']*1000:>10.3f}ms")
+        else:
+            print(f"\nPattern: '{pattern}' - NO MATCHES FOUND")
+    
+    print(f"\n{'='*80}\n")
 
 
 def main():
@@ -344,6 +414,12 @@ def main():
     parser = argparse.ArgumentParser(description='Profile batt framework functions')
     parser.add_argument('--tasks', type=int, default=100,
                        help='Number of tasks to profile (default: 100)')
+    parser.add_argument('--all', action='store_true',
+                       help='Include ALL functions in report (not just top 100)')
+    parser.add_argument('--top', type=int, default=100,
+                       help='Number of top functions to include (default: 100, ignored if --all is set)')
+    parser.add_argument('--search', nargs='+', 
+                       help='Search for functions matching these patterns (e.g., --search mapply_t apply_t)')
     
     args = parser.parse_args()
     
@@ -353,10 +429,18 @@ def main():
     # Analyze bottlenecks
     category_totals, sorted_categories = analyze_framework_bottlenecks(stats, wall_time)
     
+    # Search for specific functions if requested
+    if args.search:
+        search_results = search_functions(stats, args.search)
+        print_search_results(search_results)
+    
+    # Determine how many functions to include
+    top_n = None if args.all else args.top
+    
     # Save detailed report
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     output_file = f"profile_batt_framework_{timestamp}.txt"
-    save_detailed_report(stats, wall_time, category_totals, sorted_categories, output_file)
+    save_detailed_report(stats, wall_time, category_totals, sorted_categories, output_file, top_n)
     
     print(f"\n{'='*80}")
     print("PROFILING COMPLETE")
