@@ -24,7 +24,7 @@ async def main():
     for task_id, solver in solvers.items():
 
         check_start = timer()
-        timed_out, task_o_score = await check_solvers_pre(total_data, task_id, timeout=o.1)
+        timed_out, task_o_score = await check_solvers_pre(total_data, task_id, timeout=0.1)
         t_log = 11 - int(math.log(timer() - check_start))
 
         # print_l(f'Process solver for {task_id=} with {task_o_score=}, {timed_out=} and {t_log=}')
