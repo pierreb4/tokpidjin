@@ -20,7 +20,8 @@ scratch.*
 *.log
 tmp_batt_*
 
-# Ignore cache directory
+# Ignore logs and cache directories
+logs/
 .cache/
 
 # Ignore .gitignore
