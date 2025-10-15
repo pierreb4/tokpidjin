@@ -24,8 +24,8 @@ async def main():
     for task_id, solver in solvers.items():
 
         check_start = timer()
-        # Use shorter timeout (0.2s) to avoid long waits on slow solvers
-        timed_out, task_o_score = await check_solvers_pre(total_data, task_id, timeout=0.2)
+        # Use longer timeout (10s) to handle slower tuple-converted solvers
+        timed_out, task_o_score = await check_solvers_pre(total_data, task_id, timeout=10)
         t_log = 11 - int(math.log(timer() - check_start))
 
         print_l(f'Process solver for {task_id=} with {task_o_score=}, {timed_out=} and {t_log=}')

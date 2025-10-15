@@ -658,9 +658,10 @@ def load_module(module_name):
 #             return True, None
 
 
+
 async def run_with_timeout(func, args, timeout=5):
     """
-    Run function with timeout. Uses thread executor but with proper cleanup.
+    Run function with timeout. Uses thread executor with proper timeout handling.
     """
     try:
         # Use thread executor with proper timeout handling
@@ -675,9 +676,6 @@ async def run_with_timeout(func, args, timeout=5):
         return False, result
     except asyncio.TimeoutError:
         # Timeout occurred - return timeout flag
-        return True, None
-    except Exception as e:
-        # Other exceptions - treat as timeout to avoid breaking the flow
         return True, None
 
 

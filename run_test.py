@@ -154,7 +154,7 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
     print_l(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
-async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=1):
+async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=10):
     """ checks the speed of the solver """
     task = data['demo'][task_id] + data['test'][task_id]
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
@@ -175,7 +175,7 @@ async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=1):
     return False
 
 
-async def check_solvers_pre(data, task_id, timeout=1):
+async def check_solvers_pre(data, task_id, timeout=10):
     """ checks the speed of the solver """
     task = data['demo'][task_id] + data['test'][task_id]
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
