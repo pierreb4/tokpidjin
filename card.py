@@ -42,6 +42,13 @@ def get_items(call):
     return call.strip('[]').split(',')
 
 
+def is_called_as_function(call_str, var_name):
+    """Check if variable is being called as a function (has parentheses after it)"""
+    # Look for pattern: var_name followed by '('
+    pattern = rf'\b{re.escape(var_name)}\s*\('
+    return bool(re.search(pattern, call_str))
+
+
 def replace_random(value, input_list):
     current_idx = input_list.index(value)
     if current_idx == 0:  # First element
@@ -256,13 +263,25 @@ class Code:
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
 
                     # NOTE We could also try to match type
+                    
+                    # CRITICAL FIX: Check if variable is being called as function
+                    var_name = f't{t_n}'
+                    is_function_call = is_called_as_function(old_call, var_name)
 
-                    if random.randint(0, 2) == 0:
-                        item = f't{t_offset}'
-                    elif random.randint(0, 1) == 0:
-                        item = random.choice(DSL_FUNCTION_NAMES)
+                    if is_function_call:
+                        # Variable is being called: var(...) 
+                        # Can only replace with another function or t variable (that might be a function)
+                        if random.randint(0, 1) == 0:
+                            item = f't{t_offset}'
+                        else:
+                            item = random.choice(DSL_FUNCTION_NAMES)
                     else:
-                        item = random.choice(GENERIC_CONSTANT_NAMES)
+                        # Variable is being used as value: func(var)
+                        # Can replace with t variable or constant (NOT a function name)
+                        if random.randint(0, 1) == 0:
+                            item = f't{t_offset}'
+                        else:
+                            item = random.choice(GENERIC_CONSTANT_NAMES)
 
                     print_l(f'{item = }') if DO_PRINT else None
 
