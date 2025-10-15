@@ -38,7 +38,7 @@ def profile_data_loading():
     return elapsed, train_data
 
 
-def profile_code_generation(task_ids):
+def profile_code_generation(task_count):
     """Profile code generation (card.py) time"""
     print_l("\n" + "="*100)
     print_l("PHASE 2: CODE GENERATION (card.py)")
@@ -47,10 +47,12 @@ def profile_code_generation(task_ids):
     import subprocess
     
     # Generate batt code
+    # card.py expects: -c COUNT (not -i -b -c)
+    # Generates tmp_batt_onerun_run.py by default (or use -f to specify)
     start = time.perf_counter()
     
     result = subprocess.run(
-        ['python', 'card.py', '-i', '-b', '-c', f'-{len(task_ids)}'],
+        ['python', 'card.py', '-c', str(task_count), '-f', 'tmp_batt_onerun_run.py'],
         capture_output=True,
         text=True,
         timeout=300
@@ -60,11 +62,12 @@ def profile_code_generation(task_ids):
     
     if result.returncode == 0:
         print_l(f"✅ Code generated in {elapsed:.3f}s")
-        print_l(f"   Tasks: {len(task_ids)}")
-        print_l(f"   Rate: {elapsed/len(task_ids)*1000:.1f}ms per task")
+        print_l(f"   Tasks: {task_count}")
+        print_l(f"   Rate: {elapsed/task_count*1000:.1f}ms per task")
     else:
         print_l(f"❌ Code generation failed")
-        print_l(f"   Error: {result.stderr[:200]}")
+        print_l(f"   Error: {result.stderr[:500]}")
+        print_l(f"   Output: {result.stdout[:500]}")
         return None
     
     return elapsed
@@ -78,11 +81,11 @@ def profile_solver_execution(task_ids, train_data):
     
     # Import generated batt module
     try:
-        import batt_onerun_run as batt_module
+        import tmp_batt_onerun_run as batt_module
         from importlib import reload
         reload(batt_module)
-    except ImportError:
-        print_l("❌ Cannot import batt module - generate code first")
+    except ImportError as e:
+        print_l(f"❌ Cannot import batt module - generate code first: {e}")
         return None
     
     total_time = 0
@@ -137,11 +140,11 @@ def profile_validation(task_ids, train_data):
     print_l("="*100)
     
     try:
-        import batt_onerun_run as batt_module
+        import tmp_batt_onerun_run as batt_module
         from importlib import reload
         reload(batt_module)
-    except ImportError:
-        print_l("❌ Cannot import batt module")
+    except ImportError as e:
+        print_l(f"❌ Cannot import batt module: {e}")
         return None
     
     total_time = 0
@@ -333,7 +336,7 @@ def main():
     results['task_count'] = len(task_ids)
     
     # Phase 2: Code Generation
-    gen_time = profile_code_generation(task_ids)
+    gen_time = profile_code_generation(len(task_ids))
     if gen_time is None:
         print_l("\n❌ Pipeline profiling failed at code generation")
         return
