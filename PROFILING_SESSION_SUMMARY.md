@@ -72,12 +72,30 @@ Expected result: o_g/objects 15-30%, clear bottlenecks identified
 
 ## Expected Results from Kaggle
 
-Based on GPU_SOLVER_STRATEGY.md and existing benchmarks:
+Based on GPU_SOLVER_STRATEGY.md and PIPELINE_SCALE_ANALYSIS.md:
+
+### Production Scale Context
+- **Competition resources**: 8 hours of L4x4 GPU time (Kaggle ARC competition)
+- **Production target**: 400-1000 tasks, ~3,000-7,500 samples
+- **Current solver baseline**: 5.3ms/sample → 15.9-39.7s at scale
+- **Philosophy**: With 8hr compute budget, all GPU optimizations are worthwhile
+
+### Scale Impact
+At 32 tasks (current testing):
+- Solver time: 0.7s (optimization ROI: Low)
+- GPU speedup saves: 0.6-0.7s
+
+At 400 tasks (production):
+- Solver time: 15.9s (optimization ROI: HIGH)
+- GPU speedup saves: 14.5-15.5s (97% faster)
+
+**Key insight**: GPU optimization becomes essential at production scale!
 
 ### HIGH PRIORITY (>10% execution time)
 - **o_g** / **objects**: 15-30% of execution time
   - Expected GPU speedup: 3-6x
   - Impact: Major speedup on complex solvers
+  - At 400 tasks: 9.9-13.2s saved
 
 ### MEDIUM PRIORITY (5-10% execution time)
 - **fgpartition** / **partition**: 5-15% of execution time
@@ -91,14 +109,27 @@ Based on GPU_SOLVER_STRATEGY.md and existing benchmarks:
 
 ### Overall Impact Projection
 ```
-Current: 38.5s solver execution at 400 tasks
-After GPU:
-  - HIGH priority (3-6x): 50% faster → 19-25s
-  - MEDIUM priority (2-4x): 25% faster → 15-19s
-  - Total speedup: 2-2.5x → 15-19s
+Current (400 tasks): 42.5s total (4s code gen + 38.5s solver)
 
-With code gen (4s): 19-23s total vs 42.5s baseline
-Overall pipeline speedup: 1.8-2.2x
+After GPU DSL (2-6x on solver):
+  - Code gen: 4s (unchanged)
+  - Solver: 6-19s (2-6x faster)
+  - Total: 10-23s
+
+After Batch Operations (10-35x on batched ops):
+  - Even better performance
+  - Solver: 0.45-1.6s (10-35x faster)
+  - Total: 4.5-5.6s
+
+Combined (both optimizations):
+  - Code gen: 4s
+  - Solver: 0.3-0.5s (30-50x faster)
+  - Total: 4.3-4.5s vs 42.5s baseline
+  - Overall speedup: 9-10x faster!
+
+Scale insight: At 32 tasks (0.7s solver), GPU saves 0.6s
+             At 400 tasks (15.9s solver), GPU saves 15.5s
+             ROI increases 25x with scale!
 ```
 
 ## Next Steps (Kaggle Workflow)

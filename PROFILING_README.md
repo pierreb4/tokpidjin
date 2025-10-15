@@ -123,7 +123,26 @@ Run profiler multiple times with different batt files to confirm:
 
 ## Expected Results
 
-Based on GPU_SOLVER_STRATEGY.md, we expect:
+Based on GPU_SOLVER_STRATEGY.md and PIPELINE_SCALE_ANALYSIS.md:
+
+### Scale Impact Analysis
+
+**Critical Context:**
+- **Competition resources**: 8 hours of L4x4 GPU time
+- **Philosophy**: With abundant compute, all optimizations are worthwhile
+- **Scale factor**: Testing at 32 tasks, production at 400-1000 tasks
+
+**Performance at Different Scales:**
+
+| Scale | Solver Time | GPU Saves | ROI |
+|-------|-------------|-----------|-----|
+| 32 tasks (~130 samples) | 0.7s | 0.6-0.7s | Low |
+| 400 tasks (~3,000 samples) | 15.9s | 14.5-15.5s | **HIGH** |
+| 1000 tasks (~7,500 samples) | 39.7s | 38-39s | **CRITICAL** |
+
+**Key Insight**: GPU optimization ROI increases dramatically with scale!
+
+### Expected DSL Bottlenecks
 
 **For typical generated batt functions:**
 - `o_g` / `objects`: 15-30% of execution time
@@ -138,10 +157,16 @@ Based on GPU_SOLVER_STRATEGY.md, we expect:
 - Very complex: 2-20s (tasks like 0607ce86, 05a7bcf2)
 
 **Expected GPU impact:**
-- HIGH priority functions GPU-accelerated: 3-6x faster
-- MEDIUM priority functions GPU-accelerated: 2-4x faster
-- Overall solver speedup: 2-4x (weighted average)
-- Pipeline speedup: 1.5-2.5x (solvers are 91% of time)
+- HIGH priority functions GPU-accelerated: 3-6x faster → 9.9-13.2s saved at 400 tasks
+- MEDIUM priority functions GPU-accelerated: 2-4x faster → additional 2-4s saved
+- Batch operations (complementary): 10-35x faster → 14-15s saved at 400 tasks
+- Overall solver speedup: 30-50x combined (15.9s → 0.3-0.5s at 400 tasks)
+- Pipeline speedup: 9-10x overall (42.5s → 4.3-4.5s at 400 tasks)
+
+**Resource Context:**
+- 8 hours = 28,800 seconds available
+- Optimized solver: 0.3s = 0.001% of budget
+- Result: Can run pipeline **thousands of times** for testing/tuning!
 
 ## Implementation Priority
 

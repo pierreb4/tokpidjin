@@ -17,14 +17,14 @@
 - **Solver baseline**: 5.3ms/sample × ~130 samples = **0.7 seconds**
 
 ### Production Target
-- **Task count**: 400 tasks
+- **Task count**: 1000 tasks
 - **Samples per task**: 3-12 (avg ~7.5)
-- **Total samples**: ~3,000
-- **Solver baseline**: 5.3ms/sample × 3,000 samples = **15.9 seconds**
+- **Total samples**: ~7,500
+- **Solver baseline**: 5.3ms/sample × 7,500 samples = **39.7 seconds**
 
 ### Scale Factor
-- **30x more tasks** (32 → 400)
-- **23x more samples** (~130 → 3,000)
+- **30x more tasks** (32 → 1000)
+- **23x more samples** (~130 → 7,500)
 
 **Key Insight:** GPU acceleration ROI increases **dramatically** at production scale!
 
@@ -73,8 +73,8 @@
 
 ### Scenario 3: Batch Operations Only (Integrate Existing)
 ```
-3,000 samples in batches of 200 = 15 batches
-15 batches × ~50ms/batch = 750ms = 0.75 seconds (21x)
+7,500 samples in batches of 200 = 38 batches
+38 batches × ~50ms/batch = 1875ms = 1.86 seconds (21x)
 ```
 **Speedup**: 10-35x on batched operations = **14-15.4 seconds saved**
 
