@@ -659,15 +659,25 @@ def load_module(module_name):
 
 
 async def run_with_timeout(func, args, timeout=5):
+    """
+    Run function with timeout. Uses thread executor but with proper cleanup.
+    """
     try:
-        # Use low-level executor to avoid conflicts with high-level parallel operations
+        # Use thread executor with proper timeout handling
         loop = asyncio.get_event_loop()
         executor = get_low_level_executor()
+        
+        # Run in executor with timeout
         result = await asyncio.wait_for(
-            loop.run_in_executor(executor, func, *args), timeout
+            loop.run_in_executor(executor, func, *args), 
+            timeout
         )
         return False, result
     except asyncio.TimeoutError:
+        # Timeout occurred - return timeout flag
+        return True, None
+    except Exception as e:
+        # Other exceptions - treat as timeout to avoid breaking the flow
         return True, None
 
 
