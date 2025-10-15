@@ -52,7 +52,9 @@ if [ -n "$INITIAL" ]; then
   # CARD_OPTION="-fs -fd"
   CARD_OPTION="-fd"
   # On simone or mbp
-  if [[ "$HOSTNAME" == "simone" ]] or [[ "$HOSTNAME" == "mbp-2022.lan" ]] or [[ "$HOSTNAME" == "mbp-2022.local" ]]; then
+  if [[ "$HOSTNAME" == "simone" ]] \
+      || [[ "$HOSTNAME" == "mbp-2022.lan" ]] \
+      || [[ "$HOSTNAME" == "mbp-2022.local" ]]; then
     python prep_solver_dir.py
   else
     cp -R solver_dir_mbp solver_dir
