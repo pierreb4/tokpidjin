@@ -1,0 +1,1 @@
+/Users/pierre/dsl/tokpidjin/solver_md5/30fc7b89a2e0ec405c42cba5a78b7d93.py
