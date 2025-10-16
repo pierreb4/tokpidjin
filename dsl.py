@@ -3099,8 +3099,9 @@ def objects(
         if val == bg:
             continue
         # obj = {(val, loc)}
-        obj = []  # Optimized: use list during construction
-        obj_set = {(loc[0], loc[1], val)}  # Keep set for uniqueness check
+        initial_cell = (loc[0], loc[1], val)
+        obj = [initial_cell]  # Optimized: use list during construction, start with initial cell
+        obj_set = {initial_cell}  # Keep set for uniqueness check
         cands = {loc}
         while cands:
             neighborhood = set()
