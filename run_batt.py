@@ -103,6 +103,10 @@ except ImportError:
 
 import multiprocessing as mp
 
+# Debug flag for validation and score detection messages
+# Set to False to suppress timeout and mismatch warnings
+DEBUG_VALIDATION = True
+
 # Track active executors for cleanup on exit/interrupt
 _active_executors = []
 _executor_lock = threading.Lock()
@@ -687,7 +691,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in demo_task)
     
     # DEBUG: Log S to verify it's created fresh per task
-    if DO_PRINT:
+    if DEBUG_VALIDATION and DO_PRINT:
         print_l(f"DEBUG check_batt: task_id={task_id} S_len={len(S)}")
 
     # print_l(f'-- {task_id} - {task_i} --') if DO_PRINT else None
@@ -1550,7 +1554,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         score_mismatch = False
         if not timed_out and actual_score != saved_score:
             score_mismatch = True
-            if DO_PRINT:
+            if DEBUG_VALIDATION and DO_PRINT:
                 print_l(f"SCORE MISMATCH: {sol_solver_id} - saved_score={saved_score} actual_score={actual_score}")
         
         return {**data, 'timed_out': timed_out, 'actual_score': actual_score, 'saved_score': saved_score, 
@@ -1568,15 +1572,14 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     
     # Check for score mismatches
     score_mismatches = [d for d in validated_data if d.get('score_mismatch', False)]
-    if score_mismatches:
+    if score_mismatches and DEBUG_VALIDATION:
         print_l(f"WARNING: Found {len(score_mismatches)} score mismatches:")
         for d in score_mismatches[:5]:  # Show first 5
             print_l(f"  {d['sol_solver_id']}: saved={d['saved_score']} actual={d['actual_score']}")
         if len(score_mismatches) > 5:
             print_l(f"  ... and {len(score_mismatches) - 5} more")
-    else:
-        if DO_PRINT:
-            print_l("INFO: No score mismatches found - all solvers validated correctly")
+    elif DEBUG_VALIDATION and DO_PRINT:
+        print_l("INFO: No score mismatches found - all solvers validated correctly")
     
     # Phase 3b: Process validated results (file I/O, symlinks)
     if prof is not None:

@@ -41,6 +41,10 @@ from utils import *
 from dsl import *
 from constants import *
 
+# Debug flag for validation and score detection messages
+# Set to False to suppress timeout and mismatch warnings
+DEBUG_VALIDATION = True
+
 
 # def get_data(train=True):
 #     path = f'../data/{"training" if train else "evaluation"}'
@@ -182,7 +186,8 @@ async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=30):
         try:
             result, did_timeout = await run_with_timeout(solve_func, [S, sample['input'], None], timeout)
             if did_timeout:
-                print_l(f'Timed out: {sol_solver_id =} - {task_id =} - sample = {i}')
+                if DEBUG_VALIDATION:
+                    print_l(f'Timed out: {sol_solver_id =} - {task_id =} - sample = {i}')
                 timed_out = True
             elif result == sample['output']:
                 score += 1
