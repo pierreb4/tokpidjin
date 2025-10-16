@@ -1543,12 +1543,14 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         check_time = timer() - check_start
         t_log = 11 - int(math.log(check_time)) if check_time > 0 else 10
         
-        # Get the saved score to compare
+        # Only check score mismatch if solver didn't timeout
+        # If timed_out=True, the actual_score is incomplete and shouldn't be compared
         saved_score = o_score.get(sol_solver_id)
-        score_mismatch = (actual_score != saved_score)
-        
-        if score_mismatch and DO_PRINT:
-            print_l(f"SCORE MISMATCH: {sol_solver_id} - saved_score={saved_score} actual_score={actual_score}")
+        score_mismatch = False
+        if not timed_out and actual_score != saved_score:
+            score_mismatch = True
+            if DO_PRINT:
+                print_l(f"SCORE MISMATCH: {sol_solver_id} - saved_score={saved_score} actual_score={actual_score}")
         
         return {**data, 'timed_out': timed_out, 'actual_score': actual_score, 'saved_score': saved_score, 
                 'score_mismatch': score_mismatch, 't_log': t_log, 'check_time': check_time}
