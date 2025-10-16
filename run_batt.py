@@ -630,6 +630,7 @@ def score_sample(args):
     sample_s = []
     diff_call_count = 0
     match_count = 0
+    has_match = False
     
     if solve_result is not None:
         sample_o, _ = solve_result
@@ -637,26 +638,27 @@ def score_sample(args):
         if DO_PRINT:
             print_l(f"{sample_type}[{i}] - {task_id} - {len(sample_o)}")
         
-        # Score outputs and run diff for this sample
+        # Score outputs and collect matching solver ids
         for t_n, evo, o_solver_id, okt in sample_o:
             C = okt
             match = C == O
             if match:
                 match_count += 1
+                has_match = True
                 if DO_PRINT:
                     print_l(f'- {o_solver_id = } - {match = }')
+        
+        # OPTIMIZATION: Only run diff ONCE per sample if any output matches
+        # Calling batt multiple times with identical O parameter returns identical results
+        if has_match:
+            diff_call_count += 1
+            # Run diff to get solver-level scores (only once per sample)
+            diff_timed_out, diff_result = call_with_timeout(batt_func,
+                [task_id, S, I, O, pile_log_path], timeout)
             
-            # OPTIMIZATION: Only run diff for MATCHING outputs
-            # Non-matching outputs don't contribute useful solver scores
-            if match:
-                diff_call_count += 1
-                # Run diff to get solver-level scores
-                diff_timed_out, diff_result = call_with_timeout(batt_func,
-                    [task_id, S, I, O, pile_log_path], timeout)
-                
-                if diff_result is not None:
-                    _, sample_s_result = diff_result
-                    sample_s.extend(sample_s_result)
+            if diff_result is not None:
+                _, sample_s_result = diff_result
+                sample_s.extend(sample_s_result)
     
     return {
         'index': i,
