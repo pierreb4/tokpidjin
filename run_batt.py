@@ -621,7 +621,7 @@ def score_sample(args):
     
     # DEBUG: Log batt inputs to verify they're different per sample
     if DO_PRINT:
-        print_l(f"DEBUG batt_call: {sample_type}[{i}] task_id={task_id} I_shape={len(I)} O_shape={len(O)} S_len={len(S)}")
+        print_l(f"DEBUG batt_call: {sample_type}[{i}] task_id={task_id} I_shape={len(I)} O_shape={len(O)} S_len={len(S)} S_id={id(S)}")
     
     # Call batt with thread-based timeout
     solve_timed_out, solve_result = call_with_timeout(batt_func,
@@ -696,7 +696,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     # DEBUG: Log S to verify it's created fresh per task
     if DO_PRINT:
-        print_l(f"DEBUG check_batt: task_id={task_id} S_len={len(S)} S_first_input_shape={len(S[0][0]) if S else 'N/A'}")
+        print_l(f"DEBUG check_batt: task_id={task_id} S_len={len(S)} S_id={id(S)} S_first_input_shape={len(S[0][0]) if S else 'N/A'}")
 
     # print_l(f'-- {task_id} - {task_i} --') if DO_PRINT else None
 
