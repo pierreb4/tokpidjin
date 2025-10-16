@@ -485,45 +485,89 @@ class Differs:
                 # print_l(f'{differ_name} - {x_name} = {self.run_equals[differ_name][x_name]}')
 
 
+
     def add_lines(self, code, uses, task_id=None):
-        # run_equals = self.run_equals.copy()
-        for differ_name in self.run_equals.keys():
+        # Only batch if vectorized (GPU) mode is enabled
+        if getattr(code, 'vectorized', False):
+            BATCHABLE_DSL_FUNCTIONS = {'o_g', 'objects', 'fill', 'apply', 'mapply', 'p_g'}
+            for differ_name in self.run_equals.keys():
+                equals_name = self.run_equals[differ_name].copy()
+                batch_group = []
+                last_func = None
+                items = list(self.run_equals[differ_name].items())
+                for idx, (x_name, x_call) in enumerate(items):
+                    func_name = get_items(x_call)[0].strip()
+                    if func_name in BATCHABLE_DSL_FUNCTIONS:
+                        if last_func == func_name or last_func is None:
+                            batch_group.append((x_name, x_call))
+                            last_func = func_name
+                            if idx == len(items) - 1 and len(batch_group) > 1:
+                                self.emit_batch_code(batch_group, code, func_name)
+                                batch_group = []
+                                last_func = None
+                            continue
+                        else:
+                            if len(batch_group) > 1:
+                                self.emit_batch_code(batch_group, code, last_func)
+                            elif batch_group:
+                                add_differ_line({batch_group[0][0]: batch_group[0][1]}, code, uses, task_id, self.freeze_differs)
+                            batch_group = [(x_name, x_call)]
+                            last_func = func_name
+                            if idx == len(items) - 1 and len(batch_group) > 1:
+                                self.emit_batch_code(batch_group, code, func_name)
+                                batch_group = []
+                                last_func = None
+                            continue
+                    else:
+                        if len(batch_group) > 1:
+                            self.emit_batch_code(batch_group, code, last_func)
+                        elif batch_group:
+                            add_differ_line({batch_group[0][0]: batch_group[0][1]}, code, uses, task_id, self.freeze_differs)
+                        batch_group = []
+                        last_func = None
+                        add_differ_line({x_name: x_call}, code, uses, task_id, self.freeze_differs)
+                if len(batch_group) > 1:
+                    self.emit_batch_code(batch_group, code, last_func)
+                elif batch_group:
+                    add_differ_line({batch_group[0][0]: batch_group[0][1]}, code, uses, task_id, self.freeze_differs)
+                if task_id is None:
+                    done = track_solution(code.t_call, code.t_num, None)
+                    differ_body = build_differ_body(code.t_call, code.t_num, done)
+                    differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
+                    differ_source = f'def differ(S, I, C):\n{differ_body}'
+                    inlined_source = inline_variables(differ_source)
+                    md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
+                print(f"    s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}))", file=code.file)
+            code.last_differ_t_num = code.t_num
+        else:
+            # CPU mode: preserve old per-line emission
+            for differ_name in self.run_equals.keys():
+                equals_name = self.run_equals[differ_name].copy()
+                for x_name, x_call in self.run_equals[differ_name].items():
+                    freeze_differs = self.freeze_differs if task_id is None else True
+                    add_differ_line(equals_name, code, uses, task_id, freeze_differs)
+                if task_id is None:
+                    done = track_solution(code.t_call, code.t_num, None)
+                    differ_body = build_differ_body(code.t_call, code.t_num, done)
+                    differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
+                    differ_source = f'def differ(S, I, C):\n{differ_body}'
+                    inlined_source = inline_variables(differ_source)
+                    md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
+                print(f"    s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}))", file=code.file)
+            code.last_differ_t_num = code.t_num
 
-            # if task_id is not None:
-            #     print_l(f'{task_id = } - {differ_name = } - {self.run_equals[differ_name]}')
-
-            equals_name = self.run_equals[differ_name].copy()
-            for x_name, x_call in self.run_equals[differ_name].items():
-                freeze_differs = self.freeze_differs if task_id is None else True
-                add_differ_line(equals_name, code, uses, task_id, freeze_differs)
-
-            # XXX Looks unused
-            if task_id is None:
-                done = track_solution(code.t_call, code.t_num, None)
-
-                # print_l(f'{differ_name} - {done = }')
-
-                differ_body = build_differ_body(code.t_call, code.t_num, done)
-                differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
-
-                differ_source = f'def differ(S, I, C):\n{differ_body}'
-                # self.init_equals[differ_name] = get_equals(differ_source)
-
-                inlined_source = inline_variables(differ_source)
-                md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-
-                # NOTE Changes keys to self.run_equals !!!
-                # differ_name = f'differ_{md5_hash}'
-                # differ_source = f'def {differ_name}(S, I, O, C):\n{differ_body}'
-
-                # print_l(f'{differ_name}\n{inlined_source = }')
-
-
-            # print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
-            # print(f"        s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
-            print(f"    s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}))", file=code.file)
-
-        code.last_differ_t_num = code.t_num
+    def emit_batch_code(self, batch_group, code, func_name):
+        # Example: batch call for o_g, objects, etc.
+        # This is a placeholder; adapt as needed for your batch API
+        t_nums = [code.t_num + i + 1 for i in range(len(batch_group))]
+        args_list = [get_items(x_call)[1:] for _, x_call in batch_group]
+        # Flatten args for demonstration; real batching may need more structure
+        print(f'    # Batch call for {func_name} ({len(batch_group)} items)', file=code.file)
+        print(f'    t{t_nums[0]}_to_t{t_nums[-1]} = batch_{func_name}([{", ".join(str(args) for args in args_list)}])', file=code.file)
+        # Assign t variables from batch result
+        for i, t_num in enumerate(t_nums):
+            print(f'    t{t_num} = t{t_nums[0]}_to_t{t_nums[-1]}[{i}]', file=code.file)
+        code.t_num += len(batch_group)
 
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
