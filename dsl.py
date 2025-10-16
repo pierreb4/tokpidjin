@@ -3114,9 +3114,10 @@ def objects(
                         obj.append(cell)
                         obj_set.add(cell)
                     occupied.add(cand)
-                    neighborhood |= {
-                        (i, j) for i, j in diagfun(cand) if 0 <= i < h and 0 <= j < w
-                    }
+                    # Optimized: Direct loop instead of set comprehension (234k calls/100 tasks)
+                    for i, j in diagfun(cand):
+                        if 0 <= i < h and 0 <= j < w:
+                            neighborhood.add((i, j))
             cands = neighborhood - occupied
         objs.append(frozenset(obj))  # Convert to frozenset at end
     return frozenset(objs)
@@ -3154,9 +3155,10 @@ def objects_t(
                 if (val == v) if univalued else (v != bg):
                     obj.append((cand[0], cand[1], v))
                     occupied.add(cand)
-                    neighborhood |= {
-                        (i, j) for i, j in diagfun(cand) if 0 <= i < h and 0 <= j < w
-                    }
+                    # Optimized: Direct loop instead of set comprehension (234k calls/100 tasks)
+                    for i, j in diagfun(cand):
+                        if 0 <= i < h and 0 <= j < w:
+                            neighborhood.add((i, j))
             cands = neighborhood - occupied
         objs.append(tuple(obj))
     return tuple(objs)
