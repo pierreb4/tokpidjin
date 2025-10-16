@@ -154,14 +154,16 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
     print_l(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
-async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=10):
+async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=30):
     """ 
-    checks the speed of the solver by running on demo samples only
+    checks the speed and correctness of the solver on all samples
     
     Returns:
         tuple: (timed_out, score) where timed_out is bool and score is int
     """
     demo_samples = data['demo'][task_id]
+    test_samples = data['test'][task_id]
+    task = demo_samples + test_samples
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in demo_samples)
 
     # Create a temporary module to hold the solver function
@@ -174,13 +176,13 @@ async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=10):
     score = 0
     timed_out = False
     
-    # Test on DEMO SAMPLES ONLY (faster validation, catches inlining issues)
-    # Don't test full test set - that's too slow and causes false timeouts
-    for i, sample in enumerate(demo_samples):
+    # Test on all samples (demo + test), counting correct answers
+    # Using 30s timeout per solver (not per sample) to allow full execution
+    for i, sample in enumerate(task):
         try:
             result, did_timeout = await run_with_timeout(solve_func, [S, sample['input'], None], timeout)
             if did_timeout:
-                print_l(f'Timed out: {sol_solver_id =} - {task_id =} - demo sample = {i}')
+                print_l(f'Timed out: {sol_solver_id =} - {task_id =} - sample = {i}')
                 timed_out = True
             elif result == sample['output']:
                 score += 1

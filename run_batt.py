@@ -13,6 +13,7 @@ import threading
 import atexit
 import signal
 import time
+import types
 
 import dill as pickle
 
@@ -1543,8 +1544,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         check_time = timer() - check_start
         t_log = 11 - int(math.log(check_time)) if check_time > 0 else 10
         
-        # Only check score mismatch if solver didn't timeout
-        # If timed_out=True, the actual_score is incomplete and shouldn't be compared
+        # Compare actual score from re-execution vs saved score from batt()
+        # Only flag mismatch if solver didn't timeout (timeout means incomplete execution)
         saved_score = o_score.get(sol_solver_id)
         score_mismatch = False
         if not timed_out and actual_score != saved_score:
@@ -1573,6 +1574,9 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             print_l(f"  {d['sol_solver_id']}: saved={d['saved_score']} actual={d['actual_score']}")
         if len(score_mismatches) > 5:
             print_l(f"  ... and {len(score_mismatches) - 5} more")
+    else:
+        if DO_PRINT:
+            print_l("INFO: No score mismatches found - all solvers validated correctly")
     
     # Phase 3b: Process validated results (file I/O, symlinks)
     if prof is not None:
