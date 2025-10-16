@@ -258,6 +258,8 @@ class VariableInliner(ast.NodeTransformer):
         self.assignments = {}
         self.safe_to_inline = set()  # Track which variables are safe to inline
         self.processing = set()      # Track variables being processed to avoid recursion loops
+        self.recursion_depth = 0     # Track recursion depth to prevent infinite loops
+        self.max_recursion_depth = 100  # Maximum recursion depth before bailing out
 
 
     def visit_Assign(self, node):
@@ -285,53 +287,97 @@ class VariableInliner(ast.NodeTransformer):
     def visit_Name(self, node):
         # Replace variable reference with its assigned value, if available and safe
         if isinstance(node.ctx, ast.Load) and node.id in self.safe_to_inline:
-            # Avoid infinite recursion
+            # Avoid infinite recursion - check if we're in a cycle
             if node.id in self.processing:
+                return node
+            
+            # Check recursion depth
+            if self.recursion_depth > self.max_recursion_depth:
+                # Hit recursion limit - return original name instead of inlining
                 return node
                 
             # Track that we're processing this variable
             self.processing.add(node.id)
+            self.recursion_depth += 1
 
-            # Get a deep copy of the expression to substitute
-            expr = ast.parse(ast.unparse(self.assignments[node.id])).body[0].value
+            try:
+                # Get a deep copy of the expression to substitute
+                expr = ast.parse(ast.unparse(self.assignments[node.id])).body[0].value
+                
+                # Recursively process the expression to inline any variables inside it
+                result = self.visit(expr)
+            except (RecursionError, OverflowError) as e:
+                # Recursion limit or memory issue - bail out and return original node
+                result = node
+            finally:
+                # Done processing this variable
+                self.recursion_depth -= 1
+                self.processing.discard(node.id)
             
-            # Recursively process the expression to inline any variables inside it
-            result = self.visit(expr)
-            
-            # Done processing this variable
-            self.processing.remove(node.id)
             return result
             
         return node
 
 
-def inline_variables(source_code):
+def inline_variables(source_code, timeout_seconds=30):
+    """
+    Inline variable assignments in source code.
+    
+    Args:
+        source_code: Python source code string
+        timeout_seconds: Maximum time allowed for inlining (default 30s)
+        
+    Returns:
+        str: Inlined source code
+        
+    Raises:
+        TimeoutError: If inlining takes too long (likely infinite loop in AST visitor)
+    """
     start_total = timer()
-    parse_t0 = timer()
-    tree = ast.parse(source_code)
-    parse_dt = timer() - parse_t0
+    
+    def _inline_with_timeout():
+        parse_t0 = timer()
+        tree = ast.parse(source_code)
+        parse_dt = timer() - parse_t0
 
-    visit_t0 = timer()
-    inliner = VariableInliner()
-    # Process tree and collect assignments
-    tree = inliner.visit(tree)
-    visit_dt = timer() - visit_t0
+        visit_t0 = timer()
+        inliner = VariableInliner()
+        # Process tree and collect assignments
+        tree = inliner.visit(tree)
+        visit_dt = timer() - visit_t0
 
-    fix_t0 = timer()
-    # Convert back to source code
-    ast.fix_missing_locations(tree)
-    unparse_source = ast.unparse(tree)
-    fix_dt = timer() - fix_t0
+        fix_t0 = timer()
+        # Convert back to source code
+        ast.fix_missing_locations(tree)
+        unparse_source = ast.unparse(tree)
+        fix_dt = timer() - fix_t0
 
-    total_dt = timer() - start_total
-    # Record timings if profiler is set
-    if _prof is not None:
-        _prof['utils.inline_variables.parse'] += parse_dt
-        _prof['utils.inline_variables.visit'] += visit_dt
-        _prof['utils.inline_variables.unparse'] += fix_dt
-        _prof['utils.inline_variables.total'] += total_dt
+        total_dt = timer() - start_total
+        # Record timings if profiler is set
+        if _prof is not None:
+            _prof['utils.inline_variables.parse'] += parse_dt
+            _prof['utils.inline_variables.visit'] += visit_dt
+            _prof['utils.inline_variables.unparse'] += fix_dt
+            _prof['utils.inline_variables.total'] += total_dt
 
-    return unparse_source
+        return unparse_source
+    
+    # Run with timeout protection
+    from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+    try:
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(_inline_with_timeout)
+            try:
+                result = future.result(timeout=timeout_seconds)
+                return result
+            except FutureTimeoutError:
+                raise TimeoutError(f"inline_variables timed out after {timeout_seconds}s - likely infinite loop in AST visitor")
+    except TimeoutError:
+        # Re-raise timeout errors
+        raise
+    except Exception as e:
+        # For other errors, try to return something reasonable
+        raise RuntimeError(f"inline_variables failed: {e}") from e
 
 
 def parallel_inline_variables(source_codes):
