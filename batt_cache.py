@@ -25,11 +25,18 @@ from pathlib import Path
 from functools import lru_cache
 from typing import Optional, Dict, Any
 import asyncio
+import time
+from datetime import datetime, timedelta
 
 # Cache configuration
 CACHE_DIR = Path('.cache')
 VALIDATION_CACHE_DIR = CACHE_DIR / 'validation'
 INLINING_CACHE_DIR = CACHE_DIR / 'inlining'
+
+# Cache TTL (Time-to-Live) in seconds
+# Default: 7 days (604800 seconds)
+# Set to 0 to disable expiration
+CACHE_TTL_SECONDS = 7 * 24 * 60 * 60  # 7 days
 
 # In-memory caches (fast lookup)
 _validation_cache: Dict[str, bool] = {}
@@ -49,6 +56,12 @@ def init_cache():
     CACHE_DIR.mkdir(exist_ok=True)
     VALIDATION_CACHE_DIR.mkdir(exist_ok=True)
     INLINING_CACHE_DIR.mkdir(exist_ok=True)
+    
+    # Expire old cache entries (if TTL enabled)
+    if CACHE_TTL_SECONDS > 0:
+        expire_stats = expire_old_cache_entries()
+        if expire_stats['validation_expired'] > 0 or expire_stats['inlining_expired'] > 0:
+            print(f"Expired cache entries: validation={expire_stats['validation_expired']}, inlining={expire_stats['inlining_expired']}")
     
     # Load validation cache
     _load_validation_cache()
@@ -96,6 +109,62 @@ def _get_solver_hash(solver_source: str, task_id: str) -> str:
 def _get_inlining_hash(source_code: str) -> str:
     """Generate a unique hash for source code to inline"""
     return hashlib.md5(source_code.encode()).hexdigest()
+
+
+def _is_cache_expired(file_path: Path) -> bool:
+    """
+    Check if a cache file has expired based on TTL
+    
+    Args:
+        file_path: Path to cache file
+        
+    Returns:
+        True if file has expired, False otherwise
+    """
+    if CACHE_TTL_SECONDS <= 0:
+        return False  # TTL disabled
+    
+    try:
+        file_time = os.path.getmtime(file_path)
+        current_time = time.time()
+        age_seconds = current_time - file_time
+        return age_seconds > CACHE_TTL_SECONDS
+    except Exception:
+        return False  # Treat errors as not expired
+
+
+def expire_old_cache_entries():
+    """
+    Remove cache entries older than TTL
+    
+    Returns:
+        dict: Statistics about expired entries
+    """
+    if CACHE_TTL_SECONDS <= 0:
+        return {'validation_expired': 0, 'inlining_expired': 0, 'disabled': True}
+    
+    stats = {'validation_expired': 0, 'inlining_expired': 0}
+    cutoff_time = time.time() - CACHE_TTL_SECONDS
+    
+    # Expire validation cache
+    for cache_file in VALIDATION_CACHE_DIR.glob('*.json'):
+        try:
+            if os.path.getmtime(cache_file) < cutoff_time:
+                cache_file.unlink()
+                stats['validation_expired'] += 1
+        except Exception:
+            pass  # Ignore errors
+    
+    # Expire inlining cache
+    for cache_file in INLINING_CACHE_DIR.glob('*.py'):
+        try:
+            if os.path.getmtime(cache_file) < cutoff_time:
+                cache_file.unlink()
+                stats['inlining_expired'] += 1
+        except Exception:
+            pass  # Ignore errors
+    
+    return stats
 
 
 async def cached_check_solver_speed(
@@ -321,6 +390,97 @@ def clear_cache(cache_type: Optional[str] = None):
         for f in INLINING_CACHE_DIR.glob('*.py'):
             f.unlink()
         print("Inlining cache cleared")
+
+
+def refresh_cache(cache_type: Optional[str] = None, max_age_days: Optional[int] = None):
+    """
+    Refresh cache by removing entries older than max_age_days
+    
+    Args:
+        cache_type: 'validation', 'inlining', or None for both
+        max_age_days: Remove entries older than this many days (default: 7)
+    """
+    if max_age_days is None:
+        max_age_days = CACHE_TTL_SECONDS // (24 * 60 * 60) if CACHE_TTL_SECONDS > 0 else 7
+    
+    cutoff_time = time.time() - (max_age_days * 24 * 60 * 60)
+    stats = {'validation_removed': 0, 'inlining_removed': 0}
+    
+    if cache_type in (None, 'validation'):
+        for cache_file in VALIDATION_CACHE_DIR.glob('*.json'):
+            try:
+                if os.path.getmtime(cache_file) < cutoff_time:
+                    cache_file.unlink()
+                    stats['validation_removed'] += 1
+            except Exception:
+                pass
+        if cache_file.name != 'cache.json':  # Don't clear in-memory if main file
+            _validation_cache.clear()
+    
+    if cache_type in (None, 'inlining'):
+        for cache_file in INLINING_CACHE_DIR.glob('*.py'):
+            try:
+                if os.path.getmtime(cache_file) < cutoff_time:
+                    cache_file.unlink()
+                    stats['inlining_removed'] += 1
+            except Exception:
+                pass
+        _inlining_cache.clear()
+    
+    print(f"Cache refreshed (>{max_age_days} days): validation={stats['validation_removed']}, inlining={stats['inlining_removed']}")
+    return stats
+
+
+def get_cache_size(cache_type: Optional[str] = None) -> Dict[str, int]:
+    """
+    Get cache disk usage
+    
+    Args:
+        cache_type: 'validation', 'inlining', or None for both
+        
+    Returns:
+        Dictionary with cache sizes in bytes
+    """
+    sizes = {}
+    
+    if cache_type in (None, 'validation'):
+        validation_size = sum(f.stat().st_size for f in VALIDATION_CACHE_DIR.glob('*.json'))
+        sizes['validation_bytes'] = validation_size
+        sizes['validation_mb'] = validation_size / (1024 * 1024)
+    
+    if cache_type in (None, 'inlining'):
+        inlining_size = sum(f.stat().st_size for f in INLINING_CACHE_DIR.glob('*.py'))
+        sizes['inlining_bytes'] = inlining_size
+        sizes['inlining_mb'] = inlining_size / (1024 * 1024)
+    
+    if None not in (cache_type,):
+        sizes['total_bytes'] = sum(v for k, v in sizes.items() if k.endswith('_bytes'))
+        sizes['total_mb'] = sizes['total_bytes'] / (1024 * 1024)
+    
+    return sizes
+
+
+def print_cache_config():
+    """Print cache configuration and TTL settings"""
+    print("\n=== Cache Configuration ===")
+    print(f"Cache Directory: {CACHE_DIR}")
+    if CACHE_TTL_SECONDS > 0:
+        ttl_days = CACHE_TTL_SECONDS / (24 * 60 * 60)
+        print(f"TTL (Time-to-Live): {ttl_days:.1f} days ({CACHE_TTL_SECONDS} seconds)")
+        print(f"Status: Auto-expiration ENABLED")
+    else:
+        print(f"TTL (Time-to-Live): DISABLED (0 seconds)")
+        print(f"Status: Cache never expires automatically")
+    
+    # Show cache sizes
+    sizes = get_cache_size()
+    print(f"\nCache Sizes:")
+    if 'validation_mb' in sizes:
+        print(f"  Validation: {sizes['validation_mb']:.2f} MB")
+    if 'inlining_mb' in sizes:
+        print(f"  Inlining: {sizes['inlining_mb']:.2f} MB")
+    if 'total_mb' in sizes:
+        print(f"  Total: {sizes['total_mb']:.2f} MB")
 
 
 # Initialize cache on import
