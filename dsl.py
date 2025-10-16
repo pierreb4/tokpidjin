@@ -1225,49 +1225,12 @@ def rbind(
     else:
         n = function.__code__.co_argcount
 
-    # if n == 2:
-    #     return lambda x: function(x, fixed)
-    # elif n == 3:
-    #     return lambda x, y: function(x, y, fixed)
-    # else:
-    #     return lambda x, y, z: function(x, y, z, fixed)
-
     if n == 2:
-        def f(x):
-            return function(x, fixed)
-        return f
+        return lambda x: function(x, fixed)
     elif n == 3:
-        def f(x, y):
-            return function(x, y, fixed)
-        return f
+        return lambda x, y: function(x, y, fixed)
     else:
-        def f(x, y, z):
-            return function(x, y, z, fixed)
-        return f
-
-
-# def rbind_1(
-#     function: 'Callable',
-#     fixed: 'Any'
-# ) -> 'Callable':
-#     """ fix the rightmost argument """
-#     return lambda x: function(x, fixed)
-
-
-# def rbind_2(
-#     function: 'Callable',
-#     fixed: 'Any'
-# ) -> 'Callable':
-#     """ fix the rightmost argument """
-#     return lambda x, y: function(x, y, fixed)
-
-
-# def rbind_3(
-#     function: 'Callable',
-#     fixed: 'Any'
-# ) -> 'Callable':
-#     """ fix the rightmost argument """
-#     return lambda x, y, z: function(x, y, z, fixed)
+        return lambda x, y, z: function(x, y, z, fixed)
 
 
 def lbind(
@@ -1282,49 +1245,12 @@ def lbind(
     else:
         n = function.__code__.co_argcount
 
-    # if n == 2:
-    #     return lambda y: function(fixed, y)
-    # elif n == 3:
-    #     return lambda y, z: function(fixed, y, z)
-    # else:
-    #     return lambda y, z, a: function(fixed, y, z, a)
-
     if n == 2:
-        def f(y):
-            return function(fixed, y)
-        return f
+        return lambda y: function(fixed, y)
     elif n == 3:
-        def f(y, z):
-            return function(fixed, y, z)
-        return f
+        return lambda y, z: function(fixed, y, z)
     else:
-        def f(y, z, a):
-            return function(fixed, y, z, a)
-        return f
-
-
-# def lbind_1(
-#     function: 'Callable',
-#     fixed: 'Any'
-# ) -> 'Callable':
-#     """ fix the leftmost argument """
-#     return lambda y: function(fixed, y)
-
-
-# def lbind_2(
-#     function: 'Callable',
-#     fixed: 'Any'
-# ) -> 'Callable':
-#     """ fix the leftmost argument """
-#     return lambda y, z: function(fixed, y, z)
-
-
-# def lbind_3(
-#     function: 'Callable',
-#     fixed: 'Any'
-# ) -> 'Callable':
-#     """ fix the leftmost argument """
-#     return lambda y, z, a: function(fixed, y, z, a)
+        return lambda y, z, a: function(fixed, y, z, a)
 
 
 def power(
