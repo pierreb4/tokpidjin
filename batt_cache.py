@@ -137,6 +137,9 @@ def expire_old_cache_entries():
     """
     Remove cache entries older than TTL
     
+    Uses os.scandir() for memory efficiency (handles 1000s of files)
+    instead of Path.glob() which loads all entries into memory.
+    
     Returns:
         dict: Statistics about expired entries
     """
@@ -146,23 +149,33 @@ def expire_old_cache_entries():
     stats = {'validation_expired': 0, 'inlining_expired': 0}
     cutoff_time = time.time() - CACHE_TTL_SECONDS
     
-    # Expire validation cache
-    for cache_file in VALIDATION_CACHE_DIR.glob('*.json'):
-        try:
-            if os.path.getmtime(cache_file) < cutoff_time:
-                cache_file.unlink()
-                stats['validation_expired'] += 1
-        except Exception:
-            pass  # Ignore errors
+    # Expire validation cache using os.scandir (memory efficient)
+    try:
+        if VALIDATION_CACHE_DIR.exists():
+            for entry in os.scandir(VALIDATION_CACHE_DIR):
+                if entry.name.endswith('.json'):
+                    try:
+                        if entry.stat().st_mtime < cutoff_time:
+                            os.unlink(entry.path)
+                            stats['validation_expired'] += 1
+                    except Exception:
+                        pass  # Ignore errors
+    except Exception:
+        pass  # Ignore directory scan errors
     
-    # Expire inlining cache
-    for cache_file in INLINING_CACHE_DIR.glob('*.py'):
-        try:
-            if os.path.getmtime(cache_file) < cutoff_time:
-                cache_file.unlink()
-                stats['inlining_expired'] += 1
-        except Exception:
-            pass  # Ignore errors
+    # Expire inlining cache using os.scandir (memory efficient)
+    try:
+        if INLINING_CACHE_DIR.exists():
+            for entry in os.scandir(INLINING_CACHE_DIR):
+                if entry.name.endswith('.py'):
+                    try:
+                        if entry.stat().st_mtime < cutoff_time:
+                            os.unlink(entry.path)
+                            stats['inlining_expired'] += 1
+                    except Exception:
+                        pass  # Ignore errors
+    except Exception:
+        pass  # Ignore directory scan errors
     
     return stats
 
@@ -374,27 +387,44 @@ def print_cache_stats():
 
 def clear_cache(cache_type: Optional[str] = None):
     """
-    Clear cache
+    Clear cache using os.scandir for memory efficiency
     
     Args:
         cache_type: 'validation', 'inlining', or None for both
     """
     if cache_type in (None, 'validation'):
         _validation_cache.clear()
-        for f in VALIDATION_CACHE_DIR.glob('*.json'):
-            f.unlink()
+        try:
+            if VALIDATION_CACHE_DIR.exists():
+                for entry in os.scandir(VALIDATION_CACHE_DIR):
+                    if entry.name.endswith('.json'):
+                        try:
+                            os.unlink(entry.path)
+                        except Exception:
+                            pass
+        except Exception:
+            pass
         print("Validation cache cleared")
     
     if cache_type in (None, 'inlining'):
         _inlining_cache.clear()
-        for f in INLINING_CACHE_DIR.glob('*.py'):
-            f.unlink()
+        try:
+            if INLINING_CACHE_DIR.exists():
+                for entry in os.scandir(INLINING_CACHE_DIR):
+                    if entry.name.endswith('.py'):
+                        try:
+                            os.unlink(entry.path)
+                        except Exception:
+                            pass
+        except Exception:
+            pass
         print("Inlining cache cleared")
 
 
 def refresh_cache(cache_type: Optional[str] = None, max_age_days: Optional[int] = None):
     """
     Refresh cache by removing entries older than max_age_days
+    Uses os.scandir for memory efficiency
     
     Args:
         cache_type: 'validation', 'inlining', or None for both
@@ -407,24 +437,33 @@ def refresh_cache(cache_type: Optional[str] = None, max_age_days: Optional[int] 
     stats = {'validation_removed': 0, 'inlining_removed': 0}
     
     if cache_type in (None, 'validation'):
-        for cache_file in VALIDATION_CACHE_DIR.glob('*.json'):
-            try:
-                if os.path.getmtime(cache_file) < cutoff_time:
-                    cache_file.unlink()
-                    stats['validation_removed'] += 1
-            except Exception:
-                pass
-        if cache_file.name != 'cache.json':  # Don't clear in-memory if main file
-            _validation_cache.clear()
+        try:
+            if VALIDATION_CACHE_DIR.exists():
+                for entry in os.scandir(VALIDATION_CACHE_DIR):
+                    if entry.name.endswith('.json'):
+                        try:
+                            if entry.stat().st_mtime < cutoff_time:
+                                os.unlink(entry.path)
+                                stats['validation_removed'] += 1
+                        except Exception:
+                            pass
+        except Exception:
+            pass
+        _validation_cache.clear()
     
     if cache_type in (None, 'inlining'):
-        for cache_file in INLINING_CACHE_DIR.glob('*.py'):
-            try:
-                if os.path.getmtime(cache_file) < cutoff_time:
-                    cache_file.unlink()
-                    stats['inlining_removed'] += 1
-            except Exception:
-                pass
+        try:
+            if INLINING_CACHE_DIR.exists():
+                for entry in os.scandir(INLINING_CACHE_DIR):
+                    if entry.name.endswith('.py'):
+                        try:
+                            if entry.stat().st_mtime < cutoff_time:
+                                os.unlink(entry.path)
+                                stats['inlining_removed'] += 1
+                        except Exception:
+                            pass
+        except Exception:
+            pass
         _inlining_cache.clear()
     
     print(f"Cache refreshed (>{max_age_days} days): validation={stats['validation_removed']}, inlining={stats['inlining_removed']}")
@@ -433,7 +472,7 @@ def refresh_cache(cache_type: Optional[str] = None, max_age_days: Optional[int] 
 
 def get_cache_size(cache_type: Optional[str] = None) -> Dict[str, int]:
     """
-    Get cache disk usage
+    Get cache disk usage using os.scandir for memory efficiency
     
     Args:
         cache_type: 'validation', 'inlining', or None for both
@@ -444,16 +483,36 @@ def get_cache_size(cache_type: Optional[str] = None) -> Dict[str, int]:
     sizes = {}
     
     if cache_type in (None, 'validation'):
-        validation_size = sum(f.stat().st_size for f in VALIDATION_CACHE_DIR.glob('*.json'))
+        validation_size = 0
+        try:
+            if VALIDATION_CACHE_DIR.exists():
+                for entry in os.scandir(VALIDATION_CACHE_DIR):
+                    if entry.name.endswith('.json'):
+                        try:
+                            validation_size += entry.stat().st_size
+                        except Exception:
+                            pass
+        except Exception:
+            pass
         sizes['validation_bytes'] = validation_size
         sizes['validation_mb'] = validation_size / (1024 * 1024)
     
     if cache_type in (None, 'inlining'):
-        inlining_size = sum(f.stat().st_size for f in INLINING_CACHE_DIR.glob('*.py'))
+        inlining_size = 0
+        try:
+            if INLINING_CACHE_DIR.exists():
+                for entry in os.scandir(INLINING_CACHE_DIR):
+                    if entry.name.endswith('.py'):
+                        try:
+                            inlining_size += entry.stat().st_size
+                        except Exception:
+                            pass
+        except Exception:
+            pass
         sizes['inlining_bytes'] = inlining_size
         sizes['inlining_mb'] = inlining_size / (1024 * 1024)
     
-    if None not in (cache_type,):
+    if cache_type is None:
         sizes['total_bytes'] = sum(v for k, v in sizes.items() if k.endswith('_bytes'))
         sizes['total_mb'] = sizes['total_bytes'] / (1024 * 1024)
     
