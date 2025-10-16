@@ -564,6 +564,190 @@ def update_solver_in_file(solver_name, patched_code):
         return False
 
 
+def validate_and_clean_solver_dir(total_data, solvers_module, dry_run=True, task_id=None, quiet=False):
+    """
+    Validate solver links in solver_dir - remove links where path score doesn't match actual performance.
+    
+    A solver in solver_dir/solve_{task_id}/{score}/{t_log}/{md5_hash}.py should actually solve {score} samples.
+    If actual score differs from path score, remove the link.
+    
+    Args:
+        total_data: The demo/test data dictionary
+        solvers_module: Module containing solvers
+        dry_run: If True, only report what would be removed (default True for safety)
+        task_id: If specified, only check this task (otherwise check all)
+        quiet: If True, only print summary statistics
+    
+    Returns:
+        dict: Statistics about validation (mismatched, removed, checked)
+    """
+    from pathlib import Path
+    import hashlib
+    
+    solver_dir = Path('solver_dir')
+    if not solver_dir.exists():
+        if not quiet:
+            print(f"solver_dir does not exist")
+        return {'mismatched': 0, 'removed': 0, 'checked': 0}
+    
+    stats = {'mismatched': 0, 'removed': 0, 'checked': 0, 'errors': 0}
+    
+    # Get list of tasks to check
+    tasks_to_check = []
+    if task_id:
+        tasks_to_check = [task_id]
+    else:
+        # Find all solve_* directories
+        for solve_dir in solver_dir.glob('solve_*'):
+            if solve_dir.is_dir():
+                task = solve_dir.name.replace('solve_', '')
+                if task in total_data['demo']:
+                    tasks_to_check.append(task)
+    
+    if not quiet:
+        print(f"\nValidating solver_dir for {len(tasks_to_check)} tasks...")
+    
+    # Check each task
+    for task_id in tasks_to_check:
+        if task_id not in total_data['demo']:
+            if not quiet:
+                print(f"  Task {task_id}: not in dataset")
+            continue
+        
+        task_dir = solver_dir / f'solve_{task_id}'
+        if not task_dir.exists():
+            continue
+        
+        # Get demo samples for this task to count max possible score
+        demo_samples = total_data['demo'].get(task_id, [])
+        test_samples = total_data['test'].get(task_id, [])
+        total_samples = len(demo_samples) + len(test_samples)
+        
+        # Iterate through score directories
+        for score_dir in task_dir.glob('*'):
+            if not score_dir.is_dir():
+                continue
+            
+            try:
+                expected_score = int(score_dir.name)
+            except ValueError:
+                continue  # Not a numeric score directory
+            
+            if expected_score > total_samples:
+                if not quiet:
+                    print(f"  {task_id}/{expected_score}: Invalid score (> {total_samples} samples)")
+                stats['errors'] += 1
+                continue
+            
+            # Iterate through t_log directories
+            for t_log_dir in score_dir.glob('*'):
+                if not t_log_dir.is_dir():
+                    continue
+                
+                # Iterate through solver links
+                for solver_link in t_log_dir.glob('*.py'):
+                    stats['checked'] += 1
+                    
+                    # Extract md5 hash from filename
+                    md5_hash = solver_link.stem
+                    
+                    # Load and test the solver
+                    try:
+                        # Read the solver source
+                        with open(solver_link, 'r') as f:
+                            solver_source = f.read()
+                        
+                        # Parse solver name/ID from the solver
+                        # Try to extract from docstring or function name
+                        actual_score = check_solver_score(
+                            solver_source, total_data, task_id, demo_samples, test_samples
+                        )
+                        
+                        # Check if actual score matches expected score in path
+                        if actual_score != expected_score:
+                            stats['mismatched'] += 1
+                            
+                            if not quiet:
+                                print(f"  MISMATCH {task_id}/{expected_score}: solver actually scores {actual_score}")
+                            
+                            # Remove the mismatched link
+                            if not dry_run:
+                                solver_link.unlink()
+                                stats['removed'] += 1
+                    
+                    except Exception as e:
+                        stats['errors'] += 1
+                        if not quiet:
+                            print(f"  ERROR checking {solver_link}: {e}")
+    
+    # Print summary
+    if not quiet or stats['mismatched'] > 0:
+        print(f"\nValidation Summary:")
+        print(f"  Checked: {stats['checked']}")
+        print(f"  Mismatched: {stats['mismatched']}")
+        print(f"  Removed: {stats['removed']}")
+        print(f"  Errors: {stats['errors']}")
+        if dry_run and stats['mismatched'] > 0:
+            print(f"  (Use --cleanup to actually remove mismatched links)")
+    
+    return stats
+
+
+def check_solver_score(solver_source, total_data, task_id, demo_samples, test_samples):
+    """
+    Test a solver against demo and test samples to get actual score.
+    
+    Args:
+        solver_source: The solver source code
+        total_data: The data dictionary
+        task_id: The task ID
+        demo_samples: Demo samples for this task
+        test_samples: Test samples for this task
+    
+    Returns:
+        int: Number of samples the solver correctly solves
+    """
+    try:
+        # Compile and execute the solver
+        solver_locals = {}
+        exec(solver_source, globals(), solver_locals)
+        solve_func = solver_locals.get('solve')
+        
+        if solve_func is None:
+            return 0
+        
+        score = 0
+        S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in demo_samples)
+        
+        # Test on demo samples
+        for sample in demo_samples:
+            try:
+                I = sample['input']
+                O = sample['output']
+                C = solve_func(S, I, None)
+                
+                if C == O:
+                    score += 1
+            except:
+                pass  # Solver error or timeout counts as miss
+        
+        # Test on test samples
+        for sample in test_samples:
+            try:
+                I = sample['input']
+                O = sample['output']
+                C = solve_func(S, I, None)
+                
+                if C == O:
+                    score += 1
+            except:
+                pass  # Solver error or timeout counts as miss
+        
+        return score
+    except Exception as e:
+        return 0
+
+
 def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Test ARC solvers")
@@ -575,6 +759,8 @@ def main():
     parser.add_argument("-q", "--quiet", help="Show only task_id errors and line counts", action="store_true")
     parser.add_argument("--patch", help="Attempt to patch functions with NameErrors using specialized variants", action="store_true")
     parser.add_argument("--update", help="Update solvers.py with successful patches", action="store_true")
+    parser.add_argument("--validate-solver-dir", help="Validate solver_dir links - check if path score matches actual performance", action="store_true")
+    parser.add_argument("--cleanup", help="Actually remove mismatched solver links (use with --validate-solver-dir)", action="store_true")
     args = parser.parse_args()
 
     logging.basicConfig(filename='run_test.log', level=logging.INFO,
@@ -608,6 +794,12 @@ def main():
         run_dsl_tests(dsl, tests, args.quiet)
     if args.check_format:
         check_solvers_formatting(solvers_module, dsl, args.task_id, args.quiet)
+    if args.validate_solver_dir:
+        dry_run = not args.cleanup
+        validate_and_clean_solver_dir(total_data, solvers_module, dry_run=dry_run, task_id=args.task_id, quiet=args.quiet)
+        if not args.cleanup:
+            return True  # Validation complete, don't run solver correctness
+        # If cleanup requested, continue to solver correctness check
     return check_solvers_correctness(total_data, solvers_module, args.task_id, args.quiet, args.patch, args.update)
 
 if __name__ == "__main__":
