@@ -637,6 +637,8 @@ def score_sample(args):
         
         if DO_PRINT:
             print_l(f"{sample_type}[{i}] - {task_id} - {len(sample_o)}")
+            # DEBUG: Log sample identity to detect cross-task contamination
+            print_l(f"DEBUG score_sample: {sample_type}[{i}] task_id={task_id} I_shape={len(I)} O_shape={len(O)}")
         
         # Score outputs and collect matching solver ids
         for t_n, evo, o_solver_id, okt in sample_o:
@@ -1239,6 +1241,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if prof is not None:
             score_start = timer()
         O = demo_task[i]['output']
+        
+        # DEBUG: Log when processing demo results to catch cross-task contamination
+        if result['outputs'] and DO_PRINT:
+            print_l(f"DEBUG: task_id={task_id} demo[{i}] has {len(result['outputs'])} outputs, expected_O_len={len(O)}")
+        
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
             match = C == O
@@ -1277,6 +1284,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if prof is not None:
             score_start = timer()
         O = test_task[i]['output']
+        
+        # DEBUG: Log when processing test results to catch cross-task contamination
+        if result['outputs'] and DO_PRINT:
+            print_l(f"DEBUG: task_id={task_id} test[{i}] has {len(result['outputs'])} outputs, expected_O_len={len(O)}")
+        
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
             match = C == O
