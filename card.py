@@ -234,19 +234,26 @@ class Code:
     def file_pile(self, has_mutation):
         t_call = self.t_call[self.t_num]
         call_list = [c.strip() for c in t_call.split(',')]
-        call_string = f'{call_list[0]}(' + ', '.join(call_list[1:]) + ')'
         func_name = call_list[0]
-        
-        # Wrap ALL assignments in try-except to catch bad mutations
-        # (wrong function signatures, type errors, etc.)
-        # Use type-aware default from _get_safe_default() helper
-        # UNLESS in vectorized mode (GPU-friendly, no try/except)
+        # Type hint check: only emit call if callable, else emit as value
+        # Use DSL_FUNCTION_DICT and get_hints to check if func_name is callable
+        is_callable = False
+        if func_name in DSL_FUNCTION_DICT:
+            is_callable = True
+        elif func_name.startswith('t') or func_name.startswith('x'):
+            # Try to infer from previous assignments (very basic: if last assignment was a function)
+            prev_assign = self.t_call.get(int(func_name[1:]), None)
+            if prev_assign:
+                prev_func = prev_assign.strip().split(',')[0]
+                if prev_func in DSL_FUNCTION_DICT:
+                    is_callable = True
+        call_string = f'{func_name}(' + ', '.join(call_list[1:]) + ')' if is_callable else func_name
+        if not is_callable and len(call_list) > 1:
+            # Emit a comment to help debug
+            print(f'    # WARNING: {func_name} is not callable but used as a function', file=self.file)
         if self.vectorized:
-            # Vectorized mode: direct assignment, no exception handling
-            # Pre-validation happens at batch level
             print(f'    t{self.t_num} = {call_string}', file=self.file)
         else:
-            # Standard mode: safe with try/except
             print(f'    try:', file=self.file)
             print(f'        t{self.t_num} = {call_string}', file=self.file)
             print(f'    except (TypeError, AttributeError, ValueError, IndexError, KeyError):', file=self.file)
@@ -256,38 +263,38 @@ class Code:
 
     def do_offset_mutation(self, old_hint, old_call, t_n, is_solver, has_mutation):
         while random.random() < BUDGET_RANDOM:
-            # TODO Check parameter impact on mutation numbers
-
             while True:
                 t_offset = random.randint(1, t_n)
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
-
-                    # NOTE We could also try to match type
-                    
-                    # CRITICAL FIX: Check if variable is being called as function
                     var_name = f't{t_n}'
                     is_function_call = is_called_as_function(old_call, var_name)
-
+                    # Type hint check: only substitute callables with callables, values with values
+                    def is_var_callable(var):
+                        if var in DSL_FUNCTION_DICT:
+                            return True
+                        if var.startswith('t') or var.startswith('x'):
+                            prev_assign = self.t_call.get(int(var[1:]), None)
+                            if prev_assign:
+                                prev_func = prev_assign.strip().split(',')[0]
+                                if prev_func in DSL_FUNCTION_DICT:
+                                    return True
+                        return False
                     if is_function_call:
-                        # Variable is being called: var(...) 
-                        # Can only replace with another function or t variable (that might be a function)
-                        if random.randint(0, 1) == 0:
-                            item = f't{t_offset}'
-                        else:
-                            item = random.choice(DSL_FUNCTION_NAMES)
+                        # Only allow substitution with callables
+                        candidates = [f't{t_offset}'] if is_var_callable(f't{t_offset}') else []
+                        candidates += [fn for fn in DSL_FUNCTION_NAMES]
+                        if not candidates:
+                            continue
+                        item = random.choice(candidates)
                     else:
-                        # Variable is being used as value: func(var)
-                        # Can replace with t variable or constant (NOT a function name)
-                        if random.randint(0, 1) == 0:
-                            item = f't{t_offset}'
-                        else:
-                            item = random.choice(GENERIC_CONSTANT_NAMES)
-
+                        # Only allow substitution with values
+                        candidates = [f't{t_offset}'] if not is_var_callable(f't{t_offset}') else []
+                        candidates += [c for c in GENERIC_CONSTANT_NAMES]
+                        if not candidates:
+                            continue
+                        item = random.choice(candidates)
                     print_l(f'{item = }') if DO_PRINT else None
-
-
                     pattern = rf'\bt{t_n}\b'
-                    # self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
                     self.t_call[self.t_num] = re.sub(pattern, item, old_call)
                     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
                     break
