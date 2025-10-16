@@ -619,9 +619,7 @@ def score_sample(args):
     I = sample['input']
     O = sample['output']
     
-    # DEBUG: Log batt inputs to verify they're different per sample
-    if DO_PRINT:
-        print_l(f"DEBUG batt_call: {sample_type}[{i}] task_id={task_id} I_shape={len(I)} O_shape={len(O)} S_len={len(S)} S_id={id(S)}")
+
     
     # Call batt with thread-based timeout
     solve_timed_out, solve_result = call_with_timeout(batt_func,
@@ -637,17 +635,10 @@ def score_sample(args):
     has_match = False
     
     if solve_result is not None:
-        sample_o, _ = solve_result
+        sample_o, sample_s = solve_result
         
         if DO_PRINT:
             print_l(f"{sample_type}[{i}] - {task_id} - {len(sample_o)}")
-            # DEBUG: Log sample identity to detect cross-task contamination
-            print_l(f"DEBUG score_sample: {sample_type}[{i}] task_id={task_id} I_shape={len(I)} O_shape={len(O)}")
-            
-            # DEBUG: Log first few solver_ids from batt result to track mismatches
-            if sample_o:
-                first_solvers = [s_id for _, _, s_id, _ in sample_o[:3]]
-                print_l(f"DEBUG score_sample output solver_ids: {first_solvers}")
         
         # Score outputs and collect matching solver ids
         for t_n, evo, o_solver_id, okt in sample_o:
@@ -696,7 +687,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     # DEBUG: Log S to verify it's created fresh per task
     if DO_PRINT:
-        print_l(f"DEBUG check_batt: task_id={task_id} S_len={len(S)} S_id={id(S)} S_first_input_shape={len(S[0][0]) if S else 'N/A'}")
+        print_l(f"DEBUG check_batt: task_id={task_id} S_len={len(S)}")
 
     # print_l(f'-- {task_id} - {task_i} --') if DO_PRINT else None
 
@@ -1219,10 +1210,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     # DEBUG: Log result counts before sorting
     if DO_PRINT:
-        print_l(f"DEBUG SPLIT: task_id={task_id} demo_results={len(demo_results)} test_results={len(test_results)} all_results={len(all_results)}")
-        if demo_results:
-            demo_indices_before = [r['index'] for r in demo_results]
-            print_l(f"DEBUG SPLIT: demo indices BEFORE sort: {sorted(demo_indices_before)}")
+        print_l(f"DEBUG SPLIT: task_id={task_id} demo_results={len(demo_results)} test_results={len(test_results)}")
     
     # Sort by index to maintain order
     demo_results.sort(key=lambda x: x['index'])
@@ -1230,12 +1218,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     # DEBUG: Log result counts after sorting
     if DO_PRINT:
-        if demo_results:
-            demo_indices_after = [r['index'] for r in demo_results]
-            print_l(f"DEBUG SPLIT: demo indices AFTER sort: {demo_indices_after}")
-            # Check for duplicates
-            if len(demo_indices_after) != len(set(demo_indices_after)):
-                print_l(f"WARNING: DUPLICATE demo indices detected! {demo_indices_after}")
+        print_l(f"DEBUG SPLIT: task_id={task_id} sorted")
     
     if prof is not None:
         prof['batt.demo.parallel'] = timer() - prof_start
@@ -1278,7 +1261,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         
         # DEBUG: Log when processing demo results to catch cross-task contamination
         if result['outputs'] and DO_PRINT:
-            print_l(f"DEBUG: task_id={task_id} demo[{i}] has {len(result['outputs'])} outputs, expected_O_len={len(O)}")
+            print_l(f"DEBUG: task_id={task_id} demo[{i}] has {len(result['outputs'])} outputs")
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
@@ -1321,7 +1304,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         
         # DEBUG: Log when processing test results to catch cross-task contamination
         if result['outputs'] and DO_PRINT:
-            print_l(f"DEBUG: task_id={task_id} test[{i}] has {len(result['outputs'])} outputs, expected_O_len={len(O)}")
+            print_l(f"DEBUG: task_id={task_id} test[{i}] has {len(result['outputs'])} outputs")
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
