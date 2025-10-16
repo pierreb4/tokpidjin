@@ -155,24 +155,40 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
 
 
 async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=10):
-    """ checks the speed of the solver """
-    task = data['demo'][task_id] + data['test'][task_id]
-    S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
+    """ 
+    checks the speed and correctness of the solver
+    
+    Returns:
+        tuple: (timed_out, score) where timed_out is bool and score is int
+    """
+    demo_samples = data['demo'][task_id]
+    test_samples = data['test'][task_id]
+    task = demo_samples + test_samples
+    S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in demo_samples)
 
     # Create a temporary module to hold the solver function
     solver_module = types.ModuleType('temp_solver_module')
     exec(solver, solver_module.__dict__)
-    solver = solver_module.solve
+    solve_func = solver_module.solve
     # Ensure solver has access to DSL functions by updating its globals
-    solver.__globals__.update(globals())
+    solve_func.__globals__.update(globals())
 
-    with contextlib.suppress(Exception):
-        for i, sample in enumerate(task):
-            timed_out, result = await run_with_timeout(solver, [S, sample['input'], None], timeout)
-            if timed_out:
+    score = 0
+    timed_out = False
+    
+    # Test on all samples, counting correct answers
+    for i, sample in enumerate(task):
+        try:
+            result, did_timeout = await run_with_timeout(solve_func, [S, sample['input'], None], timeout)
+            if did_timeout:
                 print_l(f'Timed out: {sol_solver_id =} - {task_id =} - sample = {i}')
-                return True
-    return False
+                timed_out = True
+            elif result == sample['output']:
+                score += 1
+        except:
+            pass  # Errors count as incorrect
+    
+    return timed_out, score
 
 
 async def check_solvers_pre(data, task_id, timeout=10):

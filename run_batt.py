@@ -1532,17 +1532,26 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         phase3a_start = timer()
     
     async def check_one_solver(data):
-        """Validate a single solver and return timing info"""
+        """Validate a single solver and return timing info with score validation"""
         solver_source = data['solver_source']
         sol_solver_id = data['sol_solver_id']
         check_start = timer()
         # Use cached version for 5.5x speedup on warm cache
-        timed_out = await cached_check_solver_speed(
+        timed_out, actual_score = await cached_check_solver_speed(
             check_solver_speed, total_data, solver_source, task_id, sol_solver_id, timeout
         )
         check_time = timer() - check_start
         t_log = 11 - int(math.log(check_time)) if check_time > 0 else 10
-        return {**data, 'timed_out': timed_out, 't_log': t_log, 'check_time': check_time}
+        
+        # Get the saved score to compare
+        saved_score = o_score.get(sol_solver_id)
+        score_mismatch = (actual_score != saved_score)
+        
+        if score_mismatch and DO_PRINT:
+            print_l(f"SCORE MISMATCH: {sol_solver_id} - saved_score={saved_score} actual_score={actual_score}")
+        
+        return {**data, 'timed_out': timed_out, 'actual_score': actual_score, 'saved_score': saved_score, 
+                'score_mismatch': score_mismatch, 't_log': t_log, 'check_time': check_time}
     
     # Validate all solvers in parallel using asyncio.gather
     import asyncio
@@ -1553,6 +1562,15 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         prof['run_batt.phase3a_validate_batch'] = phase3a_time
         prof['run_batt.check_solver_speed'] = sum(d['check_time'] for d in validated_data)
         print_l(f'-- Phase 3a: Validated {len(validated_data)} solvers in {phase3a_time:.3f}s (parallelized)')
+    
+    # Check for score mismatches
+    score_mismatches = [d for d in validated_data if d.get('score_mismatch', False)]
+    if score_mismatches:
+        print_l(f"WARNING: Found {len(score_mismatches)} score mismatches:")
+        for d in score_mismatches[:5]:  # Show first 5
+            print_l(f"  {d['sol_solver_id']}: saved={d['saved_score']} actual={d['actual_score']}")
+        if len(score_mismatches) > 5:
+            print_l(f"  ... and {len(score_mismatches) - 5} more")
     
     # Phase 3b: Process validated results (file I/O, symlinks)
     if prof is not None:

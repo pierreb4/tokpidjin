@@ -105,7 +105,7 @@ async def cached_check_solver_speed(
     task_id: str,
     sol_solver_id: str,
     timeout: float = 1.0
-) -> bool:
+):
     """
     Cached version of check_solver_speed
     
@@ -118,7 +118,7 @@ async def cached_check_solver_speed(
         timeout: Timeout in seconds
         
     Returns:
-        bool: True if timed out, False otherwise
+        tuple: (timed_out, score) where timed_out is bool and score is int
         
     Performance:
         - Cache miss: ~87ms (same as original)
@@ -140,20 +140,23 @@ async def cached_check_solver_speed(
             with open(disk_cache_file, 'r') as f:
                 result = json.load(f)
                 timed_out = result['timed_out']
-                _validation_cache[cache_key] = timed_out
+                score = result.get('score', 0)  # Default to 0 for old cache entries
+                cached_result = (timed_out, score)
+                _validation_cache[cache_key] = cached_result
                 _cache_stats['validation_hits'] += 1
-                return timed_out
+                return cached_result
         except Exception as e:
             print(f"Warning: Could not load disk cache: {e}")
     
     # Cache miss - run actual validation
     _cache_stats['validation_misses'] += 1
-    timed_out = await check_solver_speed_func(
+    timed_out, score = await check_solver_speed_func(
         data, solver_source, task_id, sol_solver_id, timeout
     )
     
     # Store in memory cache
-    _validation_cache[cache_key] = timed_out
+    cached_result = (timed_out, score)
+    _validation_cache[cache_key] = cached_result
     
     # Store in disk cache (for multi-instance server)
     try:
@@ -162,12 +165,13 @@ async def cached_check_solver_speed(
                 'task_id': task_id,
                 'sol_solver_id': sol_solver_id,
                 'timed_out': timed_out,
+                'score': score,
                 'solver_hash': cache_key
             }, f)
     except Exception as e:
         print(f"Warning: Could not save to disk cache: {e}")
     
-    return timed_out
+    return cached_result
 
 
 def cached_inline_variables(inline_variables_func, source_code: str) -> str:
