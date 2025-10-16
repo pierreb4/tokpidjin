@@ -639,6 +639,11 @@ def score_sample(args):
             print_l(f"{sample_type}[{i}] - {task_id} - {len(sample_o)}")
             # DEBUG: Log sample identity to detect cross-task contamination
             print_l(f"DEBUG score_sample: {sample_type}[{i}] task_id={task_id} I_shape={len(I)} O_shape={len(O)}")
+            
+            # DEBUG: Log first few solver_ids from batt result to track mismatches
+            if sample_o:
+                first_solvers = [s_id for _, _, s_id, _ in sample_o[:3]]
+                print_l(f"DEBUG score_sample output solver_ids: {first_solvers}")
         
         # Score outputs and collect matching solver ids
         for t_n, evo, o_solver_id, okt in sample_o:
@@ -648,7 +653,7 @@ def score_sample(args):
                 match_count += 1
                 has_match = True
                 if DO_PRINT:
-                    print_l(f'- {o_solver_id = } - {match = }')
+                    print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
         
         # OPTIMIZATION: Only run diff ONCE per sample if any output matches
         # Calling batt multiple times with identical O parameter returns identical results
@@ -1204,9 +1209,25 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     demo_results = [r for r in all_results if r['sample_type'] == 'demo']
     test_results = [r for r in all_results if r['sample_type'] == 'test']
     
+    # DEBUG: Log result counts before sorting
+    if DO_PRINT:
+        print_l(f"DEBUG SPLIT: task_id={task_id} demo_results={len(demo_results)} test_results={len(test_results)} all_results={len(all_results)}")
+        if demo_results:
+            demo_indices_before = [r['index'] for r in demo_results]
+            print_l(f"DEBUG SPLIT: demo indices BEFORE sort: {sorted(demo_indices_before)}")
+    
     # Sort by index to maintain order
     demo_results.sort(key=lambda x: x['index'])
     test_results.sort(key=lambda x: x['index'])
+    
+    # DEBUG: Log result counts after sorting
+    if DO_PRINT:
+        if demo_results:
+            demo_indices_after = [r['index'] for r in demo_results]
+            print_l(f"DEBUG SPLIT: demo indices AFTER sort: {demo_indices_after}")
+            # Check for duplicates
+            if len(demo_indices_after) != len(set(demo_indices_after)):
+                print_l(f"WARNING: DUPLICATE demo indices detected! {demo_indices_after}")
     
     if prof is not None:
         prof['batt.demo.parallel'] = timer() - prof_start
@@ -1229,6 +1250,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         i = result['index']
         o['demo'][i] = result['outputs']
         s['demo'][i] = result['solver_scores']
+        
+        # DEBUG: Log which result is being assigned to which demo index
+        if result['outputs'] and DO_PRINT:
+            result_solver_ids = [s_id for _, _, s_id, _ in result['outputs'][:3]]
+            print_l(f"DEBUG AGGREGATE: Assigning demo[{i}] from result - first solvers: {result_solver_ids}")
         
         # Use update instead of union for better performance
         if prof is not None:
