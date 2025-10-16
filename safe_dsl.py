@@ -18,8 +18,21 @@ Date: October 11, 2025
 """
 
 from functools import wraps
-from typing import get_type_hints, Any, Callable
+from typing import Any, Callable
 import logging
+
+# Import cached type hints from dsl module
+# This provides O(1) lookups instead of O(n) introspection
+try:
+    from dsl import get_type_hints_cached
+except ImportError:
+    # Fallback if dsl is not available yet
+    from typing import get_type_hints as _get_type_hints_builtin
+    def get_type_hints_cached(func):
+        try:
+            return _get_type_hints_builtin(func)
+        except Exception:
+            return {}
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -74,7 +87,7 @@ def _get_safe_default(func: Callable) -> Any:
         Safe default value (frozenset(), tuple(), 0, False, etc.)
     """
     try:
-        hints = get_type_hints(func)
+        hints = get_type_hints_cached(func)  # Use cached version - O(1) instead of O(n)
         return_type = hints.get('return', None)
         
         if return_type is None:
