@@ -234,26 +234,19 @@ class Code:
     def file_pile(self, has_mutation):
         t_call = self.t_call[self.t_num]
         call_list = [c.strip() for c in t_call.split(',')]
+        call_string = f'{call_list[0]}(' + ', '.join(call_list[1:]) + ')'
         func_name = call_list[0]
-        # Type hint check: only emit call if callable, else emit as value
-        # Use DSL_FUNCTION_DICT and get_hints to check if func_name is callable
-        is_callable = False
-        if func_name in DSL_FUNCTION_DICT:
-            is_callable = True
-        elif func_name.startswith('t') or func_name.startswith('x'):
-            # Try to infer from previous assignments (very basic: if last assignment was a function)
-            prev_assign = self.t_call.get(int(func_name[1:]), None)
-            if prev_assign:
-                prev_func = prev_assign.strip().split(',')[0]
-                if prev_func in DSL_FUNCTION_DICT:
-                    is_callable = True
-        call_string = f'{func_name}(' + ', '.join(call_list[1:]) + ')' if is_callable else func_name
-        if not is_callable and len(call_list) > 1:
-            # Emit a comment to help debug
-            print(f'    # WARNING: {func_name} is not callable but used as a function', file=self.file)
+        
+        # Wrap ALL assignments in try-except to catch bad mutations
+        # (wrong function signatures, type errors, etc.)
+        # Use type-aware default from _get_safe_default() helper
+        # UNLESS in vectorized mode (GPU-friendly, no try/except)
         if self.vectorized:
+            # Vectorized mode: direct assignment, no exception handling
+            # Pre-validation happens at batch level
             print(f'    t{self.t_num} = {call_string}', file=self.file)
         else:
+            # Standard mode: safe with try/except
             print(f'    try:', file=self.file)
             print(f'        t{self.t_num} = {call_string}', file=self.file)
             print(f'    except (TypeError, AttributeError, ValueError, IndexError, KeyError):', file=self.file)
@@ -263,38 +256,38 @@ class Code:
 
     def do_offset_mutation(self, old_hint, old_call, t_n, is_solver, has_mutation):
         while random.random() < BUDGET_RANDOM:
+            # TODO Check parameter impact on mutation numbers
+
             while True:
                 t_offset = random.randint(1, t_n)
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
+
+                    # NOTE We could also try to match type
+                    
+                    # CRITICAL FIX: Check if variable is being called as function
                     var_name = f't{t_n}'
                     is_function_call = is_called_as_function(old_call, var_name)
-                    # Type hint check: only substitute callables with callables, values with values
-                    def is_var_callable(var):
-                        if var in DSL_FUNCTION_DICT:
-                            return True
-                        if var.startswith('t') or var.startswith('x'):
-                            prev_assign = self.t_call.get(int(var[1:]), None)
-                            if prev_assign:
-                                prev_func = prev_assign.strip().split(',')[0]
-                                if prev_func in DSL_FUNCTION_DICT:
-                                    return True
-                        return False
+
                     if is_function_call:
-                        # Only allow substitution with callables
-                        candidates = [f't{t_offset}'] if is_var_callable(f't{t_offset}') else []
-                        candidates += [fn for fn in DSL_FUNCTION_NAMES]
-                        if not candidates:
-                            continue
-                        item = random.choice(candidates)
+                        # Variable is being called: var(...) 
+                        # Can only replace with another function or t variable (that might be a function)
+                        if random.randint(0, 1) == 0:
+                            item = f't{t_offset}'
+                        else:
+                            item = random.choice(DSL_FUNCTION_NAMES)
                     else:
-                        # Only allow substitution with values
-                        candidates = [f't{t_offset}'] if not is_var_callable(f't{t_offset}') else []
-                        candidates += [c for c in GENERIC_CONSTANT_NAMES]
-                        if not candidates:
-                            continue
-                        item = random.choice(candidates)
+                        # Variable is being used as value: func(var)
+                        # Can replace with t variable or constant (NOT a function name)
+                        if random.randint(0, 1) == 0:
+                            item = f't{t_offset}'
+                        else:
+                            item = random.choice(GENERIC_CONSTANT_NAMES)
+
                     print_l(f'{item = }') if DO_PRINT else None
+
+
                     pattern = rf'\bt{t_n}\b'
+                    # self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
                     self.t_call[self.t_num] = re.sub(pattern, item, old_call)
                     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
                     break
@@ -492,89 +485,45 @@ class Differs:
                 # print_l(f'{differ_name} - {x_name} = {self.run_equals[differ_name][x_name]}')
 
 
-
     def add_lines(self, code, uses, task_id=None):
-        # Only batch if vectorized (GPU) mode is enabled
-        if getattr(code, 'vectorized', False):
-            BATCHABLE_DSL_FUNCTIONS = {'o_g', 'objects', 'fill', 'apply', 'mapply', 'p_g'}
-            for differ_name in self.run_equals.keys():
-                equals_name = self.run_equals[differ_name].copy()
-                batch_group = []
-                last_func = None
-                items = list(self.run_equals[differ_name].items())
-                for idx, (x_name, x_call) in enumerate(items):
-                    func_name = get_items(x_call)[0].strip()
-                    if func_name in BATCHABLE_DSL_FUNCTIONS:
-                        if last_func == func_name or last_func is None:
-                            batch_group.append((x_name, x_call))
-                            last_func = func_name
-                            if idx == len(items) - 1 and len(batch_group) > 1:
-                                self.emit_batch_code(batch_group, code, func_name)
-                                batch_group = []
-                                last_func = None
-                            continue
-                        else:
-                            if len(batch_group) > 1:
-                                self.emit_batch_code(batch_group, code, last_func)
-                            elif batch_group:
-                                add_differ_line({batch_group[0][0]: batch_group[0][1]}, code, uses, task_id, self.freeze_differs)
-                            batch_group = [(x_name, x_call)]
-                            last_func = func_name
-                            if idx == len(items) - 1 and len(batch_group) > 1:
-                                self.emit_batch_code(batch_group, code, func_name)
-                                batch_group = []
-                                last_func = None
-                            continue
-                    else:
-                        if len(batch_group) > 1:
-                            self.emit_batch_code(batch_group, code, last_func)
-                        elif batch_group:
-                            add_differ_line({batch_group[0][0]: batch_group[0][1]}, code, uses, task_id, self.freeze_differs)
-                        batch_group = []
-                        last_func = None
-                        add_differ_line({x_name: x_call}, code, uses, task_id, self.freeze_differs)
-                if len(batch_group) > 1:
-                    self.emit_batch_code(batch_group, code, last_func)
-                elif batch_group:
-                    add_differ_line({batch_group[0][0]: batch_group[0][1]}, code, uses, task_id, self.freeze_differs)
-                if task_id is None:
-                    done = track_solution(code.t_call, code.t_num, None)
-                    differ_body = build_differ_body(code.t_call, code.t_num, done)
-                    differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
-                    differ_source = f'def differ(S, I, C):\n{differ_body}'
-                    inlined_source = inline_variables(differ_source)
-                    md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-                print(f"    s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}))", file=code.file)
-            code.last_differ_t_num = code.t_num
-        else:
-            # CPU mode: preserve old per-line emission
-            for differ_name in self.run_equals.keys():
-                equals_name = self.run_equals[differ_name].copy()
-                for x_name, x_call in self.run_equals[differ_name].items():
-                    freeze_differs = self.freeze_differs if task_id is None else True
-                    add_differ_line(equals_name, code, uses, task_id, freeze_differs)
-                if task_id is None:
-                    done = track_solution(code.t_call, code.t_num, None)
-                    differ_body = build_differ_body(code.t_call, code.t_num, done)
-                    differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
-                    differ_source = f'def differ(S, I, C):\n{differ_body}'
-                    inlined_source = inline_variables(differ_source)
-                    md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-                print(f"    s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}))", file=code.file)
-            code.last_differ_t_num = code.t_num
+        # run_equals = self.run_equals.copy()
+        for differ_name in self.run_equals.keys():
 
-    def emit_batch_code(self, batch_group, code, func_name):
-        # Example: batch call for o_g, objects, etc.
-        # This is a placeholder; adapt as needed for your batch API
-        t_nums = [code.t_num + i + 1 for i in range(len(batch_group))]
-        args_list = [get_items(x_call)[1:] for _, x_call in batch_group]
-        # Flatten args for demonstration; real batching may need more structure
-        print(f'    # Batch call for {func_name} ({len(batch_group)} items)', file=code.file)
-        print(f'    t{t_nums[0]}_to_t{t_nums[-1]} = batch_{func_name}([{", ".join(str(args) for args in args_list)}])', file=code.file)
-        # Assign t variables from batch result
-        for i, t_num in enumerate(t_nums):
-            print(f'    t{t_num} = t{t_nums[0]}_to_t{t_nums[-1]}[{i}]', file=code.file)
-        code.t_num += len(batch_group)
+            # if task_id is not None:
+            #     print_l(f'{task_id = } - {differ_name = } - {self.run_equals[differ_name]}')
+
+            equals_name = self.run_equals[differ_name].copy()
+            for x_name, x_call in self.run_equals[differ_name].items():
+                freeze_differs = self.freeze_differs if task_id is None else True
+                add_differ_line(equals_name, code, uses, task_id, freeze_differs)
+
+            # XXX Looks unused
+            if task_id is None:
+                done = track_solution(code.t_call, code.t_num, None)
+
+                # print_l(f'{differ_name} - {done = }')
+
+                differ_body = build_differ_body(code.t_call, code.t_num, done)
+                differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
+
+                differ_source = f'def differ(S, I, C):\n{differ_body}'
+                # self.init_equals[differ_name] = get_equals(differ_source)
+
+                inlined_source = inline_variables(differ_source)
+                md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
+
+                # NOTE Changes keys to self.run_equals !!!
+                # differ_name = f'differ_{md5_hash}'
+                # differ_source = f'def {differ_name}(S, I, O, C):\n{differ_body}'
+
+                # print_l(f'{differ_name}\n{inlined_source = }')
+
+
+            # print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
+            # print(f"        s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
+            print(f"    s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}))", file=code.file)
+
+        code.last_differ_t_num = code.t_num
 
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
@@ -726,12 +675,10 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
         print(
 f"""# Generated by tokpidjin/card.py
 
-from dsl import *
+from pile import *
+from gpu_env import GPUEnv as Env
 from safe_dsl import _get_safe_default
-try:
-    from gpu_optimizations import batch_process_samples_gpu
-except ImportError:
-    batch_process_samples_gpu = None  # fallback or error will be raised at runtime
+from batt_gpu import batch_process_samples_gpu
 
 def batt(task_id, S, I, C, log_path):
     s = []
@@ -800,8 +747,8 @@ if __name__ == "__main__":
                         help="Freeze solvers, don't mutate them")
     parser.add_argument("-fd", "--freeze_differs", action="store_true",
                         help="Freeze differs, don't mutate them")
-    parser.add_argument("-f", "--file_name", type=str, default='tmp_batt_onerun_run.py',
-                        help="File name to write the batt code to (default: tmp_batt_onerun_run.py)")
+    parser.add_argument("-f", "--file_name", type=str, default='batt.py',
+                        help="File name to write the batt code to (default: batt.py)")
     parser.add_argument("--vectorized", action="store_true",
                         help="Generate vectorized batch-friendly version (GPU-optimized, no try/except)")
     args = parser.parse_args()
