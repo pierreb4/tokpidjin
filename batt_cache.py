@@ -185,6 +185,9 @@ def cached_inline_variables(inline_variables_func, source_code: str) -> str:
         - Cache miss: ~150ms per solver (same as original)
         - Cache hit: <1ms (150x faster!)
         - Kaggle impact: 2.989s → 1.5s on warm cache (2x faster)
+    
+    Raises:
+        ValueError: If inline_variables_func fails or returns non-string
     """
     # Generate cache key
     cache_key = _get_inlining_hash(source_code)
@@ -200,16 +203,29 @@ def cached_inline_variables(inline_variables_func, source_code: str) -> str:
         try:
             with open(disk_cache_file, 'r') as f:
                 inlined_code = f.read()
+                # Validate we got a string
+                if not isinstance(inlined_code, str):
+                    raise ValueError(f"Disk cache returned {type(inlined_code).__name__} instead of str")
                 # Store in memory for this run
                 _inlining_cache[cache_key] = inlined_code
                 _cache_stats['inlining_hits'] += 1
                 return inlined_code
         except Exception as e:
             print(f"Warning: Could not load inlining disk cache: {e}")
+            # Fall through to recompute
     
     # Cache miss - run actual inlining
     _cache_stats['inlining_misses'] += 1
-    inlined_code = inline_variables_func(source_code)
+    try:
+        inlined_code = inline_variables_func(source_code)
+        
+        # Validate we got a string back
+        if inlined_code is None:
+            raise ValueError("inline_variables_func returned None")
+        if not isinstance(inlined_code, str):
+            raise ValueError(f"inline_variables_func returned {type(inlined_code).__name__} instead of str")
+    except Exception as e:
+        raise ValueError(f"inline_variables_func failed: {e}") from e
     
     # Store in memory cache (LRU eviction will happen automatically)
     _inlining_cache[cache_key] = inlined_code

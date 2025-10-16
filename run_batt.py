@@ -1452,6 +1452,20 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         try:
             # Use cached version for 2x speedup on warm cache
             inlined = cached_inline_variables(inline_variables, data['solver_source'])
+            
+            # Defensive check - ensure we got a string back
+            if inlined is None:
+                task_id = data.get('task_id', 'unknown')
+                sol_solver_id = data.get('sol_solver_id', 'unknown')
+                print_l(f"ERROR: inline_variables returned None for task_id={task_id} solver_id={sol_solver_id}")
+                return None
+            
+            if not isinstance(inlined, str):
+                task_id = data.get('task_id', 'unknown')
+                sol_solver_id = data.get('sol_solver_id', 'unknown')
+                print_l(f"ERROR: inline_variables returned {type(inlined).__name__} instead of str for task_id={task_id} solver_id={sol_solver_id}")
+                return None
+            
             md5 = hashlib.md5(inlined.encode()).hexdigest()
             return {**data, 'inlined_source': inlined, 'md5_hash': md5}
         except Exception as e:
@@ -1646,10 +1660,22 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         try:
             # Use cached version for 2x speedup on warm cache
             inlined = cached_inline_variables(inline_variables, data['differ_source'])
+            
+            # Defensive check - ensure we got a string back
+            if inlined is None:
+                print_l(f"ERROR: inline_variables returned None for differ {data.get('name', 'unknown')}")
+                return None
+            
+            if not isinstance(inlined, str):
+                print_l(f"ERROR: inline_variables returned {type(inlined).__name__} instead of str for differ {data.get('name', 'unknown')}")
+                return None
+            
             md5 = hashlib.md5(inlined.encode()).hexdigest()
             return {**data, 'inlined_source': inlined, 'md5_hash': md5}
         except Exception as e:
-            print_l(f"Error inlining differ: {e}")
+            error_type = type(e).__name__
+            differ_name = data.get('name', 'unknown')
+            print_l(f"Error inlining differ {differ_name}: {error_type}: {e}")
             return None
     
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion  
