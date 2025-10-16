@@ -1248,9 +1248,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if prof is not None:
             dscore_start = timer()
         for s_item in result['solver_scores']:
-            # Extract o_solver_id from first output if available
-            if result['outputs']:
-                o_solver_id = result['outputs'][0][2]
+            # Extract o_solver_id from s_item tuple: (t_n, solver_id, differ_id, result)
+            if len(s_item) >= 2:
+                o_solver_id = s_item[1]
                 d_score.update(o_solver_id, s_item)
         if prof is not None:
             prof['batt.dscore.update'] = prof.get('batt.dscore.update', 0) + (timer() - dscore_start)
@@ -1286,9 +1286,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         if prof is not None:
             dscore_start = timer()
         for s_item in result['solver_scores']:
-            # Extract o_solver_id from first output if available
-            if result['outputs']:
-                o_solver_id = result['outputs'][0][2]
+            # Extract o_solver_id from s_item tuple: (t_n, solver_id, differ_id, result)
+            if len(s_item) >= 2:
+                o_solver_id = s_item[1]
                 d_score.update(o_solver_id, s_item)
         if prof is not None:
             prof['batt.dscore.update'] = prof.get('batt.dscore.update', 0) + (timer() - dscore_start)
