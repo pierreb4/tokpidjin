@@ -43,7 +43,7 @@ from constants import *
 
 # Debug flag for validation and score detection messages
 # Set to False to suppress timeout and mismatch warnings
-DEBUG_VALIDATION = True
+DEBUG_VALIDATION = False
 
 
 # def get_data(train=True):

@@ -105,7 +105,7 @@ import multiprocessing as mp
 
 # Debug flag for validation and score detection messages
 # Set to False to suppress timeout and mismatch warnings
-DEBUG_VALIDATION = True
+DEBUG_VALIDATION = False
 
 # Track active executors for cleanup on exit/interrupt
 _active_executors = []
@@ -1214,7 +1214,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     test_results = [r for r in all_results if r['sample_type'] == 'test']
     
     # DEBUG: Log result counts before sorting
-    if DO_PRINT:
+    if DEBUG_VALIDATION and DO_PRINT:
         print_l(f"DEBUG SPLIT: task_id={task_id} demo_results={len(demo_results)} test_results={len(test_results)}")
     
     # Sort by index to maintain order
@@ -1222,7 +1222,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     test_results.sort(key=lambda x: x['index'])
     
     # DEBUG: Log result counts after sorting
-    if DO_PRINT:
+    if DEBUG_VALIDATION and DO_PRINT:
         print_l(f"DEBUG SPLIT: task_id={task_id} sorted")
     
     if prof is not None:
@@ -1250,7 +1250,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         # DEBUG: Log which result is being assigned to which demo index
         if result['outputs'] and DO_PRINT:
             result_solver_ids = [s_id for _, _, s_id, _ in result['outputs'][:3]]
-            print_l(f"DEBUG AGGREGATE: Assigning demo[{i}] from result - first solvers: {result_solver_ids}")
+            if DEBUG_VALIDATION:
+                print_l(f"DEBUG AGGREGATE: Assigning demo[{i}] from result - first solvers: {result_solver_ids}")
         
         # Use update instead of union for better performance
         if prof is not None:
@@ -1265,7 +1266,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         O = demo_task[i]['output']
         
         # DEBUG: Log when processing demo results to catch cross-task contamination
-        if result['outputs'] and DO_PRINT:
+        if result['outputs'] and DEBUG_VALIDATION and DO_PRINT:
             print_l(f"DEBUG: task_id={task_id} demo[{i}] has {len(result['outputs'])} outputs")
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
@@ -1308,7 +1309,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         O = test_task[i]['output']
         
         # DEBUG: Log when processing test results to catch cross-task contamination
-        if result['outputs'] and DO_PRINT:
+        if result['outputs'] and DEBUG_VALIDATION and DO_PRINT:
             print_l(f"DEBUG: task_id={task_id} test[{i}] has {len(result['outputs'])} outputs")
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
