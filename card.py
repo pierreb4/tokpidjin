@@ -792,8 +792,8 @@ if __name__ == "__main__":
                         help="Freeze solvers, don't mutate them")
     parser.add_argument("-fd", "--freeze_differs", action="store_true",
                         help="Freeze differs, don't mutate them")
-    parser.add_argument("-f", "--file_name", type=str, default='batt.py',
-                        help="File name to write the batt code to (default: batt.py)")
+    parser.add_argument("-f", "--file_name", type=str, default='tmp_batt_onerun_run.py',
+                        help="File name to write the batt code to (default: tmp_batt_onerun_run.py)")
     parser.add_argument("--vectorized", action="store_true",
                         help="Generate vectorized batch-friendly version (GPU-optimized, no try/except)")
     args = parser.parse_args()
