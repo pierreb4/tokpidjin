@@ -195,7 +195,8 @@ docs: add Phase 2A quick reference card
 
 1. **Deploy to Kaggle**
    - Pull commit 31e183fa
-   - Run: `python run_batt.py -c 100 --gpu --profile`
+   - Run: `python run_batt.py -c 100 --cprofile --cprofile-top 30`
+   - Or: `python run_batt.py -c 100 --timing` (faster, just wall-clock)
 
 2. **Validate Results**
    - Measure wall-clock time
@@ -384,7 +385,15 @@ git log --oneline -1
 
 ---
 
-**Next Step**: Run Kaggle profiling with `python run_batt.py -c 100 --gpu --profile`
+**Next Step**: Run Kaggle profiling with:
+```bash
+python run_batt.py -c 100 --cprofile --cprofile-top 30
+```
+
+Or for faster wall-clock only:
+```bash
+python run_batt.py -c 100 --timing
+```
 
 **Expected Timeline**: Results within hours  
 

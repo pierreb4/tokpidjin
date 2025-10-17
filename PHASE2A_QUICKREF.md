@@ -47,7 +47,12 @@ for di, dj in offsets:  # ✅ Pre-computed, direct iteration
 ### Run on Kaggle:
 ```bash
 git pull
-python run_batt.py -c 100 --gpu --profile
+python run_batt.py -c 100 --cprofile --cprofile-top 30
+```
+
+### Or just measure wall-clock (faster):
+```bash
+python run_batt.py -c 100 --timing
 ```
 
 ### Expected:

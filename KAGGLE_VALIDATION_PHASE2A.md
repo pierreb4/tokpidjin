@@ -16,21 +16,26 @@ git pull
 # Should see commit abb3b604 with Phase 2a optimization
 ```
 
-### Step 2: Run Profiling with GPU
+### Step 2: Run Profiling with cProfile
 
 ```bash
-# Run with GPU enabled, profiler active, 100 tasks
-# Adjust timeout and paths as needed for your Kaggle setup
-python run_batt.py -c 100 --gpu --profile
+# Run with cProfile enabled on 100 tasks (GPU auto-enabled if available)
+python run_batt.py -c 100 --cprofile --cprofile-top 30
+```
+
+**Alternative: Just measure wall-clock (faster)**:
+```bash
+python run_batt.py -c 100 --timing
 ```
 
 **Expected output**:
 - Wall-clock time: ~3.08-3.15s (target)
-- Current baseline: 3.23s
+- Current baseline: 3.23s (with profiler overhead)
 - Improvement: 0.08-0.15s (target)
 - Solvers: 13,200
 - Errors: 0
 - Success rate: 100%
+- GPU info (if enabled)
 
 ### Step 3: Measure Specifically
 
