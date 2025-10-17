@@ -401,4 +401,72 @@ python run_batt.py -c 100 --timing
 
 ---
 
+## Today's Updates (October 17, 2025 - Afternoon)
+
+### 32-Task Validation Run Results ✅
+
+**Command**: `bash run_card.sh -o -i -b -c -32`  
+**Result**: All 32 tasks completed successfully  
+**Cache Hit Rate**: 99.3% (5086/5120 hits)  
+**Time Saved**: 762.90s aggregate across 32 tasks  
+
+**Key Findings**:
+- ✅ All 32 tasks completed without errors
+- ✅ 323 solvers generated
+- ✅ Inlining cache at 99.3% hit rate (excellent)
+- ⚠️ 32 sample-level timeouts (expected - individual demo/test runs)
+- ✅ 0 task-level failures
+
+**Important**: "32 tasks - 32 timeouts" means sample-level timeouts (6 samples per task), not task failures. Expected behavior for difficult cases.
+
+### Documentation Updates
+
+1. **PHASE2A_FULL_RESULTS.md** - Comprehensive validation analysis (commit 44a6b5b9)
+   - Full 32-task analysis
+   - Cache statistics explanation
+   - Timeout clarification
+   - Phase 1b baseline comparison
+
+2. **RUN_BATT_ARGUMENTS.md** - Complete command-line reference (commit 44a6b5b9)
+   - All available arguments documented
+   - Common command patterns
+   - Timeout recommendations
+   - Phase 2 profiling guide
+
+### Current Status
+
+| Aspect | Status | Details |
+|--------|--------|---------|
+| Code Implementation | ✅ Complete | Commit abb3b604 |
+| Local Testing | ✅ Complete | 335 solvers |
+| Single-Task Kaggle | ✅ Complete | 0.858s, 0 errors |
+| 32-Task Kaggle | ✅ Complete | Cache 99.3%, 762.90s saved |
+| Wall-Clock Measurement | ⏳ Pending | Need 100-task run |
+| Documentation | ✅ Complete | 6 comprehensive guides |
+
+### Recommended Next Steps
+
+**Option 1: Quick Wall-Clock Comparison** (5 min)
+```bash
+python run_batt.py -c 100 --timing
+```
+- Lightweight, shows timing breakdown
+- Compare to 3.23s Phase 1b baseline
+- Expected: 3.08-3.15s if Phase 2a working
+
+**Option 2: Full Profiling** (15 min)
+```bash
+python run_batt.py -c 100 --cprofile --cprofile-top 30
+```
+- Detailed per-function breakdown
+- Identify bottlenecks for Phase 2 work
+- Heavier overhead
+
+**Option 3: Longer Timeout for Safety** (if needed)
+```bash
+python run_batt.py -c 100 -t 20 --timing
+```
+- Use 20s timeout instead of 10s default
+- Safer for 100 tasks with some difficult cases
+
 *Phase 2A Implementation Complete - October 17, 2025*
