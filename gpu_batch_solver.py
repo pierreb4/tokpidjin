@@ -128,33 +128,63 @@ class BatchGridProcessor:
             return grids
         
         try:
-            # Transfer batch to GPU
-            batch_gpu = [cp.asarray(grid) for grid in grids]
+            # GPU-accelerated batch processing
+            if operation == 'passthrough':
+                return grids
+            
+            # Convert grids to GPU arrays
+            batch_gpu = [cp.asarray(grid, dtype=cp.int32) for grid in grids]
             
             # Apply operation on GPU
-            if operation == 'passthrough':
-                results_gpu = batch_gpu
-            elif operation == 'transpose':
+            if operation == 'transpose':
                 results_gpu = [cp.transpose(g) for g in batch_gpu]
             elif operation == 'rot90':
                 results_gpu = [cp.rot90(g) for g in batch_gpu]
             elif operation == 'flip':
                 results_gpu = [cp.fliplr(g) for g in batch_gpu]
+            elif operation == 'flip_vertical':
+                results_gpu = [cp.flipud(g) for g in batch_gpu]
+            elif operation == 'shift':
+                # Shift operations on GPU (batch process)
+                results_gpu = self._gpu_shift_batch(batch_gpu)
+            elif operation == 'p_g':
+                # Pattern matching - convert to numpy for pattern detection
+                results = [cp.asnumpy(g) for g in batch_gpu]
+                if cpu_operation:
+                    return [cpu_operation(r) for r in results]
+                return results
             else:
                 # Unknown operation, return as-is
                 results_gpu = batch_gpu
             
             # Transfer results back to CPU
-            results = [cp.asnumpy(g) for g in results_gpu]
-            
+            results = [cp.asnumpy(g).astype(np.int32) for g in results_gpu]
             return results
             
         except Exception as e:
             # Fallback to CPU
-            print(f"⚠ GPU batch operation '{operation}' failed: {e}")
+            import sys
+            print(f"⚠ GPU batch operation '{operation}' failed: {e}", file=sys.stderr)
             if cpu_operation:
                 return [cpu_operation(grid) for grid in grids]
             return grids
+    
+    def _gpu_shift_batch(self, grids_gpu: List) -> List:
+        """
+        GPU-accelerated shift operations on batch of grids.
+        
+        Args:
+            grids_gpu: List of CuPy GPU arrays
+            
+        Returns:
+            List of shifted GPU arrays
+        """
+        results = []
+        for grid in grids_gpu:
+            # Shift is typically np.roll operation
+            shifted = cp.roll(grid, 1, axis=0)  # Default: shift by 1 on axis 0
+            results.append(shifted)
+        return results
     
     def _process_gpu_batch(self, batch: List) -> List:
         """

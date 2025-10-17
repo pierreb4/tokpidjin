@@ -28,7 +28,8 @@ Usage in run_batt.py:
 """
 
 from gpu_batch_solver import BatchGridProcessor
-from typing import List, Dict, Optional, Any, Tuple
+from gpu_dsl_ops import gpu_accelerator
+from typing import List, Dict, Optional, Any, Tuple, Callable
 from collections import defaultdict
 import hashlib
 
@@ -150,6 +151,39 @@ class BatchSolverAccumulator:
             'batches_processed': self.total_grids_processed // self.batch_size if self.batch_size > 0 else 0,
             'use_gpu': self.use_gpu and self.processor.use_gpu,
         }
+    
+    def batch_apply_gpu_operation(self, grids: List[Any], operation: str) -> List[Any]:
+        """
+        Apply GPU-accelerated operation to batch of grids.
+        
+        Args:
+            grids: List of grids to process
+            operation: Operation name ('rot90', 'flip', 'transpose', 'shift')
+            
+        Returns:
+            List of processed grids
+        """
+        if not grids:
+            return []
+        
+        if operation == 'rot90':
+            return gpu_accelerator.batch_rot90(grids, k=1)
+        elif operation == 'flip':
+            return gpu_accelerator.batch_flip(grids, axis=1)
+        elif operation == 'transpose':
+            return gpu_accelerator.batch_transpose(grids)
+        elif operation == 'shift':
+            return gpu_accelerator.batch_shift(grids, shift_amount=1, axis=0)
+        else:
+            return grids
+    
+    def get_gpu_stats(self) -> Dict[str, Any]:
+        """Get GPU accelerator statistics."""
+        return gpu_accelerator.get_stats()
+    
+    def reset_gpu_stats(self):
+        """Reset GPU accelerator statistics."""
+        gpu_accelerator.reset_stats()
 
 
 class SimpleGridBatcher:
