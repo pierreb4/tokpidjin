@@ -37,23 +37,38 @@ _solver_body_stats = {
 
 def init_solver_body_cache():
     """Initialize solver body cache."""
-    SOLVER_BODY_CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    _load_solver_body_cache()
+    try:
+        SOLVER_BODY_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        print(f"[solver_body_cache] Created cache directory: {SOLVER_BODY_CACHE_DIR}")
+        _load_solver_body_cache()
+        print(f"[solver_body_cache] Cache initialization successful")
+    except Exception as e:
+        print(f"[solver_body_cache] ERROR during initialization: {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
 
 
 def _load_solver_body_cache():
     """Load solver bodies from disk cache."""
     cache_index_file = SOLVER_BODY_CACHE_DIR / 'index.json'
     
+    print(f"[solver_body_cache] Looking for index file: {cache_index_file}")
+    
     if cache_index_file.exists():
+        print(f"[solver_body_cache] Index file exists, loading...")
         try:
             with open(cache_index_file, 'r') as f:
                 index = json.load(f)
                 # Don't load all bodies into memory, just the index
                 _solver_body_cache.update({k: v for k, v in index.items()})
-                print(f"Loaded solver body cache index: {len(_solver_body_cache)} entries")
+                print(f"[solver_body_cache] Loaded solver body cache index: {len(_solver_body_cache)} entries")
         except Exception as e:
-            print(f"Warning: Could not load solver body cache: {e}")
+            print(f"[solver_body_cache] ERROR loading index: {type(e).__name__}: {e}")
+            import traceback
+            traceback.print_exc()
+    else:
+        print(f"[solver_body_cache] Index file does not exist (first run or not persisted): {cache_index_file}")
 
 
 def get_solver_body_cache_key(source_code: str) -> str:
@@ -84,7 +99,7 @@ def get_cached_solver_body(source_code: str) -> Optional[str]:
                 _solver_body_stats['hits'] += 1
                 return body
         except Exception as e:
-            print(f"Warning: Could not read solver body cache: {e}")
+            print(f"[solver_body_cache] ERROR reading disk cache {cache_file}: {e}")
     
     _solver_body_stats['misses'] += 1
     return None
