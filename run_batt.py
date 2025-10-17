@@ -59,6 +59,12 @@ from batt_cache import (
     print_cache_stats,
     get_cache_stats
 )
+from solver_body_cache import (
+    get_cached_solver_body,
+    cache_solver_body,
+    print_solver_body_cache_stats,
+    init_solver_body_cache
+)
 
 # Phase 2b: GPU batch processing
 from gpu_batch_integration import BatchSolverAccumulator
@@ -1498,6 +1504,12 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # Batch process inlining - do all at once to amortize AST overhead
     def inline_one(data):
         try:
+            # Quick Win #1: Check if we've already inlined this solver body
+            cached_body = get_cached_solver_body(data['solver_source'])
+            if cached_body is not None:
+                md5 = hashlib.md5(cached_body.encode()).hexdigest()
+                return {**data, 'inlined_source': cached_body, 'md5_hash': md5}
+            
             # Use cached version for 2x speedup on warm cache
             inlined = cached_inline_variables(inline_variables, data['solver_source'])
             
@@ -1513,6 +1525,9 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 sol_solver_id = data.get('sol_solver_id', 'unknown')
                 print_l(f"ERROR: inline_variables returned {type(inlined).__name__} instead of str for task_id={task_id} solver_id={sol_solver_id}")
                 return None
+            
+            # Quick Win #1: Cache the inlined body for future reuse
+            cache_solver_body(data['solver_source'], inlined)
             
             md5 = hashlib.md5(inlined.encode()).hexdigest()
             return {**data, 'inlined_source': inlined, 'md5_hash': md5}
@@ -2075,6 +2090,7 @@ if __name__ == "__main__":
 
         if args.cprofile:
             import cProfile, pstats, io
+            init_solver_body_cache()  # Initialize solver body cache
             pr = cProfile.Profile()
             pr.enable()
             asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing, batt_module_name=args.batt_import))
@@ -2090,4 +2106,5 @@ if __name__ == "__main__":
             print('\n[cProfile tottime top]')
             print(s.getvalue())
         else:
+            init_solver_body_cache()  # Initialize solver body cache
             asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing, batt_module_name=args.batt_import))
