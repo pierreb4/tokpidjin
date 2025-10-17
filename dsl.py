@@ -3047,6 +3047,13 @@ def normalize_o(
     return shift(obj, (-uppermost_o(obj), -leftmost_o(obj)))
 
 
+# Phase 2 Optimization: Pre-computed neighbor offsets
+# These are used in objects() and objects_t() for efficient neighbor computation
+_DNEIGHBOR_OFFSETS = ((-1, 0), (1, 0), (0, -1), (0, 1))  # 4-connected neighbors
+_INEIGHBOR_OFFSETS = ((-1, -1), (-1, 1), (1, -1), (1, 1))  # 8-connected (diagonal) neighbors
+_NEIGHBOR_OFFSETS = _DNEIGHBOR_OFFSETS + _INEIGHBOR_OFFSETS  # All 8 neighbors
+
+
 def dneighbors(
     loc: 'IJ'
 ) -> 'Indices':
@@ -3091,7 +3098,10 @@ def objects(
     occupied = set()
     h, w = len(grid), len(grid[0])
     unvisited = asindices(grid)
-    diagfun = neighbors if diagonal else dneighbors
+    
+    # Phase 2 Optimization: Use pre-computed offsets instead of function calls
+    offsets = _NEIGHBOR_OFFSETS if diagonal else _DNEIGHBOR_OFFSETS
+    
     for loc in unvisited:
         if loc in occupied:
             continue
@@ -3114,10 +3124,11 @@ def objects(
                         obj.append(cell)
                         obj_set.add(cell)
                     occupied.add(cand)
-                    # Optimized: Direct loop instead of set comprehension (234k calls/100 tasks)
-                    for i, j in diagfun(cand):
-                        if 0 <= i < h and 0 <= j < w:
-                            neighborhood.add((i, j))
+                    # Phase 2 Optimization: Use pre-computed offsets (avoid function call overhead)
+                    for di, dj in offsets:
+                        ni, nj = cand[0] + di, cand[1] + dj
+                        if 0 <= ni < h and 0 <= nj < w:
+                            neighborhood.add((ni, nj))
             cands = neighborhood - occupied
         objs.append(frozenset(obj))  # Convert to frozenset at end
     return frozenset(objs)
@@ -3139,7 +3150,10 @@ def objects_t(
     occupied = set()
     h, w = len(grid), len(grid[0])
     unvisited = asindices(grid)
-    diagfun = neighbors if diagonal else dneighbors
+    
+    # Phase 2 Optimization: Use pre-computed offsets instead of function calls
+    offsets = _NEIGHBOR_OFFSETS if diagonal else _DNEIGHBOR_OFFSETS
+    
     for loc in unvisited:
         if loc in occupied:
             continue
@@ -3155,10 +3169,11 @@ def objects_t(
                 if (val == v) if univalued else (v != bg):
                     obj.append((cand[0], cand[1], v))
                     occupied.add(cand)
-                    # Optimized: Direct loop instead of set comprehension (234k calls/100 tasks)
-                    for i, j in diagfun(cand):
-                        if 0 <= i < h and 0 <= j < w:
-                            neighborhood.add((i, j))
+                    # Phase 2 Optimization: Use pre-computed offsets (avoid function call overhead)
+                    for di, dj in offsets:
+                        ni, nj = cand[0] + di, cand[1] + dj
+                        if 0 <= ni < h and 0 <= nj < w:
+                            neighborhood.add((ni, nj))
             cands = neighborhood - occupied
         objs.append(tuple(obj))
     return tuple(objs)
