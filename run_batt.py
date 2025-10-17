@@ -60,6 +60,9 @@ from batt_cache import (
     get_cache_stats
 )
 
+# Phase 2b: GPU batch processing
+from gpu_batch_integration import BatchSolverAccumulator
+
 from concurrent.futures import ThreadPoolExecutor, as_completed
 # Use loky for better pickling support (handles closures like rbind.<locals>.f)
 try:
@@ -614,7 +617,7 @@ class D_Score:
 
 def score_sample(args):
     """Score a single sample - works for both demo and test (Week 6B optimization)"""
-    i, sample, sample_type, task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name = args
+    i, sample, sample_type, task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator = args
     
     # Import batt in worker process (needed for ProcessPoolExecutor)
     import importlib
@@ -667,6 +670,14 @@ def score_sample(args):
                 _, sample_s_result = diff_result
                 sample_s.extend(sample_s_result)
     
+    # Phase 2b: Add input grid to batch accumulator for GPU processing
+    if batch_accumulator:
+        batch_accumulator.add('input', I, operation='sample_input')
+        if sample_o:
+            # Add first output as representative of solver outputs
+            for t_n, evo, o_solver_id, okt in sample_o[:1]:
+                batch_accumulator.add('output', okt, operation='solver_output')
+    
     return {
         'index': i,
         'sample_type': sample_type,
@@ -678,7 +689,7 @@ def score_sample(args):
     }
 
 
-def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None, batt_module_name='batt'):
+def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None, batt_module_name='batt', batch_accumulator=None):
     """Check batt - now synchronous with parallel demo sample scoring"""
     task_start = timer()
     demo_task = total_data['demo'][task_id]
@@ -712,11 +723,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     # Add demo samples
     for i, sample in enumerate(demo_task):
-        all_sample_args.append((i, sample, 'demo', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name))
+        all_sample_args.append((i, sample, 'demo', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator))
     
     # Add test samples
     for i, sample in enumerate(test_task):
-        all_sample_args.append((i, sample, 'test', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name))
+        all_sample_args.append((i, sample, 'test', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator))
     
     if GPU_AVAILABLE:
         # GPU: Parallel execution with ThreadPoolExecutor (GPU context not fork-safe)
@@ -1401,7 +1412,7 @@ def check_save(path, score, max_files=32):
     return no_save
 
 
-async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None, batt_module_name='batt'):
+async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout=1, prof=None, batt_module_name='batt', batch_accumulator=None):
     """Run batt - async for validation, but check_batt is now synchronous"""
     # Log task start for crash/timeout detection
     _log_task_start(task_id, timeout)
@@ -1415,7 +1426,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     print_l(f'-- {task_id} - {task_i} start --') if DO_PRINT else None
 
     all_o, o_score, s_score = check_batt(total_data,
-            task_i, task_id, d_score, start_time, pile_log_path, timeout=timeout, prof=prof, batt_module_name=batt_module_name)
+            task_i, task_id, d_score, start_time, pile_log_path, timeout=timeout, prof=prof, batt_module_name=batt_module_name, batch_accumulator=batch_accumulator)
 
     # print_l(f'-- {task_id} - {task_i} scored --') if DO_PRINT else None
 
@@ -1808,6 +1819,12 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     _log_execution_stats(task_id, execution_time, error_type=None, 
                        error_msg=None, timeout_value=timeout)
     
+    # Phase 2b: Flush batch accumulator
+    if batch_accumulator:
+        stats = batch_accumulator.flush_and_log()
+        if DO_PRINT:
+            print_l(f"-- {task_id} batch stats: added={stats['total_grids_added']} processed={stats['total_grids_processed']}")
+    
     # No timeout
     return False, d_score
 
@@ -1980,10 +1997,14 @@ async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profil
             utils_module.set_profiler(prof)
         if hasattr(expand_solver_module, 'set_profiler'):
             expand_solver_module.set_profiler(prof)
+    
+    # Phase 2b: Initialize batch accumulator for all tasks
+    batch_acc = BatchSolverAccumulator(batch_size=100, use_gpu=GPU_AVAILABLE)
+    
     for task_i, task_id in enumerate(do_list):
         d_score = D_Score()
         loop_start = timer() if prof is not None else None
-        timed_out = await run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof, batt_module_name=batt_module_name)
+        timed_out = await run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof, batt_module_name=batt_module_name, batch_accumulator=batch_acc)
         if prof is not None:
             prof['main.run_batt'] += timer() - loop_start
         if timed_out:
