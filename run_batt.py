@@ -1999,7 +1999,10 @@ async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profil
             expand_solver_module.set_profiler(prof)
     
     # Phase 2b: Initialize batch accumulator for all tasks
-    batch_acc = BatchSolverAccumulator(batch_size=100, use_gpu=GPU_AVAILABLE)
+    # Note: Disabled GPU (use_gpu=False) - GPU operations not in hot path for test data
+    # GPU should accelerate DSL operations during solver execution, not batch processing
+    # See PHASE3_ROOT_CAUSE.md for detailed analysis
+    batch_acc = BatchSolverAccumulator(batch_size=100, use_gpu=False)
     
     for task_i, task_id in enumerate(do_list):
         d_score = D_Score()
