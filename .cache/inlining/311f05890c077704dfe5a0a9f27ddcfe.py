@@ -1,2 +1,0 @@
-def differ(S, I, C):
-    return astuple(size(difference(rbind(sizefilter, ONE)(rbind(o_g, R5)(C)), rbind(sizefilter, ONE)(rbind(o_g, R5)(I)))), get_nth_f(difference(rbind(sizefilter, ONE)(rbind(o_g, R5)(C)), rbind(sizefilter, ONE)(rbind(o_g, R5)(I))), F0))
