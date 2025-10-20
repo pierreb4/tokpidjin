@@ -51,10 +51,10 @@ from utils import *
 import utils as utils_module
 from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
-from run_test import check_solver_speed
+from run_test import check_solver
 from mega_batch_batt import MegaBatchCoordinator
 from batt_cache import (
-    cached_check_solver_speed,
+    cached_check_solver,
     cached_inline_variables,
     print_cache_stats,
     get_cache_stats,
@@ -627,8 +627,6 @@ def score_sample(args):
     
     I = sample['input']
     O = sample['output']
-    
-
     
     # Call batt with thread-based timeout
     solve_timed_out, solve_result = call_with_timeout(batt_func,
@@ -1555,8 +1553,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         sol_solver_id = data['sol_solver_id']
         check_start = timer()
         # Use cached version for 5.5x speedup on warm cache
-        timed_out, actual_score = await cached_check_solver_speed(
-            check_solver_speed, total_data, solver_source, task_id, sol_solver_id, timeout
+        timed_out, actual_score = await cached_check_solver(
+            check_solver, total_data, solver_source, task_id, sol_solver_id, timeout
         )
         check_time = timer() - check_start
         t_log = 11 - int(math.log(check_time)) if check_time > 0 else 10
@@ -1580,7 +1578,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     if prof is not None:
         phase3a_time = timer() - phase3a_start
         prof['run_batt.phase3a_validate_batch'] = phase3a_time
-        prof['run_batt.check_solver_speed'] = sum(d['check_time'] for d in validated_data)
+        prof['run_batt.check_solver'] = sum(d['check_time'] for d in validated_data)
         print_l(f'-- Phase 3a: Validated {len(validated_data)} solvers in {phase3a_time:.3f}s (parallelized)')
     
     # Check for score mismatches

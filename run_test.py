@@ -158,7 +158,7 @@ def check_solvers_formatting(solvers_module, dsl_module, specific_id=None, quiet
     print_l(f'{n_correct} out of {n} solvers formatted correctly.')
 
 
-async def check_solver_speed(data, solver, task_id, sol_solver_id, timeout=30):
+async def check_solver(data, solver, task_id, sol_solver_id, timeout=30):
     """ 
     checks the speed and correctness of the solver on all samples
     

@@ -11,10 +11,10 @@ Benefits:
 - All environments: Reduced CPU usage on warm cache
 
 Usage:
-    from batt_cache import cached_check_solver_speed, cached_inline_variables
+    from batt_cache import cached_check_solver, cached_inline_variables
     
     # Drop-in replacements for expensive functions
-    timed_out = await cached_check_solver_speed(...)
+    timed_out = await cached_check_solver(...)
     inlined_code = cached_inline_variables(source_code)
 """
 
@@ -180,8 +180,8 @@ def expire_old_cache_entries():
     return stats
 
 
-async def cached_check_solver_speed(
-    check_solver_speed_func,
+async def cached_check_solver(
+    check_solver_func,
     data,
     solver_source: str,
     task_id: str,
@@ -189,10 +189,10 @@ async def cached_check_solver_speed(
     timeout: float = 1.0
 ):
     """
-    Cached version of check_solver_speed
+    Cached version of check_solver
     
     Args:
-        check_solver_speed_func: The original async check_solver_speed function
+        check_solver_func: The original async check_solver function
         data: Training data
         solver_source: Source code of the solver
         task_id: Task ID
@@ -232,7 +232,7 @@ async def cached_check_solver_speed(
     
     # Cache miss - run actual validation
     _cache_stats['validation_misses'] += 1
-    timed_out, score = await check_solver_speed_func(
+    timed_out, score = await check_solver_func(
         data, solver_source, task_id, sol_solver_id, timeout
     )
     
