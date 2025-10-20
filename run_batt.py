@@ -51,7 +51,7 @@ from utils import *
 import utils as utils_module
 from expand_solver import expand_file, generate_expanded_content
 import expand_solver as expand_solver_module
-from run_test import check_solver
+from run_test import check_solver, eval_match
 from mega_batch_batt import MegaBatchCoordinator
 from batt_cache import (
     cached_check_solver,
@@ -650,10 +650,11 @@ def score_sample(args):
         # Score outputs and collect matching solver ids
         for t_n, evo, o_solver_id, okt in sample_o:
             C = okt
-            match = C == O
-            if match:
-                match_count += 1
-                has_match = True
+            match = eval_match(C, O) == 1000
+            if match > 0:
+                match_count += eval_match(C, O)
+                if match == 1000:
+                    has_match = True
                 if DO_PRINT:
                     print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
         
