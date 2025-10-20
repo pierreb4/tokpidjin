@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return fill(fill(I, get_nth_t(difference_tuple(dedupe(mapply(p_g(apply(second(S)))))()(dedupe(mapply(p_g(apply(first(S)))))()))(F0)), shoot(astuple(decrement(decrement(height_t(I))), ONE), UP_RIGHT)), YELLOW, shoot(astuple(decrement(height_t(I)), ONE), RIGHT))

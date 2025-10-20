@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return replace(move(I, get_nth_f(replace(I, FIVE, BLACK), F0), DOWN), EIGHT, get_nth_t(difference_tuple(dedupe(mapply(p_g(apply(second(S)))))()(dedupe(mapply(p_g(apply(first(S)))))()))(F0)))

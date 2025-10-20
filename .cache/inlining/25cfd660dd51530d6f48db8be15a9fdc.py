@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return hconcat(canvas(BLUE, astuple(ONE, size_f(sizefilter(colorfilter(rbind(subgrid, I), BLUE), FOUR)))), canvas(BLACK, astuple(ONE, subtract(FIVE, size_f(sizefilter(colorfilter(rbind(subgrid, I), BLUE), FOUR))))))

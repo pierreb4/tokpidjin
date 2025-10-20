@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return replace(subgrid(extract(height_t(I), matcher(numcolors_f, TWO)), I), get_nth_t(difference_tuple(dedupe(mapply(p_g(apply(first(S)))))()(dedupe(mapply(p_g(apply(second(S)))))()))(F1)), get_color_rank_f(extract(height_t(I), matcher(numcolors_f, TWO)), F0))

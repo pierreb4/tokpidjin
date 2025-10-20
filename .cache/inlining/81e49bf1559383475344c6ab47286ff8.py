@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return fill(fill(replace(I, THREE, MAGENTA), get_nth_t(difference_tuple(dedupe(mapply(p_g(apply(second(S)))))()(dedupe(mapply(p_g(apply(first(S)))))()))(F1)), mfilter_f(sizefilter(o_g(I, R4), ONE), compose(lbind(contained, THREE), chain(palette_t, trim, center(get_nth_f(sizefilter(o_g(I, R4), ONE), F0)))))), BLUE, mfilter_f(sizefilter(o_g(I, R4), ONE), fork(equality, size, compose(decrement, fork(add, height_f, width_f)))))

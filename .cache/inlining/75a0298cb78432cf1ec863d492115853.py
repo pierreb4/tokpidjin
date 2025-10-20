@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return fill(fill(replace(I, FIVE, YELLOW), get_nth_t(difference_tuple(dedupe(mapply(p_g(apply(second(S)))))()(dedupe(mapply(p_g(apply(first(S)))))()))(F0)), get_arg_rank_f(get_nth_f(normalize_o, F0), size, F0)), RED, get_arg_rank_f(get_nth_f(normalize_o, F0), size, L1))

@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return mir_rot_t(paint(canvas(BLACK, rbind(subgrid, I)), mpapply(shift, apply(normalize, order(colorfilter(fork(multiply, height_f, width_f), BLACK), compose(invert, size))), apply(toivec, interval(ZERO, size(apply(normalize, order(colorfilter(fork(multiply, height_f, width_f), BLACK), compose(invert, size)))), ONE)))), R5)

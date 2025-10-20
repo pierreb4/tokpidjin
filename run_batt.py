@@ -1282,7 +1282,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
-            match = C == O
+            match = eval_match(C, O)
             o_score.update(o_solver_id, match)
         if prof is not None:
             prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
@@ -1325,7 +1325,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
-            match = C == O
+            match = eval_match(C, O)
             o_score.update(o_solver_id, match)
         if prof is not None:
             prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)

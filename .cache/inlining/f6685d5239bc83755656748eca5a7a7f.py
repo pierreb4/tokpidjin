@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return fill(fill(fill(I, get_nth_t(difference_tuple(dedupe(mapply(p_g(apply(second(S)))))()(dedupe(mapply(p_g(apply(first(S)))))()))(F1)), merge_f(sfilter_f(colorfilter(rbind(get_arg_rank, F0), BLACK), square_f))), CYAN, get_arg_rank_f(sfilter_f(colorfilter(rbind(get_arg_rank, F0), BLACK), square_f), size, F0)), get_nth_t(difference_tuple(dedupe(mapply(p_g(apply(second(S)))))()(dedupe(mapply(p_g(apply(first(S)))))()))(F0)), merge_f(sizefilter(sfilter_f(colorfilter(rbind(get_arg_rank, F0), BLACK), square_f), ONE)))

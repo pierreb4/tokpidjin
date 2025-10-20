@@ -1,2 +1,0 @@
-def solve(S, I, C):
-    return paint(I, shift(asobject(replace(subgrid(get_nth_f(height_t(I), F0), I), ZERO, get_nth_t(difference_tuple(dedupe(mapply(p_g(apply(second(S)))))()(dedupe(mapply(p_g(apply(first(S)))))()))(F0)))), corner(get_nth_f(height_t(I), F0), R0)))
