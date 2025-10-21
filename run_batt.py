@@ -650,14 +650,10 @@ def score_sample(args):
         # Score outputs and collect matching solver ids
         for t_n, evo, o_solver_id, okt in sample_o:
             C = okt
-            score = eval_match(C, O)
+            match, score = eval_match(C, O)
             score_count += score
-            # Perfect match = 1000 points
-            if score >= 1000 and DO_PRINT:
+            if match and DO_PRINT:
                 print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
-            # Set match flag if we have any perfect matches
-            if score >= 1000:
-                match = True
         
         # OPTIMIZATION: Only run diff ONCE per sample if any output matches
         # Calling batt multiple times with identical O parameter returns identical results
