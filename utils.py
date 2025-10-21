@@ -319,14 +319,14 @@ class VariableInliner(ast.NodeTransformer):
         return node
 
 
-def inline_variables(source_code, timeout_seconds=1):
+def inline_variables(source_code, timeout_seconds=0.1):
     """
     Inline variable assignments in source code.
     
     Args:
         source_code: Python source code string
-        timeout_seconds: Maximum time allowed for inlining (default 1s, vs 30s previously)
-                        Normal solvers inline in <100ms. 1s timeout catches infinite loops.
+        timeout_seconds: Maximum time allowed for inlining (default 0.1s, vs 30s previously)
+                        Normal solvers inline in <100ms. 0.1s timeout catches infinite loops.
         
     Returns:
         str: Inlined source code
@@ -335,7 +335,7 @@ def inline_variables(source_code, timeout_seconds=1):
         TimeoutError: If inlining takes too long (likely infinite loop in AST visitor)
         
     Notes:
-        - Reduced from 30s to 1s: normal inlining is <100ms, generous enough for pathological cases
+        - Reduced from 30s to 0.1s: normal inlining is <100ms, generous enough for pathological cases
         - If timeout occurs, solver is skipped (caught in run_batt.py inline_one/inline_differ)
         - AST parsing errors also caught and handled gracefully
     """
