@@ -5,14 +5,16 @@ echo "=========================================="
 echo "Profile inline_variables() Timeout"
 echo "=========================================="
 echo ""
-echo "Running: bash run_card.sh -o -c -32"
+echo "Running: bash run_card.sh -o -T -c -32"
 echo "This will profile inline_variables during real solver evaluation"
-echo "(Single optimization loop for cleaner profiling)"
+echo "  -o: single optimization loop"
+echo "  -T: enable timing output"
+echo "  -c -32: run on 32 tasks"
 echo ""
 
-# Run the actual pipeline with 32 tasks, single optimization loop
+# Run the actual pipeline with 32 tasks, single optimization loop, with timing
 # Profiling happens automatically during inline_variables calls
-bash run_card.sh -o -c -32 2>&1 | tee profile_inline_realrun.log
+bash run_card.sh -o -T -c -32 2>&1 | tee profile_inline_realrun.log
 
 echo ""
 echo "=========================================="

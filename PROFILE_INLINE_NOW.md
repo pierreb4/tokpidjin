@@ -3,10 +3,15 @@
 ## The Command
 
 ```bash
-bash run_card.sh -o -c -32 2>&1 | tee profile.log
+bash run_card.sh -o -T -c -32 2>&1 | tee profile.log
 ```
 
 Run this on the server. That's it.
+
+**Flags explained:**
+- `-o` = single optimization loop (cleaner profiling)
+- `-T` = enable timing output (shows inline_variables breakdown)
+- `-c -32` = run on 32 tasks
 
 **Time**: 2-5 minutes
 

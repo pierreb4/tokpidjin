@@ -7,10 +7,10 @@ The `inline_variables()` function **already has built-in profiling**. To profile
 ### One Command on Server
 
 ```bash
-bash run_card.sh -o -c -32 2>&1 | tee profile.log
+bash run_card.sh -o -T -c -32 2>&1 | tee profile.log
 ```
 
-That's it. Just run the pipeline with 32 tasks, single optimization loop. The profiling happens automatically.
+That's it. Just run the pipeline with 32 tasks, single optimization loop, with timing enabled. The profiling happens automatically.
 
 ## Time Investment
 
@@ -76,10 +76,10 @@ git add utils.py && git commit -m "tune: Adjust inline_variables timeout"
 
 ## That's All You Need
 
-1. **Run**: `bash run_card.sh -o -c -32 2>&1 | tee profile.log`
+1. **Run**: `bash run_card.sh -o -T -c -32 2>&1 | tee profile.log`
 2. **Check**: `grep -i timeout profile.log`
 3. **Decide**: Use decision tree above
 4. **Adjust** (if needed): One `sed` command
 5. **Verify**: `git commit`
 
-The inline_variables() profiling is built in. Just run the pipeline!
+The inline_variables() profiling is built in. Just run the pipeline with -T flag!
