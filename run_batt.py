@@ -1495,8 +1495,17 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     if prof is not None:
         phase2_start = timer()
     
+    # Feature flag to disable inlining for debugging
+    SKIP_INLINING = os.environ.get('SKIP_INLINING', '1') == '1'
+    if SKIP_INLINING:
+        print_l("INLINING DISABLED (SKIP_INLINING=1) - Using raw solver source")
+    
     # Batch process inlining - do all at once to amortize AST overhead
     def inline_one(data):
+        # If inlining is disabled, return raw source with empty md5
+        if SKIP_INLINING:
+            return {**data, 'inlined_source': data['solver_source'], 'md5_hash': 'disabled'}
+        
         try:
             # Use cached version for 2x speedup on warm cache
             inlined = cached_inline_variables(inline_variables, data['solver_source'])
@@ -1742,8 +1751,18 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # Batch inline differs
     if prof is not None:
         inline_start = timer()
+    
+    # Feature flag to disable inlining for debugging
+    # (same flag as solver inlining to keep them in sync)
+    if SKIP_INLINING and not hasattr(inline_differ, '_logged'):
+        print_l("DIFFER INLINING DISABLED (SKIP_INLINING=1) - Using raw differ source")
+        inline_differ._logged = True  # Log only once
         
     def inline_differ(data):
+        # If inlining is disabled, return raw source with empty md5
+        if SKIP_INLINING:
+            return {**data, 'inlined_source': data['differ_source'], 'md5_hash': 'disabled'}
+        
         try:
             # Use cached version for 2x speedup on warm cache
             inlined = cached_inline_variables(inline_variables, data['differ_source'])
