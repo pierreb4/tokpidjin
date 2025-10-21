@@ -652,7 +652,7 @@ def score_sample(args):
             C = okt
             match, score = eval_match(C, O)
             score_count += score
-            if DO_PRINT:
+            if match and DO_PRINT:
                 print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
         
         # OPTIMIZATION: Only run diff ONCE per sample if any output matches
