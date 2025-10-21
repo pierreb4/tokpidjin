@@ -658,8 +658,8 @@ def score_sample(args):
         # OPTIMIZATION: Only run diff ONCE per sample if any output matches
         # Calling batt multiple times with identical O parameter returns identical results
 
-        # if match:
-        if score > 0:
+        if match:
+        # if score > 0:
 
             diff_call_count += 1
             # Run diff to get solver-level scores (only once per sample)
