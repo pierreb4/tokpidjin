@@ -1516,6 +1516,19 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             
             md5 = hashlib.md5(inlined.encode()).hexdigest()
             return {**data, 'inlined_source': inlined, 'md5_hash': md5}
+        except ValueError as e:
+            # Handle ValueError from cached_inline_variables wrapper
+            task_id = data.get('task_id', 'unknown')
+            sol_solver_id = data.get('sol_solver_id', 'unknown')
+            candidate = data.get('candidate', 'unknown')
+            error_msg = str(e)
+            
+            # Check for the specific "error return without exception set" error
+            if "error return without exception set" in error_msg:
+                print_l(f"SKIP: Inlining failed with AST error for task_id={task_id} solver_id={sol_solver_id}: {error_msg}")
+            else:
+                print_l(f"Error inlining task_id={task_id} solver_id={sol_solver_id} candidate={candidate}: ValueError: {e}")
+            return None
         except Exception as e:
             # Provide context about which solver failed
             task_id = data.get('task_id', 'unknown')
@@ -1742,6 +1755,17 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             
             md5 = hashlib.md5(inlined.encode()).hexdigest()
             return {**data, 'inlined_source': inlined, 'md5_hash': md5}
+        except ValueError as e:
+            # Handle ValueError from cached_inline_variables wrapper
+            differ_name = data.get('name', 'unknown')
+            error_msg = str(e)
+            
+            # Check for the specific "error return without exception set" error
+            if "error return without exception set" in error_msg:
+                print_l(f"SKIP: Inlining differ failed with AST error for {differ_name}: {error_msg}")
+            else:
+                print_l(f"Error inlining differ {differ_name}: ValueError: {e}")
+            return None
         except Exception as e:
             error_type = type(e).__name__
             differ_name = data.get('name', 'unknown')
