@@ -1541,15 +1541,19 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # Use thread pool for parallel inlining
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion
     # CRITICAL: Use _safe_map_with_timeout to prevent hangs on stuck inline operations
+    # Timeout: 1s per solver (vs 30s previously)
+    #   - Normal solvers inline in <100ms
+    #   - 1s is still generous for pathological cases
+    #   - Prevents hanging on infinite loops in AST visitor
     if GPU_AVAILABLE:
         with ThreadPoolExecutor(max_workers=4) as executor:
             inlined_data = _safe_map_with_timeout(executor, inline_one, candidate_data, 
-                                                 timeout_per_item=30, operation_name="inline_variables")
+                                                 timeout_per_item=1, operation_name="inline_variables")
     else:
         # CPU-only: Use smaller pool to limit total threads
         with ThreadPoolExecutor(max_workers=2) as executor:
             inlined_data = _safe_map_with_timeout(executor, inline_one, candidate_data,
-                                                 timeout_per_item=30, operation_name="inline_variables")
+                                                 timeout_per_item=1, operation_name="inline_variables")
     
     # Filter out failures
     inlined_data = [d for d in inlined_data if d is not None]
@@ -1774,15 +1778,18 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion  
     # CRITICAL: Use _safe_map_with_timeout to prevent hangs on stuck inline operations
+    # Timeout: 1s per differ (vs 30s previously)
+    #   - Normal differs inline in <100ms
+    #   - 1s is still generous for pathological cases
     if GPU_AVAILABLE:
         with ThreadPoolExecutor(max_workers=4) as executor:
             inlined_differs = _safe_map_with_timeout(executor, inline_differ, differ_data_list,
-                                                    timeout_per_item=30, operation_name="inline_differ")
+                                                    timeout_per_item=1, operation_name="inline_differ")
     else:
         # CPU-only: Use smaller pool to limit total threads
         with ThreadPoolExecutor(max_workers=2) as executor:
             inlined_differs = _safe_map_with_timeout(executor, inline_differ, differ_data_list,
-                                                    timeout_per_item=30, operation_name="inline_differ")
+                                                    timeout_per_item=1, operation_name="inline_differ")
     
     inlined_differs = [d for d in inlined_differs if d is not None]
     
