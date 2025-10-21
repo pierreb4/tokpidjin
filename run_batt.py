@@ -1496,7 +1496,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         phase2_start = timer()
     
     # Feature flag to disable inlining for debugging
-    SKIP_INLINING = os.environ.get('SKIP_INLINING', '1') == '1'
+    SKIP_INLINING = os.environ.get('SKIP_INLINING', '0') == '1'
     if SKIP_INLINING:
         print_l("INLINING DISABLED (SKIP_INLINING=1) - Using raw solver source")
     
