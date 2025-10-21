@@ -48,10 +48,16 @@ if [ -n "$INITIAL" ]; then
   rm -rf differ_dir differ_md5 differ_def
   mkdir differ_dir differ_md5 differ_def
   rm -f main.log  # Added -f flag to ignore if file doesn't exist
+  
   # Gets unset for ONERUN
   # CARD_OPTION="-fs -fd"
   CARD_OPTION="-fd"
 
+  # Clear cache for fresh start
+  echo "Clearing cache..."
+  python cache_manage.py clear
+  
+  # Prepare solver_dir
   python prep_solver_dir.py
 
   # # On simone or mbp
