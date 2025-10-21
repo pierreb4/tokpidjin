@@ -319,7 +319,7 @@ class VariableInliner(ast.NodeTransformer):
         return node
 
 
-def inline_variables(source_code, timeout_seconds=0.2):
+def inline_variables(source_code, timeout_seconds=0.5):
     """
     Inline variable assignments in source code.
     
