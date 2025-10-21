@@ -351,6 +351,10 @@ class Code:
 
                 # Replace with random function of same arity
                 old_func_name = old_args[i]
+
+                if old_func_name not in DSL_FUNCTION_DICT:
+                    print_l(f'{old_func_name = } - {old_args = }')
+
                 old_function = DSL_FUNCTION_DICT[old_func_name]
                 arity = old_function.__code__.co_argcount
                 while True:
