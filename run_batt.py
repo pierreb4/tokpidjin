@@ -638,8 +638,8 @@ def score_sample(args):
     sample_o = []
     sample_s = []
     diff_call_count = 0
-    match_count = 0
-    has_match = False
+    score_count = 0
+    match = False
     
     if solve_result is not None:
         sample_o, sample_s = solve_result
@@ -650,17 +650,14 @@ def score_sample(args):
         # Score outputs and collect matching solver ids
         for t_n, evo, o_solver_id, okt in sample_o:
             C = okt
-            match = eval_match(C, O) == 1000
-            if match > 0:
-                match_count += eval_match(C, O)
-                if match == 1000:
-                    has_match = True
-                if DO_PRINT:
-                    print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
+            match, score = eval_match(C, O)
+            score_count += score
+            if DO_PRINT:
+                print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
         
         # OPTIMIZATION: Only run diff ONCE per sample if any output matches
         # Calling batt multiple times with identical O parameter returns identical results
-        if has_match:
+        if match:
             diff_call_count += 1
             # Run diff to get solver-level scores (only once per sample)
             diff_timed_out, diff_result = call_with_timeout(batt_func,
@@ -685,7 +682,7 @@ def score_sample(args):
         'solver_scores': sample_s,
         'timed_out': solve_timed_out,
         'diff_calls': diff_call_count,
-        'matches': match_count
+        'matches': score_count
     }
 
 
@@ -1282,8 +1279,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
-            match = eval_match(C, O)
-            o_score.update(o_solver_id, match)
+            _, score = eval_match(C, O)
+            o_score.update(o_solver_id, score)
         if prof is not None:
             prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
         
@@ -1325,8 +1322,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
-            match = eval_match(C, O)
-            o_score.update(o_solver_id, match)
+            _, score = eval_match(C, O)
+            o_score.update(o_solver_id, score)
         if prof is not None:
             prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
         

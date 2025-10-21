@@ -78,10 +78,6 @@ def get_functions(path):
 
 
 def eval_match(C, O):
-
-    # Testing with 0 or 1 score
-    return 1 * (C == O)
-
     """
     Evaluate match between computed output C and expected output O using a tiered scoring system.
     
@@ -107,10 +103,12 @@ def eval_match(C, O):
         * Important: Helps detect off-by-one errors or scaling issues
     - Tier 4 (No match): 0 points
     """
+    # Old matching
+    perfect_match = C == O
     try:
         # Handle edge cases
         if C is None or O is None:
-            return 0
+            return perfect_match, 0
 
         # Ensure C and O are numpy arrays for shape/dtype operations
         try:
@@ -119,11 +117,11 @@ def eval_match(C, O):
             O_arr = np.asarray(O)
         except Exception:
             # If numpy not available or conversion fails, fallback to exact match
-            return 1000 if C == O else 0
+            return perfect_match, 1000 if C == O else perfect_match, 0
 
         # Tier 1: Perfect match (exact equality)
         if np.array_equal(C_arr, O_arr):
-            return 1000
+            return perfect_match, 1000
 
         # Extract dimensions (grids are always 2D in ARC)
         C_shape = C_arr.shape if hasattr(C_arr, 'shape') else (len(C_arr), len(C_arr[0]) if C_arr else 0)
@@ -137,7 +135,7 @@ def eval_match(C, O):
         # Validate dimensions are in ARC range (1-30)
         dims_valid = all(1 <= d <= 30 for d in [C_height, C_width, O_height, O_width])
         if not dims_valid:
-            return 0  # Invalid dimensions
+            return perfect_match, 0  # Invalid dimensions
 
         # Tier 2: Dimensions match exactly
         if C_height == O_height and C_width == O_width:
@@ -160,7 +158,7 @@ def eval_match(C, O):
             accuracy_points = (matching_cells * 900) // total_cells if total_cells > 0 else 0
             score += accuracy_points
 
-            return score
+            return perfect_match, score
 
         # Tier 3: Partial match (dimensions differ but both within ARC range)
         # Calculate overlap area at 0,0 corner
@@ -179,15 +177,15 @@ def eval_match(C, O):
             # Scale to 1-99 points based on accuracy in overlap
             # Use ceiling to ensure any match gets at least 1 point
             overlap_score = max(1, min(99, (matching_in_overlap * 99) // overlap_area))
-            return overlap_score
+            return perfect_match, overlap_score
 
         # Tier 4: No match
-        return 0
+        return perfect_match, 0
 
     except Exception as e:
         # Safety fallback: on any error, return 0
         # Prevents crashes from malformed grids/outputs
-        return 0
+        return perfect_match, 0
 
 
 def run_dsl_tests(dsl_module, test_module, quiet=False):
@@ -276,7 +274,7 @@ async def check_solver(data, solver, task_id, sol_solver_id, timeout=30):
     checks the speed and correctness of the solver on all samples
     
     Returns:
-        tuple: (timed_out, score) where timed_out is bool and score is int
+        tuple: (timed_out, score_count) where timed_out is bool and score_count is int
     """
     demo_samples = data['demo'][task_id]
     test_samples = data['test'][task_id]
@@ -291,7 +289,7 @@ async def check_solver(data, solver, task_id, sol_solver_id, timeout=30):
     solve_func.__globals__.update(globals())
 
     timed_out = False
-    score = 0
+    score_count = 0
     
     # Test on all samples (demo + test), counting correct answers
     # Using 30s timeout per solver (not per sample) to allow full execution
@@ -303,12 +301,12 @@ async def check_solver(data, solver, task_id, sol_solver_id, timeout=30):
                     print_l(f'Timed out: {sol_solver_id =} - {task_id =} - sample = {i}')
                 timed_out = True
             else:
-                match = eval_match(result, sample['output'])
-                score += match
+                _, score = eval_match(result, sample['output'])
+                score_count += score
         except:
             pass  # Errors count as incorrect
     
-    return timed_out, score
+    return timed_out, score_count
 
 
 async def check_solvers_pre(data, task_id, timeout=10):
@@ -316,7 +314,7 @@ async def check_solvers_pre(data, task_id, timeout=10):
     task = data['demo'][task_id] + data['test'][task_id]
     S = tuple((tuple(sample['input']), tuple(sample['output'])) for sample in task)
     timeouts = 0
-    score = 0
+    score_count = 0
 
     # print_l(f'Processing solver for task {task_id}')
 
@@ -332,9 +330,9 @@ async def check_solvers_pre(data, task_id, timeout=10):
                     # print_l(f'Solver for {task_id} timed out on sample {i}')
                     timeouts += 1
                 else:
-                    match = eval_match(result, sample['output'])
+                    _, score = eval_match(result, sample['output'])
                     # print_l(f'Solver for {task_id} correct on sample {i}: {result =}')
-                    score += match
+                    score_count += score
             except (asyncio.CancelledError, KeyboardInterrupt):
                 # Propagate cancellation/interrupt
                 raise
@@ -348,7 +346,7 @@ async def check_solvers_pre(data, task_id, timeout=10):
         # Suppress exceptions for the whole task
         pass
         
-    return timeouts, score
+    return timeouts, score_count
 
 
 def check_solvers_correctness(data, solvers_module, specific_id=None, quiet=False, patch=False, update=False):
