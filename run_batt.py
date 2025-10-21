@@ -1496,7 +1496,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         phase2_start = timer()
     
     # Feature flag to disable inlining for debugging
-    SKIP_INLINING = os.environ.get('SKIP_INLINING', '1') == '1'
+    SKIP_INLINING = os.environ.get('SKIP_INLINING', '0') == '1'
     if SKIP_INLINING:
         print_l("INLINING DISABLED (SKIP_INLINING=1) - Using raw solver source")
     
@@ -1754,9 +1754,11 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     
     # Feature flag to disable inlining for debugging
     # (same flag as solver inlining to keep them in sync)
-    if SKIP_INLINING and not hasattr(inline_differ, '_logged'):
+    # Use module-level to track if we've logged this message already
+    global _differ_inlining_logged
+    if SKIP_INLINING and not globals().get('_differ_inlining_logged', False):
         print_l("DIFFER INLINING DISABLED (SKIP_INLINING=1) - Using raw differ source")
-        inline_differ._logged = True  # Log only once
+        globals()['_differ_inlining_logged'] = True  # Log only once
         
     def inline_differ(data):
         # If inlining is disabled, return raw source with empty md5
