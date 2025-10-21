@@ -78,6 +78,10 @@ def get_functions(path):
 
 
 def eval_match(C, O):
+
+    # Testing with 0 or 1000 score
+    return 1000 * (C == O)
+
     """
     Evaluate match between computed output C and expected output O using a tiered scoring system.
     
