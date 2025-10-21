@@ -22,24 +22,44 @@ def profile_inline_stress():
     batt_module = None
     batt_file = "tmp_batt_onerun_run.py"
     
-    if os.path.exists(batt_file):
-        try:
-            import importlib.util
-            spec = importlib.util.spec_from_file_location("tmp_batt", batt_file)
-            if spec and spec.loader:
-                batt_module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(batt_module)
-        except Exception as e:
-            print(f"Error loading {batt_file}: {e}", file=sys.stderr)
-            return False
+    # Check if file exists
+    if not os.path.exists(batt_file):
+        print(f"\n{'='*60}", file=sys.stderr)
+        print(f"ERROR: Could not find {batt_file}", file=sys.stderr)
+        print(f"{'='*60}", file=sys.stderr)
+        print(f"\nNo batt module available for profiling.", file=sys.stderr)
+        print(f"Please run this command first to generate a batt module:\n", file=sys.stderr)
+        print(f"  timeout 120 bash run_card.sh -c -1\n", file=sys.stderr)
+        print(f"This will create the tmp_batt_onerun_run.py file needed for profiling.", file=sys.stderr)
+        print(f"Runtime: ~2-5 minutes depending on CPU\n", file=sys.stderr)
+        return False
     
-    if not batt_module:
-        print(f"Error: Could not find or load {batt_file}", file=sys.stderr)
-        print("Please run 'bash run_card.sh -c -1' first to generate a batt module", file=sys.stderr)
+    # Try to load and execute the batt module
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("tmp_batt", batt_file)
+        if spec and spec.loader:
+            batt_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(batt_module)
+        else:
+            print(f"Error: Could not create spec for {batt_file}", file=sys.stderr)
+            return False
+    except Exception as e:
+        print(f"Error loading {batt_file}: {e}", file=sys.stderr)
         return False
     
     # Extract and sample solvers
     solvers = [s for s in dir(batt_module) if s.startswith('solve_')]
+    
+    if not solvers:
+        print(f"\n{'='*60}", file=sys.stderr)
+        print(f"ERROR: No solvers found in {batt_file}", file=sys.stderr)
+        print(f"{'='*60}", file=sys.stderr)
+        print(f"\nThe batt module exists but contains no solve_* functions.", file=sys.stderr)
+        print(f"Try running again to regenerate:\n", file=sys.stderr)
+        print(f"  timeout 120 bash run_card.sh -c -1\n", file=sys.stderr)
+        return False
+    
     sample_solvers = random.sample(solvers, min(30, len(solvers)))
     
     print(f"Loading {len(sample_solvers)} solvers for stress testing...")

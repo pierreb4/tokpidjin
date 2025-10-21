@@ -22,25 +22,44 @@ def profile_inline_isolated():
     batt_module = None
     batt_file = "tmp_batt_onerun_run.py"
     
-    if os.path.exists(batt_file):
-        try:
-            import importlib.util
-            spec = importlib.util.spec_from_file_location("tmp_batt", batt_file)
-            if spec and spec.loader:
-                batt_module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(batt_module)
-        except Exception as e:
-            print(f"Error loading {batt_file}: {e}", file=sys.stderr)
-            return False
+    # Check if file exists
+    if not os.path.exists(batt_file):
+        print(f"\n{'='*60}", file=sys.stderr)
+        print(f"ERROR: Could not find {batt_file}", file=sys.stderr)
+        print(f"{'='*60}", file=sys.stderr)
+        print(f"\nNo batt module available for profiling.", file=sys.stderr)
+        print(f"Please run this command first to generate a batt module:\n", file=sys.stderr)
+        print(f"  timeout 120 bash run_card.sh -c -1\n", file=sys.stderr)
+        print(f"This will create the tmp_batt_onerun_run.py file needed for profiling.", file=sys.stderr)
+        print(f"Runtime: ~2-5 minutes depending on CPU\n", file=sys.stderr)
+        return False
     
-    if not batt_module:
-        print(f"Error: Could not find or load {batt_file}", file=sys.stderr)
-        print("Please run 'bash run_card.sh -c -1' first to generate a batt module", file=sys.stderr)
+    # Try to load and execute the batt module
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("tmp_batt", batt_file)
+        if spec and spec.loader:
+            batt_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(batt_module)
+        else:
+            print(f"Error: Could not create spec for {batt_file}", file=sys.stderr)
+            return False
+    except Exception as e:
+        print(f"Error loading {batt_file}: {e}", file=sys.stderr)
         return False
     
     # Extract solvers
     solvers = [s for s in dir(batt_module) if s.startswith('solve_')]
     differs = [d for d in dir(batt_module) if d.startswith('differ_')]
+    
+    if not solvers and not differs:
+        print(f"\n{'='*60}", file=sys.stderr)
+        print(f"ERROR: No solvers or differs found in {batt_file}", file=sys.stderr)
+        print(f"{'='*60}", file=sys.stderr)
+        print(f"\nThe batt module exists but contains no solve_* or differ_* functions.", file=sys.stderr)
+        print(f"Try running again to regenerate:\n", file=sys.stderr)
+        print(f"  timeout 120 bash run_card.sh -c -1\n", file=sys.stderr)
+        return False
     
     print(f"Found {len(solvers)} solvers and {len(differs)} differs")
     print()
@@ -163,11 +182,18 @@ def profile_inline_isolated():
     total_tests = total_success + total_timeouts + total_errors
     
     print(f"Total tests:    {total_tests}")
-    print(f"Success:        {total_success} ({100*total_success/total_tests:.1f}%)")
-    if total_timeouts:
-        print(f"Timeouts:       {total_timeouts} ({100*total_timeouts/total_tests:.1f}%)")
-    if total_errors:
-        print(f"Errors:         {total_errors} ({100*total_errors/total_tests:.1f}%)")
+    
+    # Guard against division by zero
+    if total_tests > 0:
+        print(f"Success:        {total_success} ({100*total_success/total_tests:.1f}%)")
+        if total_timeouts:
+            print(f"Timeouts:       {total_timeouts} ({100*total_timeouts/total_tests:.1f}%)")
+        if total_errors:
+            print(f"Errors:         {total_errors} ({100*total_errors/total_tests:.1f}%)")
+    else:
+        print(f"Success:        {total_success}")
+        print(f"Timeouts:       {total_timeouts}")
+        print(f"Errors:         {total_errors}")
     
     all_times = times_solver + times_differ
     if all_times:
@@ -176,7 +202,7 @@ def profile_inline_isolated():
         print(f"Overall max:    {max(all_times)*1000:.2f}ms")
         print(f"Overall min:    {min(all_times)*1000:.2f}ms")
     
-    return True
+    return total_tests > 0  # Return False if no tests were run
 
 if __name__ == "__main__":
     try:
