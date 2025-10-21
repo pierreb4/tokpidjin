@@ -117,7 +117,7 @@ def eval_match(C, O):
             O_arr = np.asarray(O)
         except Exception:
             # If numpy not available or conversion fails, fallback to exact match
-            return perfect_match, 1000 if C == O else perfect_match, 0
+            return perfect_match, 1000 * perfect_match
 
         # Tier 1: Perfect match (exact equality)
         if np.array_equal(C_arr, O_arr):
