@@ -51,6 +51,7 @@ Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 't_score'])
 Differ = namedtuple('Differ', ['name', 'path', 'source', 'score_type', 's_score', 't_score'])
 
 Mutation = namedtuple('Mutation', ['present', 'old', 'new'])
+HintValue = namedtuple('HintValue', ['hint', 'value'])
 
 Path('solvers_lnk.py').touch()
 import solvers_lnk

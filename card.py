@@ -31,7 +31,7 @@ def get_hints(node_name):
         return None
 
     hints = [t for var, t in global_id.__annotations__.items()]
-    return hints[-1:] + hints[:-1]
+    return hints
 
 
 def clean_call(call):
@@ -215,7 +215,9 @@ class Code:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
         else:
             # old_func_name is a known function
-            for i, (old_arg, old_hint) in enumerate(zip(old_args, old_hints)):
+            # Skip first hint (return type) and use only argument hints
+            arg_hints = old_hints[1:] if len(old_hints) > 1 else []
+            for i, (old_arg, old_hint) in enumerate(zip(old_args, arg_hints)):
                 # First deal with t variables
                 if re.match(r't\d+', old_arg):
                     if not freeze:
@@ -382,14 +384,66 @@ class Code:
 
 def get_equals(source):
     # Catalog assignments in source
+    # Each assignment maps var_name -> HintValue(hint, value)
+    # where hint is the return type of the function being called
     equals = {}
     for line in source.split('\n'):
+        # print_l(f'Processing line: {line}') if DO_PRINT else None
         if ' = ' in line:
             parts = line.split(' = ')
             var_name = parts[0].strip()
             value = parts[1].strip()
-            equals[var_name] = value
+
+            # Extract function name from the call (e.g., "func_name(...)" -> "func_name")
+            func_match = re.match(r'(\w+)\s*\(', value)
+            func_name = func_match[1] if func_match else None
+
+
+            # XXX Temporary troubleshooting code to catch special cases
+            if func_name is None:
+                assert_message(
+                    source, value, "Could not extract function name from value"
+                )
+
+
+            func_hints = None
+            if func_name == 'identity':
+                func_arg = re.match(r'identity\((\w+)\)', value)[1]
+                func_hints = get_hints(func_arg)
+                print_l(f'Identity function detected: {var_name} takes hint from {func_arg} = {func_hints}') if DO_PRINT else None
+            # elif func_name in ALL_CONSTANT_NAMES:
+            #     print_l(f'Constant detected: {var_name} assigned constant {func_name}') if DO_PRINT else None
+            #     func_hints = 'NoneType'
+            #     value = 'None'
+
+
+            # Get hints (return type) for this function
+            # If func_name is an x_n variable, get hints from that variable
+            if re.match(r'x\d+', func_name):
+                func_value = equals.get(func_name)
+                hints = [func_value.hint] if func_value is not None else None
+            else:
+                hints = get_hints(func_name) if func_hints is None else [func_hints]
+            hint = hints[-1] if hints else None
+
+
+            if hint is None:
+                hint = 'Any'  # Fallback to 'Any' if hint extraction fails
+
+            # Store as HintValue namedtuple
+            equals[var_name] = HintValue(hint, value)
+
+
+            # print_l(f'{var_name} : {hint} = {value}') if DO_PRINT else None
+
+
     return equals
+
+
+def assert_message(source, value, message):
+    print(source)
+    print_l(f'{value = }')
+    assert False, message
 
 
 def track_solution(t_call, t_num, done):
@@ -479,8 +533,12 @@ class Differs:
         self.run_equals = {}
         for differ_name in self.init_equals.keys():
             self.run_equals[differ_name] = {}
-            for x_name, x_call in self.init_equals[differ_name].items():
-                self.run_equals[differ_name][x_name] = re.sub(r'\bI\b', I, x_call)
+            for x_name, hint_value in self.init_equals[differ_name].items():
+                # Extract value from HintValue namedtuple
+                x_call = hint_value.value
+                # Perform substitution and store back as HintValue
+                substituted_call = re.sub(r'\bI\b', I, x_call)
+                self.run_equals[differ_name][x_name] = HintValue(hint_value.hint, substituted_call)
 
                 # print_l(f'{differ_name} - {x_name} = {self.run_equals[differ_name][x_name]}')
 
@@ -527,8 +585,9 @@ class Differs:
 
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
-    # Take next assignment - x_n = call(...)
-    old_name, old_call = next(iter(equals.items()))
+    # Take next assignment - x_n = HintValue(hint, call(...))
+    old_name, hint_value = next(iter(equals.items()))
+    old_call = hint_value.value
     uses[old_call] = 0
 
     old_items = get_items(old_call)
@@ -558,11 +617,13 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         print_l(f'{code.t_call[code.t_num] = }')
 
     # Replace x_n with t_name[x_call] in rest of solver
-    for x_name, x_call in equals.items():
+    for x_name, x_hint_value in equals.items():
+        x_call = x_hint_value.value
         if old_name in x_call:
             uses[old_call] += 1
             # Replace old_name with t_number[old_call] to track mutations
-            equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+            new_call = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+            equals[x_name] = HintValue(x_hint_value.hint, new_call)
 
 
 def append_to_o(code, last_t, has_mutation, task_id):
@@ -570,8 +631,9 @@ def append_to_o(code, last_t, has_mutation, task_id):
 
 
 def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
-    # Take next assignment - x_n = call(...)
-    old_name, old_call = next(iter(equals.items()))
+    # Take next assignment - x_n = HintValue(hint, call(...))
+    old_name, hint_value = next(iter(equals.items()))
+    old_call = hint_value.value
     uses[old_call] = 0
 
     # Remove entry from equals
@@ -594,10 +656,12 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
         append_to_o(code, code.t_num, has_mutation, task_id)
 
     # Replace x_n with t_name[x_call] in rest of solver
-    for x_name, x_call in equals.items():
+    for x_name, x_hint_value in equals.items():
+        x_call = x_hint_value.value
         if old_name in x_call:
             uses[old_call] += 1
-            equals[x_name] = re.sub(rf'\b{old_name}\b', f't{code.t_num}', x_call)
+            new_call = re.sub(rf'\b{old_name}\b', f't{code.t_num}', x_call)
+            equals[x_name] = HintValue(x_hint_value.hint, new_call)
 
     return old_name == 'O'
 

@@ -32,6 +32,8 @@ IntegerSet = FrozenSet[Integer]
 Grid = Tuple[Tuple[Integer]]
 Samples = Tuple[Grid, Grid]
 
+TTT_iii = Tuple[Tuple[Tuple[int, int, int], ...], ...]
+
 # Cell = Tuple[Integer, IntegerTuple]
 # Cell = Tuple[C_, IJ]
 Cell = Tuple[I_, J_, C_]
