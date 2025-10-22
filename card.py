@@ -420,7 +420,7 @@ def get_equals(source):
             elif func_name == 'lbind':
                 func_arg = re.match(r'lbind\((\w+)\)', value)[1]
                 func_hints = get_hints(func_arg)
-                print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+                print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
 
             # NOTE These shouldn't show up to start with
