@@ -410,25 +410,49 @@ def get_equals(source):
             if func_name == 'identity':
                 func_arg = re.match(r'identity\((\w+)\)', value)[1]
                 func_hints = get_hints(func_arg)
-                print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
-
+                # print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
             elif func_name == 'rbind':
                 func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[1]
-                all_func_hints = get_hints(func_arg)
-                # arg -2 is fixed
-                func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
-                # print_l(f'Rbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
-                # func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
-                print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
+
+                if re.match(r'x\d+', func_arg):
+                    func_arg = equals.get(func_name)
+
+
+                all_func_hints = get_hints(func_arg)
+                if all_func_hints is None:
+                    # assert_message(
+                    #     source, value, "Could not extract function hints from rbind argument"
+                    # )
+                    print_l(f'Rbind function could not be detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
+                    func_hints = None
+                else:
+                    # arg -2 is fixed
+                    func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
+                    # print_l(f'Rbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
+                    # func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
+                    # print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
             elif func_name == 'lbind':
                 func_arg = re.match(r'lbind\((\w+),\s*(\w+)\)', value)[1]
+
+
+                if re.match(r'x\d+', func_arg):
+                    func_arg = equals.get(func_name)
+
+
                 all_func_hints = get_hints(func_arg)
-                # arg 0 is fixed
-                func_hints = all_func_hints[1:]
-                # print_l(f'Lbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
-                # func_hints = [h for i, h in enumerate(all_func_hints) if i != 0]
-                print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+                if all_func_hints is None:
+                    # assert_message(
+                    #     source, value, "Could not extract function hints from lbind argument"
+                    # )
+                    print_l(f'Lbind function could not be detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
+                    func_hints = None
+                else:
+                    # arg 0 is fixed
+                    func_hints = all_func_hints[1:]
+                    # print_l(f'Lbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
+                    # func_hints = [h for i, h in enumerate(all_func_hints) if i != 0]
+                    # print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
 
             # Get hints (return type) for this function
