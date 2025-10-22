@@ -414,13 +414,16 @@ def get_equals(source):
 
             # Let's try the same with rbind and lbind
             elif func_name == 'rbind':
-                print_l(f'Found rbind in: {line}') if DO_PRINT else None
-                func_arg = re.match(r'rbind\((\w+)\)', value)[1]
+                # Match rbind(arg1, arg2)
+                func_match = re.match(r'rbind\((\w+),\s*(\w+)\)', value)
+                print_l(f"Found rbind in: {line} - {func_match = }") if DO_PRINT else None
+                func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[1]
                 func_hints = get_hints(func_arg)
                 print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
             elif func_name == 'lbind':
-                print_l(f'Found lbind in: {line}') if DO_PRINT else None
-                func_arg = re.match(r'lbind\((\w+)\)', value)[1]
+                func_match = re.match(r'lbind\((\w+),\s*(\w+)\)', value)
+                print_l(f"Found lbind in: {line} - {func_match = }") if DO_PRINT else None
+                func_arg = re.match(r'lbind\((\w+),\s*(\w+)\)', value)[1]
                 func_hints = get_hints(func_arg)
                 print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
