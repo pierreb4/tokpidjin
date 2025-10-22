@@ -408,22 +408,18 @@ def get_equals(source):
 
             func_hints = None
             if func_name == 'identity':
-                func_arg = re.match(r'identity\((\w+)\)', value)[1]
+                func_arg = re.match(r'identity\((\w+)\)', value)[-1]
                 func_hints = get_hints(func_arg)
                 print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
             # Let's try the same with rbind and lbind
             elif func_name == 'rbind':
                 # Match rbind(arg1, arg2)
-                func_match = re.match(r'rbind\((\w+),\s*(\w+)\)', value)
-                print_l(f"Found rbind in: {line} - {func_match = }") if DO_PRINT else None
-                func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[2]
+                func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[-1]
                 func_hints = get_hints(func_arg)
                 print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
             elif func_name == 'lbind':
-                func_match = re.match(r'lbind\((\w+),\s*(\w+)\)', value)
-                print_l(f"Found lbind in: {line} - {func_match = }") if DO_PRINT else None
-                func_arg = re.match(r'lbind\((\w+),\s*(\w+)\)', value)[2]
+                func_arg = re.match(r'lbind\((\w+),\s*(\w+)\)', value)[-1]
                 func_hints = get_hints(func_arg)
                 print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
