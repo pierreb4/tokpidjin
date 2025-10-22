@@ -424,6 +424,7 @@ def get_equals(source):
                     # assert_message(
                     #     source, value, "Could not extract function hints from rbind argument"
                     # )
+                    print_l(f'Processing line: {line}') if DO_PRINT else None
                     print_l(f'Rbind function could not be detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
                     func_hints = None
                 else:
@@ -445,6 +446,7 @@ def get_equals(source):
                     # assert_message(
                     #     source, value, "Could not extract function hints from lbind argument"
                     # )
+                    print_l(f'Processing line: {line}') if DO_PRINT else None
                     print_l(f'Lbind function could not be detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
                     func_hints = None
                 else:
