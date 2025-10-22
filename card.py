@@ -410,7 +410,10 @@ def get_equals(source):
             if func_name == 'identity':
                 func_arg = re.match(r'identity\((\w+)\)', value)[1]
                 func_hints = get_hints(func_arg)
-                print_l(f'Identity function detected: {var_name} takes hint from {func_arg} = {func_hints}') if DO_PRINT else None
+                print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+
+            # NOTE These shouldn't show up to start with
+            # Let's fix this at the source (mutate time)
             # elif func_name in ALL_CONSTANT_NAMES:
             #     print_l(f'Constant detected: {var_name} assigned constant {func_name}') if DO_PRINT else None
             #     func_hints = 'NoneType'
