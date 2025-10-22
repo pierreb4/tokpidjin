@@ -414,7 +414,7 @@ def get_equals(source):
 
             # Let's try the same with rbind and lbind
             elif func_name == 'rbind':
-                func_match = re.match(rf'{func_name}\((\w+)\)', value)
+                func_match = re.match(rf'{func_name}\((\w+),\s*(\w+)\)', value)
                 print_l(f"Found {func_name} in: {line} - {func_match = }") if DO_PRINT else None
                 func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[1]
                 func_hints = get_hints(func_arg)
