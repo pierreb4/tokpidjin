@@ -412,25 +412,23 @@ def get_equals(source):
                 func_hints = get_hints(func_arg)
                 print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
-            # Let's try the same with rbind and lbind
             elif func_name == 'rbind':
-                func_match = re.match(rf'{func_name}\((\w+),\s*(\w+)\)', value)
-                print_l(f"Found {func_name} in: {line} - {func_match = }") if DO_PRINT else None
                 func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[1]
-                func_hints = get_hints(func_arg)
+                all_func_hints = get_hints(func_arg)
+                # arg -2 is fixed
+                func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
+                # print_l(f'Rbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
+                # func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
                 print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+
             elif func_name == 'lbind':
                 func_arg = re.match(r'lbind\((\w+),\s*(\w+)\)', value)[1]
-                func_hints = get_hints(func_arg)
+                all_func_hints = get_hints(func_arg)
+                # arg 0 is fixed
+                func_hints = all_func_hints[1:]
+                # print_l(f'Lbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
+                # func_hints = [h for i, h in enumerate(all_func_hints) if i != 0]
                 print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
-
-
-            # NOTE These shouldn't show up to start with
-            # Let's fix this at the source (mutate time)
-            # elif func_name in ALL_CONSTANT_NAMES:
-            #     print_l(f'Constant detected: {var_name} assigned constant {func_name}') if DO_PRINT else None
-            #     func_hints = 'NoneType'
-            #     value = 'None'
 
 
             # Get hints (return type) for this function
