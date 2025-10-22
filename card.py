@@ -412,6 +412,17 @@ def get_equals(source):
                 func_hints = get_hints(func_arg)
                 print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
+            # Let's try the same with rbind and lbind
+            elif func_name == 'rbind':
+                func_arg = re.match(r'rbind\((\w+)\)', value)[1]
+                func_hints = get_hints(func_arg)
+                print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+            elif func_name == 'lbind':
+                func_arg = re.match(r'lbind\((\w+)\)', value)[1]
+                func_hints = get_hints(func_arg)
+                print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+
+
             # NOTE These shouldn't show up to start with
             # Let's fix this at the source (mutate time)
             # elif func_name in ALL_CONSTANT_NAMES:
