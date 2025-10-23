@@ -47,7 +47,7 @@ def clean_call(call_value):
 
 def get_items(call_value):
     items = call_value.strip('[]').split(', ')
-    print_l(f'Get items from: {call_value} - {items = }') if DO_PRINT else None
+    # print_l(f'Get items from: {call_value} - {items = }') if DO_PRINT else None
     return items
     # return call_value.strip('[]').split(',')
 
