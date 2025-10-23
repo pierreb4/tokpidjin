@@ -412,9 +412,13 @@ class Code:
                 'Integer', 'IntegerSet', 'Numerical', 'Indices', 
                 'TupleTuple', 'Any',
                 None
-            ]:
+            ] and old_hint:
             print_l(f'{old_hint = }')
         elif self.t_num > 1 and random.random() < BUDGET_RANDOM:
+
+            # XXX We need to get in here when old_hint is a tuple type
+            # XXX And adapt the code accordingly
+
             if old_hint == 'Callable':
 
                 # NOTE We could also try to match return type
@@ -541,10 +545,13 @@ def get_equals(source):
                     # We have the hints for x_n variables
                     func_value = equals.get(func_name)
 
+                    if func_value is None:
+                        print_l(f'Processing line: {line}') if DO_PRINT else None
+                        print_l(f'Function variable could not be detected: {var_name} is {func_name}') if DO_PRINT else None
+
                     # TODO We probably can refine this further
                     #      Maybe by looking at the arguments and matching types
-                    hints = func_value.hint[-1] if func_value is not None and func_value.hint is not None \
-                            else 'Any'
+                    hints = func_value.hint[-1] if func_value is not None else 'Any'
                 else:
                     hints = get_hints(func_name)
 
