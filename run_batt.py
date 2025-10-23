@@ -1462,7 +1462,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         
         solver_body = ''
         for t_num in sorted(done):
-            t_split = [item.strip() for item in t_call[t_num].split(',')]
+            t_split = [item.strip() for item in t_call[t_num].value.split(',')]
             t = [s[:-2] if s.endswith('.t') else s for s in t_split]
             func = t[0]
             args = t[1:]
@@ -1731,7 +1731,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             
             differ_body = ''
             for t_num in sorted(done_differ):
-                t_split = [item.strip() for item in t_call[t_num].split(',')]
+                t_split = [item.strip() for item in t_call[t_num].value.split(',')]
                 t = [s[:-2] if s.endswith('.t') else s for s in t_split]
                 func = t[0]
                 args = t[1:]
@@ -1888,7 +1888,7 @@ def track_solution(t_num, done):
     if t_num not in done:
         done.add(t_num)
 
-    call = t_call[t_num]
+    call = t_call[t_num].value
 
     if t_list := re.findall(r't(\d+)', call):
         for t_str in t_list:

@@ -30,16 +30,26 @@ def get_hints(node_name):
     if not inspect.isfunction(global_id):
         return None
 
-    hints = [t for var, t in global_id.__annotations__.items()]
-    return hints
+    # return [t for var, t in global_id.__annotations__.items()]
+
+    return tuple(t for var, t in global_id.__annotations__.items())
 
 
-def clean_call(call):
-    return call.replace('(', ', ').replace(')', '')
+def call_to_tuple(call_value):
+    value = call_value.replace('(', ', ').replace(')', '')
+    return tuple(value.split(', '))
 
 
-def get_items(call):
-    return call.strip('[]').split(',')
+def clean_call(call_value):
+    # print_l(f'Cleaning call_value: {call_value}') if DO_PRINT else None
+    return call_value.replace('(', ', ').replace(')', '')
+
+
+def get_items(call_value):
+    items = call_value.strip('[]').split(', ')
+    print_l(f'Get items from: {call_value} - {items = }') if DO_PRINT else None
+    return items
+    # return call_value.strip('[]').split(',')
 
 
 def is_called_as_function(call_str, var_name):
@@ -118,19 +128,19 @@ class Code:
 
         # GPU Batch Pattern: Sample extraction + processing
         # Lines t_num+0 to t_num+3 form a GPU-optimizable pattern
-        t_call[t_num + 0] = 'apply(first, S)'
-        t_call[t_num + 1] = 'apply(second, S)'
-        t_call[t_num + 2] = f'mapply(p_g, t{t_num + 0})'
-        t_call[t_num + 3] = f'mapply(p_g, t{t_num + 1})'
-        t_call[t_num + 4] = f'dedupe(t{t_num + 2})'
-        t_call[t_num + 5] = f'dedupe(t{t_num + 3})'
-        t_call[t_num + 6] = f'difference_tuple(t{t_num + arg_i}, t{t_num + arg_o})'
-        t_call[t_num + 7] = f'get_nth_t(t{t_num + 6}, {f_n})'
+        t_call[t_num + 0] = HintValue('None', 'apply(first, S)')
+        t_call[t_num + 1] = HintValue('None', 'apply(second, S)')
+        t_call[t_num + 2] = HintValue('None', f'mapply(p_g, t{t_num + 0})')
+        t_call[t_num + 3] = HintValue('None', f'mapply(p_g, t{t_num + 1})')
+        t_call[t_num + 4] = HintValue('None', f'dedupe(t{t_num + 2})')
+        t_call[t_num + 5] = HintValue('None', f'dedupe(t{t_num + 3})')
+        t_call[t_num + 6] = HintValue('None', f'difference_tuple(t{t_num + arg_i}, t{t_num + arg_o})')
+        t_call[t_num + 7] = HintValue('None', f'get_nth_t(t{t_num + 6}, {f_n})')
         self.t_num += 8
         
         # Generate normal code for all lines
-        for t in range(0, 8):
-            print(f'    t{t_num + t} = {t_call[t_num + t]}', file=self.file)
+        for t in range(8):
+            print(f'    t{t_num + t} = {t_call[t_num + t].value}', file=self.file)
         
         return f't{t_num + 7}'
 
@@ -175,31 +185,40 @@ class Code:
         t_call = self.t_call
         t_num = self.t_num
 
-        t_call[t_num + 0] = 'identity(S)'
-        t_call[t_num + 1] = f'a_mr(t{t_num + 0})'
+        t_call[t_num + 0] = HintValue('None', 'identity(S)')
+        t_call[t_num + 1] = HintValue('None', f'a_mr(t{t_num + 0})')
         self.t_num += 2
 
-        print(f'    t{t_num + 0} = {t_call[t_num + 0]}', file=self.file)
-        print(f'    t{t_num + 1} = {t_call[t_num + 1]}', file=self.file)
+        for t in range(2):
+            print(f'    t{t_num + t} = {t_call[t_num + t].value}', file=self.file)
+
         return f't{t_num + 1}'
 
 
     def mutate(self, is_solver, freeze=False):
-        old_call = clean_call(self.t_call[self.t_num])
-        self.t_call[self.t_num] = old_call
+        # NOTE old_call is a HintValue namedtuple
+        old_call = self.t_call[self.t_num]
 
-        # print_l(f'{old_call = }')
+        print_l(f'{self.t_num = } - {old_call = }')
 
-        old_items = get_items(old_call)
-        old_func_name = old_items[0].strip()
+        old_items = get_items(old_call.value)
+        old_func_name = old_items[0]
         old_hints = get_hints(old_func_name)
+
+        new_hints = old_call.hint
 
         differ = self.differ[self.t_num]
         solver = self.solver[self.t_num]
-        print(f'    # Pre-mutate: t{self.t_num} - {differ = } - {solver = } - {old_items = } - {old_hints = }', file=self.file)
+        # print(f'    # Pre-mutate: t{self.t_num} - {differ = } - {solver = }', file=self.file)
+        print(f'    # Pre-mutate: t{self.t_num} - {old_items = }', file=self.file)
+        print(f'    # Pre-mutate: t{self.t_num} - {old_hints = } from {old_func_name}', file=self.file)
+        print(f'    # Pre-mutate: t{self.t_num} - {new_hints = }', file=self.file)
 
         has_mutation = Mutation(False, None, None)
-        old_args = re.findall(r'\b(\w+)\b', old_call)
+
+        # NOTE Same as old_items for now
+        # Need to sort out how old_func_name is special
+        old_args = re.findall(r'\b(\w+)\b', old_call.value)
 
         # TODO Track t variables to get to hints
         if old_hints is None:
@@ -215,8 +234,8 @@ class Code:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
         else:
             # old_func_name is a known function
-            # Skip first hint (return type) and use only argument hints
-            arg_hints = old_hints[1:] if len(old_hints) > 1 else []
+            # Skip last hint (return type) and use only argument hints
+            arg_hints = old_hints[:-1] if len(old_hints) > 1 else []
             for i, (old_arg, old_hint) in enumerate(zip(old_args, arg_hints)):
                 # First deal with t variables
                 if re.match(r't\d+', old_arg):
@@ -226,14 +245,16 @@ class Code:
                 elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
 
-        return self.file_pile(has_mutation)
+        return self.file_batt(has_mutation)
 
 
-    def file_pile(self, has_mutation):
+    def file_batt(self, has_mutation):
+        # NOTE old_call is a HintValue namedtuple
         t_call = self.t_call[self.t_num]
-        call_list = [c.strip() for c in t_call.split(',')]
-        call_string = f'{call_list[0]}(' + ', '.join(call_list[1:]) + ')'
+
+        call_list = [c.strip() for c in t_call.value.split(',')]
         func_name = call_list[0]
+        call_string = f'{func_name}(' + ', '.join(call_list[1:]) + ')'
         
         # Wrap ALL assignments in try-except to catch bad mutations
         # (wrong function signatures, type errors, etc.)
@@ -264,7 +285,7 @@ class Code:
                     
                     # CRITICAL FIX: Check if variable is being called as function
                     var_name = f't{t_n}'
-                    is_function_call = is_called_as_function(old_call, var_name)
+                    is_function_call = is_called_as_function(old_call.value, var_name)
 
                     if is_function_call:
                         # Variable is being called: var(...) 
@@ -286,7 +307,11 @@ class Code:
 
                     pattern = rf'\bt{t_n}\b'
                     # self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-                    self.t_call[self.t_num] = re.sub(pattern, item, old_call)
+                    # self.t_call[self.t_num] = re.sub(pattern, item, old_call)
+                    # Replace value
+                    value = re.sub(pattern, item, old_call.value)
+                    # XXX We might need old_hints here
+                    self.t_call[self.t_num] = HintValue(old_hint, value)
                     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
                     break
 
@@ -377,7 +402,11 @@ class Code:
 
         if old_args[i] != old_arg:
             pattern = rf'\b{old_arg}\b'
-            self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call)
+            # self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call.value)
+            # Replace value
+            value = re.sub(pattern, f'{old_args[i]}', old_call.value)
+            # XXX We might need old_hints here
+            self.t_call[self.t_num] = HintValue(old_hint, value)
             has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
         return has_mutation
 
@@ -470,8 +499,14 @@ def get_equals(source):
             if hint is None:
                 hint = 'Any'  # Fallback to 'Any' if hint extraction fails
 
-            # Store as HintValue namedtuple
-            equals[var_name] = HintValue(hint, value)
+            # Clean and store as HintValue namedtuple
+            # TODO Possible further simplification
+            # equal_value = call_to_tuple(value)
+            equal_value = clean_call(value)
+
+            print_l(f'{var_name} : {hint} = {equal_value}') if DO_PRINT else None
+
+            equals[var_name] = HintValue(hint, equal_value)
 
 
             # print_l(f'{var_name} : {hint} = {value}') if DO_PRINT else None
@@ -493,7 +528,7 @@ def track_solution(t_call, t_num, done):
     if t_num not in done:
         done.add(t_num)
 
-    call = t_call[t_num]
+    call = t_call[t_num].value
 
     if t_list := re.findall(r't(\d+)', call):
         for t_str in t_list:
@@ -508,7 +543,7 @@ def track_solution(t_call, t_num, done):
 def build_differ_body(t_call, ret_t, done):
     differ_body = ''
     for t_num in sorted(done):
-        t_split = [item.strip() for item in t_call[t_num].split(',')]
+        t_split = [item.strip() for item in t_call[t_num].value.split(',')]
         t = [s[:-2] if s.endswith('.t') else s for s in t_split]
 
         func = t[0]
@@ -626,18 +661,24 @@ class Differs:
 
 def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
     # Take next assignment - x_n = HintValue(hint, call(...))
-    old_name, hint_value = next(iter(equals.items()))
-    old_call = hint_value.value
-    uses[old_call] = 0
+    # old_name, hint_value = next(iter(equals.items()))
+    # old_call = hint_value.value
 
-    old_items = get_items(old_call)
+
+    # Now old_call is a hint_value namedtuple
+    old_name, old_call = next(iter(equals.items()))
+
+
+    uses[old_call.value] = 0
+
+    old_items = get_items(old_call.value)
     old_func_name = old_items[0].strip()
 
     # Remove entry from equals
     del equals[old_name]
 
     # Check that right side is new
-    if old_call not in code.t_number:
+    if old_call.value not in code.t_number:
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
@@ -647,7 +688,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
             len(equals) == 1 and old_func_name.startswith('get_nth_')
         )
         has_mutation = code.mutate(False, freeze_differs)
-        code.t_number[old_call] = code.t_num
+        code.t_number[old_call.value] = code.t_num
     else:
         has_mutation = Mutation(False, None, None)
 
@@ -660,9 +701,9 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
     for x_name, x_hint_value in equals.items():
         x_call = x_hint_value.value
         if old_name in x_call:
-            uses[old_call] += 1
+            uses[old_call.value] += 1
             # Replace old_name with t_number[old_call] to track mutations
-            new_call = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call]}', x_call)
+            new_call = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call.value]}', x_call)
             equals[x_name] = HintValue(x_hint_value.hint, new_call)
 
 
@@ -672,22 +713,28 @@ def append_to_o(code, last_t, has_mutation, task_id):
 
 def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
     # Take next assignment - x_n = HintValue(hint, call(...))
-    old_name, hint_value = next(iter(equals.items()))
-    old_call = hint_value.value
-    uses[old_call] = 0
+    # old_name, hint_value = next(iter(equals.items()))
+    # old_call = hint_value.value
+
+
+    # Now old_call is a hint_value namedtuple
+    old_name, old_call = next(iter(equals.items()))
+
+
+    uses[old_call.value] = 0
 
     # Remove entry from equals
     del equals[old_name]
 
     # Check that right side is new
-    if old_call not in code.t_number:
+    if old_call.value not in code.t_number:
         # Then add it to t_call/t_number
         code.t_num += 1
         code.t_call[code.t_num] = old_call
         code.differ[code.t_num] = False
         code.solver[code.t_num] = True
         has_mutation = code.mutate(True, freeze_solvers)
-        code.t_number[old_call] = code.t_num
+        code.t_number[old_call.value] = code.t_num
     else:
         has_mutation = Mutation(False, None, None)
 
@@ -699,7 +746,7 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
     for x_name, x_hint_value in equals.items():
         x_call = x_hint_value.value
         if old_name in x_call:
-            uses[old_call] += 1
+            uses[old_call.value] += 1
             new_call = re.sub(rf'\b{old_name}\b', f't{code.t_num}', x_call)
             equals[x_name] = HintValue(x_hint_value.hint, new_call)
 
@@ -839,6 +886,8 @@ def batt(task_id, S, I, C, log_path):
     # Used in run_batt.py (call_module.t_call)
     call_file_name = batt_file_name.replace('.py', '_call.py')
     with open(call_file_name, 'w') as call_file:
+        print("from collections import namedtuple", file=call_file)
+        print("HintValue = namedtuple('HintValue', ['hint', 'value'])", file=call_file)
         print(f't_call = {code.t_call}', file=call_file)
 
 if __name__ == "__main__":
