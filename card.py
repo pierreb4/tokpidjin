@@ -226,15 +226,18 @@ class Code:
 
         if old_hints is None:
 
-
-            print_l(f'-- old_hints is None for {old_call}') if DO_PRINT else None
+            # print_l(f'-- old_hints is None for {old_call}') if DO_PRINT else None
 
             last_hint = None
             for i, old_arg in enumerate(old_args):
-                print_l(f'-- old_call[{i}] = {old_arg}') if DO_PRINT else None
+
+                # print_l(f'-- old_call[{i}] = {old_arg}') if DO_PRINT else None
+
                 if re.match(r't\d+', old_arg):
                     t_n = int(old_arg[1:])
-                    print_l(f'-- old_arg is t variable: {old_arg}: {self.t_call[t_n]}') if DO_PRINT else None
+
+                    # print_l(f'-- old_arg is t variable: {old_arg}: {self.t_call[t_n]}') if DO_PRINT else None
+
                     last_hint = self.t_call[t_n].hint[-1] if isinstance(self.t_call[t_n].hint, tuple) else self.t_call[t_n].hint
 
             # TODO Check that this is the correct behavior for both legs below
@@ -253,8 +256,17 @@ class Code:
         else:
             # old_func_name is a known function
             # Skip last hint (return type) and use only argument hints
-            arg_hints = old_hints[:-1] if len(old_hints) > 1 else []
+            if isinstance(old_hints, str):
+                arg_hints = [old_hints]
+            else:
+                arg_hints = old_hints[:-1] if len(old_hints) > 1 else []
+
             for i, (old_arg, old_hint) in enumerate(zip(old_args, arg_hints)):
+
+                if isinstance(old_hint, str) and re.match(r'^[a-z]$', old_hint):
+                    print_l(f'-- {old_func_name} - {old_args} - {arg_hints}') if DO_PRINT else None
+                    print_l(f'-- old_hint is {old_hint} for {old_call}') if DO_PRINT else None
+
                 # First deal with t variables
                 if re.match(r't\d+', old_arg):
                     if not freeze:
@@ -553,8 +565,13 @@ def get_equals(source):
 
                     # TODO We probably can refine this further
                     #      Maybe by looking at the arguments and matching types
-                    hints = func_value.hint[-1] if func_value is not None and func_value.hint is not None \
-                            else 'Any'
+
+                    if not isinstance(func_value.hint, tuple):
+                        hints = func_value.hint
+                    else:
+                        hints = func_value.hint[-1] if func_value is not None and func_value.hint is not None \
+                                else 'Any'
+                    
                 else:
                     hints = get_hints(func_name)
 
