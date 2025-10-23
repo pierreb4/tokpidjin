@@ -412,8 +412,8 @@ class Code:
                 'Integer', 'IntegerSet', 'Numerical', 'Indices', 
                 'TupleTuple', 'Any',
                 None
-            ] and old_hint:
-            print_l(f'{old_hint = }')
+            ] and not isinstance(old_hint, tuple):
+            print_l(f'Unrecognised type: {old_hint = }')
         elif self.t_num > 1 and random.random() < BUDGET_RANDOM:
 
             # XXX We need to get in here when old_hint is a tuple type
@@ -438,7 +438,7 @@ class Code:
                         break
                 old_args[i] = new_func_name
 
-            else:
+            elif not isinstance(old_hint, tuple):
                 # Replace with a t variable
                 t_n = self.t_num - 1
                 while True:
@@ -446,6 +446,8 @@ class Code:
                     if is_solver and self.solver.get(t_offset, False) or not is_solver:
                         old_args[i] = f't{t_offset}'
                         break
+            else:
+                print_l(f'Unprocessed tuple type for substitution: {old_hint = }')
 
         if old_args[i] != old_arg:
             pattern = rf'\b{old_arg}\b'
