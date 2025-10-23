@@ -486,18 +486,18 @@ def get_equals(source):
                     # func_hints = [h for i, h in enumerate(all_func_hints) if i != 0]
                     # print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
-
             # Get hints (return type) for this function
             # If func_name is an x_n variable, get hints from that variable
-            elif re.match(r'x\d+', func_name):
-                # Example:  t13 = t11(t10) - t11 = rbind(sizefilter, ONE) - t11 hint = ['Container', 'Object']
-                # We have the hints for x_n variables
-                func_value = equals.get(func_name)
-                hints = func_value.hint
-                hint = hints[-1] if hints else 'None'
             else:
-                hints = get_hints(func_name)
-                hint = hints[-1] if hints else 'None'
+                if re.match(r'x\d+', func_name):
+                    # Example:  t13 = t11(t10) - t11 = rbind(sizefilter, ONE) - t11 hint = ['Container', 'Object']
+                    # We have the hints for x_n variables
+                    func_value = equals.get(func_name)
+                    hints = func_value.hint
+                else:
+                    hints = get_hints(func_name)
+
+                hint = hints[-1] if hints and isinstance(hints, (list, tuple)) else hints
 
             # if hint is None:
             #     hint = 'Any'  # Fallback to 'Any' if hint extraction fails
