@@ -541,8 +541,10 @@ def get_equals(source):
                     # We have the hints for x_n variables
                     func_value = equals.get(func_name)
 
+                    # TODO We probably can refine this further
+                    #      Maybe by looking at the arguments and matching types
                     hints = func_value.hint[-1] if func_value is not None and func_value.hint is not None \
-                            else 'Callable'
+                            else 'Any'
                 else:
                     hints = get_hints(func_name)
 
