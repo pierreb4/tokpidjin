@@ -542,7 +542,7 @@ def get_equals(source):
                     func_value = equals.get(func_name)
 
                     hints = func_value.hint[-1] if func_value is not None and func_value.hint is not None \
-                            else 'Any'
+                            else 'Callable'
                 else:
                     hints = get_hints(func_name)
 
