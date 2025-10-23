@@ -235,7 +235,7 @@ class Code:
                 if re.match(r't\d+', old_arg):
                     t_n = int(old_arg[1:])
                     print_l(f'-- old_arg is t variable: {old_arg}: {self.t_call[t_n]}') if DO_PRINT else None
-                    last_hint = self.t_call[t_n].hint[-1]
+                    last_hint = self.t_call[t_n].hint[-1] if isinstance(self.t_call[t_n].hint, tuple) else self.t_call[t_n].hint
 
             # TODO Check that this is the correct behavior for both legs below
             # NOTE Still better than before :)
@@ -410,10 +410,10 @@ class Code:
                 'Object', 'Objects', 'FrozenSet', 'Patch', 
                 'Callable', 'Container', 'ContainerContainer',
                 'Integer', 'IntegerSet', 'Numerical', 'Indices', 
-                'TupleTuple', 'Any',
+                'TupleTuple', 'TTT_iii', 'Any',
                 None
             ] and not isinstance(old_hint, tuple):
-            print_l(f'Unrecognised type: {old_hint = }')
+            print_l(f'Unrecognised type: {old_hint = } in {old_call}') if DO_PRINT else None
         elif self.t_num > 1 and random.random() < BUDGET_RANDOM:
 
             # XXX We need to get in here when old_hint is a tuple type
@@ -553,7 +553,8 @@ def get_equals(source):
 
                     # TODO We probably can refine this further
                     #      Maybe by looking at the arguments and matching types
-                    hints = func_value.hint[-1] if func_value is not None else 'Any'
+                    hints = func_value.hint[-1] if func_value is not None and func_value.hint is not None \
+                            else 'Any'
                 else:
                     hints = get_hints(func_name)
 
