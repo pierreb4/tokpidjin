@@ -438,8 +438,9 @@ def get_equals(source):
             func_hints = None
             if func_name == 'identity':
                 func_arg = re.match(r'identity\((\w+)\)', value)[1]
-                func_hints = get_hints(func_arg)
+                hint = get_hints(func_arg)
                 # print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+
             elif func_name == 'rbind':
                 func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[1]
 
@@ -455,10 +456,10 @@ def get_equals(source):
                     # )
                     print_l(f'Processing line: {line}') if DO_PRINT else None
                     print_l(f'Rbind function could not be detected: {var_name} is {func_arg}') if DO_PRINT else None
-                    func_hints = None
+                    hint = 'None'
                 else:
                     # arg -2 is fixed
-                    func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
+                    hint = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
                     # print_l(f'Rbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
                     # func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
                     # print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
@@ -477,10 +478,10 @@ def get_equals(source):
                     # )
                     print_l(f'Processing line: {line}') if DO_PRINT else None
                     print_l(f'Lbind function could not be detected: {var_name} is {func_arg}') if DO_PRINT else None
-                    func_hints = None
+                    hint = 'None'
                 else:
                     # arg 0 is fixed
-                    func_hints = all_func_hints[1:]
+                    hint = all_func_hints[1:]
                     # print_l(f'Lbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
                     # func_hints = [h for i, h in enumerate(all_func_hints) if i != 0]
                     # print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
@@ -488,16 +489,18 @@ def get_equals(source):
 
             # Get hints (return type) for this function
             # If func_name is an x_n variable, get hints from that variable
-            if re.match(r'x\d+', func_name):
+            elif re.match(r'x\d+', func_name):
+                # Example:  t13 = t11(t10) - t11 = rbind(sizefilter, ONE) - t11 hint = ['Container', 'Object']
+                # We have the hints for x_n variables
                 func_value = equals.get(func_name)
-                hints = [func_value.hint] if func_value is not None else None
+                hints = func_value.hint
+                hint = hints[-1] if hints else 'None'
             else:
-                hints = get_hints(func_name) if func_hints is None else [func_hints]
-            hint = hints[-1] if hints else None
+                hints = get_hints(func_name)
+                hint = hints[-1] if hints else 'None'
 
-
-            if hint is None:
-                hint = 'Any'  # Fallback to 'Any' if hint extraction fails
+            # if hint is None:
+            #     hint = 'Any'  # Fallback to 'Any' if hint extraction fails
 
             # Clean and store as HintValue namedtuple
             # TODO Possible further simplification
