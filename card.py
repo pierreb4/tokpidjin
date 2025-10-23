@@ -199,7 +199,7 @@ class Code:
         # NOTE old_call is a HintValue namedtuple
         old_call = self.t_call[self.t_num]
 
-        print_l(f'{self.t_num = } - {old_call = }')
+        # print_l(f'{self.t_num = } - {old_call = }')
 
         old_items = get_items(old_call.value)
         old_func_name = old_items[0]
@@ -507,7 +507,7 @@ def get_equals(source):
             # equal_value = call_to_tuple(value)
             equal_value = clean_call(value)
 
-            print_l(f'{var_name} : {hint} = {equal_value}') if DO_PRINT else None
+            # print_l(f'{var_name} : {hint} = {equal_value}') if DO_PRINT else None
 
             equals[var_name] = HintValue(hint, equal_value)
 
