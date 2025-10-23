@@ -229,8 +229,18 @@ class Code:
 
             print_l(f'-- old_hints is None for {old_call}') if DO_PRINT else None
 
+            last_hint = None
+            for i, old_arg in enumerate(old_args):
+                print_l(f'-- old_call[{i}] = {old_arg}') if DO_PRINT else None
+                if re.match(r't\d+', old_arg):
+                    t_n = int(old_arg[1:])
+                    print_l(f'-- old_arg is t variable: {old_arg}: {self.t_call[t_n]}') if DO_PRINT else None
+                    last_hint = self.t_call[t_n].hint[-1]
 
-            old_hint = None
+            # TODO Check that this is the correct behavior for both legs below
+            # NOTE Still better than before :)
+            old_hint = last_hint
+
             # old_func_name is a t variable
             for i, old_arg in enumerate(old_args):
                 # First deal with t variables
