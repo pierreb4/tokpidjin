@@ -540,7 +540,8 @@ def get_equals(source):
                     # Example:  t13 = t11(t10) - t11 = rbind(sizefilter, ONE) - t11 hint = ['Container', 'Object']
                     # We have the hints for x_n variables
                     func_value = equals.get(func_name)
-                    hints = func_value.hint[-1]
+
+                    hints = func_value.hint[-1] if func_value is not None else 'None'
                 else:
                     hints = get_hints(func_name)
 
