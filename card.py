@@ -221,7 +221,15 @@ class Code:
         old_args = re.findall(r'\b(\w+)\b', old_call.value)
 
         # TODO Track t variables to get to hints
+
+        old_hints = new_hints
+
         if old_hints is None:
+
+
+            print_l(f'-- old_hints is None for {old_call}') if DO_PRINT else None
+
+
             old_hint = None
             # old_func_name is a t variable
             for i, old_arg in enumerate(old_args):
@@ -244,6 +252,31 @@ class Code:
                         has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
                 elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
+
+        # # TODO Track t variables to get to hints
+        # if old_hints is None:
+        #     old_hint = None
+        #     # old_func_name is a t variable
+        #     for i, old_arg in enumerate(old_args):
+        #         # First deal with t variables
+        #         if re.match(r't\d+', old_arg):
+        #             if not freeze:
+        #                 t_n = int(old_arg[1:])
+        #                 has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
+        #         elif not freeze:
+        #             has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
+        # else:
+        #     # old_func_name is a known function
+        #     # Skip last hint (return type) and use only argument hints
+        #     arg_hints = old_hints[:-1] if len(old_hints) > 1 else []
+        #     for i, (old_arg, old_hint) in enumerate(zip(old_args, arg_hints)):
+        #         # First deal with t variables
+        #         if re.match(r't\d+', old_arg):
+        #             if not freeze:
+        #                 t_n = int(old_arg[1:])
+        #                 has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
+        #         elif not freeze:
+        #             has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
 
         return self.file_batt(has_mutation)
 
@@ -438,7 +471,9 @@ def get_equals(source):
             func_hints = None
             if func_name == 'identity':
                 func_arg = re.match(r'identity\((\w+)\)', value)[1]
-                hint = get_hints(func_arg)
+                func_hints = get_hints(func_arg)
+                hint = (func_hints, func_hints)
+
                 # print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
 
             elif func_name == 'rbind':
@@ -459,7 +494,8 @@ def get_equals(source):
                     hint = 'None'
                 else:
                     # arg -2 is fixed
-                    hint = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
+                    func_hints = tuple(h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2)
+                    hint = (func_hints, func_hints)
                     # print_l(f'Rbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
                     # func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
                     # print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
@@ -481,7 +517,8 @@ def get_equals(source):
                     hint = 'None'
                 else:
                     # arg 0 is fixed
-                    hint = all_func_hints[1:]
+                    func_hints = tuple(all_func_hints[1:])
+                    hint = (func_hints, func_hints)
                     # print_l(f'Lbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
                     # func_hints = [h for i, h in enumerate(all_func_hints) if i != 0]
                     # print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
@@ -493,11 +530,12 @@ def get_equals(source):
                     # Example:  t13 = t11(t10) - t11 = rbind(sizefilter, ONE) - t11 hint = ['Container', 'Object']
                     # We have the hints for x_n variables
                     func_value = equals.get(func_name)
-                    hints = func_value.hint
+                    hints = func_value.hint[-1]
                 else:
                     hints = get_hints(func_name)
 
-                hint = hints[-1] if hints and isinstance(hints, (list, tuple)) else hints
+                # hint = hints[-1] if hints and isinstance(hints, tuple) else hints
+                hint = hints
 
             # if hint is None:
             #     hint = 'Any'  # Fallback to 'Any' if hint extraction fails
