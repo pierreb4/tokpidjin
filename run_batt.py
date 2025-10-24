@@ -1462,8 +1462,11 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         
         solver_body = ''
         for t_num in sorted(done):
-            t_split = [item.strip() for item in t_call[t_num].value.split(',')]
-            t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+            # t_split = [item.strip() for item in t_call[t_num].value.split(',')]
+            # t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+
+            t = t_call[t_num].value
+
             func = t[0]
             args = t[1:]
             solver_body += f'    t{t_num} = {func}({", ".join(args)})\n'
@@ -1731,8 +1734,11 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             
             differ_body = ''
             for t_num in sorted(done_differ):
-                t_split = [item.strip() for item in t_call[t_num].value.split(',')]
-                t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+                # t_split = [item.strip() for item in t_call[t_num].value.split(',')]
+                # t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+
+                t = t_call[t_num].value
+
                 func = t[0]
                 args = t[1:]
                 differ_body += f'    t{t_num} = {func}({", ".join(args)})\n'
@@ -1881,6 +1887,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     return False, d_score
 
 
+# See similar function in card.py
 def track_solution(t_num, done):
     if done is None:
         done = set()
@@ -1890,9 +1897,12 @@ def track_solution(t_num, done):
 
     call = t_call[t_num].value
 
-    if t_list := re.findall(r't(\d+)', call):
-        for t_str in t_list:
-            t_num = int(t_str)
+    # if t_list := re.findall(r't(\d+)', call):
+    #     for t_str in t_list:
+    #         t_num = int(t_str)
+                
+    if t_list := [int(item[1:]) for item in call if re.match(r't\d+', item)]:
+        for t_num in t_list:
             if t_num not in done:
                 done.add(t_num)
                 track_solution(t_num, done)

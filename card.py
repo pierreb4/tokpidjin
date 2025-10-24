@@ -30,8 +30,6 @@ def get_hints(node_name):
     if not inspect.isfunction(global_id):
         return None
 
-    # return [t for var, t in global_id.__annotations__.items()]
-
     return tuple(t for var, t in global_id.__annotations__.items())
 
 
@@ -40,23 +38,21 @@ def call_to_tuple(call_value):
     return tuple(value.split(', '))
 
 
-def clean_call(call_value):
-    # print_l(f'Cleaning call_value: {call_value}') if DO_PRINT else None
-    return call_value.replace('(', ', ').replace(')', '')
+# def clean_call(call_value):
+#     # print_l(f'Cleaning call_value: {call_value}') if DO_PRINT else None
+#     return call_value.replace('(', ', ').replace(')', '')
 
 
-def get_items(call_value):
-    items = call_value.strip('[]').split(', ')
-    # print_l(f'Get items from: {call_value} - {items = }') if DO_PRINT else None
-    return items
-    # return call_value.strip('[]').split(',')
+# def get_items(call_value):
+#     # print_l(f'Get items from: {call_value}') if DO_PRINT else None
+#     return call_value.strip('[]').split(', ')
 
 
-def is_called_as_function(call_str, var_name):
-    """Check if variable is being called as a function (has parentheses after it)"""
-    # Look for pattern: var_name followed by '('
-    pattern = rf'\b{re.escape(var_name)}\s*\('
-    return bool(re.search(pattern, call_str))
+# def is_called_as_function(call_str, var_name):
+#     """Check if variable is being called as a function (has parentheses after it)"""
+#     # Look for pattern: var_name followed by '('
+#     pattern = rf'\b{re.escape(var_name)}\s*\('
+#     return bool(re.search(pattern, call_str))
 
 
 def replace_random(value, input_list):
@@ -201,28 +197,29 @@ class Code:
 
         # print_l(f'{self.t_num = } - {old_call = }')
 
-        old_items = get_items(old_call.value)
-        old_func_name = old_items[0]
-        old_hints = get_hints(old_func_name)
+        # old_items = get_items(old_call.value)
+        # old_func_name = old_items[0]
 
+        old_func_name = old_call.value[0]
+        old_hints = get_hints(old_func_name)
         new_hints = old_call.hint
 
         differ = self.differ[self.t_num]
         solver = self.solver[self.t_num]
         # print(f'    # Pre-mutate: t{self.t_num} - {differ = } - {solver = }', file=self.file)
-        print(f'    # Pre-mutate: t{self.t_num} - {old_items = }', file=self.file)
-        print(f'    # Pre-mutate: t{self.t_num} - {old_hints = } from {old_func_name}', file=self.file)
-        print(f'    # Pre-mutate: t{self.t_num} - {new_hints = }', file=self.file)
-
+        print(f'    # Pre-mutate t{self.t_num}', file=self.file)
+        print(f'    # -- {old_hints = } from {old_func_name}', file=self.file)
+        print(f'    # -- {old_call.value = }', file=self.file)
+        print(f'    # -- {old_call.hint = }', file=self.file)
+ 
         has_mutation = Mutation(False, None, None)
 
         # NOTE Same as old_items for now
         # Need to sort out how old_func_name is special
-        old_args = re.findall(r'\b(\w+)\b', old_call.value)
+        # old_args = re.findall(r'\b(\w+)\b', old_call.value)
 
-        # TODO Track t variables to get to hints
-
-        old_hints = new_hints
+        old_args = old_call.value
+        old_hints = old_call.hint
 
         if old_hints is None:
 
@@ -307,8 +304,12 @@ class Code:
         # NOTE old_call is a HintValue namedtuple
         t_call = self.t_call[self.t_num]
 
-        call_list = [c.strip() for c in t_call.value.split(',')]
+        # call_list = [c.strip() for c in t_call.value.split(',')]
+        # func_name = call_list[0]
+
+        call_list = t_call.value
         func_name = call_list[0]
+
         call_string = f'{func_name}(' + ', '.join(call_list[1:]) + ')'
         
         # Wrap ALL assignments in try-except to catch bad mutations
@@ -321,9 +322,9 @@ class Code:
             print(f'    t{self.t_num} = {call_string}', file=self.file)
         else:
             # Standard mode: safe with try/except
-            print(f'    try:', file=self.file)
+            print('    try:', file=self.file)
             print(f'        t{self.t_num} = {call_string}', file=self.file)
-            print(f'    except (TypeError, AttributeError, ValueError, IndexError, KeyError):', file=self.file)
+            print('    except (TypeError, AttributeError, ValueError, IndexError, KeyError):', file=self.file)
             print(f'        t{self.t_num} = _get_safe_default({func_name})', file=self.file)
         return has_mutation
 
@@ -340,31 +341,33 @@ class Code:
                     
                     # CRITICAL FIX: Check if variable is being called as function
                     var_name = f't{t_n}'
-                    is_function_call = is_called_as_function(old_call.value, var_name)
 
-                    if is_function_call:
+                    if old_call.value[0] == var_name:
                         # Variable is being called: var(...) 
                         # Can only replace with another function or t variable (that might be a function)
                         if random.randint(0, 1) == 0:
-                            item = f't{t_offset}'
+                            sub_item = f't{t_offset}'
                         else:
-                            item = random.choice(DSL_FUNCTION_NAMES)
+                            sub_item = random.choice(DSL_FUNCTION_NAMES)
                     else:
                         # Variable is being used as value: func(var)
                         # Can replace with t variable or constant (NOT a function name)
                         if random.randint(0, 1) == 0:
-                            item = f't{t_offset}'
+                            sub_item = f't{t_offset}'
                         else:
-                            item = random.choice(GENERIC_CONSTANT_NAMES)
+                            sub_item = random.choice(GENERIC_CONSTANT_NAMES)
 
-                    print_l(f'{item = }') if DO_PRINT else None
+                    print_l(f'{sub_item = }') if DO_PRINT else None
 
 
-                    pattern = rf'\bt{t_n}\b'
+                    # pattern = rf'\bt{t_n}\b'
                     # self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-                    # self.t_call[self.t_num] = re.sub(pattern, item, old_call)
+                    # self.t_call[self.t_num] = re.sub(pattern, sub_item, old_call)
                     # Replace value
-                    value = re.sub(pattern, item, old_call.value)
+                    # value = re.sub(pattern, sub_item, old_call.value)
+
+                    value = tuple(sub_item if item == var_name else item for item in old_call.value)
+
                     # XXX We might need old_hints here
                     self.t_call[self.t_num] = HintValue(old_hint, value)
                     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
@@ -395,29 +398,31 @@ class Code:
 
 
     def do_arg_substitutions(self, old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation):
+        sub_arg = old_arg
+
         if old_hint in ['C_']:
-            old_args[i] = self.substitute_color(old_arg)
+            sub_arg = self.substitute_color(old_arg)
         elif old_hint == 'FL':
-            old_args[i] = self.substitute_rank(old_arg, FL_NAMES)
+            sub_arg = self.substitute_rank(old_arg, FL_NAMES)
         elif old_hint == 'F_':
-            old_args[i] = self.substitute_rank(old_arg, F_NAMES)
+            sub_arg = self.substitute_rank(old_arg, F_NAMES)
         elif old_hint == 'L_':
-            old_args[i] = self.substitute_rank(old_arg, L_NAMES)
+            sub_arg = self.substitute_rank(old_arg, L_NAMES)
         elif old_hint == 'R_':
-            old_args[i] = self.substitute_symbol(old_arg, R_NAMES)
+            sub_arg = self.substitute_symbol(old_arg, R_NAMES)
         elif old_hint == 'R4':
-            old_args[i] = self.substitute_symbol(old_arg, R4_NAMES)
+            sub_arg = self.substitute_symbol(old_arg, R4_NAMES)
         elif old_hint == 'R8':
-            old_args[i] = self.substitute_symbol(old_arg, R8_NAMES)
+            sub_arg = self.substitute_symbol(old_arg, R8_NAMES)
             self.score += 1
         elif old_hint == 'A4':
-            old_args[i] = self.substitute_symbol(old_arg, A4_NAMES)
+            sub_arg = self.substitute_symbol(old_arg, A4_NAMES)
         elif old_hint == 'A8':
-            old_args[i] = self.substitute_grid_angle(old_arg)
+            sub_arg = self.substitute_grid_angle(old_arg)
         elif old_hint == 'Boolean':
-            old_args[i] = self.substitute_symbol(old_arg, B_NAMES)
+            sub_arg = self.substitute_symbol(old_arg, B_NAMES)
         elif old_hint == 'IJ':
-            old_args[i] = self.substitute_symbol(old_arg, PAIR_GENERIC_CONSTANTS)
+            sub_arg = self.substitute_symbol(old_arg, PAIR_GENERIC_CONSTANTS)
         elif old_hint not in [ 'Samples', 'Grid', 'Tuple',
                 'Object', 'Objects', 'FrozenSet', 'Patch', 
                 'Callable', 'Container', 'ContainerContainer',
@@ -448,7 +453,7 @@ class Code:
                     new_function = DSL_FUNCTION_DICT[new_func_name]
                     if new_function.__code__.co_argcount == arity:
                         break
-                old_args[i] = new_func_name
+                sub_arg = new_func_name
 
             elif not isinstance(old_hint, tuple):
                 # Replace with a t variable
@@ -456,16 +461,20 @@ class Code:
                 while True:
                     t_offset = random.randint(1, t_n)
                     if is_solver and self.solver.get(t_offset, False) or not is_solver:
-                        old_args[i] = f't{t_offset}'
+                        # old_args[i] = f't{t_offset}'
+                        sub_arg = f't{t_offset}'
                         break
             else:
                 print_l(f'Unprocessed tuple type for substitution: {old_hint = }')
 
-        if old_args[i] != old_arg:
-            pattern = rf'\b{old_arg}\b'
+        if sub_arg != old_arg:
+            # pattern = rf'\b{old_arg}\b'
             # self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call.value)
             # Replace value
-            value = re.sub(pattern, f'{old_args[i]}', old_call.value)
+            # value = re.sub(pattern, f'{old_args[i]}', old_call.value)
+
+            value = old_call.value[:i] + (sub_arg,) + old_call.value[i+1:]
+
             # XXX We might need old_hints here
             self.t_call[self.t_num] = HintValue(old_hint, value)
             has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
@@ -583,8 +592,8 @@ def get_equals(source):
 
             # Clean and store as HintValue namedtuple
             # TODO Possible further simplification
-            # equal_value = call_to_tuple(value)
-            equal_value = clean_call(value)
+            equal_value = call_to_tuple(value)
+            # equal_value = clean_call(value)
 
             # print_l(f'{var_name} : {hint} = {equal_value}') if DO_PRINT else None
 
@@ -612,9 +621,12 @@ def track_solution(t_call, t_num, done):
 
     call = t_call[t_num].value
 
-    if t_list := re.findall(r't(\d+)', call):
-        for t_str in t_list:
-            t_num = int(t_str)
+    # if t_list := re.findall(r't(\d+)', call):
+    #     for t_str in t_list:
+    #         t_num = int(t_str)
+
+    if t_list := [int(item[1:]) for item in call if re.match(r't\d+', item)]:
+        for t_num in t_list:
             if t_num not in done:
                 done.add(t_num)
                 track_solution(t_call, t_num, done)
@@ -625,15 +637,14 @@ def track_solution(t_call, t_num, done):
 def build_differ_body(t_call, ret_t, done):
     differ_body = ''
     for t_num in sorted(done):
-        t_split = [item.strip() for item in t_call[t_num].value.split(',')]
-        t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+        # t_split = [item.strip() for item in t_call[t_num].value.split(',')]
+        # t = [s[:-2] if s.endswith('.t') else s for s in t_split]
+
+        t = t_call[t_num].value
 
         func = t[0]
         args = t[1:]
-        differ_body += f'    t{t_num} = '
-        differ_body += f'{func}('
-        differ_body += ', '.join(args)
-        differ_body += ')\n'
+        differ_body += f'    t{t_num} = {func}({", ".join(args)})\n'
     differ_body += f'    return t{ret_t}\n'
 
     return differ_body
@@ -693,9 +704,10 @@ class Differs:
             for x_name, hint_value in self.init_equals[differ_name].items():
                 # Extract value from HintValue namedtuple
                 x_call = hint_value.value
-                # Perform substitution and store back as HintValue
-                substituted_call = re.sub(r'\bI\b', I, x_call)
-                self.run_equals[differ_name][x_name] = HintValue(hint_value.hint, substituted_call)
+                # Perform substitution and store back as HintValue namedtuple
+                # sub_call = re.sub(r'\bI\b', I, x_call)
+                sub_call = tuple(I if item == 'I' else item for item in x_call)
+                self.run_equals[differ_name][x_name] = HintValue(hint_value.hint, sub_call)
 
                 # print_l(f'{differ_name} - {x_name} = {self.run_equals[differ_name][x_name]}')
 
@@ -750,11 +762,12 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
     # Now old_call is a hint_value namedtuple
     old_name, old_call = next(iter(equals.items()))
 
-
     uses[old_call.value] = 0
 
-    old_items = get_items(old_call.value)
-    old_func_name = old_items[0].strip()
+    # old_items = get_items(old_call.value)
+    # old_func_name = old_items[0].strip()
+
+    old_func_name = old_call.value[0]
 
     # Remove entry from equals
     del equals[old_name]
@@ -785,7 +798,13 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         if old_name in x_call:
             uses[old_call.value] += 1
             # Replace old_name with t_number[old_call] to track mutations
-            new_call = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call.value]}', x_call)
+            # new_call = re.sub(rf'\b{old_name}\b', f't{code.t_number[old_call.value]}', x_call)
+
+            new_call = tuple(
+                f't{code.t_number[old_call.value]}' if item == old_name else item
+                for item in x_call
+            )
+
             equals[x_name] = HintValue(x_hint_value.hint, new_call)
 
 
@@ -829,7 +848,13 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
         x_call = x_hint_value.value
         if old_name in x_call:
             uses[old_call.value] += 1
-            new_call = re.sub(rf'\b{old_name}\b', f't{code.t_num}', x_call)
+            # new_call = re.sub(rf'\b{old_name}\b', f't{code.t_num}', x_call)
+
+            new_call = tuple(
+                f't{code.t_num}' if item == old_name else item
+                for item in x_call
+            )
+
             equals[x_name] = HintValue(x_hint_value.hint, new_call)
 
     return old_name == 'O'
