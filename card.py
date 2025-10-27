@@ -537,7 +537,9 @@ def get_equals(source):
                 else:
                     print_l(f'Processing: {value}') if DO_PRINT else None
 
-                    if value in ('I', 'C'):
+                    if value == 'S':
+                        add_hint = ('TTT_iii',)
+                    elif value in ('I', 'C'):
                         add_hint = ('Grid',)
                     elif value in B_NAMES:
                         add_hint = ('Boolean',)    
