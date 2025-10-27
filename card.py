@@ -22,19 +22,29 @@ DSL_FUNCTION_DICT = dict(DSL_FUNCTIONS)
 BUDGET_RANDOM = 0.01
 
 # Borrowed from regin.py maybe can go to utils.py?
-def get_hints(node_name):
-    if node_name not in globals():
+def get_hints(dsl_func_name):
+    # print_l(f'Getting hints for {dsl_func_name}') if DO_PRINT else None
+
+    if dsl_func_name not in globals():
         return None
 
-    global_id = globals()[node_name]
+    global_id = globals()[dsl_func_name]
+
     if not inspect.isfunction(global_id):
         return None
 
-    return tuple(t for var, t in global_id.__annotations__.items())
+    hints = tuple(t for var, t in global_id.__annotations__.items())
+
+    # Fix hints order to match call order
+    ret_hints = hints if len(hints) <= 1 else (hints[-1],) + hints[:-1]
+
+    print_l(f'Getting hints for {dsl_func_name}: {ret_hints}') if DO_PRINT else None
+
+    return ret_hints
 
 
-def call_to_tuple(call_value):
-    value = call_value.replace('(', ', ').replace(')', '')
+def get_value(call_string):
+    value = call_string.replace('(', ', ').replace(')', '')
     return tuple(value.split(', '))
 
 
@@ -200,19 +210,26 @@ class Code:
         # old_items = get_items(old_call.value)
         # old_func_name = old_items[0]
 
-        old_func_name = old_call.value[0]
-        old_hints = get_hints(old_func_name)
-        new_hints = old_call.hint
+        # old_func_name = old_call.value[0]
+        # old_hints = get_hints(old_func_name)
 
         differ = self.differ[self.t_num]
         solver = self.solver[self.t_num]
         # print(f'    # Pre-mutate: t{self.t_num} - {differ = } - {solver = }', file=self.file)
         print(f'    # Pre-mutate t{self.t_num}', file=self.file)
-        print(f'    # -- {old_hints = } from {old_func_name}', file=self.file)
+        # print(f'    # -- {old_hints = } from {old_func_name}', file=self.file)
         print(f'    # -- {old_call.value = }', file=self.file)
         print(f'    # -- {old_call.hint = }', file=self.file)
  
         has_mutation = Mutation(False, None, None)
+
+        # TODO Refactor entire mutation system
+        # - Forget about old_hints above, old_hints come from equals via old_call.hint
+        # - Go through old_hints and old_args together (care about what's a function or not later)
+
+
+
+
 
         # NOTE Same as old_items for now
         # Need to sort out how old_func_name is special
@@ -235,7 +252,7 @@ class Code:
 
                     # print_l(f'-- old_arg is t variable: {old_arg}: {self.t_call[t_n]}') if DO_PRINT else None
 
-                    last_hint = self.t_call[t_n].hint[-1] if isinstance(self.t_call[t_n].hint, tuple) else self.t_call[t_n].hint
+                    last_hint = self.t_call[t_n].hint[0] if isinstance(self.t_call[t_n].hint, tuple) else self.t_call[t_n].hint
 
             # TODO Check that this is the correct behavior for both legs below
             # NOTE Still better than before :)
@@ -256,7 +273,7 @@ class Code:
             if isinstance(old_hints, str):
                 arg_hints = [old_hints]
             else:
-                arg_hints = old_hints[:-1] if len(old_hints) > 1 else []
+                arg_hints = old_hints[1:] if len(old_hints) > 1 else []
 
             for i, (old_arg, old_hint) in enumerate(zip(old_args, arg_hints)):
 
@@ -483,127 +500,171 @@ class Code:
 
 def get_equals(source):
     # Catalog assignments in source
-    # Each assignment maps var_name -> HintValue(hint, value)
+    # Each assignment maps x_var -> HintValue(hint, value)
     # where hint is the return type of the function being called
     equals = {}
     for line in source.split('\n'):
+
         # print_l(f'Processing line: {line}') if DO_PRINT else None
-        if ' = ' in line:
-            parts = line.split(' = ')
-            var_name = parts[0].strip()
-            value = parts[1].strip()
 
-            # Extract function name from the call (e.g., "func_name(...)" -> "func_name")
-            func_match = re.match(r'(\w+)\s*\(', value)
-            func_name = func_match[1] if func_match else None
+        if match := re.match(r'    (.+) = (([^(]+)\(.+)', line):
+            x_var = match[1]
+            call = match[2]
+            func = match[3]
 
+            func_hints = get_hints(func)
+            top_values = get_value(call)
 
-            # XXX Temporary troubleshooting code to catch special cases
-            if func_name is None:
-                assert_message(
-                    source, value, "Could not extract function name from value"
-                )
+            print_l(f'Processing: {line = }') if DO_PRINT else None
+            print_l(f'            {func_hints = }') if DO_PRINT else None
+            print_l(f'            {top_values = }') if DO_PRINT else None
 
+            new_hints = ()
+            for hint_count, value in enumerate(top_values):
+                add_hint = ()
+                if re.match(r'x\d+', value):
+                    print_l(f'Processing {hint_count = } and {value = }') if DO_PRINT else None
+                    hint_value = equals.get(value)
+                    print_l(f'Found hint_value: {hint_value}') if DO_PRINT else None
 
-            func_hints = None
-            if func_name == 'identity':
-                func_arg = re.match(r'identity\((\w+)\)', value)[1]
-                func_hints = get_hints(func_arg)
-                hint = (func_hints, func_hints)
+                    if hint_count == 0:
+                        new_hints = hint_value.hint[0]
+                        break
 
-                # print_l(f'Identity function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+                    # add_hint = (hint_value.hint[0],) if len(hint_value.hint) > 0 else () 
 
-            elif func_name == 'rbind':
-                func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[1]
-
-
-                if re.match(r'x\d+', func_arg):
-                    func_arg = equals.get(func_name)
-
-
-                all_func_hints = get_hints(func_arg)
-                if all_func_hints is None:
-                    # assert_message(
-                    #     source, value, "Could not extract function hints from rbind argument"
-                    # )
-                    print_l(f'Processing line: {line}') if DO_PRINT else None
-                    print_l(f'Rbind function could not be detected: {var_name} is {func_arg}') if DO_PRINT else None
-                    hint = 'None'
+                # Numerical constants and DSL function names
                 else:
-                    # arg -2 is fixed
-                    func_hints = tuple(h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2)
-                    hint = (func_hints, func_hints)
-                    # print_l(f'Rbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
-                    # func_hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
-                    # print_l(f'Rbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
-            elif func_name == 'lbind':
-                func_arg = re.match(r'lbind\((\w+),\s*(\w+)\)', value)[1]
+                    print_l(f'Processing: {value}') if DO_PRINT else None
 
+                    if value in ('I', 'C'):
+                        add_hint = ('Grid',)
+                    elif value in B_NAMES:
+                        add_hint = ('Boolean',)    
+                    elif value in F_NAMES:
+                        add_hint = ('F_',)
+                    elif value in FL_NAMES:
+                        add_hint = ('FL',)
+                    elif value in L_NAMES:
+                        add_hint = ('L_',)
+                    elif value in R_NAMES:
+                        add_hint = ('R_',)
+                    elif value in R4_NAMES:
+                        add_hint = ('R4',)
+                    elif value in R8_NAMES:
+                        add_hint = ('R8',)
+                    elif value in A4_NAMES:
+                        add_hint = ('A4',)
+                    elif value in A8_NAMES:
+                        add_hint = ('A8',)
+                    elif value in COLORS:
+                        add_hint = ('C_',)
+                    elif value in INT_GENERIC_CONSTANTS:
+                        add_hint = ('Integer',)
+                    elif value in PAIR_GENERIC_CONSTANTS:
+                        add_hint = ('IJ',)
+                    elif value in ('get_type_hints_cached'):
+                        add_hint = ('Callable',)
 
-                if re.match(r'x\d+', func_arg):
-                    func_arg = equals.get(func_name)
+                    # Function names
+                    elif value[0].islower():
+                        if hint_count == 0 and value in ['identity', 'rbind', 'lbind']:
+                            print_l(f'Adjusting hints: {func_hints} for value: {value}') if DO_PRINT else None
 
+                            if value == 'identity':
+                                new_hints = (get_hints(top_values[1]),)
+                                break
 
-                all_func_hints = get_hints(func_arg)
-                if all_func_hints is None:
-                    # assert_message(
-                    #     source, value, "Could not extract function hints from lbind argument"
-                    # )
-                    print_l(f'Processing line: {line}') if DO_PRINT else None
-                    print_l(f'Lbind function could not be detected: {var_name} is {func_arg}') if DO_PRINT else None
-                    hint = 'None'
-                else:
-                    # arg 0 is fixed
-                    func_hints = tuple(all_func_hints[1:])
-                    hint = (func_hints, func_hints)
-                    # print_l(f'Lbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
-                    # func_hints = [h for i, h in enumerate(all_func_hints) if i != 0]
-                    # print_l(f'Lbind function detected: {var_name} is {func_arg} = {func_hints}') if DO_PRINT else None
+                            if value == 'rbind':
+                                new_hints = (get_hints(top_values[1])[:-1],)
+                                break
 
-            # Get hints (return type) for this function
-            # If func_name is an x_n variable, get hints from that variable
-            else:
-                if re.match(r'x\d+', func_name):
-                    # Example:  t13 = t11(t10) - t11 = rbind(sizefilter, ONE) - t11 hint = ['Container', 'Object']
-                    # We have the hints for x_n variables
-                    func_value = equals.get(func_name)
+                            if value == 'lbind':
+                                new_hints = (get_hints(top_values[1])[1:],)
+                                break
 
-                    if func_value is None:
-                        print_l(f'Processing line: {line}') if DO_PRINT else None
-                        print_l(f'Function variable could not be detected: {var_name} is {func_name}') if DO_PRINT else None
+                        else:
+                            new_hints = get_hints(value)
+                            print_l(f'Getting {new_hints = } for {value = }') if DO_PRINT else None
 
-                    # TODO We probably can refine this further
-                    #      Maybe by looking at the arguments and matching types
-
-                    if not isinstance(func_value.hint, tuple):
-                        hints = func_value.hint
+                            if hint_count == 0:
+                                add_hint = (func_hints[0], )
+                                break
+                            
+                            add_hint = (new_hints,)
                     else:
-                        hints = func_value.hint[-1] if func_value is not None and func_value.hint is not None \
-                                else 'Any'
-                    
-                else:
-                    hints = get_hints(func_name)
+                        print_l(f'Could not extract hints for value: {value}') if DO_PRINT else None
 
-                # hint = hints[-1] if hints and isinstance(hints, tuple) else hints
-                hint = hints
+                # Add hints
+                if hint_count != 0:
+                    new_hints += add_hint
 
-            # if hint is None:
-            #     hint = 'Any'  # Fallback to 'Any' if hint extraction fails
-
-            # Clean and store as HintValue namedtuple
-            # TODO Possible further simplification
-            equal_value = call_to_tuple(value)
-            # equal_value = clean_call(value)
-
-            # print_l(f'{var_name} : {hint} = {equal_value}') if DO_PRINT else None
-
-            equals[var_name] = HintValue(hint, equal_value)
-
-
-            # print_l(f'{var_name} : {hint} = {value}') if DO_PRINT else None
-
+            equals[x_var] = HintValue(new_hints, top_values)
 
     return equals
+
+
+def adjust_hints(equals, value, hint):
+    hints = None
+
+    if func_name == 'identity':
+        func_arg = re.match(r'identity\((\w+)\)', value)[1]
+        hints = get_hints(func_arg)
+        hint = (hints, hints)
+
+    return hint
+
+    #     # print_l(f'Identity function detected: {var_name} is {func_arg} = {hints}') if DO_PRINT else None
+
+    # elif func_name == 'rbind':
+    #     func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[1]
+
+
+    #     if re.match(r'x\d+', func_arg):
+    #         func_arg = equals.get(func_name)
+
+
+    #     all_func_hints = get_hints(func_arg)
+    #     if all_func_hints is None:
+    #         # assert_message(
+    #         #     source, value, "Could not extract function hints from rbind argument"
+    #         # )
+    #         print_l(f'Processing line: {line}') if DO_PRINT else None
+    #         print_l(f'Rbind function could not be detected: {var_name} is {func_arg}') if DO_PRINT else None
+    #         hint = 'None'
+    #     else:
+    #         # arg -2 is fixed
+    #         hints = tuple(h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2)
+    #         hint = (hints, hints)
+    #         # print_l(f'Rbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
+    #         # hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
+    #         # print_l(f'Rbind function detected: {var_name} is {func_arg} = {hints}') if DO_PRINT else None
+
+    # elif func_name == 'lbind':
+    #     func_arg = re.match(r'lbind\((\w+),\s*(\w+)\)', value)[1]
+
+
+    #     if re.match(r'x\d+', func_arg):
+    #         func_arg = equals.get(func_name)
+
+
+    #     all_func_hints = get_hints(func_arg)
+    #     if all_func_hints is None:
+    #         # assert_message(
+    #         #     source, value, "Could not extract function hints from lbind argument"
+    #         # )
+    #         print_l(f'Processing line: {line}') if DO_PRINT else None
+    #         print_l(f'Lbind function could not be detected: {var_name} is {func_arg}') if DO_PRINT else None
+    #         hint = 'None'
+    #     else:
+    #         # arg 0 is fixed
+    #         hints = tuple(all_func_hints[1:])
+    #         hint = (hints, hints)
+    #         # print_l(f'Lbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
+    #         # hints = [h for i, h in enumerate(all_func_hints) if i != 0]
+    #         # print_l(f'Lbind function detected: {var_name} is {func_arg} = {hints}') if DO_PRINT else None
+
+
 
 
 def assert_message(source, value, message):
@@ -703,11 +764,11 @@ class Differs:
             self.run_equals[differ_name] = {}
             for x_name, hint_value in self.init_equals[differ_name].items():
                 # Extract value from HintValue namedtuple
-                x_call = hint_value.value
+                x_value = hint_value.value
                 # Perform substitution and store back as HintValue namedtuple
-                # sub_call = re.sub(r'\bI\b', I, x_call)
-                sub_call = tuple(I if item == 'I' else item for item in x_call)
-                self.run_equals[differ_name][x_name] = HintValue(hint_value.hint, sub_call)
+                # sub_value = re.sub(r'\bI\b', I, x_value)
+                sub_value = tuple(I if item == 'I' else item for item in x_value)
+                self.run_equals[differ_name][x_name] = HintValue(hint_value.hint, sub_value)
 
                 # print_l(f'{differ_name} - {x_name} = {self.run_equals[differ_name][x_name]}')
 
@@ -724,26 +785,21 @@ class Differs:
                 freeze_differs = self.freeze_differs if task_id is None else True
                 add_differ_line(equals_name, code, uses, task_id, freeze_differs)
 
-            # XXX Looks unused
-            if task_id is None:
-                done = track_solution(code.t_call, code.t_num, None)
+            # XXX Not sure that we actually need this
+            # We don't seem to save the differ source
 
-                # print_l(f'{differ_name} - {done = }')
+            # if task_id is None:
+            #     done = track_solution(code.t_call, code.t_num, None)
 
-                differ_body = build_differ_body(code.t_call, code.t_num, done)
-                differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
+            #     # print_l(f'{differ_name} - {done = }')
 
-                differ_source = f'def differ(S, I, C):\n{differ_body}'
-                # self.init_equals[differ_name] = get_equals(differ_source)
+            #     differ_body = build_differ_body(code.t_call, code.t_num, done)
+            #     differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
 
-                inlined_source = inline_variables(differ_source)
-                md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
+            #     differ_source = f'def differ(S, I, C):\n{differ_body}'
 
-                # NOTE Changes keys to self.run_equals !!!
-                # differ_name = f'differ_{md5_hash}'
-                # differ_source = f'def {differ_name}(S, I, O, C):\n{differ_body}'
-
-                # print_l(f'{differ_name}\n{inlined_source = }')
+            #     inlined_source = inline_variables(differ_source)
+            #     md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
 
 
             # print(f"    if type(t{code.t_num}.t) is int:", file=code.file)

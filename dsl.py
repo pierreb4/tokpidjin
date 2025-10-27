@@ -3814,7 +3814,7 @@ def _build_type_hints_cache():
 _build_type_hints_cache()
 
 # Public API for accessing cached type hints
-def get_type_hints_cached(func_or_name):
+def _get_type_hints_cached(func_or_name):
     """
     Get type hints from cache instead of expensive introspection.
     
@@ -3825,8 +3825,8 @@ def get_type_hints_cached(func_or_name):
         Dict of type hints, or empty dict if not found
     
     Usage in card.py:
-        from dsl import get_type_hints_cached
-        hints = get_type_hints_cached(func)  # O(1) lookup instead of O(n) introspection
+        from dsl import _get_type_hints_cached
+        hints = _get_type_hints_cached(func)  # O(1) lookup instead of O(n) introspection
     """
     if isinstance(func_or_name, str):
         name = func_or_name
