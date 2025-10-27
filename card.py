@@ -563,24 +563,34 @@ def get_equals(source):
                         add_hint = ('Integer',)
                     elif value in PAIR_GENERIC_CONSTANTS:
                         add_hint = ('IJ',)
+                    # Temporary solution. This value will disappear with a full restart
                     elif value in ('get_type_hints_cached'):
                         add_hint = ('Callable',)
 
                     # Function names
                     elif value[0].islower():
                         if hint_count == 0 and value in ['identity', 'rbind', 'lbind']:
-                            print_l(f'Adjusting hints: {func_hints} for value: {value}') if DO_PRINT else None
+                            print_l(f'Adjusting: {func_hints = } for: {top_values = }') if DO_PRINT else None
+
+                            first_arg = top_values[1]
+
+                            # Lookup first argument hints
+                            if re.match(r'x\d+', first_arg):
+                                hint_value = equals.get(value)
+                                hint_base = hint_value.hint[0] if hint_value else 'Callable'
+                            else:
+                                hint_base = get_hints(first_arg)
 
                             if value == 'identity':
-                                new_hints = (get_hints(top_values[1]),)
+                                new_hints = (hint_base,)
                                 break
 
                             if value == 'rbind':
-                                new_hints = (get_hints(top_values[1])[:-1],)
+                                new_hints = (hint_base[:-1],)
                                 break
 
                             if value == 'lbind':
-                                new_hints = (get_hints(top_values[1])[1:],)
+                                new_hints = (hint_base[1:],)
                                 break
 
                         else:
