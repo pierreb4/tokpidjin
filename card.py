@@ -565,9 +565,6 @@ def get_equals(source):
                         add_hint = ('Integer',)
                     elif value in PAIR_GENERIC_CONSTANTS:
                         add_hint = ('IJ',)
-                    # # Temporary solution. This value will disappear with a full restart
-                    # elif value in ('get_type_hints_cached'):
-                    #     add_hint = ('Callable',)
 
                     # Function names
                     elif value[0].islower():
