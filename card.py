@@ -38,7 +38,7 @@ def get_hints(dsl_func_name):
     # Fix hints order to match call order
     ret_hints = hints if len(hints) <= 1 else (hints[-1],) + hints[:-1]
 
-    print_l(f'Getting hints for {dsl_func_name}: {ret_hints}') if DO_PRINT else None
+    # print_l(f'Getting hints for {dsl_func_name}: {ret_hints}') if DO_PRINT else None
 
     return ret_hints
 
@@ -515,17 +515,20 @@ def get_equals(source):
             func_hints = get_hints(func)
             top_values = get_value(call)
 
-            print_l(f'Processing: {line = }') if DO_PRINT else None
-            print_l(f'            {func_hints = }') if DO_PRINT else None
-            print_l(f'            {top_values = }') if DO_PRINT else None
+            # print_l(f'Processing: {line = }') if DO_PRINT else None
+            # print_l(f'            {func_hints = }') if DO_PRINT else None
+            # print_l(f'            {top_values = }') if DO_PRINT else None
 
             new_hints = ()
             for hint_count, value in enumerate(top_values):
                 add_hint = ()
                 if re.match(r'x\d+', value):
-                    print_l(f'Processing {hint_count = } and {value = }') if DO_PRINT else None
+
+                    # print_l(f'Processing {hint_count = } and {value = }') if DO_PRINT else None
+
                     hint_value = equals.get(value)
-                    print_l(f'Found hint_value: {hint_value}') if DO_PRINT else None
+
+                    # print_l(f'Found hint_value: {hint_value}') if DO_PRINT else None
 
                     if hint_count == 0:
                         new_hints = hint_value.hint[0]
@@ -534,8 +537,9 @@ def get_equals(source):
                     # add_hint = (hint_value.hint[0],) if len(hint_value.hint) > 0 else () 
 
                 # Numerical constants and DSL function names
+                # NOTE We only expect function names below, for now
                 else:
-                    print_l(f'Processing: {value}') if DO_PRINT else None
+                    # print_l(f'Processing: {value}') if DO_PRINT else None
 
                     if value == 'S':
                         add_hint = ('TTT_iii',)
@@ -569,7 +573,8 @@ def get_equals(source):
                     # Function names
                     elif value[0].islower():
                         if hint_count == 0 and value in ['identity', 'rbind', 'lbind']:
-                            print_l(f'Adjusting: {func_hints = } for: {top_values = }') if DO_PRINT else None
+
+                            # print_l(f'Adjusting: {func_hints = } for: {top_values = }') if DO_PRINT else None
 
                             first_arg = top_values[1]
 
@@ -594,7 +599,8 @@ def get_equals(source):
 
                         else:
                             new_hints = get_hints(value)
-                            print_l(f'Getting {new_hints = } for {value = }') if DO_PRINT else None
+
+                            # print_l(f'Getting {new_hints = } for {value = }') if DO_PRINT else None
 
                             if hint_count == 0:
                                 add_hint = (func_hints[0], )
