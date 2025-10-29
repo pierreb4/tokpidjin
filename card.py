@@ -65,7 +65,7 @@ def get_value(call_string):
 #     return bool(re.search(pattern, call_str))
 
 
-def iscompatible_hint(old_hint, new_hint):
+def isnotincompatible_hint(old_hint, new_hint):
     """Check if two hints are compatible.
     
     Returns True if:
@@ -99,7 +99,7 @@ def iscompatible_hint(old_hint, new_hint):
         if len(old_hint) != len(new_hint):
             return False
         for oh, nh in zip(old_hint, new_hint):
-            if not iscompatible_hint(oh, nh):
+            if not isnotincompatible_hint(oh, nh):
                 return False
         return True
     
@@ -381,7 +381,7 @@ class Code:
                     if random.randint(0, 1) == 0:
                         # TODO Match type, using hints
 
-                        if iscompatible_hint(old_hint, new_hint):
+                        if isnotincompatible_hint(old_hint, new_hint):
                             sub_item = f't{t_offset}'
                         else:
                             continue
