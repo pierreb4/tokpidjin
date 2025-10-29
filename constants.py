@@ -197,7 +197,7 @@ TYPE_RANGES = {
 }
 
 # Type overlap compatibility map
-# Each type maps to the set of types it's compatible with
+# Each old hint maps to the set of hints it's compatible with
 TYPE_OVERLAPS = {
     'Integer': {'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_'},
     'F_': {'Integer', 'Numerical', 'F_', 'FL', 'R_', 'R4', 'R8', 'C_'},
