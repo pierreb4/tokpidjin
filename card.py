@@ -214,11 +214,11 @@ class Code:
         t_call = self.t_call
         t_num = self.t_num
 
-        self.t_call[t_num + 0] = HintValue(('Samples', 'Samples'), ('identity', 'S'))
+        self.t_call[t_num + 0] = HintValue(get_hints('identity'), ('identity', 'S'))
         self.file_batt(False)
         self.t_num += 1
 
-        self.t_call[t_num + 1] = HintValue(('A8', 'Samples'), ('a_mr', f't{t_num + 0}'))
+        self.t_call[t_num + 1] = HintValue(get_hints('a_mr'), ('a_mr', f't{t_num + 0}'))
         self.file_batt(False)
         self.t_num += 1
         # self.t_num += 2
