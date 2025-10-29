@@ -80,7 +80,7 @@ def replace_random(value, input_list):
 
 class Code:
     def __init__(self, file, task_id=None, S=None, t_call=None, 
-            t_number=None, t_num=0, score=0, vectorized=False):
+            t_number=None, t_num=0, vectorized=False):
         self.file = file
         self.task_id = task_id
         self.S = S
@@ -94,7 +94,6 @@ class Code:
         self.solver = {}
 
         self.t_num = t_num
-        self.score = score
 
 
     def substitute_color(self, arg, constant_dict=COLORS):
@@ -128,7 +127,6 @@ class Code:
 
 
     def substitute_color_izzo(self, arg_i, arg_o, f_n):
-        self.score -= 1
         t_call = self.t_call
         t_num = self.t_num
 
@@ -209,8 +207,6 @@ class Code:
         return arg
 
     def substitute_grid_angle_mr(self):
-        # Change the score at substitution time
-        self.score -= 1
         t_call = self.t_call
         t_num = self.t_num
 
@@ -376,40 +372,22 @@ class Code:
 
     def do_offset_mutation(self, old_hint, old_call, t_n, is_solver, has_mutation):
         while random.random() < BUDGET_RANDOM:
-            # TODO Check parameter impact on mutation numbers
-
             while True:
                 t_offset = random.randint(1, t_n)
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
-
-                    # NOTE We could also try to match type
-                    
-                    # CRITICAL FIX: Check if variable is being called as function
                     var_name = f't{t_n}'
 
-                    if old_call.value[0] == var_name:
+                    if random.randint(0, 1) == 0:
+                        # TODO Match type, using hints
+                        sub_item = f't{t_offset}'
+                    elif old_call.value[0] == var_name:
                         # Variable is being called: var(...) 
-                        # Can only replace with another function or t variable (that might be a function)
-                        if random.randint(0, 1) == 0:
-                            sub_item = f't{t_offset}'
-                        else:
-                            sub_item = random.choice(DSL_FUNCTION_NAMES)
+                        sub_item = random.choice(DSL_FUNCTION_NAMES)
                     else:
                         # Variable is being used as value: func(var)
-                        # Can replace with t variable or constant (NOT a function name)
-                        if random.randint(0, 1) == 0:
-                            sub_item = f't{t_offset}'
-                        else:
-                            sub_item = random.choice(GENERIC_CONSTANT_NAMES)
+                        sub_item = random.choice(GENERIC_CONSTANT_NAMES)
 
                     print_l(f'{sub_item = }') if DO_PRINT else None
-
-
-                    # pattern = rf'\bt{t_n}\b'
-                    # self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-                    # self.t_call[self.t_num] = re.sub(pattern, sub_item, old_call)
-                    # Replace value
-                    # value = re.sub(pattern, sub_item, old_call.value)
 
                     value = tuple(sub_item if item == var_name else item for item in old_call.value)
 
@@ -417,27 +395,6 @@ class Code:
                     self.t_call[self.t_num] = HintValue(old_hint, value)
                     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
                     break
-
-                # t_offset = random.randint(1, t_n)
-                # if t_offset > 0:
-                #     # new_call = clean_call(self.t_call[t_offset])
-                #     # new_items = get_items(new_call)
-
-                #     # if random.randint(0, 1) == 0:
-                #     #     new_func_name = new_items[0].strip()
-                #     # else:
-                #     #     # XXX Pick a random function name from dsl.py
-                #     #     #     If promising, make more structural
-                #     #     new_func_name = random.choice(DSL_FUNCTION_NAMES)
-                #     #     new_items[0] = new_func_name
-
-                #     # new_hints = get_hints(new_func_name)
-                #     # new_hint = new_hints[0] if new_hints else None
-
-                #     # if new_hint == old_hint or new_hint == 'Any' or old_hint == 'Any' or new_hint is None or old_hint is None:
-                #     pattern = rf'\bt{t_n}\b'
-                #     self.t_call[self.t_num] = re.sub(pattern, f't{t_offset}', old_call)
-                #     has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
 
         return has_mutation
 
@@ -459,7 +416,6 @@ class Code:
             sub_arg = self.substitute_symbol(old_arg, R4_NAMES)
         elif old_hint == 'R8':
             sub_arg = self.substitute_symbol(old_arg, R8_NAMES)
-            self.score += 1
         elif old_hint == 'A4':
             sub_arg = self.substitute_symbol(old_arg, A4_NAMES)
         elif old_hint == 'A8':
