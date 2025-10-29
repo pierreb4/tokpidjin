@@ -16,16 +16,15 @@ FL = int # -10 to  9, from both ends
 R_ = int # Randomized symbols, such as colors
 C_ = int # Colors
 A_ = int # Angles
-
-# Regular types, no sub (yet)
-I_ = int
-J_ = int
-IJ = Tuple[I_, J_]
-F_ = Callable
+I_ = int # Row indices
+J_ = int # Column indices
+IJ = Tuple[I_, J_] # Grid locations
+F_ = Callable # Function type
 
 # Generic types
-Boolean = bool
-Integer = int
+Boolean = bool # T/F, True / False
+Integer = int # Integers
+
 # IntegerTuple = Tuple[Integer, Integer]
 Numerical = Union[Integer, IJ]
 IntegerSet = FrozenSet[Integer]
