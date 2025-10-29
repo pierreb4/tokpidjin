@@ -134,19 +134,42 @@ class Code:
 
         # GPU Batch Pattern: Sample extraction + processing
         # Lines t_num+0 to t_num+3 form a GPU-optimizable pattern
-        t_call[t_num + 0] = HintValue('None', 'apply(first, S)')
-        t_call[t_num + 1] = HintValue('None', 'apply(second, S)')
-        t_call[t_num + 2] = HintValue('None', f'mapply(p_g, t{t_num + 0})')
-        t_call[t_num + 3] = HintValue('None', f'mapply(p_g, t{t_num + 1})')
-        t_call[t_num + 4] = HintValue('None', f'dedupe(t{t_num + 2})')
-        t_call[t_num + 5] = HintValue('None', f'dedupe(t{t_num + 3})')
-        t_call[t_num + 6] = HintValue('None', f'difference_tuple(t{t_num + arg_i}, t{t_num + arg_o})')
-        t_call[t_num + 7] = HintValue('None', f'get_nth_t(t{t_num + 6}, {f_n})')
-        self.t_num += 8
+        self.t_call[t_num + 0] = HintValue('None', 'apply(first, S)')
+        self.file_batt(False)
+        self.t_num += 1
+
+        self.t_call[t_num + 1] = HintValue('None', 'apply(second, S)')
+        self.file_batt(False)
+        self.t_num += 1
+
+        self.t_call[t_num + 2] = HintValue('None', f'mapply(p_g, t{t_num + 0})')
+        self.file_batt(False)
+        self.t_num += 1
+
+        self.t_call[t_num + 3] = HintValue('None', f'mapply(p_g, t{t_num + 1})')
+        self.file_batt(False)
+        self.t_num += 1
+
+        self.t_call[t_num + 4] = HintValue('None', f'dedupe(t{t_num + 2})')
+        self.file_batt(False)
+        self.t_num += 1
+
+        self.t_call[t_num + 5] = HintValue('None', f'dedupe(t{t_num + 3})')
+        self.file_batt(False)
+        self.t_num += 1
+
+        self.t_call[t_num + 6] = HintValue('None', f'difference_tuple(t{t_num + arg_i}, t{t_num + arg_o})')
+        self.file_batt(False)
+        self.t_num += 1
+
+        self.t_call[t_num + 7] = HintValue('None', f'get_nth_t(t{t_num + 6}, {f_n})')
+        self.file_batt(False)
+        self.t_num += 1
+        # self.t_num += 8
         
-        # Generate normal code for all lines
-        for t in range(8):
-            print(f'    t{t_num + t} = {t_call[t_num + t].value}', file=self.file)
+        # # Generate normal code for all lines
+        # for t in range(8):
+        #     print(f'    t{t_num + t} = {t_call[t_num + t].value}', file=self.file)
         
         return f't{t_num + 7}'
 
@@ -191,12 +214,17 @@ class Code:
         t_call = self.t_call
         t_num = self.t_num
 
-        t_call[t_num + 0] = HintValue('None', 'identity(S)')
-        t_call[t_num + 1] = HintValue('None', f'a_mr(t{t_num + 0})')
-        self.t_num += 2
+        self.t_call[t_num + 0] = HintValue(('Samples', 'Samples'), 'identity(S)')
+        self.file_batt(False)
+        self.t_num += 1
 
-        for t in range(2):
-            print(f'    t{t_num + t} = {t_call[t_num + t].value}', file=self.file)
+        self.t_call[t_num + 1] = HintValue(('A8', 'Samples'), f'a_mr(t{t_num + 0})')
+        self.file_batt(False)
+        self.t_num += 1
+        # self.t_num += 2
+
+        # for t in range(2):
+        #     print(f'    t{t_num + t} = {t_call[t_num + t].value}', file=self.file)
 
         return f't{t_num + 1}'
 
@@ -544,7 +572,7 @@ def get_equals(source):
                     # print_l(f'Processing: {value}') if DO_PRINT else None
 
                     if value == 'S':
-                        add_hint = ('TTT_iii',)
+                        add_hint = ('Samples',)
                     elif value in ('I', 'C'):
                         add_hint = ('Grid',)
                     elif value in B_NAMES:

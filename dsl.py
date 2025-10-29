@@ -169,13 +169,13 @@ def p_f( element: 'FrozenSet' ) -> 'IntegerSet':
     return frozenset(c for _, _, c in element)
 
 
-def p_g( grid: 'Grid' ) -> 'IntegerSet':
+def p_g( grid: 'Grid' ) -> 'Colors':
     """ colors occurring in grid """
     # logger.info(f'p_g: {grid = }')  # Disabled: excessive logging overhead
     return tuple({cell for row in grid for cell in row})
 
 
-def p_o( obj: 'Object' ) -> 'IntegerSet':
+def p_o( obj: 'Object' ) -> 'Colors':
     """ colors occurring in object """
     # logger.info(f'p_o: {obj = }')  # Disabled: excessive logging overhead
     return tuple({c for _, _, c in obj})
@@ -593,6 +593,14 @@ def get_rank( container: 'IntegerSet', rank: 'FL') -> 'Integer':
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else 0
 
 
+def get_rank_t( container: 'Colors', rank: 'FL') -> 'Integer':
+    # logger.info(f'get_rank: {container = }, {rank = }')
+    # if not all(isinstance(e, int) for e in container):
+    #     return None
+    ranked = sorted(container, reverse=True)
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else 0
+
+
 def get_arg_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
     # logger.info(f'get_arg_rank: {container = }, {compfunc = }, {rank = }')
     ranked = sorted(container, key=compfunc, reverse=True)
@@ -892,9 +900,25 @@ def maximum(
     return max(container, default=0)
 
 
+def maximum_t(
+    container: 'Colors'
+) -> 'Integer':
+    """ maximum """
+    # logger.info(f'maximum: {container = }')
+    return max(container, default=0)
+
+
 # See get_rank
 def minimum(
     container: 'IntegerSet'
+) -> 'Integer':
+    """ minimum """
+    # logger.info(f'minimum: {container = }')
+    return min(container, default=0)
+
+
+def minimum_t(
+    container: 'Colors'
 ) -> 'Integer':
     """ minimum """
     # logger.info(f'minimum: {container = }')

@@ -37,6 +37,8 @@ TTT_iii = Tuple[Tuple[Tuple[int, int, int], ...], ...]
 # Cell = Tuple[C_, IJ]
 Cell = Tuple[I_, J_, C_]
 
+Colors = Tuple[C_, ...]
+
 Object = FrozenSet[Cell]
 Objects = FrozenSet[Object]
 Indices = FrozenSet[IJ]
