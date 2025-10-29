@@ -65,6 +65,47 @@ def get_value(call_string):
 #     return bool(re.search(pattern, call_str))
 
 
+def iscompatible_hint(old_hint, new_hint):
+    """Check if two hints are compatible.
+    
+    Returns True if:
+    - Both are the same string
+    - Either is 'Any'
+    - Both are tuples of same length with compatible elements
+    - Both are constants from overlapping ranges (using TYPE_RANGES and TYPE_OVERLAPS)
+    """
+    if isinstance(old_hint, str) and old_hint == new_hint:
+        return True
+    
+    # Check for 'Any' compatibility
+    if old_hint == 'Any' or new_hint == 'Any':
+        return True
+    
+    # Check if both are constants from overlapping ranges
+    if isinstance(old_hint, str) and isinstance(new_hint, str):
+        # Use centralized type definitions from constants.py
+        # Check if these hints are compatible
+        if new_hint in TYPE_OVERLAPS.get(old_hint, set()):
+            return True
+
+        if old_hint in TYPE_OVERLAPS:
+            return False
+
+        # XXX Until we refine, assume unknown types are compatible        
+        return True
+    
+    # Check tuples
+    if isinstance(old_hint, tuple) and isinstance(new_hint, tuple):
+        if len(old_hint) != len(new_hint):
+            return False
+        for oh, nh in zip(old_hint, new_hint):
+            if not iscompatible_hint(oh, nh):
+                return False
+        return True
+    
+    return False
+
+
 def replace_random(value, input_list):
     current_idx = input_list.index(value)
     if current_idx == 0:  # First element
@@ -228,36 +269,14 @@ class Code:
     def mutate(self, is_solver, freeze=False):
         # NOTE old_call is a HintValue namedtuple
         old_call = self.t_call[self.t_num]
-
-        # print_l(f'{self.t_num = } - {old_call = }')
-
-        # old_items = get_items(old_call.value)
-        # old_func_name = old_items[0]
-
-        # old_func_name = old_call.value[0]
-        # old_hints = get_hints(old_func_name)
-
         differ = self.differ[self.t_num]
         solver = self.solver[self.t_num]
-        # print(f'    # Pre-mutate: t{self.t_num} - {differ = } - {solver = }', file=self.file)
+
         print(f'    # Pre-mutate t{self.t_num}', file=self.file)
-        # print(f'    # -- {old_hints = } from {old_func_name}', file=self.file)
         print(f'    # -- {old_call.value = }', file=self.file)
         print(f'    # -- {old_call.hint = }', file=self.file)
  
         has_mutation = Mutation(False, None, None)
-
-        # TODO Refactor entire mutation system
-        # - Forget about old_hints above, old_hints come from equals via old_call.hint
-        # - Go through old_hints and old_args together (care about what's a function or not later)
-
-
-
-
-
-        # NOTE Same as old_items for now
-        # Need to sort out how old_func_name is special
-        # old_args = re.findall(r'\b(\w+)\b', old_call.value)
 
         old_args = old_call.value
         old_hints = old_call.hint
@@ -313,31 +332,6 @@ class Code:
                 elif not freeze:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
 
-        # # TODO Track t variables to get to hints
-        # if old_hints is None:
-        #     old_hint = None
-        #     # old_func_name is a t variable
-        #     for i, old_arg in enumerate(old_args):
-        #         # First deal with t variables
-        #         if re.match(r't\d+', old_arg):
-        #             if not freeze:
-        #                 t_n = int(old_arg[1:])
-        #                 has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
-        #         elif not freeze:
-        #             has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
-        # else:
-        #     # old_func_name is a known function
-        #     # Skip last hint (return type) and use only argument hints
-        #     arg_hints = old_hints[:-1] if len(old_hints) > 1 else []
-        #     for i, (old_arg, old_hint) in enumerate(zip(old_args, arg_hints)):
-        #         # First deal with t variables
-        #         if re.match(r't\d+', old_arg):
-        #             if not freeze:
-        #                 t_n = int(old_arg[1:])
-        #                 has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
-        #         elif not freeze:
-        #             has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
-
         return self.file_batt(has_mutation)
 
 
@@ -374,13 +368,25 @@ class Code:
         while random.random() < BUDGET_RANDOM:
             while True:
                 t_offset = random.randint(1, t_n)
+
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
-                    var_name = f't{t_n}'
+                    t_name = f't{t_n}'
+
+                    print_l(f'Considering offset mutation for {t_name} to t{t_offset}') if DO_PRINT else None
+                    print_l(f'-- {t_name}: {self.t_call[t_n]}') if DO_PRINT else None
+                    print_l(f'-- t{t_offset}: {self.t_call[t_offset]}') if DO_PRINT else None
+
+                    new_hint = self.t_call[t_offset].hint
 
                     if random.randint(0, 1) == 0:
                         # TODO Match type, using hints
-                        sub_item = f't{t_offset}'
-                    elif old_call.value[0] == var_name:
+
+                        if iscompatible_hint(old_hint, new_hint):
+                            sub_item = f't{t_offset}'
+                        else:
+                            continue
+
+                    elif old_call.value[0] == t_name:
                         # Variable is being called: var(...) 
                         sub_item = random.choice(DSL_FUNCTION_NAMES)
                     else:
@@ -389,7 +395,7 @@ class Code:
 
                     print_l(f'{sub_item = }') if DO_PRINT else None
 
-                    value = tuple(sub_item if item == var_name else item for item in old_call.value)
+                    value = tuple(sub_item if item == t_name else item for item in old_call.value)
 
                     # XXX We might need old_hints here
                     self.t_call[self.t_num] = HintValue(old_hint, value)
@@ -614,58 +620,6 @@ def adjust_hints(equals, value, hint):
         hint = (hints, hints)
 
     return hint
-
-    #     # print_l(f'Identity function detected: {var_name} is {func_arg} = {hints}') if DO_PRINT else None
-
-    # elif func_name == 'rbind':
-    #     func_arg = re.match(r'rbind\((\w+),\s*(\w+)\)', value)[1]
-
-
-    #     if re.match(r'x\d+', func_arg):
-    #         func_arg = equals.get(func_name)
-
-
-    #     all_func_hints = get_hints(func_arg)
-    #     if all_func_hints is None:
-    #         # assert_message(
-    #         #     source, value, "Could not extract function hints from rbind argument"
-    #         # )
-    #         print_l(f'Processing line: {line}') if DO_PRINT else None
-    #         print_l(f'Rbind function could not be detected: {var_name} is {func_arg}') if DO_PRINT else None
-    #         hint = 'None'
-    #     else:
-    #         # arg -2 is fixed
-    #         hints = tuple(h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2)
-    #         hint = (hints, hints)
-    #         # print_l(f'Rbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
-    #         # hints = [h for i, h in enumerate(all_func_hints) if i != len(all_func_hints) - 2]
-    #         # print_l(f'Rbind function detected: {var_name} is {func_arg} = {hints}') if DO_PRINT else None
-
-    # elif func_name == 'lbind':
-    #     func_arg = re.match(r'lbind\((\w+),\s*(\w+)\)', value)[1]
-
-
-    #     if re.match(r'x\d+', func_arg):
-    #         func_arg = equals.get(func_name)
-
-
-    #     all_func_hints = get_hints(func_arg)
-    #     if all_func_hints is None:
-    #         # assert_message(
-    #         #     source, value, "Could not extract function hints from lbind argument"
-    #         # )
-    #         print_l(f'Processing line: {line}') if DO_PRINT else None
-    #         print_l(f'Lbind function could not be detected: {var_name} is {func_arg}') if DO_PRINT else None
-    #         hint = 'None'
-    #     else:
-    #         # arg 0 is fixed
-    #         hints = tuple(all_func_hints[1:])
-    #         hint = (hints, hints)
-    #         # print_l(f'Lbind function pre-detected: {var_name} is {func_arg} = {all_func_hints}') if DO_PRINT else None
-    #         # hints = [h for i, h in enumerate(all_func_hints) if i != 0]
-    #         # print_l(f'Lbind function detected: {var_name} is {func_arg} = {hints}') if DO_PRINT else None
-
-
 
 
 def assert_message(source, value, message):

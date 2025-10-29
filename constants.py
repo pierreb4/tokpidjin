@@ -180,3 +180,35 @@ GENERIC_CONSTANTS = INT_GENERIC_CONSTANTS | PAIR_GENERIC_CONSTANTS
 GENERIC_CONSTANT_NAMES = [*GENERIC_CONSTANTS]
 ALL_CONSTANTS = B_NAMES | FL_NAMES | R_NAMES | COLORS | GENERIC_CONSTANTS
 ALL_CONSTANT_NAMES = [*ALL_CONSTANTS]
+
+# Type compatibility registry for iscompatible_hint()
+# Maps type names to their constant dictionaries
+TYPE_RANGES = {
+    'F_': F_NAMES,
+    'FL': FL_NAMES,
+    'L_': L_NAMES,
+    'R_': R_NAMES,
+    'R4': R4_NAMES,
+    'R8': R8_NAMES,
+    'A4': A4_NAMES,
+    'A8': A8_NAMES,
+    'C_': COLORS,
+    'IJ': PAIR_GENERIC_CONSTANTS,
+}
+
+# Type overlap compatibility map
+# Each type maps to the set of types it's compatible with
+TYPE_OVERLAPS = {
+    'Integer': {'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_'},
+    'F_': {'Integer', 'Numerical', 'F_', 'FL', 'R_', 'R4', 'R8', 'C_'},
+    'FL': {'Integer', 'Numerical', 'F_', 'FL', 'L_'},
+    'L_': {'Integer', 'Numerical', 'L_', 'FL'},
+    'R_': {'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
+    'R4': {'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
+    'R8': {'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
+    'A4': {'Integer', 'Numerical', 'A4', 'A8'},
+    'A8': {'Integer', 'Numerical', 'A4', 'A8'},
+    'C_': {'Integer', 'Numerical', 'C_', 'F_', 'R_', 'R4', 'R8'},
+    'Numerical': {'Integer', 'Numerical', 'IJ',},
+    'IJ': {'Numerical', 'IJ'},
+}
