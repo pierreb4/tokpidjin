@@ -417,7 +417,7 @@ class Code:
     def do_arg_substitutions(self, old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation):
         sub_arg = old_arg
 
-        if old_hint in ['C_']:
+        if old_hint in ('C_',):
             sub_arg = self.substitute_color(old_arg)
         elif old_hint == 'FL':
             sub_arg = self.substitute_rank(old_arg, FL_NAMES)
@@ -438,15 +438,17 @@ class Code:
             sub_arg = self.substitute_grid_angle(old_arg)
         elif old_hint == 'Boolean':
             sub_arg = self.substitute_symbol(old_arg, B_NAMES)
+        elif old_hint in ('I_', 'J_'):
+            sub_arg = self.substitute_symbol(old_arg, CONSTANTS)
         elif old_hint == 'IJ':
             sub_arg = self.substitute_symbol(old_arg, PAIR_GENERIC_CONSTANTS)
-        elif old_hint not in [ 'Samples', 'Grid', 'Tuple',
+        elif old_hint not in ('Samples', 'Grid', 'Tuple',
                 'Object', 'Objects', 'FrozenSet', 'Patch', 
                 'Callable', 'Container', 'ContainerContainer',
                 'Integer', 'IntegerSet', 'Numerical', 'Indices', 
                 'TupleTuple', 'TTT_iii', 'Any',
                 None
-            ] and not isinstance(old_hint, tuple):
+         ) and not isinstance(old_hint, tuple):
             print_l(f'Unrecognised type: {old_hint = } in {old_call}') if DO_PRINT else None
         elif self.t_num > 1 and random.random() < BUDGET_RANDOM:
 
