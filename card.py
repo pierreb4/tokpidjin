@@ -383,14 +383,13 @@ class Code:
                             continue
 
                         sub_item = f't{t_offset}'
-
                         print_l(f'Offset: {sub_item = }') if DO_PRINT else None
 
                     elif old_call.value[0] == t_name:
                         # Check function compatibility
                         old_hints = old_call.hint
                         while True:
-                            new_func_name = random.choice(DSL_FUNCTION_NAMES)
+                            sub_item = random.choice(DSL_FUNCTION_NAMES)
                             new_hints = get_hints(new_func_name)
 
                             if len(new_hints) == len(old_hints):
@@ -402,24 +401,26 @@ class Code:
                                         old_hints, new_hints
                                     )
                                 )
-                                break
+                            else:
+                                sub_item = t_name
 
-                        sub_item = new_func_name
+                            break
+
+                        # sub_item = new_func_name
                         print_l(f'New func: {sub_item = }') if DO_PRINT else None
 
+                    elif old_hint in INT_TYPE_RANGES:
+                        sub_item = random.choice([*INT_GENERIC_CONSTANTS])
+                        print_l(f'New arg: {sub_item = }') if DO_PRINT else None
+
+                    elif old_hint in PAIR_TYPE_RANGES:
+                        sub_item = random.choice([*PAIR_GENERIC_CONSTANTS])
+                        print_l(f'New arg: {sub_item = }') if DO_PRINT else None
+
                     else:
-                        # Pick compatible constant
-                        if old_hint in INT_TYPE_RANGES:
-                            sub_item = random.choice(INT_GENERIC_CONSTANTS.keys())
-                            print_l(f'New arg: {sub_item = }') if DO_PRINT else None
-
-                        elif old_hint in PAIR_TYPE_RANGES:
-                            sub_item = random.choice(PAIR_GENERIC_CONSTANTS.keys())
-                            print_l(f'New arg: {sub_item = }') if DO_PRINT else None
-
-                        else:
-                            sub_item = t_name
-                            print_l(f'No mutation for {t_name} due to hint: {old_hint = }') if DO_PRINT else None
+                        sub_item = t_name
+                        print_l(f'No mutation for {sub_item = } due to hint: {old_hint = }') \
+                                if DO_PRINT else None
 
                     value = tuple(sub_item if item == t_name else item for item in old_call.value)
 
