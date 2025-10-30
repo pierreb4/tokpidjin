@@ -390,7 +390,7 @@ class Code:
                         old_hints = old_call.hint
                         while True:
                             sub_item = random.choice(DSL_FUNCTION_NAMES)
-                            new_hints = get_hints(new_func_name)
+                            new_hints = get_hints(sub_item)
 
                             if len(new_hints) == len(old_hints):
                                 all_compatible = all(
@@ -406,7 +406,6 @@ class Code:
 
                             break
 
-                        # sub_item = new_func_name
                         print_l(f'New func: {sub_item = }') if DO_PRINT else None
 
                     elif old_hint in INT_TYPE_RANGES:
