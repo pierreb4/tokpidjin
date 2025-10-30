@@ -72,7 +72,7 @@ def isnotincompatible_hint(old_hint, new_hint):
     - Both are the same string
     - Either is 'Any'
     - Both are tuples of same length with compatible elements
-    - Both are constants from overlapping ranges (using TYPE_RANGES and TYPE_OVERLAPS)
+    - Both are constants from overlapping ranges (using HINT_OVERLAPS)
     """
     if isinstance(old_hint, str) and old_hint == new_hint:
         return True
@@ -85,10 +85,10 @@ def isnotincompatible_hint(old_hint, new_hint):
     if isinstance(old_hint, str) and isinstance(new_hint, str):
         # Use centralized type definitions from constants.py
         # Check if these hints are compatible
-        if new_hint in TYPE_OVERLAPS.get(old_hint, set()):
+        if new_hint in HINT_OVERLAPS.get(old_hint, set()):
             return True
 
-        if old_hint in TYPE_OVERLAPS:
+        if old_hint in HINT_OVERLAPS:
             return False
 
         # XXX Until we refine, assume unknown types are compatible        
@@ -379,21 +379,47 @@ class Code:
                     new_hint = self.t_call[t_offset].hint
 
                     if random.randint(0, 1) == 0:
-                        # TODO Match type, using hints
-
-                        if isnotincompatible_hint(old_hint, new_hint):
-                            sub_item = f't{t_offset}'
-                        else:
+                        if not isnotincompatible_hint(old_hint, new_hint):
                             continue
 
-                    elif old_call.value[0] == t_name:
-                        # Variable is being called: var(...) 
-                        sub_item = random.choice(DSL_FUNCTION_NAMES)
-                    else:
-                        # Variable is being used as value: func(var)
-                        sub_item = random.choice(GENERIC_CONSTANT_NAMES)
+                        sub_item = f't{t_offset}'
 
-                    print_l(f'{sub_item = }') if DO_PRINT else None
+                        print_l(f'Offset: {sub_item = }') if DO_PRINT else None
+
+                    elif old_call.value[0] == t_name:
+                        # Check function compatibility
+                        old_hints = old_call.hint
+                        while True:
+                            new_func_name = random.choice(DSL_FUNCTION_NAMES)
+                            new_hints = get_hints(new_func_name)
+
+                            if len(new_hints) == len(old_hints):
+                                all_compatible = all(
+                                    isnotincompatible_hint(
+                                        old_arg_hint, new_arg_hint
+                                    )
+                                    for old_arg_hint, new_arg_hint in zip(
+                                        old_hints, new_hints
+                                    )
+                                )
+                                break
+
+                        sub_item = new_func_name
+                        print_l(f'New func: {sub_item = }') if DO_PRINT else None
+
+                    else:
+                        # Pick compatible constant
+                        if old_hint in INT_TYPE_RANGES:
+                            sub_item = random.choice(INT_GENERIC_CONSTANTS.keys())
+                            print_l(f'New arg: {sub_item = }') if DO_PRINT else None
+
+                        elif old_hint in PAIR_TYPE_RANGES:
+                            sub_item = random.choice(PAIR_GENERIC_CONSTANTS.keys())
+                            print_l(f'New arg: {sub_item = }') if DO_PRINT else None
+
+                        else:
+                            sub_item = t_name
+                            print_l(f'No mutation for {t_name} due to hint: {old_hint = }') if DO_PRINT else None
 
                     value = tuple(sub_item if item == t_name else item for item in old_call.value)
 

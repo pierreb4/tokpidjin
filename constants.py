@@ -183,7 +183,7 @@ ALL_CONSTANT_NAMES = [*ALL_CONSTANTS]
 
 # Type compatibility registry for iscompatible_hint()
 # Maps type names to their constant dictionaries
-TYPE_RANGES = {
+INT_TYPE_RANGES = {
     'F_': F_NAMES,
     'FL': FL_NAMES,
     'L_': L_NAMES,
@@ -193,13 +193,18 @@ TYPE_RANGES = {
     'A4': A4_NAMES,
     'A8': A8_NAMES,
     'C_': COLORS,
+}
+
+PAIR_TYPE_RANGES = {
     'IJ': PAIR_GENERIC_CONSTANTS,
 }
 
 # Type overlap compatibility map
 # Each old hint maps to the set of hints it's compatible with
-TYPE_OVERLAPS = {
+HINT_OVERLAPS = {
+    'Boolean': {'Boolean'},
     'Integer': {'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_'},
+    'Numerical': {'Integer', 'Numerical', 'IJ',},
     'F_': {'Integer', 'Numerical', 'F_', 'FL', 'R_', 'R4', 'R8', 'C_'},
     'FL': {'Integer', 'Numerical', 'F_', 'FL', 'L_'},
     'L_': {'Integer', 'Numerical', 'L_', 'FL'},
@@ -209,6 +214,18 @@ TYPE_OVERLAPS = {
     'A4': {'Integer', 'Numerical', 'A4', 'A8'},
     'A8': {'Integer', 'Numerical', 'A4', 'A8'},
     'C_': {'Integer', 'Numerical', 'C_', 'F_', 'R_', 'R4', 'R8'},
-    'Numerical': {'Integer', 'Numerical', 'IJ',},
     'IJ': {'Numerical', 'IJ'},
+    'IntegerSet': {'IntegerSet'},
+    'Grid': {'Grid', 'TupleTuple', 'ContainerContainer'},
+    'Samples': {'Samples', 'TupleTuple', 'ContainerContainer'},
+    'TTT_iii': {'TTT_iii'},
+    'Cell': {'Cell'},
+    'Colors': {'Colors'},
+    'Object': {'Object', 'ContainerContainer'},
+    'Objects': {'Objects', 'ContainerContainer'},
+    'Indices': {'Indices', 'ContainerContainer'},
+    'IndicesSet': {'IndicesSet', 'ContainerContainer'},
+    'Patch': {'Patch', 'ContainerContainer'},
+    'TupleTuple': {'Grid', 'Samples', 'TupleTuple', 'ContainerContainer'},
+    'ContainerContainer': {'Grid', 'Samples', 'IndicesSet', 'Patch', 'Object', 'Objects', 'TupleTuple', 'ContainerContainer'},
 }
