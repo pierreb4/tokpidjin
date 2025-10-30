@@ -481,7 +481,7 @@ class Code:
                 if old_func_name not in DSL_FUNCTION_DICT:
                     print_l(f'{old_func_name = } - {old_args = }')
 
-                old_function = DSL_FUNCTION_DICT[old_func_name]
+                old_function = DSL_FUNCTION_DICT[old_func_name] if old_func_name in DSL_FUNCTION_DICT else None
                 arity = old_function.__code__.co_argcount
                 while True:
                     new_func_name = random.choice(DSL_FUNCTION_NAMES)
