@@ -65,7 +65,7 @@ def get_value(call_string):
 #     return bool(re.search(pattern, call_str))
 
 
-def isnotincompatible_hint(old_hint, new_hint):
+def iscompatible_hint(old_hint, new_hint):
     """Check if two hints are compatible.
     
     Returns True if:
@@ -99,7 +99,7 @@ def isnotincompatible_hint(old_hint, new_hint):
         if len(old_hint) != len(new_hint):
             return False
         for oh, nh in zip(old_hint, new_hint):
-            if not isnotincompatible_hint(oh, nh):
+            if not iscompatible_hint(oh, nh):
                 return False
         return True
     
@@ -379,7 +379,7 @@ class Code:
                     new_hint = self.t_call[t_offset].hint
 
                     if random.randint(0, 1) == 0:
-                        if not isnotincompatible_hint(old_hint, new_hint):
+                        if not iscompatible_hint(old_hint, new_hint):
                             continue
 
                         sub_item = f't{t_offset}'
@@ -394,7 +394,7 @@ class Code:
 
                             if len(new_hints) == len(old_hints):
                                 all_compatible = all(
-                                    isnotincompatible_hint(
+                                    iscompatible_hint(
                                         old_arg_hint, new_arg_hint
                                     )
                                     for old_arg_hint, new_arg_hint in zip(
@@ -473,7 +473,7 @@ class Code:
 
             if old_hint == 'Callable':
 
-                # NOTE We could also try to match return type
+                # NOTE We also need to match hints
 
                 # Replace with random function of same arity
                 old_func_name = old_args[i]

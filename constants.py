@@ -201,31 +201,55 @@ PAIR_TYPE_RANGES = {
 
 # Type overlap compatibility map
 # Each old hint maps to the set of hints it's compatible with
+# Based on type definitions in arc_types.py
 HINT_OVERLAPS = {
-    'Boolean': {'Boolean'},
-    'Integer': {'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_'},
-    'Numerical': {'Integer', 'Numerical', 'IJ',},
-    'F_': {'Integer', 'Numerical', 'F_', 'FL', 'R_', 'R4', 'R8', 'C_'},
-    'FL': {'Integer', 'Numerical', 'F_', 'FL', 'L_'},
-    'L_': {'Integer', 'Numerical', 'L_', 'FL'},
-    'R_': {'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
-    'R4': {'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
-    'R8': {'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
-    'A4': {'Integer', 'Numerical', 'A4', 'A8'},
-    'A8': {'Integer', 'Numerical', 'A4', 'A8'},
-    'C_': {'Integer', 'Numerical', 'C_', 'F_', 'R_', 'R4', 'R8'},
+    # Base container types - compatible with themselves and generic containers
+    'Tuple': {'Tuple', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples'},
+    'FrozenSet': {'FrozenSet', 'Container', 'ContainerContainer', 'IntegerSet', 'Indices', 'Object', 'Objects', 'Patch'},
+    'Container': {'Tuple', 'FrozenSet', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'IntegerSet', 'Indices', 'Object', 'Objects', 'Patch'},
+    'ContainerContainer': {'Tuple', 'FrozenSet', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'IntegerSet', 'Indices', 'Object', 'Objects', 'Patch'},
+    'Callable': {'Callable'},
+    
+    # Numeric types - range/rank indices
+    # NOTE: Boolean = bool is a subtype of int in Python (True=1, False=0)
+    # Therefore Boolean is compatible with all Integer and range types
+    'Boolean': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'A4', 'A8', 'C_', 'I_', 'J_'},
+    'Integer': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_'},
+    'Numerical': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_', 'IJ'},
+    
+    # Integer ranges - all compatible with each other and Integer/Numerical
+    # NOTE: Boolean is compatible with all as it's a subtype of int
+    'F_': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'R_', 'R4', 'R8', 'C_'},
+    'FL': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_'},
+    'L_': {'Boolean', 'Integer', 'Numerical', 'L_', 'FL'},
+    'R_': {'Boolean', 'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
+    'R4': {'Boolean', 'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
+    'R8': {'Boolean', 'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
+    'A4': {'Boolean', 'Integer', 'Numerical', 'A4', 'A8'},
+    'A8': {'Boolean', 'Integer', 'Numerical', 'A4', 'A8'},
+    'C_': {'Boolean', 'Integer', 'Numerical', 'C_', 'F_', 'R_', 'R4', 'R8'},
+    'I_': {'Boolean', 'Integer', 'Numerical'},
+    'J_': {'Boolean', 'Integer', 'Numerical'},
     'IJ': {'Numerical', 'IJ'},
-    'IntegerSet': {'IntegerSet'},
-    'Grid': {'Grid', 'TupleTuple', 'ContainerContainer'},
-    'Samples': {'Samples', 'TupleTuple', 'ContainerContainer'},
-    'TTT_iii': {'TTT_iii'},
-    'Cell': {'Cell'},
-    'Colors': {'Colors'},
-    'Object': {'Object', 'ContainerContainer'},
-    'Objects': {'Objects', 'ContainerContainer'},
-    'Indices': {'Indices', 'ContainerContainer'},
-    'IndicesSet': {'IndicesSet', 'ContainerContainer'},
-    'Patch': {'Patch', 'ContainerContainer'},
-    'TupleTuple': {'Grid', 'Samples', 'TupleTuple', 'ContainerContainer'},
-    'ContainerContainer': {'Grid', 'Samples', 'IndicesSet', 'Patch', 'Object', 'Objects', 'TupleTuple', 'ContainerContainer'},
+    
+    # Specific frozenset types - compatible with each other and FrozenSet/Container
+    'IntegerSet': {'FrozenSet', 'Container', 'ContainerContainer', 'IntegerSet'},
+    'Indices': {'FrozenSet', 'Container', 'ContainerContainer', 'Indices', 'IndicesSet', 'Patch'},
+    'IndicesSet': {'FrozenSet', 'Container', 'ContainerContainer', 'Indices', 'IndicesSet'},
+    'Object': {'FrozenSet', 'Container', 'ContainerContainer', 'Object', 'Objects', 'Patch'},
+    'Objects': {'FrozenSet', 'Container', 'ContainerContainer', 'Object', 'Objects'},
+    'Patch': {'FrozenSet', 'Container', 'ContainerContainer', 'Indices', 'Object', 'Patch'},
+    
+    # Specific tuple types - compatible with each other and Tuple/Container
+    'Grid': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
+    'Samples': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
+    'TupleTuple': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
+    'TTT_iii': {'TupleTuple', 'Tuple', 'Container', 'ContainerContainer'},
+    'Colors': {'Tuple', 'Container', 'ContainerContainer'},
+    
+    # Other specific types
+    'Cell': {'Cell', 'Tuple', 'Container'},
+    
+    # Generic catch-all types
+    'Any': {'Any', 'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'A4', 'A8', 'C_', 'I_', 'J_', 'IJ', 'Tuple', 'FrozenSet', 'Container', 'ContainerContainer', 'Callable', 'IntegerSet', 'Grid', 'Samples', 'TTT_iii', 'Cell', 'Colors', 'Object', 'Objects', 'Indices', 'IndicesSet', 'Patch', 'TupleTuple'},
 }
