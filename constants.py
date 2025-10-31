@@ -203,11 +203,10 @@ PAIR_TYPE_RANGES = {
 # Each old hint maps to the set of hints it's compatible with
 # Based on type definitions in arc_types.py
 HINT_OVERLAPS = {
-    # Base container types - compatible with themselves and generic containers
-    'Tuple': {'Tuple', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples'},
-    'FrozenSet': {'FrozenSet', 'Container', 'ContainerContainer', 'IntegerSet', 'Indices', 'Object', 'Objects', 'Patch'},
-    'Container': {'Tuple', 'FrozenSet', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'IntegerSet', 'Indices', 'Object', 'Objects', 'Patch'},
-    'ContainerContainer': {'Tuple', 'FrozenSet', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'IntegerSet', 'Indices', 'Object', 'Objects', 'Patch'},
+    # Base container types - now exclusively tuple-based
+    'Tuple': {'Tuple', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'Indices', 'Object', 'Objects'},
+    'Container': {'Tuple', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'Indices', 'Object', 'Objects'},
+    'ContainerContainer': {'Tuple', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'Indices', 'Object', 'Objects'},
     'Callable': {'Callable'},
     
     # Numeric types - range/rank indices
@@ -218,7 +217,6 @@ HINT_OVERLAPS = {
     'Numerical': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_', 'IJ'},
     
     # Integer ranges - all compatible with each other and Integer/Numerical
-    # NOTE: Boolean is compatible with all as it's a subtype of int
     'F_': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'R_', 'R4', 'R8', 'C_'},
     'FL': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_'},
     'L_': {'Boolean', 'Integer', 'Numerical', 'L_', 'FL'},
@@ -232,24 +230,17 @@ HINT_OVERLAPS = {
     'J_': {'Boolean', 'Integer', 'Numerical'},
     'IJ': {'Numerical', 'IJ'},
     
-    # Specific frozenset types - compatible with each other and FrozenSet/Container
-    'IntegerSet': {'FrozenSet', 'Container', 'ContainerContainer', 'IntegerSet'},
-    'Indices': {'FrozenSet', 'Container', 'ContainerContainer', 'Indices', 'IndicesSet', 'Patch'},
-    'IndicesSet': {'FrozenSet', 'Container', 'ContainerContainer', 'Indices', 'IndicesSet'},
-    'Object': {'FrozenSet', 'Container', 'ContainerContainer', 'Object', 'Objects', 'Patch'},
-    'Objects': {'FrozenSet', 'Container', 'ContainerContainer', 'Object', 'Objects'},
-    'Patch': {'FrozenSet', 'Container', 'ContainerContainer', 'Indices', 'Object', 'Patch'},
-    
-    # Specific tuple types - compatible with each other and Tuple/Container
+    # Specific tuple types - consolidated from frozenset variants
+    'Indices': {'Tuple', 'Container', 'ContainerContainer', 'Indices', 'Object', 'Objects'},
+    'Object': {'Tuple', 'Container', 'ContainerContainer', 'Indices', 'Object', 'Objects'},
+    'Objects': {'Tuple', 'Container', 'ContainerContainer', 'Indices', 'Object', 'Objects'},
     'Grid': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
     'Samples': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
     'TupleTuple': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
     'TTT_iii': {'TupleTuple', 'Tuple', 'Container', 'ContainerContainer'},
     'Colors': {'Tuple', 'Container', 'ContainerContainer'},
-    
-    # Other specific types
     'Cell': {'Cell', 'Tuple', 'Container'},
     
     # Generic catch-all types
-    'Any': {'Any', 'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'A4', 'A8', 'C_', 'I_', 'J_', 'IJ', 'Tuple', 'FrozenSet', 'Container', 'ContainerContainer', 'Callable', 'IntegerSet', 'Grid', 'Samples', 'TTT_iii', 'Cell', 'Colors', 'Object', 'Objects', 'Indices', 'IndicesSet', 'Patch', 'TupleTuple'},
+    'Any': {'Any', 'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'A4', 'A8', 'C_', 'I_', 'J_', 'IJ', 'Tuple', 'Container', 'ContainerContainer', 'Callable', 'Grid', 'Samples', 'TTT_iii', 'Cell', 'Colors', 'Object', 'Objects', 'Indices', 'TupleTuple'},
 }

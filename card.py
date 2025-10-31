@@ -201,7 +201,7 @@ class Code:
         self.file_batt(False)
         self.t_num += 1
 
-        self.t_call[t_num + 7] = HintValue(get_hints('get_nth_t'), ('get_nth_t', f't{t_num + 6}', f'{f_n}'))
+        self.t_call[t_num + 7] = HintValue(get_hints('get_nth'), ('get_nth', f't{t_num + 6}', f'{f_n}'))
         self.file_batt(False)
         self.t_num += 1
         # self.t_num += 8
@@ -459,9 +459,9 @@ class Code:
         elif old_hint == 'IJ':
             sub_arg = self.substitute_symbol(old_arg, PAIR_GENERIC_CONSTANTS)
         elif old_hint not in ('Samples', 'Grid', 'Tuple',
-                'Object', 'Objects', 'FrozenSet', 'Patch', 
+                'Object', 'Objects', 'Indices',
                 'Callable', 'Container', 'ContainerContainer',
-                'Integer', 'IntegerSet', 'Numerical', 'Indices', 
+                'Integer', 'Numerical', 
                 'TupleTuple', 'TTT_iii', 'Any',
                 None
          ) and not isinstance(old_hint, tuple):
@@ -817,7 +817,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         code.differ[code.t_num] = True
         # Make t_num available for solver mutation when it fills conditions
         code.solver[code.t_num] = bool(
-            len(equals) == 1 and old_func_name.startswith('get_nth_')
+            len(equals) == 1 and old_func_name == 'get_nth'
         )
         has_mutation = code.mutate(False, freeze_differs)
         code.t_number[old_call.value] = code.t_num

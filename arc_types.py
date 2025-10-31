@@ -27,24 +27,23 @@ Integer = int # Integers
 
 # IntegerTuple = Tuple[Integer, Integer]
 Numerical = Union[Integer, IJ]
-IntegerSet = FrozenSet[Integer]
-Grid = Tuple[Tuple[Integer]]
-Samples = Tuple[Grid, Grid]
 
-TTT_iii = Tuple[Tuple[Tuple[int, int, int], ...], ...]
+# Collection types (tuple-based, replacing frozenset-based types)
+Grid = Tuple[Tuple[Integer], ...]  # 2D grid of integers
+Samples = Tuple[Tuple[Grid, Grid], ...]  # Training samples: (input grid, output grid) pairs
+Colors = Tuple[C_, ...]  # Sequence of color values
+Cell = Tuple[I_, J_, C_]  # Single cell: (row, col, color)
 
-# Cell = Tuple[Integer, IntegerTuple]
-# Cell = Tuple[C_, IJ]
-Cell = Tuple[I_, J_, C_]
+# Composite collection types (all tuple-based)
+Indices = Tuple[IJ, ...]  # Collection of grid coordinates (was FrozenSet[IJ])
+IndicesSet = Tuple[Indices, ...]  # Collection of index collections (was FrozenSet[Indices])
+Object = Tuple[Cell, ...]  # Collection of cells (was FrozenSet[Cell])
+Objects = Tuple[Object, ...]  # Collection of objects (was FrozenSet[Object])
+Patch = Union[Object, Indices]  # Either a collection of cells or coordinates
 
-Colors = Tuple[C_, ...]
+# Tuple collection types
+TupleTuple = Tuple[Tuple, ...]  # Generic tuple of tuples
+TTT_iii = Tuple[Tuple[Tuple[int, int, int], ...], ...]  # Triple tuple structure
 
-Object = FrozenSet[Cell]
-Objects = FrozenSet[Object]
-Indices = FrozenSet[IJ]
-IndicesSet = FrozenSet[Indices]
-Patch = Union[Object, Indices]
-# Element = Union[Object, Grid]
-# Piece = Union[Grid, Patch]
-TupleTuple = Tuple[Tuple]
+# Container types (alias for backwards compatibility)
 ContainerContainer = Container[Container]
