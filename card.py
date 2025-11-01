@@ -459,7 +459,7 @@ class Code:
         elif old_hint == 'IJ':
             sub_arg = self.substitute_symbol(old_arg, PAIR_GENERIC_CONSTANTS)
         elif old_hint not in ('Samples', 'Grid', 'Tuple',
-                'Object', 'Objects', 'Indices',
+                'Object', 'Objects', 'Patch', 'Indices',
                 'Callable', 'Container', 'ContainerContainer',
                 'Integer', 'Numerical', 
                 'TupleTuple', 'TTT_iii', 'Any',
