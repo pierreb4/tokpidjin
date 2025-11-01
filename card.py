@@ -530,7 +530,23 @@ def get_equals(source):
             call = match[2]
             func = match[3]
 
-            func_hints = get_hints(func)
+            # Check if func is an x variable (like x1, x2, etc.)
+            if re.match(r'x\d+', func):
+                # func is an x variable, get its hints from equals
+                func_hint_value = equals.get(func)
+                func_hints = func_hint_value.hint if func_hint_value else None
+                if func_hints is None:
+                    # x variable not yet defined - this is an error in the solver
+                    print_l(f'ERROR: x variable {func} used before definition in line: {line}') if DO_PRINT else None
+                    continue
+            else:
+                # func is a DSL function name
+                func_hints = get_hints(func)
+                if func_hints is None:
+                    # Unknown function - this is an error
+                    print_l(f'ERROR: Unknown function {func} in line: {line}') if DO_PRINT else None
+                    continue
+            
             top_values = get_value(call)
 
             # print_l(f'Processing: {line = }') if DO_PRINT else None
@@ -548,7 +564,7 @@ def get_equals(source):
 
                     # print_l(f'Found hint_value: {hint_value}') if DO_PRINT else None
 
-                    if hint_count == 0:
+                    if hint_count == 0 and hint_value:
                         new_hints = hint_value.hint[0]
                         break
 
@@ -598,7 +614,7 @@ def get_equals(source):
 
                             # Lookup first argument hints
                             if re.match(r'x\d+', first_arg):
-                                hint_value = equals.get(value)
+                                hint_value = equals.get(first_arg)
                                 hint_base = hint_value.hint[0] if hint_value else 'Callable'
                             else:
                                 hint_base = get_hints(first_arg)
@@ -620,11 +636,12 @@ def get_equals(source):
 
                             # print_l(f'Getting {new_hints = } for {value = }') if DO_PRINT else None
 
-                            if hint_count == 0:
+                            if hint_count == 0 and func_hints:
                                 add_hint = (func_hints[0], )
                                 break
                             
-                            add_hint = (new_hints,)
+                            if new_hints:
+                                add_hint = (new_hints,)
                     else:
                         print_l(f'Could not extract hints for value: {value}') if DO_PRINT else None
 

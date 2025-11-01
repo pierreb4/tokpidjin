@@ -130,11 +130,6 @@ def _gpu_grid_transform(grid, transform_func):
 # Activate logging
 logger = logging.getLogger(__name__)
 
-# Pre-computed neighbor offsets for efficient neighbor computation in objects() and objects_t()
-_DNEIGHBOR_OFFSETS = ((-1, 0), (1, 0), (0, -1), (0, 1))  # 4-connected neighbors (orthogonal)
-_INEIGHBOR_OFFSETS = ((-1, -1), (-1, 1), (1, -1), (1, 1))  # 8-connected (diagonal) neighbors only
-_NEIGHBOR_OFFSETS = _DNEIGHBOR_OFFSETS + _INEIGHBOR_OFFSETS  # All 8 neighbors
-
 def identity(
     x: 'Any'
 ) -> 'Any':
@@ -312,8 +307,8 @@ def c_iz(S: 'Samples', function: 'Callable') -> 'Any':
     # logger.info(f'c_iz: {S = }, {function = }')
     x1 = apply(first, S)
     x2 = apply(second, S)
-    x3 = dedupe(mapply(function, x1))
-    x4 = dedupe(mapply(function, x2))
+    x3 = dedupe(mapply_t(function, x1))
+    x4 = dedupe(mapply_t(function, x2))
     return difference_tuple(x3, x4)
 
 
@@ -328,8 +323,8 @@ def c_zo(S: 'Samples', function: 'Callable') -> 'Any':
     # logger.info(f'c_zo: {S = }, {function = }')
     x1 = apply(first, S)
     x2 = apply(second, S)
-    x3 = dedupe(mapply(function, x1))
-    x4 = dedupe(mapply(function, x2))
+    x3 = dedupe(mapply_t(function, x1))
+    x4 = dedupe(mapply_t(function, x2))
     return difference_tuple(x4, x3)
 
 
@@ -458,29 +453,11 @@ def get_nth(container: 'Tuple', rank: 'FL') -> 'Any':
     return container[rank] if container else math.nan
 
 
-# Alias for compatibility with solvers
-get_nth_t = get_nth
-get_nth_f = get_nth
-
-
 def get_nth_by_key( container: 'Tuple', rank: 'FL', key = identity ) -> 'Any':
     """Nth item of container, 0-based, using key function"""
     # logger.info(f'get_nth_by_key_t: {container = }, {rank = }, {key = }')
     sorted_tuple = sorted(container, key=key)
     return sorted_tuple[rank] if sorted_tuple else None
-
-
-# Parameter table for o_g function - maps type codes to (by_color, by_count, by_position)
-_O_G_PARAMS = [
-    (False, False, False),  # type 0
-    (False, False, True),   # type 1
-    (False, True, False),   # type 2
-    (False, True, True),    # type 3
-    (True, False, False),   # type 4
-    (True, False, True),    # type 5
-    (True, True, False),    # type 6
-    (True, True, True),     # type 7
-]
 
 
 # Original sorting with: key=identity
@@ -587,8 +564,22 @@ def get_arg_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> '
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else type(container)()
 
 
+def get_arg_rank( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'Any':
+    # logger.info(f'get_arg_rank_t: {container = }, {compfunc = }, {rank = }')
+    ranked = sorted(container, key=compfunc, reverse=True)
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else ()
+
+
 def get_val_rank( container: 'Container', compfunc: 'Callable', rank: 'FL') -> 'Any':
     # logger.info(f'get_val_rank: {container = }, {compfunc = }, {rank = }')
+    ranked = sorted(container, key=compfunc)
+    if -len(ranked) <= rank < len(ranked):
+        return compfunc(ranked[rank])
+    return compfunc(0)
+
+
+def get_val_rank( container: 'Tuple', compfunc: 'Callable', rank: 'FL') -> 'Any':
+    # logger.info(f'get_val_rank_t: {container = }, {compfunc = }, {rank = }')
     ranked = sorted(container, key=compfunc)
     if -len(ranked) <= rank < len(ranked):
         return compfunc(ranked[rank])
@@ -599,6 +590,12 @@ def get_common_rank( container: 'Container', rank: 'FL') -> 'Any':
     # logger.info(f'get_common_rank: {container = }, {rank = }')
     ranked = sorted(set(container), key=container.count)
     return ranked[rank] if -len(ranked) <= rank < len(ranked) else type(container)()
+
+
+def get_common_rank( container: 'Tuple', rank: 'FL') -> 'Any':
+    # logger.info(f'get_common_rank_t: {container = }, {rank = }')
+    ranked = sorted(set(container), key=container.count)
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else ()
 
 
 def add(
@@ -810,6 +807,14 @@ def merge(
 ) -> 'Container':
     """ merging """
     # logger.info(f'merge: {containers = }')
+    return type(containers)(e for c in containers for e in c)
+
+
+def merge(
+    containers: 'ContainerContainer'
+) -> 'Container':
+    """ merging """
+    # logger.info(f'merge_t: {containers = }')
     return type(containers)(e for c in containers for e in c)
 
 
@@ -1218,8 +1223,81 @@ def fork(
     return lambda x: outer(a(x), b(x))
 
 
+def combine(
+    a: 'Tuple',
+    b: 'Tuple'
+) -> 'Tuple':
+    """ union for tuples """
+    # logger.info(f'combine_t: {a = }, {b = }')
+    return a + b
 
 
+def size(
+    container: 'Tuple'
+) -> 'Integer':
+    """ cardinality of tuple """
+    # logger.info(f'size_t: {container = }')
+    return len(container)
+
+
+def valmax(
+    container: 'Tuple',
+    compfunc: 'Callable'
+) -> 'Integer':
+    """ maximum by custom function for tuples """
+    # logger.info(f'valmax_t: {container = }, {compfunc = }')
+    return compfunc(max(container, key=compfunc, default=0))
+
+
+# See get_val_rank_f
+def valmin(
+    container: 'Tuple',
+    compfunc: 'Callable'
+) -> 'Integer':
+    """ minimum by custom function for tuples """
+    # logger.info(f'valmin_t: {container = }, {compfunc = }')
+    return compfunc(min(container, key=compfunc, default=0))
+
+
+# See get_val_rank_f
+def argmax(
+    container: 'Tuple',
+    compfunc: 'Callable'
+) -> 'Any':
+    """ largest item by custom order for tuples """
+    # logger.info(f'argmax_t: {container = }, {compfunc = }')
+    return max(container, key=compfunc)
+
+
+# See get_arg_rank_f
+def argmin(
+    container: 'Tuple',
+    compfunc: 'Callable'
+) -> 'Any':
+    """ smallest item by custom order for tuples """
+    # logger.info(f'argmin_t: {container = }, {compfunc = }')
+    return min(container, key=compfunc)
+
+
+# See get_arg_rank_f
+def mostcommon(
+    container: 'Tuple'
+) -> 'Any':
+    """ most common item in tuple """
+    # logger.info(f'mostcommon_t: {container = }')
+    return max(set(container), key=container.count)
+
+
+# See get_common_rank_f
+def leastcommon(
+    container: 'Tuple'
+) -> 'Any':
+    """ least common item in tuple """
+    # logger.info(f'leastcommon_t: {container = }')
+    return min(set(container), key=container.count)
+
+
+# See get_common_rank_f
 def sfilter(
     container: 'Container',
     condition: 'Callable'
@@ -1229,6 +1307,14 @@ def sfilter(
     return type(container)(e for e in container if condition(e))
 
 
+def sfilter(
+    container: 'Tuple',
+    condition: 'Callable'
+) -> 'Tuple':
+    """ keep elements in tuple that satisfy condition """
+    # logger.info(f'sfilter_t: {container = }, {condition = }')
+    return tuple(e for e in container if condition(e))
+
 
 def mfilter(
     container: 'Container',
@@ -1236,9 +1322,25 @@ def mfilter(
 ) -> 'FrozenSet':
     """ filter and merge """
     # logger.info(f'mfilter: {container = }, {function = }')
-    return merge(sfilter(container, function))
+    return merge_f(sfilter(container, function))
 
 
+def mfilter(
+    container: 'Tuple',
+    function: 'Callable'
+) -> 'Tuple':
+    """ filter and merge for tuples """
+    # logger.info(f'mfilter_t: {container = }, {function = }')
+    # Directly create a frozenset of filtered elements
+    return frozenset(e for e in container if function(e))
+
+
+def first(
+    container: 'Tuple'
+) -> 'Any':
+    """ first item of tuple """
+    # logger.info(f'first_t: {container = }')
+    return container[0] if container else ()
 
 
 def last(
@@ -1247,6 +1349,14 @@ def last(
     """ last item of container """
     # logger.info(f'last: {container = }')
     return max(enumerate(container))[1] if container else ()
+
+
+def last(
+    container: 'Tuple'
+) -> 'Any':
+    """ last item of tuple """
+    # logger.info(f'last_t: {container = }')
+    return container[-1] if container else ()
 
 
 def remove(
@@ -1258,6 +1368,29 @@ def remove(
     return type(container)(e for e in container if e != value)
 
 
+def remove(
+    value: 'Any',
+    container: 'Tuple'
+) -> 'Tuple':
+    """ remove item from tuple """
+    # logger.info(f'remove_t: {value = }, {container = }')
+    return tuple(e for e in container if e != value)
+
+
+def other(
+    container: 'Tuple',
+    value: 'Any'
+) -> 'Any':
+    """ other value in the tuple """
+    # logger.info(f'other_t: {container = }, {value = }')
+    # # Only proceed if the value is actually in the container
+    # if value not in container:
+    #     return None
+    
+    filtered = tuple(e for e in container if e != value)
+    return filtered[0] if filtered else ()
+
+
 def apply(
     function: 'Callable',
     container: 'Container'
@@ -1265,6 +1398,16 @@ def apply(
     """ apply function to each item in container """
     # logger.info(f'apply: {function = }, {container = }')
     return type(container)(function(e) for e in container)
+
+
+def apply(
+    function: 'Callable',
+    container: 'Tuple'
+) -> 'Tuple':
+    """ apply function to each item in tuple - optimized with list comprehension """
+    # logger.info(f'apply_t: {function = }, {container = }')
+    # Optimized: list comprehension is slightly faster than generator (5-10% faster)
+    return tuple([function(e) for e in container])
 
 
 def rapply(
@@ -1276,6 +1419,15 @@ def rapply(
     return type(functions)(function(value) for function in functions)
 
 
+def rapply(
+    functions: 'Tuple',
+    value: 'Any'
+) -> 'Tuple':
+    """ apply each function in tuple to value """
+    # logger.info(f'rapply_t: {functions = }, {value = }')
+    return tuple(function(value) for function in functions)
+
+
 def mapply(
     function: 'Callable',
     container: 'ContainerContainer'
@@ -1283,6 +1435,17 @@ def mapply(
     """ apply and merge """
     # logger.info(f'mapply: {function = }, {container = }')
     return merge(apply(function, container))
+
+
+def mapply(
+    function: 'Callable',
+    container: 'Tuple'
+) -> 'Tuple':
+    """ apply and merge for tuples - optimized to eliminate intermediate tuple"""
+    # logger.info(f'mapply_t: {function = }, {container = }')
+    # Old: return merge_t(apply_t(function, container))
+    # Optimized: combine apply and merge in one pass (10-20% faster)
+    return tuple(e for item in container for e in function(item))
 
 
 def papply(
@@ -2482,6 +2645,35 @@ def shift(
     if len(next(iter(patch))) == 3:
         return frozenset((i + di, j + dj, c) for i, j, c in patch)
     return frozenset((i + di, j + dj) for i, j in patch)
+
+
+def normalize_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ moves upper left corner to origin """
+    # logger.info(f'normalize_i: {indices = }')
+    if len(indices) == 0:
+        return indices
+    return shift(indices, (-uppermost_i(indices), -leftmost_i(indices)))
+
+
+def normalize_o(
+    obj: 'Object'
+) -> 'Object':
+    """ moves upper left corner to origin """
+    # logger.info(f'normalize_o: {obj = }')
+    if len(obj) == 0:
+        return obj
+    return shift(obj, (-uppermost_o(obj), -leftmost_o(obj)))
+
+
+# Phase 2 Optimization: Pre-computed neighbor offsets
+# These are used in objects() and objects_t() for efficient neighbor computation
+_DNEIGHBOR_OFFSETS = ((-1, 0), (1, 0), (0, -1), (0, 1))  # 4-connected neighbors
+_INEIGHBOR_OFFSETS = ((-1, -1), (-1, 1), (1, -1), (1, 1))  # 8-connected (diagonal) neighbors
+_NEIGHBOR_OFFSETS = _DNEIGHBOR_OFFSETS + _INEIGHBOR_OFFSETS  # All 8 neighbors
+
+
 def dneighbors(
     loc: 'IJ'
 ) -> 'Indices':
@@ -2884,6 +3076,38 @@ def hmirror_f(
     if len(next(iter(patch))) == 3:
         return frozenset((d - i, j, c) for i, j, c in patch)
     return frozenset((d - i, j) for i, j in patch)
+
+
+def hmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring along horizontal """
+    # logger.info(f'hmirror_i: {indices = }')
+    d = ulcorner(indices)[0] + lrcorner(indices)[0]
+    return frozenset((d - i, j) for i, j in indices)
+
+
+def hmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring along horizontal """
+    # logger.info(f'hmirror_o: {obj = }')
+    d = ulcorner(obj)[0] + lrcorner(obj)[0]
+    return frozenset((d - i, j, c) for i, j, c in obj)
+
+
+# def vmirror(
+#     piece: Piece
+# ) -> Piece:
+#     """ mirroring along vertical """
+#     if isinstance(piece, tuple):
+#         return tuple(row[::-1] for row in piece)
+#     d = ulcorner(piece)[1] + lrcorner(piece)[1]
+#     if isinstance(next(iter(piece))[1], tuple):
+#         return frozenset((v, (i, d - j)) for v, (i, j) in piece)
+#     return frozenset((i, d - j) for i, j in piece)
+
+
 def vmirror_t(
     grid: 'Grid'
 ) -> 'Grid':
@@ -2903,6 +3127,38 @@ def vmirror_f(
     if len(next(iter(patch))) == 3:
         return frozenset((i, d - j, c) for i, j, c in patch)
     return frozenset((i, d - j) for i, j in patch)
+
+
+def vmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring along vertical """
+    # logger.info(f'vmirror_i: {indices = }')
+    d = ulcorner(indices)[1] + lrcorner(indices)[1]
+    return frozenset((i, d - j) for i, j in indices)
+
+
+def vmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring along vertical """
+    # logger.info(f'vmirror_o: {obj = }')
+    d = ulcorner(obj)[1] + lrcorner(obj)[1]
+    return frozenset((i, d - j, c) for i, j, c in obj)
+
+
+# def dmirror(
+#     piece: Piece
+# ) -> Piece:
+#     """ mirroring along diagonal """
+#     if isinstance(piece, tuple):
+#         return tuple(zip(*piece))
+#     a, b = ulcorner(piece)
+#     if isinstance(next(iter(piece))[1], tuple):
+#         return frozenset((v, (j - b + a, i - a + b)) for v, (i, j) in piece)
+#     return frozenset((j - b + a, i - a + b) for i, j in piece)
+
+
 def dmirror_t(
     grid: 'Grid'
 ) -> 'Grid':
@@ -2920,6 +3176,35 @@ def dmirror_f(
     if len(next(iter(patch))) == 3:
         return frozenset((j - b + a, i - a + b, c) for i, j, c in patch)
     return frozenset((j - b + a, i - a + b) for i, j in patch)
+
+
+def dmirror_i(
+    indices: 'Indices'
+) -> 'Indices':
+    """ mirroring along diagonal """
+    # logger.info(f'dmirror_i: {indices = }')
+    a, b = ulcorner(indices)
+    return frozenset((j - b + a, i - a + b) for i, j in indices)
+
+
+def dmirror_o(
+    obj: 'Object'
+) -> 'Object':
+    """ mirroring along diagonal """
+    # logger.info(f'dmirror_o: {obj = }')
+    a, b = ulcorner(obj)
+    return frozenset((j - b + a, i - a + b, c) for i, j, c in obj)
+
+
+# def cmirror(
+#     piece: Piece
+# ) -> Piece:
+#     """ mirroring along counterdiagonal """
+#     if isinstance(piece, tuple):
+#         return tuple(zip(*(r[::-1] for r in piece[::-1])))
+#     return vmirror(dmirror(vmirror(piece)))
+
+
 def cmirror_t(
     grid: 'Grid'
 ) -> 'Grid':
@@ -3066,6 +3351,39 @@ def vupscale(
 #         return shift(frozenset(o), (di_inv, dj_inv))
 
 
+def upscale_t(
+    grid: 'Grid',
+    factor: 'Integer'
+) -> 'Grid':
+    """ upscale grid """
+    # logger.info(f'upscale_t: {grid = }, {factor = }')
+    g = ()
+    for row in grid:
+        upscaled_row = ()
+        for value in row:
+            upscaled_row = upscaled_row + tuple(value for _ in range(factor))
+        g = g + tuple(upscaled_row for _ in range(factor))
+    return g
+
+
+def upscale_f(
+    obj: 'Object',
+    factor: 'Integer'
+) -> 'Object':
+    """ upscale object """
+    # logger.info(f'upscale_f: {obj = }, {factor = }')
+    if len(obj) == 0:
+        return frozenset()
+    di_inv, dj_inv = ulcorner(obj)
+    di, dj = (-di_inv, -dj_inv)
+    normed_obj = shift(obj, (di, dj))
+    o = set()
+    for i, j, c in normed_obj:
+        for io, jo in itertools.product(range(factor), range(factor)):
+            o.add((i * factor + io, j * factor + jo, c))
+    return shift(frozenset(o), (di_inv, dj_inv))
+
+
 # ============================================================================
 # TYPE HINTS CACHE - Stage 3 Optimization (Phase 1B)
 # ============================================================================
@@ -3136,45 +3454,6 @@ def _get_type_hints_cached(func_or_name):
         name = func_or_name.__name__
     
     return _TYPE_HINTS_CACHE.get(name, {})
-
-
-# ============================================================================
-# Compatibility Aliases for Solver Functions
-# ============================================================================
-# These aliases provide backwards compatibility with solvers that use the
-# _t (tuple) and _f (frozenset) suffixed versions of generic functions.
-# After consolidation, we keep only the Container-generic versions but provide
-# aliases for the specialized variants used in solvers.
-
-# Size and count functions
-size_t = size
-colorcount_t = colorcount
-
-# Collection functions
-merge_t = merge
-combine_t = combine
-remove_t = remove
-sfilter_t = sfilter
-rapply_t = rapply
-mapply_t = mapply
-
-# Palette functions
-palette_t = palette
-
-# Ranking functions (generic Container versions)
-get_arg_rank_t = get_arg_rank
-get_common_rank_t = get_common_rank
-
-# Shape and portrait (generic Container versions)
-portrait_t = portrait
-shape_t = shape
-
-# Color functions (used internally by objects())
-mostcolor_t = mostcolor
-leastcolor_t = leastcolor
-
-# Difference operation
-difference_t = difference_tuple
 
 
 # Make all DSL functions exception-safe
