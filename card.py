@@ -461,7 +461,7 @@ class Code:
         elif old_hint not in ('Samples', 'Grid', 'Tuple',
                 'Object', 'Objects', 'Patch', 'Indices',
                 'Callable', 'Container', 'ContainerContainer',
-                'Integer', 'Numerical', 
+                'Integer', 'Numerical', 'Colors', 'FrozenSet',
                 'TupleTuple', 'TTT_iii', 'Any',
                 None
          ) and not isinstance(old_hint, tuple):
