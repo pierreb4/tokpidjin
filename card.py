@@ -538,14 +538,14 @@ def get_equals(source):
                 if func_hints is None:
                     # x variable not yet defined - this is an error in the solver
                     print_l(f'ERROR: x variable {func} used before definition in line: {line}') if DO_PRINT else None
-                    continue
+                    assert False, f'Unknown x variable {func} in line: {line}'
             else:
                 # func is a DSL function name
                 func_hints = get_hints(func)
                 if func_hints is None:
                     # Unknown function - this is an error
                     print_l(f'ERROR: Unknown function {func} in line: {line}') if DO_PRINT else None
-                    continue
+                    assert False, f'Unknown function {func} in line: {line}'
             
             top_values = get_value(call)
 
