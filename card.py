@@ -582,7 +582,7 @@ def get_equals(source):
 
                     if value == 'S':
                         add_hint = ('Samples',)
-                    elif value in ('I', 'C'):
+                    elif value in ('I', 'C', 'O'):
                         add_hint = ('Grid',)
                     elif value in B_NAMES:
                         add_hint = ('Boolean',)    

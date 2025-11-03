@@ -1,0 +1,180 @@
+def apply_f(
+    function: 'Callable',
+    container: 'FrozenSet'
+
+def argmax_f(
+    container: 'FrozenSet',
+    compfunc: 'Callable'
+
+def argmin_f(
+    container: 'FrozenSet',
+    compfunc: 'Callable'
+
+def cmirror_f(
+    piece: 'FrozenSet'
+
+def colorcount_f(
+    obj: 'Object',
+    color: 'C_'
+
+def combine_f(
+    a: 'FrozenSet',
+    b: 'FrozenSet'
+
+def dmirror_f(
+    piece: 'FrozenSet'
+
+def first_f(
+    container: 'FrozenSet'
+
+def get_arg_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') -> 'Any':
+    # logger.info(f'get_arg_rank_f: {container = }, {compfunc = }, {rank = }')
+    ranked = sorted(container, key=compfunc, reverse=True)
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else frozenset()
+
+def get_color_rank_f( obj: 'Object', rank: 'FL' ) -> 'C_':
+    # logger.info(f'get_color_rank_f: {obj = }, {rank = }')
+    colors = [c for _, _, c in obj]
+    ranked = Counter(colors).most_common()
+    return ranked[rank][0] if -len(ranked) <= rank < len(ranked) else frozenset()
+
+def get_common_rank_f( container: 'FrozenSet', rank: 'FL') -> 'Any':
+    # logger.info(f'get_common_rank_f: {container = }, {rank = }')
+    # Since frozensets have unique elements, convert to list first
+    container_list = list(container)
+    ranked = sorted(set(container_list), key=container_list.count)
+    return ranked[rank] if -len(ranked) <= rank < len(ranked) else frozenset()
+
+def get_nth_by_key_f( container: 'FrozenSet', rank: 'F_', key = identity ) -> 'Any':
+    """Nth item of container, 0-based, using key function"""
+    # logger.info(f'get_nth_by_key_f: {container = }, {rank = }, {key = }')
+    sorted_frozenset = sorted(container, key=key)
+    iterator = iter(sorted_frozenset)
+    for _ in range(rank):
+        next(iterator, None)
+    return next(iterator, None)
+
+def get_nth_f(container: 'FrozenSet', rank: 'FL') -> 'Any':
+    """Nth item of container, 0-based"""
+    # logger.info(f'get_nth_f: {container = }, {rank = }')
+    # if not hasattr(container, '__iter__'):
+    #     return frozenset()
+    if rank < 0:
+        # For negative rank, reverse the iterator
+        iterator = iter(reversed(tuple(container)))
+        for _ in range(-rank-1):
+            next(iterator, frozenset())
+    else:
+        iterator = iter(container)
+        for _ in range(rank):
+            next(iterator, frozenset())
+    return next(iterator, frozenset())
+
+def get_val_rank_f( container: 'FrozenSet', compfunc: 'Callable', rank: 'FL') -> 'Any':
+    # logger.info(f'get_val_rank_f: {container = }, {compfunc = }, {rank = }')
+    ranked = sorted(container, key=compfunc)
+    if -len(ranked) <= rank < len(ranked):
+        return compfunc(ranked[rank])
+    return compfunc(0)
+
+def height_f(
+    piece: 'Indices'
+
+def hmirror_f(
+    piece: 'FrozenSet'
+
+def last_f(
+    container: 'FrozenSet'
+
+def leastcolor_f(
+    obj: 'Object'
+
+def leastcommon_f(
+    container: 'FrozenSet'
+
+def mapply_f(
+    function: 'Callable',
+    container: 'FrozenSet'
+
+def merge_f(
+    containers: 'ContainerContainer'
+
+def mfilter_f(
+    container: 'FrozenSet',
+    function: 'Callable'
+
+def mir_rot_f( patch: 'Patch', type: 'A4' ) -> 'Patch':
+    # logger.info(f'mir_rot_f: {patch = }, {type = }')
+    if type == 0:
+        # Horizontal mirror
+        return hmirror_f(patch)
+    elif type == 1:
+        # Diagonal mirror
+        return dmirror_f(patch)
+    elif type == 2:
+        # Vertical mirror
+        return vmirror_f(patch)
+    elif type == 3:
+        # Counter-diagonal mirror
+        return cmirror_f(patch)
+    return patch
+
+def mostcolor_f(
+    obj: 'Object'
+
+def mostcommon_f(
+    container: 'FrozenSet'
+
+def numcolors_f(
+    obj: 'Object'
+
+def other_f(
+    container: 'FrozenSet',
+    value: 'Any'
+
+def p_f( element: 'FrozenSet' ) -> 'IntegerSet':
+    """ colors occurring in object """
+    # logger.info(f'p_f: {element = }')  # Disabled: excessive logging overhead
+    return frozenset(c for _, _, c in element)
+
+def palette_f(
+    element: 'FrozenSet'
+
+def portrait_f(
+    patch: 'Patch'
+
+def rapply_f(
+    functions: 'FrozenSet',
+    value: 'Any'
+
+def sfilter_f(
+    container: 'FrozenSet',
+    condition: 'Callable'
+
+def shape_f(
+    piece: 'FrozenSet'
+
+def size_f(
+    container: 'FrozenSet'
+
+def square_f(
+    piece: 'FrozenSet'
+
+def upscale_f(
+    element: 'FrozenSet',
+    factor: 'Integer'
+
+def valmax_f(
+    container: 'FrozenSet',
+    compfunc: 'Callable'
+
+def valmin_f(
+    container: 'FrozenSet',
+    compfunc: 'Callable'
+
+def vmirror_f(
+    piece: 'FrozenSet'
+
+def width_f(
+    piece: 'Indices'
+
