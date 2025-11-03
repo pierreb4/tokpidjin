@@ -367,7 +367,7 @@ class Code:
     def do_offset_mutation(self, old_hint, old_call, t_n, is_solver, has_mutation):
         while random.random() < BUDGET_RANDOM:
             # while True:
-            for _ in range(99):
+            for _ in range(999):
                 t_offset = random.randint(1, t_n)
 
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
