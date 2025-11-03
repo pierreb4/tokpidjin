@@ -45,3 +45,6 @@ Patch = Union[Object, Indices]
 # Piece = Union[Grid, Patch]
 TupleTuple = Tuple[Tuple]
 ContainerContainer = Container[Container]
+
+# Type alias for tuple variant of objects (objects_t, colorfilter_t, etc)
+TTT_iii = Tuple[Tuple[Tuple[int, int, int], ...], ...]

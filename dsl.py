@@ -510,7 +510,7 @@ def o_g( grid: 'Grid', type: 'R8' ) -> 'Objects':
         return objects(grid, True, True, True)
 
 
-def o_g_t( grid: 'Grid', type: 'R8' ) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+def o_g_t( grid: 'Grid', type: 'R8' ) -> 'TTT_iii':
     """ o_g variant that returns tuple of tuples instead of frozenset """
     logger.info(f'o_g_t: {grid = }, {type = }')
     if type == 0:
@@ -2901,9 +2901,9 @@ def colorfilter(
 
 
 def colorfilter_t(
-    objs: 'Tuple[Tuple[Tuple[int, int, int], ...], ...]',
+    objs: 'TTT_iii',
     color: 'Integer'
-) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+) -> 'TTT_iii':
     """ filter objects by color - tuple variant """
     logger.info(f'colorfilter_t: {objs = }, {color = }')
     return tuple(obj for obj in objs if obj[0][2] == color)
@@ -3204,7 +3204,7 @@ def objects_t(
     univalued: 'Boolean',
     diagonal: 'Boolean',
     without_bg: 'Boolean'
-) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+) -> 'TTT_iii':
     """ objects occurring on the grid - returns tuple of tuples instead of frozenset """
     logger.info(f'objects_t: {grid = }, {univalued = }, {diagonal = }, {without_bg = }')
     if grid == ():
