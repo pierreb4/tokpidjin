@@ -69,14 +69,6 @@ R_NAMES = {
 }
 
 # Generic int constants
-NEG_TEN = -10
-NEG_NINE = -9
-NEG_EIGHT = -8
-NEG_SEVEN = -7
-NEG_SIX = -6
-NEG_FIVE = -5
-NEG_FOUR = -4
-NEG_THREE = -3
 NEG_TWO = -2
 NEG_ONE = -1
 ZERO = 0
@@ -92,11 +84,8 @@ NINE = 9
 TEN = 10
 
 CONSTANTS = {
-    'NEG_TEN': -10, 'NEG_NINE': -9, 'NEG_EIGHT': -8,
-    'NEG_SEVEN': -7, 'NEG_SIX': -6, 'NEG_FIVE': -5,
-    'NEG_FOUR': -4, 'NEG_THREE': -3, 'NEG_TWO': -2, 
-    'NEG_ONE': -1, 'ZERO': 0, 'ONE': 1, 'TWO': 2, 
-    'THREE': 3, 'FOUR': 4, 'FIVE': 5, 'SIX': 6,
+    'NEG_TWO': -2, 'NEG_ONE': -1, 'ZERO': 0, 'ONE': 1,
+    'TWO': 2, 'THREE': 3, 'FOUR': 4, 'FIVE': 5, 'SIX': 6,
     'SEVEN': 7, 'EIGHT': 8, 'NINE': 9, 'TEN': 10,
 }
 
@@ -180,67 +169,3 @@ GENERIC_CONSTANTS = INT_GENERIC_CONSTANTS | PAIR_GENERIC_CONSTANTS
 GENERIC_CONSTANT_NAMES = [*GENERIC_CONSTANTS]
 ALL_CONSTANTS = B_NAMES | FL_NAMES | R_NAMES | COLORS | GENERIC_CONSTANTS
 ALL_CONSTANT_NAMES = [*ALL_CONSTANTS]
-
-# Type compatibility registry for iscompatible_hint()
-# Maps type names to their constant dictionaries
-INT_TYPE_RANGES = {
-    'F_': F_NAMES,
-    'FL': FL_NAMES,
-    'L_': L_NAMES,
-    'R_': R_NAMES,
-    'R4': R4_NAMES,
-    'R8': R8_NAMES,
-    'A4': A4_NAMES,
-    'A8': A8_NAMES,
-    'C_': COLORS,
-}
-
-PAIR_TYPE_RANGES = {
-    'IJ': PAIR_GENERIC_CONSTANTS,
-}
-
-# Type overlap compatibility map
-# Each old hint maps to the set of hints it's compatible with
-# Based on type definitions in arc_types.py
-HINT_OVERLAPS = {
-    # Base container types - now exclusively tuple-based
-    'Tuple': {'Tuple', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'Indices', 'Object', 'Objects'},
-    'Container': {'Tuple', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'Indices', 'Object', 'Objects'},
-    'ContainerContainer': {'Tuple', 'Container', 'ContainerContainer', 'TupleTuple', 'Grid', 'Samples', 'Indices', 'Object', 'Objects'},
-    'Callable': {'Callable'},
-    
-    # Numeric types - range/rank indices
-    # NOTE: Boolean = bool is a subtype of int in Python (True=1, False=0)
-    # Therefore Boolean is compatible with all Integer and range types
-    'Boolean': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'A4', 'A8', 'C_', 'I_', 'J_'},
-    'Integer': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_'},
-    'Numerical': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'C_', 'IJ'},
-    
-    # Integer ranges - all compatible with each other and Integer/Numerical
-    'F_': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'R_', 'R4', 'R8', 'C_'},
-    'FL': {'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_'},
-    'L_': {'Boolean', 'Integer', 'Numerical', 'L_', 'FL'},
-    'R_': {'Boolean', 'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
-    'R4': {'Boolean', 'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
-    'R8': {'Boolean', 'Integer', 'Numerical', 'F_', 'R_', 'R4', 'R8', 'C_'},
-    'A4': {'Boolean', 'Integer', 'Numerical', 'A4', 'A8'},
-    'A8': {'Boolean', 'Integer', 'Numerical', 'A4', 'A8'},
-    'C_': {'Boolean', 'Integer', 'Numerical', 'C_', 'F_', 'R_', 'R4', 'R8'},
-    'I_': {'Boolean', 'Integer', 'Numerical'},
-    'J_': {'Boolean', 'Integer', 'Numerical'},
-    'IJ': {'Numerical', 'IJ'},
-    
-    # Specific tuple types - consolidated from frozenset variants
-    'Indices': {'Tuple', 'Container', 'ContainerContainer', 'Indices', 'Object', 'Objects'},
-    'Object': {'Tuple', 'Container', 'ContainerContainer', 'Indices', 'Object', 'Objects'},
-    'Objects': {'Tuple', 'Container', 'ContainerContainer', 'Indices', 'Object', 'Objects'},
-    'Grid': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
-    'Samples': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
-    'TupleTuple': {'Tuple', 'Container', 'ContainerContainer', 'Grid', 'Samples', 'TupleTuple'},
-    'TTT_iii': {'TupleTuple', 'Tuple', 'Container', 'ContainerContainer'},
-    'Colors': {'Tuple', 'Container', 'ContainerContainer'},
-    'Cell': {'Cell', 'Tuple', 'Container'},
-    
-    # Generic catch-all types
-    'Any': {'Any', 'Boolean', 'Integer', 'Numerical', 'F_', 'FL', 'L_', 'R_', 'R4', 'R8', 'A4', 'A8', 'C_', 'I_', 'J_', 'IJ', 'Tuple', 'Container', 'ContainerContainer', 'Callable', 'Grid', 'Samples', 'TTT_iii', 'Cell', 'Colors', 'Object', 'Objects', 'Indices', 'TupleTuple'},
-}
