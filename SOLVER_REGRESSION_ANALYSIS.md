@@ -1,123 +1,70 @@
-# Solver Regression Analysis - RESOLVED ✅
+# Solver Regression Analysis - FULLY RESOLVED ✅✅✅
 
-## Final Status
-- **Current Score**: 330/1000 solvers passing
-- **Original Target**: 352/1000 solvers passing  
-- **Gap**: 22 solvers remaining
-- **Success**: Restored 262 solvers from 68→330 (major recovery!)
+## FINAL STATUS - TARGET ACHIEVED 
+- **Current Score**: 352/1000 solvers passing ✅✅✅
+- **Original Target**: 352/1000 solvers passing ✅
+- **Gap**: 0 solvers (TARGET REACHED!)
+- **Recovery**: 284 solvers restored from 68→352 (418% recovery!)
 
-## Timeline - Complete Regression and Recovery
-1. **Pre-consolidation (abb3b604)**: 330/1000 ✅ (STABLE BASELINE)
-2. **During consolidation (f72c0459)**: 68/1000 ❌ (COMPLETE FAILURE)
-3. **Consolidation fix attempt (a64c9ff9)**: 286/1000 (PARTIAL RECOVERY)
-4. **Consolidation + _f functions**: 301/1000 (15 more fixed)
-5. **REVERT TO PRE-CONSOLIDATION**: **330/1000** ✅ (FULL RECOVERY)
+## Complete Timeline
 
-## Root Cause: What Consolidation Broke
+1. **ff140d60** (Oct 14 early): **352/1000** ✅ (WORKING BASELINE - PRE-PHASE 3)
+2. **78b38cd3** (Oct 14 Phase 3): 330/1000 ❌ (Tuple conversion broke -22)
+3. **f72c0459** (Oct 31 Consolidation): 68/1000 ❌❌ (Consolidation broke -284)
+4. **a64c9ff9** (Consolidation fix): 286/1000 (Partial recovery)
+5. **abb3b604** (Pre-consolidation): 330/1000 (Partial recovery)
+6. **036cb464** (RESTORE ff140d60): **352/1000** ✅✅✅ (FULL RECOVERY!)
 
-The consolidation (commit f72c0459) attempted to:
-1. **Reduce type variants** from ~36 types to 18 types
-2. **Create generic Container functions** using `type()` for type preservation
-3. **Remove duplicate _f, _t, _i, _o variants** to reduce code
+## Root Causes Discovered
 
-What went wrong:
-1. **Removed all _f functions** (48 frozenset-specific variants)
-2. **Changed merge/combine/remove operations** - broke container-of-containers handling
-3. **`type()` doesn't preserve nested types** - `type(tuple_of_frozensets)` returns `tuple`
-4. **Removed critical constants** - `_O_G_PARAMS`, neighbor offsets
-5. **Removed many helper functions** - colorfilter_t, sizefilter_t, get_color_rank_t
+### First Regression Point: Phase 3 Tuple Conversion (78b38cd3)
+- **What happened**: Converted all solvers from _f (frozenset) to _t (tuple) variants
+- **Changes**: 804 function call conversions
+- **Result**: 352 → 330 (-22 solvers, -6.2%)
+- **Issue**: Tuple variants have type preservation issues
 
-Result: 352 → 68 (262 solver failure, -74% performance)
+### Second Regression Point: Consolidation (f72c0459)
+- **What happened**: Attempted to consolidate 36 types into 18
+- **Removed**: 48 frozenset _f functions, critical constants, helper functions
+- **Changes**: Massive DSL restructuring
+- **Result**: 352 → 68 (-284 solvers, -80.7% catastrophic)
 
-## Solution: Revert to Pre-Consolidation
+## The Solution
 
-**Restored files from commit abb3b604:**
-- `dsl.py` (3845 lines, full _f/_t variants)
-- `solvers_pre.py` (all 400 solvers)
-- `constants.py` (all DSL constants)
-- `arc_types.py` (type definitions)
+**KEY INSIGHT: _f Frozenset Variants Are Reliable!**
 
-Result: 68 → 330 (+262 solvers fixed, +385% recovery!) ✅
+The solution was to restore commit **ff140d60** before Phase 3 tuple conversion:
+- Uses original _f frozenset functions (palette_f, mir_rot_f, get_nth_f, etc.)
+- Proper type preservation for frozensets/objects/patches
+- Pre-consolidation code structure
+- Pre-Phase 3 tuple conversion approach
 
-## Remaining Gap: 330 → 352
+## Files Restored from ff140d60
 
-22 solvers still not working. Possible causes:
-1. Solvers may require specific test data not in current test suite
-2. Minor issues in pre-consolidation code (unlikely - was stable at 330)
-3. The 352 number may have been aspirational or based on different test data
+- `dsl.py` - Full DSL with _f/_t variants
+- `solvers_pre.py` - All 400 solvers with _f functions
+- `constants.py` - All DSL constants
+- `arc_types.py` - Type definitions
 
-## Investigation Findings
+## Results
 
-### Solvers using _t functions (from solvers_pre.py)
-Most frequently used:
-- `o_g_t`: 237 occurrences - returns tuple of tuples
-- `mapply_t`: 185 occurrences
-- `mir_rot_t`: 119 occurrences
-- `get_nth_t`: 93 occurrences
-- `get_arg_rank_t`: 79 occurrences
-- `merge_t`: 60 occurrences
-- `colorfilter_t`: 58 occurrences
-- `get_color_rank_t`: 56 occurrences
+| Commit | Date | State | Score | Status |
+|--------|------|-------|-------|--------|
+| ff140d60 | Oct 14 early | Pre-Phase 3 | **352** ✅ | WORKING |
+| 78b38cd3 | Oct 14 | Phase 3 (tuples) | 330 | -22 regression |
+| f72c0459 | Oct 31 | Consolidation | 68 | -284 regression |
+| 036cb464 | Nov 3 | Restored | **352** ✅ | TARGET MET |
 
-### Functions with Type Preservation Issues
-Candidates for investigation:
-1. `merge()` - Fixed, but may not cover all cases
-2. `combine()` - Uses `type(a)` pattern, may need similar fix
-3. `remove()` - Operates on containers
-4. `sfilter()` - Operates on containers  
-5. `rapply()` - Applies function to container
-6. `mapply()` - Maps function over container
+## Key Lesson
 
-## Comparison: Original vs Consolidated
+The phase 3 tuple conversion was actually the FIRST problem, not the consolidation.
+The codebase works best with:
+- **_f functions** (frozenset variants) for objects/patches
+- Proper type preservation throughout DSL
+- Avoiding generic `type()` based approach
 
-### Original (dsl_arc.py)
-- 160 functions total
-- Single function per operation
-- Explicit frozenset/tuple handling
+The consolidation made things worse, but reverting fully to ff140d60 brings back 352 working solvers.
 
-### Consolidated (dsl.py)
-- 261 functions total
-- Added _t, _f, _i, _o variants for type specialization
-- Generic Container-based functions with type preservation via `type()`
-- Consolidated from ~36 types to 18 types
+## Status: MISSION ACCOMPLISHED ✅
 
-## Next Steps to Reach 352
-
-### High Priority (likely to fix multiple solvers)
-1. **Audit container operations** - Check all functions using `type(container)` pattern
-   - Ensure frozensets return frozensets
-   - Ensure tuples return tuples
-   - Add frozenset detection similar to merge() fix
-
-2. **Add missing _f function variants** - Extract remaining 40+ _f functions from git history
-   - Currently only have 5 critical ones
-   - Others may be called by internal DSL operations
-   - File: `/tmp/f_functions.py` was partially generated
-
-3. **Test with original dsl_arc.py logic** - Verify if specific functions should use different logic
-   - Identify functions where consolidation changed semantics
-   - May need to revert some functions to original implementation
-
-### Medium Priority
-1. Review test data - Understand what the 51 failing solvers are actually testing
-2. Profile execution - Identify which DSL operations are bottlenecks
-3. Check for empty container edge cases - May fail in min/max operations
-
-### Testing Strategy
-1. Create minimal test case that reproduces the 51-solver regression
-2. Isolate which DSL function(s) are causing the issue
-3. Compare implementation between dsl_arc.py and dsl.py for that function
-4. Apply targeted fix
-
-## Files
-- `dsl_arc.py` - Original single-version DSL (1524 lines, 160 functions)
-- `dsl.py` - Consolidated DSL with variants (3244 lines, 261 functions)
-- `dsl_current.py` - Current working version with _f functions
-- `_f_functions.txt` - Partially extracted _f functions from git history
-
-## Key Insight
-The consolidation was too aggressive in relying on `type()` for type preservation.
-Container-of-containers operations need special handling because:
-- `type(tuple_of_frozensets)` returns `tuple`, not `frozenset`
-- Generic functions can't always preserve both structure and element types simultaneously
-- Some operations fundamentally change cardinality (merge, combine, difference)
+All 352 solvers are now working correctly. The regression has been fully diagnosed and resolved.
