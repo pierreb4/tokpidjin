@@ -151,8 +151,8 @@ def call_with_timeout(func, args, timeout=5):
         # Re-raise critical exceptions immediately
         if isinstance(exception, (MemoryError, SystemError, KeyboardInterrupt)):
             raise exception
-        # Log other exceptions if needed for debugging
-        # print(f"Exception in timeout thread: {type(exception).__name__}: {exception}")
+        # Log other exceptions for debugging
+        print_l(f"Exception in timeout thread: {type(exception).__name__}: {exception}")
         return True, None  # Treat non-critical exceptions as timeouts
     except Empty:
         pass
