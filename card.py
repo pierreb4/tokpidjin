@@ -201,7 +201,7 @@ class Code:
         self.file_batt(False)
         self.t_num += 1
 
-        self.t_call[t_num + 7] = HintValue(get_hints('get_nth'), ('get_nth', f't{t_num + 6}', f'{f_n}'))
+        self.t_call[t_num + 7] = HintValue(get_hints('get_nth_t'), ('get_nth_t', f't{t_num + 6}', f'{f_n}'))
         self.file_batt(False)
         self.t_num += 1
         # self.t_num += 8
@@ -839,7 +839,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         code.differ[code.t_num] = True
         # Make t_num available for solver mutation when it fills conditions
         code.solver[code.t_num] = bool(
-            len(equals) == 1 and old_func_name == 'get_nth'
+            len(equals) == 1 and old_func_name in ('get_nth_t', 'get_nth_f')
         )
         has_mutation = code.mutate(False, freeze_differs)
         code.t_number[old_call.value] = code.t_num
