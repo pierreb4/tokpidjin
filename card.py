@@ -266,53 +266,6 @@ class Code:
         return f't{t_num + 1}'
 
 
-    def mutate(self, is_solver, freeze=False):
-        # NOTE old_call is a HintValue namedtuple
-        old_call = self.t_call[self.t_num]
-        differ = self.differ[self.t_num]
-        solver = self.solver[self.t_num]
-
-        print(f'    # Pre-mutate t{self.t_num}', file=self.file)
-        print(f'    # - self.t_call[{self.t_num}] = {self.t_call[self.t_num]}', file=self.file)
-
-        has_mutation = Mutation(False, None, None)
-
-        if freeze:
-            return self.file_batt(has_mutation)
-
-        if isinstance(old_call.hint, str):
-            # NOTE Not sure that this is legit, but let's deal with it for now
-            # TODO Track where this came from and correct at source if needed
-            old_hints = (old_call.hint,)
-        else:
-            old_hints = old_call.hint
-
-        mutation = False
-        new_call_value = ()
-        for i, (old_value, old_hint) in enumerate(zip(old_call.value, old_hints)):
-
-            if isinstance(old_hint, str) and re.match(r'^[a-z]$', old_hint):
-                print_l(f'-- {old_func_name} - {old_call.value} - {old_call.hint}') if DO_PRINT else None
-                print_l(f'-- old_hint is {old_hint} for {old_call}') if DO_PRINT else None
-
-            # First deal with t variables
-            if re.match(r't\d+', old_value):
-                new_value = self.do_offset_mutation(old_call, old_hint, old_value, is_solver)
-            else:
-                new_value = self.do_arg_substitutions(old_call, old_hint, old_value, is_solver)
-
-            if new_value != old_value:
-                print_l(f'-- Arg mutated: {old_value} -> {new_value}') if DO_PRINT else None
-                mutation = True
-
-            new_call_value += (new_value, ) if has_mutation.present else (old_value, )
-
-        self.t_call[self.t_num] = HintValue(old_call.hint, new_call_value)
-        has_mutation = Mutation(mutation, old_call, self.t_call[self.t_num])
-
-        return self.file_batt(has_mutation)
-
-
     def file_batt(self, has_mutation):
         # NOTE old_call is a HintValue namedtuple
         t_call = self.t_call[self.t_num]
@@ -340,6 +293,61 @@ class Code:
             print('    except (TypeError, AttributeError, ValueError, IndexError, KeyError):', file=self.file)
             print(f'        t{self.t_num} = _get_safe_default({func_name})', file=self.file)
         return has_mutation
+
+
+    def mutate(self, is_solver, freeze=False):
+        # NOTE old_call is a HintValue namedtuple
+        old_call = self.t_call[self.t_num]
+        differ = self.differ[self.t_num]
+        solver = self.solver[self.t_num]
+
+        print(f'    # Pre-mutate t{self.t_num}', file=self.file)
+        print(f'    # - self.t_call[{self.t_num}] = {self.t_call[self.t_num]}', file=self.file)
+
+        has_mutation = Mutation(False, None, None)
+
+        if freeze:
+            return self.file_batt(has_mutation)
+
+        if isinstance(old_call.hint, str):
+            # NOTE Not sure that this is legit, but let's deal with it for now
+            # TODO Track where this came from and correct at source if needed
+            old_hints = (old_call.hint,)
+        else:
+            old_hints = old_call.hint
+
+        mutation = False
+        new_call_value = ()
+        for old_value, old_hint in zip(old_call.value, old_hints):
+
+            if isinstance(old_hint, str) and re.match(r'^[a-z]$', old_hint):
+                print_l(f'-- {old_func_name} - {old_call.value} - {old_call.hint}') if DO_PRINT else None
+                print_l(f'-- old_hint is {old_hint} for {old_call}') if DO_PRINT else None
+
+            # TODO Values to deal with:
+            # - T variables (t followed with digits)
+            # - DSL function names (start with a lowercase letter)
+            # - Numerical constants names (start with uppercase letter)
+            # Types of mutations:
+            # - Offset mutation
+            # - Substitution of numerical constamts within the same range
+            # - Substitution of DSL functions with compatible signatures
+            # XXX Does it make sense to only do offset mutations for t variables?
+            if re.match(r't\d+', old_value):
+                new_value = self.do_offset_mutation(old_call, old_hint, old_value, is_solver)
+            else:
+                new_value = self.do_arg_substitutions(old_call, old_hint, old_value, is_solver)
+
+            if new_value != old_value:
+                print_l(f'-- Arg mutated: {old_value} -> {new_value}') if DO_PRINT else None
+                mutation = True
+
+            new_call_value += (new_value, ) if has_mutation.present else (old_value, )
+
+        self.t_call[self.t_num] = HintValue(old_call.hint, new_call_value)
+        has_mutation = Mutation(mutation, old_call, self.t_call[self.t_num])
+
+        return self.file_batt(has_mutation)
 
 
     # Replace when old_value is a t variable
