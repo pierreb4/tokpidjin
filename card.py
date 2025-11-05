@@ -588,11 +588,11 @@ def get_equals(source):
                                 break
 
                             if value == 'rbind':
-                                new_hints = (hint_base[:-1],)
+                                new_hints = (hint_base[:-1],) if isinstance(hint_base, tuple) else ('Any',)
                                 break
 
                             if value == 'lbind':
-                                new_hints = (hint_base[1:],)
+                                new_hints = (hint_base[1:],) if isinstance(hint_base, tuple) else ('Any',)
                                 break
 
                         else:
