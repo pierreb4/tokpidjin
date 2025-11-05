@@ -311,9 +311,9 @@ class Code:
                     has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
         else:
             # old_func_name is a known function
-            # Skip last hint (return type) and use only argument hints
+            # Skip first hint (return type) and use only argument hints
             if isinstance(old_hints, str):
-                arg_hints = [old_hints]
+                arg_hints = (old_hints,)
             else:
                 arg_hints = old_hints[1:] if len(old_hints) > 1 else []
 
@@ -353,11 +353,11 @@ class Code:
         if self.vectorized:
             # Vectorized mode: direct assignment, no exception handling
             # Pre-validation happens at batch level
-            print(f'    t{self.t_num} = {call_string}', file=self.file)
+            print(f'    t{self.t_num} = {call_string} # {has_mutation}', file=self.file)
         else:
             # Standard mode: safe with try/except
             print('    try:', file=self.file)
-            print(f'        t{self.t_num} = {call_string}', file=self.file)
+            print(f'        t{self.t_num} = {call_string} # {has_mutation}', file=self.file)
             print('    except (TypeError, AttributeError, ValueError, IndexError, KeyError):', file=self.file)
             print(f'        t{self.t_num} = _get_safe_default({func_name})', file=self.file)
         return has_mutation
@@ -402,10 +402,10 @@ class Code:
                                         old_hints, new_hints
                                     )
                                 )
+                                if all_compatible:
+                                    break
                             else:
                                 sub_item = t_name
-
-                            break
 
                         print_l(f'New func: {sub_item = }') if DO_PRINT else None
 
