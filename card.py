@@ -397,8 +397,7 @@ class Code:
                         print_l(f'New arg: {new_value = }') if DO_PRINT else None
 
                     else:
-                        print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') \
-                                if DO_PRINT else None
+                        print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') if DO_PRINT else None
 
                     # XXX Old hack?
                     # break
