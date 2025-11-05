@@ -273,8 +273,7 @@ class Code:
         solver = self.solver[self.t_num]
 
         print(f'    # Pre-mutate t{self.t_num}', file=self.file)
-        print(f'    # -- {old_call.value = }', file=self.file)
-        print(f'    # -- {old_call.hint = }', file=self.file)
+        print(f'    # - self.t_call[{self.t_num}] = {self.t_call[self.t_num]}', file=self.file)
  
         has_mutation = Mutation(False, None, None)
 
@@ -777,36 +776,14 @@ class Differs:
 
 
     def add_lines(self, code, uses, task_id=None):
-        # run_equals = self.run_equals.copy()
         for differ_name in self.run_equals.keys():
 
-            # if task_id is not None:
-            #     print_l(f'{task_id = } - {differ_name = } - {self.run_equals[differ_name]}')
-
             equals_name = self.run_equals[differ_name].copy()
+
             for x_name, x_call in self.run_equals[differ_name].items():
                 freeze_differs = self.freeze_differs if task_id is None else True
                 add_differ_line(equals_name, code, uses, task_id, freeze_differs)
 
-            # XXX Not sure that we actually need this
-            # We don't seem to save the differ source
-
-            # if task_id is None:
-            #     done = track_solution(code.t_call, code.t_num, None)
-
-            #     # print_l(f'{differ_name} - {done = }')
-
-            #     differ_body = build_differ_body(code.t_call, code.t_num, done)
-            #     differ_body = re.sub(r'\bt(\d+)\b', r'x\1', differ_body)
-
-            #     differ_source = f'def differ(S, I, C):\n{differ_body}'
-
-            #     inlined_source = inline_variables(differ_source)
-            #     md5_hash = hashlib.md5(inlined_source.encode()).hexdigest()
-
-
-            # print(f"    if type(t{code.t_num}.t) is int:", file=code.file)
-            # print(f"        s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}.t))", file=code.file)
             print(f"    s.append(({code.t_num}, '{task_id}', '{differ_name}', t{code.t_num}))", file=code.file)
 
         code.last_differ_t_num = code.t_num
