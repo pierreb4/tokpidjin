@@ -274,62 +274,41 @@ class Code:
 
         print(f'    # Pre-mutate t{self.t_num}', file=self.file)
         print(f'    # - self.t_call[{self.t_num}] = {self.t_call[self.t_num]}', file=self.file)
- 
+
         has_mutation = Mutation(False, None, None)
 
-        old_args = old_call.value
-        old_hints = old_call.hint
+        if freeze:
+            return self.file_batt(has_mutation)
 
-        if old_hints is None:
-
-            # print_l(f'-- old_hints is None for {old_call}') if DO_PRINT else None
-
-            last_hint = None
-            for i, old_arg in enumerate(old_args):
-
-                # print_l(f'-- old_call[{i}] = {old_arg}') if DO_PRINT else None
-
-                if re.match(r't\d+', old_arg):
-                    t_n = int(old_arg[1:])
-
-                    # print_l(f'-- old_arg is t variable: {old_arg}: {self.t_call[t_n]}') if DO_PRINT else None
-
-                    last_hint = self.t_call[t_n].hint[0] if isinstance(self.t_call[t_n].hint, tuple) else self.t_call[t_n].hint
-
-            # TODO Check that this is the correct behavior for both legs below
-            # NOTE Still better than before :)
-            old_hint = last_hint
-
-            # old_func_name is a t variable
-            for i, old_arg in enumerate(old_args):
-                # First deal with t variables
-                if re.match(r't\d+', old_arg):
-                    if not freeze:
-                        t_n = int(old_arg[1:])
-                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
-                elif not freeze:
-                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
+        if isinstance(old_call.hint, str):
+            # NOTE Not sure that this is legit, but let's deal with it for now
+            # TODO Track where this came from and correct at source if needed
+            old_hints = (old_call.hint,)
         else:
-            # old_func_name is a known function
-            # Skip first hint (return type) and use only argument hints
-            if isinstance(old_hints, str):
-                arg_hints = (old_hints,)
+            old_hints = old_call.hint
+
+        mutation = False
+        new_call_value = ()
+        for i, (old_value, old_hint) in enumerate(zip(old_call.value, old_hints)):
+
+            if isinstance(old_hint, str) and re.match(r'^[a-z]$', old_hint):
+                print_l(f'-- {old_func_name} - {old_call.value} - {old_call.hint}') if DO_PRINT else None
+                print_l(f'-- old_hint is {old_hint} for {old_call}') if DO_PRINT else None
+
+            # First deal with t variables
+            if re.match(r't\d+', old_value):
+                new_value = self.do_offset_mutation(old_call, old_hint, old_value, is_solver)
             else:
-                arg_hints = old_hints[1:] if len(old_hints) > 1 else []
+                new_value = self.do_arg_substitutions(old_call, old_hint, old_value, is_solver)
 
-            for i, (old_arg, old_hint) in enumerate(zip(old_args, arg_hints)):
+            if new_value != old_value:
+                print_l(f'-- Arg mutated: {old_value} -> {new_value}') if DO_PRINT else None
+                mutation = True
 
-                if isinstance(old_hint, str) and re.match(r'^[a-z]$', old_hint):
-                    print_l(f'-- {old_func_name} - {old_args} - {arg_hints}') if DO_PRINT else None
-                    print_l(f'-- old_hint is {old_hint} for {old_call}') if DO_PRINT else None
+            new_call_value += (new_value, ) if has_mutation.present else (old_value, )
 
-                # First deal with t variables
-                if re.match(r't\d+', old_arg):
-                    if not freeze:
-                        t_n = int(old_arg[1:])
-                        has_mutation = self.do_offset_mutation(old_hint, old_call, t_n, is_solver, has_mutation)
-                elif not freeze:
-                    has_mutation = self.do_arg_substitutions(old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation)
+        self.t_call[self.t_num] = HintValue(old_call.hint, new_call_value)
+        has_mutation = Mutation(mutation, old_call, self.t_call[self.t_num])
 
         return self.file_batt(has_mutation)
 
@@ -363,17 +342,19 @@ class Code:
         return has_mutation
 
 
-    def do_offset_mutation(self, old_hint, old_call, t_n, is_solver, has_mutation):
+    # Replace when old_value is a t variable
+    def do_offset_mutation(self, old_call, old_hint, old_value, is_solver):
+        t_n = int(old_value[1:])
+        new_value = old_value
+
         while random.random() < BUDGET_RANDOM:
             # while True:
             for _ in range(999):
                 t_offset = random.randint(1, t_n)
 
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
-                    t_name = f't{t_n}'
-
-                    print_l(f'Considering offset mutation for {t_name} to t{t_offset}') if DO_PRINT else None
-                    print_l(f'-- {t_name}: {self.t_call[t_n]}') if DO_PRINT else None
+                    print_l(f'Considering offset mutation for {old_value} to t{t_offset}') if DO_PRINT else None
+                    print_l(f'-- {old_value}: {self.t_call[t_n]}') if DO_PRINT else None
                     print_l(f'-- t{t_offset}: {self.t_call[t_offset]}') if DO_PRINT else None
 
                     new_hint = self.t_call[t_offset].hint
@@ -382,16 +363,16 @@ class Code:
                         if not iscompatible_hint(old_hint, new_hint):
                             continue
 
-                        sub_item = f't{t_offset}'
-                        print_l(f'Offset: {sub_item = }') if DO_PRINT else None
+                        new_value = f't{t_offset}'
+                        print_l(f'Offset: {new_value = }') if DO_PRINT else None
 
-                    elif old_call.value[0] == t_name:
+                    elif old_hint == 'Callable' or isinstance(old_hint, tuple):
                         # Check function compatibility
                         old_hints = old_call.hint
                         # while True:
                         for _ in range(99):
-                            sub_item = random.choice(DSL_FUNCTION_NAMES)
-                            new_hints = get_hints(sub_item)
+                            new_value = random.choice(DSL_FUNCTION_NAMES)
+                            new_hints = get_hints(new_value)
 
                             if len(new_hints) == len(old_hints):
                                 all_compatible = all(
@@ -404,61 +385,55 @@ class Code:
                                 )
                                 if all_compatible:
                                     break
-                            else:
-                                sub_item = t_name
 
-                        print_l(f'New func: {sub_item = }') if DO_PRINT else None
+                        print_l(f'New func: {new_value = }') if DO_PRINT else None
 
                     elif old_hint in INT_TYPE_RANGES:
-                        sub_item = random.choice([*INT_GENERIC_CONSTANTS])
-                        print_l(f'New arg: {sub_item = }') if DO_PRINT else None
+                        new_value = random.choice([*INT_GENERIC_CONSTANTS])
+                        print_l(f'New arg: {new_value = }') if DO_PRINT else None
 
                     elif old_hint in PAIR_TYPE_RANGES:
-                        sub_item = random.choice([*PAIR_GENERIC_CONSTANTS])
-                        print_l(f'New arg: {sub_item = }') if DO_PRINT else None
+                        new_value = random.choice([*PAIR_GENERIC_CONSTANTS])
+                        print_l(f'New arg: {new_value = }') if DO_PRINT else None
 
                     else:
-                        sub_item = t_name
-                        print_l(f'No mutation for {sub_item = } due to hint: {old_hint = }') \
+                        print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') \
                                 if DO_PRINT else None
 
-                    value = tuple(sub_item if item == t_name else item for item in old_call.value)
+                    # XXX Old hack?
+                    # break
 
-                    # XXX We might need old_hints here
-                    self.t_call[self.t_num] = HintValue(old_hint, value)
-                    has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
-                    break
-
-        return has_mutation
+        return new_value
 
 
-    def do_arg_substitutions(self, old_hint, old_call, old_args, old_arg, i, is_solver, has_mutation):
-        sub_arg = old_arg
+    # Substitute when old_value isn't a t variable
+    def do_arg_substitutions(self, old_call, old_hint, old_value, is_solver):
+        new_value = old_value
 
         if old_hint in ('C_',):
-            sub_arg = self.substitute_color(old_arg)
+            new_value = self.substitute_color(old_value)
         elif old_hint == 'FL':
-            sub_arg = self.substitute_rank(old_arg, FL_NAMES)
+            new_value = self.substitute_rank(old_value, FL_NAMES)
         elif old_hint == 'F_':
-            sub_arg = self.substitute_rank(old_arg, F_NAMES)
+            new_value = self.substitute_rank(old_value, F_NAMES)
         elif old_hint == 'L_':
-            sub_arg = self.substitute_rank(old_arg, L_NAMES)
+            new_value = self.substitute_rank(old_value, L_NAMES)
         elif old_hint == 'R_':
-            sub_arg = self.substitute_symbol(old_arg, R_NAMES)
+            new_value = self.substitute_symbol(old_value, R_NAMES)
         elif old_hint == 'R4':
-            sub_arg = self.substitute_symbol(old_arg, R4_NAMES)
+            new_value = self.substitute_symbol(old_value, R4_NAMES)
         elif old_hint == 'R8':
-            sub_arg = self.substitute_symbol(old_arg, R8_NAMES)
+            new_value = self.substitute_symbol(old_value, R8_NAMES)
         elif old_hint == 'A4':
-            sub_arg = self.substitute_symbol(old_arg, A4_NAMES)
+            new_value = self.substitute_symbol(old_value, A4_NAMES)
         elif old_hint == 'A8':
-            sub_arg = self.substitute_grid_angle(old_arg)
+            new_value = self.substitute_grid_angle(old_value)
         elif old_hint == 'Boolean':
-            sub_arg = self.substitute_symbol(old_arg, B_NAMES)
+            new_value = self.substitute_symbol(old_value, B_NAMES)
         elif old_hint in ('I_', 'J_'):
-            sub_arg = self.substitute_symbol(old_arg, CONSTANTS)
+            new_value = self.substitute_symbol(old_value, CONSTANTS)
         elif old_hint == 'IJ':
-            sub_arg = self.substitute_symbol(old_arg, PAIR_GENERIC_CONSTANTS)
+            new_value = self.substitute_symbol(old_value, PAIR_GENERIC_CONSTANTS)
         elif old_hint not in ('Samples', 'Grid', 'Tuple',
                 'Object', 'Objects', 'Patch', 'Indices',
                 'Callable', 'Container', 'ContainerContainer',
@@ -474,13 +449,11 @@ class Code:
 
             if old_hint == 'Callable':
 
-                # NOTE We also need to match hints
-
-                # Replace with random function of same arity
-                old_func_name = old_args[i]
+                # Look for compatible function (arity and hints)
+                old_func_name = old_value
 
                 if old_func_name not in DSL_FUNCTION_DICT:
-                    print_l(f'{old_func_name = } - {old_args = }')
+                    print_l(f'{old_func_name = } - {old_call.value = }')
 
                 old_function = DSL_FUNCTION_DICT[old_func_name] if old_func_name in DSL_FUNCTION_DICT else None
                 arity = old_function.__code__.co_argcount
@@ -491,7 +464,7 @@ class Code:
                     new_function = DSL_FUNCTION_DICT[new_func_name]
                     if new_function.__code__.co_argcount == arity:
                         break
-                sub_arg = new_func_name
+                new_value = new_func_name
 
             elif not isinstance(old_hint, tuple):
                 # Replace with a t variable
@@ -500,24 +473,12 @@ class Code:
                 for _ in range(99):
                     t_offset = random.randint(1, t_n)
                     if is_solver and self.solver.get(t_offset, False) or not is_solver:
-                        # old_args[i] = f't{t_offset}'
-                        sub_arg = f't{t_offset}'
+                        new_value = f't{t_offset}'
                         break
             else:
                 print_l(f'Unprocessed tuple type for substitution: {old_hint = }')
 
-        if sub_arg != old_arg:
-            # pattern = rf'\b{old_arg}\b'
-            # self.t_call[self.t_num] = re.sub(pattern, f'{old_args[i]}', old_call.value)
-            # Replace value
-            # value = re.sub(pattern, f'{old_args[i]}', old_call.value)
-
-            value = old_call.value[:i] + (sub_arg,) + old_call.value[i+1:]
-
-            # XXX We might need old_hints here
-            self.t_call[self.t_num] = HintValue(old_hint, value)
-            has_mutation = Mutation(True, old_call, self.t_call[self.t_num])
-        return has_mutation
+        return new_value
 
 
 def get_equals(source):
