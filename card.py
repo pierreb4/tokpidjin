@@ -283,7 +283,7 @@ class Code:
         call_string = f'{func_name}(' + ', '.join(call_list[1:]) + ')'
 
         if has_mutation.present:
-            print(f'    # - {has_mutation.old}', file=self.file)
+            # print(f'    # - {has_mutation.old}', file=self.file)
             print(f'    # - {has_mutation.new}', file=self.file)
 
         # Wrap ALL assignments in try-except to catch bad mutations
@@ -309,8 +309,8 @@ class Code:
         differ = self.differ[self.t_num]
         solver = self.solver[self.t_num]
 
-        print(f'    # Pre-mutate t{self.t_num}', file=self.file)
-        print(f'    # - self.t_call[{self.t_num}] = {self.t_call[self.t_num]}', file=self.file)
+        # print(f'    # Pre-mutate t{self.t_num}', file=self.file)
+        print(f'    # - {old_call}', file=self.file)
 
         has_mutation = Mutation(False, None, None)
 
