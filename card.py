@@ -171,38 +171,40 @@ class Code:
         t_call = self.t_call
         t_num = self.t_num
 
+        mutation = Mutation(False, None, None)
+
         # GPU Batch Pattern: Sample extraction + processing
         # Lines t_num+0 to t_num+3 form a GPU-optimizable pattern
         self.t_call[t_num + 0] = HintValue(get_hints('apply'), ('apply', 'first', 'S'))
-        self.file_batt(False)
+        self.file_batt(mutation)
         self.t_num += 1
 
         self.t_call[t_num + 1] = HintValue(get_hints('apply'), ('apply', 'second', 'S'))
-        self.file_batt(False)
+        self.file_batt(mutation)
         self.t_num += 1
 
         self.t_call[t_num + 2] = HintValue(get_hints('mapply'), ('mapply', 'p_g', f't{t_num + 0}'))
-        self.file_batt(False)
+        self.file_batt(mutation)
         self.t_num += 1
 
         self.t_call[t_num + 3] = HintValue(get_hints('mapply'), ('mapply', 'p_g', f't{t_num + 1}'))
-        self.file_batt(False)
+        self.file_batt(mutation)
         self.t_num += 1
 
         self.t_call[t_num + 4] = HintValue(get_hints('dedupe'), ('dedupe', f't{t_num + 2}'))
-        self.file_batt(False)
+        self.file_batt(mutation)
         self.t_num += 1
 
         self.t_call[t_num + 5] = HintValue(get_hints('dedupe'), ('dedupe', f't{t_num + 3}'))
-        self.file_batt(False)
+        self.file_batt(mutation)
         self.t_num += 1
 
         self.t_call[t_num + 6] = HintValue(get_hints('difference_tuple'), ('difference_tuple', f't{t_num + arg_i}', f't{t_num + arg_o}'))
-        self.file_batt(False)
+        self.file_batt(mutation)
         self.t_num += 1
 
         self.t_call[t_num + 7] = HintValue(get_hints('get_nth_t'), ('get_nth_t', f't{t_num + 6}', f'{f_n}'))
-        self.file_batt(False)
+        self.file_batt(mutation)
         self.t_num += 1
         # self.t_num += 8
         
@@ -277,7 +279,11 @@ class Code:
         func_name = call_list[0]
 
         call_string = f'{func_name}(' + ', '.join(call_list[1:]) + ')'
-        
+
+        if has_mutation.present:
+            print(f'    # - {has_mutation.old}', file=self.file)
+            print(f'    # - {has_mutation.new}', file=self.file)
+
         # Wrap ALL assignments in try-except to catch bad mutations
         # (wrong function signatures, type errors, etc.)
         # Use type-aware default from _get_safe_default() helper
@@ -285,11 +291,11 @@ class Code:
         if self.vectorized:
             # Vectorized mode: direct assignment, no exception handling
             # Pre-validation happens at batch level
-            print(f'    t{self.t_num} = {call_string} # {has_mutation}', file=self.file)
+            print(f'    t{self.t_num} = {call_string}', file=self.file)
         else:
             # Standard mode: safe with try/except
             print('    try:', file=self.file)
-            print(f'        t{self.t_num} = {call_string} # {has_mutation}', file=self.file)
+            print(f'        t{self.t_num} = {call_string}', file=self.file)
             print('    except (TypeError, AttributeError, ValueError, IndexError, KeyError):', file=self.file)
             print(f'        t{self.t_num} = _get_safe_default({func_name})', file=self.file)
         return has_mutation
@@ -336,14 +342,20 @@ class Code:
             #     We can start like that and expand later if needed
             if re.match(r't\d+', old_value):
                 new_value = self.do_offset_mutation(old_call, old_hint, old_value, is_solver)
+            elif re.match(r'^[a-z]', old_value):
+                # DSL function name
+                new_value = self.do_dsl_substitutions(old_call, old_hint, old_value, is_solver)
+            elif re.match(r'^[A-Z]', old_value):
+                # Numerical constant name
+                new_value = self.do_num_substitutions(old_call, old_hint, old_value, is_solver)
             else:
-                new_value = self.do_arg_substitutions(old_call, old_hint, old_value, is_solver)
+                assert False, f'Unhandled value type for mutation: {old_value = }'
 
             if new_value != old_value:
                 print(f'    # - Arg change: {old_value} -> {new_value}', file=self.file)
                 mutation = True
 
-            new_call_value += (new_value, ) if has_mutation.present else (old_value, )
+            new_call_value += (new_value, ) if mutation else (old_value, )
 
         self.t_call[self.t_num] = HintValue(old_call.hint, new_call_value)
         has_mutation = Mutation(mutation, old_call, self.t_call[self.t_num])
@@ -414,43 +426,11 @@ class Code:
         return new_value
 
 
-    # Substitute when old_value isn't a t variable
-    def do_arg_substitutions(self, old_call, old_hint, old_value, is_solver):
+    # Substitute when old_value is a DSL function name
+    def do_dsl_substitutions(self, old_call, old_hint, old_value, is_solver):
         new_value = old_value
 
-        if old_hint in ('C_',):
-            new_value = self.substitute_color(old_value)
-        elif old_hint == 'FL':
-            new_value = self.substitute_rank(old_value, FL_NAMES)
-        elif old_hint == 'F_':
-            new_value = self.substitute_rank(old_value, F_NAMES)
-        elif old_hint == 'L_':
-            new_value = self.substitute_rank(old_value, L_NAMES)
-        elif old_hint == 'R_':
-            new_value = self.substitute_symbol(old_value, R_NAMES)
-        elif old_hint == 'R4':
-            new_value = self.substitute_symbol(old_value, R4_NAMES)
-        elif old_hint == 'R8':
-            new_value = self.substitute_symbol(old_value, R8_NAMES)
-        elif old_hint == 'A4':
-            new_value = self.substitute_symbol(old_value, A4_NAMES)
-        elif old_hint == 'A8':
-            new_value = self.substitute_grid_angle(old_value)
-        elif old_hint == 'Boolean':
-            new_value = self.substitute_symbol(old_value, B_NAMES)
-        elif old_hint in ('I_', 'J_'):
-            new_value = self.substitute_symbol(old_value, CONSTANTS)
-        elif old_hint == 'IJ':
-            new_value = self.substitute_symbol(old_value, PAIR_GENERIC_CONSTANTS)
-        elif old_hint not in ('Samples', 'Grid', 'Tuple',
-                'Object', 'Objects', 'Patch', 'Indices',
-                'Callable', 'Container', 'ContainerContainer',
-                'Integer', 'Numerical', 'Colors', 'FrozenSet',
-                'TupleTuple', 'TTT_iii', 'Any',
-                None
-         ) and not isinstance(old_hint, tuple):
-            print_l(f'Unrecognised type: {old_hint = } in {old_call}') if DO_PRINT else None
-        elif self.t_num > 1 and random.random() < BUDGET_RANDOM:
+        if self.t_num > 1 and random.random() < BUDGET_RANDOM:
 
             # XXX We need to get in here when old_hint is a tuple type
             # XXX And adapt the code accordingly
@@ -485,6 +465,46 @@ class Code:
                         break
             else:
                 print_l(f'Unprocessed tuple type for substitution: {old_hint = }')
+
+        return new_value
+
+
+    # Substitute when old_value is a numerical constant name
+    def do_num_substitutions(self, old_call, old_hint, old_value, is_solver):
+        new_value = old_value
+
+        if old_hint in ('C_',):
+            new_value = self.substitute_color(old_value)
+        elif old_hint == 'FL':
+            new_value = self.substitute_rank(old_value, FL_NAMES)
+        elif old_hint == 'F_':
+            new_value = self.substitute_rank(old_value, F_NAMES)
+        elif old_hint == 'L_':
+            new_value = self.substitute_rank(old_value, L_NAMES)
+        elif old_hint == 'R_':
+            new_value = self.substitute_symbol(old_value, R_NAMES)
+        elif old_hint == 'R4':
+            new_value = self.substitute_symbol(old_value, R4_NAMES)
+        elif old_hint == 'R8':
+            new_value = self.substitute_symbol(old_value, R8_NAMES)
+        elif old_hint == 'A4':
+            new_value = self.substitute_symbol(old_value, A4_NAMES)
+        elif old_hint == 'A8':
+            new_value = self.substitute_grid_angle(old_value)
+        elif old_hint == 'Boolean':
+            new_value = self.substitute_symbol(old_value, B_NAMES)
+        elif old_hint in ('I_', 'J_'):
+            new_value = self.substitute_symbol(old_value, CONSTANTS)
+        elif old_hint == 'IJ':
+            new_value = self.substitute_symbol(old_value, PAIR_GENERIC_CONSTANTS)
+        elif old_hint not in ('Samples', 'Grid', 'Tuple',
+                'Object', 'Objects', 'Patch', 'Indices',
+                'Callable', 'Container', 'ContainerContainer',
+                'Integer', 'Numerical', 'Colors', 'FrozenSet',
+                'TupleTuple', 'TTT_iii', 'Any',
+                None
+         ) and not isinstance(old_hint, tuple):
+            print_l(f'Unrecognised type: {old_hint = } in {old_call}') if DO_PRINT else None
 
         return new_value
 
