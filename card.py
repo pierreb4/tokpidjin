@@ -333,13 +333,14 @@ class Code:
             # - Substitution of numerical constamts within the same range
             # - Substitution of DSL functions with compatible signatures
             # XXX Does it make sense to only do offset mutations for t variables?
+            #     We can start like that and expand later if needed
             if re.match(r't\d+', old_value):
                 new_value = self.do_offset_mutation(old_call, old_hint, old_value, is_solver)
             else:
                 new_value = self.do_arg_substitutions(old_call, old_hint, old_value, is_solver)
 
             if new_value != old_value:
-                print_l(f'-- Arg mutated: {old_value} -> {new_value}') if DO_PRINT else None
+                print(f'    # - Arg change: {old_value} -> {new_value}', file=self.file)
                 mutation = True
 
             new_call_value += (new_value, ) if has_mutation.present else (old_value, )
