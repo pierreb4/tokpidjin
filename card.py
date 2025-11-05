@@ -584,7 +584,7 @@ def get_equals(source):
                                 hint_base = get_hints(first_arg)
 
                             if value == 'identity':
-                                new_hints = (hint_base,)
+                                new_hints = (hint_base,) if isinstance(hint_base, tuple) else ('Any',)
                                 break
 
                             if value == 'rbind':
