@@ -97,9 +97,10 @@ BAD_SOLVERS = {
 
 DO_PRINT_LIST = [ 'mbp-2022.lan', 'mbp-2022.local', 'simone' ]
 # DO_PRINT_LIST = [ 'simone' ]
-DO_PRINT = os.uname()[1] in DO_PRINT_LIST
-DO_PRINT = True
-
+# DO_PRINT = os.uname()[1] in DO_PRINT_LIST
+# DO_PRINT = os.uname()[1].startswith('mbp') or os.uname()[1] == 'simone'
+DO_PRINT = os.uname()[1] == 'simone'
+DO_DEBUG = os.uname()[1].startswith('mbp-2022')
 
 # Thread-based timeout function (no asyncio needed!)
 from queue import Queue, Empty

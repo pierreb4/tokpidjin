@@ -21,7 +21,6 @@ DSL_FUNCTION_DICT = dict(DSL_FUNCTIONS)
 
 BUDGET_RANDOM = 0.01
 
-# Borrowed from regin.py maybe can go to utils.py?
 def get_hints(dsl_func_name):
     # print_l(f'Getting hints for {dsl_func_name}') if DO_PRINT else None
 
@@ -33,17 +32,19 @@ def get_hints(dsl_func_name):
     if not inspect.isfunction(global_id):
         return None
 
-    hints = tuple(t for var, t in global_id.__annotations__.items())
+    return tuple(t for var, t in global_id.__annotations__.items())
+
+    # hints = tuple(t for var, t in global_id.__annotations__.items())
 
     # Fix hints order to match call order
-    ret_hints = hints if len(hints) <= 1 else (hints[-1],) + hints[:-1]
+    # ret_hints = hints if len(hints) <= 1 else (hints[-1],) + hints[:-1]
 
     # print_l(f'Getting hints for {dsl_func_name}: {ret_hints}') if DO_PRINT else None
 
-    return ret_hints
+    # return ret_hints
 
 
-def get_value(call_string):
+def get_values(call_string):
     value = call_string.replace('(', ', ').replace(')', '')
     return tuple(value.split(', '))
 
@@ -310,7 +311,8 @@ class Code:
         solver = self.solver[self.t_num]
 
         # print(f'    # Pre-mutate t{self.t_num}', file=self.file)
-        print(f'    # - {old_call}', file=self.file)
+        print(f'    # {old_call = }', file=self.file) if DO_DEBUG else None
+        print_l(f'    # {old_call = }') if DO_DEBUG else None
 
         has_mutation = Mutation(False, None, None)
 
@@ -499,6 +501,8 @@ class Code:
             new_value = self.substitute_symbol(old_value, CONSTANTS)
         elif old_hint == 'IJ':
             new_value = self.substitute_symbol(old_value, PAIR_GENERIC_CONSTANTS)
+        elif isinstance(old_hint, tuple):
+            print_l(f'Tuple: {old_hint = } in {old_call}') if DO_DEBUG else None
         elif old_hint not in ('Samples', 'Grid', 'Tuple',
                 'Object', 'Objects', 'Patch', 'Indices',
                 'Callable', 'Container', 'ContainerContainer',
@@ -525,53 +529,49 @@ def get_equals(source):
             call = match[2]
             func = match[3]
 
-            # Check if func is an x variable (like x1, x2, etc.)
-            if re.match(r'x\d+', func):
-                # func is an x variable, get its hints from equals
-                func_hint_value = equals.get(func)
-                func_hints = func_hint_value.hint if func_hint_value else None
-                if func_hints is None:
-                    # x variable not yet defined - this is an error in the solver
-                    print_l(f'ERROR: x variable {func} used before definition in line: {line}') if DO_PRINT else None
-                    assert False, f'Unknown x variable {func} in line: {line}'
-            else:
-                # func is a DSL function name
-                func_hints = get_hints(func)
-                if func_hints is None:
-                    # Unknown function - this is an error
-                    print_l(f'ERROR: Unknown function {func} in line: {line}') if DO_PRINT else None
-                    assert False, f'Unknown function {func} in line: {line}'
-            
-            top_values = get_value(call)
+            # # Check if func is an x variable (like x1, x2, etc.)
+            # if re.match(r'x\d+', func):
+            #     # func is an x variable, get its hints from equals
+            #     func_hint_value = equals.get(func)
+            #     func_hints = func_hint_value.hint
+            #     if func_hints is None:
+            #         # x variable not yet defined - this is an error in the solver
+            #         print_l(f'ERROR: x variable {func} used before definition in line: {line}') if DO_PRINT else None
+            #         assert False, f'Unknown x variable {func} in line: {line}'
+            # else:
+            #     # func is a DSL function name
+            #     func_hints = get_hints(func)
+            #     if func_hints is None:
+            #         # Unknown function - this is an error
+            #         print_l(f'ERROR: Unknown function {func} in line: {line}') if DO_PRINT else None
+            #         assert False, f'Unknown function {func} in line: {line}'
 
-            # print_l(f'Processing: {line = }') if DO_PRINT else None
-            # print_l(f'            {func_hints = }') if DO_PRINT else None
-            # print_l(f'            {top_values = }') if DO_PRINT else None
+            values = get_values(call)
 
+            print_l(f'- {line = }') if DO_DEBUG else None
+            # print_l(f'- {func_hints = }') if DO_DEBUG else None
+            print_l(f'- {values = }') if DO_DEBUG else None
+
+            last_hint = ()
             new_hints = ()
-            for hint_count, value in enumerate(top_values):
-                add_hint = ()
+            for val_idx, value in enumerate(values):
+                hint_idx = val_idx - 1
+
+                # NOTE value can be:
+                # - x variable (x1, x2, etc.)
+                # - Numerical constant (I, C, R4, etc.)
+                # - Regular DSL function name (first, second, etc.)
+                # - Special DSL function name (identity, rbind, etc.)
                 if re.match(r'x\d+', value):
+                    hints = equals.get(value).hint[-1]
 
-                    # print_l(f'Processing {hint_count = } and {value = }') if DO_PRINT else None
+                    print_l(f'Got {hints = } for {value = }') if DO_DEBUG else None
 
-                    hint_value = equals.get(value)
+                    add_hint = (hints[-1],) if isinstance(hints, tuple) else (hints,)
 
-                    # print_l(f'Found hint_value: {hint_value}') if DO_PRINT else None
+                    # add_hint = (hint_value.hint[-1],) if isinstance(hint_value.hint, tuple) else hint_value.hint
 
-                    if hint_count == 0 and hint_value:
-                        new_hints = hint_value.hint[0]
-                        break
-
-                    # add_hint = (hint_value.hint[0],) if len(hint_value.hint) > 0 else () 
-
-                # Numerical constants and DSL function names
-                # NOTE We only expect function names below, for now
-                else:
-                    print_l(f'- {line = }') if DO_PRINT else None
-
-                    # print_l(f'Processing: {value}') if DO_PRINT else None
-
+                elif re.match(r'^[A-Z]', value):
                     if value == 'S':
                         add_hint = ('Samples',)
                     elif value in ('I', 'C', 'O'):
@@ -600,62 +600,81 @@ def get_equals(source):
                         add_hint = ('Integer',)
                     elif value in PAIR_GENERIC_CONSTANTS:
                         add_hint = ('IJ',)
+                    else:
+                        assert_message(line, value, f'Unknown constant value: {value}')
 
-                    # Function names
-                    elif value[0].islower():
-                        if hint_count == 0 and value in ['identity', 'rbind', 'lbind']:
+                elif re.match(r'^[a-z]', value):
+                    # Copy hint for regular or parameter functions
+                    if val_idx != 0 or value not in ['identity', 'rbind', 'lbind']:
+                        hints = get_hints(value)[-1]
 
-                            # print_l(f'Adjusting: {func_hints = } for: {top_values = }') if DO_PRINT else None
+                        print_l(f'Got {hints = } for {value = }') if DO_DEBUG else None
 
-                            first_arg = top_values[1]
+                        add_hint = (hints[-1],) if isinstance(hints, tuple) else (hints,)
 
-                            # Lookup first argument hints
-                            if re.match(r'x\d+', first_arg):
-                                hint_value = equals.get(first_arg)
-                                hint_base = hint_value.hint[0] if hint_value else 'Callable'
-                            else:
-                                hint_base = get_hints(first_arg)
+                    elif val_idx == 0 and value in ['identity', 'rbind', 'lbind']:
+                        # print_l(f'Adjusting: {func_hints = } for: {values = }') if DO_PRINT else None
 
-                            if value == 'identity':
-                                # new_hints = (hint_base,) if isinstance(hint_base, tuple) else ('Any',)
-                                new_hints = (hint_base,)
-                                # break
+                        first_arg = values[1]
 
-                            if value == 'rbind':
+                        print_l(f'Adjusting {value = } with {first_arg = }') if DO_DEBUG else None
 
-                                # print_l(f'- {line = }') if DO_PRINT else None
-                                print_l(f'| {hint_base = }') if DO_PRINT else None
-                                print_l(f'| {top_values = }') if DO_PRINT else None
-                                print_l(f'| {call = }') if DO_PRINT else None
+                        # Lookup first argument hints
+                        if re.match(r'x\d+', first_arg):
+                            hint_value = equals.get(first_arg)
+                            hint_base = hint_value.hint
 
-                                # new_hints = (hint_base[:-1],) if isinstance(hint_base, tuple) else ('Any',)
-                                new_hints = (hint_base[:-1],)
-                                # break
-
-                            if value == 'lbind':
-                                # new_hints = (hint_base[1:],) if isinstance(hint_base, tuple) else ('Any',)
-                                new_hints = (hint_base[1:],)
-                                # break
+                            print_l(f'| x {hint_base = }') if DO_DEBUG else None
 
                         else:
-                            new_hints = get_hints(value)
+                            hint_base = get_hints(first_arg)
 
-                            # print_l(f'Getting {new_hints = } for {value = }') if DO_PRINT else None
+                            print_l(f'| * {hint_base = }') if DO_DEBUG else None
 
-                            if hint_count == 0 and func_hints:
-                                add_hint = (func_hints[0], )
-                                break
-                            
-                            if new_hints:
-                                add_hint = (new_hints,)
-                    else:
-                        print_l(f'Could not extract hints for value: {value}') if DO_PRINT else None
+                        if value == 'identity':
 
+                            print_l(f'| {call = }') if DO_DEBUG else None
+                            print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+
+                            last_hint = (hint_base, hint_base,)
+                            break
+
+                        elif value == 'rbind':
+
+                            print_l(f'| {call = }') if DO_DEBUG else None
+                            print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+
+                            # Skip the rightmost value
+                            last_hint = hint_base[:-2] + (hint_base[-1],)
+                            break
+
+                        elif value == 'lbind':
+
+                            print_l(f'| {call = }') if DO_DEBUG else None
+                            print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+
+                            # Skip the leftmost value
+                            last_hint = hint_base[1:] 
+                            break
+                                        
                 # Add hints
-                if hint_count != 0:
-                    new_hints += add_hint
+                if val_idx != 0:
+                    print_l(f'Add {add_hint = } to {new_hints}') if DO_DEBUG else None
 
-            equals[x_var] = HintValue(new_hints, top_values)
+                    new_hints += add_hint
+                else:
+                    print_l(f'Save {add_hint = } for {new_hints}') if DO_DEBUG else None
+
+                    last_hint = add_hint
+
+            new_hints += last_hint
+
+            print_l(f'Final hints for {x_var}: {new_hints}') if DO_DEBUG else None
+
+            equals[x_var] = HintValue(new_hints, values)
 
     return equals
 
@@ -803,6 +822,8 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
     # Now old_call is a hint_value namedtuple
     old_name, old_call = next(iter(equals.items()))
 
+    # print(f'    # {old_call = }', file=code.file) if DO_DEBUG else None
+
     uses[old_call.value] = 0
 
     # old_items = get_items(old_call.value)
@@ -821,7 +842,7 @@ def add_differ_line(equals, code, uses, task_id=None, freeze_differs=False):
         code.differ[code.t_num] = True
         # Make t_num available for solver mutation when it fills conditions
         code.solver[code.t_num] = bool(
-            len(equals) == 1 and old_func_name in ('get_nth_t', 'get_nth_f')
+            len(equals) == 1 and old_func_name.startswith('get_nth')
         )
         has_mutation = code.mutate(False, freeze_differs)
         code.t_number[old_call.value] = code.t_num
