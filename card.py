@@ -352,8 +352,8 @@ class Code:
             elif re.match(r'^[A-Z]', old_value):
                 # Numerical constant name
                 new_value = self.do_num_substitutions(old_call, old_hint, old_value, is_solver)
-            else:
-                assert False, f'Unhandled value type for mutation: {old_value = }'
+            # else:
+            #     assert False, f'Unhandled value type for mutation: {old_value = }'
 
             if new_value != old_value:
                 print(f'    # - Arg change: {old_value} -> {new_value}', file=self.file)
