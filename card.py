@@ -617,7 +617,8 @@ def get_equals(source):
                                 hint_base = get_hints(first_arg)
 
                             if value == 'identity':
-                                new_hints = (hint_base,) if isinstance(hint_base, tuple) else ('Any',)
+                                # new_hints = (hint_base,) if isinstance(hint_base, tuple) else ('Any',)
+                                new_hints = (hint_base,)
                                 # break
 
                             if value == 'rbind':
@@ -627,11 +628,13 @@ def get_equals(source):
                                 print_l(f'| {top_values = }') if DO_PRINT else None
                                 print_l(f'| {call = }') if DO_PRINT else None
 
-                                new_hints = (hint_base[:-1],) if isinstance(hint_base, tuple) else ('Any',)
+                                # new_hints = (hint_base[:-1],) if isinstance(hint_base, tuple) else ('Any',)
+                                new_hints = (hint_base[:-1],)
                                 # break
 
                             if value == 'lbind':
-                                new_hints = (hint_base[1:],) if isinstance(hint_base, tuple) else ('Any',)
+                                # new_hints = (hint_base[1:],) if isinstance(hint_base, tuple) else ('Any',)
+                                new_hints = (hint_base[1:],)
                                 # break
 
                         else:
