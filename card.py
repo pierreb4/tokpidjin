@@ -568,6 +568,8 @@ def get_equals(source):
                 # Numerical constants and DSL function names
                 # NOTE We only expect function names below, for now
                 else:
+                    print_l(f'- {line = }') if DO_PRINT else None
+
                     # print_l(f'Processing: {value}') if DO_PRINT else None
 
                     if value == 'S':
@@ -616,15 +618,21 @@ def get_equals(source):
 
                             if value == 'identity':
                                 new_hints = (hint_base,) if isinstance(hint_base, tuple) else ('Any',)
-                                break
+                                # break
 
                             if value == 'rbind':
+
+                                # print_l(f'- {line = }') if DO_PRINT else None
+                                print_l(f'| {hint_base = }') if DO_PRINT else None
+                                print_l(f'| {top_values = }') if DO_PRINT else None
+                                print_l(f'| {call = }') if DO_PRINT else None
+
                                 new_hints = (hint_base[:-1],) if isinstance(hint_base, tuple) else ('Any',)
-                                break
+                                # break
 
                             if value == 'lbind':
                                 new_hints = (hint_base[1:],) if isinstance(hint_base, tuple) else ('Any',)
-                                break
+                                # break
 
                         else:
                             new_hints = get_hints(value)
@@ -745,6 +753,9 @@ class Differs:
         self.differs = get_differs(differ_list, best_only=True)
 
         for differ_name, differ in self.differs.items():
+
+            print_l(f'Processing {differ_name = }') if DO_PRINT else None
+
             self.init_equals[differ_name] = get_equals(differ.source)
 
 
@@ -952,7 +963,11 @@ def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt
     task_ids = list(solvers.keys())
     differs = Differs(task_ids, freeze_differs=args.freeze_differs)
 
-    equals = {task_id: get_equals(solver.source) for task_id, solver in solvers.items()}
+    equals = {}
+    for task_id, solver in solvers.items():
+        print(f'Processing {task_id = }') if DO_PRINT else None
+        equals[task_id] = get_equals(solver.source)
+
     seed = time.time()
     random.seed(seed)
 
