@@ -638,7 +638,7 @@ def get_equals(source):
                             print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             # last_hint = (hint_base, hint_base,) if hint_base else ('Any',)
-                            last_hint = hint_base if hint_base else ('Any',)
+                            last_hint = hint_base or ('Any',)
                             break
 
                         elif value == 'rbind':
@@ -649,7 +649,7 @@ def get_equals(source):
 
                             # Skip the rightmost value
                             # last_hint = hint_base[:-2] + (hint_base[-1],) if hint_base else ('Any',)
-                            last_hint = hint_base if hint_base else ('Any',)
+                            last_hint = hint_base or ('Any',)
                             break
 
                         elif value == 'lbind':
@@ -660,7 +660,7 @@ def get_equals(source):
 
                             # Skip the leftmost value
                             # last_hint = hint_base[1:] if hint_base else ('Any',)
-                            last_hint = hint_base if hint_base else ('Any',)
+                            last_hint = hint_base or ('Any',)
                             break
                                         
                 # Add hints
