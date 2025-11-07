@@ -607,14 +607,14 @@ def get_equals(source):
 
                 elif re.match(r'^[a-z]', value):
                     # Copy hint for regular or parameter functions
-                    if val_idx != 0 or value not in ['identity', 'rbind', 'lbind']:
+                    if val_idx != 0 or value not in ['identity', 'rbind', 'lbind', 'compose', 'chain', 'matcher', 'power', 'fork']:
                         hints = get_hints(value)[-1]
 
                         print_l(f'Got {hints = } for {value = }') if DO_DEBUG else None
 
                         add_hint = (hints[-1],) if isinstance(hints, tuple) else (hints,)
 
-                    elif val_idx == 0 and value in ['identity', 'rbind', 'lbind']:
+                    elif val_idx == 0 and value in ['identity', 'rbind', 'lbind', 'compose', 'chain', 'matcher', 'power', 'fork']:
                         # print_l(f'Adjusting: {func_hints = } for: {values = }') if DO_PRINT else None
 
                         first_arg = values[1]
@@ -662,6 +662,218 @@ def get_equals(source):
                             left_val = values[2] if len(values) > 2 else 'Any'
                             last_hint = (hint_base,) + (left_val,) + (hint_base[1:],) \
                                     if hint_base else ('Callable', 'Any', 'Callable')
+                            break
+
+                        elif value == 'compose':
+                            # compose(outer, inner) -> lambda x: outer(inner(x))
+                            # Result type: (inner's input, outer's return)
+                            
+                            print_l(f'| {call = }') if DO_DEBUG else None
+                            print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+
+                            # Get second argument (inner function)
+                            second_arg = values[2] if len(values) > 2 else None
+                            
+                            if second_arg:
+                                if re.match(r'x\d+', second_arg):
+                                    inner_hint_value = equals.get(second_arg)
+                                    if inner_hint_value:
+                                        inner_hints = inner_hint_value.hint
+                                    else:
+                                        # x variable not yet processed, try as DSL function
+                                        inner_hints = get_hints(second_arg)
+                                else:
+                                    inner_hints = get_hints(second_arg)
+                                
+                                if inner_hints and hint_base:
+                                    # Composed function: takes inner's input, returns outer's output
+                                    # hint_base is outer's hints, inner_hints is inner's hints
+                                    
+                                    # Extract inner's input types
+                                    if isinstance(inner_hints[-1], tuple) and len(inner_hints) > 2:
+                                        # inner is result of special function
+                                        inner_input = inner_hints[-1][:-1]
+                                    else:
+                                        # inner is regular function
+                                        inner_input = inner_hints[:-1]
+                                    
+                                    # Extract outer's return type
+                                    if isinstance(hint_base[-1], tuple) and len(hint_base) > 2:
+                                        # outer is result of special function
+                                        outer_return = hint_base[-1][-1:]
+                                    else:
+                                        # outer is regular function
+                                        outer_return = hint_base[-1:]
+                                    
+                                    result_hints = (inner_input, outer_return)
+                                    last_hint = (hint_base,) + (inner_hints,) + (result_hints[0] + result_hints[1],)
+                                else:
+                                    last_hint = ('Callable', 'Callable', 'Callable')
+                            else:
+                                last_hint = ('Callable', 'Callable', 'Callable')
+                            break
+
+                        elif value == 'chain':
+                            # chain(h, g, f) -> lambda x: h(g(f(x)))
+                            # Result type: (f's input, h's return)
+                            
+                            print_l(f'| {call = }') if DO_DEBUG else None
+                            print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+
+                            # Get g and f functions
+                            g_arg = values[2] if len(values) > 2 else None
+                            f_arg = values[3] if len(values) > 3 else None
+                            
+                            if g_arg and f_arg:
+                                # Get g hints
+                                if re.match(r'x\d+', g_arg):
+                                    g_hint_value = equals.get(g_arg)
+                                    if g_hint_value:
+                                        g_hints = g_hint_value.hint
+                                    else:
+                                        # x variable not yet processed, try as DSL function
+                                        g_hints = get_hints(g_arg)
+                                else:
+                                    g_hints = get_hints(g_arg)
+                                
+                                # Get f hints
+                                if re.match(r'x\d+', f_arg):
+                                    f_hint_value = equals.get(f_arg)
+                                    if f_hint_value:
+                                        f_hints = f_hint_value.hint
+                                    else:
+                                        # x variable not yet processed, try as DSL function
+                                        f_hints = get_hints(f_arg)
+                                else:
+                                    f_hints = get_hints(f_arg)
+                                
+                                if f_hints and g_hints and hint_base:
+                                    print_l(f'| chain: f_hints={f_hints}, g_hints={g_hints}, hint_base={hint_base}') if DO_DEBUG else None
+                                    # Chained function: takes f's input, returns h's output
+                                    # hint_base is h's hints
+                                    # Special handling: if hints come from compose/fork/etc, 
+                                    # the last element is (input_types..., return_type)
+                                    
+                                    # Extract f's input types
+                                    if isinstance(f_hints[-1], tuple) and len(f_hints) > 2:
+                                        # f is result of special function, extract input from result tuple
+                                        f_input = f_hints[-1][:-1]
+                                    else:
+                                        # f is regular function
+                                        f_input = f_hints[:-1]
+                                    
+                                    # Extract h's return type
+                                    if isinstance(hint_base[-1], tuple) and len(hint_base) > 2:
+                                        # h is result of special function, extract return from result tuple
+                                        h_return = hint_base[-1][-1:]
+                                    else:
+                                        # h is regular function
+                                        h_return = hint_base[-1:]
+                                    
+                                    print_l(f'| chain: f_input={f_input}, h_return={h_return}') if DO_DEBUG else None
+                                    result_hints = (f_input, h_return)
+                                    last_hint = (hint_base,) + (g_hints,) + (f_hints,) + (result_hints[0] + result_hints[1],)
+                                else:
+                                    print_l(f'| chain FALLBACK: f_hints={f_hints}, g_hints={g_hints}, hint_base={hint_base}') if DO_DEBUG else None
+                                    last_hint = ('Callable', 'Callable', 'Callable', 'Callable')
+                            else:
+                                last_hint = ('Callable', 'Callable', 'Callable', 'Callable')
+                            break
+
+                        elif value == 'matcher':
+                            # matcher(function, target) -> lambda x: function(x) == target
+                            # Result type: (function's input, Boolean)
+                            
+                            print_l(f'| {call = }') if DO_DEBUG else None
+                            print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+
+                            # Get target argument
+                            target_arg = values[2] if len(values) > 2 else 'Any'
+                            
+                            # Matcher always returns Boolean, input from function's first param
+                            result_hints = (hint_base[:-1], ('Boolean',)) if hint_base else (('Any',), ('Boolean',))
+                            last_hint = (hint_base,) + (target_arg,) + (result_hints[0] + result_hints[1],)
+                            break
+
+                        elif value == 'power':
+                            # power(function, n) -> function composed n times
+                            # Result type: same as input function (must be A -> A)
+                            
+                            print_l(f'| {call = }') if DO_DEBUG else None
+                            print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+
+                            # Get n argument
+                            n_arg = values[2] if len(values) > 2 else 'Integer'
+                            
+                            # Power returns same signature as input function
+                            last_hint = (hint_base,) + (n_arg,) + (hint_base,) if hint_base else ('Callable', 'Integer', 'Callable')
+                            break
+
+                        elif value == 'fork':
+                            # fork(outer, a, b) -> lambda x: outer(a(x), b(x))
+                            # Result type: (a's input [same as b's], outer's return)
+                            
+                            print_l(f'| {call = }') if DO_DEBUG else None
+                            print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+
+                            # Get a and b functions
+                            a_arg = values[2] if len(values) > 2 else None
+                            b_arg = values[3] if len(values) > 3 else None
+                            
+                            if a_arg and b_arg:
+                                # Get a hints
+                                if re.match(r'x\d+', a_arg):
+                                    a_hint_value = equals.get(a_arg)
+                                    if a_hint_value:
+                                        a_hints = a_hint_value.hint
+                                    else:
+                                        # x variable not yet processed, try as DSL function
+                                        a_hints = get_hints(a_arg)
+                                else:
+                                    a_hints = get_hints(a_arg)
+                                
+                                # Get b hints
+                                if re.match(r'x\d+', b_arg):
+                                    b_hint_value = equals.get(b_arg)
+                                    if b_hint_value:
+                                        b_hints = b_hint_value.hint
+                                    else:
+                                        # x variable not yet processed, try as DSL function
+                                        b_hints = get_hints(b_arg)
+                                else:
+                                    b_hints = get_hints(b_arg)
+                                
+                                if a_hints and b_hints and hint_base:
+                                    # Fork: takes shared input (a's input), returns outer's output
+                                    # hint_base is outer's hints
+                                    
+                                    # Extract a's input types (shared with b)
+                                    if isinstance(a_hints[-1], tuple) and len(a_hints) > 2:
+                                        # a is result of special function
+                                        a_input = a_hints[-1][:-1]
+                                    else:
+                                        # a is regular function
+                                        a_input = a_hints[:-1]
+                                    
+                                    # Extract outer's return type
+                                    if isinstance(hint_base[-1], tuple) and len(hint_base) > 2:
+                                        # outer is result of special function
+                                        outer_return = hint_base[-1][-1:]
+                                    else:
+                                        # outer is regular function
+                                        outer_return = hint_base[-1:]
+                                    
+                                    result_hints = (a_input, outer_return)
+                                    last_hint = (hint_base,) + (a_hints,) + (b_hints,) + (result_hints[0] + result_hints[1],)
+                                else:
+                                    last_hint = ('Callable', 'Callable', 'Callable', 'Callable')
+                            else:
+                                last_hint = ('Callable', 'Callable', 'Callable', 'Callable')
                             break
                                         
                 # Add hints
