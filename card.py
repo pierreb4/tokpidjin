@@ -610,7 +610,7 @@ def get_equals(source):
                     if val_idx != 0 or value not in ['identity', 'rbind', 'lbind', 'compose', 'chain', 'matcher', 'power', 'fork']:
                         hints = get_hints(value)[-1]
 
-                        print_l(f'Got {hints = } for {value = }') if DO_DEBUG else None
+                        # print_l(f'Got {hints = } for {value = }') if DO_DEBUG else None
 
                         add_hint = (hints[-1],) if isinstance(hints, tuple) else (hints,)
 
@@ -619,34 +619,34 @@ def get_equals(source):
 
                         first_arg = values[1]
 
-                        print_l(f'Adjusting {value = } with {first_arg = }') if DO_DEBUG else None
+                        # print_l(f'Adjusting {value = } with {first_arg = }') if DO_DEBUG else None
 
                         # Lookup first argument hints
                         if re.match(r'x\d+', first_arg):
                             hint_value = equals.get(first_arg)
                             hint_base = hint_value.hint
 
-                            print_l(f'| x {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| x {hint_base = }') if DO_DEBUG else None
 
                         else:
                             hint_base = get_hints(first_arg)
 
-                            print_l(f'| * {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| * {hint_base = }') if DO_DEBUG else None
 
                         if value == 'identity':
 
-                            print_l(f'| {call = }') if DO_DEBUG else None
-                            print_l(f'| {first_arg = }') if DO_DEBUG else None
-                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| {call = }') if DO_DEBUG else None
+                            # print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            # print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             last_hint = (hint_base, hint_base) if hint_base else ('Any', 'Any')
                             break
 
                         elif value == 'rbind':
 
-                            print_l(f'| {call = }') if DO_DEBUG else None
-                            print_l(f'| {first_arg = }') if DO_DEBUG else None
-                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| {call = }') if DO_DEBUG else None
+                            # print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            # print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             right_val = values[-1] if len(values) > 1 else 'Any'
                             last_hint = (hint_base,) + (right_val,) + (hint_base[:-2] + hint_base[-1:],) \
@@ -655,9 +655,9 @@ def get_equals(source):
 
                         elif value == 'lbind':
 
-                            print_l(f'| {call = }') if DO_DEBUG else None
-                            print_l(f'| {first_arg = }') if DO_DEBUG else None
-                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| {call = }') if DO_DEBUG else None
+                            # print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            # print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             left_val = values[2] if len(values) > 2 else 'Any'
                             last_hint = (hint_base,) + (left_val,) + (hint_base[1:],) \
@@ -668,9 +668,9 @@ def get_equals(source):
                             # compose(outer, inner) -> lambda x: outer(inner(x))
                             # Result type: (inner's input, outer's return)
                             
-                            print_l(f'| {call = }') if DO_DEBUG else None
-                            print_l(f'| {first_arg = }') if DO_DEBUG else None
-                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| {call = }') if DO_DEBUG else None
+                            # print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            # print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             # Get second argument (inner function)
                             second_arg = values[2] if len(values) > 2 else None
@@ -718,9 +718,9 @@ def get_equals(source):
                             # chain(h, g, f) -> lambda x: h(g(f(x)))
                             # Result type: (f's input, h's return)
                             
-                            print_l(f'| {call = }') if DO_DEBUG else None
-                            print_l(f'| {first_arg = }') if DO_DEBUG else None
-                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| {call = }') if DO_DEBUG else None
+                            # print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            # print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             # Get g and f functions
                             g_arg = values[2] if len(values) > 2 else None
@@ -786,9 +786,9 @@ def get_equals(source):
                             # matcher(function, target) -> lambda x: function(x) == target
                             # Result type: (function's input, Boolean)
                             
-                            print_l(f'| {call = }') if DO_DEBUG else None
-                            print_l(f'| {first_arg = }') if DO_DEBUG else None
-                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| {call = }') if DO_DEBUG else None
+                            # print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            # print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             # Get target argument
                             target_arg = values[2] if len(values) > 2 else 'Any'
@@ -802,9 +802,9 @@ def get_equals(source):
                             # power(function, n) -> function composed n times
                             # Result type: same as input function (must be A -> A)
                             
-                            print_l(f'| {call = }') if DO_DEBUG else None
-                            print_l(f'| {first_arg = }') if DO_DEBUG else None
-                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| {call = }') if DO_DEBUG else None
+                            # print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            # print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             # Get n argument
                             n_arg = values[2] if len(values) > 2 else 'Integer'
@@ -817,9 +817,9 @@ def get_equals(source):
                             # fork(outer, a, b) -> lambda x: outer(a(x), b(x))
                             # Result type: (a's input [same as b's], outer's return)
                             
-                            print_l(f'| {call = }') if DO_DEBUG else None
-                            print_l(f'| {first_arg = }') if DO_DEBUG else None
-                            print_l(f'| {hint_base = }') if DO_DEBUG else None
+                            # print_l(f'| {call = }') if DO_DEBUG else None
+                            # print_l(f'| {first_arg = }') if DO_DEBUG else None
+                            # print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             # Get a and b functions
                             a_arg = values[2] if len(values) > 2 else None

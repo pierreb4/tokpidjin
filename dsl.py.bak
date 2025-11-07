@@ -133,20 +133,20 @@ def identity(
     x: 'Any'
 ) -> 'Any':
     """ identity function """
-    # logger.info(f'identity: {x = }')  # Disabled: excessive logging overhead
+    logger.info(f'identity: {x = }')
     return x
 
 
 def first(container: 'Container') -> 'Any':
     """First item of container"""
-    # logger.info(f'first: {container = }')  # Disabled: excessive logging overhead
+    logger.info(f'first: {container = }')
     iterator = iter(container)
     return next(iterator, None)
 
 
 def second(container: 'Container') -> 'Any':
     """Second item of container"""
-    # logger.info(f'second: {container = }')  # Disabled: excessive logging overhead
+    logger.info(f'second: {container = }')
     iterator = iter(container)
     next(iterator)
     return next(iterator, None)
@@ -154,7 +154,7 @@ def second(container: 'Container') -> 'Any':
 
 def difference_tuple(a: 'Tuple', b: 'Tuple') -> 'Tuple':
     """Tuple difference"""
-    # logger.info(f'difference_tuple: {a = }, {b = }')  # Disabled: excessive logging overhead
+    logger.info(f'difference_tuple: {a = }, {b = }')
     return type(a)(e for e in a if e not in b)
 
 
@@ -164,25 +164,25 @@ difference_t = difference_tuple
 
 def p_f( element: 'FrozenSet' ) -> 'IntegerSet':
     """ colors occurring in object """
-    # logger.info(f'p_f: {element = }')  # Disabled: excessive logging overhead
+    logger.info(f'p_f: {element = }')
     return frozenset(c for _, _, c in element)
 
 
 def p_g( grid: 'Grid' ) -> 'IntegerSet':
     """ colors occurring in grid """
-    # logger.info(f'p_g: {grid = }')  # Disabled: excessive logging overhead
+    logger.info(f'p_g: {grid = }')
     return tuple({cell for row in grid for cell in row})
 
 
 def p_o( obj: 'Object' ) -> 'IntegerSet':
     """ colors occurring in object """
-    # logger.info(f'p_o: {obj = }')  # Disabled: excessive logging overhead
+    logger.info(f'p_o: {obj = }')
     return tuple({c for _, _, c in obj})
 
 
 def dedupe_pair_tuple(S: 'Samples') -> 'Samples':
     """Remove sample pairs where input equals output"""
-    # logger.info(f'dedupe_pair_tuple: {S = }')  # Disabled: excessive logging overhead
+    logger.info(f'dedupe_pair_tuple: {S = }')
     return tuple((a, b) for a, b in S if a != b)
 
 
@@ -510,7 +510,7 @@ def o_g( grid: 'Grid', type: 'R8' ) -> 'Objects':
         return objects(grid, True, True, True)
 
 
-def o_g_t( grid: 'Grid', type: 'R8' ) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+def o_g_t( grid: 'Grid', type: 'R8' ) -> 'TTT_iii':
     """ o_g variant that returns tuple of tuples instead of frozenset """
     logger.info(f'o_g_t: {grid = }, {type = }')
     if type == 0:
@@ -2901,9 +2901,9 @@ def colorfilter(
 
 
 def colorfilter_t(
-    objs: 'Tuple[Tuple[Tuple[int, int, int], ...], ...]',
+    objs: 'TTT_iii',
     color: 'Integer'
-) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+) -> 'TTT_iii':
     """ filter objects by color - tuple variant """
     logger.info(f'colorfilter_t: {objs = }, {color = }')
     return tuple(obj for obj in objs if obj[0][2] == color)
@@ -3204,7 +3204,7 @@ def objects_t(
     univalued: 'Boolean',
     diagonal: 'Boolean',
     without_bg: 'Boolean'
-) -> 'Tuple[Tuple[Tuple[int, int, int], ...], ...]':
+) -> 'TTT_iii':
     """ objects occurring on the grid - returns tuple of tuples instead of frozenset """
     logger.info(f'objects_t: {grid = }, {univalued = }, {diagonal = }, {without_bg = }')
     if grid == ():
