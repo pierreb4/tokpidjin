@@ -374,7 +374,7 @@ class Code:
         t_n = int(old_value[1:])
         new_value = old_value
 
-        while random.random() < BUDGET_RANDOM:
+        if random.random() < BUDGET_RANDOM:
             # while True:
             for _ in range(999):
                 t_offset = random.randint(1, t_n)
@@ -425,7 +425,9 @@ class Code:
 
                     else:
                         print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') if DO_PRINT else None
+                        continue
 
+                    # We have a new value, exit loop
                     break
 
         return new_value
