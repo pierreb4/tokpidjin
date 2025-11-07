@@ -328,7 +328,9 @@ class Code:
 
         mutation = False
         new_call_value = ()
-        for old_value, old_hint in zip(old_call.value, old_hints):
+        # for old_value, old_hint in zip(old_call.value, old_hints):
+        for i, old_value in enumerate(old_call.value):
+            old_hint = old_hints[i - 1]    
 
             if isinstance(old_hint, str) and re.match(r'^[a-z]$', old_hint):
                 print_l(f'-- {old_func_name} - {old_call.value} - {old_call.hint}') if DO_PRINT else None
