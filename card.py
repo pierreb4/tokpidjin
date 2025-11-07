@@ -426,8 +426,7 @@ class Code:
                     else:
                         print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') if DO_PRINT else None
 
-                    # XXX Old hack?
-                    # break
+                    break
 
         return new_value
 
@@ -530,23 +529,6 @@ def get_equals(source):
             x_var = match[1]
             call = match[2]
             func = match[3]
-
-            # # Check if func is an x variable (like x1, x2, etc.)
-            # if re.match(r'x\d+', func):
-            #     # func is an x variable, get its hints from equals
-            #     func_hint_value = equals.get(func)
-            #     func_hints = func_hint_value.hint
-            #     if func_hints is None:
-            #         # x variable not yet defined - this is an error in the solver
-            #         print_l(f'ERROR: x variable {func} used before definition in line: {line}') if DO_PRINT else None
-            #         assert False, f'Unknown x variable {func} in line: {line}'
-            # else:
-            #     # func is a DSL function name
-            #     func_hints = get_hints(func)
-            #     if func_hints is None:
-            #         # Unknown function - this is an error
-            #         print_l(f'ERROR: Unknown function {func} in line: {line}') if DO_PRINT else None
-            #         assert False, f'Unknown function {func} in line: {line}'
 
             values = get_values(call)
 
