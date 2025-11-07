@@ -311,8 +311,8 @@ class Code:
         solver = self.solver[self.t_num]
 
         # print(f'    # Pre-mutate t{self.t_num}', file=self.file)
+        # print_l(f'    # {old_call = }') if DO_DEBUG else None
         print(f'    # {old_call = }', file=self.file) if DO_DEBUG else None
-        print_l(f'    # {old_call = }') if DO_DEBUG else None
 
         has_mutation = Mutation(False, None, None)
 
@@ -639,8 +639,8 @@ def get_equals(source):
                             print_l(f'| {first_arg = }') if DO_DEBUG else None
                             print_l(f'| {hint_base = }') if DO_DEBUG else None
 
-                            # last_hint = (hint_base, hint_base,) if hint_base else ('Any',)
-                            last_hint = hint_base or ('Any',)
+                            last_hint = (hint_base, hint_base) if hint_base else ('Any', 'Any')
+                            # last_hint = hint_base or ('Any',)
                             break
 
                         elif value == 'rbind':
@@ -649,9 +649,9 @@ def get_equals(source):
                             print_l(f'| {first_arg = }') if DO_DEBUG else None
                             print_l(f'| {hint_base = }') if DO_DEBUG else None
 
-                            # Skip the rightmost value
-                            # last_hint = hint_base[:-2] + (hint_base[-1],) if hint_base else ('Any',)
-                            last_hint = hint_base or ('Any',)
+                            last_val = values[-1] if len(values) > 1 else 'Any'
+                            last_hint = (hint_base,) + (last_val,) + (hint_base[:-2] + (hint_base[-1],),) if hint_base else ('Any',)
+                            # last_hint = hint_base or ('Any',)
                             break
 
                         elif value == 'lbind':
