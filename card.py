@@ -640,7 +640,6 @@ def get_equals(source):
                             print_l(f'| {hint_base = }') if DO_DEBUG else None
 
                             last_hint = (hint_base, hint_base) if hint_base else ('Any', 'Any')
-                            # last_hint = hint_base or ('Any',)
                             break
 
                         elif value == 'rbind':
@@ -651,8 +650,7 @@ def get_equals(source):
 
                             right_val = values[-1] if len(values) > 1 else 'Any'
                             last_hint = (hint_base,) + (right_val,) + (hint_base[:-2] + hint_base[-1:],) \
-                                    if hint_base else ('Any', 'Any', 'Any')
-                            # last_hint = hint_base or ('Any',)
+                                    if hint_base else ('Callable', 'Any', 'Callable')
                             break
 
                         elif value == 'lbind':
@@ -664,8 +662,7 @@ def get_equals(source):
                             # last_hint = hint_base[1:] if hint_base else ('Any',)
                             left_val = values[2] if len(values) > 2 else 'Any'
                             last_hint = (hint_base,) + (left_val,) + (hint_base[:1] + hint_base[2:],) \
-                                    if hint_base else ('Any', 'Any', 'Any')
-                            # last_hint = hint_base or ('Any',)
+                                    if hint_base else ('Callable', 'Any', 'Callable')
                             break
                                         
                 # Add hints
