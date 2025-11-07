@@ -649,8 +649,9 @@ def get_equals(source):
                             print_l(f'| {first_arg = }') if DO_DEBUG else None
                             print_l(f'| {hint_base = }') if DO_DEBUG else None
 
-                            last_val = values[-1] if len(values) > 1 else 'Any'
-                            last_hint = (hint_base,) + (last_val,) + (hint_base[:-2] + (hint_base[-1],),) if hint_base else ('Any',)
+                            right_val = values[-1] if len(values) > 1 else 'Any'
+                            last_hint = (hint_base,) + (right_val,) + (hint_base[:-2] + hint_base[-1:],) \
+                                    if hint_base else ('Any', 'Any', 'Any')
                             # last_hint = hint_base or ('Any',)
                             break
 
@@ -660,9 +661,11 @@ def get_equals(source):
                             print_l(f'| {first_arg = }') if DO_DEBUG else None
                             print_l(f'| {hint_base = }') if DO_DEBUG else None
 
-                            # Skip the leftmost value
                             # last_hint = hint_base[1:] if hint_base else ('Any',)
-                            last_hint = hint_base or ('Any',)
+                            left_val = values[2] if len(values) > 2 else 'Any'
+                            last_hint = (hint_base,) + (left_val,) + (hint_base[:1] + hint_base[2:],) \
+                                    if hint_base else ('Any', 'Any', 'Any')
+                            # last_hint = hint_base or ('Any',)
                             break
                                         
                 # Add hints
