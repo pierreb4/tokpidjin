@@ -347,13 +347,13 @@ class Code:
             # XXX Does it make sense to only do offset mutations for t variables?
             #     We can start like that and expand later if needed
             if re.match(r't\d+', old_value):
-                new_value = self.do_offset_mutation(old_call, old_hint, old_value, is_solver)
+                new_value = self.do_t_var_substitution(old_call, old_hint, old_value, is_solver)
             elif re.match(r'^[a-z]', old_value):
                 # DSL function name
-                new_value = self.do_dsl_substitutions(old_call, old_hint, old_value, is_solver)
+                new_value = self.do_dsl_substitution(old_call, old_hint, old_value, is_solver)
             elif re.match(r'^[A-Z]', old_value):
                 # Numerical constant name
-                new_value = self.do_num_substitutions(old_call, old_hint, old_value, is_solver)
+                new_value = self.do_num_substitution(old_call, old_hint, old_value, is_solver)
             # else:
             #     assert False, f'Unhandled value type for mutation: {old_value = }'
 
@@ -370,70 +370,73 @@ class Code:
 
 
     # Replace when old_value is a t variable
-    def do_offset_mutation(self, old_call, old_hint, old_value, is_solver):
+    def do_t_var_substitution(self, old_call, old_hint, old_value, is_solver):
+        if random.random() >= BUDGET_RANDOM:
+            return old_value
+
         t_n = int(old_value[1:])
         new_value = old_value
 
-        if random.random() < BUDGET_RANDOM:
-            for _ in range(999):
-                range_n = range(1, t_n)
-                t_offset = random.choices(range_n, weights=range_n)[0]
+        for _ in range(999):
+            range_n = range(1, t_n)
+            t_offset = random.choices(range_n, weights=range_n)[0]
 
-                if is_solver and self.solver.get(t_offset, False) or not is_solver:
-                    print_l(f'Considering offset mutation for {old_value} to t{t_offset}') if DO_PRINT else None
-                    print_l(f'-- {old_value}: {self.t_call[t_n]}') if DO_PRINT else None
-                    print_l(f'-- t{t_offset}: {self.t_call[t_offset]}') if DO_PRINT else None
+            if is_solver and self.solver.get(t_offset, False) or not is_solver:
+                print_l(f'Considering t-variable substitution for {old_value} to t{t_offset}') if DO_PRINT else None
+                print_l(f'-- {old_value}: {self.t_call[t_n]}') if DO_PRINT else None
+                print_l(f'-- t{t_offset}: {self.t_call[t_offset]}') if DO_PRINT else None
 
-                    new_hint = self.t_call[t_offset].hint
+                new_hint = self.t_call[t_offset].hint
 
-                    if random.randint(0, 1) == 0:
-                        if not iscompatible_hint(old_hint, new_hint):
-                            continue
-
-                        new_value = f't{t_offset}'
-                        print_l(f'Offset: {new_value = }') if DO_PRINT else None
-
-                    elif old_hint == 'Callable' or isinstance(old_hint, tuple):
-                        # Check function compatibility
-                        old_hints = old_call.hint
-                        for _ in range(99):
-                            new_value = random.choice(DSL_FUNCTION_NAMES)
-                            new_hints = get_hints(new_value)
-
-                            if len(new_hints) == len(old_hints):
-                                all_compatible = all(
-                                    iscompatible_hint(
-                                        old_arg_hint, new_arg_hint
-                                    )
-                                    for old_arg_hint, new_arg_hint in zip(
-                                        old_hints, new_hints
-                                    )
-                                )
-                                if all_compatible:
-                                    break
-
-                        print_l(f'New func: {new_value = }') if DO_PRINT else None
-
-                    elif old_hint in INT_TYPE_RANGES:
-                        new_value = random.choice([*INT_GENERIC_CONSTANTS])
-                        print_l(f'New arg: {new_value = }') if DO_PRINT else None
-
-                    elif old_hint in PAIR_TYPE_RANGES:
-                        new_value = random.choice([*PAIR_GENERIC_CONSTANTS])
-                        print_l(f'New arg: {new_value = }') if DO_PRINT else None
-
-                    else:
-                        print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') if DO_PRINT else None
+                if random.randint(0, 1) == 0:
+                    if not iscompatible_hint(old_hint, new_hint):
                         continue
 
-                    # We have a new value, exit loop
+                    new_value = f't{t_offset}'
+                    print_l(f'Offset: {new_value = }') if DO_PRINT else None
                     break
+
+                elif old_hint == 'Callable' or isinstance(old_hint, tuple):
+                    # Check function compatibility
+                    old_hints = old_call.hint
+                    for _ in range(99):
+                        new_value = random.choice(DSL_FUNCTION_NAMES)
+                        new_hints = get_hints(new_value)
+
+                        if len(new_hints) == len(old_hints):
+                            all_compatible = all(
+                                iscompatible_hint(
+                                    old_arg_hint, new_arg_hint
+                                )
+                                for old_arg_hint, new_arg_hint in zip(
+                                    old_hints, new_hints
+                                )
+                            )
+                            if all_compatible:
+                                break
+
+                    print_l(f'New func: {new_value = }') if DO_PRINT else None
+                    break
+
+                elif old_hint in INT_TYPE_RANGES:
+                    new_value = random.choice([*INT_GENERIC_CONSTANTS])
+                    print_l(f'New arg: {new_value = }') if DO_PRINT else None
+                    break
+
+                elif old_hint in PAIR_TYPE_RANGES:
+                    new_value = random.choice([*PAIR_GENERIC_CONSTANTS])
+                    print_l(f'New arg: {new_value = }') if DO_PRINT else None
+                    break
+
+                else:
+                    print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') if DO_PRINT else None
+                    continue
 
         return new_value
 
 
     # Substitute when old_value is a DSL function name
-    def do_dsl_substitutions(self, old_call, old_hint, old_value, is_solver):
+    def do_dsl_substitution(self, old_call, old_hint, old_value, is_solver):
         new_value = old_value
 
         if self.t_num > 1 and random.random() < BUDGET_RANDOM:
@@ -476,7 +479,7 @@ class Code:
 
 
     # Substitute when old_value is a numerical constant name
-    def do_num_substitutions(self, old_call, old_hint, old_value, is_solver):
+    def do_num_substitution(self, old_call, old_hint, old_value, is_solver):
         new_value = old_value
 
         if old_hint in ('C_',):
