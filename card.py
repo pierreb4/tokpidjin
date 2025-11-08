@@ -375,9 +375,7 @@ class Code:
         new_value = old_value
 
         if random.random() < BUDGET_RANDOM:
-            # while True:
             for _ in range(999):
-                # t_offset = random.randint(1, t_n)
                 range_n = range(1, t_n)
                 t_offset = random.choices(range_n, weights=range_n)[0]
 
@@ -398,7 +396,6 @@ class Code:
                     elif old_hint == 'Callable' or isinstance(old_hint, tuple):
                         # Check function compatibility
                         old_hints = old_call.hint
-                        # while True:
                         for _ in range(99):
                             new_value = random.choice(DSL_FUNCTION_NAMES)
                             new_hints = get_hints(new_value)
