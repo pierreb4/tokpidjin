@@ -377,7 +377,9 @@ class Code:
         if random.random() < BUDGET_RANDOM:
             # while True:
             for _ in range(999):
-                t_offset = random.randint(1, t_n)
+                # t_offset = random.randint(1, t_n)
+                range_n = range(1, t_n)
+                t_offset = random.choices(range_n, weights=range_n)[0]
 
                 if is_solver and self.solver.get(t_offset, False) or not is_solver:
                     print_l(f'Considering offset mutation for {old_value} to t{t_offset}') if DO_PRINT else None
