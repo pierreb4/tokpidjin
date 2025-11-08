@@ -69,6 +69,14 @@ R_NAMES = {
 }
 
 # Generic int constants
+NEG_TEN = -10
+NEG_NINE = -9
+NEG_EIGHT = -8
+NEG_SEVEN = -7
+NEG_SIX = -6
+NEG_FIVE = -5
+NEG_FOUR = -4
+NEG_THREE = -3
 NEG_TWO = -2
 NEG_ONE = -1
 ZERO = 0
@@ -84,8 +92,11 @@ NINE = 9
 TEN = 10
 
 CONSTANTS = {
-    'NEG_TWO': -2, 'NEG_ONE': -1, 'ZERO': 0, 'ONE': 1,
-    'TWO': 2, 'THREE': 3, 'FOUR': 4, 'FIVE': 5, 'SIX': 6,
+    'NEG_TEN': -10, 'NEG_NINE': -9, 'NEG_EIGHT': -8,
+    'NEG_SEVEN': -7, 'NEG_SIX': -6, 'NEG_FIVE': -5,
+    'NEG_FOUR': -4, 'NEG_THREE': -3, 'NEG_TWO': -2, 
+    'NEG_ONE': -1, 'ZERO': 0, 'ONE': 1, 'TWO': 2, 
+    'THREE': 3, 'FOUR': 4, 'FIVE': 5, 'SIX': 6,
     'SEVEN': 7, 'EIGHT': 8, 'NINE': 9, 'TEN': 10,
 }
 
@@ -176,6 +187,7 @@ INT_TYPE_RANGES = {
     'A4': A4_NAMES,
     'A8': A8_NAMES,
     'C_': COLORS,
+    'Integer': CONSTANTS,
 }
 
 PAIR_TYPE_RANGES = {
