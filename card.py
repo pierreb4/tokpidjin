@@ -77,11 +77,11 @@ def iscompatible_hint(old_hint, new_hint):
     """
     if isinstance(old_hint, str) and old_hint == new_hint:
         return True
-    
+
     # Check for 'Any' compatibility
     if old_hint == 'Any' or new_hint == 'Any':
         return True
-    
+
     # Check if both are constants from overlapping ranges
     if isinstance(old_hint, str) and isinstance(new_hint, str):
         # Use centralized type definitions from constants.py
@@ -94,16 +94,13 @@ def iscompatible_hint(old_hint, new_hint):
 
         # XXX Until we refine, assume unknown types are compatible        
         return True
-    
+
     # Check tuples
     if isinstance(old_hint, tuple) and isinstance(new_hint, tuple):
         if len(old_hint) != len(new_hint):
             return False
-        for oh, nh in zip(old_hint, new_hint):
-            if not iscompatible_hint(oh, nh):
-                return False
-        return True
-    
+            
+        return all(iscompatible_hint(oh, nh) for oh, nh in zip(old_hint, new_hint))
     return False
 
 
