@@ -99,7 +99,7 @@ def iscompatible_hint(old_hint, new_hint):
     if isinstance(old_hint, tuple) and isinstance(new_hint, tuple):
         if len(old_hint) != len(new_hint):
             return False
-            
+
         return all(iscompatible_hint(oh, nh) for oh, nh in zip(old_hint, new_hint))
     return False
 
@@ -327,11 +327,10 @@ class Code:
         new_call_value = ()
         # for old_value, old_hint in zip(old_call.value, old_hints):
         for i, old_value in enumerate(old_call.value):
-            old_hint = old_hints[i - 1]    
-
-            if isinstance(old_hint, str) and re.match(r'^[a-z]$', old_hint):
-                print_l(f'-- {old_func_name} - {old_call.value} - {old_call.hint}') if DO_PRINT else None
-                print_l(f'-- old_hint is {old_hint} for {old_call}') if DO_PRINT else None
+            # Hint structure: (arg1_type, arg2_type, ..., function_type)
+            # Value structure: ('function_name', 'arg1', 'arg2', ...)
+            # So: i=0 → function_type (last), i=1 → arg1_type (first), etc.
+            old_hint = old_hints[-1] if i == 0 else old_hints[i - 1]
 
             # TODO Values to deal with:
             # - T variables (t followed with digits)
