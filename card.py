@@ -938,36 +938,35 @@ class Differs:
         self.freeze_differs = freeze_differs
         self.init_equals = {}
 
-        all_list = { 'iz': [], 'zo': [] }
+        all_list = []
         differ_list = ['differs']
-        for score_type in ['iz', 'zo']:
-            file_list = []
-            weights = []
-            for task_id in task_ids:
-                differ_dir = f'differ_dir/{score_type}/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py'
-                file_paths = glob.glob(differ_dir)
-                if not file_paths:
-                    continue
-                random.shuffle(file_paths)
-                for file_path in file_paths:
-                    sections = file_path.split('/')
-                    s_score = int(sections[3])
-                    # t_score = int(sections[4])
+        file_list = []
+        weights = []
+        for task_id in task_ids:
+            differ_dir = f'differ_dir/solve_{task_id}/[0-9]*/[0-9]*/[0-9a-f]*.py'
+            file_paths = glob.glob(differ_dir)
+            if not file_paths:
+                continue
+            random.shuffle(file_paths)
+            for file_path in file_paths:
+                sections = file_path.split('/')
+                s_score = int(sections[2])
+                # t_score = int(sections[3])
 
-                    file_list.append(file_path)
-                    weights.append(s_score)
+                file_list.append(file_path)
+                weights.append(s_score)
 
-                if sum(weights) > 0:
-                    select_differ = random.choices(file_list, weights=weights, k=1)
-                else:
-                    select_differ = []
+            if sum(weights) > 0:
+                select_differ = random.choices(file_list, weights=weights, k=1)
+            else:
+                select_differ = []
 
-                # all_list += [f[:-3] for f in file_paths if f.endswith('.py')]
-                all_list[score_type] += [f[:-3] for f in select_differ if f.endswith('.py')]
+            # all_list += [f[:-3] for f in file_paths if f.endswith('.py')]
+            all_list += [f[:-3] for f in select_differ if f.endswith('.py')]
 
-            # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
-            add_list = random.sample(all_list[score_type], min(32, len(all_list[score_type])))
-            differ_list += add_list
+        # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
+        add_list = random.sample(all_list, min(32, len(all_list)))
+        differ_list += add_list
 
         # TODO Maybe adjust get_differs to get the best differs 
         self.differs = get_differs(differ_list, best_only=True)

@@ -48,7 +48,7 @@ import solvers_pre
 # import solvers_evo
 
 Solver = namedtuple('Solver', ['name', 'path', 'source', 'o_score', 't_score'])
-Differ = namedtuple('Differ', ['name', 'path', 'source', 'score_type', 's_score', 't_score'])
+Differ = namedtuple('Differ', ['name', 'path', 'source', 's_score', 't_score'])
 
 Mutation = namedtuple('Mutation', ['present', 'old', 'new'])
 HintValue = namedtuple('HintValue', ['hint', 'value'])
@@ -641,26 +641,26 @@ def get_differs(import_names, best_only=False):
             for name in dir(differ_module):
                 if name.startswith('differ_'):
                     differ = getattr(differ_module, name)
-                    differs[name] = Differ(name, imp_name, inspect.getsource(differ), None, 0, 999)
+                    differs[name] = Differ(name, imp_name, inspect.getsource(differ), 0, 999)
         else:
             # new_imp_name = f'differ_md5.{imp_name}'
             # differ_module = importlib.import_module(new_imp_name)
             # differ = getattr(differ_module, 'differ')
             # name = f'differ_{imp_name}'
-            # differs[name] = Differ(name, imp_name, inspect.getsource(differ), None, 0, 999)
+            # differs[name] = Differ(name, imp_name, inspect.getsource(differ), 0, 999)
 
             sections = imp_name.split('/')
-            score_type = sections[1]  # 'iz' or 'zo'
-            s_score = int(sections[3])
-            t_score = int(sections[4])
-            # solver_md5 = sections[5]
-            # differ_md5 = sections[6]
-            differ_md5 = sections[5]
+            # Updated path structure: differ_dir/solve_{task_id}/{s_score}/{t_score}/{md5}
+            s_score = int(sections[2])
+            t_score = int(sections[3])
+            # solver_md5 = sections[4]
+            # differ_md5 = sections[5]
+            differ_md5 = sections[4]
 
             differ_module = importlib.import_module(f'differ_md5.{differ_md5}')
             differ = getattr(differ_module, 'differ')
             name = f'differ_{differ_md5}'
-            differs[name] = Differ(name, differ_md5, inspect.getsource(differ), None, 0, 999)
+            differs[name] = Differ(name, differ_md5, inspect.getsource(differ), s_score, t_score)
 
     return differs
 

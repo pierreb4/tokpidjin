@@ -578,8 +578,7 @@ class D_Score:
         self.last_t = {}
 
     def update(self, solver_id, s_item):
-        # NOTE: Add whether it's iz or zo differ
-        # or just pick the best score?
+        # Updated for unified differ scoring with 0-1000 scale (matching solvers)
         last_t, s_solver_id, d_name, return_tuple = s_item
 
         # Keep track of last_t per differ
@@ -591,29 +590,33 @@ class D_Score:
         if d_name not in self.score[solver_id]:
             self.score[solver_id][d_name] = {
                 'last_t': self.last_t[d_name],
-                'iz': 0,
-                'zo': 0    
+                'score': 0
             }
         
-        # if not return_tuple.ok or type(return_tuple.t) != tuple or type(return_tuple.t[0]) != int:
-        # Check if return_tuple is valid: must be a tuple with at least one element, and first element must be int
-        if type(return_tuple) != tuple or len(return_tuple) == 0 or type(return_tuple[0]) != int:
+        # Check if return_tuple is valid: must be a tuple with at least 2 elements, both integers
+        if type(return_tuple) != tuple or len(return_tuple) < 2:
             return
-
-        # size = return_tuple.t[0]
-        size = return_tuple[0]
-
-        # Score for iz differ
-        if s_solver_id == 'None':
-            self.score[solver_id][d_name]['iz'] += size > 0
-        if s_solver_id == solver_id:
-            self.score[solver_id][d_name]['iz'] += size == 0
-
-        # Score for zo differ
-        if s_solver_id == 'None':
-            self.score[solver_id][d_name]['zo'] += size == 0
-        if s_solver_id == solver_id:
-            self.score[solver_id][d_name]['zo'] += size > 0
+        
+        if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
+            return
+        
+        # Convert differ tuple to 0-1000 score (like eval_match)
+        # For differ_exact_dims: (total_cells, matching_cells)
+        # Score = (matching_cells * 1000) // total_cells
+        total = return_tuple[0]
+        matching = return_tuple[1]
+        
+        if total <= 0:
+            return
+        
+        # Calculate score (0-1000 per sample, just like solvers)
+        sample_score = (matching * 1000) // total
+        
+        # Clamp to 0-1000 range for safety
+        sample_score = max(0, min(1000, sample_score))
+        
+        # Accumulate the score across samples
+        self.score[solver_id][d_name]['score'] += sample_score
 
 
 def score_sample(args):
@@ -1351,9 +1354,8 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     for o_solver_id in d_score.score.keys():
         for name in d_score.score[o_solver_id].keys():
             if name not in s_score:
-                s_score[name] = {'iz': S_Score(), 'zo': S_Score()}
-            for score_type in ['iz', 'zo']:
-                s_score[name][score_type].update(o_solver_id, d_score.score[o_solver_id][name][score_type])
+                s_score[name] = S_Score()
+            s_score[name].update(o_solver_id, d_score.score[o_solver_id][name]['score'])
     
     if prof is not None:
         prof['batt.score.consolidate'] = timer() - consolidate_start
@@ -1840,29 +1842,28 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         if not Path(differ_md5_path).exists():
             generate_expanded_content(inlined_source, differ_md5_path)
 
-        for score_type in ['iz', 'zo']:
-            # Differs aren't always scored
-            if name not in s_score:
-                continue
+        # Differs aren't always scored
+        if name not in s_score:
+            continue
 
-            task_s_score = s_score[name][score_type].get(sol_solver_id)
+        task_s_score = s_score[name].get(sol_solver_id)
 
-            differ_task = f'differ_dir/{score_type}/solve_{task_id}'
-            if check_save(differ_task, task_s_score, max_files):
-                continue
+        differ_task = f'differ_dir/solve_{task_id}'
+        if check_save(differ_task, task_s_score, max_files):
+            continue
 
-            # Use t_log from the corresponding solver
-            # Find the matching validated_data entry
-            t_log = 10  # default
-            for vdata in validated_data:
-                if vdata['sol_solver_id'] == sol_solver_id:
-                    t_log = vdata['t_log']
-                    break
-            
-            differ_score = f'differ_dir/{score_type}/solve_{task_id}/{task_s_score}/{t_log}'
-            ensure_dir(differ_score)
-            differ_link = f'{differ_score}/{md5_hash}.py'
-            symlink(differ_md5_path, differ_link)
+        # Use t_log from the corresponding solver
+        # Find the matching validated_data entry
+        t_log = 10  # default
+        for vdata in validated_data:
+            if vdata['sol_solver_id'] == sol_solver_id:
+                t_log = vdata['t_log']
+                break
+        
+        differ_score = f'differ_dir/solve_{task_id}/{task_s_score}/{t_log}'
+        ensure_dir(differ_score)
+        differ_link = f'{differ_score}/{md5_hash}.py'
+        symlink(differ_md5_path, differ_link)
     
     if prof is not None:
         phase4_process_time = timer() - process_start
