@@ -907,10 +907,6 @@ def main():
     # total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
     total_data = train_data
 
-    # # Rename 'train' samples 'demo' to avoid confusion with the 'train' dataset
-    # # So we have train/eval datasets and demo/test samples
-    # total_data['demo'] = total_data.pop('train')
-    
     if args.task_id is not None:
         task_id = args.task_id
         solvers_module = None
@@ -922,8 +918,6 @@ def main():
         except Exception as e:
             print(f"Error loading solver module {args.solvers}: {e}")
             return
-    # else:
-    #     solvers_module = solvers_pre
 
     if args.check_dsl:
         run_dsl_tests(dsl, tests, args.quiet)
