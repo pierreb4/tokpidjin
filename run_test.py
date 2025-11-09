@@ -896,16 +896,22 @@ def main():
     parser.add_argument("--update", help="Update solvers.py with successful patches", action="store_true")
     parser.add_argument("--validate-solver-dir", help="Validate solver_dir links - check if path score matches actual performance", action="store_true")
     parser.add_argument("--cleanup", help="Actually remove mismatched solver links (use with --validate-solver-dir)", action="store_true")
+    parser.add_argument("--data", help="Data to use: 'train', 'eval', or 'both' (default: train)", 
+                        type=str, default='train', choices=['train', 'eval', 'both'])
     args = parser.parse_args()
 
     logging.basicConfig(filename='run_test.log', level=logging.INFO,
                         format='%(levelname)s:%(name)s:%(message)s')
 
-    # data = get_data(train=True)
-    train_data = get_data(train=True)
-    eval_data = get_data(train=False)
-    # total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
-    total_data = train_data
+    # Load data based on --data argument
+    if args.data == 'train':
+        total_data = get_data(train=True)
+    elif args.data == 'eval':
+        total_data = get_data(train=False)
+    else:  # args.data == 'both'
+        train_data = get_data(train=True)
+        eval_data = get_data(train=False)
+        total_data = {k: {**train_data[k], **eval_data[k]} for k in train_data.keys()}
 
     if args.task_id is not None:
         task_id = args.task_id

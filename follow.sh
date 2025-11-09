@@ -3,7 +3,7 @@
 # Default values
 INTERVAL=60
 CLEANUP="rm run_test.log"
-DEFAULT="python run_test.py -q"
+DEFAULT="python run_test.py -q --data both"
 CMD="$DEFAULT"
 QUIET=false
 
