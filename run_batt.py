@@ -1931,7 +1931,7 @@ def pick_rnd_task(task_list, total_data):
     return [task_id]
 
 
-async def main_mega_batch(do_list, start=0, count=0, batch_size=1000, batt_module_name='batt', enable_timing=False):
+async def main_mega_batch(do_list, start=0, count=0, batch_size=1000, batt_module_name='batt', enable_timing=False, data='train'):
     """
     Mega-batch mode: Process all tasks using GPU batch optimization.
     
@@ -1951,9 +1951,15 @@ async def main_mega_batch(do_list, start=0, count=0, batch_size=1000, batt_modul
     
     start_time = timer()
     
-    # Load data
-    train_data = get_data(train=True, sort_by_size=True)
-    total_data = train_data
+    # Load data based on data argument
+    if data == 'train':
+        total_data = get_data(train=True, sort_by_size=True)
+    elif data == 'eval':
+        total_data = get_data(train=False, sort_by_size=True)
+    else:  # data == 'both'
+        train_data = get_data(train=True, sort_by_size=True)
+        eval_data = get_data(train=False, sort_by_size=True)
+        total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
     
     # Determine task list
     full_list = list(total_data['demo'].keys())
@@ -2021,11 +2027,16 @@ async def main_mega_batch(do_list, start=0, count=0, batch_size=1000, batt_modul
     return results
 
 
-async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None, batt_module_name='batt'):
-    train_data = get_data(train=True, sort_by_size=True)
-    # eval_data = get_data(train=False, sort_by_size=True)
-    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
-    total_data = train_data
+async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profile=None, batt_module_name='batt', data='train'):
+    # Load data based on data argument
+    if data == 'train':
+        total_data = get_data(train=True, sort_by_size=True)
+    elif data == 'eval':
+        total_data = get_data(train=False, sort_by_size=True)
+    else:  # data == 'both'
+        train_data = get_data(train=True, sort_by_size=True)
+        eval_data = get_data(train=False, sort_by_size=True)
+        total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
 
     # NOTE We could have a task list just for unsolved tasks
     full_list = list(total_data['demo'].keys())
@@ -2104,6 +2115,8 @@ if __name__ == "__main__":
     parser.add_argument('--cprofile-top', type=int, default=30, help='Number of top functions to show in cProfile')
     parser.add_argument('--mega-batch', action='store_true', help='Use mega-batch GPU processing (4000+ samples)')
     parser.add_argument('--batch-size', type=int, default=1000, help='Batch size for mega-batch mode (default: 1000)')
+    parser.add_argument('--data', help="Data to use: 'train', 'eval', or 'both' (default: train)", 
+                        type=str, default='train', choices=['train', 'eval', 'both'])
     args = parser.parse_args()
 
     # Choose execution mode
@@ -2116,7 +2129,8 @@ if __name__ == "__main__":
             count=args.count,
             batch_size=args.batch_size,
             batt_module_name=args.batt_import,
-            enable_timing=args.timing
+            enable_timing=args.timing,
+            data=args.data
         ))
     else:
         # Standard mode: Load batt module for traditional processing
@@ -2142,7 +2156,7 @@ if __name__ == "__main__":
             import cProfile, pstats, io
             pr = cProfile.Profile()
             pr.enable()
-            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing, batt_module_name=args.batt_import))
+            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing, batt_module_name=args.batt_import, data=args.data))
             pr.disable()
             s = io.StringIO()
             ps = pstats.Stats(pr, stream=s).sort_stats('cumulative')
@@ -2155,4 +2169,4 @@ if __name__ == "__main__":
             print('\n[cProfile tottime top]')
             print(s.getvalue())
         else:
-            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing, batt_module_name=args.batt_import))
+            asyncio.run(main(do_list=args.task_ids, start=args.start, count=args.count, timeout=args.timeout, enable_timing=args.timing, batt_module_name=args.batt_import, data=args.data))
