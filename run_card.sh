@@ -149,8 +149,8 @@ while date && [ $STOP -eq 0 ]; do
     find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
 
     # Generate batt with GPU support if enabled
-    echo "Generating batt: python card.py $CARD_OPTION -c 32 $CARD_GPU_ARGS -f ${TMPBATT}_run.py"
-    python card.py $CARD_OPTION -c 32 $CARD_GPU_ARGS -f ${TMPBATT}_run.py
+    echo "Generating batt: python card.py --data both $CARD_OPTION -c 32 $CARD_GPU_ARGS -f ${TMPBATT}_run.py"
+    python card.py --data both $CARD_OPTION -c 32 $CARD_GPU_ARGS -f ${TMPBATT}_run.py
     unset CARD_OPTION
 
     # Pick a random timeout between 0.1 and 0.5 * TIMEOUT

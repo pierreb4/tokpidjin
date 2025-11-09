@@ -1120,11 +1120,16 @@ def add_solver_line(equals, code, uses, task_id=None, freeze_solvers=False):
     return old_name == 'O'
 
 
-def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt_file_name='batt.py', vectorized=False):
-    train_data = get_data(train=True, sort_by_size=True)
-    # eval_data = get_data(train=False, sort_by_size=True)
-    # total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
-    total_data = train_data
+def main(count=0, task_id=None, freeze_solvers=False, freeze_differs=False, batt_file_name='batt.py', vectorized=False, data='train'):
+    # Load data based on data argument
+    if data == 'train':
+        total_data = get_data(train=True, sort_by_size=True)
+    elif data == 'eval':
+        total_data = get_data(train=False, sort_by_size=True)
+    else:  # data == 'both'
+        train_data = get_data(train=True, sort_by_size=True)
+        eval_data = get_data(train=False, sort_by_size=True)
+        total_data = {k: {**train_data[k], **eval_data[k]} for k in ['demo', 'test']}
 
     # Get one of best solvers if not mutating (while running main.py for instance)
     all_solvers = get_solvers([solvers_dir], best_only=freeze_solvers)
@@ -1274,10 +1279,12 @@ if __name__ == "__main__":
                         help="File name to write the batt code to (default: batt.py)")
     parser.add_argument("--vectorized", action="store_true",
                         help="Generate vectorized batch-friendly version (GPU-optimized, no try/except)")
+    parser.add_argument("--data", help="Data to use: 'train', 'eval', or 'both' (default: train)", 
+                        type=str, default='train', choices=['train', 'eval', 'both'])
     args = parser.parse_args()
 
     # differs = Differs(freeze_differs=args.freeze_differs)
     differs = None
 
-    main(args.count, args.task_id, args.freeze_solvers, args.freeze_differs, args.file_name, args.vectorized)
+    main(args.count, args.task_id, args.freeze_solvers, args.freeze_differs, args.file_name, args.vectorized, args.data)
 
