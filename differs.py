@@ -154,3 +154,23 @@ def differ_f4a4346405e974b919a4b5a52f28e40c(S, I, C):
 # XXX Put picker bits in card.py
 #     together with substitute funcs
 
+
+def differ_2e60be2014891e3e081089061ca48033(S, I, C):
+    """
+    Count matching cells when dimensions match (Tier 2 scoring).
+    Returns (total_cells, matching_cells).
+    """
+    x1 = cellwise(I, C, NEG_ONE)   # Matches keep original, non-matches = -1
+    x2 = f_ofcolor(x1, NEG_ONE)    # Get indices of non-matching cells
+    x3 = size(x2)                  # Count non-matching cells
+    x4 = height_t(I)               # Grid height
+    x5 = width_t(I)                # Grid width
+    x6 = multiply(x4, x5)          # Total cells
+    x7 = subtract(x6, x3)          # Matching cells = total - non-matching
+    x8 = astuple(x6, x7)           # (total_cells, matching_cells)
+    return x8
+
+
+# Alias for readability
+differ_exact_dims = differ_2e60be2014891e3e081089061ca48033
+

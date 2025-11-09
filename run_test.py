@@ -40,6 +40,7 @@ from grid import *
 from utils import *
 from dsl import *
 from constants import *
+from differs import differ_exact_dims
 
 # Debug flag for validation and score detection messages
 # Set to False to suppress timeout and mismatch warnings
@@ -77,9 +78,14 @@ def get_functions(path):
     return functions
 
 
-def eval_match(C, O):
+def eval_match(S, C, O):
     """
     Evaluate match between computed output C and expected output O using a tiered scoring system.
+    
+    Args:
+        S: Sample pairs (tuple of (input, output) tuples) for differ context
+        C: Computed output grid
+        O: Expected output grid (ground truth)
     
     Grid size range: 1x1 to 30x30 (from ARC dataset specification)
     
@@ -139,24 +145,14 @@ def eval_match(C, O):
 
         # Tier 2: Dimensions match exactly
         if C_height == O_height and C_width == O_width:
+            # Use differ function to count matching cells
+            # Returns (total_cells, matching_cells)
+            total_cells, matching_cells = differ_exact_dims(S, O, C)
+            
             # Base score: 100 points for matching dimensions
-            score = 100
-            total_cells = C_height * C_width
-
-            # Count matching cells
-            matching_cells = 0
-            for i in range(C_height):
-                for j in range(C_width):
-                    try:
-                        if C_arr[i, j] == O_arr[i, j]:
-                            matching_cells += 1
-                    except Exception:
-                        pass
-
             # Add points based on accuracy percentage (0-900 additional points)
-            # Cell accuracy formula avoids making 1/100 match look as good as 50/100
             accuracy_points = (matching_cells * 900) // total_cells if total_cells > 0 else 0
-            score += accuracy_points
+            score = 100 + accuracy_points
 
             return perfect_match, score
 
@@ -301,7 +297,7 @@ async def check_solver(data, solver, task_id, sol_solver_id, timeout=30):
                     print_l(f'Timed out: {sol_solver_id =} - {task_id =} - sample = {i}')
                 timed_out = True
             else:
-                _, score = eval_match(result, sample['output'])
+                _, score = eval_match(S, result, sample['output'])
                 score_count += score
         except:
             pass  # Errors count as incorrect
@@ -330,7 +326,7 @@ async def check_solvers_pre(data, task_id, timeout=10):
                     # print_l(f'Solver for {task_id} timed out on sample {i}')
                     timeouts += 1
                 else:
-                    _, score = eval_match(result, sample['output'])
+                    _, score = eval_match(S, result, sample['output'])
                     # print_l(f'Solver for {task_id} correct on sample {i}: {result =}')
                     score_count += score
             except (asyncio.CancelledError, KeyboardInterrupt):

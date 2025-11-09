@@ -650,7 +650,7 @@ def score_sample(args):
         # Score outputs and collect matching solver ids
         for t_n, evo, o_solver_id, okt in sample_o:
             C = okt
-            match, score = eval_match(C, O)
+            match, score = eval_match(S, C, O)
             score_count += score
             if match and DO_PRINT:
                 print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
@@ -1282,7 +1282,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
-            _, score = eval_match(C, O)
+            _, score = eval_match(S, C, O)
             o_score.update(o_solver_id, score)
         if prof is not None:
             prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
@@ -1325,7 +1325,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
-            _, score = eval_match(C, O)
+            _, score = eval_match(S, C, O)
             o_score.update(o_solver_id, score)
         if prof is not None:
             prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
