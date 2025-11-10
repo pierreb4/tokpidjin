@@ -91,6 +91,9 @@ def profile_task(task_id, total_data, timeout=60.0):
     d_score = D_Score()
     start_time = timer()
     
+    # Inject t_call into run_batt module's namespace (needed by track_solution)
+    run_batt.t_call = t_call
+    
     try:
         # Run with profiling enabled
         timed_out = run_batt.asyncio.run(
