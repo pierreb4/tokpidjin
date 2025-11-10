@@ -48,6 +48,11 @@ if [ -n "$INITIAL" ]; then
   echo "Clearing cache..."
   python cache_manage.py clear
 
+  # Remove stale __pycache__ files (prevents "No module named 'fluff'" type errors)
+  echo "Cleaning stale __pycache__..."
+  rm -rf __pycache__
+  find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+
   rm -rf solver_dir solver_md5 solver_def
   mkdir solver_dir solver_md5 solver_def
   rm -rf differ_dir differ_md5 differ_def
