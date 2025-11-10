@@ -49,6 +49,11 @@ if [ -n "$INITIAL" ]; then
   mkdir differ_dir differ_md5 differ_def
   rm -f main.log  # Added -f flag to ignore if file doesn't exist
   
+  # Reset telemetry logs to prevent unlimited accumulation
+  echo "Resetting telemetry logs..."
+  rm -f logs/inlining_telemetry.jsonl
+  rm -f logs/run_batt_timing_stats.jsonl
+  
   # Gets unset for ONERUN
   # CARD_OPTION="-fs -fd"
   CARD_OPTION="-fd"
@@ -76,7 +81,7 @@ if [ -z "$COUNT" ]; then
 fi
 
 if [ -z "$TIMEOUT" ]; then
-  TIMEOUT=10.0
+  TIMEOUT=15.0
 fi
 
 # Determine GPU mode

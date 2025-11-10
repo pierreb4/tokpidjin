@@ -297,7 +297,8 @@ _inlining_stats = {
     'timeout_retry_success': 0,  # Succeeded by skipping inlining
     'timeout_retry_fail': 0,      # Failed even after retry
     'other_errors': 0,
-    'success_count': 0
+    'success_count': 0,
+    'retry_time_ms': 0.0           # Total time spent in retry operations
 }
 _inlining_stats_lock = threading.Lock()
 
@@ -331,6 +332,7 @@ def _print_inlining_summary():
         retry_fail = _inlining_stats['timeout_retry_fail']
         errors = _inlining_stats['other_errors']
         success = _inlining_stats['success_count']
+        retry_time_ms = _inlining_stats['retry_time_ms']
     
     if total == 0:
         return
@@ -342,6 +344,8 @@ def _print_inlining_summary():
     if timeouts > 0:
         print_l(f"  → Retry success (raw source): {retry_success} ({100*retry_success/timeouts:.1f}% of timeouts)")
         print_l(f"  → Retry fail: {retry_fail} ({100*retry_fail/timeouts:.1f}% of timeouts)")
+        avg_retry_time = retry_time_ms / (retry_success + retry_fail) if (retry_success + retry_fail) > 0 else 0
+        print_l(f"  → Total retry time: {retry_time_ms:.1f}ms (avg {avg_retry_time:.2f}ms per retry)")
     print_l(f"Other errors: {errors} ({100*errors/total:.1f}%)")
     print_l("=" * 30)
 
@@ -1615,16 +1619,21 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                     print_l(f"TIMEOUT: Inlining timeout for task_id={task_id} solver_id={sol_solver_id}")
                     print_l(f"  → Retrying with raw source (skip inlining)")
                 
-                # Retry: Skip inlining and use raw source
+                # Retry: Skip inlining and use raw source (with timing)
+                retry_start = time.time()
                 try:
                     raw_source = data['solver_source']
                     md5 = hashlib.md5(raw_source.encode()).hexdigest()
+                    retry_time_ms = (time.time() - retry_start) * 1000
                     with _inlining_stats_lock:
                         _inlining_stats['timeout_retry_success'] += 1
+                        _inlining_stats['retry_time_ms'] += retry_time_ms
                     return {**data, 'inlined_source': raw_source, 'md5_hash': md5}
                 except Exception as retry_error:
+                    retry_time_ms = (time.time() - retry_start) * 1000
                     with _inlining_stats_lock:
                         _inlining_stats['timeout_retry_fail'] += 1
+                        _inlining_stats['retry_time_ms'] += retry_time_ms
                     print_l(f"ERROR: Retry failed for task_id={task_id} solver_id={sol_solver_id}: {retry_error}")
                     return None
             
@@ -1909,16 +1918,21 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                     print_l(f"TIMEOUT: Inlining timeout for differ {differ_name}")
                     print_l(f"  → Retrying with raw source (skip inlining)")
                 
-                # Retry: Skip inlining and use raw source
+                # Retry: Skip inlining and use raw source (with timing)
+                retry_start = time.time()
                 try:
                     raw_source = data['differ_source']
                     md5 = hashlib.md5(raw_source.encode()).hexdigest()
+                    retry_time_ms = (time.time() - retry_start) * 1000
                     with _inlining_stats_lock:
                         _inlining_stats['timeout_retry_success'] += 1
+                        _inlining_stats['retry_time_ms'] += retry_time_ms
                     return {**data, 'inlined_source': raw_source, 'md5_hash': md5}
                 except Exception as retry_error:
+                    retry_time_ms = (time.time() - retry_start) * 1000
                     with _inlining_stats_lock:
                         _inlining_stats['timeout_retry_fail'] += 1
+                        _inlining_stats['retry_time_ms'] += retry_time_ms
                     print_l(f"ERROR: Retry failed for differ {differ_name}: {retry_error}")
                     return None
             
