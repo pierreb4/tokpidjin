@@ -102,7 +102,7 @@ def profile_task(task_id, total_data, timeout=60.0):
                 pile_log_path='pile.log',
                 timeout=timeout,
                 prof=prof,
-                batt_module_name='batt',
+                batt_module_name='tmp_batt_onerun_run',
                 batch_accumulator=None
             )
         )
