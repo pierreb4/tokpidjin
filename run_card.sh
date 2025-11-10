@@ -42,7 +42,12 @@ done
 shift $((OPTIND -1))
 
 if [ -n "$INITIAL" ]; then
-  echo "Initial run - removing old solvers"
+  echo "Initial run - removing old data"
+
+  # Clear cache for fresh start
+  echo "Clearing cache..."
+  python cache_manage.py clear
+
   rm -rf solver_dir solver_md5 solver_def
   mkdir solver_dir solver_md5 solver_def
   rm -rf differ_dir differ_md5 differ_def
@@ -58,10 +63,6 @@ if [ -n "$INITIAL" ]; then
   # CARD_OPTION="-fs -fd"
   CARD_OPTION="-fd"
 
-  # Clear cache for fresh start
-  echo "Clearing cache..."
-  python cache_manage.py clear
-  
   # Prepare solver_dir
   python prep_solver_dir.py
 
