@@ -615,8 +615,12 @@ class D_Score:
         # Clamp to 0-1000 range for safety
         sample_score = max(0, min(1000, sample_score))
         
-        # Accumulate the score across samples
-        self.score[solver_id][d_name]['score'] += sample_score
+        # Accumulate the score across samples, taking into account
+        # score improvement from 'None' to actual solver
+        if s_solver_id == 'None':
+            self.score[solver_id][d_name]['score'] += 1000 - sample_score
+        if s_solver_id == solver_id:
+            self.score[solver_id][d_name]['score'] += sample_score
 
 
 def score_sample(args):
