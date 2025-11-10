@@ -2015,7 +2015,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     
     # Week 6E: Log and print inlining telemetry
     _log_inlining_stats()
-    if DO_PRINT:
+    if DO_DEBUG:
         _print_inlining_summary()
     
     # Phase 2b: Flush batch accumulator
