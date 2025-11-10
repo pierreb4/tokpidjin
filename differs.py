@@ -6,7 +6,7 @@ from dsl import *
 # in run, initially I, but then any grid in t_n
 
 # def differ_p_g_iz:
-def differ_fc9e44c913711da609a9e25126b4b296(S, I, C):
+def differ_3f0ddb7d879771cea3fd76b3efe1f81a(S, I, C):
     x1 = identity(p_g)
     x2 = x1(I)
     x3 = x1(C)
@@ -20,7 +20,7 @@ def differ_fc9e44c913711da609a9e25126b4b296(S, I, C):
 
 
 # def differ_p_g_zo:
-def differ_c59e6ae069a9205b311cf67a15473d64(S, I, C):
+def differ_24bc869480a2b6e94edb36dde31aa952(S, I, C):
     x1 = identity(p_g)
     x2 = x1(I)
     x3 = x1(C)
@@ -33,7 +33,7 @@ def differ_c59e6ae069a9205b311cf67a15473d64(S, I, C):
 
 
 # def differ_o_g_size_iz:
-def differ_d50e4f6db9fab7b53f413af7de3a35da(S, I, C):
+def differ_c1c647c98b030d4e84ceab659a625a86(S, I, C):
     x1 = rbind(o_g, R5)
     x2 = x1(I)
     x3 = x1(C)
@@ -42,13 +42,15 @@ def differ_d50e4f6db9fab7b53f413af7de3a35da(S, I, C):
     x6 = x4(x3)
     x7 = difference(x5, x6)
     x8 = size(x7)
-    x9 = get_nth_f(x7, F0)
-    x10 = astuple(x8, x9)
-    return x10
+    x9 = multiply(x8, HUNDRED)
+    x10 = subtract(THOUSAND, x9)
+    x11 = get_nth_f(x7, F0)
+    x12 = astuple(x10, x11)
+    return x12
 
 
 # def differ_o_g_size_zo:
-def differ_f4a4346405e974b919a4b5a52f28e40c(S, I, C):
+def differ_d94712356774eb0ee744182d98e136ae(S, I, C):
     x1 = rbind(o_g, R5)
     x2 = x1(I)
     x3 = x1(C)
@@ -57,9 +59,10 @@ def differ_f4a4346405e974b919a4b5a52f28e40c(S, I, C):
     x6 = x4(x3)
     x7 = difference(x6, x5)
     x8 = size(x7)
-    x9 = get_nth_f(x7, F0)
-    x10 = astuple(x8, x9)
-    return x10
+    x9 = multiply(x8, HUNDRED)
+    x10 = get_nth_f(x7, F0)
+    x11 = astuple(x9, x10)
+    return x11
 
 
 # TODO Write more like these
