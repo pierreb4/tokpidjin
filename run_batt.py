@@ -290,6 +290,61 @@ def _safe_map_with_timeout(executor, func, items, timeout_per_item=0.5, operatio
     
     return results
 
+# Inlining telemetry tracking (Week 6E)
+_inlining_stats = {
+    'total_attempts': 0,
+    'timeout_count': 0,
+    'timeout_retry_success': 0,  # Succeeded by skipping inlining
+    'timeout_retry_fail': 0,      # Failed even after retry
+    'other_errors': 0,
+    'success_count': 0
+}
+_inlining_stats_lock = threading.Lock()
+
+def _log_inlining_stats():
+    """Log inlining statistics to file for analysis"""
+    stats_file = Path('logs/inlining_telemetry.jsonl')
+    stats_file.parent.mkdir(parents=True, exist_ok=True)
+    
+    with _inlining_stats_lock:
+        stats_copy = _inlining_stats.copy()
+    
+    from datetime import datetime
+    stats_entry = {
+        'timestamp': datetime.now().isoformat(),
+        **stats_copy
+    }
+    
+    try:
+        with open(stats_file, 'a') as f:
+            import json
+            f.write(json.dumps(stats_entry) + '\n')
+    except Exception as e:
+        print_l(f"Warning: Could not log inlining stats: {e}")
+
+def _print_inlining_summary():
+    """Print inlining statistics summary"""
+    with _inlining_stats_lock:
+        total = _inlining_stats['total_attempts']
+        timeouts = _inlining_stats['timeout_count']
+        retry_success = _inlining_stats['timeout_retry_success']
+        retry_fail = _inlining_stats['timeout_retry_fail']
+        errors = _inlining_stats['other_errors']
+        success = _inlining_stats['success_count']
+    
+    if total == 0:
+        return
+    
+    print_l("\n=== INLINING TELEMETRY ===")
+    print_l(f"Total attempts: {total}")
+    print_l(f"Success (first try): {success} ({100*success/total:.1f}%)")
+    print_l(f"Timeouts: {timeouts} ({100*timeouts/total:.1f}%)")
+    if timeouts > 0:
+        print_l(f"  → Retry success (raw source): {retry_success} ({100*retry_success/timeouts:.1f}% of timeouts)")
+        print_l(f"  → Retry fail: {retry_fail} ({100*retry_fail/timeouts:.1f}% of timeouts)")
+    print_l(f"Other errors: {errors} ({100*errors/total:.1f}%)")
+    print_l("=" * 30)
+
 class GPUBatchProcessor:
     """
     Batch processor optimized for Kaggle GPUs (T4x2, P100, L4x4)
@@ -1515,6 +1570,10 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         if SKIP_INLINING:
             return {**data, 'inlined_source': data['solver_source'], 'md5_hash': 'disabled'}
         
+        # Week 6E: Telemetry tracking
+        with _inlining_stats_lock:
+            _inlining_stats['total_attempts'] += 1
+        
         try:
             # Use cached version for 2x speedup on warm cache
             inlined = cached_inline_variables(inline_variables, data['solver_source'])
@@ -1524,15 +1583,21 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 task_id = data.get('task_id', 'unknown')
                 sol_solver_id = data.get('sol_solver_id', 'unknown')
                 print_l(f"ERROR: inline_variables returned None for task_id={task_id} solver_id={sol_solver_id}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
                 return None
             
             if not isinstance(inlined, str):
                 task_id = data.get('task_id', 'unknown')
                 sol_solver_id = data.get('sol_solver_id', 'unknown')
                 print_l(f"ERROR: inline_variables returned {type(inlined).__name__} instead of str for task_id={task_id} solver_id={sol_solver_id}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
                 return None
             
             md5 = hashlib.md5(inlined.encode()).hexdigest()
+            with _inlining_stats_lock:
+                _inlining_stats['success_count'] += 1
             return {**data, 'inlined_source': inlined, 'md5_hash': md5}
         except ValueError as e:
             # Handle ValueError from cached_inline_variables wrapper
@@ -1541,11 +1606,37 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             candidate = data.get('candidate', 'unknown')
             error_msg = str(e)
             
+            # Check for timeout - this is the adaptive retry case
+            if "timed out after" in error_msg:
+                with _inlining_stats_lock:
+                    _inlining_stats['timeout_count'] += 1
+                
+                if DEBUG_VALIDATION and DO_PRINT:
+                    print_l(f"TIMEOUT: Inlining timeout for task_id={task_id} solver_id={sol_solver_id}")
+                    print_l(f"  → Retrying with raw source (skip inlining)")
+                
+                # Retry: Skip inlining and use raw source
+                try:
+                    raw_source = data['solver_source']
+                    md5 = hashlib.md5(raw_source.encode()).hexdigest()
+                    with _inlining_stats_lock:
+                        _inlining_stats['timeout_retry_success'] += 1
+                    return {**data, 'inlined_source': raw_source, 'md5_hash': md5}
+                except Exception as retry_error:
+                    with _inlining_stats_lock:
+                        _inlining_stats['timeout_retry_fail'] += 1
+                    print_l(f"ERROR: Retry failed for task_id={task_id} solver_id={sol_solver_id}: {retry_error}")
+                    return None
+            
             # Check for the specific "error return without exception set" error
-            if "error return without exception set" in error_msg:
+            elif "error return without exception set" in error_msg:
                 print_l(f"SKIP: Inlining failed with AST error for task_id={task_id} solver_id={sol_solver_id}: {error_msg}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
             else:
                 print_l(f"Error inlining task_id={task_id} solver_id={sol_solver_id} candidate={candidate}: ValueError: {e}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
             return None
         except Exception as e:
             # Provide context about which solver failed
@@ -1554,6 +1645,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             candidate = data.get('candidate', 'unknown')
             error_type = type(e).__name__
             print_l(f"Error inlining task_id={task_id} solver_id={sol_solver_id} candidate={candidate}: {error_type}: {e}")
+            with _inlining_stats_lock:
+                _inlining_stats['other_errors'] += 1
             return None
     
     # Use thread pool for parallel inlining
@@ -1777,6 +1870,10 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         if SKIP_INLINING:
             return {**data, 'inlined_source': data['differ_source'], 'md5_hash': 'disabled'}
         
+        # Week 6E: Telemetry tracking
+        with _inlining_stats_lock:
+            _inlining_stats['total_attempts'] += 1
+        
         try:
             # Use cached version for 2x speedup on warm cache
             inlined = cached_inline_variables(inline_variables, data['differ_source'])
@@ -1784,29 +1881,63 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             # Defensive check - ensure we got a string back
             if inlined is None:
                 print_l(f"ERROR: inline_variables returned None for differ {data.get('name', 'unknown')}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
                 return None
             
             if not isinstance(inlined, str):
                 print_l(f"ERROR: inline_variables returned {type(inlined).__name__} instead of str for differ {data.get('name', 'unknown')}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
                 return None
             
             md5 = hashlib.md5(inlined.encode()).hexdigest()
+            with _inlining_stats_lock:
+                _inlining_stats['success_count'] += 1
             return {**data, 'inlined_source': inlined, 'md5_hash': md5}
         except ValueError as e:
             # Handle ValueError from cached_inline_variables wrapper
             differ_name = data.get('name', 'unknown')
             error_msg = str(e)
             
+            # Check for timeout - this is the adaptive retry case
+            if "timed out after" in error_msg:
+                with _inlining_stats_lock:
+                    _inlining_stats['timeout_count'] += 1
+                
+                if DEBUG_VALIDATION and DO_PRINT:
+                    print_l(f"TIMEOUT: Inlining timeout for differ {differ_name}")
+                    print_l(f"  → Retrying with raw source (skip inlining)")
+                
+                # Retry: Skip inlining and use raw source
+                try:
+                    raw_source = data['differ_source']
+                    md5 = hashlib.md5(raw_source.encode()).hexdigest()
+                    with _inlining_stats_lock:
+                        _inlining_stats['timeout_retry_success'] += 1
+                    return {**data, 'inlined_source': raw_source, 'md5_hash': md5}
+                except Exception as retry_error:
+                    with _inlining_stats_lock:
+                        _inlining_stats['timeout_retry_fail'] += 1
+                    print_l(f"ERROR: Retry failed for differ {differ_name}: {retry_error}")
+                    return None
+            
             # Check for the specific "error return without exception set" error
-            if "error return without exception set" in error_msg:
+            elif "error return without exception set" in error_msg:
                 print_l(f"SKIP: Inlining differ failed with AST error for {differ_name}: {error_msg}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
             else:
                 print_l(f"Error inlining differ {differ_name}: ValueError: {e}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
             return None
         except Exception as e:
             error_type = type(e).__name__
             differ_name = data.get('name', 'unknown')
             print_l(f"Error inlining differ {differ_name}: {error_type}: {e}")
+            with _inlining_stats_lock:
+                _inlining_stats['other_errors'] += 1
             return None
     
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion  
@@ -1881,6 +2012,11 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     execution_time = timer() - run_batt_start
     _log_execution_stats(task_id, execution_time, error_type=None, 
                        error_msg=None, timeout_value=timeout)
+    
+    # Week 6E: Log and print inlining telemetry
+    _log_inlining_stats()
+    if DO_PRINT:
+        _print_inlining_summary()
     
     # Phase 2b: Flush batch accumulator
     if batch_accumulator:
