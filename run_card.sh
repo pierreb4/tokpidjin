@@ -82,7 +82,7 @@ if [ -z "$COUNT" ]; then
 fi
 
 if [ -z "$TIMEOUT" ]; then
-  TIMEOUT=15.0
+  TIMEOUT=20.0
 fi
 
 # Determine GPU mode
