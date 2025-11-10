@@ -333,6 +333,7 @@ def _print_inlining_summary():
         errors = _inlining_stats['other_errors']
         success = _inlining_stats['success_count']
         retry_time_ms = _inlining_stats['retry_time_ms']
+        error_types = _inlining_stats.get('error_types', {})
     
     if total == 0:
         return
@@ -347,6 +348,13 @@ def _print_inlining_summary():
         avg_retry_time = retry_time_ms / (retry_success + retry_fail) if (retry_success + retry_fail) > 0 else 0
         print_l(f"  → Total retry time: {retry_time_ms:.1f}ms (avg {avg_retry_time:.2f}ms per retry)")
     print_l(f"Other errors: {errors} ({100*errors/total:.1f}%)")
+    
+    # Print error type breakdown if errors occurred
+    if error_types:
+        print_l("Error breakdown:")
+        for error_key, count in sorted(error_types.items(), key=lambda x: -x[1]):
+            print_l(f"  → {error_key}: {count} ({100*count/errors:.1f}% of errors)")
+    
     print_l("=" * 30)
 
 class GPUBatchProcessor:
@@ -1941,17 +1949,32 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 print_l(f"SKIP: Inlining differ failed with AST error for {differ_name}: {error_msg}")
                 with _inlining_stats_lock:
                     _inlining_stats['other_errors'] += 1
+                    # Track specific error types
+                    _inlining_stats.setdefault('error_types', {})
+                    _inlining_stats['error_types'].setdefault('ast_error', 0)
+                    _inlining_stats['error_types']['ast_error'] += 1
             else:
                 print_l(f"Error inlining differ {differ_name}: ValueError: {e}")
                 with _inlining_stats_lock:
                     _inlining_stats['other_errors'] += 1
+                    # Track specific error types
+                    _inlining_stats.setdefault('error_types', {})
+                    error_key = 'thread_error' if "can't start new thread" in error_msg else 'other_value_error'
+                    _inlining_stats['error_types'].setdefault(error_key, 0)
+                    _inlining_stats['error_types'][error_key] += 1
             return None
         except Exception as e:
             error_type = type(e).__name__
             differ_name = data.get('name', 'unknown')
+            error_msg = str(e)
             print_l(f"Error inlining differ {differ_name}: {error_type}: {e}")
             with _inlining_stats_lock:
                 _inlining_stats['other_errors'] += 1
+                # Track specific error types
+                _inlining_stats.setdefault('error_types', {})
+                error_key = 'thread_error' if "can't start new thread" in error_msg else error_type.lower()
+                _inlining_stats['error_types'].setdefault(error_key, 0)
+                _inlining_stats['error_types'][error_key] += 1
             return None
     
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion  
@@ -2021,6 +2044,18 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         prof['run_batt.phase4_build'] = phase4_build_time
         prof['run_batt.phase4_inline'] = phase4_inline_time
         prof['run_batt.phase4_process'] = phase4_process_time
+        
+        # Add inlining error stats to profiling data
+        with _inlining_stats_lock:
+            if _inlining_stats.get('other_errors', 0) > 0:
+                prof['run_batt.inline_errors'] = _inlining_stats['other_errors']
+            if _inlining_stats.get('timeout_count', 0) > 0:
+                prof['run_batt.inline_timeouts'] = _inlining_stats['timeout_count']
+            
+            # Add breakdown by error type if available
+            error_types = _inlining_stats.get('error_types', {})
+            for error_key, count in error_types.items():
+                prof[f'run_batt.inline_error.{error_key}'] = count
 
     # Log successful execution stats for timeout optimization
     execution_time = timer() - run_batt_start
