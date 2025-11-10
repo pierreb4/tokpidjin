@@ -31,7 +31,7 @@ from timeit import default_timer as timer
 # Import from run_batt for profiling
 import run_batt
 from run_batt import get_data, run_batt as run_batt_func, D_Score
-import tmp_batt_onerun_run_call
+from tmp_batt_onerun_run_call import t_call
 
 
 # Outlier tasks to profile
