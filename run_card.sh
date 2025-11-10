@@ -177,6 +177,20 @@ while date && [ $STOP -eq 0 ]; do
     echo "Running: timeout -k 5s ${BATT_TIMEOUT}s python run_batt.py --data both -t $TIMEOUT -c $COUNT -b ${TMPBATT}_run $BATT_GPU_ARGS"
     timeout -k 5s ${BATT_TIMEOUT}s python -u run_batt.py --data both -t $TIMEOUT -c $COUNT \
         -b ${TMPBATT}_run $BATT_GPU_ARGS | tee ${TMPBATT}_run.log
+
+    # Print summary of run_batt.py results
+    echo ""
+    echo "=== RUN_BATT.PY SUMMARY ==="
+    if [ -f "${TMPBATT}_run.log" ]; then
+      # Extract inlining telemetry summary (last occurrence)
+      grep -A 6 "INLINING TELEMETRY" ${TMPBATT}_run.log | tail -7 || true
+      # Extract key performance metrics
+      grep -E "Processing|scored|Total time|Telemetry" ${TMPBATT}_run.log | tail -10 || true
+    else
+      echo "Log file not found: ${TMPBATT}_run.log"
+    fi
+    echo "==========================="
+    echo ""
   fi
 
   # Remove results that are too large (for now)
