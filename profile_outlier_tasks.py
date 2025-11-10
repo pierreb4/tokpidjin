@@ -113,17 +113,23 @@ def profile_task(task_id, total_data, timeout=60.0):
         
         total_time = timer() - start_time
         
+        # Handle run_batt return value (can be tuple or bool)
+        if isinstance(timed_out, tuple):
+            timed_out_flag = timed_out[0]
+        else:
+            timed_out_flag = timed_out
+        
         result = {
             'task_id': task_id,
             'total_time': total_time,
-            'timed_out': timed_out,
-            'success': not timed_out,
+            'timed_out': timed_out_flag,
+            'success': not timed_out_flag,
             'phase_times': dict(prof),
         }
         
         # Analyze phase breakdown
         print(f"\nTotal time: {total_time:.2f}s")
-        print(f"Timed out: {timed_out}")
+        print(f"Timed out: {timed_out_flag}")
         
         if prof:
             print(f"\nPhase breakdown:")
@@ -264,6 +270,19 @@ def main():
         'outlier_tasks': outlier_profiles,
         'reference_tasks': reference_profiles,
     }
+    
+    # Convert floats to ensure JSON serializable
+    def convert_to_serializable(obj):
+        if isinstance(obj, dict):
+            return {k: convert_to_serializable(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [convert_to_serializable(item) for item in obj]
+        elif isinstance(obj, (int, float, str, bool, type(None))):
+            return obj
+        else:
+            return str(obj)  # Convert any other type to string
+    
+    results = convert_to_serializable(results)
     
     with open(output_file, 'w') as f:
         json.dump(results, f, indent=2)
