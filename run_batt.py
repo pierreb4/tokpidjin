@@ -2263,8 +2263,8 @@ if __name__ == "__main__":
                         help='Number of tasks to run (default: 0 - all tasks)')
     parser.add_argument('-t', '--timeout', type=float, default=10,
                         help='Timeout for each task in seconds (default: 10)')
-    parser.add_argument('-b', '--batt_import', type=str, default='batt',
-                        help='Module to import for batt (default: batt)')
+    parser.add_argument('-b', '--batt_import', type=str, default='tmp_batt_onerun_run',
+                        help='Module to import for batt (default: tmp_batt_onerun_run)')
     parser.add_argument('--timing', action='store_true', help='Print lightweight timing breakdown')
     parser.add_argument('--cprofile', action='store_true', help='Run with cProfile and print top stats')
     parser.add_argument('--cprofile-top', type=int, default=30, help='Number of top functions to show in cProfile')
