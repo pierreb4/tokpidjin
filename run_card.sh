@@ -196,7 +196,7 @@ while date && [ $STOP -eq 0 ]; do
       # Extract inlining telemetry summary (last occurrence)
       grep -A 6 "INLINING TELEMETRY" ${TMPBATT}_run.log | tail -7 || true
       # Extract key performance metrics
-      grep -E "Processing|scored|Total time|Telemetry" ${TMPBATT}_run.log | tail -32 || true
+      grep -E "Processing|scored|Total time|Telemetry" ${TMPBATT}_run.log | tail -5 || true
     else
       echo "Log file not found: ${TMPBATT}_run.log"
     fi
