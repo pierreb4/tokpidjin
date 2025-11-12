@@ -298,19 +298,25 @@ def _safe_map_with_timeout(executor, func, items, timeout_per_item=0.5, operatio
                 raise
         
         # Collect chunk results with timeout
-        for future in as_completed(futures, timeout=timeout_per_item * len(futures)):
-            i, item = futures[future]
-            try:
-                result = future.result(timeout=timeout_per_item)
-                results[i] = result
-            except TimeoutError:
-                print_l(f"Warning: {operation_name} timed out after {timeout_per_item}s for item {i}")
-                results[i] = None
-            except Exception as e:
-                print_l(f"Warning: {operation_name} failed for item {i}: {type(e).__name__}: {e}")
-                results[i] = None
+        # Use try/except to catch TimeoutError from as_completed and continue with partial results
+        try:
+            for future in as_completed(futures, timeout=timeout_per_item * len(futures)):
+                i, item = futures[future]
+                try:
+                    result = future.result(timeout=timeout_per_item)
+                    results[i] = result
+                except TimeoutError:
+                    print_l(f"Warning: {operation_name} timed out after {timeout_per_item}s for item {i}")
+                    results[i] = None
+                except Exception as e:
+                    print_l(f"Warning: {operation_name} failed for item {i}: {type(e).__name__}: {e}")
+                    results[i] = None
+        except TimeoutError as e:
+            # Some futures didn't complete - collect what we have and mark rest as None
+            unfinished_count = str(e).split('(')[1].split(')')[0] if '(' in str(e) else 'unknown'
+            print_l(f"Warning: {operation_name} chunk timeout - {unfinished_count} futures unfinished, using partial results")
+            # Results for unfinished futures are already None (initialized above)
     
-    return results
     return results
 
 # Inlining telemetry tracking (Week 6E)
