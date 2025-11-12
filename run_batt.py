@@ -257,7 +257,7 @@ def _log_task_start(task_id, timeout_value):
 def _safe_map_with_timeout(executor, func, items, timeout_per_item=0.5, operation_name="operation"):
     """
     Safe version of executor.map() that doesn't hang on stuck tasks.
-    Uses submit() + as_completed() with per-item timeout.
+    Uses chunked submission to avoid thread exhaustion with large item lists.
     
     Args:
         executor: ThreadPoolExecutor or ProcessPoolExecutor
@@ -271,23 +271,46 @@ def _safe_map_with_timeout(executor, func, items, timeout_per_item=0.5, operatio
     """
     from concurrent.futures import as_completed
     
-    # Submit all tasks
-    futures = {executor.submit(func, item): (i, item) for i, item in enumerate(items)}
+    items_list = list(items)
+    results = [None] * len(items_list)
     
-    # Collect results with timeout
-    results = [None] * len(items)
-    for future in as_completed(futures, timeout=timeout_per_item * len(items)):
-        i, item = futures[future]
-        try:
-            result = future.result(timeout=timeout_per_item)
-            results[i] = result
-        except TimeoutError:
-            print_l(f"Warning: {operation_name} timed out after {timeout_per_item}s for item {i}")
-            results[i] = None
-        except Exception as e:
-            print_l(f"Warning: {operation_name} failed for item {i}: {type(e).__name__}: {e}")
-            results[i] = None
+    # Get max_workers from executor (defaults to 2 if not available)
+    max_workers = getattr(executor, '_max_workers', 2)
     
+    # Submit in chunks to avoid thread exhaustion
+    # Chunk size = max_workers * 4 (keep 4x items in flight)
+    chunk_size = max(max_workers * 4, 8)  # At least 8, typically 8-16
+    
+    for chunk_start in range(0, len(items_list), chunk_size):
+        chunk_end = min(chunk_start + chunk_size, len(items_list))
+        chunk_items = items_list[chunk_start:chunk_end]
+        
+        # Submit chunk
+        futures = {}
+        for offset, item in enumerate(chunk_items):
+            i = chunk_start + offset
+            try:
+                futures[executor.submit(func, item)] = (i, item)
+            except RuntimeError as e:
+                if "can't start new thread" in str(e):
+                    print_l(f"Warning: Thread exhaustion submitting {operation_name} item {i}, skipping remaining in chunk")
+                    break
+                raise
+        
+        # Collect chunk results with timeout
+        for future in as_completed(futures, timeout=timeout_per_item * len(futures)):
+            i, item = futures[future]
+            try:
+                result = future.result(timeout=timeout_per_item)
+                results[i] = result
+            except TimeoutError:
+                print_l(f"Warning: {operation_name} timed out after {timeout_per_item}s for item {i}")
+                results[i] = None
+            except Exception as e:
+                print_l(f"Warning: {operation_name} failed for item {i}: {type(e).__name__}: {e}")
+                results[i] = None
+    
+    return results
     return results
 
 # Inlining telemetry tracking (Week 6E)
