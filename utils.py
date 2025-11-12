@@ -382,6 +382,12 @@ def inline_variables(source_code, timeout_seconds=0.5):
                 return result
             except FutureTimeoutError:
                 raise TimeoutError(f"inline_variables timed out after {timeout_seconds}s - likely infinite loop in AST visitor")
+    except RuntimeError as e:
+        # Handle "can't start new thread" from nested thread pools
+        if "can't start new thread" in str(e):
+            raise RuntimeError(f"inline_variables failed: can't start new thread") from e
+        # Re-raise other RuntimeErrors
+        raise
     except TimeoutError:
         # Re-raise timeout errors
         raise
