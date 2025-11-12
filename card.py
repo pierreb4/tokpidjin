@@ -466,6 +466,8 @@ class Code:
                     t_offset = random.randint(1, t_n)
                     if is_solver and self.solver.get(t_offset, False) or not is_solver:
                         new_value = f't{t_offset}'
+                        print_l(f'Old hint: {old_hint} replaced with: {new_value = }') if DO_PRINT else None
+                        print_l(f'New var: {self.t_call[t_offset]}') if DO_PRINT else None
                         break
             else:
                 print_l(f'Unprocessed tuple type for substitution: {old_hint = }')
