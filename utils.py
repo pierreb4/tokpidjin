@@ -290,6 +290,10 @@ class VariableInliner(ast.NodeTransformer):
 
     def visit_Name(self, node):
         # Replace variable reference with its assigned value, if available and safe
+        # Defensive check: ensure node has required attributes
+        if not hasattr(node, 'ctx') or not hasattr(node, 'id'):
+            return node
+        
         if isinstance(node.ctx, ast.Load) and node.id in self.safe_to_inline:
             # Avoid infinite recursion - check if we're in a cycle
             if node.id in self.processing:
@@ -306,7 +310,20 @@ class VariableInliner(ast.NodeTransformer):
 
             try:
                 # Get a deep copy of the expression to substitute
-                expr = ast.parse(ast.unparse(self.assignments[node.id])).body[0].value
+                # Defensive: ensure the assignment value is valid
+                if node.id not in self.assignments:
+                    return node
+                    
+                assigned_value = self.assignments[node.id]
+                if assigned_value is None:
+                    return node
+                
+                # Try to unparse and re-parse for deep copy
+                try:
+                    expr = ast.parse(ast.unparse(assigned_value)).body[0].value
+                except (AttributeError, IndexError, ValueError) as parse_error:
+                    # AST unparsing failed - return original node
+                    return node
                 
                 # Recursively process the expression to inline any variables inside it
                 result = self.visit(expr)
