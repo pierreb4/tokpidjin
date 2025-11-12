@@ -363,6 +363,8 @@ def _print_inlining_summary():
         success = _inlining_stats['success_count']
         retry_time_ms = _inlining_stats['retry_time_ms']
         error_types = _inlining_stats.get('error_types', {})
+        thread_retry_success = _inlining_stats.get('thread_retry_success', 0)
+        thread_retry_fallback = _inlining_stats.get('thread_retry_fallback', 0)
     
     if total == 0:
         return
@@ -376,6 +378,13 @@ def _print_inlining_summary():
         print_l(f"  → Retry fail: {retry_fail} ({100*retry_fail/timeouts:.1f}% of timeouts)")
         avg_retry_time = retry_time_ms / (retry_success + retry_fail) if (retry_success + retry_fail) > 0 else 0
         print_l(f"  → Total retry time: {retry_time_ms:.1f}ms (avg {avg_retry_time:.2f}ms per retry)")
+    
+    # Print thread retry statistics if any occurred
+    if thread_retry_success > 0 or thread_retry_fallback > 0:
+        print_l(f"Thread exhaustion retries:")
+        print_l(f"  → Retry success: {thread_retry_success}")
+        print_l(f"  → Retry fallback (raw source): {thread_retry_fallback}")
+    
     print_l(f"Other errors: {errors} ({100*errors/total:.1f}%)")
     
     # Print error type breakdown if errors occurred
@@ -1674,6 +1683,53 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                     print_l(f"ERROR: Retry failed for task_id={task_id} solver_id={sol_solver_id}: {retry_error}")
                     return None
             
+            # Check for thread exhaustion - retry with backoff
+            elif "can't start new thread" in error_msg:
+                print_l(f"THREAD EXHAUSTION: task_id={task_id} solver_id={sol_solver_id} - retrying with backoff")
+                
+                # Exponential backoff retry: 0.1s, 0.2s, 0.4s
+                max_retries = 3
+                for retry_num in range(max_retries):
+                    backoff_time = 0.1 * (2 ** retry_num)  # 0.1s, 0.2s, 0.4s
+                    time.sleep(backoff_time)
+                    
+                    try:
+                        inlined = cached_inline_variables(inline_variables, data['solver_source'])
+                        if inlined is not None and isinstance(inlined, str):
+                            md5 = hashlib.md5(inlined.encode()).hexdigest()
+                            with _inlining_stats_lock:
+                                _inlining_stats['success_count'] += 1
+                                _inlining_stats.setdefault('thread_retry_success', 0)
+                                _inlining_stats['thread_retry_success'] += 1
+                            print_l(f"  → Retry {retry_num + 1} succeeded after {backoff_time}s")
+                            return {**data, 'inlined_source': inlined, 'md5_hash': md5}
+                    except ValueError as retry_error:
+                        if "can't start new thread" not in str(retry_error):
+                            # Different error - stop retrying
+                            break
+                        # Same thread error - continue to next retry
+                        if retry_num < max_retries - 1:
+                            print_l(f"  → Retry {retry_num + 1} failed, waiting {backoff_time * 2}s")
+                
+                # All retries failed - use raw source as fallback
+                print_l(f"  → All retries failed, using raw source")
+                try:
+                    raw_source = data['solver_source']
+                    md5 = hashlib.md5(raw_source.encode()).hexdigest()
+                    with _inlining_stats_lock:
+                        _inlining_stats['other_errors'] += 1
+                        _inlining_stats.setdefault('error_types', {})
+                        _inlining_stats['error_types'].setdefault('thread_error', 0)
+                        _inlining_stats['error_types']['thread_error'] += 1
+                        _inlining_stats.setdefault('thread_retry_fallback', 0)
+                        _inlining_stats['thread_retry_fallback'] += 1
+                    return {**data, 'inlined_source': raw_source, 'md5_hash': md5}
+                except Exception as fallback_error:
+                    print_l(f"ERROR: Fallback failed for task_id={task_id} solver_id={sol_solver_id}: {fallback_error}")
+                    with _inlining_stats_lock:
+                        _inlining_stats['other_errors'] += 1
+                    return None
+            
             # Check for the specific "error return without exception set" error
             elif "error return without exception set" in error_msg:
                 print_l(f"SKIP: Inlining failed with AST error for task_id={task_id} solver_id={sol_solver_id}: {error_msg}")
@@ -1973,6 +2029,53 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                     print_l(f"ERROR: Retry failed for differ {differ_name}: {retry_error}")
                     return None
             
+            # Check for thread exhaustion - retry with backoff
+            elif "can't start new thread" in error_msg:
+                print_l(f"THREAD EXHAUSTION: Differ {differ_name} - retrying with backoff")
+                
+                # Exponential backoff retry: 0.1s, 0.2s, 0.4s
+                max_retries = 3
+                for retry_num in range(max_retries):
+                    backoff_time = 0.1 * (2 ** retry_num)  # 0.1s, 0.2s, 0.4s
+                    time.sleep(backoff_time)
+                    
+                    try:
+                        inlined = cached_inline_variables(inline_variables, data['differ_source'])
+                        if inlined is not None and isinstance(inlined, str):
+                            md5 = hashlib.md5(inlined.encode()).hexdigest()
+                            with _inlining_stats_lock:
+                                _inlining_stats['success_count'] += 1
+                                _inlining_stats.setdefault('thread_retry_success', 0)
+                                _inlining_stats['thread_retry_success'] += 1
+                            print_l(f"  → Retry {retry_num + 1} succeeded after {backoff_time}s")
+                            return {**data, 'inlined_source': inlined, 'md5_hash': md5}
+                    except ValueError as retry_error:
+                        if "can't start new thread" not in str(retry_error):
+                            # Different error - stop retrying
+                            break
+                        # Same thread error - continue to next retry
+                        if retry_num < max_retries - 1:
+                            print_l(f"  → Retry {retry_num + 1} failed, waiting {backoff_time * 2}s")
+                
+                # All retries failed - use raw source as fallback
+                print_l(f"  → All retries failed, using raw source")
+                try:
+                    raw_source = data['differ_source']
+                    md5 = hashlib.md5(raw_source.encode()).hexdigest()
+                    with _inlining_stats_lock:
+                        _inlining_stats['other_errors'] += 1
+                        _inlining_stats.setdefault('error_types', {})
+                        _inlining_stats['error_types'].setdefault('thread_error', 0)
+                        _inlining_stats['error_types']['thread_error'] += 1
+                        _inlining_stats.setdefault('thread_retry_fallback', 0)
+                        _inlining_stats['thread_retry_fallback'] += 1
+                    return {**data, 'inlined_source': raw_source, 'md5_hash': md5}
+                except Exception as fallback_error:
+                    print_l(f"ERROR: Fallback failed for differ {differ_name}: {fallback_error}")
+                    with _inlining_stats_lock:
+                        _inlining_stats['other_errors'] += 1
+                    return None
+            
             # Check for the specific "error return without exception set" error
             elif "error return without exception set" in error_msg:
                 print_l(f"SKIP: Inlining differ failed with AST error for {differ_name}: {error_msg}")
@@ -1988,9 +2091,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                     _inlining_stats['other_errors'] += 1
                     # Track specific error types
                     _inlining_stats.setdefault('error_types', {})
-                    error_key = 'thread_error' if "can't start new thread" in error_msg else 'other_value_error'
-                    _inlining_stats['error_types'].setdefault(error_key, 0)
-                    _inlining_stats['error_types'][error_key] += 1
+                    _inlining_stats['error_types'].setdefault('other_value_error', 0)
+                    _inlining_stats['error_types']['other_value_error'] += 1
             return None
         except Exception as e:
             error_type = type(e).__name__
