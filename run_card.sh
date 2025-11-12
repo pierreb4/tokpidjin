@@ -193,10 +193,17 @@ while date && [ $STOP -eq 0 ]; do
     echo ""
     echo "=== RUN_BATT.PY SUMMARY ==="
     if [ -f "${TMPBATT}_run.log" ]; then
+      # Extract final task summary (tasks completed and timeout count)
+      grep -E "tasks - .* timeouts" ${TMPBATT}_run.log | tail -1 || true
+      echo ""
       # Extract inlining telemetry summary (last occurrence)
       grep -A 6 "INLINING TELEMETRY" ${TMPBATT}_run.log | tail -7 || true
-      # Extract key performance metrics
-      grep -E "Processing|scored|Total time|Telemetry" ${TMPBATT}_run.log | tail -5 || true
+      echo ""
+      # Extract cache statistics
+      grep -E "Cache|Hit rate" ${TMPBATT}_run.log | tail -5 || true
+      echo ""
+      # Extract timing summary if enabled
+      grep -A 20 "Timing summary" ${TMPBATT}_run.log | tail -21 || true
     else
       echo "Log file not found: ${TMPBATT}_run.log"
     fi
