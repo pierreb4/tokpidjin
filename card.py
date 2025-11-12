@@ -451,7 +451,6 @@ class Code:
                 old_function = DSL_FUNCTION_DICT[old_func_name] if old_func_name in DSL_FUNCTION_DICT else None
                 arity = old_function.__code__.co_argcount
 
-                # while True:
                 for _ in range(99):
                     new_func_name = random.choice(DSL_FUNCTION_NAMES)
                     new_function = DSL_FUNCTION_DICT[new_func_name]
@@ -462,7 +461,7 @@ class Code:
             elif not isinstance(old_hint, tuple):
                 # Replace with a t variable
                 t_n = self.t_num - 1
-                # while True:
+
                 for _ in range(99):
                     t_offset = random.randint(1, t_n)
                     if is_solver and self.solver.get(t_offset, False) or not is_solver:
