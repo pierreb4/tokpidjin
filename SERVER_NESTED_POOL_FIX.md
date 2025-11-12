@@ -1,8 +1,8 @@
-# Server Deployment Guide - Nested Thread Pool Fix
+# Server Deployment Guide - Thread and AST Fixes
 
-## Problem on Server
+## Problems on Server
 
-After the last changes (chunked submission + partial results), you're seeing:
+### Problem 1: Nested Thread Pools (Fixed ad152146)
 
 ```
 run_batt.py:1986: Error inlining differ differ_d3afe19ade3e81de3e21cd580a52fac2: 
@@ -11,7 +11,21 @@ ValueError: inline_variables_func failed: inline_variables failed: can't start n
 
 **Root Cause:** `inline_variables()` creates a `ThreadPoolExecutor` internally while already running inside another thread pool, causing **nested thread pools** that exhaust system threads.
 
-## Fix Applied (Commit ad152146)
+### Problem 2: Malformed AST Nodes (Fixed f7519aa8)
+
+```
+run_batt.py:1683: Error inlining task_id=d90796e8 solver_id=a644e277: 
+ValueError: inline_variables_func failed: inline_variables failed: 'Name' object has no attribute 'put'
+```
+
+**Root Cause:** `VariableInliner.visit_Name()` assumed all AST Name nodes have `.ctx` and `.id` attributes. Edge-case Python code can produce malformed AST structures that cause AttributeError.
+
+## Fixes Applied
+
+### Fix 1: Nested Thread Pool Handling (Commit ad152146)
+
+**File Modified:** `utils.py`  
+**Change:** Catch `RuntimeError` when creating nested ThreadPoolExecutor
 
 **File Modified:** `utils.py`  
 **Change:** Catch `RuntimeError` when creating nested ThreadPoolExecutor
@@ -33,6 +47,45 @@ except RuntimeError as e:
     raise
 ```
 
+### Fix 2: AST Defensive Checks (Commit f7519aa8)
+
+**File Modified:** `utils.py`  
+**Function:** `VariableInliner.visit_Name()`  
+**Changes:** 
+1. Check `hasattr(node, 'ctx')` and `hasattr(node, 'id')` before accessing
+2. Verify `node.id in self.assignments` before lookup
+3. Check `assigned_value is not None` before unparsing
+4. Wrap `ast.parse(ast.unparse(...))` in try/except for AST errors
+
+```python
+# Before: Assumed all Name nodes have .ctx and .id
+def visit_Name(self, node):
+    if isinstance(node.ctx, ast.Load) and node.id in self.safe_to_inline:
+        expr = ast.parse(ast.unparse(self.assignments[node.id])).body[0].value
+        # ... could crash on malformed nodes
+
+# After: Defensive checks at every step
+def visit_Name(self, node):
+    # Check node has required attributes
+    if not hasattr(node, 'ctx') or not hasattr(node, 'id'):
+        return node
+    
+    if isinstance(node.ctx, ast.Load) and node.id in self.safe_to_inline:
+        # Verify assignment exists and is valid
+        if node.id not in self.assignments:
+            return node
+        assigned_value = self.assignments[node.id]
+        if assigned_value is None:
+            return node
+        
+        # Try AST operations with error handling
+        try:
+            expr = ast.parse(ast.unparse(assigned_value)).body[0].value
+        except (AttributeError, IndexError, ValueError):
+            return node  # Return original on AST errors
+        # ... continues safely
+```
+
 ## Deployment Steps
 
 ### 1. Pull Latest Changes
@@ -45,42 +98,48 @@ git pull && date
 **Expected output:**
 ```
 From github.com:pierreb4/tokpidjin
-   b01aa2d1..30020ba0  main -> main
-Updating b01aa2d1..30020ba0
+   8e84a522..f7519aa8  main -> main
+Updating 8e84a522..f7519aa8
 Fast-forward
- utils.py                           | 6 ++++++
- THREAD_EXHAUSTION_ANALYSIS.md      | 189 ++++++++++++++++++++++++++
- 2 files changed, 195 insertions(+)
+ utils.py                           | 19 ++++++++++++++++++-
+ SERVER_NESTED_POOL_FIX.md          | 75 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 93 insertions(+), 1 deletion(-)
 ```
 
 ### 2. Test with Single Instance
 
 ```bash
-# Run one instance to verify fix
+# Run one instance to verify both fixes
 python run_batt.py -c 10
 ```
 
 **Expected behavior:**
 - ✅ No "RuntimeError: can't start new thread" crashes
+- ✅ No "'Name' object has no attribute" crashes  
 - ✅ Some "ValueError: can't start new thread" logged (tracked gracefully)
-- ✅ Pipeline continues with other differs
+- ✅ Some AST errors logged (tracked gracefully)
+- ✅ Pipeline continues with other differs/solvers
 - ✅ Task completes successfully
 
 ### 3. Monitor Error Rate
 
-Check telemetry output for thread error tracking:
+Check telemetry output for error tracking:
 
 ```bash
 # Look for error breakdown in logs
 grep "Error types:" logs/batt.log
 
 # Example healthy output:
-# Error types: thread_error=2 (0.5%), other_value_error=1 (0.2%)
+# Error types: thread_error=2 (0.5%), ast_error=1 (0.2%), other_value_error=0 (0.0%)
 ```
 
-**Healthy rate:** <1% thread errors  
-**Warning threshold:** >5% thread errors  
-**Action threshold:** >10% thread errors → reduce instances
+**Healthy rates:** 
+- Thread errors: <1%
+- AST errors: <2% (edge cases in generated code)
+- Total errors: <5%
+
+**Warning threshold:** >5% total errors  
+**Action threshold:** >10% total errors → investigate patterns
 
 ### 4. Scale to 2 Instances
 
