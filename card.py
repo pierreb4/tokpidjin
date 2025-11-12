@@ -458,7 +458,8 @@ class Code:
                         break
                 new_value = new_func_name
 
-            elif not isinstance(old_hint, tuple):
+            # elif not isinstance(old_hint, tuple):
+            else:
                 # Replace with a t variable
                 t_n = self.t_num - 1
 
@@ -473,8 +474,8 @@ class Code:
                         print_l(f'Old hint: {old_hint} replaced with: {new_value = }') if DO_PRINT else None
                         print_l(f'New var: {self.t_call[t_offset]}') if DO_PRINT else None
                         break
-            else:
-                print_l(f'Unprocessed tuple type for substitution: {old_hint = }')
+            # else:
+            #     print_l(f'Unprocessed tuple type for substitution: {old_hint = }')
 
         return new_value
 
