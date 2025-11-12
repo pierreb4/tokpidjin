@@ -466,6 +466,10 @@ class Code:
                     t_offset = random.randint(1, t_n)
                     if is_solver and self.solver.get(t_offset, False) or not is_solver:
                         new_value = f't{t_offset}'
+                        new_hint = self.t_call[t_offset].hint
+                        if not iscompatible_hint(old_hint, new_hint):
+                            continue
+
                         print_l(f'Old hint: {old_hint} replaced with: {new_value = }') if DO_PRINT else None
                         print_l(f'New var: {self.t_call[t_offset]}') if DO_PRINT else None
                         break
