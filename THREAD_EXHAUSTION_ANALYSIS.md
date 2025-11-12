@@ -1,54 +1,72 @@
 # Thread Exhaustion Analysis - "can't start new thread" Errors
 
+## Summary of Fixes (Nov 12, 2025)
+
+**Three sequential fixes for thread exhaustion:**
+
+1. **Chunked submission** (228fce39) - Prevents submitting 100+ items at once
+2. **Partial results on timeout** (b01aa2d1) - Graceful degradation when futures timeout  
+3. **Nested thread pool handling** (ad152146) - Catches RuntimeError from nested ThreadPoolExecutor
+
+All three fixes work together to provide **robust thread management under load**.
+
+---
+
 ## Problem Description
 
 **Error Pattern:**
 ```
-run_batt.py:1945: Error inlining differ differ_eabb0746e9ce9720baef2df2ff9025b8: 
+run_batt.py:1986: Error inlining differ differ_d3afe19ade3e81de3e21cd580a52fac2: 
 ValueError: inline_variables_func failed: inline_variables failed: can't start new thread
 ```
 
-**Root Cause:** Thread pool exhaustion during parallel differ inlining operations.
+**Root Cause:** Nested thread pools exhaust system threads when:
+- `_safe_map_with_timeout` runs `inline_differ` in ThreadPoolExecutor
+- `inline_differ` calls `cached_inline_variables` 
+- Which calls `inline_variables`
+- Which creates **another ThreadPoolExecutor internally**
+
+This creates **thread pool nesting** that multiplies thread usage.
 
 ## Why This Happens
 
-### Thread Creation Chain
+### Thread Creation Chain (Nested Pools)
 
-1. **Top Level**: `run_batt.py` uses `ThreadPoolExecutor(max_workers=4)` for differ inlining
-2. **Middle Level**: `inline_variables()` uses `call_with_timeout()` which creates threads
-3. **Nested Level**: Some operations within inline_variables create additional threads
+```
+run_batt.py main thread
+  └─> ThreadPoolExecutor(max_workers=2 or 4) [_safe_map_with_timeout]
+       ├─> inline_differ worker 1
+       │    └─> cached_inline_variables
+       │         └─> inline_variables
+       │              └─> ThreadPoolExecutor(max_workers=1) ← NEW THREAD POOL
+       │                   └─> _inline_with_timeout (timeout protection)
+       ├─> inline_differ worker 2
+       │    └─> (same nested structure)
+       └─> ... more workers
+```
 
-**Total threads per task:**
-- Main thread: 1
-- ThreadPoolExecutor workers: 4
-- Timeout threads (per worker): 4
-- Nested operation threads: variable
-- **Peak usage: 15-30 threads simultaneously**
+**Thread multiplication:**
+- Outer pool: 2-4 threads
+- Each worker tries to create inner pool: 1 thread
+- **Total attempt: 2-4 inner pools simultaneously**
+- Under load with multiple instances: **System thread limit exceeded**
 
-### macOS Thread Limits
+### Previous Thread Issues (Now Fixed)
 
-**User-level limits (macOS):**
-- Default: ~2048 threads per process
-- Soft limit: Can be lower depending on system load
-- Hard limit: 2560 threads
+**Issue 1: Bulk submission** (FIXED 228fce39)
+- Submitted all 100+ items at once to ThreadPoolExecutor
+- Created 100+ threads immediately
+- **Fix**: Chunked submission (8-16 items at a time)
 
-**When running multiple instances:**
-- 2 run_card.sh instances × 30 threads = 60 threads (OK)
-- 3 instances × 30 threads = 90 threads (OK)
-- Under load: System may reduce available thread quota
+**Issue 2: Timeout crash** (FIXED b01aa2d1)
+- `as_completed()` raised TimeoutError, crashed pipeline
+- Lost all results when some futures timed out
+- **Fix**: Catch TimeoutError, use partial results
 
-### The Problem
-
-When system is under memory/CPU pressure:
-1. OS reduces available thread quota
-2. New thread creation fails
-3. `inline_variables()` catches exception and wraps it in ValueError
-4. Differ inlining fails
-5. Task may timeout waiting for differs
-
-## Impact on Performance
-
-### Direct Impact
+**Issue 3: Nested pools** (FIXED ad152146 - THIS FIX)
+- `inline_variables` creates ThreadPoolExecutor inside worker thread
+- Multiplies thread usage when outer pool is active
+- **Fix**: Catch RuntimeError from nested pool creation
 - Failed differ inlining → differs not generated → missed solutions
 - Error handling overhead → ~10-50ms per failed differ
 - Retry logic → additional 50-200ms if retry needed
@@ -79,8 +97,143 @@ Multiple locations in code catch and retry on thread errors:
 - Line 870: Retry on "can't start new thread"
 - Line 980: Backoff retry for thread errors
 - Line 1045: Thread error handling
-- Line 1137: Nested timeout thread handling
-- Line 1186: Additional thread error recovery
+## Fix Implementation (Nov 12, 2025)
+
+### Solution: Catch Nested ThreadPoolExecutor RuntimeError
+
+**File:** `utils.py`  
+**Function:** `inline_variables`  
+**Commit:** ad152146
+
+**Problem:**
+```python
+# utils.py line 379 (BEFORE)
+with ThreadPoolExecutor(max_workers=1) as executor:  # Creates thread
+    future = executor.submit(_inline_with_timeout)
+    result = future.result(timeout=timeout_seconds)
+    
+# When called from inline_differ worker thread:
+# → Already inside ThreadPoolExecutor from _safe_map_with_timeout
+# → Creates NESTED thread pool
+# → System thread limit exceeded
+# → RuntimeError: can't start new thread
+```
+
+**Fix:**
+```python
+# utils.py line 379 (AFTER)
+try:
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(_inline_with_timeout)
+        result = future.result(timeout=timeout_seconds)
+except RuntimeError as e:
+    # Handle "can't start new thread" from nested thread pools
+    if "can't start new thread" in str(e):
+        raise RuntimeError("inline_variables failed: can't start new thread") from e
+    raise
+```
+
+**Error handling chain:**
+1. `ThreadPoolExecutor.__init__` → `RuntimeError: can't start new thread`
+2. `utils.inline_variables` catches, re-raises as `RuntimeError`
+3. `batt_cache.cached_inline_variables` catches, raises `ValueError`
+4. `run_batt.inline_differ` catches `ValueError`, logs and tracks
+
+**Benefits:**
+- ✅ Graceful handling of nested thread pool failures
+- ✅ Consistent error propagation chain
+- ✅ Proper error tracking in telemetry
+- ✅ Prevents cascading failures
+- ✅ Allows partial results to succeed
+
+### Complete Thread Fix Timeline
+
+**Fix 1: Chunked Submission** (228fce39 - Nov 12)
+- Prevented submitting 100+ items at once
+- Submit in chunks of 8-16 items
+- Catches RuntimeError on submit
+
+**Fix 2: Partial Results** (b01aa2d1 - Nov 12)  
+- Catch TimeoutError from `as_completed()`
+- Use partial results instead of crashing
+- Graceful degradation under load
+
+**Fix 3: Nested Pool Handling** (ad152146 - Nov 12 - THIS FIX)
+- Catch RuntimeError from nested ThreadPoolExecutor
+- Propagate through error chain properly
+- Enable tracking of thread exhaustion errors
+
+### Updated Thread Architecture
+
+**Before fixes:**
+```
+run_batt → ThreadPool → inline_differ × 100
+                          ↓ (RuntimeError: too many threads)
+                          ✗ CRASH
+```
+
+**After Fix 1 (Chunked):**
+```
+run_batt → ThreadPool → Chunk 1 (8-16 items)
+                          ↓ complete
+                      → Chunk 2 (8-16 items)
+                          ↓ complete
+                      → ... (sequential chunks)
+```
+
+**After Fix 2 (Partial Results):**
+```
+Chunk timeout → 5 of 8 futures complete
+                ↓ TimeoutError caught
+                → Return 5 results + 3 None
+                → Continue pipeline ✓
+```
+
+**After Fix 3 (Nested Pool Handling - THIS FIX):**
+```
+inline_variables → Create ThreadPoolExecutor
+                    ↓ RuntimeError: can't start new thread
+                    → Catch, convert to RuntimeError
+                    → batt_cache raises ValueError
+                    → inline_differ logs and tracks
+                    → Return None for this differ
+                    → Continue with other differs ✓
+```
+
+## Previous Solutions (Still Active)
+
+### 1. Reduced Thread Pool Size ✅
+```python
+# run_batt.py lines 1707-1714, 2012-2019
+if GPU_AVAILABLE:
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        # GPU systems have more resources
+else:
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        # CPU-only: Limit to 2 to reduce thread pressure
+```
+
+### 2. Chunked Submission in _safe_map_with_timeout ✅
+```python
+# run_batt.py lines 257-312
+chunk_size = max(max_workers * 4, 8)  # 8-16 items per chunk
+for chunk in chunks(items, chunk_size):
+    # Submit chunk
+    for item in chunk:
+        try:
+            futures[executor.submit(func, item)] = (i, item)
+        except RuntimeError as e:
+            # Catch "can't start new thread"
+            print_l(f"Failed to submit: {e}")
+    
+    # Collect results with partial timeout handling
+    try:
+        for future in as_completed(futures, timeout=...):
+            results[i] = future.result()
+    except TimeoutError:
+        # Use partial results
+        print_l("X futures unfinished, using partial results")
+```
 
 ### 3. Timeout-Based Fallback ✅
 ```python
@@ -90,7 +243,7 @@ if "timed out after" in error_msg:
     return {**data, 'inlined_source': raw_source, 'md5_hash': md5}
 ```
 
-### 4. Error Tracking (NEW - This Commit) ✅
+### 4. Error Tracking ✅
 - Track thread errors separately in telemetry
 - Include in profiling data as `run_batt.inline_error.thread_error`
 - Print error breakdown in telemetry summary
