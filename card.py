@@ -378,9 +378,9 @@ class Code:
             t_offset = random.choices(range_n, weights=range_n)[0]
 
             if is_solver and self.solver.get(t_offset, False) or not is_solver:
-                print_l(f'Considering t-variable substitution for {old_value} to t{t_offset}') if DO_PRINT else None
-                print_l(f'-- {old_value}: {self.t_call[t_n]}') if DO_PRINT else None
-                print_l(f'-- t{t_offset}: {self.t_call[t_offset]}') if DO_PRINT else None
+                print_l(f'Considering t-variable substitution for {old_value} to t{t_offset}') if DO_DEBUG else None
+                print_l(f'-- {old_value}: {self.t_call[t_n]}') if DO_DEBUG else None
+                print_l(f'-- t{t_offset}: {self.t_call[t_offset]}') if DO_DEBUG else None
 
                 new_hint = self.t_call[t_offset].hint
 
@@ -425,7 +425,7 @@ class Code:
                     break
 
                 else:
-                    print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') if DO_PRINT else None
+                    print_l(f'No mutation for {new_value = } due to hint: {old_hint = }') if DO_DEBUG else None
                     continue
 
         return new_value
