@@ -111,6 +111,37 @@ import multiprocessing as mp
 # Set to False to suppress timeout and mismatch warnings
 DEBUG_VALIDATION = False
 
+# Thread pool configuration - consolidated for consistency
+# These values balance parallelism with system stability
+#
+# Design rationale:
+# 1. Inline operations (solver/differ processing):
+#    - GPU systems: 4 workers (more resources, handles nested ThreadPoolExecutor better)
+#    - CPU systems: 2 workers (conservative, prevents thread exhaustion)
+#    - Each worker may create nested ThreadPoolExecutor(max_workers=1) in inline_variables
+#    - Total threads: gpu=4+4=8, cpu=2+2=4
+#
+# 2. Batch processing (sample scoring):
+#    - GPU systems: 2 workers (GPU context not fork-safe, must use threads)
+#    - CPU systems: 3 workers (can use ProcessPoolExecutor for better isolation)
+#    - Batch operations are heavier than inline, need fewer concurrent workers
+#
+# 3. Fallback: 1 worker (sequential processing when resources exhausted)
+#
+# Why these specific numbers:
+# - 4 for GPU inline: Validated on Kaggle L4x4, handles load well
+# - 2 for CPU inline: Tested on 12-core server, prevents "can't start new thread"
+# - 2 for GPU batch: Safe for ThreadPoolExecutor with GPU context
+# - 3 for CPU batch: Optimal for ProcessPoolExecutor without over-subscription
+# - 1 for fallback: Ensures progress even under extreme memory pressure
+THREAD_POOL_CONFIG = {
+    'gpu_inline': 4,      # GPU systems: inline_variables thread pool
+    'cpu_inline': 2,      # CPU systems: inline_variables thread pool
+    'gpu_batch': 2,       # GPU systems: batch processing (ThreadPoolExecutor)
+    'cpu_batch': 3,       # CPU systems: batch processing (ProcessPoolExecutor)
+    'fallback': 1,        # Single-threaded fallback for resource errors
+}
+
 # Track active executors for cleanup on exit/interrupt
 _active_executors = []
 _executor_lock = threading.Lock()
@@ -872,8 +903,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     })
         else:
             # Normal load - use limited parallelism
-            # Reduce max_workers from 5 to 2 for memory safety
-            max_workers = min(2, len(all_sample_args))
+            # GPU systems: Use THREAD_POOL_CONFIG['gpu_batch'] (2 workers)
+            # CPU systems: Would use ProcessPoolExecutor, but ThreadPoolExecutor for GPU compatibility
+            max_workers = min(THREAD_POOL_CONFIG['gpu_batch'], len(all_sample_args))
             
             try:
                 with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -993,11 +1025,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             if use_threads:
                 # Small batch or system overloaded: Use ThreadPoolExecutor (lighter weight)
                 executor_class = ThreadPoolExecutor
-                max_workers = 1 if system_overloaded else min(sample_count, 3)
+                max_workers = THREAD_POOL_CONFIG['fallback'] if system_overloaded else min(sample_count, THREAD_POOL_CONFIG['cpu_batch'])
             else:
                 # Large batch: Try ProcessPoolExecutor
                 executor_class = ProcessPoolExecutor
-                max_workers = min(sample_count, 3)  # Reduced from 4 to 3 for memory safety
+                max_workers = min(sample_count, THREAD_POOL_CONFIG['cpu_batch'])
             
             executor = executor_class(max_workers=max_workers)
             # Register executor for cleanup on exit/interrupt to prevent semaphore leaks
@@ -1159,10 +1191,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             gc.collect()
             
             # Try ThreadPoolExecutor as fallback (lighter weight)
-            # Use only 1 worker to minimize memory usage
+            # Use THREAD_POOL_CONFIG['fallback'] (1 worker) to minimize memory usage
             try:
                 try:
-                    executor = ThreadPoolExecutor(max_workers=1)
+                    executor = ThreadPoolExecutor(max_workers=THREAD_POOL_CONFIG['fallback'])
                     # Register executor for cleanup
                     with _executor_lock:
                         _active_executors.append(executor)
@@ -1754,19 +1786,14 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # Use thread pool for parallel inlining
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion
     # CRITICAL: Use _safe_map_with_timeout to prevent hangs on stuck inline operations
-    # Timeout: 0.1s per solver (vs 30s previously)
+    # Timeout: 0.5s per solver (vs 30s previously)
     #   - Normal solvers inline in <100ms
-    #   - 0.1s is still generous for pathological cases
+    #   - 0.5s is still generous for pathological cases
     #   - Prevents hanging on infinite loops in AST visitor
-    if GPU_AVAILABLE:
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            inlined_data = _safe_map_with_timeout(executor, inline_one, candidate_data, 
-                                                 timeout_per_item=0.5, operation_name="inline_variables")
-    else:
-        # CPU-only: Use smaller pool to limit total threads
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            inlined_data = _safe_map_with_timeout(executor, inline_one, candidate_data,
-                                                 timeout_per_item=0.5, operation_name="inline_variables")
+    max_workers = THREAD_POOL_CONFIG['gpu_inline'] if GPU_AVAILABLE else THREAD_POOL_CONFIG['cpu_inline']
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        inlined_data = _safe_map_with_timeout(executor, inline_one, candidate_data, 
+                                             timeout_per_item=0.5, operation_name="inline_variables")
     
     # Filter out failures
     inlined_data = [d for d in inlined_data if d is not None]
@@ -2110,18 +2137,13 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     
     # CPU-only fix: Reduce concurrency to avoid thread exhaustion  
     # CRITICAL: Use _safe_map_with_timeout to prevent hangs on stuck inline operations
-    # Timeout: 0.1s per differ (vs 30s previously)
+    # Timeout: 0.5s per differ (vs 30s previously)
     #   - Normal differs inline in <100ms
-    #   - 0.1s is still generous for pathological cases
-    if GPU_AVAILABLE:
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            inlined_differs = _safe_map_with_timeout(executor, inline_differ, differ_data_list,
-                                                    timeout_per_item=0.5, operation_name="inline_differ")
-    else:
-        # CPU-only: Use smaller pool to limit total threads
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            inlined_differs = _safe_map_with_timeout(executor, inline_differ, differ_data_list,
-                                                    timeout_per_item=0.5, operation_name="inline_differ")
+    #   - 0.5s is still generous for pathological cases
+    max_workers = THREAD_POOL_CONFIG['gpu_inline'] if GPU_AVAILABLE else THREAD_POOL_CONFIG['cpu_inline']
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        inlined_differs = _safe_map_with_timeout(executor, inline_differ, differ_data_list,
+                                                timeout_per_item=0.5, operation_name="inline_differ")
     
     inlined_differs = [d for d in inlined_differs if d is not None]
     
