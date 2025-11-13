@@ -2458,7 +2458,6 @@ async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profil
     if os.path.isfile(pile_log_path):
         os.remove(pile_log_path)
 
-    timeouts = 0
     prof = defaultdict(float) if enable_timing else None
     if prof is not None:
         # Register profiler with modules that support it
@@ -2473,16 +2472,22 @@ async def main(do_list, start=0, count=0, timeout=1, enable_timing=False, profil
     # See PHASE3_ROOT_CAUSE.md for detailed analysis
     batch_acc = BatchSolverAccumulator(batch_size=100, use_gpu=False)
     
+    timeouts = 0
+    tot_d_score = 0
     for task_i, task_id in enumerate(do_list):
         d_score = D_Score()
         loop_start = timer() if prof is not None else None
-        timed_out = await run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof, batt_module_name=batt_module_name, batch_accumulator=batch_acc)
+        timed_out, ret_d_score = await run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, timeout, prof=prof, batt_module_name=batt_module_name, batch_accumulator=batch_acc)
         if prof is not None:
             prof['main.run_batt'] += timer() - loop_start
         if timed_out:
             timeouts += 1
+        else:
+            for solver_id in ret_d_score.score:
+                for d_name in ret_d_score.score[solver_id]:
+                    tot_d_score += ret_d_score.score[solver_id][d_name]["score"]
         
-    print(f'{len(do_list)} tasks - {timeouts} timeouts')
+    print(f'{len(do_list)} tasks - {timeouts = } - {tot_d_score = } in {(timer() - start_time):.3f}s')
 
     # Print cache statistics
     print_cache_stats()

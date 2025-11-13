@@ -194,7 +194,7 @@ while date && [ $STOP -eq 0 ]; do
     echo "=== RUN_BATT.PY SUMMARY ==="
     if [ -f "${TMPBATT}_run.log" ]; then
       # Extract final task summary (tasks completed and timeout count)
-      grep -E "tasks - .* timeouts" ${TMPBATT}_run.log | tail -1 || true
+      grep -E "tasks - timeouts = " ${TMPBATT}_run.log | tail -1 || true
       echo ""
       # Extract inlining telemetry summary (last occurrence)
       grep -A 6 "INLINING TELEMETRY" ${TMPBATT}_run.log | tail -7 || true
