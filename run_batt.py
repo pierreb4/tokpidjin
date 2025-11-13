@@ -2116,7 +2116,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 # Exponential backoff retry: 0.1s, 0.2s, 0.4s
                 max_retries = 3
                 for retry_num in range(max_retries):
-                    backoff_time = 0.1 * (2 ** retry_num)  # 0.1s, 0.2s, 0.4s
+                    backoff_time = 5 * 0.1 * (2 ** retry_num)  # 0.1s, 0.2s, 0.4s
                     time.sleep(backoff_time)
                     
                     try:
