@@ -1440,7 +1440,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
         total_matches = sum(r.get('matches', 0) for r in all_results)
         total_outputs = sum(len(r.get('outputs', [])) for r in all_results)
         if DO_PRINT:
-            print_l(f"-- Demo+Test scoring: {total_outputs} outputs, {total_matches} matches, {total_diff_calls} diff calls (skipped {total_outputs - total_diff_calls})")
+            print_l(f"-- Demo+Test scoring: {task_i} - {total_outputs} outputs, {total_matches} matches, {total_diff_calls} diff calls (skipped {total_outputs - total_diff_calls})")
     
     # Week 6B: Profile result aggregation to find overhead
     if prof is not None:
