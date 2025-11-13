@@ -1794,7 +1794,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                             break
                         # Same thread error - continue to next retry
                         if retry_num < max_retries - 1:
-                            print_l(f"  → Retry {retry_num + 1} failed, waiting {backoff_time * 2}s")
+                            next_backoff = 0.1 * (2 ** (retry_num + 1))
+                            print_l(f"  → Retry {retry_num + 1} failed, waiting {next_backoff}s")
                 
                 # All retries failed - use raw source as fallback
                 print_l(f"  → All retries failed, using raw source")
@@ -2116,7 +2117,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                 # Exponential backoff retry: 0.1s, 0.2s, 0.4s
                 max_retries = 3
                 for retry_num in range(max_retries):
-                    backoff_time = 5 * 0.1 * (2 ** retry_num)  # 0.1s, 0.2s, 0.4s
+                    backoff_time = 0.1 * (2 ** retry_num)  # 0.1s, 0.2s, 0.4s
                     time.sleep(backoff_time)
                     
                     try:
@@ -2135,7 +2136,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
                             break
                         # Same thread error - continue to next retry
                         if retry_num < max_retries - 1:
-                            print_l(f"  → Retry {retry_num + 1} failed, waiting {backoff_time * 2}s")
+                            next_backoff = 0.1 * (2 ** (retry_num + 1))
+                            print_l(f"  → Retry {retry_num + 1} failed, waiting {next_backoff}s")
                 
                 # All retries failed - use raw source as fallback
                 print_l(f"  → All retries failed, using raw source")
