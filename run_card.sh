@@ -193,7 +193,7 @@ while date && [ $STOP -eq 0 ]; do
     echo ""
     echo "=== RUN_BATT.PY SUMMARY ==="
     if [ -f "${TMPBATT}_run.log" ]; then
-      grep -E "Demo+Test scoring:" ${TMPBATT}_run.log | tail -10 || true
+      grep -E "Demo\+Test scoring:" ${TMPBATT}_run.log | tail -10 || true
       echo ""
       # Extract inlining telemetry summary (last occurrence)
       grep -A 6 "INLINING TELEMETRY" ${TMPBATT}_run.log | tail -7 || true
