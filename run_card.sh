@@ -63,6 +63,9 @@ if [ -n "$INITIAL" ]; then
   echo "Resetting telemetry logs..."
   rm -f logs/inlining_telemetry.jsonl
   rm -f logs/run_batt_timing_stats.jsonl
+
+  # Remove temporary batt files
+  find . -maxdepth 1 -name 'tmp_batt_*' -exec rm {} \;
   
   # Gets unset for ONERUN
   # CARD_OPTION="-fs -fd"
@@ -156,8 +159,8 @@ while date && [ $STOP -eq 0 ]; do
     touch ${TMPBATT}_run.log
     touch ${TMPBATT}_main.log
 
-    # Remove old temporary files
-    find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
+    # # Remove old temporary files
+    # find . -maxdepth 1 -name 'tmp_batt_*' -mmin +120 -exec rm {} \;
 
     # Generate batt with GPU support if enabled
     echo "Generating batt: python card.py --data both $CARD_OPTION -c 32 $CARD_GPU_ARGS -f ${TMPBATT}_run.py"
