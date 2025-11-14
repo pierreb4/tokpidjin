@@ -1115,21 +1115,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 submitted = True
                                 break
                             
-                            future = None  # Track if future was created
                             try:
                                 future = executor.submit(score_sample, args)
-                                sample_futures[future] = args
-                                submitted_samples.add(sample_key)  # Mark as submitted
-                                submitted = True
-                                if DO_DEBUG:
-                                    print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] submit succeeded on attempt {attempt}, breaking")
-                                break  # Success, move to next sample
+                                # Exception raised - don't add future to dict yet
                             except RuntimeError as e:
-                                # If future was created before exception, remove it from dict
-                                if future is not None and future in sample_futures:
-                                    del sample_futures[future]
-                                    if DO_DEBUG:
-                                        print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] removed orphaned future on attempt {attempt}")
                                 if "can't start new thread" in str(e):
                                     if attempt < max_retries - 1:
                                         # Backoff and retry
@@ -1152,6 +1141,14 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                     if DO_DEBUG:
                                         print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] different RuntimeError: {e}, breaking")
                                     break
+                            
+                            # If we get here, submit succeeded - add to tracking dict
+                            sample_futures[future] = args
+                            submitted_samples.add(sample_key)
+                            submitted = True
+                            if DO_DEBUG:
+                                print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] submit succeeded on attempt {attempt}, breaking")
+                            break  # Success, move to next sample
                         
                         # If submission failed after all retries, record the failure
                         if not submitted:
