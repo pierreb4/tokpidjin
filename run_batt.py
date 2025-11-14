@@ -1094,6 +1094,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                     # Use retry with backoff for "can't start new thread" errors
                     sample_futures = {}
                     failed_samples = []  # Track samples that failed to submit even after retries
+                    submitted_samples = set()  # Track (task_id, sample_type, sample_idx) to prevent duplicates
                     
                     for args in all_sample_args:
                         # Retry submission with exponential backoff if thread creation fails
@@ -1105,9 +1106,19 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                         for attempt in range(max_retries):
                             if DO_DEBUG:
                                 print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] attempt {attempt}, submitted={submitted}")
+                            
+                            # Check if this sample was already submitted (prevents duplicates during sleep)
+                            sample_key = (task_id, sample_type, sample_idx)
+                            if sample_key in submitted_samples:
+                                if DO_DEBUG:
+                                    print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] already submitted, skipping")
+                                submitted = True
+                                break
+                            
                             try:
                                 future = executor.submit(score_sample, args)
                                 sample_futures[future] = args
+                                submitted_samples.add(sample_key)  # Mark as submitted
                                 submitted = True
                                 if DO_DEBUG:
                                     print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] submit succeeded on attempt {attempt}, breaking")
