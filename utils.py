@@ -100,9 +100,10 @@ DO_PRINT_LIST = [ 'mbp-2022.lan', 'mbp-2022.local', 'simone' ]
 DO_DEBUG = False
 DO_PRINT = False
 # DO_PRINT = os.uname()[1] in DO_PRINT_LIST
-# DO_PRINT = os.uname()[1] == 'simone'
+DO_DEBUG = os.uname()[1] == 'simone'
 # DO_DEBUG = os.uname()[1].startswith('mbp-2022')
 DO_PRINT = os.uname()[1].startswith('mbp-2022') or os.uname()[1] == 'simone'
+
 
 # Thread-based timeout function (no asyncio needed!)
 from queue import Queue, Empty

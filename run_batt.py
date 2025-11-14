@@ -1100,36 +1100,46 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                         max_retries = 5
                         retry_delay = 0.1  # Start with 100ms
                         submitted = False
+                        sample_type, sample_idx = args[2], args[0]  # Extract for logging
                         
                         for attempt in range(max_retries):
+                            if DO_DEBUG:
+                                print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] attempt {attempt}, submitted={submitted}")
                             try:
                                 future = executor.submit(score_sample, args)
                                 sample_futures[future] = args
                                 submitted = True
+                                if DO_DEBUG:
+                                    print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] submit succeeded on attempt {attempt}, breaking")
                                 break  # Success, move to next sample
                             except RuntimeError as e:
                                 if "can't start new thread" in str(e):
                                     if attempt < max_retries - 1:
                                         # Backoff and retry
                                         if DO_PRINT and attempt == 0:
-                                            sample_type, sample_idx = args[2], args[0]
                                             print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed, retrying with backoff...")
+                                        if DO_DEBUG:
+                                            print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] attempt {attempt} failed (thread), sleeping {retry_delay}s")
                                         time.sleep(retry_delay)
                                         retry_delay *= 2  # Exponential backoff
                                         gc.collect()  # Try to free resources
                                     else:
                                         # Max retries exceeded, record as failed
                                         if DO_PRINT:
-                                            sample_type, sample_idx = args[2], args[0]
                                             print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed after {max_retries} retries")
+                                        if DO_DEBUG:
+                                            print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] all retries exhausted, breaking")
                                         break  # Exit retry loop, will handle below
                                 else:
                                     # Different RuntimeError, don't retry
+                                    if DO_DEBUG:
+                                        print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] different RuntimeError: {e}, breaking")
                                     break
                         
                         # If submission failed after all retries, record the failure
                         if not submitted:
-                            sample_type, sample_idx = args[2], args[0]
+                            if DO_DEBUG:
+                                print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] not submitted after retries, adding to failed_samples")
                             failed_samples.append({
                                 'index': sample_idx,
                                 'sample_type': sample_type,
@@ -1139,6 +1149,9 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 'diff_calls': 0,
                                 'matches': 0
                             })
+                        else:
+                            if DO_DEBUG:
+                                print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] submitted successfully, total futures: {len(sample_futures)}")
                     
                     # Collect results as they complete
                     all_results = list(failed_samples)  # Start with pre-failed samples
