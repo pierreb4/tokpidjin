@@ -1115,6 +1115,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                 submitted = True
                                 break
                             
+                            future = None  # Track if future was created
                             try:
                                 future = executor.submit(score_sample, args)
                                 sample_futures[future] = args
@@ -1124,6 +1125,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                     print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] submit succeeded on attempt {attempt}, breaking")
                                 break  # Success, move to next sample
                             except RuntimeError as e:
+                                # If future was created before exception, remove it from dict
+                                if future is not None and future in sample_futures:
+                                    del sample_futures[future]
+                                    if DO_DEBUG:
+                                        print_l(f"DEBUG: {task_id} - {sample_type}[{sample_idx}] removed orphaned future on attempt {attempt}")
                                 if "can't start new thread" in str(e):
                                     if attempt < max_retries - 1:
                                         # Backoff and retry
