@@ -346,71 +346,47 @@ def inline_variables(source_code, timeout_seconds=0.5):
     
     Args:
         source_code: Python source code string
-        timeout_seconds: Maximum time allowed for inlining (default 0.1s, vs 30s previously)
-                        Normal solvers inline in <100ms. 0.1s timeout catches infinite loops.
+        timeout_seconds: Deprecated parameter (kept for API compatibility)
+                        Timeout is now handled by outer call_with_timeout() wrapper
         
     Returns:
         str: Inlined source code
         
-    Raises:
-        TimeoutError: If inlining takes too long (likely infinite loop in AST visitor)
-        
     Notes:
-        - Reduced from 30s to 0.1s: normal inlining is <100ms, generous enough for pathological cases
-        - If timeout occurs, solver is skipped (caught in run_batt.py inline_one/inline_differ)
-        - AST parsing errors also caught and handled gracefully
+        - Removed internal ThreadPoolExecutor timeout (Nov 2024) to reduce thread nesting
+        - AST inlining either completes quickly (<100ms) or fails immediately
+        - Outer call_with_timeout() wrapper in run_batt.py provides timeout protection
+        - This eliminates 3-level thread nesting: ProcessPool → call_with_timeout → inline_variables
     """
     start_total = timer()
     
-    def _inline_with_timeout():
-        parse_t0 = timer()
-        tree = ast.parse(source_code)
-        parse_dt = timer() - parse_t0
+    # Direct execution without ThreadPoolExecutor wrapper
+    # Relies on outer timeout from call_with_timeout() in run_batt.py
+    parse_t0 = timer()
+    tree = ast.parse(source_code)
+    parse_dt = timer() - parse_t0
 
-        visit_t0 = timer()
-        inliner = VariableInliner()
-        # Process tree and collect assignments
-        tree = inliner.visit(tree)
-        visit_dt = timer() - visit_t0
+    visit_t0 = timer()
+    inliner = VariableInliner()
+    # Process tree and collect assignments
+    tree = inliner.visit(tree)
+    visit_dt = timer() - visit_t0
 
-        fix_t0 = timer()
-        # Convert back to source code
-        ast.fix_missing_locations(tree)
-        unparse_source = ast.unparse(tree)
-        fix_dt = timer() - fix_t0
+    fix_t0 = timer()
+    # Convert back to source code
+    ast.fix_missing_locations(tree)
+    unparse_source = ast.unparse(tree)
+    fix_dt = timer() - fix_t0
 
-        total_dt = timer() - start_total
-        # Record timings if profiler is set
-        if _prof is not None:
-            _prof['utils.inline_variables.parse'] += parse_dt
-            _prof['utils.inline_variables.visit'] += visit_dt
-            _prof['utils.inline_variables.unparse'] += fix_dt
-            _prof['utils.inline_variables.total'] += total_dt
+    total_dt = timer() - start_total
+    # Record timings if profiler is set
+    if _prof is not None:
+        _prof['utils.inline_variables.parse'] += parse_dt
+        _prof['utils.inline_variables.visit'] += visit_dt
+        _prof['utils.inline_variables.unparse'] += fix_dt
+        _prof['utils.inline_variables.total'] += total_dt
 
-        return unparse_source
-    
-    # Run with timeout protection
-    from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
-    try:
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_inline_with_timeout)
-            try:
-                result = future.result(timeout=timeout_seconds)
-                return result
-            except FutureTimeoutError:
-                raise TimeoutError(f"inline_variables timed out after {timeout_seconds}s - likely infinite loop in AST visitor")
-    except RuntimeError as e:
-        # Handle "can't start new thread" from nested thread pools
-        if "can't start new thread" in str(e):
-            raise RuntimeError(f"inline_variables failed: can't start new thread") from e
-        # Re-raise other RuntimeErrors
-        raise
-    except TimeoutError:
-        # Re-raise timeout errors
-        raise
-    except Exception as e:
-        # For other errors, try to return something reasonable
-        raise RuntimeError(f"inline_variables failed: {e}") from e
+    return unparse_source
 
 
 def parallel_inline_variables(source_codes):
