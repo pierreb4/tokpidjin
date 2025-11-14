@@ -321,12 +321,14 @@ def _safe_map_with_timeout(executor, func, items, timeout_per_item=0.5, operatio
         for offset, item in enumerate(chunk_items):
             i = chunk_start + offset
             try:
-                futures[executor.submit(func, item)] = (i, item)
+                future = executor.submit(func, item)
             except RuntimeError as e:
                 if "can't start new thread" in str(e):
                     print_l(f"Warning: Thread exhaustion submitting {operation_name} item {i}, skipping remaining in chunk")
                     break
                 raise
+            # Only add to dict if no exception raised
+            futures[future] = (i, item)
         
         # Collect chunk results with timeout
         # Use try/except to catch TimeoutError from as_completed and continue with partial results
@@ -910,8 +912,18 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
             try:
                 with ThreadPoolExecutor(max_workers=max_workers) as executor:
                     # Submit all samples (demo + test) for parallel execution
-                    sample_futures = {executor.submit(score_sample, args): args 
-                                    for args in all_sample_args}
+                    sample_futures = {}
+                    for args in all_sample_args:
+                        try:
+                            future = executor.submit(score_sample, args)
+                        except RuntimeError as e:
+                            # Log and skip this sample if thread creation fails
+                            sample_type, sample_idx = args[2], args[0]
+                            if DO_PRINT:
+                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed: {e}")
+                            continue
+                        # Only add to dict if no exception raised
+                        sample_futures[future] = args
                     
                     # Collect results as they complete
                     all_results = []
@@ -1289,8 +1301,6 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                             for attempt in range(max_retries):
                                 try:
                                     future = executor.submit(score_sample, args)
-                                    sample_futures[future] = args
-                                    break  # Success
                                 except RuntimeError as e:
                                     if "can't start new thread" in str(e):
                                         if attempt < max_retries - 1:
@@ -1309,6 +1319,10 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
                                     else:
                                         # Different RuntimeError, don't retry
                                         raise
+                                
+                                # Only add to dict if no exception raised
+                                sample_futures[future] = args
+                                break  # Success
                         
                         all_results = []
                         for future in as_completed(sample_futures):
