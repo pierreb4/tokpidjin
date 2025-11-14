@@ -78,109 +78,63 @@ def get_functions(path):
     return functions
 
 
-def eval_match(S, C, O):
+def eval_match(S, C, O, solver_id=None, differ_scores=None):
     """
-    Evaluate match between computed output C and expected output O using a tiered scoring system.
+    Evaluate match between computed output C and expected output O.
     
     Args:
         S: Sample pairs (tuple of (input, output) tuples) for differ context
         C: Computed output grid
         O: Expected output grid (ground truth)
+        solver_id: Optional solver ID (for differ score lookup)
+        differ_scores: Optional list of differ score tuples for this solver
+                      Each tuple: (last_t, s_solver_id, d_name, return_tuple)
     
-    Grid size range: 1x1 to 30x30 (from ARC dataset specification)
-    
-    Scoring Tiers (0-1000 points):
-    1. Perfect match (exact): 1000 points (instant win)
-    2. Dimension match: 100-1000 points (base + scaled cell accuracy)
-    3. Partial match (dimensions differ): 1-99 points (best effort)
-    4. No match: 0 points (timeout, error, or no overlap)
-    
-    Scoring Logic:
-    - Tier 1 (Perfect): C == O → 1000 points
-    - Tier 2 (Dimensions match):
-        * Base: 100 points for matching H and W
-        * Cell accuracy: 1-900 additional points based on percentage of cells matching
-        * Formula: 100 + (matching_cells / total_cells) * 900
-        * Total range: 100-1000 points
-    - Tier 3 (Partial, dimensions differ, both ≤30):
-        * Overlap area: min(C_h, O_h) x min(C_w, O_w)
-        * Score: (matching_cells_in_overlap / overlap_area) * 99
-        * Max 99 points to distinguish from Tier 2
-        * Important: Helps detect off-by-one errors or scaling issues
-    - Tier 4 (No match): 0 points
+    Scoring (0-1000 points):
+    - Perfect match: 1000 points
+    - With differ_scores: Sum all differ scores for the solver (0-1000 each)
+    - Without differ_scores: 0 points (no scoring method available)
     """
-    # Old matching
     perfect_match = C == O
+    
     try:
         # Handle edge cases
         if C is None or O is None:
             return perfect_match, 0
 
-        # Ensure C and O are numpy arrays for shape/dtype operations
-        try:
-            import numpy as np
-            C_arr = np.asarray(C)
-            O_arr = np.asarray(O)
-        except Exception:
-            # If numpy not available or conversion fails, fallback to exact match
-            return perfect_match, 1000 * perfect_match
-
         # Tier 1: Perfect match (exact equality)
-        if np.array_equal(C_arr, O_arr):
+        if perfect_match:
             return perfect_match, 1000
 
-        # Extract dimensions (grids are always 2D in ARC)
-        C_shape = C_arr.shape if hasattr(C_arr, 'shape') else (len(C_arr), len(C_arr[0]) if C_arr else 0)
-        O_shape = O_arr.shape if hasattr(O_arr, 'shape') else (len(O_arr), len(O_arr[0]) if O_arr else 0)
-
-        C_height = C_shape[0] if len(C_shape) >= 1 else 0
-        C_width = C_shape[1] if len(C_shape) >= 2 else 0
-        O_height = O_shape[0] if len(O_shape) >= 1 else 0
-        O_width = O_shape[1] if len(O_shape) >= 2 else 0
-
-        # Validate dimensions are in ARC range (1-30)
-        dims_valid = all(1 <= d <= 30 for d in [C_height, C_width, O_height, O_width])
-        if not dims_valid:
-            return perfect_match, 0  # Invalid dimensions
-
-        # Tier 2: Dimensions match exactly
-        if C_height == O_height and C_width == O_width:
-            # Use differ function to count matching cells
-            # Returns (total_cells, matching_cells)
-            total_cells, matching_cells = differ_exact_dims(S, O, C)
+        # Tier 2: Use differ scores if provided (from run_batt.py)
+        if differ_scores is not None and len(differ_scores) > 0:
+            total_score = 0
+            for s_item in differ_scores:
+                if len(s_item) >= 4:
+                    last_t, s_solver_id, d_name, return_tuple = s_item
+                    
+                    # Validate return_tuple
+                    if type(return_tuple) != tuple or len(return_tuple) < 2:
+                        continue
+                    if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
+                        continue
+                    
+                    # Convert differ tuple to score (same as D_Score.update in run_batt.py)
+                    total, matching = return_tuple[0], return_tuple[1]
+                    if total <= 0:
+                        continue
+                    
+                    # Calculate score (0-1000 per differ)
+                    differ_score = (matching * 1000) // total
+                    differ_score = max(0, min(1000, differ_score))
+                    total_score += differ_score
             
-            # Base score: 100 points for matching dimensions
-            # Add points based on accuracy percentage (0-900 additional points)
-            accuracy_points = (matching_cells * 900) // total_cells if total_cells > 0 else 0
-            score = 100 + accuracy_points
+            return perfect_match, total_score
 
-            return perfect_match, score
-
-        # Tier 3: Partial match (dimensions differ but both within ARC range)
-        # Calculate overlap area at 0,0 corner
-        overlap_height = min(C_height, O_height)
-        overlap_width = min(C_width, O_width)
-        overlap_area = overlap_height * overlap_width
-
-        if overlap_area > 0:
-            # Count matching cells in overlap area
-            matching_in_overlap = 0
-            for i in range(overlap_height):
-                for j in range(overlap_width):
-                    with contextlib.suppress(Exception):
-                        if C_arr[i, j] == O_arr[i, j]:
-                            matching_in_overlap += 1
-            # Scale to 1-99 points based on accuracy in overlap
-            # Use ceiling to ensure any match gets at least 1 point
-            overlap_score = max(1, min(99, (matching_in_overlap * 99) // overlap_area))
-            return perfect_match, overlap_score
-
-        # Tier 4: No match
+        # Tier 3: No differ scores available
         return perfect_match, 0
 
-    except Exception as e:
-        # Safety fallback: on any error, return 0
-        # Prevents crashes from malformed grids/outputs
+    except Exception:
         return perfect_match, 0
 
 

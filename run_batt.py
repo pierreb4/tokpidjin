@@ -792,20 +792,18 @@ def score_sample(args):
         if DO_PRINT:
             print_l(f"{sample_type}[{i}] - {task_id} - {len(sample_o)}")
         
-        # Score outputs and collect matching solver ids
-        for t_n, evo, o_solver_id, okt in sample_o:
-            C = okt
-            match, score = eval_match(S, C, O)
-            score_count += score
-            if match and DO_PRINT:
-                print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
+        # # First pass: Quick check if ANY solver produced a perfect match
+        # for t_n, evo, o_solver_id, okt in sample_o:
+        #     C = okt
+        #     if C == O:  # Perfect match check only
+        #         match = True
+        #         break
         
         # OPTIMIZATION: Only run diff ONCE per sample if any output matches
-        # Calling batt multiple times with identical O parameter returns identical results
-
-        if match:
-        # if score > 0:
-
+        # Run differs BEFORE scoring so we can pass differ scores to eval_match
+        differ_scores_by_solver = {}  # Map solver_id → list of differ score tuples
+        # if match:
+        if True:
             diff_call_count += 1
             # Run diff to get solver-level scores (only once per sample)
             diff_timed_out, diff_result = call_with_timeout(batt_func,
@@ -814,6 +812,25 @@ def score_sample(args):
             if diff_result is not None:
                 _, sample_s_result = diff_result
                 sample_s.extend(sample_s_result)
+                
+                # Organize differ scores by solver_id for eval_match
+                for s_item in sample_s_result:
+                    if len(s_item) >= 2:
+                        last_t, s_solver_id, d_name, return_tuple = s_item
+                        if s_solver_id != 'None':  # Only actual solver scores
+                            if s_solver_id not in differ_scores_by_solver:
+                                differ_scores_by_solver[s_solver_id] = []
+                            differ_scores_by_solver[s_solver_id].append(s_item)
+        
+        # Second pass: Score outputs with differ scores
+        for t_n, evo, o_solver_id, okt in sample_o:
+            C = okt
+            # Pass differ scores for this specific solver
+            solver_differs = differ_scores_by_solver.get(o_solver_id, None)
+            match_result, score = eval_match(S, C, O, o_solver_id, solver_differs)
+            score_count += score
+            if match_result and DO_PRINT:
+                print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
     
     # Phase 2b: Add input grid to batch accumulator for GPU processing
     if batch_accumulator:
