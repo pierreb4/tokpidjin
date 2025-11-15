@@ -75,7 +75,7 @@ def differ_d94712356774eb0ee744182d98e136ae(S, I, C):
 def differ_2e60be2014891e3e081089061ca48033(S, I, C):
     """
     Count matching cells.
-    Returns (total_cells, matching_cells).
+    Returns (matching_cells, different_cells).
     """
     x1 = cellwise(I, C, NEG_ONE)
     x2 = f_ofcolor(x1, NEG_ONE)
@@ -84,6 +84,6 @@ def differ_2e60be2014891e3e081089061ca48033(S, I, C):
     x5 = width_t(I)
     x6 = multiply(x4, x5)
     x7 = subtract(x6, x3)
-    x8 = astuple(x7, x6)
+    x8 = astuple(x7, x2)
     return x8
 
