@@ -72,38 +72,8 @@ try:
 except ImportError:
     from concurrent.futures import ProcessPoolExecutor
     LOKY_AVAILABLE = False
-try:
-    import cupy as cp
-    from dsl import GPU_AVAILABLE
-    # Import optimized GPU batch processor
-    from gpu_optimizations import KaggleGPUOptimizer
-    
-    if GPU_AVAILABLE:
-        try:
-            # Kaggle GPU detection and configuration
-            gpu_count = cp.cuda.runtime.getDeviceCount()
-            print(f"Kaggle GPU Support: {GPU_AVAILABLE} ({gpu_count} devices)")
-            for i in range(gpu_count):
-                device = cp.cuda.Device(i)
-                mem_total = device.mem_info[1] / (1024**3)
-                print(f"  GPU {i}: Compute {device.compute_capability}, Memory: {mem_total:.1f}GB")
-            
-            # Initialize optimized batch processor
-            gpu_optimizer = KaggleGPUOptimizer(device_id=0)
-            print("✓ Kaggle GPU Optimizer initialized")
-        except Exception as e:
-            # CUDA driver not available or insufficient (common on Kaggle CPU-only sessions)
-            print(f"GPU detected but not accessible: {e}")
-            GPU_AVAILABLE = False
-            gpu_optimizer = None
-    else:
-        gpu_optimizer = None
-except ImportError:
-    GPU_AVAILABLE = False
-    gpu_optimizer = None
-    # Only print message if GPU was expected (not in forced CPU mode)
-    if os.environ.get('EXPECT_GPU', '1') != '0':
-        print_l("GPU Support: Disabled (CuPy not available)")
+# GPU support removed - not in hot path for test execution
+# See PHASE3_ROOT_CAUSE.md for analysis
 
 import multiprocessing as mp
 
@@ -146,6 +116,10 @@ THREAD_POOL_CONFIG = {
 _active_executors = []
 _executor_lock = threading.Lock()
 
+# ============================================================================
+# HELPER FUNCTIONS - Executor Management and Common Patterns
+# ============================================================================
+
 def _safe_executor_shutdown(executor, wait=True, cancel_futures=False):
     """
     Safely shutdown executor with compatibility for both stdlib and loky.
@@ -172,6 +146,184 @@ def _safe_executor_shutdown(executor, wait=True, cancel_futures=False):
                 executor.shutdown(wait=wait)
             except Exception:
                 pass
+
+
+@contextmanager
+def managed_executor(executor_class, max_workers, task_id=None):
+    """
+    Context manager for executor lifecycle with automatic cleanup.
+    
+    Handles:
+    - Executor creation with retry on thread exhaustion
+    - Registration in _active_executors for cleanup
+    - Automatic shutdown and deregistration
+    
+    Args:
+        executor_class: ThreadPoolExecutor or ProcessPoolExecutor
+        max_workers: Number of workers
+        task_id: Optional task ID for logging
+    
+    Yields:
+        executor instance or None if creation failed
+    """
+    executor = None
+    max_creation_retries = 3
+    creation_retry_delay = 0.2
+    
+    for attempt in range(max_creation_retries):
+        try:
+            executor = executor_class(max_workers=max_workers)
+            with _executor_lock:
+                _active_executors.append(executor)
+            break
+        except RuntimeError as e:
+            if "can't start new thread" in str(e) and attempt < max_creation_retries - 1:
+                if DO_PRINT:
+                    print_l(f"-- {executor_class.__name__} creation failed (thread exhaustion), retrying in {creation_retry_delay}s...")
+                time.sleep(creation_retry_delay)
+                creation_retry_delay *= 2
+                gc.collect()
+            else:
+                if DO_PRINT:
+                    print_l(f"-- {executor_class.__name__} creation failed: {e}")
+                break
+        except Exception as e:
+            if DO_PRINT:
+                print_l(f"-- {executor_class.__name__} creation failed: {e}")
+            break
+    
+    try:
+        yield executor
+    finally:
+        if executor is not None:
+            _safe_executor_shutdown(executor, wait=True, cancel_futures=False)
+            with _executor_lock:
+                if executor in _active_executors:
+                    _active_executors.remove(executor)
+
+
+def _submit_with_retry(executor, func, args, max_retries=5, task_id=None, sample_type=None, sample_idx=None):
+    """
+    Submit a task to executor with exponential backoff retry on thread exhaustion.
+    
+    Args:
+        executor: ThreadPoolExecutor or ProcessPoolExecutor
+        func: Function to execute
+        args: Arguments for function
+        max_retries: Maximum retry attempts (default: 5)
+        task_id: Optional task ID for logging
+        sample_type: Optional sample type ('demo'/'test') for logging
+        sample_idx: Optional sample index for logging
+    
+    Returns:
+        tuple: (success: bool, future: Future or None)
+        - (True, future) if submission succeeded
+        - (False, None) if all retries failed
+    """
+    retry_delay = 0.1
+    
+    for attempt in range(max_retries):
+        try:
+            future = executor.submit(func, args)
+            return (True, future)
+        except RuntimeError as e:
+            if "can't start new thread" in str(e):
+                if attempt < max_retries - 1:
+                    if DO_PRINT and attempt == 0:
+                        context = f"{task_id} - {sample_type}[{sample_idx}]" if task_id else "task"
+                        print_l(f"-- {context} thread creation failed, retrying with backoff...")
+                    if DO_DEBUG:
+                        print_l(f"DEBUG: attempt {attempt} failed (thread), sleeping {retry_delay}s")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                    gc.collect()
+                else:
+                    if DO_PRINT:
+                        context = f"{task_id} - {sample_type}[{sample_idx}]" if task_id else "task"
+                        print_l(f"-- {context} thread creation failed after {max_retries} retries")
+                    return (False, None)
+            else:
+                # Different RuntimeError, don't retry
+                if DO_DEBUG:
+                    print_l(f"DEBUG: different RuntimeError: {e}")
+                return (False, None)
+    
+    return (False, None)
+
+
+def _collect_futures_safely(sample_futures, task_id, start_time, timeout_value, result_timeout=600):
+    """
+    Collect results from futures with unified error handling.
+    
+    Handles TimeoutError, MemoryError, RuntimeError, and generic Exceptions.
+    
+    Args:
+        sample_futures: Dict mapping futures to their args
+        task_id: Task ID for logging
+        start_time: Start time for logging
+        timeout_value: Timeout value for logging
+        result_timeout: Timeout per result in seconds (default: 600)
+    
+    Returns:
+        list of result dictionaries
+    """
+    all_results = []
+    
+    for future in as_completed(sample_futures):
+        args = sample_futures[future]
+        sample_type, sample_idx = args[2], args[0]
+        
+        try:
+            result = future.result(timeout=result_timeout)
+            all_results.append(result)
+        except TimeoutError:
+            if DO_PRINT:
+                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after {result_timeout}s")
+            all_results.append({
+                'index': sample_idx,
+                'sample_type': sample_type,
+                'outputs': [],
+                'solver_scores': [],
+                'timed_out': True,
+                'diff_calls': 0,
+                'matches': 0
+            })
+        except MemoryError:
+            if DO_PRINT:
+                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
+            print_l(f"CRITICAL: MemoryError during future collection. System out of memory. Exiting.")
+            _log_and_exit(task_id, start_time, 'memory_error',
+                        f"Future collection MemoryError at {sample_type}[{sample_idx}]", timeout_value)
+        except RuntimeError as e:
+            if "can't start new thread" in str(e):
+                if DO_PRINT:
+                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
+            else:
+                if DO_PRINT:
+                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+            all_results.append({
+                'index': sample_idx,
+                'sample_type': sample_type,
+                'outputs': [],
+                'solver_scores': [],
+                'timed_out': True,
+                'diff_calls': 0,
+                'matches': 0
+            })
+        except Exception as e:
+            if DO_PRINT:
+                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+            all_results.append({
+                'index': sample_idx,
+                'sample_type': sample_type,
+                'outputs': [],
+                'solver_scores': [],
+                'timed_out': True,
+                'diff_calls': 0,
+                'matches': 0
+            })
+    
+    return all_results
 
 def _cleanup_executors():
     """Clean up any active executors to prevent semaphore leaks"""
@@ -428,261 +580,243 @@ def _print_inlining_summary():
     
     print_l("=" * 30)
 
-class GPUBatchProcessor:
+
+def _inline_with_telemetry(source, context_type='solver', context_info=None):
     """
-    Batch processor optimized for Kaggle GPUs (T4x2, P100, L4x4)
-    - T4: 16GB, Compute 7.5, good for inference
-    - P100: 16GB, Compute 6.0, high memory bandwidth
-    - L4: 24GB, Compute 8.9, newest architecture
-    """
-    def __init__(self, batch_size=32, use_gpu=True):
-        self.batch_size = batch_size
-        self.use_gpu = use_gpu and GPU_AVAILABLE
-        self.gpu_id = 0  # Default to first GPU
-        
-        # Use optimized Kaggle GPU processor if available
-        if self.use_gpu and gpu_optimizer is not None:
-            self.optimizer = gpu_optimizer
-            print(f"Using KaggleGPUOptimizer (batch_size={batch_size})")
-        elif self.use_gpu:
-            # Fallback: Configure GPU manually
-            try:
-                cp.cuda.Device(self.gpu_id).use()
-                mem_info = cp.cuda.Device(self.gpu_id).mem_info
-                available_mem = mem_info[0]
-                mem_limit = int(available_mem * 0.8)
-                cp.get_default_memory_pool().set_limit(size=mem_limit)
-                print(f"GPU batch processor initialized on device {self.gpu_id}")
-                print(f"  Memory limit: {mem_limit/(1024**3):.2f}GB")
-                self.optimizer = None
-            except Exception as e:
-                print(f"GPU initialization warning: {e}")
-                self.use_gpu = False
-                self.optimizer = None
-        else:
-            self.optimizer = None
-        
-    def process_tasks_batch(self, tasks):
-        """Process multiple tasks in parallel with GPU acceleration"""
-        if not tasks:
-            return []
-        
-        # Adjust batch size based on task complexity and GPU memory
-        effective_batch_size = self._get_effective_batch_size(len(tasks))
-        
-        results = []
-        for i in range(0, len(tasks), effective_batch_size):
-            batch = tasks[i:i+effective_batch_size]
-            try:
-                if self.use_gpu:
-                    batch_results = self._process_batch_gpu(batch)
-                else:
-                    batch_results = self._process_batch_cpu(batch)
-                results.extend(batch_results)
-            except Exception as e:
-                print(f"Batch processing error: {e}, falling back to CPU")
-                batch_results = self._process_batch_cpu(batch)
-                results.extend(batch_results)
-            finally:
-                if self.use_gpu:
-                    self._cleanup_gpu_memory()
-        
-        return results
+    Inline variables in source code with telemetry tracking and error handling.
     
-    def _get_effective_batch_size(self, num_tasks):
-        """Adjust batch size based on available GPU memory"""
-        if not self.use_gpu:
-            return min(self.batch_size, num_tasks)
+    Handles:
+    - Timeout retry (skip inlining, use raw source)
+    - Thread exhaustion retry with exponential backoff
+    - Error type tracking for telemetry
+    
+    Args:
+        source: Source code string to inline
+        context_type: Type of context ('solver' or 'differ') for logging
+        context_info: Dict with optional keys: task_id, solver_id, name
+    
+    Returns:
+        tuple: (inlined_source: str, md5_hash: str) or (None, None) on error
+    """
+    context_info = context_info or {}
+    
+    # Feature flag to disable inlining for debugging
+    SKIP_INLINING = os.environ.get('SKIP_INLINING', '0') == '1'
+    if SKIP_INLINING:
+        if context_type == 'solver' and not globals().get('_solver_inlining_logged', False):
+            print_l("INLINING DISABLED (SKIP_INLINING=1) - Using raw source")
+            globals()['_solver_inlining_logged'] = True
+        elif context_type == 'differ' and not globals().get('_differ_inlining_logged', False):
+            print_l("DIFFER INLINING DISABLED (SKIP_INLINING=1) - Using raw differ source")
+            globals()['_differ_inlining_logged'] = True
+        md5_hash = 'disabled'
+        return (source, md5_hash)
+    
+    # Week 6E: Telemetry tracking
+    with _inlining_stats_lock:
+        _inlining_stats['total_attempts'] += 1
+    
+    try:
+        # Use cached version for 2x speedup on warm cache
+        inlined = cached_inline_variables(inline_variables, source)
         
-        try:
-            mem_info = cp.cuda.Device(self.gpu_id).mem_info
-            available_mem = mem_info[0]
-            # Reduce batch size if memory is low
-            if available_mem < 1024**3:  # Less than 1GB available
-                return max(4, self.batch_size // 4)
-            elif available_mem < 2 * 1024**3:  # Less than 2GB
-                return max(8, self.batch_size // 2)
-        except:
-            pass
+        # Defensive check - ensure we got a string back
+        if inlined is None:
+            identifier = context_info.get('task_id', context_info.get('name', 'unknown'))
+            print_l(f"ERROR: inline_variables returned None for {context_type} {identifier}")
+            with _inlining_stats_lock:
+                _inlining_stats['other_errors'] += 1
+            return (None, None)
         
-        return min(self.batch_size, num_tasks)
+        if not isinstance(inlined, str):
+            identifier = context_info.get('task_id', context_info.get('name', 'unknown'))
+            print_l(f"ERROR: inline_variables returned {type(inlined).__name__} instead of str for {context_type} {identifier}")
+            with _inlining_stats_lock:
+                _inlining_stats['other_errors'] += 1
+            return (None, None)
         
-    def _process_batch_gpu(self, task_batch):
-        """
-        Process task batch on GPU
-        Optimized for grid operations common in ARC tasks
-        """
-        if not GPU_AVAILABLE:
-            return self._process_batch_cpu(task_batch)
+        md5_hash = hashlib.md5(inlined.encode()).hexdigest()
+        with _inlining_stats_lock:
+            _inlining_stats['success_count'] += 1
+        return (inlined, md5_hash)
         
-        results = []
-        try:
-            # Process each task with GPU-accelerated operations
-            for task in task_batch:
-                result = self._process_single_task_gpu(task)
-                results.append(result)
+    except ValueError as e:
+        # Handle ValueError from cached_inline_variables wrapper
+        identifier = context_info.get('task_id', context_info.get('name', 'unknown'))
+        error_msg = str(e)
+        
+        # Check for timeout - this is the adaptive retry case
+        if "timed out after" in error_msg:
+            with _inlining_stats_lock:
+                _inlining_stats['timeout_count'] += 1
             
-        except cp.cuda.memory.OutOfMemoryError:
-            print("GPU OOM, falling back to CPU for this batch")
-            return self._process_batch_cpu(task_batch)
-        except Exception as e:
-            print(f"GPU processing error: {e}")
-            return self._process_batch_cpu(task_batch)
-        
-        return results
-    
-    def _process_single_task_gpu(self, task):
-        """Process a single task with GPU acceleration"""
-        # This is a template - actual implementation depends on task structure
-        # For now, return the task as-is
-        # TODO: Implement GPU-accelerated grid operations
-        return task
-    
-    def _process_batch_cpu(self, task_batch):
-        """Fallback CPU processing for tasks"""
-        # Process tasks sequentially on CPU
-        return [self._process_single_task_cpu(task) for task in task_batch]
-    
-    def _process_single_task_cpu(self, task):
-        """Process a single task on CPU"""
-        # This is a template - return task as-is
-        return task
-    
-    def _cleanup_gpu_memory(self):
-        """Clean up GPU memory between batches"""
-        if self.use_gpu:
+            if DEBUG_VALIDATION and DO_PRINT:
+                print_l(f"TIMEOUT: Inlining timeout for {context_type} {identifier}")
+                print_l(f"  → Retrying with raw source (skip inlining)")
+            
+            # Retry: Skip inlining and use raw source (with timing)
+            retry_start = time.time()
             try:
-                mempool = cp.get_default_memory_pool()
-                pinned_mempool = cp.get_default_pinned_memory_pool()
-                mempool.free_all_blocks()
-                pinned_mempool.free_all_blocks()
-            except:
-                pass
-
-    def _gpu_batch_solve(self, task_batch):
-        """Process task batch on GPU"""
-        if not GPU_AVAILABLE:
-            return self._cpu_batch_solve(task_batch)
+                md5_hash = hashlib.md5(source.encode()).hexdigest()
+                retry_time_ms = (time.time() - retry_start) * 1000
+                with _inlining_stats_lock:
+                    _inlining_stats['timeout_retry_success'] += 1
+                    _inlining_stats['retry_time_ms'] += retry_time_ms
+                return (source, md5_hash)
+            except Exception as retry_error:
+                retry_time_ms = (time.time() - retry_start) * 1000
+                with _inlining_stats_lock:
+                    _inlining_stats['timeout_retry_fail'] += 1
+                    _inlining_stats['retry_time_ms'] += retry_time_ms
+                print_l(f"ERROR: Retry failed for {context_type} {identifier}: {retry_error}")
+                return (None, None)
         
-        try:
-            # Convert grids to GPU arrays
-            gpu_grids = [cp.asarray(task['grid']) for task in task_batch]
-            # Batch process on GPU
-            results = []
-            for gpu_grid in gpu_grids:
-                result = self._solve_on_gpu(gpu_grid)
-                results.append(cp.asnumpy(result))
-            return results
-        except Exception as e:
-            print(f"GPU batch failed, falling back to CPU: {e}")
-            return self._cpu_batch_solve(task_batch)
-
-    def _cpu_batch_solve(self, task_batch):
-        """Fallback CPU processing"""
-        return [self._solve_cpu(task) for task in task_batch]
-
-# GPU memory management optimized for Kaggle GPUs
-def configure_gpu_memory(device_id=0, memory_fraction=0.8):
-    """
-    Configure GPU memory for Kaggle environment
-    
-    Args:
-        device_id: GPU device ID (0 for first GPU)
-        memory_fraction: Fraction of available memory to use (0.8 = 80%)
-    
-    Returns:
-        bool: True if successful, False otherwise
-    """
-    if not GPU_AVAILABLE:
-        return False
-    
-    try:
-        cp.cuda.Device(device_id).use()
+        # Check for thread exhaustion - retry with backoff
+        elif "can't start new thread" in error_msg:
+            print_l(f"THREAD EXHAUSTION: {context_type} {identifier} - retrying with backoff")
+            
+            # Exponential backoff retry: 0.1s, 0.2s, 0.4s
+            max_retries = 3
+            for retry_num in range(max_retries):
+                backoff_time = 0.1 * (2 ** retry_num)
+                time.sleep(backoff_time)
+                
+                try:
+                    inlined = cached_inline_variables(inline_variables, source)
+                    if inlined is not None and isinstance(inlined, str):
+                        md5_hash = hashlib.md5(inlined.encode()).hexdigest()
+                        with _inlining_stats_lock:
+                            _inlining_stats['success_count'] += 1
+                            _inlining_stats.setdefault('thread_retry_success', 0)
+                            _inlining_stats['thread_retry_success'] += 1
+                        print_l(f"  → Retry {retry_num + 1} succeeded after {backoff_time}s")
+                        return (inlined, md5_hash)
+                except ValueError as retry_error:
+                    if "can't start new thread" not in str(retry_error):
+                        break
+                    if retry_num < max_retries - 1:
+                        next_backoff = 0.1 * (2 ** (retry_num + 1))
+                        print_l(f"  → Retry {retry_num + 1} failed, waiting {next_backoff}s")
+            
+            # All retries failed - use raw source as fallback
+            print_l(f"  → All retries failed, using raw source")
+            try:
+                md5_hash = hashlib.md5(source.encode()).hexdigest()
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
+                    _inlining_stats.setdefault('error_types', {})
+                    _inlining_stats['error_types'].setdefault('thread_error', 0)
+                    _inlining_stats['error_types']['thread_error'] += 1
+                    _inlining_stats.setdefault('thread_retry_fallback', 0)
+                    _inlining_stats['thread_retry_fallback'] += 1
+                return (source, md5_hash)
+            except Exception as fallback_error:
+                print_l(f"ERROR: Fallback failed for {context_type} {identifier}: {fallback_error}")
+                with _inlining_stats_lock:
+                    _inlining_stats['other_errors'] += 1
+                return (None, None)
         
-        # Get available memory
-        mem_info = cp.cuda.Device(device_id).mem_info
-        total_mem = mem_info[1]
-        available_mem = mem_info[0]
-        
-        # Set memory pool limit
-        mem_limit = int(total_mem * memory_fraction)
-        cp.get_default_memory_pool().set_limit(size=mem_limit)
-        
-        print(f"GPU {device_id} configured:")
-        print(f"  Total memory: {total_mem/(1024**3):.2f}GB")
-        print(f"  Available: {available_mem/(1024**3):.2f}GB")
-        print(f"  Pool limit: {mem_limit/(1024**3):.2f}GB")
-        
-        return True
-    except Exception as e:
-        print(f"GPU configuration error: {e}")
-        return False
-
-
-def gpu_memory_cleanup():
-    """Clean up GPU memory pools to prevent OOM errors"""
-    if not GPU_AVAILABLE:
-        return
-    
-    try:
-        mempool = cp.get_default_memory_pool()
-        pinned_mempool = cp.get_default_pinned_memory_pool()
-        
-        # Free unused blocks
-        mempool.free_all_blocks()
-        pinned_mempool.free_all_blocks()
-        
-        # Optional: Print memory stats
-        # mem_info = cp.cuda.Device().mem_info
-        # print(f"GPU memory after cleanup: {mem_info[0]/(1024**3):.2f}GB free")
-    except Exception as e:
-        print(f"GPU cleanup warning: {e}")
-
-
-def get_optimal_batch_size(grid_size=None, num_samples=None):
-    """
-    Calculate optimal batch size based on GPU memory and task characteristics
-    
-    Args:
-        grid_size: Average grid size (rows * cols)
-        num_samples: Number of samples to process
-    
-    Returns:
-        int: Optimal batch size
-    """
-    if not GPU_AVAILABLE:
-        return 16  # Default CPU batch size
-    
-    try:
-        mem_info = cp.cuda.Device().mem_info
-        available_mem = mem_info[0]
-        
-        # T4/P100: 16GB, L4: 24GB
-        # Conservative estimates for grid operations
-        if available_mem > 10 * 1024**3:  # > 10GB available
-            base_batch = 64
-        elif available_mem > 5 * 1024**3:  # > 5GB available
-            base_batch = 32
-        elif available_mem > 2 * 1024**3:  # > 2GB available
-            base_batch = 16
+        # Check for the specific "error return without exception set" error
+        elif "error return without exception set" in error_msg:
+            print_l(f"SKIP: Inlining failed with AST error for {context_type} {identifier}: {error_msg}")
+            with _inlining_stats_lock:
+                _inlining_stats['other_errors'] += 1
+                _inlining_stats.setdefault('error_types', {})
+                _inlining_stats['error_types'].setdefault('ast_error', 0)
+                _inlining_stats['error_types']['ast_error'] += 1
         else:
-            base_batch = 8
+            print_l(f"Error inlining {context_type} {identifier}: ValueError: {e}")
+            with _inlining_stats_lock:
+                _inlining_stats['other_errors'] += 1
+                _inlining_stats.setdefault('error_types', {})
+                _inlining_stats['error_types'].setdefault('other_value_error', 0)
+                _inlining_stats['error_types']['other_value_error'] += 1
+        return (None, None)
         
-        # Adjust for grid size if provided
-        if grid_size:
-            if grid_size > 900:  # Large grids (30x30)
-                base_batch = max(4, base_batch // 4)
-            elif grid_size > 400:  # Medium grids (20x20)
-                base_batch = max(8, base_batch // 2)
-        
-        # Cap at num_samples if provided
-        if num_samples:
-            base_batch = min(base_batch, num_samples)
-        
-        return base_batch
-    except:
-        return 16
+    except Exception as e:
+        error_type = type(e).__name__
+        identifier = context_info.get('task_id', context_info.get('name', 'unknown'))
+        error_msg = str(e)
+        print_l(f"Error inlining {context_type} {identifier}: {error_type}: {e}")
+        with _inlining_stats_lock:
+            _inlining_stats['other_errors'] += 1
+            _inlining_stats.setdefault('error_types', {})
+            error_key = 'thread_error' if "can't start new thread" in error_msg else error_type.lower()
+            _inlining_stats['error_types'].setdefault(error_key, 0)
+            _inlining_stats['error_types'][error_key] += 1
+        return (None, None)
 
+
+def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_score, S, prof=None):
+    """
+    Aggregate sample results (outputs and scores).
+    
+    Used for both demo and test result processing to avoid code duplication.
+    
+    Args:
+        results: List of result dictionaries from sample processing
+        task: Task data (demo_task or test_task)
+        sample_type: 'demo' or 'test'
+        all_o: Set to accumulate all outputs
+        o_score: O_Score instance
+        d_score: D_Score instance
+        S: Solver specification tuple
+        prof: Optional profiling dict
+    
+    Returns:
+        tuple: (o dict, s dict, updated all_o set)
+    """
+    o = {}
+    s = {}
+    
+    for result in results:
+        if result is None:
+            continue
+        
+        i = result['index']
+        o[i] = result['outputs']
+        s[i] = result['solver_scores']
+        
+        # Use update instead of union for better performance
+        if prof is not None:
+            union_start = timer()
+        all_o = all_o.union(result['outputs'])
+        if prof is not None:
+            prof['batt.result.union'] = prof.get('batt.result.union', 0) + (timer() - union_start)
+        
+        # Update scores
+        if prof is not None:
+            score_start = timer()
+        O = task[i]['output']
+        
+        # DEBUG: Log when processing results to catch cross-task contamination
+        if result['outputs'] and DEBUG_VALIDATION and DO_PRINT:
+            print_l(f"DEBUG: {sample_type}[{i}] has {len(result['outputs'])} outputs")
+        
+        for t_n, evo, o_solver_id, okt in result['outputs']:
+            C = okt
+            _, score = eval_match(S, C, O)
+            o_score.update(o_solver_id, score)
+        if prof is not None:
+            prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
+        
+        # Update solver scores
+        if prof is not None:
+            dscore_start = timer()
+        for s_item in result['solver_scores']:
+            # Extract o_solver_id from s_item tuple: (t_n, solver_id, differ_id, result)
+            if len(s_item) >= 2:
+                o_solver_id = s_item[1]
+                d_score.update(o_solver_id, s_item)
+        if prof is not None:
+            prof['batt.dscore.update'] = prof.get('batt.dscore.update', 0) + (timer() - dscore_start)
+    
+    return o, s, all_o
+
+
+# ============================================================================
+# SCORING CLASSES
+# ============================================================================
 
 class O_Score:    
     def __init__(self):
