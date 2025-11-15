@@ -115,16 +115,19 @@ def eval_match(S, C, O, solver_id=None, differ_scores=None):
                     # Validate return_tuple
                     if type(return_tuple) != tuple or len(return_tuple) < 2:
                         continue
-                    if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
+                    # if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
+                    if type(return_tuple[0]) != int:
                         continue
                     
                     # Convert differ tuple to score (same as D_Score.update in run_batt.py)
-                    total, matching = return_tuple[0], return_tuple[1]
-                    if total <= 0:
-                        continue
+                    # total, matching = return_tuple[0], return_tuple[1]
+                    # if total <= 0:
+                    #     continue
                     
                     # Calculate score (0-1000 per differ)
-                    differ_score = (matching * 1000) // total
+                    # differ_score = (matching * 1000) // total
+
+                    differ_score = return_tuple[0] # Use first element as score
                     differ_score = max(0, min(1000, differ_score))
                     total_score += differ_score
             
