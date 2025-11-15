@@ -74,7 +74,7 @@ def differ_d94712356774eb0ee744182d98e136ae(S, I, C):
 
 def differ_2e60be2014891e3e081089061ca48033(S, I, C):
     """
-    Count matching cells when dimensions match (Tier 2 scoring).
+    Count matching cells.
     Returns (total_cells, matching_cells).
     """
     x1 = cellwise(I, C, NEG_ONE)
@@ -84,10 +84,6 @@ def differ_2e60be2014891e3e081089061ca48033(S, I, C):
     x5 = width_t(I)
     x6 = multiply(x4, x5)
     x7 = subtract(x6, x3)
-    x8 = astuple(x6, x7)
+    x8 = astuple(x7, x6)
     return x8
-
-
-# Alias for readability
-differ_exact_dims = differ_2e60be2014891e3e081089061ca48033
 
