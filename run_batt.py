@@ -196,18 +196,19 @@ def managed_executor(executor_class, max_workers, task_id=None):
                     _active_executors.remove(executor)
 
 
-def _submit_with_retry(executor, func, args, max_retries=5, task_id=None, sample_type=None, sample_idx=None):
+def _submit_with_retry(executor, func, args, max_retries=5, task_id=None, sample_type=None, sample_idx=None, unpack_args=False):
     """
     Submit a task to executor with exponential backoff retry on thread exhaustion.
     
     Args:
         executor: ThreadPoolExecutor or ProcessPoolExecutor
         func: Function to execute
-        args: Arguments for function
+        args: Arguments for function (tuple)
         max_retries: Maximum retry attempts (default: 5)
         task_id: Optional task ID for logging
         sample_type: Optional sample type ('demo'/'test') for logging
         sample_idx: Optional sample index for logging
+        unpack_args: If True, unpack with *args. If False, pass args as single argument (default: False)
     
     Returns:
         tuple: (success: bool, future: Future or None)
@@ -218,7 +219,10 @@ def _submit_with_retry(executor, func, args, max_retries=5, task_id=None, sample
     
     for attempt in range(max_retries):
         try:
-            future = executor.submit(func, *args)
+            if unpack_args:
+                future = executor.submit(func, *args)
+            else:
+                future = executor.submit(func, args)
             return (True, future)
         except RuntimeError as e:
             if "can't start new thread" in str(e):
@@ -471,7 +475,8 @@ def _safe_map_with_timeout(executor, func, items, timeout_per_item=0.5, operatio
                 max_retries=3,  # Fewer retries for map operations
                 task_id=f"{operation_name}_item_{i}",
                 sample_type=operation_name,
-                sample_idx=i
+                sample_idx=i,
+                unpack_args=True  # Unpack (item,) to pass item directly
             )
             if success and future is not None:
                 futures[future] = (i, item)
