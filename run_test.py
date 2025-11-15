@@ -40,7 +40,6 @@ from grid import *
 from utils import *
 from dsl import *
 from constants import *
-from differs import differ_exact_dims
 
 # Debug flag for validation and score detection messages
 # Set to False to suppress timeout and mismatch warnings
