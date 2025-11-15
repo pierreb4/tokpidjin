@@ -1013,8 +1013,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     prof_start = timer() if prof is not None else None
     
     # Week 6B Optimization: Process ALL samples (demo + test) together for better parallelization
-    # GPU environments use ThreadPoolExecutor (GPU context not fork-safe)
-    # CPU environments use ProcessPoolExecutor (avoids GIL, better for CPU-bound work)
+    # Use ProcessPoolExecutor for CPU parallelism (avoids GIL, better for CPU-bound work)
     
     # Prepare arguments for ALL samples (demo + test combined)
     all_sample_args = []
@@ -1027,154 +1026,40 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     for i, sample in enumerate(test_task):
         all_sample_args.append((i, sample, 'test', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator))
     
-    if GPU_AVAILABLE:
-        # GPU: Parallel execution with ThreadPoolExecutor (GPU context not fork-safe)
-        # Check system health before attempting parallel execution
-        thread_count = threading.active_count()
-        system_overloaded = thread_count > 40  # Conservative threshold
-        
-        if system_overloaded:
-            # System under heavy load - use sequential processing
-            if DO_PRINT:
-                print_l(f"-- System overloaded ({thread_count} threads), using sequential processing")
-            
-            all_results = []
-            for args in all_sample_args:
-                try:
-                    result = score_sample(args)
-                    all_results.append(result)
-                except Exception as e:
-                    sample_type, sample_idx = args[2], args[0]
-                    if DO_PRINT:
-                        print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
-                    all_results.append({
-                        'index': sample_idx,
-                        'sample_type': sample_type,
-                        'outputs': [],
-                        'solver_scores': [],
-                        'timed_out': True,
-                        'diff_calls': 0,
-                        'matches': 0
-                    })
-        else:
-            # Normal load - use limited parallelism
-            # GPU systems: Use THREAD_POOL_CONFIG['gpu_batch'] (2 workers)
-            # CPU systems: Would use ProcessPoolExecutor, but ThreadPoolExecutor for GPU compatibility
-            max_workers = min(THREAD_POOL_CONFIG['gpu_batch'], len(all_sample_args))
-            
-            try:
-                with ThreadPoolExecutor(max_workers=max_workers) as executor:
-                    # Submit all samples (demo + test) for parallel execution
-                    sample_futures = {}
-                    for args in all_sample_args:
-                        try:
-                            future = executor.submit(score_sample, args)
-                        except RuntimeError as e:
-                            # Log and skip this sample if thread creation fails
-                            sample_type, sample_idx = args[2], args[0]
-                            if DO_PRINT:
-                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] thread creation failed: {e}")
-                            continue
-                        # Only add to dict if no exception raised
-                        sample_futures[future] = args
-                    
-                    # Collect results as they complete
-                    all_results = []
-                    for future in as_completed(sample_futures):
-                        try:
-                            # Use generous timeout to prevent hanging on stuck workers
-                            result = future.result(timeout=600)  # 10 minutes max per sample result
-                            all_results.append(result)
-                        except TimeoutError:
-                            args = sample_futures[future]
-                            sample_type, sample_idx = args[2], args[0]
-                            if DO_PRINT:
-                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] result collection timed out after 600s")
-                            all_results.append({
-                                'index': sample_idx,
-                                'sample_type': sample_type,
-                                'outputs': [],
-                                'solver_scores': [],
-                                'timed_out': True,
-                                'diff_calls': 0,
-                                'matches': 0
-                            })
-                        except MemoryError:
-                            # Handle memory exhaustion in thread - immediate exit to prevent hang
-                            args = sample_futures[future]
-                            sample_type, sample_idx = args[2], args[0]
-                            if DO_PRINT:
-                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to MemoryError")
-                            print_l(f"CRITICAL: MemoryError in GPU ThreadPoolExecutor. System out of memory. Exiting.")
-                            _log_and_exit(task_id, start_time, 'memory_error', 
-                                        f"GPU ThreadPoolExecutor MemoryError at {sample_type}[{sample_idx}]", timeout)
-                        except RuntimeError as e:
-                            # Handle "can't start new thread" from nested call_with_timeout
-                            if "can't start new thread" in str(e):
-                                args = sample_futures[future]
-                                sample_type, sample_idx = args[2], args[0]
-                                if DO_PRINT:
-                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed due to nested thread exhaustion (in call_with_timeout)")
-                                all_results.append({
-                                    'index': sample_idx,
-                                    'sample_type': sample_type,
-                                    'outputs': [],
-                                    'solver_scores': [],
-                                    'timed_out': True,
-                                    'diff_calls': 0,
-                                    'matches': 0
-                                })
-                            else:
-                                # Different RuntimeError
-                                args = sample_futures[future]
-                                sample_type, sample_idx = args[2], args[0]
-                                if DO_PRINT:
-                                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
-                                all_results.append({
-                                    'index': sample_idx,
-                                    'sample_type': sample_type,
-                                    'outputs': [],
-                                    'solver_scores': [],
-                                    'timed_out': True,
-                                    'diff_calls': 0,
-                                    'matches': 0
-                                })
-                        except Exception as e:
-                            args = sample_futures[future]
-                            sample_type, sample_idx = args[2], args[0]
-                            if DO_PRINT:
-                                print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
-                            all_results.append({
-                                'index': sample_idx,
-                                'sample_type': sample_type,
-                                'outputs': [],
-                                'solver_scores': [],
-                                'timed_out': True,
-                                'diff_calls': 0,
-                                'matches': 0
-                            })
-            except MemoryError:
-                # MemoryError during thread creation (Thread._bootstrap)
-                # This happens before any futures can be collected
-                print_l(f"CRITICAL: MemoryError during GPU ThreadPoolExecutor thread creation (Thread._bootstrap)")
-                print_l(f"System critically low on memory. Cannot create worker threads. Exiting.")
-                _log_and_exit(task_id, start_time, 'memory_error', 
-                            'GPU ThreadPoolExecutor thread creation MemoryError (Thread._bootstrap)', timeout)
-    else:
-        # CPU-only: Use ProcessPoolExecutor for true CPU parallelism (Week 6B)
-        # Conservative workers for multi-instance server environment
-        # Check sample count to decide strategy
-        sample_count = len(all_sample_args)
-        
-        # Check system health before attempting parallel execution
-        # If too many threads already exist, skip ProcessPoolExecutor entirely
-        thread_count = threading.active_count()
-        # Lower threshold to 40 (was 50) to prevent thread cleanup issues
-        # Under extreme load, thread cleanup can fail with KeyError in threading._active
-        system_overloaded = thread_count > 40  # Conservative threshold
-        
-        if system_overloaded and DO_PRINT:
+    # Check system health before attempting parallel execution
+    sample_count = len(all_sample_args)
+    thread_count = threading.active_count()
+    system_overloaded = thread_count > 40  # Conservative threshold
+    
+    if system_overloaded:
+        # System under heavy load - use sequential processing
+        if DO_PRINT:
             print_l(f"-- System overloaded ({thread_count} threads), using sequential processing")
+        
+        all_results = []
+        for args in all_sample_args:
+            try:
+                result = score_sample(args)
+                all_results.append(result)
+            except Exception as e:
+                sample_type, sample_idx = args[2], args[0]
+                if DO_PRINT:
+                    print_l(f"-- {task_id} - {sample_type}[{sample_idx}] failed: {e}")
+                all_results.append({
+                    'index': sample_idx,
+                    'sample_type': sample_type,
+                    'outputs': [],
+                    'solver_scores': [],
+                    'timed_out': True,
+                    'diff_calls': 0,
+                    'matches': 0
+                })
+    else:
+        # Use ProcessPoolExecutor for true CPU parallelism
+        # Conservative workers for multi-instance server environment
+        
+        if not LOKY_AVAILABLE and DO_PRINT:
+            print_l("Warning: loky not available, using standard ProcessPoolExecutor (may fail on closures)")
         
         # Memory-aware worker selection
         # Small batches (<4 samples): Use threads (lighter, good for small work)
