@@ -735,20 +735,22 @@ class D_Score:
         if type(return_tuple) != tuple or len(return_tuple) < 2:
             return
         
-        if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
+        # if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
+        if type(return_tuple[0]) != int:
             return
         
         # Convert differ tuple to 0-1000 score (like eval_match)
         # For differ_exact_dims: (total_cells, matching_cells)
-        # Score = (matching_cells * 1000) // total_cells
-        total = return_tuple[0]
-        matching = return_tuple[1]
+        # total = return_tuple[0]
+        # matching = return_tuple[1]
         
-        if total <= 0:
-            return
+        sample_score = return_tuple[0]  # Directly use provided score
+
+        # if total <= 0:
+        #     return
         
-        # Calculate score (0-1000 per sample, just like solvers)
-        sample_score = (matching * 1000) // total
+        # # Calculate score (0-1000 per sample, just like solvers)
+        # sample_score = (matching * 1000) // total
         
         # Clamp to 0-1000 range for safety
         sample_score = max(0, min(1000, sample_score))
