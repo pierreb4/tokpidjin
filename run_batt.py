@@ -218,7 +218,7 @@ def _submit_with_retry(executor, func, args, max_retries=5, task_id=None, sample
     
     for attempt in range(max_retries):
         try:
-            future = executor.submit(func, args)
+            future = executor.submit(func, *args)
             return (True, future)
         except RuntimeError as e:
             if "can't start new thread" in str(e):
