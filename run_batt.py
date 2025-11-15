@@ -61,7 +61,7 @@ from batt_cache import (
     init_cache
 )
 
-# Phase 2b: GPU batch processing
+# Phase 2b: Batch processing accumulator
 from gpu_batch_integration import BatchSolverAccumulator
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -86,29 +86,23 @@ DEBUG_VALIDATION = False
 #
 # Design rationale:
 # 1. Inline operations (solver/differ processing):
-#    - GPU systems: 4 workers (more resources, handles nested ThreadPoolExecutor better)
 #    - CPU systems: 2 workers (conservative, prevents thread exhaustion)
 #    - Each worker may create nested ThreadPoolExecutor(max_workers=1) in inline_variables
-#    - Total threads: gpu=4+4=8, cpu=2+2=4
+#    - Total threads: 2+2=4
 #
 # 2. Batch processing (sample scoring):
-#    - GPU systems: 2 workers (GPU context not fork-safe, must use threads)
 #    - CPU systems: 3 workers (can use ProcessPoolExecutor for better isolation)
 #    - Batch operations are heavier than inline, need fewer concurrent workers
 #
 # 3. Fallback: 1 worker (sequential processing when resources exhausted)
 #
 # Why these specific numbers:
-# - 4 for GPU inline: Validated on Kaggle L4x4, handles load well
 # - 2 for CPU inline: Tested on 12-core server, prevents "can't start new thread"
-# - 2 for GPU batch: Safe for ThreadPoolExecutor with GPU context
 # - 3 for CPU batch: Optimal for ProcessPoolExecutor without over-subscription
 # - 1 for fallback: Ensures progress even under extreme memory pressure
 THREAD_POOL_CONFIG = {
-    'gpu_inline': 4,      # GPU systems: inline_variables thread pool
-    'cpu_inline': 2,      # CPU systems: inline_variables thread pool
-    'gpu_batch': 2,       # GPU systems: batch processing (ThreadPoolExecutor)
-    'cpu_batch': 3,       # CPU systems: batch processing (ProcessPoolExecutor)
+    'cpu_inline': 2,      # inline_variables thread pool
+    'cpu_batch': 3,       # batch processing (ProcessPoolExecutor)
     'fallback': 1,        # Single-threaded fallback for resource errors
 }
 
@@ -971,7 +965,7 @@ def score_sample(args):
             if match_result and DO_PRINT:
                 print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
     
-    # Phase 2b: Add input grid to batch accumulator for GPU processing
+    # Phase 2b: Add input grid to batch accumulator
     if batch_accumulator:
         batch_accumulator.add('input', I, operation='sample_input')
         if sample_o:
@@ -1464,7 +1458,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     #   - Normal solvers inline in <100ms
     #   - 0.5s is still generous for pathological cases
     #   - Prevents hanging on infinite loops in AST visitor
-    max_workers = THREAD_POOL_CONFIG['gpu_inline'] if GPU_AVAILABLE else THREAD_POOL_CONFIG['cpu_inline']
+    max_workers = THREAD_POOL_CONFIG['cpu_inline']
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         inlined_data = _safe_map_with_timeout(executor, inline_one, candidate_data, 
                                              timeout_per_item=0.5, operation_name="inline_variables")
@@ -1815,7 +1809,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
     # Timeout: 0.5s per differ (vs 30s previously)
     #   - Normal differs inline in <100ms
     #   - 0.5s is still generous for pathological cases
-    max_workers = THREAD_POOL_CONFIG['gpu_inline'] if GPU_AVAILABLE else THREAD_POOL_CONFIG['cpu_inline']
+    max_workers = THREAD_POOL_CONFIG['cpu_inline']
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         inlined_differs = _safe_map_with_timeout(executor, inline_differ, differ_data_list,
                                                 timeout_per_item=0.5, operation_name="inline_differ")
@@ -1951,18 +1945,18 @@ def pick_rnd_task(task_list, total_data):
 
 async def main_mega_batch(do_list, start=0, count=0, batch_size=1000, batt_module_name='batt', enable_timing=False, data='train'):
     """
-    Mega-batch mode: Process all tasks using GPU batch optimization.
+    Mega-batch mode: Process all tasks using batch optimization.
     
     Instead of calling batt() 4000+ times sequentially, this:
     1. Collects all inputs from all tasks
     2. Batches them into chunks of ~1000
-    3. Processes each batch (Week 5: GPU vectorized)
+    3. Processes each batch
     4. Merges results back per-task
     
     Expected speedup (Week 5): 4.8-9x faster than sequential
     """
     print(f"\n{'='*60}")
-    print("MEGA-BATCH MODE - GPU Batch Processing")
+    print("MEGA-BATCH MODE - Batch Processing")
     print(f"{'='*60}")
     print(f"Batch size: {batch_size}")
     print(f"Batt module: {batt_module_name}")
