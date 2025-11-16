@@ -77,23 +77,7 @@ def get_functions(path):
     return functions
 
 
-def eval_match(S, C, O, solver_id=None, differ_scores=None):
-    """
-    Evaluate match between computed output C and expected output O.
-    
-    Args:
-        S: Sample pairs (tuple of (input, output) tuples) for differ context
-        C: Computed output grid
-        O: Expected output grid (ground truth)
-        solver_id: Optional solver ID (for differ score lookup)
-        differ_scores: Optional list of differ score tuples for this solver
-                      Each tuple: (last_t, s_solver_id, d_name, return_tuple)
-    
-    Scoring (0-1000 points):
-    - Perfect match: 1000 points
-    - With differ_scores: Sum all differ scores for the solver (0-1000 each)
-    - Without differ_scores: 0 points (no scoring method available)
-    """
+def eval_match(S, C, O, differ_score=0):
     perfect_match = C == O
     
     try:
@@ -104,37 +88,8 @@ def eval_match(S, C, O, solver_id=None, differ_scores=None):
         # Tier 1: Perfect match (exact equality)
         if perfect_match:
             return perfect_match, 1000
-
-        # Tier 2: Use differ scores if provided (from run_batt.py)
-        if differ_scores is not None and len(differ_scores) > 0:
-            total_score = 0
-            for s_item in differ_scores:
-                if len(s_item) >= 4:
-                    last_t, s_solver_id, d_name, return_tuple = s_item
-                    
-                    # Validate return_tuple
-                    if type(return_tuple) != tuple or len(return_tuple) < 2:
-                        continue
-                    # if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
-                    if type(return_tuple[0]) != int:
-                        continue
-                    
-                    # Convert differ tuple to score (same as D_Score.update in run_batt.py)
-                    # total, matching = return_tuple[0], return_tuple[1]
-                    # if total <= 0:
-                    #     continue
-                    
-                    # Calculate score (0-1000 per differ)
-                    # differ_score = (matching * 1000) // total
-
-                    differ_score = return_tuple[0] # Use first element as score
-                    differ_score = max(0, min(1000, differ_score))
-                    total_score += differ_score
-            
-            return perfect_match, total_score
-
-        # Tier 3: No differ scores available
-        return perfect_match, 0
+        else:
+            return perfect_match, differ_score
 
     except Exception:
         return perfect_match, 0
