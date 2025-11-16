@@ -797,8 +797,7 @@ def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_scor
         
         for t_n, evo, o_solver_id, okt in result['outputs']:
             C = okt
-            solver_differs = differ_scores_by_solver.get(o_solver_id, None)
-            _, score = eval_match(S, C, O, o_solver_id, solver_differs)
+            _, score = eval_match(S, C, O, o_solver_id, d_score)
             o_score.update(o_solver_id, score)
         if prof is not None:
             prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
