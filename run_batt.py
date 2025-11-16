@@ -795,13 +795,6 @@ def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_scor
         if result['outputs'] and DEBUG_VALIDATION and DO_PRINT:
             print_l(f"DEBUG: {sample_type}[{i}] has {len(result['outputs'])} outputs")
         
-        for t_n, evo, o_solver_id, okt in result['outputs']:
-            C = okt
-            _, score = eval_match(S, C, O, o_solver_id, d_score)
-            o_score.update(o_solver_id, score)
-        if prof is not None:
-            prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
-        
         # Update solver scores
         if prof is not None:
             dscore_start = timer()
@@ -813,6 +806,14 @@ def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_scor
         if prof is not None:
             prof['batt.dscore.update'] = prof.get('batt.dscore.update', 0) + (timer() - dscore_start)
     
+        for t_n, evo, o_solver_id, okt in result['outputs']:
+            C = okt
+            differ_score = d_score.get(o_solver_id)
+            _, score = eval_match(S, C, O, differ_score)
+            o_score.update(o_solver_id, score)
+        if prof is not None:
+            prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
+        
     return o, s, all_o
 
 
@@ -874,21 +875,8 @@ class D_Score:
         # if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
         if type(return_tuple[0]) != int:
             return
-        
-        # Convert differ tuple to 0-1000 score (like eval_match)
-        # For differ_exact_dims: (total_cells, matching_cells)
-        # total = return_tuple[0]
-        # matching = return_tuple[1]
-        
+                
         sample_score = return_tuple[0]  # Directly use provided score
-
-        # if total <= 0:
-        #     return
-        
-        # # Calculate score (0-1000 per sample, just like solvers)
-        # sample_score = (matching * 1000) // total
-        
-        # Clamp to 0-1000 range for safety
         sample_score = max(0, min(1000, sample_score))
         
         # Accumulate the score across samples, taking into account
@@ -897,11 +885,17 @@ class D_Score:
             self.score[solver_id][d_name]['score'] += 1000 - sample_score
         if s_solver_id == solver_id:
             self.score[solver_id][d_name]['score'] += sample_score
-
+            
+    def get(self, solver_id):
+        if solver_id not in self.score:
+            return 0
+        # Sum all differ scores for this solver
+        total = sum(differ_data['score'] for differ_data in self.score[solver_id].values())
+        return total
 
 def score_sample(args):
     """Score a single sample - works for both demo and test (Week 6B optimization)"""
-    i, sample, sample_type, task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator = args
+    i, sample, sample_type, task_id, S, d_score, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator = args
     
     # Import batt in worker process (needed for ProcessPoolExecutor)
     import importlib
@@ -929,43 +923,31 @@ def score_sample(args):
         
         if DO_PRINT:
             print_l(f"{sample_type}[{i}] - {task_id} - {len(sample_o)}")
-        
-        # # First pass: Quick check if ANY solver produced a perfect match
-        # for t_n, evo, o_solver_id, okt in sample_o:
-        #     C = okt
-        #     if C == O:  # Perfect match check only
-        #         match = True
-        #         break
-        
+                
         # OPTIMIZATION: Only run diff ONCE per sample if any output matches
         # Run differs BEFORE scoring so we can pass differ scores to eval_match
         differ_scores_by_solver = {}  # Map solver_id → list of differ score tuples
-        # if match:
-        if True:
-            diff_call_count += 1
-            # Run diff to get solver-level scores (only once per sample)
-            diff_timed_out, diff_result = call_with_timeout(batt_func,
-                [task_id, S, I, O, pile_log_path], timeout)
-            
-            if diff_result is not None:
-                _, sample_s_result = diff_result
-                sample_s.extend(sample_s_result)
-                
-                # Organize differ scores by solver_id for eval_match
-                for s_item in sample_s_result:
-                    if len(s_item) >= 2:
-                        last_t, s_solver_id, d_name, return_tuple = s_item
-                        if s_solver_id != 'None':  # Only actual solver scores
-                            if s_solver_id not in differ_scores_by_solver:
-                                differ_scores_by_solver[s_solver_id] = []
-                            differ_scores_by_solver[s_solver_id].append(s_item)
+        diff_call_count += 1
+        # Run diff to get solver-level scores (only once per sample)
+        diff_timed_out, diff_result = call_with_timeout(batt_func,
+            [task_id, S, I, O, pile_log_path], timeout)
         
+        if diff_result is not None:
+            _, sample_s_result = diff_result
+            sample_s.extend(sample_s_result)
+            
+            for s_item in sample_s_result:
+                # Extract solver_id from s_item tuple: (t_n, solver_id, differ_id, result)
+                if len(s_item) >= 2:
+                    solver_id = s_item[1]
+                    d_score.update(solver_id, s_item)
+
         # Second pass: Score outputs with differ scores
         for t_n, evo, o_solver_id, okt in sample_o:
             C = okt
             # Pass differ scores for this specific solver
-            solver_differs = differ_scores_by_solver.get(o_solver_id, None)
-            match_result, score = eval_match(S, C, O, o_solver_id, solver_differs)
+            differ_score = d_score.get(o_solver_id)
+            match_result, score = eval_match(S, C, O, differ_score)
             score_count += score
             if match_result and DO_PRINT:
                 print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
@@ -1022,11 +1004,11 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     # Add demo samples
     for i, sample in enumerate(demo_task):
-        all_sample_args.append((i, sample, 'demo', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator))
+        all_sample_args.append((i, sample, 'demo', task_id, S, d_score, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator))
     
     # Add test samples
     for i, sample in enumerate(test_task):
-        all_sample_args.append((i, sample, 'test', task_id, S, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator))
+        all_sample_args.append((i, sample, 'test', task_id, S, d_score, pile_log_path, timeout, DO_PRINT, batt_module_name, batch_accumulator))
     
     # Check system health before attempting parallel execution
     sample_count = len(all_sample_args)
