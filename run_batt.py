@@ -803,6 +803,7 @@ def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_scor
             if len(s_item) >= 2:
                 o_solver_id = s_item[1]
                 d_score.update(o_solver_id, s_item)
+
         if prof is not None:
             prof['batt.dscore.update'] = prof.get('batt.dscore.update', 0) + (timer() - dscore_start)
     
@@ -872,7 +873,6 @@ class D_Score:
         if type(return_tuple) != tuple or len(return_tuple) < 2:
             return
         
-        # if type(return_tuple[0]) != int or type(return_tuple[1]) != int:
         if type(return_tuple[0]) != int:
             return
                 
@@ -885,13 +885,16 @@ class D_Score:
             self.score[solver_id][d_name]['score'] += 1000 - sample_score
         if s_solver_id == solver_id:
             self.score[solver_id][d_name]['score'] += sample_score
-            
+
     def get(self, solver_id):
         if solver_id not in self.score:
             return 0
-        # Sum all differ scores for this solver
-        total = sum(differ_data['score'] for differ_data in self.score[solver_id].values())
-        return total
+
+        return sum(
+            self.score[solver_id][d_name]['score']
+            for d_name in self.score[solver_id]
+        )
+
 
 def score_sample(args):
     """Score a single sample - works for both demo and test (Week 6B optimization)"""
