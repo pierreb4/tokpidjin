@@ -909,8 +909,9 @@ def score_sample(args):
     O = sample['output']
     
     # Call batt with thread-based timeout
+    # NOTE We use I twice to avoid potential leakage of O
     solve_timed_out, solve_result = call_with_timeout(batt_func,
-        [task_id, S, I, None, pile_log_path], timeout)
+        [task_id, S, I, I, pile_log_path], timeout)
     
     if solve_timed_out and DO_PRINT:
         print_l(f'-- {task_id} - {sample_type}[{i}] timed out')
@@ -931,7 +932,7 @@ def score_sample(args):
         # Run differs BEFORE scoring so we can pass differ scores to eval_match
         differ_scores_by_solver = {}  # Map solver_id → list of differ score tuples
         diff_call_count += 1
-        # Run diff to get solver-level scores (only once per sample)
+        # Run batt to get solver-level scores (only once per sample)
         diff_timed_out, diff_result = call_with_timeout(batt_func,
             [task_id, S, I, O, pile_log_path], timeout)
         
