@@ -749,7 +749,7 @@ def _inline_with_telemetry(source, context_type='solver', context_info=None):
         return (None, None)
 
 
-def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_score, S, prof=None):
+def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_score, s_score, S, prof=None):
     """
     Aggregate sample results (outputs and scores).
     
@@ -762,6 +762,7 @@ def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_scor
         all_o: Set to accumulate all outputs
         o_score: O_Score instance
         d_score: D_Score instance
+        s_score: Dict of S_Score instances (per differ name)
         S: Solver specification tuple
         prof: Optional profiling dict
     
@@ -812,8 +813,16 @@ def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_scor
             differ_score = d_score.get(o_solver_id)
             _, score = eval_match(S, C, O, differ_score)
             o_score.update(o_solver_id, score)
+        
         if prof is not None:
             prof['batt.score.update'] = prof.get('batt.score.update', 0) + (timer() - score_start)
+    
+    # Build s_score (differ-centric view) after all samples aggregated
+    for solver_id in d_score.score:
+        for d_name in d_score.score[solver_id]:
+            if d_name not in s_score:
+                s_score[d_name] = S_Score()
+            s_score[d_name].update(solver_id, d_score.score[solver_id][d_name]['score'])
         
     return o, s, all_o
 
@@ -882,7 +891,7 @@ class D_Score:
         # Accumulate the score across samples, taking into account
         # score improvement from 'None' to actual solver
         if s_solver_id == 'None':
-            self.score[solver_id][d_name]['score'] += 1000 - sample_score
+            self.score[solver_id][d_name]['score'] += -sample_score
         if s_solver_id == solver_id:
             self.score[solver_id][d_name]['score'] += sample_score
 
@@ -890,10 +899,10 @@ class D_Score:
         if solver_id not in self.score:
             return 0
 
-        return sum(
+        return max(0, sum(
             self.score[solver_id][d_name]['score']
             for d_name in self.score[solver_id]
-        )
+        ))
 
 
 def score_sample(args):
@@ -939,21 +948,11 @@ def score_sample(args):
         if diff_result is not None:
             _, sample_s_result = diff_result
             sample_s.extend(sample_s_result)
-            
-            for s_item in sample_s_result:
-                # Extract solver_id from s_item tuple: (t_n, solver_id, differ_id, result)
-                if len(s_item) >= 2:
-                    solver_id = s_item[1]
-                    d_score.update(solver_id, s_item)
 
-        # Second pass: Score outputs with differ scores
+        # Optional: Print matches for debugging (scoring happens in aggregation)
         for t_n, evo, o_solver_id, okt in sample_o:
             C = okt
-            # Pass differ scores for this specific solver
-            differ_score = d_score.get(o_solver_id)
-            match_result, score = eval_match(S, C, O, differ_score)
-            score_count += score
-            if match_result and DO_PRINT:
+            if C == O and DO_PRINT:
                 print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
     
     # Phase 2b: Add input grid to batch accumulator
@@ -1137,28 +1136,19 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     
     # Aggregate demo and test results using helper function
     o['demo'], s['demo'], all_o = _aggregate_sample_results(
-        demo_results, demo_task, 'demo', all_o, o_score, d_score, S, prof
+        demo_results, demo_task, 'demo', all_o, o_score, d_score, s_score, S, prof
     )
     o['test'], s['test'], all_o = _aggregate_sample_results(
-        test_results, test_task, 'test', all_o, o_score, d_score, S, prof
+        test_results, test_task, 'test', all_o, o_score, d_score, s_score, S, prof
     )
     
     if prof is not None:
         prof['batt.aggregation.total'] = timer() - agg_start
 
     # NOTE Move this around when we start with 'eval' runs?
-    if prof is not None:
-        consolidate_start = timer()
+    # Week 6B: S_Score is now built during aggregation in _aggregate_sample_results
+    # (removed consolidation loop - s_score populated incrementally)
     
-    for o_solver_id in d_score.score.keys():
-        for name in d_score.score[o_solver_id].keys():
-            if name not in s_score:
-                s_score[name] = S_Score()
-            s_score[name].update(o_solver_id, d_score.score[o_solver_id][name]['score'])
-    
-    if prof is not None:
-        prof['batt.score.consolidate'] = timer() - consolidate_start
-
     # Week 6B: Test samples now processed in parallel with demo samples above!
     # Old sequential test processing removed - all samples processed together
     
