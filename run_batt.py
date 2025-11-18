@@ -1201,7 +1201,7 @@ def check_solver_save(path, score, max_files=32):
     return no_save
 
 
-# XXX Quick and dirty workaround to promote differ diversity
+# XXX Quick and dirty workaround to promote diversity
 def check_differ_save(path, score, max_files=32):
     # List subpaths in path
     root_path = Path(path)
