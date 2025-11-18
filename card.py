@@ -963,7 +963,8 @@ class Differs:
                 weights.append(s_score)
 
             if sum(weights) > 0:
-                select_differ = random.choices(file_list, weights=weights, k=1)
+                # select_differ = random.choices(file_list, weights=weights, k=1)
+                select_differ = random.sample(file_list, k=1)
             else:
                 select_differ = []
 
@@ -971,7 +972,7 @@ class Differs:
             all_list += [f[:-3] for f in select_differ if f.endswith('.py')]
 
         # all_list = [f[:-3] for f in os.listdir('differ_md5') if f.endswith('.py')]
-        add_list = random.sample(all_list, min(32, len(all_list)))
+        add_list = random.sample(all_list, k=min(32, len(all_list)))
         differ_list += add_list
 
         # TODO Maybe adjust get_differs to get the best differs 
