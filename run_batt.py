@@ -1821,8 +1821,6 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
 
         task_s_score = s_score[name].get(sol_solver_id)
 
-        print_l(f'-- Differ {name} for solver {sol_solver_id} with score {task_s_score}') if DO_PRINT else None
-
         differ_task = f'differ_dir/solve_{task_id}'
         if check_save(differ_task, task_s_score, max_files):
             continue
