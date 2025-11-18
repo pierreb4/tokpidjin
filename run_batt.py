@@ -1217,20 +1217,41 @@ def check_differ_save(path, score, max_files=32):
 
     no_save = False
     while len(files) > max_files: 
+        # Check if this score has already been seen
         for file in files:
-            # Only save if this is a score that we haven't been seen
             if file.is_file():
                 file_parts = file.relative_to(root_path).parts
                 saved_o = int(file_parts[0])
                 if score == saved_o:
-                    no_save = True
-                    break
+                    return True
+                    
+        # Too many files, remove worst one before saving new one
+        worst_score = None
+        worst_time = None
+        worst_file = None
+        for file in files:
+            if file.is_file():
+                file_parts = file.relative_to(root_path).parts
+                saved_o = int(file_parts[0])
+                saved_t = int(file_parts[1])
 
-            # Too many files, remove a random file to make space
-            if random.random() < 1/max_files:
-                with suppress(FileNotFoundError):
-                    os.remove(file)
-                files.remove(file)
+                if worst_score is None or saved_o < worst_score:
+                    worst_score = saved_o
+                    worst_time = saved_t
+                    worst_file = file
+                elif saved_o == worst_score and saved_t < worst_time:
+                    worst_time = saved_t
+                    worst_file = file
+
+        if score < worst_score:
+            # New candidate is worse than worst saved one, don't save
+            no_save = True
+            break
+
+        if worst_file is not None:
+            with suppress(FileNotFoundError):
+                os.remove(worst_file)
+            files.remove(worst_file)
 
     return no_save
 
