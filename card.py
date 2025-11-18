@@ -964,6 +964,7 @@ class Differs:
 
             if sum(weights) > 0:
                 # select_differ = random.choices(file_list, weights=weights, k=1)
+                # Promote diversity by random sampling instead of weighted choice
                 select_differ = random.sample(file_list, k=1)
             else:
                 select_differ = []
