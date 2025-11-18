@@ -1155,7 +1155,7 @@ def check_batt(total_data, task_i, task_id, d_score, start_time, pile_log_path, 
     return all_o, o_score, s_score
 
 
-def check_save(path, score, max_files=32):
+def check_solver_save(path, score, max_files=32):
     # List subpaths in path
     root_path = Path(path)
 
@@ -1197,6 +1197,40 @@ def check_save(path, score, max_files=32):
             with suppress(FileNotFoundError):
                 os.remove(worst_file)
             files.remove(worst_file)
+
+    return no_save
+
+
+# XXX Quick and dirty workaround to check things
+def check_differ_save(path, score, max_files=32):
+    # List subpaths in path
+    root_path = Path(path)
+
+    done = False
+    while not done:
+        with suppress(FileNotFoundError):
+            paths = list(root_path.rglob("*"))
+            done = True
+
+    # List files (not folders) in subpaths
+    files = [f for f in paths if f.is_file()]
+
+    no_save = False
+    while len(files) > max_files: 
+        for file in files:
+            # Only save if this is a score that we haven't been seen
+            if file.is_file():
+                file_parts = file.relative_to(root_path).parts
+                saved_o = int(file_parts[0])
+                if score == saved_o:
+                    no_save = True
+                    break
+
+            # Too many files, remove a random file to make space
+            if random.random() < 1/max_files:
+                with suppress(FileNotFoundError):
+                    os.remove(file)
+                files.remove(file)
 
     return no_save
 
@@ -1243,7 +1277,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         solve_task = f'solver_dir/solve_{task_id}'
         
         # Quick check if score is too low before expensive operations
-        if check_save(solve_task, task_o_score, max_files):
+        if check_solver_save(solve_task, task_o_score, max_files):
             continue
         
         # Track calls and build solver body (lightweight operation)
@@ -1531,7 +1565,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         # Double-check score (might have changed)
         if prof is not None:
             check_start = timer()
-        should_skip = check_save(solve_task, task_o_score, max_files)
+        should_skip = check_solver_save(solve_task, task_o_score, max_files)
         if prof is not None:
             phase3b_check_save_time += timer() - check_start
         
@@ -1822,7 +1856,7 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
         task_s_score = s_score[name].get(sol_solver_id)
 
         differ_task = f'differ_dir/solve_{task_id}'
-        if check_save(differ_task, task_s_score, max_files):
+        if check_differ_save(differ_task, task_s_score, max_files):
             continue
 
         # Use t_log from the corresponding solver
