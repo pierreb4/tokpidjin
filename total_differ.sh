@@ -8,6 +8,8 @@ for dir in differ_dir/*; do
   # Find the largest number in the list
   max=$(echo $numbers | tr ' ' '\n' | sort -nr | head -1)
   
+  echo "Max in $dir: $max"
+
   # Add to total
   total=$((total + max))
 done
