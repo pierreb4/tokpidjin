@@ -808,8 +808,7 @@ def _aggregate_sample_results(results, task, sample_type, all_o, o_score, d_scor
         if prof is not None:
             prof['batt.dscore.update'] = prof.get('batt.dscore.update', 0) + (timer() - dscore_start)
     
-        for t_n, evo, o_solver_id, okt in result['outputs']:
-            C = okt
+        for t_n, evo, o_solver_id, C in result['outputs']:
             differ_score = d_score.get(o_solver_id)
             _, score = eval_match(S, C, O, differ_score)
             o_score.update(o_solver_id, score)
@@ -950,8 +949,7 @@ def score_sample(args):
             sample_s.extend(sample_s_result)
 
         # Optional: Print matches for debugging (scoring happens in aggregation)
-        for t_n, evo, o_solver_id, okt in sample_o:
-            C = okt
+        for t_n, evo, o_solver_id, C in sample_o:
             if C == O and DO_PRINT:
                 print_l(f'- MATCH: {o_solver_id = } - sample_type={sample_type}[{i}] task_id={task_id}')
     
@@ -960,8 +958,8 @@ def score_sample(args):
         batch_accumulator.add('input', I, operation='sample_input')
         if sample_o:
             # Add first output as representative of solver outputs
-            for t_n, evo, o_solver_id, okt in sample_o[:1]:
-                batch_accumulator.add('output', okt, operation='solver_output')
+            for t_n, evo, o_solver_id, C in sample_o[:1]:
+                batch_accumulator.add('output', C, operation='solver_output')
     
     return {
         'index': i,
@@ -1822,6 +1820,8 @@ async def run_batt(total_data, task_i, task_id, d_score, start_time, pile_log_pa
             continue
 
         task_s_score = s_score[name].get(sol_solver_id)
+
+        print_l(f'-- Differ {name} for solver {sol_solver_id} with score {task_s_score}') if DO_PRINT else None
 
         differ_task = f'differ_dir/solve_{task_id}'
         if check_save(differ_task, task_s_score, max_files):
