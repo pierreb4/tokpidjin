@@ -917,9 +917,13 @@ def score_sample(args):
     O = sample['output']
     
     # Call batt with thread-based timeout
-    # NOTE We use I twice to avoid potential leakage of O
-    solve_timed_out, solve_result = call_with_timeout(batt_func,
-        [task_id, S, I, I, pile_log_path], timeout)
+    if sample_type == 'demo':
+        solve_timed_out, solve_result = call_with_timeout(batt_func,
+            [task_id, S, I, O, pile_log_path], timeout)
+    else:
+        # For test samples, we don't pass O to avoid leakage
+        solve_timed_out, solve_result = call_with_timeout(batt_func,
+            [task_id, S, I, None, pile_log_path], timeout)
     
     if solve_timed_out and DO_PRINT:
         print_l(f'-- {task_id} - {sample_type}[{i}] timed out')
