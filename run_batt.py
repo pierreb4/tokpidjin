@@ -957,10 +957,7 @@ def score_sample(args):
     # Phase 2b: Add input grid to batch accumulator
     if batch_accumulator:
         batch_accumulator.add('input', I, operation='sample_input')
-        if sample_o:
-            # Add first output as representative of solver outputs
-            for t_n, evo, o_solver_id, C in sample_o[:1]:
-                batch_accumulator.add('output', C, operation='solver_output')
+        batch_accumulator.add('output', O, operation='solver_output')
     
     return {
         'index': i,
