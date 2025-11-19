@@ -923,7 +923,7 @@ def score_sample(args):
     else:
         # For test samples, we don't pass O to avoid leakage
         solve_timed_out, solve_result = call_with_timeout(batt_func,
-            [task_id, S, I, (()), pile_log_path], timeout)
+            [task_id, S, I, I, pile_log_path], timeout)
     
     if solve_timed_out and DO_PRINT:
         print_l(f'-- {task_id} - {sample_type}[{i}] timed out')
