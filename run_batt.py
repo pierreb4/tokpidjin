@@ -917,13 +917,9 @@ def score_sample(args):
     O = sample['output']
     
     # Call batt with thread-based timeout
-    if sample_type == 'demo':
-        solve_timed_out, solve_result = call_with_timeout(batt_func,
-            [task_id, S, I, O, pile_log_path], timeout)
-    else:
-        # For test samples, we don't pass O to avoid leakage
-        solve_timed_out, solve_result = call_with_timeout(batt_func,
-            [task_id, S, I, I, pile_log_path], timeout)
+    # We don't pass O to avoid leakage
+    solve_timed_out, solve_result = call_with_timeout(batt_func,
+        [task_id, S, I, I, pile_log_path], timeout)
     
     if solve_timed_out and DO_PRINT:
         print_l(f'-- {task_id} - {sample_type}[{i}] timed out')
@@ -945,12 +941,13 @@ def score_sample(args):
         differ_scores_by_solver = {}  # Map solver_id → list of differ score tuples
         diff_call_count += 1
         # Run batt to get solver-level scores (only once per sample)
-        diff_timed_out, diff_result = call_with_timeout(batt_func,
-            [task_id, S, I, O, pile_log_path], timeout)
-        
-        if diff_result is not None:
-            _, sample_s = diff_result
-            # sample_s.extend(sample_s)
+        # Only use O from demo samples
+        if sample_type == 'demo':
+            diff_timed_out, diff_result = call_with_timeout(batt_func,
+                [task_id, S, I, O, pile_log_path], timeout)
+            
+            if diff_result is not None:
+                _, sample_s = diff_result
 
         # Optional: Print matches for debugging (scoring happens in aggregation)
         for t_n, evo, o_solver_id, C in sample_o:
