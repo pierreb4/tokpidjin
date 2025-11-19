@@ -923,7 +923,7 @@ def score_sample(args):
     else:
         # For test samples, we don't pass O to avoid leakage
         solve_timed_out, solve_result = call_with_timeout(batt_func,
-            [task_id, S, I, None, pile_log_path], timeout)
+            [task_id, S, I, (()), pile_log_path], timeout)
     
     if solve_timed_out and DO_PRINT:
         print_l(f'-- {task_id} - {sample_type}[{i}] timed out')
@@ -935,7 +935,7 @@ def score_sample(args):
     match = False
     
     if solve_result is not None:
-        sample_o, sample_s = solve_result
+        sample_o, _ = solve_result
         
         if DO_PRINT:
             print_l(f"{sample_type}[{i}] - {task_id} - {len(sample_o)}")
@@ -949,8 +949,8 @@ def score_sample(args):
             [task_id, S, I, O, pile_log_path], timeout)
         
         if diff_result is not None:
-            _, sample_s_result = diff_result
-            sample_s.extend(sample_s_result)
+            _, sample_s = diff_result
+            # sample_s.extend(sample_s)
 
         # Optional: Print matches for debugging (scoring happens in aggregation)
         for t_n, evo, o_solver_id, C in sample_o:
